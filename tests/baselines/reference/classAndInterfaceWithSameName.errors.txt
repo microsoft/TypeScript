@@ -1,0 +1,21 @@
+classAndInterfaceWithSameName.ts(1,11): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+classAndInterfaceWithSameName.ts(6,9): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+
+
+==== classAndInterfaceWithSameName.ts (2 errors) ====
+    class C { foo: string; }
+              ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    interface C { foo: string; }
+    
+    namespace M {
+        class D {
+            bar: string;
+            ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+        }
+    
+        interface D {
+            bar: string;
+        }
+    }

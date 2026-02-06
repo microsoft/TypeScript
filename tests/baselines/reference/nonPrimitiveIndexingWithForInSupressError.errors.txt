@@ -5,7 +5,7 @@ nonPrimitiveIndexingWithForInSupressError.ts(4,17): error TS7053: Element implic
 
 !!! error TS5102: Option 'suppressImplicitAnyIndexErrors' has been removed. Please remove it from your configuration.
 ==== nonPrimitiveIndexingWithForInSupressError.ts (1 errors) ====
-    var a: object;
+    var a: object = {};
     
     for (var key in a) {
         var value = a[key];

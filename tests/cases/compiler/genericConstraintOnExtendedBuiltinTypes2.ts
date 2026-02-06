@@ -1,4 +1,5 @@
-module EndGate {
+// @target: es2015
+namespace EndGate {
     export interface ICloneable {
         Clone(): any;
     }
@@ -6,7 +7,7 @@ module EndGate {
 
 interface Number extends EndGate.ICloneable { }
 
-module EndGate.Tweening {
+namespace EndGate.Tweening {
     export class Tween<T extends ICloneable>{
         private _from: T;
 
@@ -16,7 +17,7 @@ module EndGate.Tweening {
     }
 }
 
-module EndGate.Tweening {
+namespace EndGate.Tweening {
     export class NumberTween extends Tween<Number>{
         constructor(from: number) {
             super(from);

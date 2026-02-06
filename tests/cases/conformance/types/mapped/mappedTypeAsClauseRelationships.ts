@@ -1,3 +1,4 @@
+// @target: es2015
 // From original issue #45212:
 type Methods<T> = { [P in keyof T as T[P] extends Function ? P : never]: T[P] };
 type H<T> = T[keyof Methods<T>]; // Ok

@@ -1,3 +1,4 @@
+// @target: es2015
 
 interface I5 extends I5 { // error
     foo():void;

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 var obj1: {};
 obj1.length;
 

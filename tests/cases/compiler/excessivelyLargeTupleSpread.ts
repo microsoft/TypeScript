@@ -1,3 +1,4 @@
+// @target: es2015
 // #41771
 
 type BuildTuple<L extends number, T extends any[] = [any]> = 

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/collisionExportsRequireAndInternalModuleAlias.ts] ////
 
 === collisionExportsRequireAndInternalModuleAlias.ts ===
-export module m {
+export namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 
@@ -38,7 +38,7 @@ new require();
 >require : typeof exports
 >        : ^^^^^^^^^^^^^^
 
-module m1 {
+namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -71,7 +71,7 @@ module m1 {
 >        : ^^^^^^^^^^^^^^
 }
 
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 

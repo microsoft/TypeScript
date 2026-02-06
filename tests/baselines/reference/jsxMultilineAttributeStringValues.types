@@ -2,8 +2,10 @@
 
 === jsxMultilineAttributeStringValues.tsx ===
 const a = <input value="
->a : error
-><input value="  foo: 23"></input> : error
+>a : any
+>  : ^^^
+><input value="  foo: 23"></input> : any
+>                                  : ^^^
 >input : any
 >      : ^^^
 >value : string
@@ -15,8 +17,10 @@ const a = <input value="
 >      : ^^^
 
 const b = <input value='
->b : error
-><input value='foo: 23'></input> : error
+>b : any
+>  : ^^^
+><input value='foo: 23'></input> : any
+>                                : ^^^
 >input : any
 >      : ^^^
 >value : string

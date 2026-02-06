@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/externalModules/exportAssignmentTopLevelIdentifier.ts] ////
 
 //// [foo_0.ts]
-module Foo {
+namespace Foo {
 	export var answer = 42;
 }
 export = Foo;

@@ -1,0 +1,9 @@
+//// [tests/cases/conformance/nonjsExtensions/declarationFilesForNodeNativeModules.ts] ////
+
+=== main.ts ===
+import mod = require("./dir/native.node");
+>mod : Symbol(mod, Decl(main.ts, 0, 0))
+
+mod.doNativeThing("good");
+>mod : Symbol(mod, Decl(main.ts, 0, 0))
+

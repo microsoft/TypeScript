@@ -1,4 +1,6 @@
 ﻿/// <reference path="fourslash.ts" />
+// @lib: es5
+// @strict: true
 // @allowJs: true
 // @Filename: jsDocTypeTag2.js
 //// /** @type {string} */

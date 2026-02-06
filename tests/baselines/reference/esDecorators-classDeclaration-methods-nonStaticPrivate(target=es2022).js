@@ -9,6 +9,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-methods-nonStaticPrivate.js]
+"use strict";
 let C = (() => {
     let _instanceExtraInitializers = [];
     let _private_method1_decorators;

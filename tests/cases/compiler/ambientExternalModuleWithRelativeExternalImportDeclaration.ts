@@ -1,3 +1,4 @@
+// @target: es2015
 declare module "OuterModule" {
     import m2 = require("./SubModule");
     class SubModule {

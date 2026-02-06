@@ -21,7 +21,7 @@ interface I {
 >              : ^^^^^^
 }
 
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 

@@ -47,17 +47,17 @@ const [isAny] = makeTuple(stringy());  // [string]
 
 //// [inferFromBindingPattern.js]
 "use strict";
-var x1 = f1(); // string
-var x2 = f2()[0]; // string
-var x3 = f3().x; // string
+let x1 = f1(); // string
+let [x2] = f2(); // string
+let { x: x3 } = f3(); // string
 // Repro from #30379
 function foo() {
     return [42];
 }
-var x = foo()[0]; // [number]
-var person = selectJohn()[0];
-var _a = selectJohn(), any = _a[0], whatever = _a[1];
-var john = selectJohn();
-var personAgain = john[0], nufinspecial = john[1];
-var isStringTuple = makeTuple(stringy()); // [string]
-var isAny = makeTuple(stringy())[0]; // [string]
+const [x] = foo(); // [number]
+const [person] = selectJohn();
+const [any, whatever] = selectJohn();
+const john = selectJohn();
+const [personAgain, nufinspecial] = john;
+const isStringTuple = makeTuple(stringy()); // [string]
+const [isAny] = makeTuple(stringy()); // [string]

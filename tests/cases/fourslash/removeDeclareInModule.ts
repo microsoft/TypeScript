@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-//// /**/export module Foo {
+//// /**/export namespace Foo {
 ////     function a(): void {}
 //// }
 //// 

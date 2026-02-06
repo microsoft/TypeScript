@@ -1,4 +1,5 @@
-module M {
+// @target: es2015
+namespace M {
     export abstract class A {}
     export class B extends A {}
 }

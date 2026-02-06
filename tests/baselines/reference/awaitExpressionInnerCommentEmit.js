@@ -8,6 +8,7 @@ async function foo() {
 }
 
 //// [awaitExpressionInnerCommentEmit.js]
+"use strict";
 async function foo() {
     /*comment1*/ await 1;
     await /*comment2*/ 2;

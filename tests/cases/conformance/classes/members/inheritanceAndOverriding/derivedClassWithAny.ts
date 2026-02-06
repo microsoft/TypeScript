@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     x: number;
     get X(): number { return 1; }
@@ -49,9 +50,9 @@ class E extends D {
     }
 }
 
-var c: C;
-var d: D;
-var e: E;
+declare var c: C;
+declare var d: D;
+declare var e: E;
 
 c = d;
 c = e;

@@ -13,5 +13,6 @@ var d: Derived;
 var r = new d();
 
 //// [interfaceWithConstructSignaturesThatHidesBaseSignature.js]
+"use strict";
 var d;
 var r = new d();

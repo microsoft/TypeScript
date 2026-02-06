@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: input.js
 // @outFile: output.js
 // @allowJs: true

@@ -1,4 +1,5 @@
-module M {
+// @target: es2015
+namespace M {
     interface I {
         salt:number;
         pepper:number;

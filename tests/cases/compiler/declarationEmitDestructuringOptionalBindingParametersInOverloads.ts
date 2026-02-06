@@ -1,4 +1,6 @@
-﻿// @declaration: true
+﻿// @strict: false
+// @target: es2015
+// @declaration: true
 
 function foo([x, y, z] ?: [string, number, boolean]);
 function foo(...rest: any[]) {

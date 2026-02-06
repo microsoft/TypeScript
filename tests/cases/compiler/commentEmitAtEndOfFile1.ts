@@ -1,12 +1,13 @@
+// @target: es2015
 // @allowUnusedLabels: true
 
 // test
 var f = ''
 // test #2
-module foo {
+namespace foo {
         function bar() { }
 }
 // test #3
-module empty {
+namespace empty {
 }
 // test #4

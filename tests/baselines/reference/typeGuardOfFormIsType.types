@@ -43,6 +43,7 @@ function isC1(x: any): x is C1 {
 >isC1 : (x: any) => x is C1
 >     : ^ ^^   ^^^^^       
 >x : any
+>  : ^^^
 
     return true;
 >true : true
@@ -53,6 +54,7 @@ function isC2(x: any): x is C2 {
 >isC2 : (x: any) => x is C2
 >     : ^ ^^   ^^^^^       
 >x : any
+>  : ^^^
 
     return true;
 >true : true
@@ -63,6 +65,7 @@ function isD1(x: any): x is D1 {
 >isD1 : (x: any) => x is D1
 >     : ^ ^^   ^^^^^       
 >x : any
+>  : ^^^
 
     return true;
 >true : true
@@ -74,12 +77,12 @@ var c1Orc2: C1 | C2;
 >       : ^^^^^^^
 
 str = isC1(c1Orc2) && c1Orc2.p1; // C1
->str = isC1(c1Orc2) && c1Orc2.p1 : string
->                                : ^^^^^^
+>str = isC1(c1Orc2) && c1Orc2.p1 : string | false
+>                                : ^^^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
->isC1(c1Orc2) && c1Orc2.p1 : string
->                          : ^^^^^^
+>isC1(c1Orc2) && c1Orc2.p1 : string | false
+>                          : ^^^^^^^^^^^^^^
 >isC1(c1Orc2) : boolean
 >             : ^^^^^^^
 >isC1 : (x: any) => x is C1
@@ -94,12 +97,12 @@ str = isC1(c1Orc2) && c1Orc2.p1; // C1
 >   : ^^^^^^
 
 num = isC2(c1Orc2) && c1Orc2.p2; // C2
->num = isC2(c1Orc2) && c1Orc2.p2 : number
->                                : ^^^^^^
+>num = isC2(c1Orc2) && c1Orc2.p2 : number | false
+>                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->isC2(c1Orc2) && c1Orc2.p2 : number
->                          : ^^^^^^
+>isC2(c1Orc2) && c1Orc2.p2 : number | false
+>                          : ^^^^^^^^^^^^^^
 >isC2(c1Orc2) : boolean
 >             : ^^^^^^^
 >isC2 : (x: any) => x is C2
@@ -114,12 +117,12 @@ num = isC2(c1Orc2) && c1Orc2.p2; // C2
 >   : ^^^^^^
 
 str = isD1(c1Orc2) && c1Orc2.p1; // D1
->str = isD1(c1Orc2) && c1Orc2.p1 : string
->                                : ^^^^^^
+>str = isD1(c1Orc2) && c1Orc2.p1 : string | false
+>                                : ^^^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
->isD1(c1Orc2) && c1Orc2.p1 : string
->                          : ^^^^^^
+>isD1(c1Orc2) && c1Orc2.p1 : string | false
+>                          : ^^^^^^^^^^^^^^
 >isD1(c1Orc2) : boolean
 >             : ^^^^^^^
 >isD1 : (x: any) => x is D1
@@ -134,12 +137,12 @@ str = isD1(c1Orc2) && c1Orc2.p1; // D1
 >   : ^^^^^^
 
 num = isD1(c1Orc2) && c1Orc2.p3; // D1
->num = isD1(c1Orc2) && c1Orc2.p3 : number
->                                : ^^^^^^
+>num = isD1(c1Orc2) && c1Orc2.p3 : number | false
+>                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->isD1(c1Orc2) && c1Orc2.p3 : number
->                          : ^^^^^^
+>isD1(c1Orc2) && c1Orc2.p3 : number | false
+>                          : ^^^^^^^^^^^^^^
 >isD1(c1Orc2) : boolean
 >             : ^^^^^^^
 >isD1 : (x: any) => x is D1
@@ -158,12 +161,12 @@ var c2Ord1: C2 | D1;
 >       : ^^^^^^^
 
 num = isC2(c2Ord1) && c2Ord1.p2; // C2
->num = isC2(c2Ord1) && c2Ord1.p2 : number
->                                : ^^^^^^
+>num = isC2(c2Ord1) && c2Ord1.p2 : number | false
+>                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->isC2(c2Ord1) && c2Ord1.p2 : number
->                          : ^^^^^^
+>isC2(c2Ord1) && c2Ord1.p2 : number | false
+>                          : ^^^^^^^^^^^^^^
 >isC2(c2Ord1) : boolean
 >             : ^^^^^^^
 >isC2 : (x: any) => x is C2
@@ -178,12 +181,12 @@ num = isC2(c2Ord1) && c2Ord1.p2; // C2
 >   : ^^^^^^
 
 num = isD1(c2Ord1) && c2Ord1.p3; // D1
->num = isD1(c2Ord1) && c2Ord1.p3 : number
->                                : ^^^^^^
+>num = isD1(c2Ord1) && c2Ord1.p3 : number | false
+>                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->isD1(c2Ord1) && c2Ord1.p3 : number
->                          : ^^^^^^
+>isD1(c2Ord1) && c2Ord1.p3 : number | false
+>                          : ^^^^^^^^^^^^^^
 >isD1(c2Ord1) : boolean
 >             : ^^^^^^^
 >isD1 : (x: any) => x is D1
@@ -198,12 +201,12 @@ num = isD1(c2Ord1) && c2Ord1.p3; // D1
 >   : ^^^^^^
 
 str = isD1(c2Ord1) && c2Ord1.p1; // D1
->str = isD1(c2Ord1) && c2Ord1.p1 : string
->                                : ^^^^^^
+>str = isD1(c2Ord1) && c2Ord1.p1 : string | false
+>                                : ^^^^^^^^^^^^^^
 >str : string
 >    : ^^^^^^
->isD1(c2Ord1) && c2Ord1.p1 : string
->                          : ^^^^^^
+>isD1(c2Ord1) && c2Ord1.p1 : string | false
+>                          : ^^^^^^^^^^^^^^
 >isD1(c2Ord1) : boolean
 >             : ^^^^^^^
 >isD1 : (x: any) => x is D1
@@ -220,8 +223,8 @@ str = isD1(c2Ord1) && c2Ord1.p1; // D1
 var r2: C2 | D1 = isC1(c2Ord1) && c2Ord1; // C2 | D1
 >r2 : C2 | D1
 >   : ^^^^^^^
->isC1(c2Ord1) && c2Ord1 : D1
->                       : ^^
+>isC1(c2Ord1) && c2Ord1 : false | D1
+>                       : ^^^^^^^^^^
 >isC1(c2Ord1) : boolean
 >             : ^^^^^^^
 >isC1 : (x: any) => x is C1

@@ -2,6 +2,8 @@
 
 // @strict: true
 // @module: commonjs
+// @esModuleInterop: false
+// @allowSyntheticDefaultImports: false
 
 // @filename: node.ts
 //// import Container from "./container.js";

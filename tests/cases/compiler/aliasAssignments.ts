@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 // @Filename: aliasAssignments_moduleA.ts
 export class someClass {

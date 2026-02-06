@@ -64,11 +64,11 @@ var f5: (a: (s: string) => any) => void = function (a = s => <number>s) { };
 >s : Symbol(s, Decl(defaultArgsInFunctionExpressions.ts, 19, 55))
 
 // Instantiated module
-module T { }
+namespace T { }
 >T : Symbol(T, Decl(defaultArgsInFunctionExpressions.ts, 19, 76))
 
-module U {
->U : Symbol(U, Decl(defaultArgsInFunctionExpressions.ts, 22, 12))
+namespace U {
+>U : Symbol(U, Decl(defaultArgsInFunctionExpressions.ts, 22, 15))
 
     export var x;
 >x : Symbol(x, Decl(defaultArgsInFunctionExpressions.ts, 24, 14))
@@ -81,7 +81,7 @@ var f6 = (t = T) => { };
 var f7 = (t = U) => { return t; };
 >f7 : Symbol(f7, Decl(defaultArgsInFunctionExpressions.ts, 28, 3))
 >t : Symbol(t, Decl(defaultArgsInFunctionExpressions.ts, 28, 10))
->U : Symbol(U, Decl(defaultArgsInFunctionExpressions.ts, 22, 12))
+>U : Symbol(U, Decl(defaultArgsInFunctionExpressions.ts, 22, 15))
 >t : Symbol(t, Decl(defaultArgsInFunctionExpressions.ts, 28, 10))
 
 f7().x;

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/es6/Symbols/symbolProperty49.ts] ////
 
 //// [symbolProperty49.ts]
-module M {
+namespace M {
     export var Symbol;
 
     class C {
@@ -10,6 +10,7 @@ module M {
 }
 
 //// [symbolProperty49.js]
+"use strict";
 var M;
 (function (M) {
     class C {

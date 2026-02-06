@@ -29,7 +29,7 @@ label: let b = 1;
 label: const c = 1;
 >c : Symbol(c, Decl(labeledStatementWithLabel_strict.ts, 9, 12))
 
-label: module M { }
+label: namespace M { }
 >M : Symbol(M, Decl(labeledStatementWithLabel_strict.ts, 11, 6))
 
 label: namespace N {}

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxSpreadChildrenInvalidType.tsx] ////
 
 === tsxSpreadChildrenInvalidType.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -162,7 +162,7 @@ function TodoListNoError({ todos }: TodoListProps) {
 >div : any
 >    : ^^^
 }
-let x: TodoListProps;
+declare let x: TodoListProps;
 >x : TodoListProps
 >  : ^^^^^^^^^^^^^
 

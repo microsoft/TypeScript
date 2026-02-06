@@ -1,3 +1,4 @@
+// @target: es2015
 type F1 = (num: [number]) => void;
 type IsNumber<T extends number> = T;
 

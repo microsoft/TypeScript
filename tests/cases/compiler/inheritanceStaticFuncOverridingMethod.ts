@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class a {
     static x() {
         return "10";

@@ -1,3 +1,4 @@
+// @strict: false
 // @isolatedModules: true
 // @out:all.js
 // @target: es6

@@ -1,3 +1,5 @@
+// @target: es5, es2015
+// @strict: false
 // Constructors
 class c1 {
     constructor(i: number, ...arguments) { // error

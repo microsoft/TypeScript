@@ -1,3 +1,4 @@
+// @target: es2015
 type StringMap = { [x: string]: string };
 
 const empty1 = {};

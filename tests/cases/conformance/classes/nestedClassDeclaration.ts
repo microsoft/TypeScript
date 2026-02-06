@@ -1,3 +1,4 @@
+// @target: es2015
 // nested classes are not allowed
 
 class C {

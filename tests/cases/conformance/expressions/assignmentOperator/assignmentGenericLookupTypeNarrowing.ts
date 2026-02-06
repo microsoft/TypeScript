@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #26130
 
 let mappedObject: {[K in "foo"]: null | {x: string}} = {foo: {x: "hello"}};

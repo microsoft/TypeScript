@@ -35,7 +35,7 @@ import fs = module("fs");
 >     : ^^^^
 
 
-module TypeScriptAllInOne {
+namespace TypeScriptAllInOne {
 >TypeScriptAllInOne : typeof TypeScriptAllInOne
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -193,8 +193,8 @@ module TypeScriptAllInOne {
                 }
             }
             catch (e) {
->e : any
->  : ^^^
+>e : unknown
+>  : ^^^^^^^
 
                 console.log(e);
 >console.log(e) : any
@@ -205,8 +205,8 @@ module TypeScriptAllInOne {
 >        : ^^^
 >log : any
 >    : ^^^
->e : any
->  : ^^^
+>e : unknown
+>  : ^^^^^^^
             }
             finally {
 
@@ -782,14 +782,14 @@ module TypeScriptAllInOne {
                 throw null;
             }
             catch (Exception)  ? 
->Exception : any
->          : ^^^
+>Exception : unknown
+>          : ^^^^^^^
             }
             finally {
                 try { }
                 catch (Exception) { }
->Exception : any
->          : ^^^
+>Exception : unknown
+>          : ^^^^^^^
             }
 
             return retVal;

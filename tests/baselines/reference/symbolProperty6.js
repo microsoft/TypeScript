@@ -11,6 +11,7 @@ class C {
 }
 
 //// [symbolProperty6.js]
+"use strict";
 var _a;
 class C {
     constructor() {

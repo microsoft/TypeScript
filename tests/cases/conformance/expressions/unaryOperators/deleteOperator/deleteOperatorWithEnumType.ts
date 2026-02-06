@@ -1,3 +1,4 @@
+// @target: es2015
 // delete  operator on enum type
 
 enum ENUM { };

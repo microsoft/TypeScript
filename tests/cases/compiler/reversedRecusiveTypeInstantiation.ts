@@ -1,3 +1,4 @@
+// @target: es2015
 interface A<StringArgPos1, NumberArgPos2> {
    xPos1 : StringArgPos1
    yPos2 : NumberArgPos2

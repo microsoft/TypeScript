@@ -4,4 +4,5 @@
 var v = function * () { }
 
 //// [FunctionExpression1_es6.js]
+"use strict";
 var v = function* () { };

@@ -1,3 +1,4 @@
+// @target: es2015
 // These are all errors because type parameters cannot reference other type parameters from the same list
 
 function foo<T, U>(x: T, y: U) {

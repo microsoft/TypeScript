@@ -1,4 +1,5 @@
-// @moduleResolution: node
+// @target: es2015
+// @moduleResolution: bundler
 // @traceResolution: true
 
 // @filename: /a/b/c/lib.ts

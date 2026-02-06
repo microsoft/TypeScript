@@ -1,4 +1,5 @@
-﻿"use strict"
+﻿// @target: es2015
+"use strict"
 interface public { }
 interface implements {
     foo(package, protected);

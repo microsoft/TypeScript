@@ -1,3 +1,4 @@
+// @target: es2015
 declare function tag(...x: any[]): any;
 
 var a = `${123 + 456 as number}`;

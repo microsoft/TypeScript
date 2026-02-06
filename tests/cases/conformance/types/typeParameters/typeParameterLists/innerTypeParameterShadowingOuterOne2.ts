@@ -1,3 +1,4 @@
+// @target: es2015
 // inner type parameters shadow outer ones of the same name
 // no errors expected
 

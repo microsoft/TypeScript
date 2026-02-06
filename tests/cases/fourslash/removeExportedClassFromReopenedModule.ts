@@ -1,8 +1,8 @@
 /// <reference path="fourslash.ts" />
 
-//// module multiM { }
+//// namespace multiM { }
 //// 
-//// module multiM {
+//// namespace multiM {
 ////     /*1*/export class c { }
 //// }
 //// 

@@ -1,3 +1,4 @@
+// @target: es2015
 var x = '';
 var a = x.charAt(0);
 var b = x.hasOwnProperty('charAt');

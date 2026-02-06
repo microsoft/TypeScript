@@ -1,3 +1,4 @@
+// @target: es2015
 // Fixes #16245 -- always suggest the exact match, even when
 // other options are very close
 enum U8 {

@@ -1,0 +1,13 @@
+jsxImportForSideEffectsNonExtantNoError.tsx(4,8): error TS2882: Cannot find module or type declarations for side-effect import of './App.css'.
+
+
+==== jsxImportForSideEffectsNonExtantNoError.tsx (1 errors) ====
+    /// <reference path="/.lib/react16.d.ts" />
+    import * as React from "react";
+    
+    import "./App.css"; // doesn't actually exist
+           ~~~~~~~~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of './App.css'.
+    
+    const tag = <div></div>;
+    

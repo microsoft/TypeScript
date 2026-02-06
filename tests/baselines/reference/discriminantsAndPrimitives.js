@@ -83,6 +83,7 @@ else {
 
 
 //// [discriminantsAndPrimitives.js]
+"use strict";
 // Repro from #10257 plus other tests
 function f1(x) {
     if (typeof x !== 'string') {
@@ -116,7 +117,7 @@ function f4(x) {
         }
     }
 }
-var n;
+let n;
 if (n.type === "Disjunction") {
     n.alternatives.slice();
 }

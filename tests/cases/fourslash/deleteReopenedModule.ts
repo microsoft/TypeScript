@@ -1,10 +1,10 @@
 /// <reference path="fourslash.ts" />
 
-/////*start*/module M {
+/////*start*/namespace M {
 ////    export class C { }
 //// }/*end*/
 ////
-////module M { }
+////namespace M { }
 ////
 ////var c = new M.C();
 

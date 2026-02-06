@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxSpreadChildren.tsx] ////
 
 === tsxSpreadChildren.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -11,6 +11,7 @@ declare module JSX {
 }
 declare var React: any;
 >React : any
+>      : ^^^
 
 interface TodoProp {
     id: number;

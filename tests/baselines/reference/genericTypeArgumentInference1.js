@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericTypeArgumentInference1.ts] ////
 
 //// [genericTypeArgumentInference1.ts]
-module Underscore {
+namespace Underscore {
     export interface Iterator<T, U> {
         (value: T, index: any, list: any): U;
     }
@@ -19,6 +19,7 @@ var r4 = _.all([<any>true], _.identity);
 
 
 //// [genericTypeArgumentInference1.js]
+"use strict";
 var r = _.all([true, 1, null, 'yes'], _.identity);
 var r2 = _.all([true], _.identity);
 var r3 = _.all([], _.identity);

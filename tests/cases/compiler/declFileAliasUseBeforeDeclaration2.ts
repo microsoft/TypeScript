@@ -1,8 +1,9 @@
+// @target: es2015
 //@module: commonjs
 //@declaration: true
 
 declare module "test" {
-    module A {
+    namespace A {
         class C {
         }
     }

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/overloadsInDifferentContainersDisagreeOnAmbient.ts] ////
 
 === overloadsInDifferentContainersDisagreeOnAmbient.ts ===
-declare module M {
+declare namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -11,7 +11,7 @@ declare module M {
 >  : ^^^^^^^^^^^^^^^^^^^^^^
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

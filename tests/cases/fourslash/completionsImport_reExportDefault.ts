@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 // @module: esnext
-// @moduleResolution: node
 
 // @Filename: /a/b/impl.ts
 ////export default function foo() {}
@@ -17,10 +17,10 @@ verify.completions({
     exact: completion.globalsPlus([
         {
             name: "foo",
-            source: "/a/b/impl",
+            source: "./a",
             sourceDisplay: "./a",
-            text: "function foo(): void",
-            kind: "function",
+            text: "(alias) function foo(): void\nexport foo",
+            kind: "alias",
             kindModifiers: "export",
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
@@ -30,7 +30,7 @@ verify.completions({
 });
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
-    source: "/a/b/impl",
+    source: "./a",
     description: `Add import from "./a"`,
     newFileContent: `import { foo } from "./a";
 

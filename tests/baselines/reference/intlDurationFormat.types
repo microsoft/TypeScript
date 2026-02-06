@@ -1,0 +1,49 @@
+//// [tests/cases/conformance/es2025/intlDurationFormat.ts] ////
+
+=== intlDurationFormat.ts ===
+new Intl.DurationFormat('en').format({
+>new Intl.DurationFormat('en').format({  years: 1,  hours: 20,  minutes: 15,  seconds: 35}) : string
+>                                                                                           : ^^^^^^
+>new Intl.DurationFormat('en').format : (duration: Partial<Record<Intl.DurationFormatUnit, number>>) => string
+>                                     : ^        ^^               ^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      
+>new Intl.DurationFormat('en') : Intl.DurationFormat
+>                              : ^^^^^^^^^^^^^^^^^^^
+>Intl.DurationFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions): Intl.DurationFormat; prototype: Intl.DurationFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.DurationFormatLocaleMatcher; }): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>                    : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>DurationFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions): Intl.DurationFormat; prototype: Intl.DurationFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.DurationFormatLocaleMatcher; }): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>'en' : "en"
+>     : ^^^^
+>format : (duration: Partial<Record<Intl.DurationFormatUnit, number>>) => string
+>       : ^        ^^               ^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      
+>{  years: 1,  hours: 20,  minutes: 15,  seconds: 35} : { years: number; hours: number; minutes: number; seconds: number; }
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  years: 1,
+>years : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+
+  hours: 20,
+>hours : number
+>      : ^^^^^^
+>20 : 20
+>   : ^^
+
+  minutes: 15,
+>minutes : number
+>        : ^^^^^^
+>15 : 15
+>   : ^^
+
+  seconds: 35
+>seconds : number
+>        : ^^^^^^
+>35 : 35
+>   : ^^
+
+});
+

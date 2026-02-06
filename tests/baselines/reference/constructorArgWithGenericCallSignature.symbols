@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/constructorArgWithGenericCallSignature.ts] ////
 
 === constructorArgWithGenericCallSignature.ts ===
-module Test {
+namespace Test {
 >Test : Symbol(Test, Decl(constructorArgWithGenericCallSignature.ts, 0, 0))
 
     export interface MyFunc {
->MyFunc : Symbol(MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 13))
+>MyFunc : Symbol(MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 16))
 
         <T>(value1: T): T;
 >T : Symbol(T, Decl(constructorArgWithGenericCallSignature.ts, 2, 9))
@@ -18,18 +18,18 @@ module Test {
 
         constructor(func: MyFunc) { }
 >func : Symbol(func, Decl(constructorArgWithGenericCallSignature.ts, 5, 20))
->MyFunc : Symbol(MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 13))
+>MyFunc : Symbol(MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 16))
     }
  
  export function F(func: MyFunc) { }
 >F : Symbol(F, Decl(constructorArgWithGenericCallSignature.ts, 6, 5))
 >func : Symbol(func, Decl(constructorArgWithGenericCallSignature.ts, 8, 19))
->MyFunc : Symbol(MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 13))
+>MyFunc : Symbol(MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 16))
 }
 var func: Test.MyFunc;
 >func : Symbol(func, Decl(constructorArgWithGenericCallSignature.ts, 10, 3))
 >Test : Symbol(Test, Decl(constructorArgWithGenericCallSignature.ts, 0, 0))
->MyFunc : Symbol(Test.MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 13))
+>MyFunc : Symbol(Test.MyFunc, Decl(constructorArgWithGenericCallSignature.ts, 0, 16))
 
 Test.F(func); // OK
 >Test.F : Symbol(Test.F, Decl(constructorArgWithGenericCallSignature.ts, 6, 5))

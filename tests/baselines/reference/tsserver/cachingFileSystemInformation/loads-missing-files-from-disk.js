@@ -7,7 +7,6 @@ Before request
 import {y} from "bar"
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -65,10 +64,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/p
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (1)
@@ -102,13 +97,9 @@ After request
 PolledWatches::
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
 /users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 /users/username/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -336,26 +327,6 @@ Info seq  [hh:mm:ss:mss] directoryExists:: [
   {
     "key": "/node_modules",
     "count": 1
-  },
-  {
-    "key": "/users/username/projects/project/node_modules/@types",
-    "count": 2
-  },
-  {
-    "key": "/users/username/projects/node_modules/@types",
-    "count": 2
-  },
-  {
-    "key": "/users/username/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/users/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/node_modules/@types",
-    "count": 1
   }
 ]
 Info seq  [hh:mm:ss:mss] getDirectories:: []
@@ -433,26 +404,6 @@ Info seq  [hh:mm:ss:mss] fileExists:: [
 Info seq  [hh:mm:ss:mss] directoryExists:: [
   {
     "key": "/users/username/projects/project",
-    "count": 1
-  },
-  {
-    "key": "/users/username/projects/project/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/users/username/projects/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/users/username/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/users/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/node_modules/@types",
     "count": 1
   }
 ]

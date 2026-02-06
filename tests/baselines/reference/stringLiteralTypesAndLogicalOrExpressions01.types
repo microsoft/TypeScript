@@ -28,10 +28,10 @@ let c: "foo" = b;
 >  : ^^^^^
 
 let d = b || "bar";
->d : string
->  : ^^^^^^
->b || "bar" : "foo" | "bar"
->           : ^^^^^^^^^^^^^
+>d : "foo"
+>  : ^^^^^
+>b || "bar" : "foo"
+>           : ^^^^^
 >b : "foo"
 >  : ^^^^^
 >"bar" : "bar"
@@ -40,6 +40,6 @@ let d = b || "bar";
 let e: "foo" | "bar" = d;
 >e : "foo" | "bar"
 >  : ^^^^^^^^^^^^^
->d : string
->  : ^^^^^^
+>d : "foo"
+>  : ^^^^^
 

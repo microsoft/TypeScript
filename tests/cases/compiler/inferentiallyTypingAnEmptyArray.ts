@@ -1,4 +1,5 @@
-﻿// April 2014, Section 4.6:
+﻿// @target: es2015
+// April 2014, Section 4.6:
 //      In the absence of a contextual type, the type of an array literal is C[], where C is the
 //      Undefined type(section 3.2.6) if the array literal is empty, or the best common type of
 //      the element expressions if the array literal is not empty.

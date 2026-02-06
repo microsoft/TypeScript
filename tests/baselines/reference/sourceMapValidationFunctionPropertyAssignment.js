@@ -4,5 +4,6 @@
 var x = { n() { } };
 
 //// [sourceMapValidationFunctionPropertyAssignment.js]
-var x = { n: function () { } };
+"use strict";
+var x = { n() { } };
 //# sourceMappingURL=sourceMapValidationFunctionPropertyAssignment.js.map

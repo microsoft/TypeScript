@@ -7,7 +7,6 @@ import {x} from "bar"
 export const y = 1;export const x = 10;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -27,9 +26,13 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/users/username/projects/project/foo.js]
 define(["require", "exports"], function (require, exports) {
@@ -39,14 +42,8 @@ define(["require", "exports"], function (require, exports) {
 
 
 
-PolledWatches::
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /users/username/projects/project: *new*
   {}
@@ -63,17 +60,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/bar.d.ts
 /users/username/projects/project/foo.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/users/username/projects/project/bar.d.ts
-/users/username/projects/project/foo.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /users/username/projects/project/bar.d.ts (used version)
 /users/username/projects/project/foo.ts (used version)
 
@@ -98,10 +92,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mfoo.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS2792: [0mCannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
-
-[7m1[0m import {x} from "bar"
-[7m [0m [91m                ~~~~~[0m
+[91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
@@ -112,15 +103,11 @@ Output::
 PolledWatches::
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /users/username/projects: *new*
   {}
@@ -145,11 +132,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/foo.ts
 
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/foo.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /users/username/projects/project/foo.ts (computed .d.ts)
@@ -184,17 +170,13 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/users/username/projects/project/foo.js] file written with same contents
-
-PolledWatches::
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /users/username/projects/node_modules:
@@ -203,7 +185,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /users/username/projects/project:
   {}
@@ -225,13 +207,11 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/bar.d.ts
 /users/username/projects/project/foo.ts
 
-Semantic diagnostics in builder refreshed for::
-/users/username/projects/project/bar.d.ts
-/users/username/projects/project/foo.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /users/username/projects/project/bar.d.ts (used version)

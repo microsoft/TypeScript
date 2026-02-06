@@ -1,3 +1,4 @@
+// @target: es2015
 type X = { kind: "a", a: string } | { kind: "b", b: string }
 
 function func<T extends X>(value: T) {

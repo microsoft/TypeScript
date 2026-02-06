@@ -1,0 +1,20 @@
+parameterReferenceInInitializer1.ts(2,5): error TS2322: Type 'undefined' is not assignable to type 'a'.
+  'a' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+
+
+==== parameterReferenceInInitializer1.ts (1 errors) ====
+    function fn<a>(y: Y, set: (y: Y, x: number) => void): a {
+        return undefined;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'a'.
+!!! error TS2322:   'a' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+    }
+    interface Y { x: number }
+    
+    class C {
+        constructor(
+            y: Y,
+            public x = fn(y, (y, x) => y.x = x) // expected to work, but actually doesn't
+        ) {
+        }
+    }

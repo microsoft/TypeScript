@@ -48,7 +48,6 @@ import {
     formatMessage,
     generateTSConfig,
     getBuildOrderFromAnyBuildOrder,
-    getCompilerOptionsDiffValue,
     getConfigFileParsingDiagnostics,
     getDiagnosticText,
     getErrorSummaryText,
@@ -158,7 +157,13 @@ function updateReportDiagnostic(
 }
 
 function defaultIsPretty(sys: System) {
-    return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY() && !sys.getEnvironmentVariable("NO_COLOR");
+    if (sys.getEnvironmentVariable("NO_COLOR")) {
+        return false;
+    }
+    if (sys.getEnvironmentVariable("FORCE_COLOR")) {
+        return true;
+    }
+    return !!sys.writeOutputIsTTY && sys.writeOutputIsTTY();
 }
 
 function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
@@ -169,10 +174,11 @@ function shouldBePretty(sys: System, options: CompilerOptions | BuildOptions) {
 }
 
 function getOptionsForHelp(commandLine: ParsedCommandLine) {
+    const helpOptions = filter(optionDeclarations.concat(tscBuildOption), option => option.showInHelp !== false);
     // Sort our options by their names, (e.g. "--noImplicitAny" comes before "--watch")
     return !!commandLine.options.all ?
-        toSorted(optionDeclarations.concat(tscBuildOption), (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
-        filter(optionDeclarations.concat(tscBuildOption), v => !!v.showInSimplifiedHelpView);
+        toSorted(helpOptions, (a, b) => compareStringsCaseInsensitive(a.name, b.name)) :
+        filter(helpOptions, v => !!v.showInSimplifiedHelpView);
 }
 
 function printVersion(sys: System) {
@@ -507,8 +513,8 @@ function printEasyHelp(sys: System, simpleOptions: readonly CommandLineOption[])
 function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[], buildOptions: readonly CommandLineOption[], watchOptions: readonly CommandLineOption[]) {
     let output: string[] = [...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
     output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.ALL_COMPILER_OPTIONS), compilerOptions, /*subCategory*/ true, /*beforeOptionsDescription*/ undefined, formatMessage(Diagnostics.You_can_learn_about_all_of_the_compiler_options_at_0, "https://aka.ms/tsc"))];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.WATCH_OPTIONS), watchOptions, /*subCategory*/ false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), filter(buildOptions, option => option !== tscBuildOption), /*subCategory*/ false, formatMessage(Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.WATCH_OPTIONS), filter(watchOptions, option => option.showInHelp !== false), /*subCategory*/ false, getDiagnosticText(Diagnostics.Including_watch_w_will_start_watching_the_current_project_for_the_file_changes_Once_set_you_can_config_watch_mode_with_Colon))];
+    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), filter(buildOptions, option => option !== tscBuildOption && option.showInHelp !== false), /*subCategory*/ false, formatMessage(Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
     for (const line of output) {
         sys.write(line);
     }
@@ -516,7 +522,7 @@ function printAllHelp(sys: System, compilerOptions: readonly CommandLineOption[]
 
 function printBuildHelp(sys: System, buildOptions: readonly CommandLineOption[]) {
     let output: string[] = [...getHeader(sys, `${getDiagnosticText(Diagnostics.tsc_Colon_The_TypeScript_Compiler)} - ${getDiagnosticText(Diagnostics.Version_0, version)}`)];
-    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), filter(buildOptions, option => option !== tscBuildOption), /*subCategory*/ false, formatMessage(Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
+    output = [...output, ...generateSectionOptionsOutput(sys, getDiagnosticText(Diagnostics.BUILD_OPTIONS), filter(buildOptions, option => option !== tscBuildOption && option.showInHelp !== false), /*subCategory*/ false, formatMessage(Diagnostics.Using_build_b_will_make_tsc_behave_more_like_a_build_orchestrator_than_a_compiler_This_is_used_to_trigger_building_composite_projects_which_you_can_learn_more_about_at_0, "https://aka.ms/tsc-composite-builds"))];
     for (const line of output) {
         sys.write(line);
     }
@@ -574,7 +580,7 @@ function executeCommandLineWorker(
     }
 
     if (commandLine.options.init) {
-        writeConfigFile(sys, reportDiagnostic, commandLine.options, commandLine.fileNames);
+        writeConfigFile(sys, reportDiagnostic, commandLine.options);
         return sys.exit(ExitStatus.Success);
     }
 
@@ -615,20 +621,27 @@ function executeCommandLineWorker(
             }
         }
     }
-    else if (commandLine.fileNames.length === 0) {
+    else if (!commandLine.options.ignoreConfig || commandLine.fileNames.length === 0) {
         const searchPath = normalizePath(sys.getCurrentDirectory());
         configFileName = findConfigFile(searchPath, fileName => sys.fileExists(fileName));
-    }
-
-    if (commandLine.fileNames.length === 0 && !configFileName) {
-        if (commandLine.options.showConfig) {
-            reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath(sys.getCurrentDirectory())));
+        // if (!commandLine.options.ignoreConfig) {
+        if (commandLine.fileNames.length !== 0) {
+            if (configFileName) {
+                // Error to not specify config file
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConfig_to_skip_this_error));
+                return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+            }
         }
-        else {
-            printVersion(sys);
-            printHelp(sys, commandLine);
+        else if (!configFileName) {
+            if (commandLine.options.showConfig) {
+                reportDiagnostic(createCompilerDiagnostic(Diagnostics.Cannot_find_a_tsconfig_json_file_at_the_current_directory_Colon_0, normalizePath(sys.getCurrentDirectory())));
+            }
+            else {
+                printVersion(sys);
+                printHelp(sys, commandLine);
+            }
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
-        return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
     }
 
     const currentDirectory = sys.getCurrentDirectory();
@@ -1277,7 +1290,6 @@ function writeConfigFile(
     sys: System,
     reportDiagnostic: DiagnosticReporter,
     options: CompilerOptions,
-    fileNames: string[],
 ) {
     const currentDirectory = sys.getCurrentDirectory();
     const file = normalizePath(combinePaths(currentDirectory, "tsconfig.json"));
@@ -1285,9 +1297,8 @@ function writeConfigFile(
         reportDiagnostic(createCompilerDiagnostic(Diagnostics.A_tsconfig_json_file_is_already_defined_at_Colon_0, file));
     }
     else {
-        sys.writeFile(file, generateTSConfig(options, fileNames, sys.newLine));
-        const output: string[] = [sys.newLine, ...getHeader(sys, "Created a new tsconfig.json with:")];
-        output.push(getCompilerOptionsDiffValue(options, sys.newLine) + sys.newLine + sys.newLine);
+        sys.writeFile(file, generateTSConfig(options, sys.newLine));
+        const output: string[] = [sys.newLine, ...getHeader(sys, "Created a new tsconfig.json")];
         output.push(`You can learn more at https://aka.ms/tsconfig` + sys.newLine);
         for (const line of output) {
             sys.write(line);

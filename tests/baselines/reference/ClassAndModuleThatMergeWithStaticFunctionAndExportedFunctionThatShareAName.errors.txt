@@ -13,14 +13,14 @@ ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20
 !!! error TS2300: Duplicate identifier 'Origin'.
     }
     
-    module Point {
+    namespace Point {
         export function Origin() { return null; } //expected duplicate identifier error
                         ~~~~~~
 !!! error TS2300: Duplicate identifier 'Origin'.
     }
     
     
-    module A {
+    namespace A {
         export class Point {
             constructor(public x: number, public y: number) { }
     
@@ -29,7 +29,7 @@ ClassAndModuleThatMergeWithStaticFunctionAndExportedFunctionThatShareAName.ts(20
 !!! error TS2300: Duplicate identifier 'Origin'.
         }
     
-        export module Point {
+        export namespace Point {
             export function Origin() { return ""; }//expected duplicate identifier error
                             ~~~~~~
 !!! error TS2300: Duplicate identifier 'Origin'.

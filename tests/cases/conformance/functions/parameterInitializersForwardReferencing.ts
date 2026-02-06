@@ -1,3 +1,5 @@
+// @target: es5, es2015
+// @strict: false
 function left(a, b = a, c = b) {
     a;
     b;

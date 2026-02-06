@@ -1,4 +1,5 @@
-// @target: ES5
+// @strict: false
+// @target: ES5, ES2015
 // The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 class BugExhibition<T> {
     public exhibitBug() {
@@ -33,7 +34,7 @@ class C {
     }
 }
 
-module M {
+namespace M {
     export function exhibitBug() {
         function localFunction() { }
         var x: { (): void; };

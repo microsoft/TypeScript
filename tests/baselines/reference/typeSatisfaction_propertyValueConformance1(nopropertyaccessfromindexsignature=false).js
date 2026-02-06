@@ -27,7 +27,8 @@ const x2 = {
 
 
 //// [typeSatisfaction_propertyValueConformance1.js]
-var x = {
+"use strict";
+const x = {
     m: true
 };
 // Should be OK
@@ -36,9 +37,9 @@ checkTruths(x);
 checkM(x);
 // Should fail under --noPropertyAccessFromIndexSignature
 console.log(x.z);
-var m = x.m;
+const m = x.m;
 // Should be able to detect a failure here
-var x2 = {
+const x2 = {
     m: true,
     s: "false"
 };

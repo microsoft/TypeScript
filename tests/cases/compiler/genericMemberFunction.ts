@@ -1,4 +1,5 @@
-//@module: amd
+// @target: es2015
+//@module: esnext
 export class BuildError<A, B, C>{
   public parent<A, B extends A, C>(): FileWithErrors<A, B, C> {
     return undefined;

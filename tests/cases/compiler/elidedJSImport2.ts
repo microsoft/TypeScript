@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowJs: true
 // @checkJs: false
 // @module: ES2022, commonjs

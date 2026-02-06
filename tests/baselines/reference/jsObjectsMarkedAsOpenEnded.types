@@ -34,6 +34,7 @@ class C {
 >this.member = {} : {}
 >                 : ^^
 >this.member : any
+>            : ^^^
 >this : this
 >     : ^^^^
 >member : any
@@ -44,7 +45,8 @@ class C {
         this.member.a = 0;
 >this.member.a = 0 : 0
 >                  : ^
->this.member.a : error
+>this.member.a : any
+>              : ^^^
 >this.member : {}
 >            : ^^
 >this : this
@@ -75,7 +77,8 @@ var obj = {
 obj.property.a = 0;
 >obj.property.a = 0 : 0
 >                   : ^
->obj.property.a : error
+>obj.property.a : any
+>               : ^^^
 >obj.property : {}
 >             : ^^
 >obj : { property: {}; }
@@ -122,6 +125,7 @@ variable.a = 1;
 >(new C()).member.a = 1 : 1
 >                       : ^
 >(new C()).member.a : any
+>                   : ^^^
 >(new C()).member : {}
 >                 : ^^
 >(new C()) : C
@@ -141,6 +145,7 @@ variable.a = 1;
 >(new C()).initializedMember.a = 1 : 1
 >                                  : ^
 >(new C()).initializedMember.a : any
+>                              : ^^^
 >(new C()).initializedMember : {}
 >                            : ^^
 >(new C()) : C
@@ -160,6 +165,7 @@ obj.property.a = 1;
 >obj.property.a = 1 : 1
 >                   : ^
 >obj.property.a : any
+>               : ^^^
 >obj.property : {}
 >             : ^^
 >obj : { property: {}; }
@@ -175,6 +181,7 @@ arr[0].a = 1;
 >arr[0].a = 1 : 1
 >             : ^
 >arr[0].a : any
+>         : ^^^
 >arr[0] : {}
 >       : ^^
 >arr : {}[]
@@ -190,6 +197,7 @@ getObj().a = 1;
 >getObj().a = 1 : 1
 >               : ^
 >getObj().a : any
+>           : ^^^
 >getObj() : {}
 >         : ^^
 >getObj : () => {}

@@ -1,3 +1,4 @@
+// @target: es2015
 var x = true;
 
 var a: any = x;

@@ -5,6 +5,7 @@
 
 
 //// [classExpressionWithStaticPropertiesES64.js]
+"use strict";
 var _a;
 (_a = class {
     },

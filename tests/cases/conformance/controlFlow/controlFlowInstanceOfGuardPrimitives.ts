@@ -1,3 +1,4 @@
+// @target: es2015
 function distinguish(thing: string | number | Date) {
     if (thing instanceof Object) {
         console.log("Aha!! It's a Date in " + thing.getFullYear());

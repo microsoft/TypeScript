@@ -26,9 +26,10 @@ function f(x: string | number | boolean) {
 
 
 //// [controlFlowCommaOperator.js]
+"use strict";
 function f(x) {
-    var y = false;
-    var z = false;
+    let y = false;
+    let z = false;
     if (y = "", typeof x === "string") {
         x; // string
         y; // string

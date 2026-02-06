@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: classMemberInitializerWithLamdaScoping3_0.ts
 var field1: string;
 

@@ -47,7 +47,7 @@ export default actionCreatorFactory;
 //// [/user/username/projects/myproject/plugin-one/tsconfig.json]
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "declaration": true,
     "traceResolution": true
   }
@@ -86,7 +86,6 @@ export default actionCreatorFactory;
 //// [/user/username/projects/myProject/plugin-one/node_modules/plugin-two] symlink(/user/username/projects/myProject/plugin-two)
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -104,8 +103,15 @@ declare const console: { log(msg: any): void; };
 /home/src/tslibs/TS/Lib/tsc.js -p plugin-one --explainFiles
 Output::
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myproject/plugin-one/action.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'typescript-fsa' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/user/username/projects/myproject/plugin-one/package.json' does not exist.
+File '/user/username/projects/myproject/package.json' does not exist.
+File '/user/username/projects/package.json' does not exist.
+File '/user/username/package.json' does not exist.
+File '/user/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'typescript-fsa' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json'.
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa.ts' does not exist.
@@ -123,8 +129,15 @@ Resolving real path for '/user/username/projects/myproject/plugin-one/node_modul
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
 File '/user/username/projects/myproject/plugin-one/node_modules/typescript-fsa/package.json' exists according to earlier cached lookups.
 ======== Resolving module 'plugin-two' from '/user/username/projects/myproject/plugin-one/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'plugin-two' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/user/username/projects/myproject/plugin-one/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/myproject/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'plugin-two' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/package.json' does not exist.
 File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two.ts' does not exist.
@@ -136,8 +149,15 @@ File '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/index
 Resolving real path for '/user/username/projects/myproject/plugin-one/node_modules/plugin-two/index.d.ts', result '/user/username/projects/myProject/plugin-two/index.d.ts'.
 ======== Module name 'plugin-two' was successfully resolved to '/user/username/projects/myProject/plugin-two/index.d.ts'. ========
 ======== Resolving module 'typescript-fsa' from '/user/username/projects/myProject/plugin-two/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'typescript-fsa' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/user/username/projects/myProject/plugin-two/package.json' does not exist.
+File '/user/username/projects/myProject/package.json' does not exist according to earlier cached lookups.
+File '/user/username/projects/package.json' does not exist according to earlier cached lookups.
+File '/user/username/package.json' does not exist according to earlier cached lookups.
+File '/user/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'typescript-fsa' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Found 'package.json' at '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/package.json'.
 File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa.ts' does not exist.
@@ -154,8 +174,8 @@ File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/i
 Resolving real path for '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts', result '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts'.
 ======== Module name 'typescript-fsa' was successfully resolved to '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/index.d.ts' with Package ID 'typescript-fsa/index.d.ts@3.0.0-beta-2'. ========
 File '/user/username/projects/myProject/plugin-two/node_modules/typescript-fsa/package.json' exists according to earlier cached lookups.
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 plugin-one/node_modules/typescript-fsa/index.d.ts
   Imported via "typescript-fsa" from file 'plugin-one/action.ts' with packageId 'typescript-fsa/index.d.ts@3.0.0-beta-2'
 plugin-one/action.ts
@@ -169,14 +189,13 @@ plugin-one/index.ts
   Matched by default include pattern '**/*'
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/plugin-one/action.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.actions = void 0;
-var typescript_fsa_1 = require("typescript-fsa"); // Include version of shared lib
-var action = (0, typescript_fsa_1.actionCreatorFactory)("somekey");
-var featureOne = action("feature-one");
-exports.actions = { featureOne: featureOne };
+import { actionCreatorFactory } from "typescript-fsa"; // Include version of shared lib
+const action = actionCreatorFactory("somekey");
+const featureOne = action("feature-one");
+export const actions = { featureOne };
 
 
 //// [/user/username/projects/myproject/plugin-one/action.d.ts]
@@ -188,8 +207,7 @@ export declare const actions: {
 
 
 //// [/user/username/projects/myproject/plugin-one/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/user/username/projects/myproject/plugin-one/index.d.ts]

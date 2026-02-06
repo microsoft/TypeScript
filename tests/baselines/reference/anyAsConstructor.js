@@ -13,6 +13,7 @@ var c = new x(x);
 var d = new x<any>(x); // no error
 
 //// [anyAsConstructor.js]
+"use strict";
 // any is considered an untyped function call
 // can be called except with type arguments which is an error
 var x;

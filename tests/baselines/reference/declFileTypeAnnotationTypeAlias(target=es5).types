@@ -1,0 +1,72 @@
+//// [tests/cases/compiler/declFileTypeAnnotationTypeAlias.ts] ////
+
+=== declFileTypeAnnotationTypeAlias.ts ===
+namespace M {
+>M : typeof M
+>  : ^^^^^^^^
+
+    export type Value = string | number | boolean;
+>Value : Value
+>      : ^^^^^
+
+    export var x: Value;
+>x : Value
+>  : ^^^^^
+
+    export class c {
+>c : c
+>  : ^
+    }
+
+    export type C = c;
+>C : c
+>  : ^
+
+    export namespace m {
+>m : typeof m
+>  : ^^^^^^^^
+
+        export class c {
+>c : c
+>  : ^
+        }
+    }
+
+    export type MC = m.c;
+>MC : m.c
+>   : ^^^
+>m : any
+>  : ^^^
+
+    export type fc = () => c;
+>fc : fc
+>   : ^^
+}
+
+interface Window {
+    someMethod();
+>someMethod : () => any
+>           : ^^^^^^^^^
+}
+
+namespace M {
+>M : typeof M
+>  : ^^^^^^^^
+
+    export type W = Window | string;
+>W : W
+>  : ^
+
+    export namespace N {
+>N : typeof N
+>  : ^^^^^^^^
+
+        export class Window { }
+>Window : Window
+>       : ^^^^^^
+
+        export var p: W;
+>p : W
+>  : ^
+    }
+}

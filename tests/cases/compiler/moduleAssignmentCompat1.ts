@@ -1,7 +1,8 @@
-module A {
+// @target: es2015
+namespace A {
     export class C { }
 }
-module B {
+namespace B {
     export class C { }
     class D { }
 }

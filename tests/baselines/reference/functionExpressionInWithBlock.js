@@ -10,11 +10,11 @@ function x() {
 }
 
 //// [functionExpressionInWithBlock.js]
+"use strict";
 function x() {
     with ({}) {
         function f() {
-            var _this = this;
-            (function () { return _this; });
+            () => this;
         }
     }
 }

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/genericRecursiveImplicitConstructorErrors1.ts] ////
 
 === genericRecursiveImplicitConstructorErrors1.ts ===
-export declare module TypeScript {
+export declare namespace TypeScript {
 >TypeScript : typeof TypeScript
 >           : ^^^^^^^^^^^^^^^^^
 

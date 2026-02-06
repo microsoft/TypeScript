@@ -1,3 +1,4 @@
+// @target: es2015
 declare module "ambientModule" {
     export type typ = 1
     export var val: typ

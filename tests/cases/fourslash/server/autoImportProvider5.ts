@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
+
 // @Filename: /home/src/workspaces/project/package.json
 //// { "dependencies": { "react-hook-form": "*" } }
 

@@ -1,3 +1,4 @@
+// @target: es2015
 // regression test for https://github.com/microsoft/TypeScript/issues/33243
 type X = 
  | { x: 'x', y: number } & { y: number } 

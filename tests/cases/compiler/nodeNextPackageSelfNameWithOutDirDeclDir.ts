@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: nodenext
 // @outDir: ./dist
 // @declarationDir: ./types

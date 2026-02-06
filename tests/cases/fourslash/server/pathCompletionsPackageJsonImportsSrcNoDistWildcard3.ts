@@ -3,6 +3,7 @@
 // @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
+////     "lib": ["es5"],
 ////     "module": "nodenext",
 ////     "rootDir": "src",
 ////     "outDir": "dist",

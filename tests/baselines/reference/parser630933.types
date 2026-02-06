@@ -8,16 +8,16 @@ var a = "Hello";
 >        : ^^^^^^^
 
 var b = a.match(/\/ver=([^/]+)/);
->b : RegExpMatchArray
->  : ^^^^^^^^^^^^^^^^
->a.match(/\/ver=([^/]+)/) : RegExpMatchArray
->                         : ^^^^^^^^^^^^^^^^
->a.match : (regexp: string | RegExp) => RegExpMatchArray | null
->        : ^      ^^               ^^^^^                       
+>b : RegExpMatchArray | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+>a.match(/\/ver=([^/]+)/) : RegExpMatchArray | null
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^
+>a.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>        : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >a : string
 >  : ^^^^^^
->match : (regexp: string | RegExp) => RegExpMatchArray | null
->      : ^      ^^               ^^^^^                       
+>match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
+>      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >/\/ver=([^/]+)/ : RegExp
 >                : ^^^^^^
 

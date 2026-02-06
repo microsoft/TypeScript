@@ -9,6 +9,7 @@ function getObj() {
  
 
 //// [emptyMemberAccess.js]
+"use strict";
 function getObj() {
     ().toString();
 }

@@ -21,13 +21,13 @@ enum Computed {
     C = 1 << 3,
 >C : Symbol(Computed.C, Decl(enumAssignmentCompat5.ts, 5, 15))
 }
-let n: number;
->n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
+declare let n: number;
+>n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 11))
 
 let e: E = n; // ok because it's too inconvenient otherwise
 >e : Symbol(e, Decl(enumAssignmentCompat5.ts, 9, 3))
 >E : Symbol(E, Decl(enumAssignmentCompat5.ts, 0, 0))
->n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
+>n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 11))
 
 e = 0; // ok, in range
 >e : Symbol(e, Decl(enumAssignmentCompat5.ts, 9, 3))
@@ -45,16 +45,16 @@ a = 2; // error, 2 !== 0
 
 a = n; // ok
 >a : Symbol(a, Decl(enumAssignmentCompat5.ts, 12, 3))
->n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
+>n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 11))
 
 let c: Computed = n; // ok
 >c : Symbol(c, Decl(enumAssignmentCompat5.ts, 16, 3))
 >Computed : Symbol(Computed, Decl(enumAssignmentCompat5.ts, 2, 1))
->n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
+>n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 11))
 
 c = n; // ok
 >c : Symbol(c, Decl(enumAssignmentCompat5.ts, 16, 3))
->n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 3))
+>n : Symbol(n, Decl(enumAssignmentCompat5.ts, 8, 11))
 
 c = 4; // ok
 >c : Symbol(c, Decl(enumAssignmentCompat5.ts, 16, 3))

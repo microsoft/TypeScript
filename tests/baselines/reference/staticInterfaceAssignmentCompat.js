@@ -15,12 +15,10 @@ var x: ShapeFactory = Shape;
 
 
 //// [staticInterfaceAssignmentCompat.js]
-var Shape = /** @class */ (function () {
-    function Shape() {
-    }
-    Shape.create = function () {
+"use strict";
+class Shape {
+    static create() {
         return new Shape();
-    };
-    return Shape;
-}());
+    }
+}
 var x = Shape;

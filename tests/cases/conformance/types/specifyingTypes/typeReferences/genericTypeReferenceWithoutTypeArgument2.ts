@@ -1,3 +1,4 @@
+// @target: es2015
 // it is an error to use a generic type without type arguments
 // all of these are errors 
 
@@ -22,7 +23,7 @@ class D extends I {
 
 interface U extends I {}
 
-module M {
+namespace M {
     export interface E<T> { foo: T }
 }
 

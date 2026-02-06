@@ -9,9 +9,10 @@ if (true === true); {
 }
 
 //// [emptyThenWarning.js]
+"use strict";
 if (1)
     ;
-var x = 0;
+let x = 0;
 if (true === true)
     ;
 {

@@ -1,7 +1,8 @@
+assignAnyToEveryType.ts(23,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 assignAnyToEveryType.ts(41,1): error TS2631: Cannot assign to 'M' because it is a namespace.
 
 
-==== assignAnyToEveryType.ts (1 errors) ====
+==== assignAnyToEveryType.ts (2 errors) ====
     // all of these are valid
     
     var x: any;
@@ -25,6 +26,8 @@ assignAnyToEveryType.ts(41,1): error TS2631: Cannot assign to 'M' because it is 
     
     class C {
         foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     var h: C = x;
@@ -38,7 +41,7 @@ assignAnyToEveryType.ts(41,1): error TS2631: Cannot assign to 'M' because it is 
     var j: { (): string } = x;
     var j2: { <T>(x: T): string } = x;
     
-    module M {
+    namespace M {
         export var foo = 1;
     }
     

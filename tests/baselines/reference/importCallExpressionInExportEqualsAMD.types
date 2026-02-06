@@ -10,12 +10,12 @@ export = async function() {
 >                                                                      : ^^^^^^^^^^^^^^^^^^^
 
     const something = await import("./something");
->something : 42
->          : ^^
->await import("./something") : 42
->                            : ^^
->import("./something") : Promise<42>
->                      : ^^^^^^^^^^^
+>something : { default: 42; }
+>          : ^^^^^^^^^^^^^^^^
+>await import("./something") : { default: 42; }
+>                            : ^^^^^^^^^^^^^^^^
+>import("./something") : Promise<{ default: 42; }>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >"./something" : "./something"
 >              : ^^^^^^^^^^^^^
 

@@ -10,7 +10,7 @@
 ////let l9 = 0, l10 :string = "", l11 = null;
 ////for(let l11 in {}) { }
 ////for(let l12 = 0; l12 < 9; l12++) { }
-////module M {
+////namespace M {
 ////    let ll1 = "s";
 ////    export let ll2 = 0;
 ////}

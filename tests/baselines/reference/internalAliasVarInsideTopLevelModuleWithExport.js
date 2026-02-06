@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasVarInsideTopLevelModuleWithExport.ts] ////
 
 //// [internalAliasVarInsideTopLevelModuleWithExport.ts]
-export module a {
+export namespace a {
     export var x = 10;
 }
 

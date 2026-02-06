@@ -1,3 +1,4 @@
+// @target: es2015
 class A<T extends { length: number }> {
     x: T;
 }
@@ -6,6 +7,6 @@ class B<U> extends A<string> {
     y: U;
 }
 
-var x: A<{ length: number; foo: number }>;
-var y: B<number>;
+declare var x: A<{ length: number; foo: number }>;
+declare var y: B<number>;
 x = y;  // error

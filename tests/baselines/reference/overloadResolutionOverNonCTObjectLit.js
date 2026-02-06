@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/overloadResolutionOverNonCTObjectLit.ts] ////
 
 //// [overloadResolutionOverNonCTObjectLit.ts]
-module Bugs {
+namespace Bugs {
                 export interface IToken {
                                 startIndex:number;
                                 type:string;
@@ -24,6 +24,7 @@ module Bugs {
 }
 
 //// [overloadResolutionOverNonCTObjectLit.js]
+"use strict";
 var Bugs;
 (function (Bugs) {
     function bug3() {

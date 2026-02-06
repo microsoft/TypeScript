@@ -16,7 +16,6 @@ System.register([], function (exports_1, context_1) {
         execute: function () {
             Home = {};
             exports_1("default", Home);
-            // There is intentionally no semicolon on the prior line, this comment should not break emit
         }
     };
 });

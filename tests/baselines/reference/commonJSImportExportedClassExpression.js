@@ -16,16 +16,13 @@ exports.K = class K {
 
 //// [mod1.js]
 "use strict";
-exports.K = /** @class */ (function () {
-    function K() {
+exports.K = class K {
+    values() {
     }
-    K.prototype.values = function () {
-    };
-    return K;
-}());
+};
 //// [main.js]
 "use strict";
-var K = require("./mod1").K;
+const { K } = require("./mod1");
 /** @param {K} k */
 function f(k) {
     k.values();

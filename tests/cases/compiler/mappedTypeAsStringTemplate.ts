@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #44220
 
 function foo<T extends { [K in keyof T as `${Extract<K, string>}y`]: number }>(foox: T) { }

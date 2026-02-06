@@ -1,3 +1,4 @@
+// @target: es2015
 // @checkjs: true
 // @outdir: out/
 // @filename: bug39372.js

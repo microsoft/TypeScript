@@ -21,18 +21,20 @@ class TestComponent extends React.Component<any, {}> {
 >       : ^^^^^^^^^
 
         return <BaseComponent />;
-><BaseComponent /> : error
+><BaseComponent /> : any
+>                  : ^^^
 >BaseComponent : typeof BaseComponent
 >              : ^^^^^^^^^^^^^^^^^^^^
     }
 }
 
 === component.d.ts ===
-declare module JSX {
+declare namespace JSX {
   interface ElementAttributesProperty { props; }
 >props : any
+>      : ^^^
 }
-declare module React {
+declare namespace React {
 >React : typeof React
 >      : ^^^^^^^^^^^^
 

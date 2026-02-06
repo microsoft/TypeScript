@@ -6,6 +6,7 @@ function f() {
 
 
 //// [exportInFunction.js]
+"use strict";
 function f() {
     export = 0;
 }

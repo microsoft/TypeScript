@@ -1,3 +1,4 @@
+// @target: es2015
 class IFoo<T> {
     foo<T>(x: T): T { // no error on implementors because IFoo's T is different from foo's T
         return null;

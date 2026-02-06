@@ -24,7 +24,7 @@ isNotNull(x?.y?.z) ? title(x.y.z) : null; // should not error
 //// [typePredicatesOptionalChaining1.js]
 "use strict";
 var _a;
-var x = {
+const x = {
     y: {},
 };
 // type guard

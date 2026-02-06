@@ -3,32 +3,42 @@
 === jsxNestedWithinTernaryParsesCorrectly.tsx ===
 const emptyMessage = null as any;
 >emptyMessage : any
+>             : ^^^
 >null as any : any
+>            : ^^^
 
 const a = (
->a : error
->(    <div>      {0 ? (        emptyMessage // must be identifier?      ) : (          // must be exactly two expression holes        <span>          {0}{0}        </span>      )}    </div>) : error
+>a : any
+>  : ^^^
+>(    <div>      {0 ? (        emptyMessage // must be identifier?      ) : (          // must be exactly two expression holes        <span>          {0}{0}        </span>      )}    </div>) : any
+>                                                                                                                                                                                              : ^^^
 
     <div>
-><div>      {0 ? (        emptyMessage // must be identifier?      ) : (          // must be exactly two expression holes        <span>          {0}{0}        </span>      )}    </div> : error
+><div>      {0 ? (        emptyMessage // must be identifier?      ) : (          // must be exactly two expression holes        <span>          {0}{0}        </span>      )}    </div> : any
+>                                                                                                                                                                                        : ^^^
 >div : any
 >    : ^^^
 
       {0 ? (
->0 ? (        emptyMessage // must be identifier?      ) : (          // must be exactly two expression holes        <span>          {0}{0}        </span>      ) : error
+>0 ? (        emptyMessage // must be identifier?      ) : (          // must be exactly two expression holes        <span>          {0}{0}        </span>      ) : any
+>                                                                                                                                                                 : ^^^
 >0 : 0
 >  : ^
 >(        emptyMessage // must be identifier?      ) : any
+>                                                    : ^^^
 
         emptyMessage // must be identifier?
 >emptyMessage : any
+>             : ^^^
 
       ) : (
->(          // must be exactly two expression holes        <span>          {0}{0}        </span>      ) : error
+>(          // must be exactly two expression holes        <span>          {0}{0}        </span>      ) : any
+>                                                                                                       : ^^^
 
           // must be exactly two expression holes
         <span>
-><span>          {0}{0}        </span> : error
+><span>          {0}{0}        </span> : any
+>                                      : ^^^
 >span : any
 >     : ^^^
 

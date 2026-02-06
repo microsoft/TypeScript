@@ -11,7 +11,7 @@ var x: number = foo1.b();
 >b : Symbol(foo1.b, Decl(foo1.ts, 1, 22))
 
 === foo1.ts ===
-declare module M1 {
+declare namespace M1 {
 >M1 : Symbol(M1, Decl(foo1.ts, 0, 0))
 
 	export var a: string; 

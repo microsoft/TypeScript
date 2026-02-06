@@ -1,3 +1,4 @@
+// @target: es2015
 type Params = {
     foo: string;
 } & ({ tag: 'a'; type: number } | { tag: 'b'; type: string });

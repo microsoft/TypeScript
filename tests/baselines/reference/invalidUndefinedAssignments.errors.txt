@@ -1,12 +1,14 @@
 invalidUndefinedAssignments.ts(4,1): error TS2628: Cannot assign to 'E' because it is an enum.
 invalidUndefinedAssignments.ts(5,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
+invalidUndefinedAssignments.ts(7,11): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 invalidUndefinedAssignments.ts(9,1): error TS2629: Cannot assign to 'C' because it is a class.
+invalidUndefinedAssignments.ts(13,1): error TS2322: Type 'undefined' is not assignable to type 'I'.
 invalidUndefinedAssignments.ts(14,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
 invalidUndefinedAssignments.ts(17,1): error TS2631: Cannot assign to 'M' because it is a namespace.
 invalidUndefinedAssignments.ts(21,1): error TS2630: Cannot assign to 'i' because it is a function.
 
 
-==== invalidUndefinedAssignments.ts (6 errors) ====
+==== invalidUndefinedAssignments.ts (8 errors) ====
     var x: typeof undefined;
     
     enum E { A }
@@ -18,6 +20,8 @@ invalidUndefinedAssignments.ts(21,1): error TS2630: Cannot assign to 'i' because
 !!! error TS2540: Cannot assign to 'A' because it is a read-only property.
     
     class C { foo: string }
+              ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     var f: C;
     C = x;
     ~
@@ -26,11 +30,13 @@ invalidUndefinedAssignments.ts(21,1): error TS2630: Cannot assign to 'i' because
     interface I { foo: string }
     var g: I;
     g = x;
+    ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'I'.
     I = x;
     ~
 !!! error TS2693: 'I' only refers to a type, but is being used as a value here.
     
-    module M { export var x = 1; }
+    namespace M { export var x = 1; }
     M = x;
     ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.

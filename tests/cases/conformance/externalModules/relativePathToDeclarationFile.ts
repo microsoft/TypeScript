@@ -1,11 +1,13 @@
+// @target: es2015
+// @module: commonjs
 // @ModuleResolution: classic
 // @Filename: test/foo.d.ts
-export declare module M2 {
+export declare namespace M2 {
 	export var x: boolean;
 }
 
 // @Filename: test/other.d.ts
-export declare module M2 {
+export declare namespace M2 {
 	export var x: string;
 }
 

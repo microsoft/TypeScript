@@ -51,6 +51,7 @@ async function* f7() {
 }
 
 //// [file1.js]
+"use strict";
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;
@@ -77,6 +78,7 @@ async function f1() {
     }
 }
 //// [file2.js]
+"use strict";
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;
@@ -103,6 +105,7 @@ async function f2() {
     }
 }
 //// [file3.js]
+"use strict";
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;
@@ -144,6 +147,7 @@ function f3() {
     });
 }
 //// [file4.js]
+"use strict";
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;
@@ -185,6 +189,7 @@ function f4() {
     });
 }
 //// [file5.js]
+"use strict";
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;
@@ -213,6 +218,7 @@ async function f5() {
     }
 }
 //// [file6.js]
+"use strict";
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;
@@ -256,6 +262,7 @@ function f6() {
     });
 }
 //// [file7.js]
+"use strict";
 var __asyncValues = (this && this.__asyncValues) || function (o) {
     if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
     var m = o[Symbol.asyncIterator], i;

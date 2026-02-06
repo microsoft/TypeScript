@@ -5,5 +5,6 @@ function F(a,) {
 }
 
 //// [parserParameterList12.js]
+"use strict";
 function F(a) {
 }

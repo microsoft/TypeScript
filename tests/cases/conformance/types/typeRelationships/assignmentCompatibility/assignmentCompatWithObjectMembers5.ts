@@ -1,14 +1,16 @@
+// @target: es2015
+// @strict: false
 class C {
     foo: string;
 }
 
-var c: C;
+declare var c: C;
 
 interface I {
     fooo: string;
 }
 
-var i: I;
+declare var i: I;
 
 c = i; // error
 i = c; // error

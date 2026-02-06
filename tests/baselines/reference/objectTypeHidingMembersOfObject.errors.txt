@@ -1,0 +1,39 @@
+objectTypeHidingMembersOfObject.ts(8,16): error TS2454: Variable 'c' is used before being assigned.
+objectTypeHidingMembersOfObject.ts(15,16): error TS2454: Variable 'i' is used before being assigned.
+objectTypeHidingMembersOfObject.ts(27,16): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== objectTypeHidingMembersOfObject.ts (3 errors) ====
+    // all of these valueOf calls should return the type shown in the overriding signatures here
+    
+    class C {
+        valueOf() { }
+    }
+    
+    var c: C;
+    var r1: void = c.valueOf();
+                   ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    
+    interface I {
+        valueOf(): void;
+    }
+    
+    var i: I;
+    var r2: void = i.valueOf();
+                   ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    
+    var a = {
+        valueOf: () => { }
+    }
+    
+    var r3: void = a.valueOf();
+    
+    var b: {
+        valueOf(): void;
+    }
+    
+    var r4: void = b.valueOf();
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.

@@ -1,4 +1,5 @@
 /// <reference path="fourslash.ts" />
+// @lib: es5
 // @module: commonjs
 // @allowJs: true
 

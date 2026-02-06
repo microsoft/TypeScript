@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/internalAliasUninitializedModule.ts] ////
 
 === internalAliasUninitializedModule.ts ===
-module a {
-    export module b {
+namespace a {
+    export namespace b {
         export interface I {
             foo();
 >foo : () => any
@@ -11,7 +11,7 @@ module a {
     }
 }
 
-module c {
+namespace c {
 >c : typeof c
 >  : ^^^^^^^^
 

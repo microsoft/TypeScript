@@ -1,10 +1,14 @@
+constructorOverloadsWithDefaultValues.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 constructorOverloadsWithDefaultValues.ts(3,17): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
+constructorOverloadsWithDefaultValues.ts(9,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 constructorOverloadsWithDefaultValues.ts(10,17): error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
 
 
-==== constructorOverloadsWithDefaultValues.ts (2 errors) ====
+==== constructorOverloadsWithDefaultValues.ts (4 errors) ====
     class C {
         foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         constructor(x = 1); // error
                     ~~~~~
 !!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.
@@ -14,6 +18,8 @@ constructorOverloadsWithDefaultValues.ts(10,17): error TS2371: A parameter initi
     
     class D<T> {
         foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         constructor(x = 1); // error
                     ~~~~~
 !!! error TS2371: A parameter initializer is only allowed in a function or constructor implementation.

@@ -1,4 +1,5 @@
-﻿// @declaration: true
+﻿// @target: es2015
+// @declaration: true
 
 let abc: "AB\r\nC" = `AB
 C`;

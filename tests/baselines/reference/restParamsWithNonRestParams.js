@@ -9,24 +9,10 @@ function foo3(a?:string, ...b:number[]){}
 foo3(); // error but shouldn't be
 
 //// [restParamsWithNonRestParams.js]
-function foo() {
-    var b = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i] = arguments[_i];
-    }
-}
+"use strict";
+function foo(...b) { }
 foo(); // ok
-function foo2(a) {
-    var b = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        b[_i - 1] = arguments[_i];
-    }
-}
+function foo2(a, ...b) { }
 foo2(); // should be an error
-function foo3(a) {
-    var b = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        b[_i - 1] = arguments[_i];
-    }
-}
+function foo3(a, ...b) { }
 foo3(); // error but shouldn't be

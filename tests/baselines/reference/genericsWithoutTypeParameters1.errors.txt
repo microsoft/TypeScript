@@ -1,3 +1,5 @@
+genericsWithoutTypeParameters1.ts(2,16): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 genericsWithoutTypeParameters1.ts(9,9): error TS2314: Generic type 'C<T>' requires 1 type argument(s).
 genericsWithoutTypeParameters1.ts(10,9): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
 genericsWithoutTypeParameters1.ts(11,11): error TS2314: Generic type 'I<T>' requires 1 type argument(s).
@@ -15,9 +17,12 @@ genericsWithoutTypeParameters1.ts(27,8): error TS2314: Generic type 'J<T>' requi
 genericsWithoutTypeParameters1.ts(31,22): error TS2314: Generic type 'A<T>' requires 1 type argument(s).
 
 
-==== genericsWithoutTypeParameters1.ts (15 errors) ====
+==== genericsWithoutTypeParameters1.ts (16 errors) ====
     class C<T> {
         foo(): T { return null }
+                   ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
     }
     
     interface I<T> {

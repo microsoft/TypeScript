@@ -3,6 +3,7 @@
 === commaOperatorWithSecondOperandNumberType.ts ===
 var ANY: any;
 >ANY : any
+>    : ^^^
 
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
@@ -25,6 +26,7 @@ ANY, NUMBER;
 >ANY, NUMBER : number
 >            : ^^^^^^
 >ANY : any
+>    : ^^^
 >NUMBER : number
 >       : ^^^^^^
 
@@ -69,6 +71,7 @@ var resultIsNumber1 = (ANY, NUMBER);
 >ANY, NUMBER : number
 >            : ^^^^^^
 >ANY : any
+>    : ^^^
 >NUMBER : number
 >       : ^^^^^^
 
@@ -133,6 +136,7 @@ ANY = undefined, NUMBER;
 >ANY = undefined : undefined
 >                : ^^^^^^^^^
 >ANY : any
+>    : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >NUMBER : number
@@ -208,6 +212,7 @@ var resultIsNumber7 = (ANY = undefined, NUMBER);
 >ANY = undefined : undefined
 >                : ^^^^^^^^^
 >ANY : any
+>    : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >NUMBER : number

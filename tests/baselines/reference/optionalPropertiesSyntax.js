@@ -38,3 +38,4 @@ interface indexSig {
 }
 
 //// [optionalPropertiesSyntax.js]
+"use strict";

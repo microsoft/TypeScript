@@ -1,0 +1,27 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== /packages/search/package.json (0 errors) ====
+    {
+        "name": "search",
+        "version": "0.0.1",
+        "main": "lib/index.js",
+        "types": "lib/index.d.ts",
+        "sideEffects": false
+    }
+==== /packages/search/lib/index.d.ts (0 errors) ====
+    export declare function test<T> (a: () => T): () => T;
+==== /packages/search-prefix/src/API/NotificationAPIUtils.ts (0 errors) ====
+    export type NotificationRequest = {};
+    export type NotificationResponse = {};
+    export function getNotification(): NotificationResponse {
+      return {};
+    }
+==== /packages/search-prefix/src/Store/NotificationStore.ts (0 errors) ====
+    import { test } from "search/lib/index";
+    import { getNotification } from "../API/NotificationAPIUtils";
+    
+    export const NotificationScenario = test(
+      getNotification
+    );

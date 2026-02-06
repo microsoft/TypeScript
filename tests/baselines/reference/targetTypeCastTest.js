@@ -26,6 +26,7 @@ var add2: Adder2 = function(x,y) {
 function add3(x,y) {x}
 
 //// [targetTypeCastTest.js]
+"use strict";
 function Point(x, y) {
     this.x = x;
     this.y = y;

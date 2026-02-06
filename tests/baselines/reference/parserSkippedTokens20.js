@@ -4,4 +4,5 @@
 var v: X<T \
 
 //// [parserSkippedTokens20.js]
+"use strict";
 var v;

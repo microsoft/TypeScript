@@ -1,4 +1,5 @@
-﻿//@noImplicitAny: true
+﻿// @target: es2015
+//@noImplicitAny: true
 
 var x: {}[] = [[1, 2, 3], ["hello"]];
 

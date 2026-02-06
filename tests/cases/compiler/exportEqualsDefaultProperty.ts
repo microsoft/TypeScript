@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 
 // @Filename: exp.ts
 var x = {

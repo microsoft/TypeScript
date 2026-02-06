@@ -54,32 +54,29 @@ exports.someMethod = exports.Foo = exports.foo = void 0;
  * comment1
  * @param p
  */
-var foo = function (p) {
+const foo = (p) => {
     return {
         /**
          * comment2
          * @param s
          */
-        bar: function (s) { },
+        bar: (s) => { },
         /**
          * comment3
          * @param s
          */
-        bar2: function (s) { },
+        bar2(s) { },
     };
 };
 exports.foo = foo;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
+class Foo {
     /**
      * comment4
      * @param s
      */
-    Foo.prototype.bar = function (s) {
-    };
-    return Foo;
-}());
+    bar(s) {
+    }
+}
 exports.Foo = Foo;
 /**
 * comment5

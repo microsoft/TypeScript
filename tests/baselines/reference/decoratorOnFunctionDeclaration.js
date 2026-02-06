@@ -8,5 +8,6 @@ function F() {
 }
 
 //// [decoratorOnFunctionDeclaration.js]
+"use strict";
 function F() {
 }

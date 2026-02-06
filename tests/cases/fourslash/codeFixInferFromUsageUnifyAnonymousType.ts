@@ -1,4 +1,6 @@
 /// <reference path='fourslash.ts' />
+
+// @stableTypeOrdering: true
 // @strict: true
 // based on acorn, translated to TS
 
@@ -16,4 +18,4 @@
 ////kw("6", { beforeExpr: true, prefix: true, startsExpr: true })
 
 
-verify.rangeAfterCodeFix("name: string, options: { startsExpr?: boolean; beforeExpr?: boolean; isLoop?: boolean; prefix?: boolean; keyword?: any; } | undefined",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);
+verify.rangeAfterCodeFix("name: string, options: { beforeExpr?: boolean; isLoop?: boolean; keyword?: any; prefix?: boolean; startsExpr?: boolean; } | undefined",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);

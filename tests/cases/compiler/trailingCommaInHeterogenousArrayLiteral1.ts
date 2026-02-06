@@ -1,3 +1,4 @@
+// @target: es2015
 class arrTest {
     test(arg1: number[]) {    }
     callTest() {

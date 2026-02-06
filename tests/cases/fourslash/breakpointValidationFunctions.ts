@@ -15,7 +15,7 @@
 ////{
 ////    return;
 ////}
-////module m {
+////namespace m {
 ////    var greetings = 0;
 ////    function greet(greeting: string): number {
 ////        greetings++;
@@ -30,7 +30,7 @@
 ////        return;
 ////    }
 ////}
-////module m1 {
+////namespace m1 {
 ////    var greetings = 0;
 ////    export function greet(greeting: string): number {
 ////        greetings++;

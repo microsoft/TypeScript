@@ -15,6 +15,7 @@ let x: Foo[] = [
 
 
 //// [objectLiteralsAgainstUnionsOfArrays01.js]
-var x = [
+"use strict";
+let x = [
     { bar: { prop: 100 } }
 ];

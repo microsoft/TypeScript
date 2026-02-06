@@ -1,0 +1,8 @@
+for-of8.ts(1,1): error TS2454: Variable 'v' is used before being assigned.
+
+
+==== for-of8.ts (1 errors) ====
+    v;
+    ~
+!!! error TS2454: Variable 'v' is used before being assigned.
+    for (var v of [0]) { }

@@ -1,4 +1,5 @@
-var x: {
+// @target: es2015
+declare var x: {
     a: string;
     b: number;
 };

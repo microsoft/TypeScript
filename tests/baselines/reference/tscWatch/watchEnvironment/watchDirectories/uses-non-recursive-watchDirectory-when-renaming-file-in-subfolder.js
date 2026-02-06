@@ -11,7 +11,6 @@ Input::
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 13
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -35,15 +34,12 @@ Output::
 
 
 
-//// [/a/username/projects/project/src/file1.js] Inode:: 111
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 15
+
+//// [/a/username/projects/project/src/file1.js] Inode:: 119
+"use strict";
 
 
-
-PolledWatches::
-/a/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /a/username/projects/project: *new*
@@ -54,8 +50,8 @@ FsWatches::
   {"inode":6}
 /a/username/projects/project/tsconfig.json: *new*
   {"inode":7}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {"inode":15}
 
 Program root files: [
   "/a/username/projects/project/src/file1.ts"
@@ -66,15 +62,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /a/username/projects/project/src/file1.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /a/username/projects/project/src/file1.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /a/username/projects/project/src/file1.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -82,7 +78,7 @@ exitCode:: ExitStatus.undefined
 Change:: Rename file1 to file2
 
 Input::
-//// [/a/username/projects/project/src/file2.ts] Inode:: 112
+//// [/a/username/projects/project/src/file2.ts] Inode:: 120
 
 
 //// [/a/username/projects/project/src/file1.ts] deleted
@@ -92,10 +88,6 @@ sysLog:: /a/username/projects/project/src/file1.ts:: Changing watcher to Missing
 
 
 PolledWatches::
-/a/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /a/username/projects/project/src/file1.ts: *new*
   {"pollingInterval":250}
 
@@ -106,8 +98,8 @@ FsWatches::
   {"inode":5}
 /a/username/projects/project/tsconfig.json:
   {"inode":7}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":15}
 
 FsWatches *deleted*::
 /a/username/projects/project/src/file1.ts:
@@ -129,15 +121,10 @@ Output::
 
 
 
-//// [/a/username/projects/project/src/file2.js] Inode:: 113
+//// [/a/username/projects/project/src/file2.js] Inode:: 121
+"use strict";
 
 
-
-PolledWatches::
-/a/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/a/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /a/username/projects/project/src/file1.ts:
@@ -149,11 +136,11 @@ FsWatches::
 /a/username/projects/project/src:
   {"inode":5}
 /a/username/projects/project/src/file2.ts: *new*
-  {"inode":112}
+  {"inode":120}
 /a/username/projects/project/tsconfig.json:
   {"inode":7}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":13}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":15}
 
 
 Program root files: [
@@ -165,7 +152,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /a/username/projects/project/src/file2.ts
 
 Semantic diagnostics in builder refreshed for::

@@ -16,19 +16,19 @@ function test({
     nested: { p = 'c' }
 >nested : any
 >       : ^^^
->p : "a" | "b"
->  : ^^^^^^^^^
+>p : any
+>  : ^^^
 >'c' : "c"
 >    : ^^^
 
 }: {
     method?: 'x' | 'y',
->method : "x" | "y"
->       : ^^^^^^^^^
+>method : "x" | "y" | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^
 
     nested?: { p: 'a' | 'b' }
->nested : { p: "a" | "b"; }
->       : ^^^^^         ^^^
+>nested : { p: "a" | "b"; } | undefined
+>       : ^^^^^         ^^^^^^^^^^^^^^^
 >p : "a" | "b"
 >  : ^^^^^^^^^
 
@@ -39,8 +39,8 @@ function test({
 >       : ^^^^^^^^^
 
     p
->p : "a" | "b"
->  : ^^^^^^^^^
+>p : any
+>  : ^^^
 }
 
 test({});

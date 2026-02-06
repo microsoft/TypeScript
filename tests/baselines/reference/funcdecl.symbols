@@ -114,20 +114,20 @@ function f(n: () => void) { }
 >f : Symbol(f, Decl(funcdecl.ts, 46, 38))
 >n : Symbol(n, Decl(funcdecl.ts, 48, 11))
 
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(funcdecl.ts, 48, 29))
 
     export function foo(n: () => void ) {
->foo : Symbol(foo, Decl(funcdecl.ts, 50, 11))
+>foo : Symbol(foo, Decl(funcdecl.ts, 50, 14))
 >n : Symbol(n, Decl(funcdecl.ts, 51, 24))
     }
 
 }
 
 m2.foo(() =>  {
->m2.foo : Symbol(m2.foo, Decl(funcdecl.ts, 50, 11))
+>m2.foo : Symbol(m2.foo, Decl(funcdecl.ts, 50, 14))
 >m2 : Symbol(m2, Decl(funcdecl.ts, 48, 29))
->foo : Symbol(m2.foo, Decl(funcdecl.ts, 50, 11))
+>foo : Symbol(m2.foo, Decl(funcdecl.ts, 50, 14))
 
     var b = 30;
 >b : Symbol(b, Decl(funcdecl.ts, 58, 7))

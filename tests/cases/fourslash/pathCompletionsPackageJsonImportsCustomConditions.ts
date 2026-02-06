@@ -9,7 +9,7 @@
 ////   "imports": {
 ////     "#only-with-custom-conditions": {
 ////       "custom-condition": "./something.js"
-////     },
+////     }
 ////   }
 //// }
 

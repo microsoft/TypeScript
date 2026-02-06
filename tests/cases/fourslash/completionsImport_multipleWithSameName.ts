@@ -29,7 +29,7 @@ verify.completions({
         },
         {
             name: "foo",
-            source: "/a",
+            source: "./a",
             sourceDisplay: "./a",
             text: "const foo: 0",
             kind: "const",
@@ -39,7 +39,7 @@ verify.completions({
         },
         {
             name: "foo",
-            source: "/b",
+            source: "./b",
             sourceDisplay: "./b",
             text: "const foo: 1",
             kind: "const",
@@ -52,7 +52,7 @@ verify.completions({
 });
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
-    source: "/b",
+    source: "./b",
     description: `Add import from "./b"`,
     newFileContent: `import { foo } from "./b";
 

@@ -1,6 +1,8 @@
+// @target: es2015
 interface I<S> {
    f: <T extends S>(x: T) => void
 }
  
 var x: I<{s: string}>
+declare var x: I<{s: string}>
 x.f({s: 1})

@@ -1,3 +1,4 @@
+// @target: es2015
 class C<T, T> { }
 class C2<T, U, T> { }
 

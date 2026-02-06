@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @traceResolution: true
 
 // @Filename: /src/a.ts

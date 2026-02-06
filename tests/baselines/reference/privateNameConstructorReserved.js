@@ -7,6 +7,7 @@ class A {
 
 
 //// [privateNameConstructorReserved.js]
+"use strict";
 var _A_instances, _A_constructor;
 class A {
     constructor() {

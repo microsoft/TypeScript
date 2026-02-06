@@ -1,3 +1,4 @@
+// @target: es2015
 type MyExtract<T, U> = T extends U ? T : never
 
 function foo<T>(a: T) {

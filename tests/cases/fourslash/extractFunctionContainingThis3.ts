@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 
+// @strict: false
 ////const foo = {
 ////    bar: "1",
 ////    baz() {

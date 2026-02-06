@@ -1,5 +1,5 @@
 // @strictNullChecks: true
-// @target: es5
+// @target: es5, es2015
 let o = { a: 1, b: 'no' }
 let o2 = { b: 'yes', c: true }
 let swap = { a: 'yes', b: -1 };

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @checkJs: true
 // @allowJs: true
 // @Filename: main.js

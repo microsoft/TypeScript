@@ -8,7 +8,7 @@ file.tsx(29,2): error TS2741: Property 'x' is missing in type '{}' but required 
 
 
 ==== file.tsx (3 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		test1: Attribs1;

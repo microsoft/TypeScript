@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 type Same<T> = { [P in keyof T]: T[P] };

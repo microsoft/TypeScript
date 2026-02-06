@@ -1,6 +1,9 @@
+// @strict: false
+// @ignoreDeprecations: 6.0
+// @alwaysStrict: true, false
 // @lib: es5,es2015.promise
 // @noEmitHelpers: true
-// @target: ES5
+// @target: ES5, ES2015
 declare var x, y, z, a, b, c;
 
 async function withStatement0() {

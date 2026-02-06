@@ -7,6 +7,7 @@ if (true) {
 }
 
 //// [parser512097.js]
-var tt = { aa: aa };
+"use strict";
+var tt = { aa };
 if (true) {
 }

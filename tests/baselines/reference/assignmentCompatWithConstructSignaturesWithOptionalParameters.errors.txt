@@ -1,16 +1,40 @@
 assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(16,5): error TS2322: Type 'new (x: number) => number' is not assignable to type 'new () => number'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
-assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(17,5): error TS2322: Type 'new (x: number, y?: number) => number' is not assignable to type 'new () => number'.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(17,5): error TS2322: Type 'new (x: number, y?: number | undefined) => number' is not assignable to type 'new () => number'.
   Target signature provides too few arguments. Expected 1 or more, but got 0.
 assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(19,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new () => number'.
   Target signature provides too few arguments. Expected 2 or more, but got 0.
-assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(27,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number) => number'.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(24,5): error TS2322: Type 'new (x: number) => number' is not assignable to type 'new (x?: number | undefined) => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(25,5): error TS2322: Type 'new (x: number, y?: number | undefined) => number' is not assignable to type 'new (x?: number | undefined) => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(27,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number | undefined) => number'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
 assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x: number) => number'.
   Target signature provides too few arguments. Expected 2 or more, but got 1.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(43,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x: number, y?: number | undefined) => number'.
+  Types of parameters 'y' and 'y' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(48,5): error TS2322: Type 'new (x: number) => number' is not assignable to type 'new (x?: number | undefined, y?: number | undefined) => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(49,5): error TS2322: Type 'new (x: number, y?: number | undefined) => number' is not assignable to type 'new (x?: number | undefined, y?: number | undefined) => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(51,5): error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number | undefined, y?: number | undefined) => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
 
 
-==== assignmentCompatWithConstructSignaturesWithOptionalParameters.ts (5 errors) ====
+==== assignmentCompatWithConstructSignaturesWithOptionalParameters.ts (11 errors) ====
     // call signatures in derived types must have the same or fewer optional parameters as the base type
     
     interface Base { 
@@ -21,9 +45,9 @@ assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS
         a5: new (x?: number, y?: number) => number;
         a6: new (x: number, y: number) => number;
     }
-    var b: Base;
+    declare var b: Base;
     
-    var a: new () => number;
+    declare var a: new () => number;
         a = b.a; // ok
         a = b.a2; // ok
         a = b.a3; // error
@@ -32,7 +56,7 @@ assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS
 !!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
         a = b.a4; // error
         ~
-!!! error TS2322: Type 'new (x: number, y?: number) => number' is not assignable to type 'new () => number'.
+!!! error TS2322: Type 'new (x: number, y?: number | undefined) => number' is not assignable to type 'new () => number'.
 !!! error TS2322:   Target signature provides too few arguments. Expected 1 or more, but got 0.
         a = b.a5; // ok
         a = b.a6; // error
@@ -40,18 +64,28 @@ assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS
 !!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new () => number'.
 !!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 0.
     
-    var a2: new (x?: number) => number; 
+    declare var a2: new (x?: number) => number; 
         a2 = b.a; // ok
         a2 = b.a2; // ok
         a2 = b.a3; // ok
+        ~~
+!!! error TS2322: Type 'new (x: number) => number' is not assignable to type 'new (x?: number | undefined) => number'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
         a2 = b.a4; // ok
+        ~~
+!!! error TS2322: Type 'new (x: number, y?: number | undefined) => number' is not assignable to type 'new (x?: number | undefined) => number'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
         a2 = b.a5; // ok
         a2 = b.a6; // error
         ~~
-!!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number) => number'.
+!!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number | undefined) => number'.
 !!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     
-    var a3: new (x: number) => number; 
+    declare var a3: new (x: number) => number; 
         a3 = b.a; // ok
         a3 = b.a2; // ok
         a3 = b.a3; // ok
@@ -62,19 +96,39 @@ assignmentCompatWithConstructSignaturesWithOptionalParameters.ts(35,5): error TS
 !!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x: number) => number'.
 !!! error TS2322:   Target signature provides too few arguments. Expected 2 or more, but got 1.
     
-    var a4: new (x: number, y?: number) => number;
+    declare var a4: new (x: number, y?: number) => number;
         a4 = b.a; // ok
         a4 = b.a2; // ok
         a4 = b.a3; // ok
         a4 = b.a4; // ok
         a4 = b.a5; // ok
         a4 = b.a6; // ok
+        ~~
+!!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x: number, y?: number | undefined) => number'.
+!!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
     
-    var a5: new (x?: number, y?: number) => number;
+    declare var a5: new (x?: number, y?: number) => number;
         a5 = b.a; // ok
         a5 = b.a2; // ok
         a5 = b.a3; // ok
+        ~~
+!!! error TS2322: Type 'new (x: number) => number' is not assignable to type 'new (x?: number | undefined, y?: number | undefined) => number'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
         a5 = b.a4; // ok
+        ~~
+!!! error TS2322: Type 'new (x: number, y?: number | undefined) => number' is not assignable to type 'new (x?: number | undefined, y?: number | undefined) => number'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
         a5 = b.a5; // ok
         a5 = b.a6; // ok
+        ~~
+!!! error TS2322: Type 'new (x: number, y: number) => number' is not assignable to type 'new (x?: number | undefined, y?: number | undefined) => number'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
     

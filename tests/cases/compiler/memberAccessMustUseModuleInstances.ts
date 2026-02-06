@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 // @Filename: memberAccessMustUseModuleInstances_0.ts
 export class Promise {

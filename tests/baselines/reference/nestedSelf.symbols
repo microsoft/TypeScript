@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/nestedSelf.ts] ////
 
 === nestedSelf.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(nestedSelf.ts, 0, 0))
 
  export class C {
->C : Symbol(C, Decl(nestedSelf.ts, 0, 10))
+>C : Symbol(C, Decl(nestedSelf.ts, 0, 13))
 
    public n = 42;
 >n : Symbol(C.n, Decl(nestedSelf.ts, 1, 17))
@@ -16,7 +16,7 @@ module M {
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(nestedSelf.ts, 3, 31))
 >this.n : Symbol(C.n, Decl(nestedSelf.ts, 1, 17))
->this : Symbol(C, Decl(nestedSelf.ts, 0, 10))
+>this : Symbol(C, Decl(nestedSelf.ts, 0, 13))
 >n : Symbol(C.n, Decl(nestedSelf.ts, 1, 17))
 >x : Symbol(x, Decl(nestedSelf.ts, 3, 31))
  }

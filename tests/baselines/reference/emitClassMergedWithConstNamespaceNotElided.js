@@ -21,5 +21,5 @@ Clone.clone("ok");
 //// [usage.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var enum_1 = require("./enum");
+const enum_1 = require("./enum");
 enum_1.Clone.clone("ok");

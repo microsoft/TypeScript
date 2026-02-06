@@ -12,6 +12,7 @@
 })();
 
 //// [parserVariableDeclaration2.js]
+"use strict";
 (function () {
     var check = function () {
     };

@@ -3,7 +3,6 @@
 
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -78,7 +77,11 @@ ts.JsTyping.discoverTypings::
           "ts2.7": "1.3.0"
         }
       },
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","commander"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:

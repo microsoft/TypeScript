@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxSpreadChildren.tsx] ////
 
 //// [tsxSpreadChildren.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -29,14 +29,14 @@ let x: TodoListProps;
 
 
 //// [tsxSpreadChildren.jsx]
+"use strict";
 function Todo(prop) {
     return <div>{prop.key.toString() + prop.todo}</div>;
 }
-function TodoList(_a) {
-    var todos = _a.todos;
+function TodoList({ todos }) {
     return <div>
-        {...todos.map(function (todo) { return <Todo key={todo.id} todo={todo.todo}/>; })}
+        {...todos.map(todo => <Todo key={todo.id} todo={todo.todo}/>)}
     </div>;
 }
-var x;
+let x;
 <TodoList {...x}/>;

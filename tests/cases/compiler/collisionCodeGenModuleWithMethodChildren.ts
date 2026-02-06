@@ -1,11 +1,13 @@
-module M {
+// @target: es2015
+// @strict: false
+namespace M {
     export var x = 3;
     class c {
         fn(M, p = x) { }
     }
 }
 
-module M {
+namespace M {
     class d {
         fn2() {
             var M;
@@ -14,7 +16,7 @@ module M {
     }
 }
 
-module M {
+namespace M {
     class e {
         fn3() {
             function M() {
@@ -24,7 +26,7 @@ module M {
     }
 }
 
-module M { // Shouldnt bn _M
+namespace M { // Shouldnt bn _M
     class f {
         M() {
         }

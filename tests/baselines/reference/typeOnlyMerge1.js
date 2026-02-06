@@ -21,10 +21,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = 0;
+const A = 0;
 exports.A = A;
 //// [c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
+const b_1 = require("./b");
 b_1.A;

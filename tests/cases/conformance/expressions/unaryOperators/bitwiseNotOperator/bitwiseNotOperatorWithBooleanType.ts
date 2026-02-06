@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnreachableCode: true
 
 // ~ operator on boolean type
@@ -9,7 +10,7 @@ class A {
     public a: boolean;
     static foo() { return false; }
 }
-module M {
+namespace M {
     export var n: boolean;
 }
 

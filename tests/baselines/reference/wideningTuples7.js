@@ -7,7 +7,8 @@ var foo = function bar() {
 };
 
 //// [wideningTuples7.js]
+"use strict";
 var foo = function bar() {
-    var intermediate;
+    let intermediate;
     return intermediate = [undefined];
 };

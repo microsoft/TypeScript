@@ -28,8 +28,8 @@ class Employee {
     public reports: Employee[] = [];
 >reports : Employee[]
 >        : ^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 }
 
 class Employee2 {
@@ -80,16 +80,16 @@ class Employee2 {
 >        : ^^^^^^^^
 
         this.reports = [];
->this.reports = [] : undefined[]
->                  : ^^^^^^^^^^^
+>this.reports = [] : never[]
+>                  : ^^^^^^^
 >this.reports : Employee[]
 >             : ^^^^^^^^^^
 >this : this
 >     : ^^^^
 >reports : Employee[]
 >        : ^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
     }
 }
 

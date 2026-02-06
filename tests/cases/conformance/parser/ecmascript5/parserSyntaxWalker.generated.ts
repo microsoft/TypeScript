@@ -1,4 +1,5 @@
-﻿//declare module "fs" {
+﻿// @target: es2015
+//declare module "fs" {
 //    export class File {
 //        constructor(filename: string);
 //        public ReadAllText(): string;
@@ -11,7 +12,7 @@
 //import fs = module("fs");
 
 
-//module TypeScriptAllInOne {
+//namespace TypeScriptAllInOne {
 //    export class Program {
 //        static Main(...args: string[]) {
 //            try {

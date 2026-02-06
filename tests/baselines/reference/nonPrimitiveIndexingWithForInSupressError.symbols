@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/types/nonPrimitive/nonPrimitiveIndexingWithForInSupressError.ts] ////
 
 === nonPrimitiveIndexingWithForInSupressError.ts ===
-var a: object;
+var a: object = {};
 >a : Symbol(a, Decl(nonPrimitiveIndexingWithForInSupressError.ts, 0, 3))
 
 for (var key in a) {

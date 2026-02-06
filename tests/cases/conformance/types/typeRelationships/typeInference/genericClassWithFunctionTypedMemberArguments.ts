@@ -1,7 +1,8 @@
+// @target: es2015
 // Generic functions used as arguments for function typed parameters are not used to make inferences from
 // Using function arguments, no errors expected
 
-module ImmediatelyFix {
+namespace ImmediatelyFix {
     class C<T> {
         foo<T>(x: (a: T) => T) {
             return x(null);
@@ -24,14 +25,14 @@ module ImmediatelyFix {
     var r3a = c2.foo(x => 1); // number
 }
 
-module WithCandidates {
+namespace WithCandidates {
     class C<T> {
         foo2<T, U>(x: T, cb: (a: T) => U) {
             return cb(x);
         }
     }
 
-    var c: C<number>;
+    declare var c: C<number>;
     var r4 = c.foo2(1, function <Z>(a: Z) { return '' }); // string, contextual signature instantiation is applied to generic functions
     var r5 = c.foo2(1, (a) => ''); // string
     var r6 = c.foo2<string, number>('', <Z>(a: Z) => 1); // number
@@ -42,7 +43,7 @@ module WithCandidates {
         }
     }
 
-    var c2: C2<number, string>;
+    declare var c2: C2<number, string>;
     var r7 = c2.foo3(1, <Z>(a: Z) => '', ''); // string
     var r8 = c2.foo3(1, function (a) { return '' }, ''); // string
 
@@ -51,7 +52,7 @@ module WithCandidates {
             return cb(x);
         }
     }
-    var c3: C3<number, string>;
+    declare var c3: C3<number, string>;
 
     function other<T, U>(t: T, u: U) {
         var r10 = c.foo2(1, (x: T) => ''); // error

@@ -1,8 +1,9 @@
+// @target: es2015
 // @module: commonjs
 // @declaration: true
 
 // @filename: es6ImportNamedImportInIndirectExportAssignment_0.ts
-export module a {
+export namespace a {
     export class c {
     }
 }

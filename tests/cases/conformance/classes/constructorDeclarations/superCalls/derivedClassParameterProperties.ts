@@ -1,3 +1,4 @@
+// @target: es2015
 // ordering of super calls in derived constructors matters depending on other class contents
 
 class Base {

@@ -12,10 +12,12 @@ const Foo = {};
 
 
 //// [globals.js]
+"use strict";
 var globals;
 (function (globals) {
     globals.Bar = {};
 })(globals || (globals = {}));
 var Foo = globals.toString.Blah;
 //// [index.js]
-var Foo = {};
+"use strict";
+const Foo = {};

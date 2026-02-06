@@ -11,6 +11,7 @@ while (a == 10)
 }
 
 //// [sourceMapValidationWhile.js]
+"use strict";
 var a = 10;
 while (a == 10) {
     a++;

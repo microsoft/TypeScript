@@ -1,7 +1,9 @@
-// @module: node16,node18,nodenext
+// @target: es2022
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @outDir: out
 // @filename: index.ts
+// @rootDir: .
 // esm format file
 import * as cjs from "package/cjs";
 import * as mjs from "package/mjs";
@@ -51,27 +53,8 @@ typei.implicitCjsSource;
 ts.cjsSource;
 // @filename: node_modules/inner/index.d.ts
 // cjs format file
-import * as cjs from "inner/a";
-import * as mjs from "inner/b";
-import * as type from "inner";
-import * as ts from "inner/types";
-export { cjs };
-export { mjs };
-export { type };
-export { ts };
 export const implicitCjsSource = true;
-// @filename: node_modules/inner/index.d.mts
-// esm format file
-import * as cjs from "inner/a";
-import * as mjs from "inner/b";
-import * as type from "inner";
-import * as ts from "inner/types";
-export { cjs };
-export { mjs };
-export { type };
-export { ts };
-export const mjsSource = true;
-// @filename: node_modules/inner/index.d.cts
+// @filename: node_modules/inner/test.d.ts
 // cjs format file
 import * as cjs from "inner/a";
 import * as mjs from "inner/b";
@@ -81,7 +64,32 @@ export { cjs };
 export { mjs };
 export { type };
 export { ts };
+// @filename: node_modules/inner/index.d.mts
+// esm format file
+export const mjsSource = true;
+// @filename: node_modules/inner/test.d.mts
+// esm format file
+import * as cjs from "inner/a";
+import * as mjs from "inner/b";
+import * as type from "inner";
+import * as ts from "inner/types";
+export { cjs };
+export { mjs };
+export { type };
+export { ts };
+// @filename: node_modules/inner/index.d.cts
+// cjs format file
 export const cjsSource = true;
+// @filename: node_modules/inner/test.d.cts
+// cjs format file
+import * as cjs from "inner/a";
+import * as mjs from "inner/b";
+import * as type from "inner";
+import * as ts from "inner/types";
+export { cjs };
+export { mjs };
+export { type };
+export { ts };
 // @filename: package.json
 {
     "name": "package",
@@ -113,7 +121,7 @@ export const cjsSource = true;
         "./types": {
             "types": {
                 "import": "./index.d.mts",
-                "require": "./index.d.cts",
+                "require": "./index.d.cts"
             },
             "node": {
                 "import": "./index.mjs",

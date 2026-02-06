@@ -3,6 +3,7 @@
 === ambientInsideNonAmbientExternalModule.ts ===
 export declare var x;
 >x : any
+>  : ^^^
 
 export declare function f();
 >f : () => any
@@ -16,4 +17,4 @@ export declare enum E { }
 >E : E
 >  : ^
 
-export declare module M { }
+export declare namespace M { }

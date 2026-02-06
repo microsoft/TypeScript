@@ -1,3 +1,4 @@
+// @target: es2015
 // @experimentalDecorators: true
 interface I<T> {
     prototype: T,

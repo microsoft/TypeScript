@@ -1,0 +1,14 @@
+customEventDetail.ts(4,1): error TS2454: Variable 'x' is used before being assigned.
+customEventDetail.ts(5,9): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== customEventDetail.ts (2 errors) ====
+    var x: CustomEvent;
+    
+    // valid since detail is any
+    x.initCustomEvent('hello', true, true, { id: 12, name: 'hello' });
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    var y = x.detail.name;
+            ~
+!!! error TS2454: Variable 'x' is used before being assigned.

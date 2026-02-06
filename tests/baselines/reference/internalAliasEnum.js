@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasEnum.ts] ////
 
 //// [internalAliasEnum.ts]
-module a {
+namespace a {
     export enum weekend {
         Friday,
         Saturday,
@@ -9,16 +9,17 @@ module a {
     }
 }
 
-module c {
+namespace c {
     import b = a.weekend;
     export var bVal: b = b.Sunday;
 }
 
 
 //// [internalAliasEnum.js]
+"use strict";
 var a;
 (function (a) {
-    var weekend;
+    let weekend;
     (function (weekend) {
         weekend[weekend["Friday"] = 0] = "Friday";
         weekend[weekend["Saturday"] = 1] = "Saturday";

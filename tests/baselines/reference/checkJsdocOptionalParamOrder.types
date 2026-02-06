@@ -12,8 +12,8 @@ function foo(a, b, c) {}
 >    : ^ ^^      ^^ ^^^      ^^ ^^      ^^^^^^^^^
 >a : number
 >  : ^^^^^^
->b : number
->  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >c : number
 >  : ^^^^^^
 

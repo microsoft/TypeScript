@@ -1,3 +1,4 @@
+// @target: es2015
 // all the following should be error
 function fn1(): number {  }
 function fn2(): string { }

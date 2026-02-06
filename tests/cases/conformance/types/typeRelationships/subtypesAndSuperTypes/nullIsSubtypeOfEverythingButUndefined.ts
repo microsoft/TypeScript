@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // null is a subtype of any other types except undefined
 
 var r0 = true ? null : null;
@@ -54,7 +56,7 @@ var r14 = true ? E.A : null;
 var r14 = true ? null : E.A;
 
 function f() { }
-module f {
+namespace f {
     export var bar = 1;
 }
 var af: typeof f;
@@ -62,7 +64,7 @@ var r15 = true ? af : null;
 var r15 = true ? null : af;
 
 class c { baz: string }
-module c {
+namespace c {
     export var bar = 1;
 }
 var ac: typeof c;

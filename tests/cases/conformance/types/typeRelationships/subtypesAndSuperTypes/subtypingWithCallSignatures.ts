@@ -1,4 +1,5 @@
-module CallSignature {
+// @target: es2015
+namespace CallSignature {
     declare function foo1(cb: (x: number) => void): typeof cb;
     declare function foo1(cb: any): any;
     var r = foo1((x: number) => 1); // ok because base returns void

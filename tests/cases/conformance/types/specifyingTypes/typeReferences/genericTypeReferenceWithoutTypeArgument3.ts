@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // it is an error to use a generic type without type arguments
 // all of these are errors 
 
@@ -15,7 +17,7 @@ declare function f(x: C): C;
 
 declare class D extends C {}
 
-declare module M {
+declare namespace M {
     export class E<T> { foo: T }
 }
 

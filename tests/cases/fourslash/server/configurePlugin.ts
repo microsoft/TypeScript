@@ -3,6 +3,7 @@
 // @Filename: tsconfig.json
 //// {
 ////     "compilerOptions": {
+////         "lib": ["es5"],
 ////         "plugins": [
 ////             { "name": "configurable-diagnostic-adder" , "message": "configured error" }
 ////         ]

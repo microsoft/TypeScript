@@ -2,7 +2,7 @@
 
 === Performance Stats ===
 Type Count: 2,500
-Instantiation count: 5,000
+Instantiation count: 2,500
 
 === flatArrayNoExcessiveStackDepth.ts ===
 // Repro from #43493
@@ -80,8 +80,6 @@ const repro_43249 = (value: unknown) => {
 >   : ^^
 
     const [, extracted] = match;
-> : undefined
-> : ^^^^^^^^^
 >extracted : string
 >          : ^^^^^^
 >match : [] | RegExpMatchArray

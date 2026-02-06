@@ -1,5 +1,5 @@
 ﻿//@target: ES6
-var iterableWithOptionalIterator: {
+declare var iterableWithOptionalIterator: {
     [Symbol.iterator]?(): Iterator<string>
 };
 

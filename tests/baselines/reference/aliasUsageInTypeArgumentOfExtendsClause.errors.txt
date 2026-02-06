@@ -1,0 +1,31 @@
+aliasUsageInTypeArgumentOfExtendsClause_backbone.ts(2,12): error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
+aliasUsageInTypeArgumentOfExtendsClause_main.ts(7,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== aliasUsageInTypeArgumentOfExtendsClause_main.ts (1 errors) ====
+    import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
+    import moduleA = require("./aliasUsageInTypeArgumentOfExtendsClause_moduleA");
+    interface IHasVisualizationModel {
+        VisualizationModel: typeof Backbone.Model;
+    }
+    class C<T extends IHasVisualizationModel> {
+        x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    class D extends C<IHasVisualizationModel> {
+        x = moduleA;
+    }
+==== aliasUsageInTypeArgumentOfExtendsClause_backbone.ts (1 errors) ====
+    export class Model {
+        public someData: string;
+               ~~~~~~~~
+!!! error TS2564: Property 'someData' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+==== aliasUsageInTypeArgumentOfExtendsClause_moduleA.ts (0 errors) ====
+    import Backbone = require("./aliasUsageInTypeArgumentOfExtendsClause_backbone");
+    export class VisualizationModel extends Backbone.Model {
+        // interesting stuff here
+    }
+    

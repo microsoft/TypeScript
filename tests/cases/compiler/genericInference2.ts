@@ -1,4 +1,5 @@
-    declare module ko { 
+// @target: es2015
+    declare namespace ko { 
        export interface Observable<T> { 
            (): T; 
            (value: T): any; 

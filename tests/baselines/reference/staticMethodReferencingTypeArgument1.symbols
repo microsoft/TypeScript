@@ -1,21 +1,21 @@
 //// [tests/cases/compiler/staticMethodReferencingTypeArgument1.ts] ////
 
 === staticMethodReferencingTypeArgument1.ts ===
-module Editor {
+namespace Editor {
 >Editor : Symbol(Editor, Decl(staticMethodReferencingTypeArgument1.ts, 0, 0))
 
     export class List<T> {
->List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+>List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 18))
 >T : Symbol(T, Decl(staticMethodReferencingTypeArgument1.ts, 1, 22))
 
         next: List<T>;
 >next : Symbol(List.next, Decl(staticMethodReferencingTypeArgument1.ts, 1, 26))
->List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+>List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 18))
 >T : Symbol(T, Decl(staticMethodReferencingTypeArgument1.ts, 1, 22))
 
         prev: List<T>;
 >prev : Symbol(List.prev, Decl(staticMethodReferencingTypeArgument1.ts, 2, 22))
->List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+>List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 18))
 >T : Symbol(T, Decl(staticMethodReferencingTypeArgument1.ts, 1, 22))
 
         constructor(public isHead: boolean, public data: T) {
@@ -26,14 +26,14 @@ module Editor {
 
         static MakeHead(): List<T> {
 >MakeHead : Symbol(List.MakeHead, Decl(staticMethodReferencingTypeArgument1.ts, 6, 9))
->List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+>List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 18))
 >T : Symbol(T)
 
             var entry: List<T> = new List<T>(true, null); // can't access T here
 >entry : Symbol(entry, Decl(staticMethodReferencingTypeArgument1.ts, 9, 15))
->List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+>List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 18))
 >T : Symbol(T)
->List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 15))
+>List : Symbol(List, Decl(staticMethodReferencingTypeArgument1.ts, 0, 18))
 >T : Symbol(T)
 
             entry.prev = entry;

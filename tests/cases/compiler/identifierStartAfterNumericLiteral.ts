@@ -1,3 +1,4 @@
+// @target: es2015
 let valueIn = 3in[null];
 
 3a[null]

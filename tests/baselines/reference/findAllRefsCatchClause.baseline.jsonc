@@ -18,7 +18,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "var",
-    "name": "var err: any",
+    "name": "var err: unknown",
     "displayParts": [
      {
       "text": "var",
@@ -41,7 +41,7 @@
       "kind": "space"
      },
      {
-      "text": "any",
+      "text": "unknown",
       "kind": "keyword"
      }
     ]
@@ -70,7 +70,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "var",
-    "name": "var err: any",
+    "name": "var err: unknown",
     "displayParts": [
      {
       "text": "var",
@@ -93,7 +93,7 @@
       "kind": "space"
      },
      {
-      "text": "any",
+      "text": "unknown",
       "kind": "keyword"
      }
     ]

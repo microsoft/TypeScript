@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/collisionCodeGenModuleWithModuleChildren.ts] ////
 
 === collisionCodeGenModuleWithModuleChildren.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -11,7 +11,7 @@ module M {
 >3 : 3
 >  : ^
 
-    module m1 {
+    namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -29,11 +29,11 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    module m2 {
+    namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 
@@ -57,11 +57,11 @@ module M {
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    module m3 {
+    namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -85,11 +85,11 @@ module M {
     }
 }
 
-module M { // shouldnt be _M
+namespace M { // shouldnt be _M
 >M : typeof M
 >  : ^^^^^^^^
 
-    module m3 {
+    namespace m3 {
 >m3 : typeof m3
 >   : ^^^^^^^^^
 
@@ -107,15 +107,15 @@ module M { // shouldnt be _M
     }
 }
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
-    module m4 {
+    namespace m4 {
 >m4 : typeof m4
 >   : ^^^^^^^^^
 
-        module M {
+        namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

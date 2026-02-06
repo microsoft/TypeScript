@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare module "foo" {
    namespace M {}
    var M;

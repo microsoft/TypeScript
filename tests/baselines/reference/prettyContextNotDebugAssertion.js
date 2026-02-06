@@ -5,5 +5,6 @@ if (true) {
 
 
 //// [index.js]
+"use strict";
 if (true) {
 }

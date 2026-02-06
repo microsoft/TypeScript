@@ -1,4 +1,5 @@
-﻿interface A { a: string }
+﻿// @target: es2015
+interface A { a: string }
 interface B { b: string }
 interface C { c: string }
 interface D { d: string }

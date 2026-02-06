@@ -1,3 +1,4 @@
+// @target: es2015
 class C { constructor(x: number, y: number) { } }
 class ELoc extends C {
     constructor(x: number) {

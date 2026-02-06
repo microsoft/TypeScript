@@ -18,7 +18,7 @@ verify.completions({
         {
             name: "foo",
             text: "const foo: 0",
-            source: "/a",
+            source: "./a",
             sourceDisplay: "./a",
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions
@@ -26,7 +26,7 @@ verify.completions({
         {
             name: "bar",
             text: "const bar: 0",
-            source: "/a",
+            source: "./a",
             sourceDisplay: "./a",
             hasAction: true,
             sortText: completion.SortText.AutoImportSuggestions

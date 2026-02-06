@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 
 function f1(x: string) {

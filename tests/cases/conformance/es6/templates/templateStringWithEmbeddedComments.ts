@@ -1,4 +1,5 @@
-﻿`head${ // single line comment
+﻿// @target: es2015
+`head${ // single line comment
 10
 }
 middle${

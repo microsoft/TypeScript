@@ -1,7 +1,8 @@
+// @target: es2015
 //@jsx: preserve
 
 //@filename: react.d.ts
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 	}
@@ -31,7 +32,7 @@ interface ComponentClass<P> {
 	new (props?: P, context?: any): Component<P, any>;
 }
 
-declare module TestMod {
+declare namespace TestMod {
 	interface TestClass extends ComponentClass<{reqd: any}> {
 	}
 	var Test: TestClass;

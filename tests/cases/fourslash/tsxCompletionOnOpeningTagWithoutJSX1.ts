@@ -1,5 +1,7 @@
 ﻿/// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 //@Filename: file.tsx
 //// var x = 'something'
 //// var y = </**/;

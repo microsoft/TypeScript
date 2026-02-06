@@ -1,3 +1,4 @@
+// @target: es2015
 function foo<T>() {
     var z = foo<typeof y>();
     var y: {

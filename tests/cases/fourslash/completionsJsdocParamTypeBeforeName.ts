@@ -1,4 +1,7 @@
 /// <reference path="fourslash.ts" />
+
+// @lib: es5
+
 //// /** @param /*name1*/ {/*type*/} /*name2*/ */
 //// function toString(obj) {}
 

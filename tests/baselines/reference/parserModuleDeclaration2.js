@@ -5,3 +5,4 @@ declare module "Foo" {
 }
 
 //// [parserModuleDeclaration2.js]
+"use strict";

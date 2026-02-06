@@ -44,7 +44,6 @@ export class Data {
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -64,13 +63,20 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m6[0m     "baseUrl": "."
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/lib1/tools/toolsinterface.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/user/username/projects/myproject/lib1/tools/toolsinterface.d.ts]
@@ -80,23 +86,7 @@ export interface ITest {
 
 
 //// [/user/username/projects/myproject/lib1/tools/public.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./toolsinterface"), exports);
+export * from "./toolsinterface";
 
 
 //// [/user/username/projects/myproject/lib1/tools/public.d.ts]
@@ -104,23 +94,7 @@ export * from "./toolsinterface";
 
 
 //// [/user/username/projects/myproject/lib1/public.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./tools/public"), exports);
+export * from "./tools/public";
 
 
 //// [/user/username/projects/myproject/lib1/public.d.ts]
@@ -128,21 +102,14 @@ export * from "./tools/public";
 
 
 //// [/user/username/projects/myproject/lib2/data.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Data = void 0;
-var Data = /** @class */ (function () {
-    function Data() {
-    }
-    Data.prototype.test = function () {
-        var result = {
+export class Data {
+    test() {
+        const result = {
             title: "title"
         };
         return result;
-    };
-    return Data;
-}());
-exports.Data = Data;
+    }
+}
 
 
 //// [/user/username/projects/myproject/lib2/data.d.ts]
@@ -153,23 +120,7 @@ export declare class Data {
 
 
 //// [/user/username/projects/myproject/lib2/public.js]
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./data"), exports);
+export * from "./data";
 
 
 //// [/user/username/projects/myproject/lib2/public.d.ts]
@@ -177,17 +128,12 @@ export * from "./data";
 
 
 //// [/user/username/projects/myproject/app.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.App = void 0;
-var public_1 = require("lib2/public");
-var App = /** @class */ (function () {
-    function App() {
-        new public_1.Data().test();
+import { Data } from "lib2/public";
+export class App {
+    constructor() {
+        new Data().test();
     }
-    return App;
-}());
-exports.App = App;
+}
 
 
 //// [/user/username/projects/myproject/app.d.ts]
@@ -197,14 +143,8 @@ export declare class App {
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/myproject/app.ts: *new*
   {}
@@ -232,7 +172,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
@@ -240,17 +180,10 @@ Program files::
 /user/username/projects/myproject/lib2/public.ts
 /user/username/projects/myproject/app.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts
-/user/username/projects/myproject/lib1/tools/public.ts
-/user/username/projects/myproject/lib1/public.ts
-/user/username/projects/myproject/lib2/data.ts
-/user/username/projects/myproject/lib2/public.ts
-/user/username/projects/myproject/app.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts during emit)
 /user/username/projects/myproject/lib1/tools/public.ts (computed .d.ts during emit)
 /user/username/projects/myproject/lib1/public.ts (computed .d.ts during emit)
@@ -281,10 +214,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2561: [0mObject literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
-[7m5[0m             title: "title"
-[7m [0m [91m            ~~~~~[0m
+[7m6[0m     "baseUrl": "."
+[7m [0m [91m    ~~~~~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
@@ -316,7 +250,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
@@ -324,13 +258,7 @@ Program files::
 /user/username/projects/myproject/lib2/public.ts
 /user/username/projects/myproject/app.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts
-/user/username/projects/myproject/lib1/tools/public.ts
-/user/username/projects/myproject/lib1/public.ts
-/user/username/projects/myproject/lib2/data.ts
-/user/username/projects/myproject/lib2/public.ts
-/user/username/projects/myproject/app.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
@@ -363,7 +291,13 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m6[0m     "baseUrl": "."
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -393,7 +327,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
@@ -401,13 +335,7 @@ Program files::
 /user/username/projects/myproject/lib2/public.ts
 /user/username/projects/myproject/app.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts
-/user/username/projects/myproject/lib1/tools/public.ts
-/user/username/projects/myproject/lib1/public.ts
-/user/username/projects/myproject/lib2/data.ts
-/user/username/projects/myproject/lib2/public.ts
-/user/username/projects/myproject/app.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)
@@ -440,10 +368,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96mlib2/data.ts[0m:[93m5[0m:[93m13[0m - [91merror[0m[90m TS2561: [0mObject literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?
+[96mtsconfig.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
 
-[7m5[0m             title: "title"
-[7m [0m [91m            ~~~~~[0m
+[7m6[0m     "baseUrl": "."
+[7m [0m [91m    ~~~~~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
@@ -475,7 +404,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts
 /user/username/projects/myproject/lib1/tools/public.ts
 /user/username/projects/myproject/lib1/public.ts
@@ -483,13 +412,7 @@ Program files::
 /user/username/projects/myproject/lib2/public.ts
 /user/username/projects/myproject/app.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/lib1/tools/toolsinterface.ts
-/user/username/projects/myproject/lib1/tools/public.ts
-/user/username/projects/myproject/lib1/public.ts
-/user/username/projects/myproject/lib2/data.ts
-/user/username/projects/myproject/lib2/public.ts
-/user/username/projects/myproject/app.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/lib1/tools/toolsinterface.ts (computed .d.ts)

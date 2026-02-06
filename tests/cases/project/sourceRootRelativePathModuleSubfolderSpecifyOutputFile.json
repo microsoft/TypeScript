@@ -8,5 +8,6 @@
     "sourceMap": true,
     "declaration": true,
     "baselineCheck": true,
-    "sourceRoot": "../src"
+    "sourceRoot": "../src",
+    "strict": false
 }

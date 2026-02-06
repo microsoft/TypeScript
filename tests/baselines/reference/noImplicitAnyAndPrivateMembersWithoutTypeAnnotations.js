@@ -15,5 +15,6 @@ var x = new Something();
 
 
 //// [app.js]
+"use strict";
 /// <reference path="test.d.ts" />
 var x = new Something();

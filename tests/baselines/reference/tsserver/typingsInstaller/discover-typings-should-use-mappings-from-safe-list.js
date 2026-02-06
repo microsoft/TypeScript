@@ -9,7 +9,6 @@
 
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -42,7 +41,11 @@ ts.JsTyping.discoverTypings::
       },
       "unresolvedImports": [],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["jquery","chroma-js"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []

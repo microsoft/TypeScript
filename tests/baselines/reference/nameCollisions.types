@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/nameCollisions.ts] ////
 
 === nameCollisions.ts ===
-module T {
+namespace T {
 >T : typeof T
 >  : ^^^^^^^^
 
@@ -11,7 +11,7 @@ module T {
 >2 : 2
 >  : ^
 
-    module x { // error
+    namespace x { // error
 >x : typeof x
 >  : ^^^^^^^^
 
@@ -25,7 +25,7 @@ module T {
         }
     }
 
-    module z {
+    namespace z {
 >z : typeof z
 >  : ^^^^^^^^
 
@@ -37,7 +37,7 @@ module T {
 >z : any
 >  : ^^^
 
-    module y {
+    namespace y {
 >y : typeof y
 >  : ^^^^^^^^
 
@@ -54,7 +54,7 @@ module T {
 >w : any
 >  : ^^^
 
-    module w { } //ok
+    namespace w { } //ok
 
     var f;
 >f : any

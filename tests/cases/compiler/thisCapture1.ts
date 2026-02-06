@@ -1,3 +1,4 @@
+// @target: es2015
 class X {
     private y = 0;
     public getSettings(keys: string[]): any {

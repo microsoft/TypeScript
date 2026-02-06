@@ -21,7 +21,7 @@
 const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForModuleExports: true };
 const classEntry = (isConstructor: boolean): FourSlashInterface.ExpectedCompletionEntry => ({
     name: "Cls",
-    source: "/a",
+    source: "./a",
     sourceDisplay: "./a",
     kind: "class",
     kindModifiers: "export",

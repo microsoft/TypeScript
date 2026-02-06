@@ -10,6 +10,7 @@ var x: A = {
 
 
 //// [objectLiteralWithNumericPropertyName.js]
+"use strict";
 var x = {
     0: 3
 };

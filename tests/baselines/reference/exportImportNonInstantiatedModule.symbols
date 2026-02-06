@@ -1,19 +1,19 @@
 //// [tests/cases/compiler/exportImportNonInstantiatedModule.ts] ////
 
 === exportImportNonInstantiatedModule.ts ===
-module A {
+namespace A {
 >A : Symbol(A, Decl(exportImportNonInstantiatedModule.ts, 0, 0))
 
     export interface I { x: number }
->I : Symbol(I, Decl(exportImportNonInstantiatedModule.ts, 0, 10))
+>I : Symbol(I, Decl(exportImportNonInstantiatedModule.ts, 0, 13))
 >x : Symbol(I.x, Decl(exportImportNonInstantiatedModule.ts, 1, 24))
 }
 
-module B {
+namespace B {
 >B : Symbol(B, Decl(exportImportNonInstantiatedModule.ts, 2, 1))
 
     export import A1 = A
->A1 : Symbol(A1, Decl(exportImportNonInstantiatedModule.ts, 4, 10))
+>A1 : Symbol(A1, Decl(exportImportNonInstantiatedModule.ts, 4, 13))
 >A : Symbol(A1, Decl(exportImportNonInstantiatedModule.ts, 0, 0))
     
 }
@@ -21,7 +21,7 @@ module B {
 var x: B.A1.I = { x: 1 };
 >x : Symbol(x, Decl(exportImportNonInstantiatedModule.ts, 9, 3))
 >B : Symbol(B, Decl(exportImportNonInstantiatedModule.ts, 2, 1))
->A1 : Symbol(B.A1, Decl(exportImportNonInstantiatedModule.ts, 4, 10))
->I : Symbol(A.I, Decl(exportImportNonInstantiatedModule.ts, 0, 10))
+>A1 : Symbol(B.A1, Decl(exportImportNonInstantiatedModule.ts, 4, 13))
+>I : Symbol(A.I, Decl(exportImportNonInstantiatedModule.ts, 0, 13))
 >x : Symbol(x, Decl(exportImportNonInstantiatedModule.ts, 9, 17))
 

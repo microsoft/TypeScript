@@ -13,7 +13,7 @@ export type { AA } from './a';
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AA = void 0;
-var A = {};
+const A = {};
 exports.AA = {};
 //// [b.js]
 "use strict";

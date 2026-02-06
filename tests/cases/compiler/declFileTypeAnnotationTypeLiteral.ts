@@ -1,11 +1,11 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @declaration: true
 
 class c {
 }
 class g<T> {
 }
-module m {
+namespace m {
     export class c {
     }
 }

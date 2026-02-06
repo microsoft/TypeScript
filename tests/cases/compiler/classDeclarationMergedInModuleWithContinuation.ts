@@ -1,11 +1,12 @@
-module M {
+// @target: es2015
+namespace M {
     export class N { }
-    export module N {
+    export namespace N {
         export var v = 0;
     }
 }
 
-module M {
+namespace M {
     export class O extends M.N {
     }
 }

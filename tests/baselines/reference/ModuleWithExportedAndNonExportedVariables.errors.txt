@@ -2,7 +2,7 @@ ModuleWithExportedAndNonExportedVariables.ts(11,11): error TS2339: Property 'y' 
 
 
 ==== ModuleWithExportedAndNonExportedVariables.ts (1 errors) ====
-    module A {
+    namespace A {
         export var x = 'hello world'
         var y = 12;
     }

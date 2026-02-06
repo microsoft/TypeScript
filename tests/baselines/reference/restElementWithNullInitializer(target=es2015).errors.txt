@@ -1,0 +1,24 @@
+restElementWithNullInitializer.ts(1,15): error TS2488: Type 'null' must have a '[Symbol.iterator]()' method that returns an iterator.
+restElementWithNullInitializer.ts(4,15): error TS2488: Type 'undefined' must have a '[Symbol.iterator]()' method that returns an iterator.
+restElementWithNullInitializer.ts(7,15): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== restElementWithNullInitializer.ts (3 errors) ====
+    function foo1([...r] = null) {
+                  ~~~~~~
+!!! error TS2488: Type 'null' must have a '[Symbol.iterator]()' method that returns an iterator.
+    }
+    
+    function foo2([...r] = undefined) {
+                  ~~~~~~
+!!! error TS2488: Type 'undefined' must have a '[Symbol.iterator]()' method that returns an iterator.
+    }
+    
+    function foo3([...r] = {}) {
+                  ~~~~~~
+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
+    }
+    
+    function foo4([...r] = []) {
+    }
+    

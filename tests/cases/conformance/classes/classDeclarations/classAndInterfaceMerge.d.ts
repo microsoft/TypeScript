@@ -1,3 +1,4 @@
+// @target: es2015
 
 interface C { }
 
@@ -7,7 +8,7 @@ interface C { }
 
 interface C { }
 
-declare module M {
+declare namespace M {
 
     interface C1 { }
 
@@ -20,6 +21,6 @@ declare module M {
     export class C2 { }
 }
 
-declare module M {
+declare namespace M {
     export interface C2 { }
 }

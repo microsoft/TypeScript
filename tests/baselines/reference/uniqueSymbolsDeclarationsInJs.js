@@ -31,6 +31,7 @@ const a = Symbol();
 
 
 //// [uniqueSymbolsDeclarationsInJs-out.js]
+"use strict";
 // classes
 class C {
     constructor() {

@@ -1,3 +1,4 @@
+// @target: es2015
 class Base {
     protected constructor() { }
     public instance1 = new Base(); // allowed

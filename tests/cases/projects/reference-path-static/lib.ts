@@ -1,3 +1,3 @@
-module Lib {
+namespace Lib {
     export class LibType {}
 }

@@ -10,6 +10,7 @@ class C<T> {
 }
 
 //// [computedPropertyNames32_ES6.js]
+"use strict";
 function foo() { return ''; }
 class C {
     bar() {

@@ -335,7 +335,7 @@ declare function testFunction12P<T>(x: T, y: T): Promise<T>;
 >y : T
 >  : ^
 
-var r1: IPromise<number>;
+declare var r1: IPromise<number>;
 >r1 : IPromise<number>
 >   : ^^^^^^^^^^^^^^^^
 
@@ -405,7 +405,7 @@ var r1c = r1.then(testFunctionP, testFunctionP, testFunctionP);
 >testFunctionP : () => Promise<number>
 >              : ^^^^^^               
 
-var s1: Promise<number>;
+declare var s1: Promise<number>;
 >s1 : Promise<number>
 >   : ^^^^^^^^^^^^^^^
 
@@ -493,7 +493,7 @@ var s1d = s1.then(testFunctionP, testFunction, testFunction).then(testFunction, 
 >testFunction : () => IPromise<number>
 >             : ^^^^^^                
 
-var r2: IPromise<{ x: number; }>;
+declare var r2: IPromise<{ x: number; }>;
 >r2 : IPromise<{ x: number; }>
 >   : ^^^^^^^^^^^^^^      ^^^^
 >x : number
@@ -547,7 +547,7 @@ var r2b = r2.then(testFunction2, testFunction2, testFunction2).then(testFunction
 >testFunction2 : () => IPromise<{ x: number; }>
 >              : ^^^^^^                        
 
-var s2: Promise<{ x: number; }>;
+declare var s2: Promise<{ x: number; }>;
 >s2 : Promise<{ x: number; }>
 >   : ^^^^^^^^^^^^^      ^^^^
 >x : number
@@ -637,7 +637,7 @@ var s2d = s2.then(testFunction2P, testFunction2, testFunction2).then(testFunctio
 >testFunction2 : () => IPromise<{ x: number; }>
 >              : ^^^^^^                        
 
-var r3: IPromise<number>;
+declare var r3: IPromise<number>;
 >r3 : IPromise<number>
 >   : ^^^^^^^^^^^^^^^^
 
@@ -689,7 +689,7 @@ var r3b = r3.then(testFunction3, testFunction3, testFunction3).then(testFunction
 >testFunction3 : (x: number) => IPromise<number>
 >              : ^ ^^      ^^^^^                
 
-var s3: Promise<number>;
+declare var s3: Promise<number>;
 >s3 : Promise<number>
 >   : ^^^^^^^^^^^^^^^
 
@@ -777,17 +777,17 @@ var s3d = s3.then(testFunction3P, testFunction3, testFunction3).then(testFunctio
 >testFunction3 : (x: number) => IPromise<number>
 >              : ^ ^^      ^^^^^                
 
-var r4: IPromise<string>;
+declare var r4: IPromise<string>;
 >r4 : IPromise<string>
 >   : ^^^^^^^^^^^^^^^^
 
-var sIPromise: (x: any) => IPromise<string>;
+declare var sIPromise: (x: any) => IPromise<string>;
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^                
 >x : any
 >  : ^^^
 
-var sPromise: (x: any) => Promise<string>;
+declare var sPromise: (x: any) => Promise<string>;
 >sPromise : (x: any) => Promise<string>
 >         : ^ ^^   ^^^^^               
 >x : any
@@ -841,7 +841,7 @@ var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testF
 >testFunction4 : (x: number, y?: string) => IPromise<string>
 >              : ^ ^^      ^^ ^^^      ^^^^^                
 
-var s4: Promise<string>;
+declare var s4: Promise<string>;
 >s4 : Promise<string>
 >   : ^^^^^^^^^^^^^^^
 
@@ -929,7 +929,7 @@ var s4d = s4.then(sIPromise, testFunction4P, testFunction4).then(sIPromise, test
 >testFunction4 : (x: number, y?: string) => IPromise<string>
 >              : ^ ^^      ^^ ^^^      ^^^^^                
 
-var r5: IPromise<string>;
+declare var r5: IPromise<string>;
 >r5 : IPromise<string>
 >   : ^^^^^^^^^^^^^^^^
 
@@ -981,7 +981,7 @@ var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^                
 
-var s5: Promise<string>;
+declare var s5: Promise<string>;
 >s5 : Promise<string>
 >   : ^^^^^^^^^^^^^^^
 
@@ -1069,7 +1069,7 @@ var s5d = s5.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPro
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^                
 
-var r6: IPromise<string>;
+declare var r6: IPromise<string>;
 >r6 : IPromise<string>
 >   : ^^^^^^^^^^^^^^^^
 
@@ -1121,7 +1121,7 @@ var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^                
 
-var s6: Promise<string>;
+declare var s6: Promise<string>;
 >s6 : Promise<string>
 >   : ^^^^^^^^^^^^^^^
 
@@ -1209,7 +1209,7 @@ var s6d = s6.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPro
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^                
 
-var r7: IPromise<string>;
+declare var r7: IPromise<string>;
 >r7 : IPromise<string>
 >   : ^^^^^^^^^^^^^^^^
 
@@ -1261,7 +1261,7 @@ var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^                
 
-var s7: Promise<string>;
+declare var s7: Promise<string>;
 >s7 : Promise<string>
 >   : ^^^^^^^^^^^^^^^
 
@@ -1349,17 +1349,17 @@ var s7d = r7.then(sPromise, sPromise, sPromise).then(sPromise, sPromise, sPromis
 >sPromise : (x: any) => Promise<string>
 >         : ^ ^^   ^^^^^               
 
-var r8: IPromise<number>;
+declare var r8: IPromise<number>;
 >r8 : IPromise<number>
 >   : ^^^^^^^^^^^^^^^^
 
-var nIPromise: (x: any) => IPromise<number>;
+declare var nIPromise: (x: any) => IPromise<number>;
 >nIPromise : (x: any) => IPromise<number>
 >          : ^ ^^   ^^^^^                
 >x : any
 >  : ^^^
 
-var nPromise: (x: any) => Promise<number>;
+declare var nPromise: (x: any) => Promise<number>;
 >nPromise : (x: any) => Promise<number>
 >         : ^ ^^   ^^^^^               
 >x : any
@@ -1501,7 +1501,7 @@ var s8d = s8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nI
 >nIPromise : (x: any) => IPromise<number>
 >          : ^ ^^   ^^^^^                
 
-var r9: IPromise<number>;
+declare var r9: IPromise<number>;
 >r9 : IPromise<number>
 >   : ^^^^^^^^^^^^^^^^
 
@@ -1607,7 +1607,7 @@ var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise,
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^                
 
-var s9: Promise<number>;
+declare var s9: Promise<number>;
 >s9 : Promise<number>
 >   : ^^^^^^^^^^^^^^^
 
@@ -2017,7 +2017,7 @@ var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromis
 >sIPromise : (x: any) => IPromise<string>
 >          : ^ ^^   ^^^^^                
 
-var r11: IPromise<number>;
+declare var r11: IPromise<number>;
 >r11 : IPromise<number>
 >    : ^^^^^^^^^^^^^^^^
 
@@ -2039,7 +2039,7 @@ var r11a = r11.then(testFunction11, testFunction11, testFunction11); // ok
 >testFunction11 : { (x: number): IPromise<number>; (x: string): IPromise<string>; }
 >               : ^^^ ^^      ^^^                ^^^ ^^      ^^^                ^^^
 
-var s11: Promise<number>;
+declare var s11: Promise<number>;
 >s11 : Promise<number>
 >    : ^^^^^^^^^^^^^^^
 

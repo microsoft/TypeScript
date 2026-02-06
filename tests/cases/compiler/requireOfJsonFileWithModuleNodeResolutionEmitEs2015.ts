@@ -1,5 +1,6 @@
+// @target: es2015
 // @module: es2015
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @outdir: out/
 // @fullEmitPaths: true
 // @resolveJsonModule: true

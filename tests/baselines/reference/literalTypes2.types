@@ -389,28 +389,28 @@ function f3() {
 >  : ^^^
 >cond ? true : 123 : true | 123
 >                  : ^^^^^^^^^^
->cond : boolean
->     : ^^^^^^^
+>cond : false
+>     : ^^^^^
 >true : true
 >     : ^^^^
 >123 : 123
 >    : ^^^
 
     const c4 = cond ? "abc" : null;
->c4 : "abc"
->   : ^^^^^
->cond ? "abc" : null : "abc"
->                    : ^^^^^
+>c4 : "abc" | null
+>   : ^^^^^^^^^^^^
+>cond ? "abc" : null : "abc" | null
+>                    : ^^^^^^^^^^^^
 >cond : boolean
 >     : ^^^^^^^
 >"abc" : "abc"
 >      : ^^^^^
 
     const c5 = cond ? 456 : undefined;
->c5 : 456
->   : ^^^
->cond ? 456 : undefined : 456
->                       : ^^^
+>c5 : 456 | undefined
+>   : ^^^^^^^^^^^^^^^
+>cond ? 456 : undefined : 456 | undefined
+>                       : ^^^^^^^^^^^^^^^
 >cond : boolean
 >     : ^^^^^^^
 >456 : 456
@@ -451,8 +451,8 @@ function f3() {
 >   : ^^^^^^^^   ^^^
 >cond ? c7 : "hello" : [1 | 2, "foo" | "bar"] | "hello"
 >                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->cond : boolean
->     : ^^^^^^^
+>cond : false
+>     : ^^^^^
 >c7 : [1 | 2, "foo" | "bar"]
 >   : ^^^^^^^^^^^^^^^^^^^^^^
 >"hello" : "hello"
@@ -477,16 +477,16 @@ function f3() {
 >   : ^^^^^^^^^^^^^^^^
 
     let x4 = c4;
->x4 : string
->   : ^^^^^^
->c4 : "abc"
->   : ^^^^^
+>x4 : string | null
+>   : ^^^^^^^^^^^^^
+>c4 : "abc" | null
+>   : ^^^^^^^^^^^^
 
     let x5 = c5;
->x5 : number
->   : ^^^^^^
->c5 : 456
->   : ^^^
+>x5 : number | undefined
+>   : ^^^^^^^^^^^^^^^^^^
+>c5 : 456 | undefined
+>   : ^^^^^^^^^^^^^^^
 
     let x6 = c6;
 >x6 : { kind: 123; }

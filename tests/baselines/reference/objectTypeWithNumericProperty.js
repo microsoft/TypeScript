@@ -46,12 +46,10 @@ var r3 = b['1'];
 var r4 = b['1.1'];
 
 //// [objectTypeWithNumericProperty.js]
+"use strict";
 // no errors here
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c;
 var r1 = c[1];
 var r2 = c[1.1];

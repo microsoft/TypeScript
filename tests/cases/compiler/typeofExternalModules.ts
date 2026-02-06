@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: typeofExternalModules_external.ts
 export class C { }

@@ -19,6 +19,7 @@ let fooBar: FooBar = mixBar({
 });
 
 //// [errorMessagesIntersectionTypes01.js]
-var fooBar = mixBar({
+"use strict";
+let fooBar = mixBar({
     fooProp: "frizzlebizzle"
 });

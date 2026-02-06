@@ -5,3 +5,4 @@ function f(a, {
 }
 
 //// [parserErrorRecovery_ParameterList2.js]
+"use strict";

@@ -5,5 +5,6 @@ for (const [a, b] of X) {
 }
 
 //// [parserForOfStatement11.js]
+"use strict";
 for (const [a, b] of X) {
 }

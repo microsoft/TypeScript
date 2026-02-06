@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasClassInsideLocalModuleWithExport.ts] ////
 
 //// [internalAliasClassInsideLocalModuleWithExport.ts]
-export module x {
+export namespace x {
     export class c {
         foo(a: number) {
             return a;
@@ -9,8 +9,8 @@ export module x {
     }
 }
 
-export module m2 {
-    export module m3 {
+export namespace m2 {
+    export namespace m3 {
         export import c = x.c;
         export var cProp = new c();
         var cReturnVal = cProp.foo(10);
@@ -25,19 +25,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.d = exports.m2 = exports.x = void 0;
 var x;
 (function (x) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        c.prototype.foo = function (a) {
+    class c {
+        foo(a) {
             return a;
-        };
-        return c;
-    }());
+        }
+    }
     x.c = c;
 })(x || (exports.x = x = {}));
 var m2;
 (function (m2) {
-    var m3;
+    let m3;
     (function (m3) {
         m3.c = x.c;
         m3.cProp = new m3.c();

@@ -80,6 +80,7 @@ import {
     JSDocParsingMode,
     LanguageServiceMode,
     length,
+    libMap,
     map,
     mapDefinedIterator,
     matchesExcludeWorker,
@@ -464,6 +465,10 @@ export function convertCompilerOptions(protocolOptions: protocol.ExternalProject
             protocolOptions[id] = mappedValues.get(propertyValue.toLowerCase());
         }
     });
+    // Convert lib short names (e.g. "es6") to full filenames (e.g. "lib.es6.d.ts")
+    if (isArray(protocolOptions.lib)) {
+        protocolOptions.lib = protocolOptions.lib.map(libName => libMap.get(libName) ?? libName);
+    }
     return protocolOptions as any;
 }
 

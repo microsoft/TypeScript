@@ -3,8 +3,8 @@
 //// [arrayLiteralAndArrayConstructorEquivalence1.ts]
 var myCars=new Array(); 
 var myCars3 = new Array({});
-var myCars4: Array; // error
-var myCars5: Array<any>[];
+declare var myCars4: Array; // error
+declare var myCars5: Array<any>[];
  
 myCars = myCars3;
 myCars = myCars4;
@@ -16,10 +16,9 @@ myCars3 = myCars5;
 
 
 //// [arrayLiteralAndArrayConstructorEquivalence1.js]
+"use strict";
 var myCars = new Array();
 var myCars3 = new Array({});
-var myCars4; // error
-var myCars5;
 myCars = myCars3;
 myCars = myCars4;
 myCars = myCars5;

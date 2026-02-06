@@ -102,7 +102,7 @@ export function createZoo(): Array<Dog> {
 {
   "compilerOptions": {
     "declaration": true,
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs",
     "strict": true,
     "noUnusedLocals": true,
@@ -130,7 +130,6 @@ export function createZoo(): Array<Dog> {
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}

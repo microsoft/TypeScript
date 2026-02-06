@@ -1,16 +1,22 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+amdDependencyCommentName4.ts(6,8): error TS2882: Cannot find module or type declarations for side-effect import of 'unaliasedModule1'.
 amdDependencyCommentName4.ts(8,21): error TS2792: Cannot find module 'aliasedModule1'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 amdDependencyCommentName4.ts(11,26): error TS2792: Cannot find module 'aliasedModule2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 amdDependencyCommentName4.ts(14,15): error TS2792: Cannot find module 'aliasedModule3'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 amdDependencyCommentName4.ts(17,21): error TS2792: Cannot find module 'aliasedModule4'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+amdDependencyCommentName4.ts(20,8): error TS2882: Cannot find module or type declarations for side-effect import of 'unaliasedModule2'.
 
 
-==== amdDependencyCommentName4.ts (4 errors) ====
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== amdDependencyCommentName4.ts (6 errors) ====
     ///<amd-dependency path='aliasedModule5' name='n1'/>
     ///<amd-dependency path='unaliasedModule3'/>
     ///<amd-dependency path='aliasedModule6' name='n2'/>
     ///<amd-dependency path='unaliasedModule4'/>
     
     import "unaliasedModule1";
+           ~~~~~~~~~~~~~~~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'unaliasedModule1'.
     
     import r1 = require("aliasedModule1");
                         ~~~~~~~~~~~~~~~~
@@ -33,3 +39,5 @@ amdDependencyCommentName4.ts(17,21): error TS2792: Cannot find module 'aliasedMo
     ns;
     
     import "unaliasedModule2";
+           ~~~~~~~~~~~~~~~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'unaliasedModule2'.

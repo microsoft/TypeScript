@@ -7,7 +7,7 @@ interface IPoint {
 }
 
 // Module
-module Shapes {
+namespace Shapes {
 
     // Class
     export class Point implements IPoint {
@@ -38,22 +38,22 @@ var p: IPoint = new Shapes.Point(3, 4);
 var dist = p.getDist();
 
 //// [sourceMap-FileWithComments.js]
+"use strict";
 // Module
 var Shapes;
 (function (Shapes) {
     // Class
-    var Point = /** @class */ (function () {
+    class Point {
         // Constructor
-        function Point(x, y) {
+        constructor(x, y) {
             this.x = x;
             this.y = y;
         }
         // Instance member
-        Point.prototype.getDist = function () { return Math.sqrt(this.x * this.x + this.y * this.y); };
-        // Static member
-        Point.origin = new Point(0, 0);
-        return Point;
-    }());
+        getDist() { return Math.sqrt(this.x * this.x + this.y * this.y); }
+    }
+    // Static member
+    Point.origin = new Point(0, 0);
     Shapes.Point = Point;
     // Variable comment after class
     var a = 10;

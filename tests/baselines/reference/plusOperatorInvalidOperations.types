@@ -12,8 +12,8 @@ var result1 = b+;   //expect error
 >        : ^^^
 >b+ : any
 >   : ^^^
->b : any
->  : ^^^
+>b : undefined
+>  : ^^^^^^^^^
 > : any
 > : ^^^
 

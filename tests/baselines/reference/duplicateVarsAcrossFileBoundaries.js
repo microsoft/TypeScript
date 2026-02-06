@@ -19,31 +19,37 @@ var y = "";
 var z = 0;
 
 //// [duplicateVarsAcrossFileBoundaries_4.ts]
-module P { }
+namespace P { }
 import p = P;
 var q;
 
 //// [duplicateVarsAcrossFileBoundaries_5.ts]
-module Q { }
+namespace Q { }
 import q = Q;
 var p;
 
 //// [duplicateVarsAcrossFileBoundaries_0.js]
+"use strict";
 var x = 3;
 var y = "";
 //// [duplicateVarsAcrossFileBoundaries_1.js]
+"use strict";
 var x = true;
 var z = 3;
 //// [duplicateVarsAcrossFileBoundaries_2.js]
+"use strict";
 var x = "";
 var y = 3;
 var z = false;
 //// [duplicateVarsAcrossFileBoundaries_3.js]
+"use strict";
 var x = 0;
 var y = "";
 var z = 0;
 //// [duplicateVarsAcrossFileBoundaries_4.js]
+"use strict";
 var p = P;
 var q;
 //// [duplicateVarsAcrossFileBoundaries_5.js]
+"use strict";
 var p;

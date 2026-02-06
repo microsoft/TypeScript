@@ -1,10 +1,11 @@
+// @target: es2015
 enum W {
 
     a, b, c,
 
 }
 
-module W {
+namespace W {
     export class D { }
 }
 

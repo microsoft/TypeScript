@@ -1,3 +1,4 @@
+// @target: es2015
 // interfaces with the same root module should merge
 
 // basic case
@@ -37,7 +38,7 @@ var r5 = b.bar;
 var r6 = b.baz;
 
 // basic non-generic and generic case inside a module
-module M {
+namespace M {
     interface A {
         foo: string;
     }

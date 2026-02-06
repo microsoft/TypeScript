@@ -1,4 +1,5 @@
-﻿// no error
+﻿// @target: es2015
+// no error
 var numStrTuple: [number, string] = [5, "hello"];
 var numStrTuple2: [number, string] = [5, "foo", true];
 var numStrBoolTuple: [number, string, boolean] = [5, "foo", true];

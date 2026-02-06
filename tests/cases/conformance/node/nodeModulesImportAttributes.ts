@@ -1,4 +1,5 @@
-// @module: node16,node18,nodenext
+// @target: es2022
+// @module: node16,node18,node20,nodenext
 // @resolveJsonModule: true
 // @filename: index.ts
 import json from "./package.json" with { type: "json" };

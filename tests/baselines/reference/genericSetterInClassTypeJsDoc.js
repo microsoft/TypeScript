@@ -26,6 +26,7 @@ new Box(3).value = 3;
 
 
 //// [genericSetterInClassTypeJsDoc-out.js]
+"use strict";
 /**
  * @template T
  */

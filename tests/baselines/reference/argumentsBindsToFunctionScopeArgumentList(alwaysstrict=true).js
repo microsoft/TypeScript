@@ -1,0 +1,14 @@
+//// [tests/cases/compiler/argumentsBindsToFunctionScopeArgumentList.ts] ////
+
+//// [argumentsBindsToFunctionScopeArgumentList.ts]
+var arguments = 10;
+function foo(a) {
+    arguments = 10;  /// This shouldnt be of type number and result in error.
+}
+
+//// [argumentsBindsToFunctionScopeArgumentList.js]
+"use strict";
+var arguments = 10;
+function foo(a) {
+    arguments = 10; /// This shouldnt be of type number and result in error.
+}

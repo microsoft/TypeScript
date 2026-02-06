@@ -1,4 +1,5 @@
-// @module: node16,node18,nodenext
+// @target: es2022
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @filename: subfolder/index.ts
 // cjs format file

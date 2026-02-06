@@ -1,3 +1,4 @@
+// @target: es2015
 var a: { [s: string]: string; };
 var b: { [n: number]: string; };
 var c: {};

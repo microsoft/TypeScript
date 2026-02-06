@@ -9,6 +9,7 @@ async function* test(x: Promise<number>) {
 }
 
 //// [awaitAndYield.js]
+"use strict";
 async function* test(x) {
     let E;
     (function (E) {

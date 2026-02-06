@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitThis: false
 
 function Test1() {

@@ -1,3 +1,4 @@
+// @target: es2015
 // public indexers not allowed
 
 class C {

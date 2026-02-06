@@ -1,9 +1,10 @@
 //// [tests/cases/compiler/unusedNamespaceInModule.ts] ////
 
 //// [unusedNamespaceInModule.ts]
-module A {
+namespace A {
     namespace B { }
     export namespace C {}
 }
 
 //// [unusedNamespaceInModule.js]
+"use strict";

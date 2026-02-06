@@ -18,6 +18,7 @@ function R3(n:number) {
 }
 
 //// [recursiveReturns.js]
+"use strict";
 function R1() {
     R1();
     return;

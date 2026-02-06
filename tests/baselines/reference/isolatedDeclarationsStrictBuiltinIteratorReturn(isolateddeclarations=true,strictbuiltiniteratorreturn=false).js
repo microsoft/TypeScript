@@ -50,6 +50,7 @@ const a13 = (): IterableIterator<number, BuiltinIteratorReturn> => null!;
 const a14 = (): IterableIterator<number, BuiltinIteratorReturn, any> => null!;
 
 //// [isolatedDeclarationsStrictBuiltinIteratorReturn.js]
+"use strict";
 const a1 = () => null;
 const a2 = () => null;
 const a3 = () => null;

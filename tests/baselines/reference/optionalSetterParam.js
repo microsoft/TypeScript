@@ -8,13 +8,7 @@ class foo {
 
 
 //// [optionalSetterParam.js]
-var foo = /** @class */ (function () {
-    function foo() {
-    }
-    Object.defineProperty(foo.prototype, "bar", {
-        set: function (param) { },
-        enumerable: false,
-        configurable: true
-    });
-    return foo;
-}());
+"use strict";
+class foo {
+    set bar(param) { }
+}

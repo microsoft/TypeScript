@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @Filename: mod1.ts
 export = class {
     chunk = 1

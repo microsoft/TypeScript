@@ -1,0 +1,104 @@
+reachabilityChecks11.ts(6,5): error TS7027: Unreachable code detected.
+reachabilityChecks11.ts(18,5): error TS7027: Unreachable code detected.
+reachabilityChecks11.ts(30,5): error TS7027: Unreachable code detected.
+reachabilityChecks11.ts(47,5): error TS7027: Unreachable code detected.
+reachabilityChecks11.ts(60,5): error TS7027: Unreachable code detected.
+reachabilityChecks11.ts(69,5): error TS7027: Unreachable code detected.
+
+
+==== reachabilityChecks11.ts (6 errors) ====
+    // while (true);
+    var x = 1;
+    
+    namespace A {
+        while (true);
+        let x;
+        ~~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    namespace A1 {
+        do {} while(true);
+        namespace A {
+            interface F {}
+        }
+    }
+    
+    namespace A2 {
+        while (true);
+        namespace A {
+        ~~~~~~~~~~~~~
+            var x = 1;
+    ~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    namespace A3 {
+        while (true);
+        type T = string;
+    }
+    
+    namespace A4 {
+        while (true);
+        namespace A {
+        ~~~~~~~~~~~~~
+            const enum E { X }
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    function f1(x) {
+        if (x) {
+            return;
+        }
+        else {
+            throw new Error("123");
+        }
+        var x;
+    }
+    
+    function f2() {
+        return;
+        class A {
+        ~~~~~~~~~
+        }
+    ~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    namespace B {
+        for (; ;);
+        namespace C {
+        }
+    }
+    
+    function f3() {
+        do {
+        } while (true);
+        enum E {
+        ~~~~~~~~
+            X = 1
+    ~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    function f4() {
+        if (true) {
+            throw new Error();
+        }
+        const enum E {
+        ~~~~~~~~~~~~~~
+            X = 1
+    ~~~~~~~~~~~~~
+        }
+    ~~~~~
+!!! error TS7027: Unreachable code detected.
+    }
+    
+    

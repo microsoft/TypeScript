@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: node_modules/aws-lambda/index.d.ts
 export type Handler<TEvent = any, TResult = any> = (
     event: TEvent,

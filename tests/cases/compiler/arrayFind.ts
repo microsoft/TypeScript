@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es2015
 
 // test fix for #18112, type guard predicates should narrow returned element

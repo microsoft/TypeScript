@@ -1,8 +1,17 @@
+// @target: es2015
 // @moduleResolution: bundler
 // @module: esnext
 // @allowJs: true
 // @noEmit: true
 // @traceResolution: true
+
+// The correct behavior for this test would be for both the module augmentation
+// and the import to resolve to `walk.mjs` (triggering at least one implicit any
+// error, I think?). However, https://github.com/microsoft/TypeScript/issues/50762
+// causes the import to resolve through the `default` condition, replacing `.js`
+// with `.d.ts` to find `walk.d.ts`. While this is incorrect, it's important that
+// the module augmentation, which resolves through self-name resolution, resolves
+// to the same module as the external import.
 
 // @Filename: /node_modules/acorn-walk/package.json
 {
@@ -22,14 +31,6 @@
     "./package.json": "./package.json"
   }
 }
-
-// The correct behavior for this test would be for both the module augmentation
-// and the import to resolve to `walk.mjs` (triggering at least one implicit any
-// error, I think?). However, https://github.com/microsoft/TypeScript/issues/50762
-// causes the import to resolve through the `default` condition, replacing `.js`
-// with `.d.ts` to find `walk.d.ts`. While this is incorrect, it's important that
-// the module augmentation, which resolves through self-name resolution, resolves
-// to the same module as the external import.
 
 // @Filename: /node_modules/acorn-walk/dist/walk.d.ts
 export {};

@@ -1,4 +1,5 @@
-﻿//@noImplicitAny: true
+﻿// @target: es2015
+//@noImplicitAny: true
 
 interface I {
     // Implicit-'any' errors for first two call signatures, x1, x2, z2.

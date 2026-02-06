@@ -1,3 +1,4 @@
+// @target: es2015
 // Valid cases
 
 let { foo, foo: bar } = { foo: 1 };

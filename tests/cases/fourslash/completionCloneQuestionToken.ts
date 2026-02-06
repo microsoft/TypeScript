@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 // @Filename: /file2.ts
 //// type TCallback<T = any> = (options: T) => any;
 //// type InKeyOf<E> = { [K in keyof E]?: TCallback<E[K]>; };

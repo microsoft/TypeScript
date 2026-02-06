@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @lib: esnext, dom
 // @downlevelIteration: true
 // https://github.com/Microsoft/TypeScript/issues/24722

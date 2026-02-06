@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution4.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 	    div: { n: string; };
@@ -20,6 +20,7 @@ declare module JSX {
 
 
 //// [file.jsx]
+"use strict";
 // OK
 <div n='x'/>;
 // OK

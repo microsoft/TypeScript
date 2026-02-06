@@ -1,3 +1,4 @@
+// @target: es2015
 class A {
     f() {}
     static m1 (a: string): void;

@@ -4,4 +4,5 @@
 var v = { public get [e]() { } };
 
 //// [parserComputedPropertyName5.js]
+"use strict";
 var v = { get [e]() { } };

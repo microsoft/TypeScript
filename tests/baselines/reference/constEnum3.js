@@ -14,6 +14,7 @@ f2('bar')
 
 
 //// [constEnum3.js]
+"use strict";
 function f1(f) { }
 function f2(f) { }
 f1(0 /* TestType.foo */);

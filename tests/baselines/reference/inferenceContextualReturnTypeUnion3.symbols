@@ -1,0 +1,146 @@
+//// [tests/cases/compiler/inferenceContextualReturnTypeUnion3.ts] ////
+
+=== inferenceContextualReturnTypeUnion3.ts ===
+declare function deprecate<T extends Function>(
+>deprecate : Symbol(deprecate, Decl(inferenceContextualReturnTypeUnion3.ts, 0, 0))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion3.ts, 0, 27))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.decorators.d.ts, --, --))
+
+  fn: T,
+>fn : Symbol(fn, Decl(inferenceContextualReturnTypeUnion3.ts, 0, 47))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion3.ts, 0, 27))
+
+  msg: string,
+>msg : Symbol(msg, Decl(inferenceContextualReturnTypeUnion3.ts, 1, 8))
+
+  code?: string,
+>code : Symbol(code, Decl(inferenceContextualReturnTypeUnion3.ts, 2, 14))
+
+): T;
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion3.ts, 0, 27))
+
+const soonFrozenObjectDeprecation = <T extends object>(
+>soonFrozenObjectDeprecation : Symbol(soonFrozenObjectDeprecation, Decl(inferenceContextualReturnTypeUnion3.ts, 6, 5))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion3.ts, 6, 37))
+
+  obj: T,
+>obj : Symbol(obj, Decl(inferenceContextualReturnTypeUnion3.ts, 6, 55))
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion3.ts, 6, 37))
+
+  name: string,
+>name : Symbol(name, Decl(inferenceContextualReturnTypeUnion3.ts, 7, 9))
+
+  code: string,
+>code : Symbol(code, Decl(inferenceContextualReturnTypeUnion3.ts, 8, 15))
+
+  note = "",
+>note : Symbol(note, Decl(inferenceContextualReturnTypeUnion3.ts, 9, 15))
+
+): T => {
+>T : Symbol(T, Decl(inferenceContextualReturnTypeUnion3.ts, 6, 37))
+
+  const message = `${name} will be frozen in future, all modifications are deprecated.${
+>message : Symbol(message, Decl(inferenceContextualReturnTypeUnion3.ts, 12, 7))
+>name : Symbol(name, Decl(inferenceContextualReturnTypeUnion3.ts, 7, 9))
+
+    note && `\n${note}`
+>note : Symbol(note, Decl(inferenceContextualReturnTypeUnion3.ts, 9, 15))
+>note : Symbol(note, Decl(inferenceContextualReturnTypeUnion3.ts, 9, 15))
+
+  }`;
+  return new Proxy(obj, {
+>Proxy : Symbol(Proxy, Decl(lib.es2015.proxy.d.ts, --, --))
+>obj : Symbol(obj, Decl(inferenceContextualReturnTypeUnion3.ts, 6, 55))
+
+    set: deprecate(
+>set : Symbol(set, Decl(inferenceContextualReturnTypeUnion3.ts, 15, 25))
+>deprecate : Symbol(deprecate, Decl(inferenceContextualReturnTypeUnion3.ts, 0, 0))
+
+      (target, property, value, receiver) =>
+>target : Symbol(target, Decl(inferenceContextualReturnTypeUnion3.ts, 17, 7))
+>property : Symbol(property, Decl(inferenceContextualReturnTypeUnion3.ts, 17, 14))
+>value : Symbol(value, Decl(inferenceContextualReturnTypeUnion3.ts, 17, 24))
+>receiver : Symbol(receiver, Decl(inferenceContextualReturnTypeUnion3.ts, 17, 31))
+
+        Reflect.set(target, property, value, receiver),
+>Reflect.set : Symbol(Reflect.set, Decl(lib.es2015.reflect.d.ts, --, --), Decl(lib.es2015.reflect.d.ts, --, --))
+>Reflect : Symbol(Reflect, Decl(lib.es2015.reflect.d.ts, --, --))
+>set : Symbol(Reflect.set, Decl(lib.es2015.reflect.d.ts, --, --), Decl(lib.es2015.reflect.d.ts, --, --))
+>target : Symbol(target, Decl(inferenceContextualReturnTypeUnion3.ts, 17, 7))
+>property : Symbol(property, Decl(inferenceContextualReturnTypeUnion3.ts, 17, 14))
+>value : Symbol(value, Decl(inferenceContextualReturnTypeUnion3.ts, 17, 24))
+>receiver : Symbol(receiver, Decl(inferenceContextualReturnTypeUnion3.ts, 17, 31))
+
+      message,
+>message : Symbol(message, Decl(inferenceContextualReturnTypeUnion3.ts, 12, 7))
+
+      code,
+>code : Symbol(code, Decl(inferenceContextualReturnTypeUnion3.ts, 8, 15))
+
+    ),
+    defineProperty: deprecate(
+>defineProperty : Symbol(defineProperty, Decl(inferenceContextualReturnTypeUnion3.ts, 21, 6))
+>deprecate : Symbol(deprecate, Decl(inferenceContextualReturnTypeUnion3.ts, 0, 0))
+
+      (target, property, descriptor) =>
+>target : Symbol(target, Decl(inferenceContextualReturnTypeUnion3.ts, 23, 7))
+>property : Symbol(property, Decl(inferenceContextualReturnTypeUnion3.ts, 23, 14))
+>descriptor : Symbol(descriptor, Decl(inferenceContextualReturnTypeUnion3.ts, 23, 24))
+
+        Reflect.defineProperty(target, property, descriptor),
+>Reflect.defineProperty : Symbol(Reflect.defineProperty, Decl(lib.es2015.reflect.d.ts, --, --))
+>Reflect : Symbol(Reflect, Decl(lib.es2015.reflect.d.ts, --, --))
+>defineProperty : Symbol(Reflect.defineProperty, Decl(lib.es2015.reflect.d.ts, --, --))
+>target : Symbol(target, Decl(inferenceContextualReturnTypeUnion3.ts, 23, 7))
+>property : Symbol(property, Decl(inferenceContextualReturnTypeUnion3.ts, 23, 14))
+>descriptor : Symbol(descriptor, Decl(inferenceContextualReturnTypeUnion3.ts, 23, 24))
+
+      message,
+>message : Symbol(message, Decl(inferenceContextualReturnTypeUnion3.ts, 12, 7))
+
+      code,
+>code : Symbol(code, Decl(inferenceContextualReturnTypeUnion3.ts, 8, 15))
+
+    ),
+    deleteProperty: deprecate(
+>deleteProperty : Symbol(deleteProperty, Decl(inferenceContextualReturnTypeUnion3.ts, 27, 6))
+>deprecate : Symbol(deprecate, Decl(inferenceContextualReturnTypeUnion3.ts, 0, 0))
+
+      (target, property) => Reflect.deleteProperty(target, property),
+>target : Symbol(target, Decl(inferenceContextualReturnTypeUnion3.ts, 29, 7))
+>property : Symbol(property, Decl(inferenceContextualReturnTypeUnion3.ts, 29, 14))
+>Reflect.deleteProperty : Symbol(Reflect.deleteProperty, Decl(lib.es2015.reflect.d.ts, --, --))
+>Reflect : Symbol(Reflect, Decl(lib.es2015.reflect.d.ts, --, --))
+>deleteProperty : Symbol(Reflect.deleteProperty, Decl(lib.es2015.reflect.d.ts, --, --))
+>target : Symbol(target, Decl(inferenceContextualReturnTypeUnion3.ts, 29, 7))
+>property : Symbol(property, Decl(inferenceContextualReturnTypeUnion3.ts, 29, 14))
+
+      message,
+>message : Symbol(message, Decl(inferenceContextualReturnTypeUnion3.ts, 12, 7))
+
+      code,
+>code : Symbol(code, Decl(inferenceContextualReturnTypeUnion3.ts, 8, 15))
+
+    ),
+    setPrototypeOf: deprecate(
+>setPrototypeOf : Symbol(setPrototypeOf, Decl(inferenceContextualReturnTypeUnion3.ts, 32, 6))
+>deprecate : Symbol(deprecate, Decl(inferenceContextualReturnTypeUnion3.ts, 0, 0))
+
+      (target, proto) => Reflect.setPrototypeOf(target, proto),
+>target : Symbol(target, Decl(inferenceContextualReturnTypeUnion3.ts, 34, 7))
+>proto : Symbol(proto, Decl(inferenceContextualReturnTypeUnion3.ts, 34, 14))
+>Reflect.setPrototypeOf : Symbol(Reflect.setPrototypeOf, Decl(lib.es2015.reflect.d.ts, --, --))
+>Reflect : Symbol(Reflect, Decl(lib.es2015.reflect.d.ts, --, --))
+>setPrototypeOf : Symbol(Reflect.setPrototypeOf, Decl(lib.es2015.reflect.d.ts, --, --))
+>target : Symbol(target, Decl(inferenceContextualReturnTypeUnion3.ts, 34, 7))
+>proto : Symbol(proto, Decl(inferenceContextualReturnTypeUnion3.ts, 34, 14))
+
+      message,
+>message : Symbol(message, Decl(inferenceContextualReturnTypeUnion3.ts, 12, 7))
+
+      code,
+>code : Symbol(code, Decl(inferenceContextualReturnTypeUnion3.ts, 8, 15))
+
+    ),
+  });
+};

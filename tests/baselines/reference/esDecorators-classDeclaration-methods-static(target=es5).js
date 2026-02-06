@@ -13,6 +13,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-methods-static.js]
+"use strict";
 var method3 = "method3";
 var C = function () {
     var _a;

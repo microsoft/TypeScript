@@ -1,6 +1,7 @@
-﻿"use strict"
-module public { }
-module private { }
-module public.whatever {
+﻿// @target: es2015
+"use strict"
+namespace public { }
+namespace private { }
+namespace public.whatever {
 }
-module private.public.foo { }
+namespace private.public.foo { }

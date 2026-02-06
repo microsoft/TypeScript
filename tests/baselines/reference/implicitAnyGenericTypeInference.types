@@ -31,7 +31,6 @@ c = { compareTo: (x, y) => { return y; } };
 >(x, y) => { return y; } : <U>(x: any, y: U) => U
 >                        : ^ ^^ ^^^^^^^ ^^^^^^^^^
 >x : any
->  : ^^^
 >y : U
 >  : ^
 >y : U
@@ -64,8 +63,8 @@ f1(() => null);
 >               : ^^^^
 >f1 : <T>(cb: () => T) => void
 >   : ^ ^^  ^^       ^^^^^    
->() => null : () => any
->           : ^^^^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
 
 declare function f2<T>(cb: () => PromiseLike<T>): void;
 >f2 : <T>(cb: () => PromiseLike<T>) => void
@@ -78,8 +77,8 @@ f2(async () => null);
 >                     : ^^^^
 >f2 : <T>(cb: () => PromiseLike<T>) => void
 >   : ^ ^^  ^^                    ^^^^^    
->async () => null : () => Promise<any>
->                 : ^^^^^^^^^^^^^^^^^^
+>async () => null : () => Promise<null>
+>                 : ^^^^^^^^^^^^^^^^^^^
 
 declare function f3<T>(cb: () => Generator<T>): void;
 >f3 : <T>(cb: () => Generator<T>) => void
@@ -92,10 +91,9 @@ f3(function* () { yield null; });
 >                                 : ^^^^
 >f3 : <T>(cb: () => Generator<T>) => void
 >   : ^ ^^  ^^                  ^^^^^    
->function* () { yield null; } : () => Generator<any, void, any>
->                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () { yield null; } : () => Generator<null, void, any>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield null : any
->           : ^^^
 
 declare function f4<T>(cb: () => Generator<unknown, T>): void;
 >f4 : <T>(cb: () => Generator<unknown, T>) => void
@@ -108,8 +106,8 @@ f4(function* () { return null; });
 >                                  : ^^^^
 >f4 : <T>(cb: () => Generator<unknown, T>) => void
 >   : ^ ^^  ^^                           ^^^^^    
->function* () { return null; } : () => Generator<never, any, any>
->                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* () { return null; } : () => Generator<never, null, any>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare function f5<T>(cb: () => AsyncGenerator<T>): void;
 >f5 : <T>(cb: () => AsyncGenerator<T>) => void
@@ -122,10 +120,9 @@ f5(async function* () { yield null; });
 >                                       : ^^^^
 >f5 : <T>(cb: () => AsyncGenerator<T>) => void
 >   : ^ ^^  ^^                       ^^^^^    
->async function* () { yield null; } : () => AsyncGenerator<any, void, any>
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function* () { yield null; } : () => AsyncGenerator<null, void, any>
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >yield null : any
->           : ^^^
 
 declare function f6<T>(cb: () => AsyncGenerator<unknown, T>): void;
 >f6 : <T>(cb: () => AsyncGenerator<unknown, T>) => void
@@ -138,15 +135,15 @@ f6(async function* () { return null; });
 >                                        : ^^^^
 >f6 : <T>(cb: () => AsyncGenerator<unknown, T>) => void
 >   : ^ ^^  ^^                                ^^^^^    
->async function* () { return null; } : () => AsyncGenerator<never, any, any>
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>async function* () { return null; } : () => AsyncGenerator<never, null, any>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // https://github.com/microsoft/TypeScript/issues/44913
 Promise.resolve().catch(e => null);
->Promise.resolve().catch(e => null) : Promise<any>
->                                   : ^^^^^^^^^^^^
->Promise.resolve().catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<void | TResult>
->                        : ^       ^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve().catch(e => null) : Promise<void | null>
+>                                   : ^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve().catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<void | TResult>
+>                        : ^       ^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve() : Promise<void>
 >                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -155,18 +152,17 @@ Promise.resolve().catch(e => null);
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->catch : <TResult = never>(onrejected?: (reason: any) => TResult | PromiseLike<TResult>) => Promise<void | TResult>
->      : ^       ^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->e => null : (e: any) => any
->          : ^ ^^^^^^^^^^^^^
+>catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<void | TResult>
+>      : ^       ^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>e => null : (e: any) => null
+>          : ^ ^^^^^^^^^^^^^^
 >e : any
->  : ^^^
 
 Promise.resolve().then(v => null);
->Promise.resolve().then(v => null) : Promise<any>
->                                  : ^^^^^^^^^^^^
->Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->                       : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve().then(v => null) : Promise<null>
+>                                  : ^^^^^^^^^^^^^
+>Promise.resolve().then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>                       : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Promise.resolve() : Promise<void>
 >                  : ^^^^^^^^^^^^^
 >Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
@@ -175,10 +171,10 @@ Promise.resolve().then(v => null);
 >        : ^^^^^^^^^^^^^^^^^^
 >resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
 >        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
->then : <TResult1 = void, TResult2 = never>(onfulfilled?: (value: void) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
->     : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->v => null : (v: void) => any
->          : ^ ^^^^^^^^^^^^^^
+>then : <TResult1 = void, TResult2 = never>(onfulfilled?: ((value: void) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>v => null : (v: void) => null
+>          : ^ ^^^^^^^^^^^^^^^
 >v : void
 >  : ^^^^
 

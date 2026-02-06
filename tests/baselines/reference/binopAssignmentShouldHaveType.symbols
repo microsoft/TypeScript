@@ -5,11 +5,11 @@ declare var console;
 >console : Symbol(console, Decl(binopAssignmentShouldHaveType.ts, 0, 11))
 
 "use strict";
-module Test {
+namespace Test {
 >Test : Symbol(Test, Decl(binopAssignmentShouldHaveType.ts, 1, 13))
 
  export class Bug {
->Bug : Symbol(Bug, Decl(binopAssignmentShouldHaveType.ts, 2, 13))
+>Bug : Symbol(Bug, Decl(binopAssignmentShouldHaveType.ts, 2, 16))
 
   getName():string {
 >getName : Symbol(Bug.getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
@@ -26,7 +26,7 @@ module Test {
 >(name= this.getName()).length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >name : Symbol(name, Decl(binopAssignmentShouldHaveType.ts, 8, 6))
 >this.getName : Symbol(Bug.getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
->this : Symbol(Bug, Decl(binopAssignmentShouldHaveType.ts, 2, 13))
+>this : Symbol(Bug, Decl(binopAssignmentShouldHaveType.ts, 2, 16))
 >getName : Symbol(Bug.getName, Decl(binopAssignmentShouldHaveType.ts, 3, 19))
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 

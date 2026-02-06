@@ -10,6 +10,7 @@ var d: Date[]; // Should be OK (d should be Date[])
 
 
 //// [typeArgumentInferenceTransitiveConstraints.js]
+"use strict";
 function fn(a, b, c) {
     return [a, b, c];
 }

@@ -1,7 +1,8 @@
+// @target: es2015
 //@filename: file.tsx
 //@jsx: preserve
 
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;

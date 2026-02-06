@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @strict: false
 ////interface Iterator_<T, U> {
 ////    (value: T, index: any, list: any): U;
 ////}

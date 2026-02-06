@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/classes/members/classTypes/instancePropertiesInheritedIntoClassType.ts] ////
 
 === instancePropertiesInheritedIntoClassType.ts ===
-module NonGeneric {
+namespace NonGeneric {
 >NonGeneric : typeof NonGeneric
 >           : ^^^^^^^^^^^^^^^^^
 
@@ -118,7 +118,7 @@ module NonGeneric {
 
 }
 
-module Generic {
+namespace Generic {
 >Generic : typeof Generic
 >        : ^^^^^^^^^^^^^^
 

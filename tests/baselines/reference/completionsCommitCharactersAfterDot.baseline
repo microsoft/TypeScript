@@ -26,10 +26,10 @@
 // const w = obj4?.
 //                 ^
 // | ----------------------------------------------------------------------
-// | (method) Function.apply(this: Function, thisArg: any, argArray?: any): any
+// | (method) CallableFunction.apply<T, R>(this: (this: T) => R, thisArg: T): R (+1 overload)
 // | (property) Function.arguments: any
-// | (method) Function.bind(this: Function, thisArg: any, ...argArray: any[]): any
-// | (method) Function.call(this: Function, thisArg: any, ...argArray: any[]): any
+// | (method) CallableFunction.bind<T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T> (+1 overload)
+// | (method) CallableFunction.call<T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A): R
 // | (property) Function.caller: Function
 // | (property) Function.length: number
 // | (property) Function.prototype: any
@@ -39,10 +39,10 @@
 // const a = obj5?.
 //                 ^
 // | ----------------------------------------------------------------------
-// | (method) Function.apply(this: Function, thisArg: any, argArray?: any): any
+// | (method) CallableFunction.apply<T, R>(this: (this: T) => R, thisArg: T): R (+1 overload)
 // | (property) Function.arguments: any
-// | (method) Function.bind(this: Function, thisArg: any, ...argArray: any[]): any
-// | (method) Function.call(this: Function, thisArg: any, ...argArray: any[]): any
+// | (method) CallableFunction.bind<T>(this: T, thisArg: ThisParameterType<T>): OmitThisParameter<T> (+1 overload)
+// | (method) CallableFunction.call<T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A): R
 // | (property) Function.caller: Function
 // | (property) Function.length: number
 // | (property) Function.prototype: any
@@ -279,8 +279,8 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "CallableFunction",
+              "kind": "interfaceName"
             },
             {
               "text": ".",
@@ -289,6 +289,30 @@
             {
               "text": "apply",
               "kind": "methodName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "R",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "(",
@@ -307,8 +331,44 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "this",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=>",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "R",
+              "kind": "typeParameterName"
             },
             {
               "text": ",",
@@ -331,36 +391,8 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "argArray",
-              "kind": "parameterName"
-            },
-            {
-              "text": "?",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
+              "text": "T",
+              "kind": "typeParameterName"
             },
             {
               "text": ")",
@@ -375,13 +407,41 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
+              "text": "R",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "+",
+              "kind": "operator"
+            },
+            {
+              "text": "1",
+              "kind": "numericLiteral"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "overload",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             }
           ],
           "documentation": [
             {
-              "text": "Calls the function, substituting the specified object for the this value of the function, and the specified array for the arguments of the function.",
+              "text": "Calls the function with the specified object as the this value and the elements of specified array as the arguments.",
               "kind": "text"
             }
           ],
@@ -399,23 +459,6 @@
                 },
                 {
                   "text": "The object to be used as the this object.",
-                  "kind": "text"
-                }
-              ]
-            },
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "argArray",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A set of arguments to be passed to the function.",
                   "kind": "text"
                 }
               ]
@@ -494,8 +537,8 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "CallableFunction",
+              "kind": "interfaceName"
             },
             {
               "text": ".",
@@ -504,6 +547,18 @@
             {
               "text": "bind",
               "kind": "methodName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "(",
@@ -522,8 +577,8 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "T",
+              "kind": "typeParameterName"
             },
             {
               "text": ",",
@@ -546,43 +601,19 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
+              "text": "ThisParameterType",
+              "kind": "aliasName"
             },
             {
-              "text": ",",
+              "text": "<",
               "kind": "punctuation"
             },
             {
-              "text": " ",
-              "kind": "space"
+              "text": "T",
+              "kind": "typeParameterName"
             },
             {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "argArray",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
+              "text": ">",
               "kind": "punctuation"
             },
             {
@@ -598,8 +629,48 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
+              "text": "OmitThisParameter",
+              "kind": "aliasName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "+",
+              "kind": "operator"
+            },
+            {
+              "text": "1",
+              "kind": "numericLiteral"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "overload",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             }
           ],
           "documentation": [
@@ -621,24 +692,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An object to which the this keyword can refer inside the new function.",
-                  "kind": "text"
-                }
-              ]
-            },
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "argArray",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A list of arguments to be passed to the new function.",
+                  "text": "The object to be used as the this object.",
                   "kind": "text"
                 }
               ]
@@ -668,8 +722,8 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "CallableFunction",
+              "kind": "interfaceName"
             },
             {
               "text": ".",
@@ -678,6 +732,66 @@
             {
               "text": "call",
               "kind": "methodName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "A",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "R",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "(",
@@ -696,8 +810,72 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "this",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "...",
+              "kind": "punctuation"
+            },
+            {
+              "text": "args",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "A",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=>",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "R",
+              "kind": "typeParameterName"
             },
             {
               "text": ",",
@@ -720,8 +898,8 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
+              "text": "T",
+              "kind": "typeParameterName"
             },
             {
               "text": ",",
@@ -736,7 +914,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "argArray",
+              "text": "args",
               "kind": "parameterName"
             },
             {
@@ -748,16 +926,8 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
+              "text": "A",
+              "kind": "typeParameterName"
             },
             {
               "text": ")",
@@ -772,13 +942,13 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
+              "text": "R",
+              "kind": "typeParameterName"
             }
           ],
           "documentation": [
             {
-              "text": "Calls a method of an object, substituting another object for the current object.",
+              "text": "Calls the function with the specified object as the this value and the specified rest arguments as the arguments.",
               "kind": "text"
             }
           ],
@@ -795,7 +965,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The object to be used as the current object.",
+                  "text": "The object to be used as the this object.",
                   "kind": "text"
                 }
               ]
@@ -804,7 +974,7 @@
               "name": "param",
               "text": [
                 {
-                  "text": "argArray",
+                  "text": "args",
                   "kind": "parameterName"
                 },
                 {
@@ -812,7 +982,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A list of arguments to be passed to the method.",
+                  "text": "Argument values to be passed to the function.",
                   "kind": "text"
                 }
               ]
@@ -1067,8 +1237,8 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "CallableFunction",
+              "kind": "interfaceName"
             },
             {
               "text": ".",
@@ -1077,6 +1247,30 @@
             {
               "text": "apply",
               "kind": "methodName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "R",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "(",
@@ -1095,8 +1289,44 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "this",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=>",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "R",
+              "kind": "typeParameterName"
             },
             {
               "text": ",",
@@ -1119,36 +1349,8 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": ",",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "argArray",
-              "kind": "parameterName"
-            },
-            {
-              "text": "?",
-              "kind": "punctuation"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
+              "text": "T",
+              "kind": "typeParameterName"
             },
             {
               "text": ")",
@@ -1163,13 +1365,41 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
+              "text": "R",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "+",
+              "kind": "operator"
+            },
+            {
+              "text": "1",
+              "kind": "numericLiteral"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "overload",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             }
           ],
           "documentation": [
             {
-              "text": "Calls the function, substituting the specified object for the this value of the function, and the specified array for the arguments of the function.",
+              "text": "Calls the function with the specified object as the this value and the elements of specified array as the arguments.",
               "kind": "text"
             }
           ],
@@ -1187,23 +1417,6 @@
                 },
                 {
                   "text": "The object to be used as the this object.",
-                  "kind": "text"
-                }
-              ]
-            },
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "argArray",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A set of arguments to be passed to the function.",
                   "kind": "text"
                 }
               ]
@@ -1282,8 +1495,8 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "CallableFunction",
+              "kind": "interfaceName"
             },
             {
               "text": ".",
@@ -1292,6 +1505,18 @@
             {
               "text": "bind",
               "kind": "methodName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "(",
@@ -1310,8 +1535,8 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "T",
+              "kind": "typeParameterName"
             },
             {
               "text": ",",
@@ -1334,43 +1559,19 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
+              "text": "ThisParameterType",
+              "kind": "aliasName"
             },
             {
-              "text": ",",
+              "text": "<",
               "kind": "punctuation"
             },
             {
-              "text": " ",
-              "kind": "space"
+              "text": "T",
+              "kind": "typeParameterName"
             },
             {
-              "text": "...",
-              "kind": "punctuation"
-            },
-            {
-              "text": "argArray",
-              "kind": "parameterName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
+              "text": ">",
               "kind": "punctuation"
             },
             {
@@ -1386,8 +1587,48 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
+              "text": "OmitThisParameter",
+              "kind": "aliasName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "+",
+              "kind": "operator"
+            },
+            {
+              "text": "1",
+              "kind": "numericLiteral"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "overload",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
             }
           ],
           "documentation": [
@@ -1409,24 +1650,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "An object to which the this keyword can refer inside the new function.",
-                  "kind": "text"
-                }
-              ]
-            },
-            {
-              "name": "param",
-              "text": [
-                {
-                  "text": "argArray",
-                  "kind": "parameterName"
-                },
-                {
-                  "text": " ",
-                  "kind": "space"
-                },
-                {
-                  "text": "A list of arguments to be passed to the new function.",
+                  "text": "The object to be used as the this object.",
                   "kind": "text"
                 }
               ]
@@ -1456,8 +1680,8 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "CallableFunction",
+              "kind": "interfaceName"
             },
             {
               "text": ".",
@@ -1466,6 +1690,66 @@
             {
               "text": "call",
               "kind": "methodName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "A",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "any",
+              "kind": "keyword"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "R",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "(",
@@ -1484,8 +1768,72 @@
               "kind": "space"
             },
             {
-              "text": "Function",
-              "kind": "localName"
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "this",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "T",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "...",
+              "kind": "punctuation"
+            },
+            {
+              "text": "args",
+              "kind": "parameterName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "A",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=>",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "R",
+              "kind": "typeParameterName"
             },
             {
               "text": ",",
@@ -1508,8 +1856,8 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
+              "text": "T",
+              "kind": "typeParameterName"
             },
             {
               "text": ",",
@@ -1524,7 +1872,7 @@
               "kind": "punctuation"
             },
             {
-              "text": "argArray",
+              "text": "args",
               "kind": "parameterName"
             },
             {
@@ -1536,16 +1884,8 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
-            },
-            {
-              "text": "[",
-              "kind": "punctuation"
-            },
-            {
-              "text": "]",
-              "kind": "punctuation"
+              "text": "A",
+              "kind": "typeParameterName"
             },
             {
               "text": ")",
@@ -1560,13 +1900,13 @@
               "kind": "space"
             },
             {
-              "text": "any",
-              "kind": "keyword"
+              "text": "R",
+              "kind": "typeParameterName"
             }
           ],
           "documentation": [
             {
-              "text": "Calls a method of an object, substituting another object for the current object.",
+              "text": "Calls the function with the specified object as the this value and the specified rest arguments as the arguments.",
               "kind": "text"
             }
           ],
@@ -1583,7 +1923,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "The object to be used as the current object.",
+                  "text": "The object to be used as the this object.",
                   "kind": "text"
                 }
               ]
@@ -1592,7 +1932,7 @@
               "name": "param",
               "text": [
                 {
-                  "text": "argArray",
+                  "text": "args",
                   "kind": "parameterName"
                 },
                 {
@@ -1600,7 +1940,7 @@
                   "kind": "space"
                 },
                 {
-                  "text": "A list of arguments to be passed to the method.",
+                  "text": "Argument values to be passed to the function.",
                   "kind": "text"
                 }
               ]

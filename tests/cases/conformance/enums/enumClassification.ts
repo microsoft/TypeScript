@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 
 // An enum type where each member has no initializer or an initializer that specififes

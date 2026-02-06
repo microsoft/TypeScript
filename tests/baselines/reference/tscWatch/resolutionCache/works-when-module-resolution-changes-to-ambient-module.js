@@ -4,7 +4,6 @@ Input::
 import * as fs from "fs";
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -19,38 +18,38 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/home/src/tslibs/TS/Lib/tsc.js -w /users/username/projects/project/foo.ts
+/home/src/tslibs/TS/Lib/tsc.js -w /users/username/projects/project/foo.ts -types node
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96mfoo.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module 'fs' or its corresponding type declarations.
-
-[7m1[0m import * as fs from "fs";
-[7m [0m [91m                    ~~~~[0m
+[91merror[0m[90m TS2688: [0mCannot find type definition file for 'node'.
+  The file is in the program because:
+    Entry point of type library 'node' specified in compilerOptions
 
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/users/username/projects/project/foo.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 
 PolledWatches::
 /users/username/projects/node_modules: *new*
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /users/username/projects/project/node_modules: *new*
-  {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {}
+/users/username/projects: *new*
+  {}
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/foo.ts: *new*
   {}
@@ -59,26 +58,32 @@ Program root files: [
   "/users/username/projects/project/foo.ts"
 ]
 Program options: {
-  "watch": true
+  "watch": true,
+  "types": [
+    "node"
+  ]
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/foo.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/users/username/projects/project/foo.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /users/username/projects/project/foo.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: npm install node types
 
-Input::
+Before running Timeout callback:: count: 1
+7: timerToInvalidateFailedLookupResolutions
+Output::
+sysLog:: /users/username/projects/project/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
+
+
 //// [/users/username/projects/project/node_modules/@types/node/package.json]
 
 {
@@ -95,25 +100,20 @@ declare module "fs" {
 }
 
 
-Output::
-sysLog:: /users/username/projects/project/node_modules:: Changing watcher to PresentFileSystemEntryWatcher
-sysLog:: /users/username/projects/project/node_modules/@types:: Changing watcher to PresentFileSystemEntryWatcher
-
-
 PolledWatches::
 /users/username/projects/node_modules:
-  {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /users/username/projects/project/node_modules:
   {"pollingInterval":500}
-/users/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
   {}
 /users/username/projects/project/foo.ts:
   {}
@@ -121,16 +121,20 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project/node_modules: *new*
   {}
-/users/username/projects/project/node_modules/@types: *new*
-  {}
 
-Timeout callback:: count: 2
-14: timerToUpdateProgram *new*
-16: timerToInvalidateFailedLookupResolutions *new*
+Timeout callback:: count: 1
+7: timerToInvalidateFailedLookupResolutions *new*
 
-Before running Timeout callback:: count: 2
-14: timerToUpdateProgram
-16: timerToInvalidateFailedLookupResolutions
+Host is moving to new time
+After running Timeout callback:: count: 1
+
+Timeout callback:: count: 1
+8: timerToUpdateProgram *new*
+
+Input::
+
+Before running Timeout callback:: count: 1
+8: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -147,11 +151,13 @@ Output::
 PolledWatches::
 /users/username/projects/node_modules:
   {"pollingInterval":500}
-/users/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {}
+/users/username/projects:
+  {}
+/users/username/projects/project:
   {}
 /users/username/projects/project/foo.ts:
   {}
@@ -163,26 +169,25 @@ FsWatches::
 FsWatchesRecursive::
 /users/username/projects/project/node_modules:
   {}
-/users/username/projects/project/node_modules/@types:
-  {}
-
-Timeout callback:: count: 0
-16: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
   "/users/username/projects/project/foo.ts"
 ]
 Program options: {
-  "watch": true
+  "watch": true,
+  "types": [
+    "node"
+  ]
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/foo.ts
 /users/username/projects/project/node_modules/@types/node/index.d.ts
 
 Semantic diagnostics in builder refreshed for::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/foo.ts
 /users/username/projects/project/node_modules/@types/node/index.d.ts
 

@@ -1,3 +1,4 @@
+// @target: es2015
 interface C {
     new (a: string): string;
 }

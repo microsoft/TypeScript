@@ -1,8 +1,8 @@
 //// [tests/cases/compiler/namespaces1.ts] ////
 
 //// [namespaces1.ts]
-module X {
-    export module Y {
+namespace X {
+    export namespace Y {
         export interface Z { }
     }
     export interface Y { }
@@ -12,5 +12,6 @@ var x: X.Y.Z;
 var x2: X.Y;
 
 //// [namespaces1.js]
+"use strict";
 var x;
 var x2;

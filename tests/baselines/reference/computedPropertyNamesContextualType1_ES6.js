@@ -12,6 +12,7 @@ var o: I = {
 }
 
 //// [computedPropertyNamesContextualType1_ES6.js]
+"use strict";
 var o = {
     ["" + 0](y) { return y.length; },
     ["" + 1]: y => y.length

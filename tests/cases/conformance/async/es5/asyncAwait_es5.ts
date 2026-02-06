@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @lib: es5,es2015.promise
 type MyPromise<T> = Promise<T>;
 declare var MyPromise: typeof Promise;
@@ -36,7 +36,7 @@ class C {
 	static async m6(): MyPromise<void> { }
 }
 
-module M {
+namespace M {
 	export async function f1() { }
 }
 

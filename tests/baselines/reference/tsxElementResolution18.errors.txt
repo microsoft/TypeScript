@@ -2,7 +2,7 @@ file1.tsx(6,1): error TS7026: JSX element implicitly has type 'any' because no i
 
 
 ==== file1.tsx (1 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     }
     

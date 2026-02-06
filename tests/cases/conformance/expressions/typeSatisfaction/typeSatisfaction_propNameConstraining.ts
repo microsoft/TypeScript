@@ -1,3 +1,4 @@
+// @target: es2015
 type Keys = 'a' | 'b' | 'c' | 'd';
 
 const p = {

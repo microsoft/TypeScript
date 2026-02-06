@@ -1,18 +1,42 @@
+validNullAssignments.ts(1,5): error TS2322: Type 'null' is not assignable to type 'number'.
+validNullAssignments.ts(2,5): error TS2322: Type 'null' is not assignable to type 'boolean'.
+validNullAssignments.ts(3,5): error TS2322: Type 'null' is not assignable to type 'string'.
+validNullAssignments.ts(4,5): error TS2322: Type 'null' is not assignable to type 'void'.
+validNullAssignments.ts(6,5): error TS2322: Type 'null' is not assignable to type 'undefined'.
+validNullAssignments.ts(7,1): error TS2322: Type 'null' is not assignable to type 'undefined'.
 validNullAssignments.ts(10,3): error TS2540: Cannot assign to 'A' because it is a read-only property.
+validNullAssignments.ts(12,11): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+validNullAssignments.ts(14,1): error TS2322: Type 'null' is not assignable to type 'C'.
 validNullAssignments.ts(15,1): error TS2629: Cannot assign to 'C' because it is a class.
+validNullAssignments.ts(19,1): error TS2322: Type 'null' is not assignable to type 'I'.
 validNullAssignments.ts(20,1): error TS2693: 'I' only refers to a type, but is being used as a value here.
 validNullAssignments.ts(23,1): error TS2631: Cannot assign to 'M' because it is a namespace.
+validNullAssignments.ts(25,5): error TS2322: Type 'null' is not assignable to type '{ f(): void; }'.
+validNullAssignments.ts(28,5): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 validNullAssignments.ts(30,1): error TS2630: Cannot assign to 'i' because it is a function.
 
 
-==== validNullAssignments.ts (5 errors) ====
+==== validNullAssignments.ts (16 errors) ====
     var a: number = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'number'.
     var b: boolean = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'boolean'.
     var c: string = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
     var d: void = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'void'.
     
     var e: typeof undefined = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'undefined'.
     e = null; // ok
+    ~
+!!! error TS2322: Type 'null' is not assignable to type 'undefined'.
     
     enum E { A }
     E.A = null; // error
@@ -20,8 +44,12 @@ validNullAssignments.ts(30,1): error TS2630: Cannot assign to 'i' because it is 
 !!! error TS2540: Cannot assign to 'A' because it is a read-only property.
     
     class C { foo: string }
+              ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     var f: C;
     f = null; // ok
+    ~
+!!! error TS2322: Type 'null' is not assignable to type 'C'.
     C = null; // error
     ~
 !!! error TS2629: Cannot assign to 'C' because it is a class.
@@ -29,19 +57,26 @@ validNullAssignments.ts(30,1): error TS2630: Cannot assign to 'i' because it is 
     interface I { foo: string }
     var g: I;
     g = null; // ok
+    ~
+!!! error TS2322: Type 'null' is not assignable to type 'I'.
     I = null; // error
     ~
 !!! error TS2693: 'I' only refers to a type, but is being used as a value here.
     
-    module M { export var x = 1; }
+    namespace M { export var x = 1; }
     M = null; // error
     ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.
     
     var h: { f(): void } = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type '{ f(): void; }'.
     
     function i<T>(a: T) {
         a = null;
+        ~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
     }
     i = null; // error
     ~

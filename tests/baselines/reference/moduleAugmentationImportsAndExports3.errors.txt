@@ -7,7 +7,7 @@ f3.ts(11,21): error TS2307: Cannot find module './f2' or its corresponding type 
     
 ==== f2.ts (0 errors) ====
     export class B {
-        n: number;
+        n!: number;
     }
     
 ==== f3.ts (2 errors) ====
@@ -39,5 +39,5 @@ f3.ts(11,21): error TS2307: Cannot find module './f2' or its corresponding type 
     import {A} from "./f1";
     import "./f3";
     
-    let a: A;
+    declare let a: A;
     let b = a.foo().n;

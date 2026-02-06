@@ -1,3 +1,4 @@
+// @target: es2015
 interface I<T> {
     <U extends T>(u: U): U;
 }

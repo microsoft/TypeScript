@@ -1,6 +1,7 @@
+// @target: es2015
 function fn() {
     return fn.n;
 }
-module fn {
+namespace fn {
     export var n = 1;
 }

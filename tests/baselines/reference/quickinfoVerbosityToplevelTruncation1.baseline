@@ -61,10 +61,9 @@
 // |     property8: {
 // |         [key: string]: unknown;
 // |     };
-// |     property9: string;
-// |     property10: number;
-// |     property11: boolean;
-// |     ... 8 more ... ;
+// |     property9: string | null;
+// |     property10: number | null;
+// |     ... 9 more ... ;
 // |     property20: () => void;
 // | }
 // | (verbosity level: 1)
@@ -935,6 +934,22 @@
           "kind": "keyword"
         },
         {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "null",
+          "kind": "keyword"
+        },
+        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -963,23 +978,11 @@
           "kind": "keyword"
         },
         {
-          "text": ";",
-          "kind": "punctuation"
-        },
-        {
-          "text": "\n",
-          "kind": "lineBreak"
-        },
-        {
-          "text": "    ",
+          "text": " ",
           "kind": "space"
         },
         {
-          "text": "property11",
-          "kind": "propertyName"
-        },
-        {
-          "text": ":",
+          "text": "|",
           "kind": "punctuation"
         },
         {
@@ -987,7 +990,7 @@
           "kind": "space"
         },
         {
-          "text": "boolean",
+          "text": "null",
           "kind": "keyword"
         },
         {
@@ -1003,7 +1006,7 @@
           "kind": "space"
         },
         {
-          "text": "... 8 more ... ",
+          "text": "... 9 more ... ",
           "kind": "propertyName"
         },
         {

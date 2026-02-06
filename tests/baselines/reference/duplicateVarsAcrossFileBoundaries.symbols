@@ -35,22 +35,22 @@ var z = 0;
 >z : Symbol(z, Decl(duplicateVarsAcrossFileBoundaries_1.ts, 1, 3), Decl(duplicateVarsAcrossFileBoundaries_2.ts, 2, 3), Decl(duplicateVarsAcrossFileBoundaries_3.ts, 2, 3))
 
 === duplicateVarsAcrossFileBoundaries_4.ts ===
-module P { }
+namespace P { }
 >P : Symbol(P, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 0, 0), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 2, 3))
 
 import p = P;
->p : Symbol(p, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 0, 12))
+>p : Symbol(p, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 0, 15))
 >P : Symbol(P, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 0, 0), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 2, 3))
 
 var q;
->q : Symbol(q, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 2, 3), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 0, 12))
+>q : Symbol(q, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 2, 3), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 0, 15))
 
 === duplicateVarsAcrossFileBoundaries_5.ts ===
-module Q { }
+namespace Q { }
 >Q : Symbol(Q, Decl(duplicateVarsAcrossFileBoundaries_5.ts, 0, 0))
 
 import q = Q;
->q : Symbol(q, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 2, 3), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 0, 12))
+>q : Symbol(q, Decl(duplicateVarsAcrossFileBoundaries_4.ts, 2, 3), Decl(duplicateVarsAcrossFileBoundaries_5.ts, 0, 15))
 >Q : Symbol(Q, Decl(duplicateVarsAcrossFileBoundaries_5.ts, 0, 0))
 
 var p;

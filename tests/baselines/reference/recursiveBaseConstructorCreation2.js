@@ -17,4 +17,5 @@ var bar = new xyz(); // Error: Invalid 'new' expression.
 
 
 //// [recursiveBaseConstructorCreation2.js]
+"use strict";
 var bar = new xyz(); // Error: Invalid 'new' expression.

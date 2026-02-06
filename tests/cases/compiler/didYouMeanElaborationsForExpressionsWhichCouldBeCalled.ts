@@ -1,3 +1,4 @@
+// @target: es2015
 class Bar {
     x!: string;
 }

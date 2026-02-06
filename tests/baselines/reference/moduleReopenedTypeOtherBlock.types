@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleReopenedTypeOtherBlock.ts] ////
 
 === moduleReopenedTypeOtherBlock.ts ===
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -13,7 +13,7 @@ module M {
 >n : number
 >  : ^^^^^^
 }
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

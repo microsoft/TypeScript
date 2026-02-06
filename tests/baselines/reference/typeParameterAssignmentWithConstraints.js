@@ -8,6 +8,7 @@ function f<A, B extends A>() {
 }
 
 //// [typeParameterAssignmentWithConstraints.js]
+"use strict";
 function f() {
     var a;
     var b;

@@ -29,7 +29,7 @@ const angularCorePackageJson: File = {
 };
 const tsconfig: File = {
     path: "/user/username/projects/project/tsconfig.json",
-    content: `{ "compilerOptions": { "module": "commonjs" } }`,
+    content: `{ "compilerOptions": { "module": "commonjs", "types": ["*"] } }`,
 };
 const packageJson: File = {
     path: "/user/username/projects/project/package.json",
@@ -188,6 +188,11 @@ describe("unittests:: tsserver:: autoImportProvider::", () => {
 
         // Create auto import provider project, ensure still !session.getProjectService().pendingEnsureProjectForOpenFiles
         host.writeFile(packageJson.path, packageJson.content);
+        // package.json was watched in --moduleResolution bundler
+        assert.isTrue(session.getProjectService().pendingEnsureProjectForOpenFiles);
+        host.runQueuedTimeoutCallbacks();
+        assert.isFalse(session.getProjectService().pendingEnsureProjectForOpenFiles);
+
         session.host.baselineHost("Before getPackageJsonAutoImportProvider");
         hostProject.getPackageJsonAutoImportProvider();
         assert.isFalse(session.getProjectService().pendingEnsureProjectForOpenFiles);

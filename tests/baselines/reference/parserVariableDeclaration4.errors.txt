@@ -2,7 +2,7 @@ parserVariableDeclaration4.ts(2,4): error TS1038: A 'declare' modifier cannot be
 
 
 ==== parserVariableDeclaration4.ts (1 errors) ====
-    declare module M {
+    declare namespace M {
        declare var v;
        ~~~~~~~
 !!! error TS1038: A 'declare' modifier cannot be used in an already ambient context.

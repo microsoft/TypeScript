@@ -1,3 +1,4 @@
+// @target: es2015
 // @noEmit: true
 // @module: esnext
 // @allowJS: true

@@ -22,11 +22,9 @@ class Foo {
 
 
 //// [propertyWrappedInTry.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+"use strict";
+class Foo {
+}
 try {
     bar = someInitThatMightFail();
 }

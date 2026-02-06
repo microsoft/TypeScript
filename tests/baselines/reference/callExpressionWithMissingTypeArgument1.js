@@ -4,4 +4,5 @@
 Foo<a,,b>();
 
 //// [callExpressionWithMissingTypeArgument1.js]
+"use strict";
 Foo();

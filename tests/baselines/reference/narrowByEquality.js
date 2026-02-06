@@ -111,7 +111,7 @@ if (x == xAndObj) {
 // Repro from #24991
 function test(level) {
     if (level == +level) {
-        var q2 = level; // error
+        const q2 = level; // error
         return level;
     }
     return 0;

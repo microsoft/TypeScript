@@ -1,8 +1,9 @@
-module A {
+// @target: es2015
+namespace A {
     export interface I { x: number }
 }
 
-module B {
+namespace B {
     export import A1 = A
     
 }

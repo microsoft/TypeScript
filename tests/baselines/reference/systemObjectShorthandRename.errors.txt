@@ -1,0 +1,14 @@
+error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== x.ts (0 errors) ====
+    export const x = 'X'
+==== index.ts (0 errors) ====
+    import {x} from './x.js'
+    
+    const x2 = {x}
+    const a = {x2}
+    
+    const x3 = x
+    const b = {x3}

@@ -9,7 +9,7 @@ parserRealSource2.ts(4,21): error TS6053: File 'typescript.ts' not found.
                         ~~~~~~~~~~~~~
 !!! error TS6053: File 'typescript.ts' not found.
     
-    module TypeScript {
+    namespace TypeScript {
     
         export function hasFlag(val: number, flag: number) {
             return (val & flag) != 0;

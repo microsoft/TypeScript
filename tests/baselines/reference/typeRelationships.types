@@ -92,8 +92,8 @@ class C {
         var b = [this, this.self, null, undefined];
 >b : this[]
 >  : ^^^^^^
->[this, this.self, null, undefined] : this[]
->                                   : ^^^^^^
+>[this, this.self, null, undefined] : (this | null | undefined)[]
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >this.self : this

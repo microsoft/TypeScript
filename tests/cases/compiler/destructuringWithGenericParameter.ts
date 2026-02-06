@@ -1,3 +1,4 @@
+// @target: es2015
 class GenericClass<T> {
     payload: T;
 }

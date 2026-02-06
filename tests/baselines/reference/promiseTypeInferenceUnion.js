@@ -18,6 +18,7 @@ const g2: Promise<number> = Promise.resolve(f2(42));
 const g3: Promise<number> = Promise.resolve(f3(42));
 
 //// [promiseTypeInferenceUnion.js]
+"use strict";
 function f1(x) {
     return Promise.resolve(x);
 }

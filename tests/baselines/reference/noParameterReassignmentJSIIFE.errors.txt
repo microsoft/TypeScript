@@ -1,0 +1,14 @@
+index.js(3,42): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+  Type 'IArguments' is missing the following properties from type 'string[]': pop, push, concat, join, and 23 more.
+
+
+==== index.js (1 errors) ====
+    self.importScripts = (function (importScripts) {
+        return function () {
+            return importScripts.apply(this, arguments);
+                                             ~~~~~~~~~
+!!! error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
+!!! error TS2345:   Type 'IArguments' is missing the following properties from type 'string[]': pop, push, concat, join, and 23 more.
+        };
+    })(importScripts);
+    

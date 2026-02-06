@@ -1,3 +1,4 @@
+// @target: es2015
 class Base {
     static foo: {
         bar: Object;

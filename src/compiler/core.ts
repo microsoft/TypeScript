@@ -1063,8 +1063,8 @@ export function rangeEquals<T>(array1: readonly T[], array2: readonly T[], pos: 
  *
  * @internal
  */
-export const elementAt: <T>(array: readonly T[] | undefined, offset: number) => T | undefined = !!Array.prototype.at
-    ? (array, offset) => array?.at(offset)
+export const elementAt: <T>(array: readonly T[] | undefined, offset: number) => T | undefined = !!(Array.prototype as any).at
+    ? (array, offset) => (array as any)?.at(offset)
     : (array, offset) => {
         if (array !== undefined) {
             offset = toOffset(array, offset);
@@ -1209,7 +1209,7 @@ export function binarySearchKey<T, U>(array: readonly T[], key: U, keySelector: 
     while (low <= high) {
         const middle = low + ((high - low) >> 1);
         const midKey = keySelector(array[middle], middle);
-        switch (keyComparer(midKey, key)) {
+        switch (Math.sign(keyComparer(midKey, key))) {
             case Comparison.LessThan:
                 low = middle + 1;
                 break;
@@ -1623,7 +1623,7 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
     const multiMap = new Map<THash, TElement | TElement[]>();
     let size = 0;
 
-    function* getElementIterator(): IterableIterator<TElement> {
+    function* getElementIterator(): SetIterator<TElement> {
         for (const value of multiMap.values()) {
             if (isArray(value)) {
                 yield* value;
@@ -1722,13 +1722,13 @@ export function createSet<TElement, THash = number>(getHashCode: (element: TElem
                 }
             }
         },
-        keys(): IterableIterator<TElement> {
+        keys(): SetIterator<TElement> {
             return getElementIterator();
         },
-        values(): IterableIterator<TElement> {
+        values(): SetIterator<TElement> {
             return getElementIterator();
         },
-        *entries(): IterableIterator<[TElement, TElement]> {
+        *entries(): SetIterator<[TElement, TElement]> {
             for (const value of getElementIterator()) {
                 yield [value, value];
             }
@@ -1967,9 +1967,11 @@ export function equateStringsCaseSensitive(a: string, b: string): boolean {
     return equateValues(a, b);
 }
 
-function compareComparableValues(a: string | undefined, b: string | undefined): Comparison;
-function compareComparableValues(a: number | undefined, b: number | undefined): Comparison;
-function compareComparableValues(a: string | number | undefined, b: string | number | undefined) {
+/** @internal */
+export function compareComparableValues(a: string | undefined, b: string | undefined): Comparison;
+/** @internal */
+export function compareComparableValues(a: number | undefined, b: number | undefined): Comparison;
+export function compareComparableValues(a: string | number | undefined, b: string | number | undefined) {
     return a === b ? Comparison.EqualTo :
         a === undefined ? Comparison.LessThan :
         b === undefined ? Comparison.GreaterThan :

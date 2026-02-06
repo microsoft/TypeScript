@@ -8,4 +8,5 @@ b /* parameter b */,
 ) { }
 
 //// [commentOnParameter3.js]
+"use strict";
 function commentedParameters(a /* parameter a */, b /* parameter b */) { }

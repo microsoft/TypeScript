@@ -1,6 +1,6 @@
 // @jsx: react
 // @strict: true
-// @target: ES5
+// @target: ES5, ES2015
 // @module: ESNext
 // @esModuleInterop: true
 // @skipLibCheck: true

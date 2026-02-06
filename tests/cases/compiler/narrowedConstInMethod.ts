@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 
 // Fixes #10501, possibly null 'x'

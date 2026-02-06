@@ -1,9 +1,10 @@
-file.tsx(13,54): error TS2322: Type '(a: { x: string; }) => string' is not assignable to type '((a: { x: string; }) => string) & ((cur: { x: string; }) => { x: string; })'.
+file.tsx(14,54): error TS2322: Type '(a: { x: string; }) => string' is not assignable to type '((a: { x: string; }) => string) & ((cur: { x: string; }) => { x: string; })'.
   Type '(a: { x: string; }) => string' is not assignable to type '(cur: { x: string; }) => { x: string; }'.
     Type 'string' is not assignable to type '{ x: string; }'.
 
 
 ==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
     import * as React from "react";
     interface BaseProps<T> {
       initialValues: T;
@@ -21,4 +22,4 @@ file.tsx(13,54): error TS2322: Type '(a: { x: string; }) => string' is not assig
 !!! error TS2322: Type '(a: { x: string; }) => string' is not assignable to type '((a: { x: string; }) => string) & ((cur: { x: string; }) => { x: string; })'.
 !!! error TS2322:   Type '(a: { x: string; }) => string' is not assignable to type '(cur: { x: string; }) => { x: string; }'.
 !!! error TS2322:     Type 'string' is not assignable to type '{ x: string; }'.
-!!! related TS6500 file.tsx:13:54: The expected type comes from property 'nextValues' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<GenericComponent<{ initialValues: { x: string; }; nextValues: (a: { x: string; }) => string; }, { x: string; }>> & { initialValues: { x: string; }; nextValues: (a: { x: string; }) => string; } & BaseProps<{ x: string; }> & { children?: ReactNode; }'
+!!! related TS6500 file.tsx:14:54: The expected type comes from property 'nextValues' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<GenericComponent<{ initialValues: { x: string; }; nextValues: (a: { x: string; }) => string; }, { x: string; }>> & { initialValues: { x: string; }; nextValues: (a: { x: string; }) => string; } & BaseProps<{ x: string; }> & { children?: ReactNode | undefined; }'

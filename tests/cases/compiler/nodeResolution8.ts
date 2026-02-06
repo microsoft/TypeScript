@@ -1,6 +1,7 @@
+// @target: es2015
+// @strict: false
 // @module: commonjs
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @filename: node_modules/a/ref.ts
 var x = 1;
 

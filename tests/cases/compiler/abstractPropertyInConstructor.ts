@@ -1,3 +1,4 @@
+// @target: es2015
 abstract class AbstractClass {
     constructor(str: string, other: AbstractClass) {
         this.method(parseInt(str));

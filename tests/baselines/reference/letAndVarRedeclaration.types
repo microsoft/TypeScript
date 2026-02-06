@@ -49,7 +49,7 @@ function f1() {
     }
 }
 
-module M0 {
+namespace M0 {
 >M0 : typeof M0
 >   : ^^^^^^^^^
 
@@ -66,7 +66,7 @@ module M0 {
 >   : ^^^^^^^^^^
 }
 
-module M1 {
+namespace M1 {
 >M1 : typeof M1
 >   : ^^^^^^^^^
 
@@ -108,7 +108,7 @@ function f2() {
     }
 }
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 

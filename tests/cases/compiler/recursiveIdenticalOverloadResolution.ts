@@ -1,5 +1,6 @@
+// @target: es2015
 
-module M {
+namespace M {
 
    interface I { (i: I): I; }
 

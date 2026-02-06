@@ -15,8 +15,8 @@ interface NotNumber {
 }
 
 var x = 1;
-var a: Number;
-var b: NotNumber;
+declare var a: Number;
+declare var b: NotNumber;
 
 a = x; 
 a = b; 
@@ -30,9 +30,8 @@ x = b; // expected error
 
 
 //// [assignFromNumberInterface2.js]
+"use strict";
 var x = 1;
-var a;
-var b;
 a = x;
 a = b;
 b = a;

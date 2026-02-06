@@ -6,6 +6,7 @@ interface I {
 }
 
 //// [interfaceWithOptionalProperty.js]
+"use strict";
 
 
 //// [interfaceWithOptionalProperty.d.ts]

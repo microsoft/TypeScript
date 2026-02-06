@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 interface A { a: number; }
 interface B { b: number; }

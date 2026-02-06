@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 let e1: intrinsic;

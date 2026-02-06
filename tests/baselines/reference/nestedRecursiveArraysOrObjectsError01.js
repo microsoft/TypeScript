@@ -17,7 +17,8 @@ const blah: Style = [
 
 
 //// [nestedRecursiveArraysOrObjectsError01.js]
-var blah = [
+"use strict";
+const blah = [
     [[{
                 foo: 'asdf',
                 jj: 1 // intentional error

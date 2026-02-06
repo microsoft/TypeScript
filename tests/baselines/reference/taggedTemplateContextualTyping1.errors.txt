@@ -1,0 +1,46 @@
+taggedTemplateContextualTyping1.ts(6,5): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+taggedTemplateContextualTyping1.ts(13,31): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+taggedTemplateContextualTyping1.ts(14,31): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+taggedTemplateContextualTyping1.ts(14,94): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+taggedTemplateContextualTyping1.ts(15,31): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+taggedTemplateContextualTyping1.ts(15,112): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+taggedTemplateContextualTyping1.ts(16,49): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+taggedTemplateContextualTyping1.ts(16,94): error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+
+
+==== taggedTemplateContextualTyping1.ts (8 errors) ====
+    type FuncType = (x: <T>(p: T) => T) => typeof x;
+    
+    function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T;
+    function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, h: FuncType, x: T): T;
+    function tempTag1<T>(...rest: any[]): T {
+        return undefined;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+    }
+    
+    // If contextual typing takes place, these functions should work.
+    // Otherwise, the arrow functions' parameters will be typed as 'any',
+    // and it is an error to invoke an any-typed value with type arguments,
+    // so this test will error.
+    tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ 10 }`;
+                                  ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+    tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ y => { y<number>(undefined); return y; }                  }${ 10 }`;
+                                  ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+                                                                                                 ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+    tempTag1 `${ x => { x<number>(undefined); return x; }                   }${ (y: <T>(p: T) => T) => { y<number>(undefined); return y } }${ undefined }`;
+                                  ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+                                                                                                                   ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+    tempTag1 `${ (x: <T>(p: T) => T) => { x<number>(undefined); return x; } }${ y => { y<number>(undefined); return y; }                  }${ undefined }`;
+                                                    ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+                                                                                                 ~~~~~~~~~
+!!! error TS2345: Argument of type 'undefined' is not assignable to parameter of type 'number'.
+    

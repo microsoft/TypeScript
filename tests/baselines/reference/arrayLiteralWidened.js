@@ -26,6 +26,7 @@ var d = [undefined, x];
 
 
 //// [arrayLiteralWidened.js]
+"use strict";
 // array literals are widened upon assignment according to their element type
 var a = []; // any[]
 var a = [, ,];

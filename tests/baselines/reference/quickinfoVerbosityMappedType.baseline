@@ -36,8 +36,8 @@
 //       ^
 // | ----------------------------------------------------------------------
 // | const y: {
-// |     banana?: string;
-// |     apple?: boolean;
+// |     banana?: string | undefined;
+// |     apple?: boolean | undefined;
 // | }
 // | (verbosity level: 0)
 // | ----------------------------------------------------------------------
@@ -700,6 +700,22 @@
           "kind": "keyword"
         },
         {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
+        },
+        {
           "text": ";",
           "kind": "punctuation"
         },
@@ -729,6 +745,22 @@
         },
         {
           "text": "boolean",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
           "kind": "keyword"
         },
         {

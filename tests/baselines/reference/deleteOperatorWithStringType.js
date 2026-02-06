@@ -2,7 +2,7 @@
 
 //// [deleteOperatorWithStringType.ts]
 // delete  operator on string type
-var STRING: string;
+declare var STRING: string;
 var STRING1: string[] = ["", "abc"];
 
 function foo(): string { return "abc"; }
@@ -11,7 +11,7 @@ class A {
     public a: string;
     static foo() { return ""; }
 }
-module M {
+namespace M {
     export var n: string;
 }
 
@@ -47,16 +47,12 @@ delete foo();
 delete objA.a,M.n;
 
 //// [deleteOperatorWithStringType.js]
-// delete  operator on string type
-var STRING;
+"use strict";
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return ""; };
-    return A;
-}());
+class A {
+    static foo() { return ""; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -67,7 +63,7 @@ var ResultIsBoolean2 = delete STRING1;
 // string type literal
 var ResultIsBoolean3 = delete "";
 var ResultIsBoolean4 = delete { x: "", y: "" };
-var ResultIsBoolean5 = delete { x: "", y: function (s) { return s; } };
+var ResultIsBoolean5 = delete { x: "", y: (s) => { return s; } };
 // string type expressions
 var ResultIsBoolean6 = delete objA.a;
 var ResultIsBoolean7 = delete M.n;

@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @lib: es2015
 // @downlevelIteration: true
 // @noEmitHelpers: true
