@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 // @Filename: /a.ts
 //// /*export*/export class A/*A*/ {
 //// 

@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @filename: internal.ts
 export declare function usePrivateType<T extends unknown[]>(...args: T): PrivateMapped<T[any]>;

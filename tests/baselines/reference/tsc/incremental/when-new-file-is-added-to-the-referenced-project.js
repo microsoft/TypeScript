@@ -60,12 +60,12 @@ Found 1 error in project2/tsconfig.json[90m:3[0m
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/projects/project2/class2.js]
-var class2 = /** @class */ (function () {
-    function class2() {
-    }
-    return class2;
-}());
+"use strict";
+class class2 {
+}
 
 
 //// [/home/src/workspaces/projects/project2/class2.d.ts]
@@ -74,17 +74,17 @@ declare class class2 {
 
 
 //// [/home/src/workspaces/projects/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2025.full.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "../project1/class1.d.ts",
     "./class2.ts"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -125,7 +125,7 @@ declare class class2 {
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../tslibs/ts/lib/lib.d.ts",
+      "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -139,7 +139,7 @@ declare class class2 {
   ],
   "latestChangedDtsFile": "./class2.d.ts",
   "version": "FakeTSVersion",
-  "size": 891
+  "size": 903
 }
 
 
@@ -201,18 +201,18 @@ Found 1 error in project2/tsconfig.json[90m:3[0m
 
 //// [/home/src/workspaces/projects/project2/class2.js] file written with same contents
 //// [/home/src/workspaces/projects/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[4],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2025.full.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[4],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "../project1/class1.d.ts",
     "../project1/class3.d.ts",
     "./class2.ts"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -262,7 +262,7 @@ Found 1 error in project2/tsconfig.json[90m:3[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../tslibs/ts/lib/lib.d.ts",
+      "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -280,7 +280,7 @@ Found 1 error in project2/tsconfig.json[90m:3[0m
   ],
   "latestChangedDtsFile": "./class2.d.ts",
   "version": "FakeTSVersion",
-  "size": 995
+  "size": 1007
 }
 
 
@@ -340,17 +340,17 @@ Found 2 errors in the same file, starting at: project2/tsconfig.json[90m:3[0m
 
 //// [/home/src/workspaces/projects/project2/class2.js] file written with same contents
 //// [/home/src/workspaces/projects/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2025.full.d.ts","../project1/class1.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[3],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "../project1/class1.d.ts",
     "./class2.ts"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -391,7 +391,7 @@ Found 2 errors in the same file, starting at: project2/tsconfig.json[90m:3[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../tslibs/ts/lib/lib.d.ts",
+      "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -405,7 +405,7 @@ Found 2 errors in the same file, starting at: project2/tsconfig.json[90m:3[0m
   ],
   "latestChangedDtsFile": "./class2.d.ts",
   "version": "FakeTSVersion",
-  "size": 891
+  "size": 903
 }
 
 
@@ -432,18 +432,18 @@ Found 1 error in project2/tsconfig.json[90m:3[0m
 
 //// [/home/src/workspaces/projects/project2/class2.js] file written with same contents
 //// [/home/src/workspaces/projects/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[4],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2025.full.d.ts","../project1/class1.d.ts","../project1/class3.d.ts","./class2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3469237238-declare class class1 {}","affectsGlobalScope":true},{"version":"-3469165364-declare class class3 {}","affectsGlobalScope":true},{"version":"777969115-class class2 {}","signature":"-2684084705-declare class class2 {\n}\n","affectsGlobalScope":true}],"root":[4],"options":{"composite":true,"module":0},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./class2.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/projects/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "../project1/class1.d.ts",
     "../project1/class3.d.ts",
     "./class2.ts"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -493,7 +493,7 @@ Found 1 error in project2/tsconfig.json[90m:3[0m
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../tslibs/ts/lib/lib.d.ts",
+      "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -511,7 +511,7 @@ Found 1 error in project2/tsconfig.json[90m:3[0m
   ],
   "latestChangedDtsFile": "./class2.d.ts",
   "version": "FakeTSVersion",
-  "size": 995
+  "size": 1007
 }
 
 

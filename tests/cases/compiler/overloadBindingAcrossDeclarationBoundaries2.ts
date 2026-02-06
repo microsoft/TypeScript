@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: overloadBindingAcrossDeclarationBoundaries_file0.ts
 interface Opt1 {
     p?: any;

@@ -2,7 +2,7 @@
 
 //// [decrementOperatorWithUnsupportedBooleanType.ts]
 // -- operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 
@@ -57,15 +57,11 @@ M.n--;
 objA.a--, M.n--;
 
 //// [decrementOperatorWithUnsupportedBooleanType.js]
-// -- operator on boolean type
-var BOOLEAN;
+"use strict";
 function foo() { return true; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return true; };
-    return A;
-}());
+class A {
+    static foo() { return true; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -76,10 +72,10 @@ var ResultIsNumber2 = BOOLEAN--;
 // boolean type literal
 var ResultIsNumber3 = --true;
 var ResultIsNumber4 = --{ x: true, y: false };
-var ResultIsNumber5 = --{ x: true, y: function (n) { return n; } };
+var ResultIsNumber5 = --{ x: true, y: (n) => { return n; } };
 var ResultIsNumber6 = true--;
 var ResultIsNumber7 = { x: true, y: false }--;
-var ResultIsNumber8 = { x: true, y: function (n) { return n; } }--;
+var ResultIsNumber8 = { x: true, y: (n) => { return n; } }--;
 // boolean type expressions
 var ResultIsNumber9 = --objA.a;
 var ResultIsNumber10 = --M.n;

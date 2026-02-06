@@ -23,7 +23,7 @@ export namespace c {
 >b : any
 >  : ^^^
 
-    export var x: b.I;
+    export declare var x: b.I;
 >x : b.I
 >  : ^^^
 >b : any

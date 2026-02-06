@@ -1,3 +1,4 @@
+// @target: es2015
 // All of these should be an error
 
 namespace Y {

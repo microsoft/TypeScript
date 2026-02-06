@@ -16,6 +16,7 @@ texts.push(100);
 texts.push("100");
 
 //// [b.tsx]
+/// <reference path="/.lib/react.d.ts" />
 import * as React from "react";
 
 export function MyComponent(props: { foo: string }) {
@@ -53,20 +54,6 @@ let x = (
 );
 
 
-//// [a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.texts = void 0;
-exports.texts = [];
-/**
- @ts-ignore */
-exports.texts.push(100);
-/**
- @ts-expect-error */
-exports.texts.push(100);
-/**
- @ts-expect-error */
-exports.texts.push("100");
 //// [b.js]
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
@@ -104,11 +91,12 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComponent = MyComponent;
-var React = __importStar(require("react"));
+/// <reference path="/.lib/react.d.ts" />
+const React = __importStar(require("react"));
 function MyComponent(props) {
     return React.createElement("div", null);
 }
-var x = (React.createElement("div", null,
+let x = (React.createElement("div", null,
     React.createElement(MyComponent, { foo: 100 }),
     React.createElement(MyComponent, { foo: 100 }),
     React.createElement(MyComponent, { foo: 100 }),

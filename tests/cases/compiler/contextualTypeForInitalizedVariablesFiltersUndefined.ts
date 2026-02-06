@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 const fInferred = ({ a = 0 } = {}) => a;
 // const fInferred: ({ a }?: { a?: number; }) => number

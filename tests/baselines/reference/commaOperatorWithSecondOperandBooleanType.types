@@ -3,6 +3,7 @@
 === commaOperatorWithSecondOperandBooleanType.ts ===
 var ANY: any;
 >ANY : any
+>    : ^^^
 
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
@@ -25,6 +26,7 @@ ANY, BOOLEAN;
 >ANY, BOOLEAN : boolean
 >             : ^^^^^^^
 >ANY : any
+>    : ^^^
 >BOOLEAN : boolean
 >        : ^^^^^^^
 
@@ -69,6 +71,7 @@ var resultIsBoolean1 = (ANY, BOOLEAN);
 >ANY, BOOLEAN : boolean
 >             : ^^^^^^^
 >ANY : any
+>    : ^^^
 >BOOLEAN : boolean
 >        : ^^^^^^^
 
@@ -133,6 +136,7 @@ ANY = undefined, BOOLEAN;
 >ANY = undefined : undefined
 >                : ^^^^^^^^^
 >ANY : any
+>    : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >BOOLEAN : boolean
@@ -214,6 +218,7 @@ var resultIsBoolean7 = (ANY = undefined, BOOLEAN);
 >ANY = undefined : undefined
 >                : ^^^^^^^^^
 >ANY : any
+>    : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >BOOLEAN : false

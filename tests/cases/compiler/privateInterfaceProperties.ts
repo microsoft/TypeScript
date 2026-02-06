@@ -1,3 +1,4 @@
+// @target: es2015
 interface i1 { name:string; }
  
 // should be an error 

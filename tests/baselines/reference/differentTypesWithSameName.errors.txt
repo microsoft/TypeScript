@@ -1,11 +1,15 @@
+differentTypesWithSameName.ts(3,5): error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
+differentTypesWithSameName.ts(11,2): error TS2564: Property 't' has no initializer and is not definitely assigned in the constructor.
 differentTypesWithSameName.ts(16,15): error TS2345: Argument of type 'variable' is not assignable to parameter of type 'm.variable'.
   Property 's' is missing in type 'variable' but required in type 'm.variable'.
 
 
-==== differentTypesWithSameName.ts (1 errors) ====
+==== differentTypesWithSameName.ts (3 errors) ====
     namespace m {
       export class variable{
         s: string;
+        ~
+!!! error TS2564: Property 's' has no initializer and is not definitely assigned in the constructor.
       }
       export function doSomething(v: m.variable) {
         
@@ -14,6 +18,8 @@ differentTypesWithSameName.ts(16,15): error TS2345: Argument of type 'variable' 
     
     class variable {
      t: number;
+     ~
+!!! error TS2564: Property 't' has no initializer and is not definitely assigned in the constructor.
     }
     
     

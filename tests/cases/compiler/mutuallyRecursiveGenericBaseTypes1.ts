@@ -1,3 +1,4 @@
+// @target: es2015
 interface A<T> {
     foo(): B<T>; // instead of B does see this
     foo(): void; // instead of B does see this

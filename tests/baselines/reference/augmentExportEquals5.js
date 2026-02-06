@@ -87,5 +87,5 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./augmentation");
-var x;
-var y = x.id;
+let x;
+const y = x.id;

@@ -212,14 +212,14 @@ var a = <string[]>[];
 >  : ^^^^^^^^
 ><string[]>[] : string[]
 >             : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 var a: string[] = [];
 >a : string[]
 >  : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 var a = new Array<string>();
 >a : string[]

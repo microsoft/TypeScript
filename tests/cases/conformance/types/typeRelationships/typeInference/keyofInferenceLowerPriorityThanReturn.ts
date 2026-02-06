@@ -1,3 +1,4 @@
+// @target: es2015
 // #22736
 declare class Write {
     protected dummy: Write;

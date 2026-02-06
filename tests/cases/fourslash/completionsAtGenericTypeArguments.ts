@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 ////class Foo<T1, T2> {}
 ////const foo = new Foo</*1*/, /*2*/,
 ////

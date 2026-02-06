@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class a {
     static get x(): () => string {
         return null;

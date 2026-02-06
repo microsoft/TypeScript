@@ -6,7 +6,8 @@ namespace Validation {
 }
 
 //// [unusedVariablesinNamespaces1.js]
+"use strict";
 var Validation;
 (function (Validation) {
-    var lettersRegexp = /^[A-Za-z]+$/;
+    const lettersRegexp = /^[A-Za-z]+$/;
 })(Validation || (Validation = {}));

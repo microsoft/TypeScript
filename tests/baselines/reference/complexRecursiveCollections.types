@@ -1,7 +1,8 @@
 //// [tests/cases/compiler/complexRecursiveCollections.ts] ////
 
 === Performance Stats ===
-Assignability cache: 10,000
+Identity cache: 2,500
+Assignability cache: 5,000
 Type Count: 50,000
 Instantiation count: 100,000
 Symbol count: 100,000
@@ -148,8 +149,8 @@ declare namespace Immutable {
 >       : ^       ^^   ^^       ^^^                                                                                                                               ^^^^^   
 >jsValue : any
 >        : ^^^
->reviver : (key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any
->        : ^   ^^               ^^        ^^                                                       ^^    ^^^                      ^^^^^   
+>reviver : ((key: string | number, sequence: Collection.Keyed<string, any> | Collection.Indexed<any>, path?: Array<string | number>) => any) | undefined
+>        : ^^   ^^               ^^        ^^                                                       ^^    ^^^                      ^^^^^   ^^^^^^^^^^^^^
 >key : string | number
 >    : ^^^^^^^^^^^^^^^
 >sequence : Collection.Keyed<string, any> | Collection.Indexed<any>
@@ -158,8 +159,8 @@ declare namespace Immutable {
 >           : ^^^
 >Collection : any
 >           : ^^^
->path : (string | number)[]
->     : ^^^^^^^^^^^^^^^^^^^
+>path : (string | number)[] | undefined
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   export function is(first: any, second: any): boolean;
 >is : (first: any, second: any) => boolean
@@ -1520,12 +1521,12 @@ declare namespace Immutable {
   export function Range(start?: number, end?: number, step?: number): Seq.Indexed<number>;
 >Range : (start?: number, end?: number, step?: number) => Seq.Indexed<number>
 >      : ^     ^^^      ^^   ^^^      ^^    ^^^      ^^^^^                   
->start : number
->      : ^^^^^^
->end : number
->    : ^^^^^^
->step : number
->     : ^^^^^^
+>start : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>end : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+>step : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >Seq : any
 >    : ^^^
 
@@ -1534,8 +1535,8 @@ declare namespace Immutable {
 >       : ^ ^^     ^^ ^^     ^^^      ^^^^^              
 >value : T
 >      : ^
->times : number
->      : ^^^^^^
+>times : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 >Seq : any
 >    : ^^^
 
@@ -1559,12 +1560,12 @@ declare namespace Immutable {
 
     export interface Class<T extends Object> {
       (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
->values : Partial<T> | Iterable<[string, any]>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>values : Partial<T> | Iterable<[string, any]> | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       new (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
->values : Partial<T> | Iterable<[string, any]>
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>values : Partial<T> | Iterable<[string, any]> | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     export interface Instance<T extends Object> {
       readonly size: number;
@@ -1783,8 +1784,8 @@ declare namespace Immutable {
 >       : ^^^^^^^^^^^^^
 >defaultValues : T
 >              : ^
->name : string
->     : ^^^^^^
+>name : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >Record : any
 >       : ^^^
 
@@ -2268,8 +2269,8 @@ declare namespace Immutable {
 
   export interface Seq<K, V> extends Collection<K, V> {
     readonly size: number | undefined;
->size : number
->     : ^^^^^^
+>size : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
     // Force evaluation
     cacheResult(): this;
@@ -3149,8 +3150,8 @@ declare namespace Immutable {
     sort(comparator?: (valueA: V, valueB: V) => number): this;
 >sort : (comparator?: (valueA: V, valueB: V) => number) => this
 >     : ^          ^^^                                ^^^^^    
->comparator : (valueA: V, valueB: V) => number
->           : ^      ^^ ^^      ^^ ^^^^^      
+>comparator : ((valueA: V, valueB: V) => number) | undefined
+>           : ^^      ^^ ^^      ^^ ^^^^^      ^^^^^^^^^^^^^
 >valueA : V
 >       : ^
 >valueB : V
@@ -3167,8 +3168,8 @@ declare namespace Immutable {
 >    : ^
 >iter : this
 >     : ^^^^
->comparator : (valueA: C, valueB: C) => number
->           : ^      ^^ ^^      ^^ ^^^^^      
+>comparator : ((valueA: C, valueB: C) => number) | undefined
+>           : ^^      ^^ ^^      ^^ ^^^^^      ^^^^^^^^^^^^^
 >valueA : C
 >       : ^
 >valueB : C
@@ -3209,10 +3210,10 @@ declare namespace Immutable {
     slice(begin?: number, end?: number): this;
 >slice : (begin?: number, end?: number) => this
 >      : ^     ^^^      ^^   ^^^      ^^^^^    
->begin : number
->      : ^^^^^^
->end : number
->    : ^^^^^^
+>begin : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
+>end : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
     rest(): this;
 >rest : () => this
@@ -3312,14 +3313,14 @@ declare namespace Immutable {
     flatten(depth?: number): Collection<any, any>;
 >flatten : { (depth?: number): Collection<any, any>; (shallow?: boolean): Collection<any, any>; }
 >        : ^^^     ^^^      ^^^                    ^^^       ^^^       ^^^                    ^^^
->depth : number
->      : ^^^^^^
+>depth : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
     flatten(shallow?: boolean): Collection<any, any>;
 >flatten : { (depth?: number): Collection<any, any>; (shallow?: boolean): Collection<any, any>; }
 >        : ^^^     ^^^      ^^^                    ^^^       ^^^       ^^^                    ^^^
->shallow : boolean
->        : ^^^^^^^
+>shallow : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
 
     flatMap<M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any): Collection<K, M>;
 >flatMap : <M>(mapper: (value: V, key: K, iter: this) => Iterable<M>, context?: any) => Collection<K, M>
@@ -3431,8 +3432,8 @@ declare namespace Immutable {
     join(separator?: string): string;
 >join : (separator?: string) => string
 >     : ^         ^^^      ^^^^^      
->separator : string
->          : ^^^^^^
+>separator : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
 
     isEmpty(): boolean;
 >isEmpty : () => boolean
@@ -3484,8 +3485,8 @@ declare namespace Immutable {
 >     : ^^^^
 >context : any
 >        : ^^^
->notSetValue : V
->            : ^
+>notSetValue : V | undefined
+>            : ^^^^^^^^^^^^^
 
     findLast(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): V | undefined;
 >findLast : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => V | undefined
@@ -3500,8 +3501,8 @@ declare namespace Immutable {
 >     : ^^^^
 >context : any
 >        : ^^^
->notSetValue : V
->            : ^
+>notSetValue : V | undefined
+>            : ^^^^^^^^^^^^^
 
     findEntry(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): [K, V] | undefined;
 >findEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V] | undefined
@@ -3516,8 +3517,8 @@ declare namespace Immutable {
 >     : ^^^^
 >context : any
 >        : ^^^
->notSetValue : V
->            : ^
+>notSetValue : V | undefined
+>            : ^^^^^^^^^^^^^
 
     findLastEntry(predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V): [K, V] | undefined;
 >findLastEntry : (predicate: (value: V, key: K, iter: this) => boolean, context?: any, notSetValue?: V) => [K, V] | undefined
@@ -3532,8 +3533,8 @@ declare namespace Immutable {
 >     : ^^^^
 >context : any
 >        : ^^^
->notSetValue : V
->            : ^
+>notSetValue : V | undefined
+>            : ^^^^^^^^^^^^^
 
     findKey(predicate: (value: V, key: K, iter: this) => boolean, context?: any): K | undefined;
 >findKey : (predicate: (value: V, key: K, iter: this) => boolean, context?: any) => K | undefined
@@ -3578,8 +3579,8 @@ declare namespace Immutable {
     max(comparator?: (valueA: V, valueB: V) => number): V | undefined;
 >max : (comparator?: (valueA: V, valueB: V) => number) => V | undefined
 >    : ^          ^^^                                ^^^^^             
->comparator : (valueA: V, valueB: V) => number
->           : ^      ^^ ^^      ^^ ^^^^^      
+>comparator : ((valueA: V, valueB: V) => number) | undefined
+>           : ^^      ^^ ^^      ^^ ^^^^^      ^^^^^^^^^^^^^
 >valueA : V
 >       : ^
 >valueB : V
@@ -3596,8 +3597,8 @@ declare namespace Immutable {
 >    : ^
 >iter : this
 >     : ^^^^
->comparator : (valueA: C, valueB: C) => number
->           : ^      ^^ ^^      ^^ ^^^^^      
+>comparator : ((valueA: C, valueB: C) => number) | undefined
+>           : ^^      ^^ ^^      ^^ ^^^^^      ^^^^^^^^^^^^^
 >valueA : C
 >       : ^
 >valueB : C
@@ -3606,8 +3607,8 @@ declare namespace Immutable {
     min(comparator?: (valueA: V, valueB: V) => number): V | undefined;
 >min : (comparator?: (valueA: V, valueB: V) => number) => V | undefined
 >    : ^          ^^^                                ^^^^^             
->comparator : (valueA: V, valueB: V) => number
->           : ^      ^^ ^^      ^^ ^^^^^      
+>comparator : ((valueA: V, valueB: V) => number) | undefined
+>           : ^^      ^^ ^^      ^^ ^^^^^      ^^^^^^^^^^^^^
 >valueA : V
 >       : ^
 >valueB : V
@@ -3624,8 +3625,8 @@ declare namespace Immutable {
 >    : ^
 >iter : this
 >     : ^^^^
->comparator : (valueA: C, valueB: C) => number
->           : ^      ^^ ^^      ^^ ^^^^^      
+>comparator : ((valueA: C, valueB: C) => number) | undefined
+>           : ^^      ^^ ^^      ^^ ^^^^^      ^^^^^^^^^^^^^
 >valueA : C
 >       : ^
 >valueB : C

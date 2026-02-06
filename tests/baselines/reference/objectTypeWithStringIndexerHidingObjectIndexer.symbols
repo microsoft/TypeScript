@@ -21,19 +21,19 @@ var r = o['']; // should be Object
 class C {
 >C : Symbol(C, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 7, 14))
 
-    foo: string;
+    foo!: string;
 >foo : Symbol(C.foo, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 9, 9))
 
     [x: string]: string;
 >x : Symbol(x, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 11, 5))
 }
-var c: C;
->c : Symbol(c, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 13, 3))
+declare var c: C;
+>c : Symbol(c, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 13, 11))
 >C : Symbol(C, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 7, 14))
 
 var r2: string = c[''];
 >r2 : Symbol(r2, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 14, 3))
->c : Symbol(c, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 13, 3))
+>c : Symbol(c, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 13, 11))
 
 interface I {
 >I : Symbol(I, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 14, 23))
@@ -44,26 +44,26 @@ interface I {
     [x: string]: string;
 >x : Symbol(x, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 18, 5))
 }
-var i: I;
->i : Symbol(i, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 20, 3))
+declare var i: I;
+>i : Symbol(i, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 20, 11))
 >I : Symbol(I, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 14, 23))
 
 var r3: string = i[''];
 >r3 : Symbol(r3, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 21, 3))
->i : Symbol(i, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 20, 3))
+>i : Symbol(i, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 20, 11))
 
-var o2: {
->o2 : Symbol(o2, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 23, 3))
+declare var o2: {
+>o2 : Symbol(o2, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 23, 11))
 
     baz: string;
->baz : Symbol(baz, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 23, 9))
+>baz : Symbol(baz, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 23, 17))
 
     [x: string]: string;
 >x : Symbol(x, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 25, 5))
 }
 var r4: string = o2[''];
 >r4 : Symbol(r4, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 27, 3))
->o2 : Symbol(o2, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 23, 3))
+>o2 : Symbol(o2, Decl(objectTypeWithStringIndexerHidingObjectIndexer.ts, 23, 11))
 
 
 

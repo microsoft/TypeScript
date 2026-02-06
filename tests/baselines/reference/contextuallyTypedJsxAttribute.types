@@ -5,16 +5,16 @@ interface Elements {
   foo: { callback?: (value: number) => void };
 >foo : { callback?: (value: number) => void; }
 >    : ^^^^^^^^^^^^^                       ^^^
->callback : (value: number) => void
->         : ^     ^^      ^^^^^    
+>callback : ((value: number) => void) | undefined
+>         : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
 >value : number
 >      : ^^^^^^
 
   bar: { callback?: (value: string) => void };
 >bar : { callback?: (value: string) => void; }
 >    : ^^^^^^^^^^^^^                       ^^^
->callback : (value: string) => void
->         : ^     ^^      ^^^^^    
+>callback : ((value: string) => void) | undefined
+>         : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
 >value : string
 >      : ^^^^^^
 }
@@ -22,8 +22,8 @@ interface Elements {
 type Props<C extends keyof Elements> = { as?: C } & Elements[C];
 >Props : Props<C>
 >      : ^^^^^^^^
->as : C
->   : ^
+>as : C | undefined
+>   : ^^^^^^^^^^^^^
 
 declare function Test<C extends keyof Elements>(props: Props<C>): null;
 >Test : <C extends keyof Elements>(props: Props<C>) => null

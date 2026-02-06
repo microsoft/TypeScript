@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 
 namespace TargetIsPublic {
@@ -10,9 +12,9 @@ namespace TargetIsPublic {
         foo: string;
     }
 
-    var a: { foo: string; }
-    var b: Base;
-    var i: I;
+    declare var a: { foo: string; };
+    declare var b: Base;
+    declare var i: I;
 
     // sources
     class D {
@@ -22,8 +24,8 @@ namespace TargetIsPublic {
     class E {
         private foo: string;
     }
-    var d: D;
-    var e: E;
+    declare var d: D;
+    declare var e: E;
 
     a = b;
     a = i;
@@ -62,9 +64,9 @@ namespace TargetIsPublic {
     interface I extends Base {
     }
 
-    var a: { foo: string; }
-    var b: Base;
-    var i: I;
+    declare var a: { foo: string; };
+    declare var b: Base;
+    declare var i: I;
 
     // sources
     class D {
@@ -75,8 +77,8 @@ namespace TargetIsPublic {
         private foo: string;
     }
 
-    var d: D;
-    var e: E;
+    declare var d: D;
+    declare var e: E;
 
     a = b; // error
     a = i; // error

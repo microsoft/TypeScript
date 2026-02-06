@@ -35,6 +35,7 @@ Promise.try((foo: string, bar?: number) => "Async result", "foo", 42);
 
 
 //// [promiseTry.js]
+"use strict";
 Promise.try(() => {
     return "Sync result";
 });

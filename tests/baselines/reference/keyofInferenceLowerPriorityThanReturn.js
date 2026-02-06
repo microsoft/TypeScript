@@ -50,7 +50,8 @@ function f() {
 
 
 //// [keyofInferenceLowerPriorityThanReturn.js]
-var bookTable = null;
+"use strict";
+const bookTable = null;
 function insertOnConflictDoNothing(_table, _conflictTarget) {
     throw new Error();
 }

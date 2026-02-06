@@ -17,11 +17,8 @@ export function bar() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 exports.Foo = Foo;
 //// [file2.js]
 "use strict";
@@ -34,7 +31,7 @@ function foo() {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = bar;
-var file2_1 = require("./file2");
+const file2_1 = require("./file2");
 function bar() {
     return (0, file2_1.foo)();
 }

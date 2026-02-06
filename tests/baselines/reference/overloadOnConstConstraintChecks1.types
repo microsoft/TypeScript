@@ -91,6 +91,7 @@ class D implements MyDoc {
 >createElement : { (tagName: string): Base; (tagName: "canvas"): Derived1; (tagName: "div"): Derived2; (tagName: "span"): Derived3; }
 >              : ^^^       ^^      ^^^    ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^
 >tagName : any
+>        : ^^^
 
         return null;
     }

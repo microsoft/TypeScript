@@ -9,6 +9,7 @@ namespace myMod {
 
 
 //// [anyDeclare.js]
+"use strict";
 var myMod;
 (function (myMod) {
     var myFn;

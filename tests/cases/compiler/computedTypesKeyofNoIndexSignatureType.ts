@@ -1,3 +1,4 @@
+// @target: es2015
 type Compute<A> = { [K in keyof A]: Compute<A[K]>; } & {};
 
 type EqualsTest<T> = <A>() => A extends T ? 1 : 0;

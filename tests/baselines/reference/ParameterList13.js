@@ -6,3 +6,4 @@ interface I {
 }
 
 //// [ParameterList13.js]
+"use strict";

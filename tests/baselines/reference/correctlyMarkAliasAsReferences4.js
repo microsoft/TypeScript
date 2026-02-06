@@ -4,6 +4,7 @@
 declare module "classnames";
 
 //// [0.tsx]
+/// <reference path="/.lib/react.d.ts" />
 ///<reference path="declaration.d.ts" />
 import * as cx from 'classnames';
 import * as React from "react";
@@ -12,6 +13,7 @@ let buttonProps : {[attributeName: string]: ''}
 let k = <button {...buttonProps} className={cx('class1', { class2: true })} />;
 
 //// [0.js]
+/// <reference path="/.lib/react.d.ts" />
 ///<reference path="declaration.d.ts" />
 import * as cx from 'classnames';
 import * as React from "react";

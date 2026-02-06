@@ -1,3 +1,4 @@
+// @target: es2015
 var x: any;
 
 enum E { a, b, c }

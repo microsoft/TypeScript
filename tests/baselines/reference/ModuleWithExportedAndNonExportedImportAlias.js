@@ -42,15 +42,15 @@ var line = Geometry.Lines.Line;
 
 
 //// [ModuleWithExportedAndNonExportedImportAlias.js]
+"use strict";
 var B;
 (function (B) {
-    var Line = /** @class */ (function () {
-        function Line(start, end) {
+    class Line {
+        constructor(start, end) {
             this.start = start;
             this.end = end;
         }
-        return Line;
-    }());
+    }
     B.Line = Line;
 })(B || (B = {}));
 var Geometry;

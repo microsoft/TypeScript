@@ -1,4 +1,5 @@
 /// <reference path='fourslash.ts' />
+// @strict: false
 ////class C {
 ////    /**
 ////     * @param {number} x - the first parameter

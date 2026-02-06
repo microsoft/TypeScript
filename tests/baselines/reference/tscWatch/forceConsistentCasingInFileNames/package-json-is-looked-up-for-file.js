@@ -90,14 +90,10 @@ export {};
 
 
 PolledWatches::
-/Users/name/projects/lib-boilerplate/node_modules/@types: *new*
-  {"pollingInterval":500}
 /Users/name/projects/lib-boilerplate/src/package.json: *new*
   {"pollingInterval":2000}
 /Users/name/projects/lib-boilerplate/test/package.json: *new*
   {"pollingInterval":2000}
-/Users/name/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/package.json: *new*
   {"pollingInterval":2000}
 /home/src/tslibs/TS/package.json: *new*

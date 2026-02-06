@@ -1,4 +1,5 @@
-﻿//@noImplicitAny: true
+﻿// @target: es2015
+//@noImplicitAny: true
 
 namespace M {
     // No implicit-'any' errors.

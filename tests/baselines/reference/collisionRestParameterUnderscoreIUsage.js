@@ -11,15 +11,11 @@ class Foo {
 new Foo();
 
 //// [collisionRestParameterUnderscoreIUsage.js]
+"use strict";
 var _i = "This is what I'd expect to see";
-var Foo = /** @class */ (function () {
-    function Foo() {
-        var args = [];
-        for (var _a = 0; _a < arguments.length; _a++) {
-            args[_a] = arguments[_a];
-        }
+class Foo {
+    constructor(...args) {
         console.log(_i); // This should result in error
     }
-    return Foo;
-}());
+}
 new Foo();

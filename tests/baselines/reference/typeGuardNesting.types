@@ -28,8 +28,8 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >                              : ^^^^^^^
 >typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->strOrBool : string | true
->          : ^^^^^^^^^^^^^
+>strOrBool : string | boolean
+>          : ^^^^^^^^^^^^^^^^
 >'string' : "string"
 >         : ^^^^^^^^
 
@@ -44,8 +44,8 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >                              : ^^^^^^^
 >typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->strOrBool : string | boolean
->          : ^^^^^^^^^^^^^^^^
+>strOrBool : string | false
+>          : ^^^^^^^^^^^^^^
 >'string' : "string"
 >         : ^^^^^^^^
 >strOrBool : string
@@ -56,20 +56,20 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 	let bool: boolean = (typeof strOrBool === 'boolean') ? strOrBool : false;
 >bool : boolean
 >     : ^^^^^^^
->(typeof strOrBool === 'boolean') ? strOrBool : false : boolean
->                                                     : ^^^^^^^
+>(typeof strOrBool === 'boolean') ? strOrBool : false : false
+>                                                     : ^^^^^
 >(typeof strOrBool === 'boolean') : boolean
 >                                 : ^^^^^^^
 >typeof strOrBool === 'boolean' : boolean
 >                               : ^^^^^^^
 >typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->strOrBool : string | boolean
->          : ^^^^^^^^^^^^^^^^
+>strOrBool : string | false
+>          : ^^^^^^^^^^^^^^
 >'boolean' : "boolean"
 >          : ^^^^^^^^^
->strOrBool : boolean
->          : ^^^^^^^
+>strOrBool : false
+>          : ^^^^^
 >false : false
 >      : ^^^^^
 
@@ -84,8 +84,8 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 >                               : ^^^^^^^
 >typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->strOrBool : string | boolean
->          : ^^^^^^^^^^^^^^^^
+>strOrBool : string | false
+>          : ^^^^^^^^^^^^^^
 >'boolean' : "boolean"
 >          : ^^^^^^^^^
 >strOrBool : string
@@ -96,20 +96,20 @@ if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'stri
 	let bool2: boolean = (typeof strOrBool !== 'string') ? strOrBool : false;
 >bool2 : boolean
 >      : ^^^^^^^
->(typeof strOrBool !== 'string') ? strOrBool : false : boolean
->                                                    : ^^^^^^^
+>(typeof strOrBool !== 'string') ? strOrBool : false : false
+>                                                    : ^^^^^
 >(typeof strOrBool !== 'string') : boolean
 >                                : ^^^^^^^
 >typeof strOrBool !== 'string' : boolean
 >                              : ^^^^^^^
 >typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->strOrBool : string | boolean
->          : ^^^^^^^^^^^^^^^^
+>strOrBool : string | false
+>          : ^^^^^^^^^^^^^^
 >'string' : "string"
 >         : ^^^^^^^^
->strOrBool : boolean
->          : ^^^^^^^
+>strOrBool : false
+>          : ^^^^^
 >false : false
 >      : ^^^^^
 }
@@ -131,8 +131,8 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >         : ^^^^^^^^
 >!strOrBool : boolean
 >           : ^^^^^^^
->strOrBool : boolean
->          : ^^^^^^^
+>strOrBool : string | boolean
+>          : ^^^^^^^^^^^^^^^^
 >typeof strOrBool !== 'boolean' : boolean
 >                               : ^^^^^^^
 >typeof strOrBool : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -165,8 +165,8 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 	let bool: boolean = (typeof strOrBool === 'boolean') ? strOrBool : false;
 >bool : boolean
 >     : ^^^^^^^
->(typeof strOrBool === 'boolean') ? strOrBool : false : boolean
->                                                     : ^^^^^^^
+>(typeof strOrBool === 'boolean') ? strOrBool : false : false
+>                                                     : ^^^^^
 >(typeof strOrBool === 'boolean') : boolean
 >                                 : ^^^^^^^
 >typeof strOrBool === 'boolean' : boolean
@@ -177,16 +177,16 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >          : ^^^^^^^^^^^^^^^^
 >'boolean' : "boolean"
 >          : ^^^^^^^^^
->strOrBool : boolean
->          : ^^^^^^^
+>strOrBool : false
+>          : ^^^^^
 >false : false
 >      : ^^^^^
 
 	let label2: string = (typeof strOrBool !== 'boolean') ? strOrBool : "string";
 >label2 : string
 >       : ^^^^^^
->(typeof strOrBool !== 'boolean') ? strOrBool : "string" : string
->                                                        : ^^^^^^
+>(typeof strOrBool !== 'boolean') ? strOrBool : "string" : string | boolean
+>                                                        : ^^^^^^^^^^^^^^^^
 >(typeof strOrBool !== 'boolean') : boolean
 >                                 : ^^^^^^^
 >typeof strOrBool !== 'boolean' : boolean
@@ -197,16 +197,16 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >          : ^^^^^^^^^^^^^^^^
 >'boolean' : "boolean"
 >          : ^^^^^^^^^
->strOrBool : string
->          : ^^^^^^
+>strOrBool : string | boolean
+>          : ^^^^^^^^^^^^^^^^
 >"string" : "string"
 >         : ^^^^^^^^
 
 	let bool2: boolean = (typeof strOrBool !== 'string') ? strOrBool : false;
 >bool2 : boolean
 >      : ^^^^^^^
->(typeof strOrBool !== 'string') ? strOrBool : false : boolean
->                                                    : ^^^^^^^
+>(typeof strOrBool !== 'string') ? strOrBool : false : string | boolean
+>                                                    : ^^^^^^^^^^^^^^^^
 >(typeof strOrBool !== 'string') : boolean
 >                                : ^^^^^^^
 >typeof strOrBool !== 'string' : boolean
@@ -217,8 +217,8 @@ if ((typeof strOrBool !== 'string' && !strOrBool) || typeof strOrBool !== 'boole
 >          : ^^^^^^^^^^^^^^^^
 >'string' : "string"
 >         : ^^^^^^^^
->strOrBool : boolean
->          : ^^^^^^^
+>strOrBool : string | boolean
+>          : ^^^^^^^^^^^^^^^^
 >false : false
 >      : ^^^^^
 }

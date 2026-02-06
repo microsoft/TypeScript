@@ -10,6 +10,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-multipleDecorators.js]
+"use strict";
 var C = function () {
     var _classDecorators = [dec1, dec2];
     var _classDescriptor;

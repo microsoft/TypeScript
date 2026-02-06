@@ -1,4 +1,5 @@
-var x: Object;
+// @target: es2015
+declare var x: Object;
 var y: RegExp;
 y = x;
 

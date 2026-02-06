@@ -162,8 +162,6 @@ async function fn14(x) {
 >x : any
 
     var [, x] = y;
-> : undefined
-> : ^^^^^^^^^
 >x : any
 >  : ^^^
 >y : any

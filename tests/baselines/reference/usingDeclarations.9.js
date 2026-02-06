@@ -6,6 +6,7 @@
 }
 
 //// [usingDeclarations.9.js]
+"use strict";
 {
     using a = null;
 }

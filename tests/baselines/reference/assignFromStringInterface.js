@@ -2,12 +2,12 @@
 
 //// [assignFromStringInterface.ts]
 var x = '';
-var a: String;
+declare var a: String;
 x = a;
 a = x;
 
 //// [assignFromStringInterface.js]
+"use strict";
 var x = '';
-var a;
 x = a;
 a = x;

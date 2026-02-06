@@ -1,18 +1,42 @@
+file1.tsx(3,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 file1.tsx(3,1): error TS2657: JSX expressions must have one parent element.
+file1.tsx(3,6): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+file1.tsx(4,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+file1.tsx(4,6): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+file2.tsx(1,9): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 file2.tsx(1,9): error TS2657: JSX expressions must have one parent element.
+file2.tsx(1,14): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+file2.tsx(1,20): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+file2.tsx(1,25): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 
 
-==== file1.tsx (1 errors) ====
+==== file1.tsx (5 errors) ====
     declare namespace JSX { interface Element { } }
     
     <div></div>
+    ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     ~~~~~~~~~~~
+         ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     <div></div>
     ~~~~~~~~~~~
 !!! error TS2657: JSX expressions must have one parent element.
+    ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+         ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     
-==== file2.tsx (1 errors) ====
+==== file2.tsx (5 errors) ====
     var x = <div></div><div></div>
+            ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
             ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2657: JSX expressions must have one parent element.
+                 ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                       ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                            ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
     

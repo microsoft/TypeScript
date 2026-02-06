@@ -1,3 +1,4 @@
+// @target: es2023
 // @module: node20
 // @checkJs: true
 // @noEmit: true

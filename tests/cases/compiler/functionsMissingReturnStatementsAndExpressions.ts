@@ -1,6 +1,6 @@
 // @allowUnreachableCode: true
 
-// @target: es5
+// @target: es5, es2015
 
 function f1(): string {
     // errors because there are no return statements

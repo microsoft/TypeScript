@@ -1,5 +1,5 @@
 // @strict: true
-// @target: es5
+// @target: es5, es2015
 
 declare const props: WizardStepProps;
 export class Wizard {

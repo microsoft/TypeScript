@@ -42,6 +42,7 @@ declare var c;
 declare var c = 10;
 
 //// [varBlock.js]
+"use strict";
 var m2;
 (function (m2) {
     m2.b2 = 10;

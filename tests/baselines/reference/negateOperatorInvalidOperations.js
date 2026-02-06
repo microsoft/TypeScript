@@ -15,6 +15,7 @@ var NUMBER4 = -(undefined - undefined);
 var NUMBER =-;
 
 //// [negateOperatorInvalidOperations.js]
+"use strict";
 // Unary operator -
 // operand before -
 var NUMBER1 = ;

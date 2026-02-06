@@ -79,6 +79,7 @@ str = bigIntUint64Array.toLocaleString('en-US', { style: 'currency', currency: '
 
 
 //// [arrayToLocaleStringES2020.js]
+"use strict";
 let str;
 const arr = [1, 2, 3];
 str = arr.toLocaleString(); // OK

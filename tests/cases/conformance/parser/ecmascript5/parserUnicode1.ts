@@ -1,3 +1,4 @@
+// @target: es2015
 try {
   var \u0078x = 6;
 

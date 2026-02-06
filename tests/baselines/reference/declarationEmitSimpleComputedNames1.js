@@ -35,35 +35,31 @@ export const instanceLookup = (new Holder())["some" + "thing"];
 
 //// [declarationEmitSimpleComputedNames1.js]
 "use strict";
-var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.instanceLookup = exports.staticLookup = exports.Holder = exports.conatainer = exports.fieldName = void 0;
 exports.fieldName = Math.random() > 0.5 ? "f1" : "f2";
-exports.conatainer = (_a = {},
-    _a[exports.fieldName] = function () {
+exports.conatainer = {
+    [exports.fieldName]() {
         return "result";
-    },
-    _a);
-var classFieldName = Math.random() > 0.5 ? "g1" : "g2";
-var otherField = classFieldName === "g1" ? "g2" : "g1";
-var staticField = Math.random() > 0.5 ? "s1" : "s2";
-var Holder = /** @class */ (function () {
-    function Holder() {
     }
-    Holder.prototype[classFieldName] = function () {
+};
+const classFieldName = Math.random() > 0.5 ? "g1" : "g2";
+const otherField = classFieldName === "g1" ? "g2" : "g1";
+const staticField = Math.random() > 0.5 ? "s1" : "s2";
+class Holder {
+    [classFieldName]() {
         return "value";
-    };
-    Holder.prototype[otherField] = function () {
+    }
+    [otherField]() {
         return 42;
-    };
-    Holder[staticField] = function () {
+    }
+    static [staticField]() {
         return { static: true };
-    };
-    Holder[staticField] = function () {
+    }
+    static [staticField]() {
         return { static: "sometimes" };
-    };
-    return Holder;
-}());
+    }
+}
 exports.Holder = Holder;
 /**
  * Could be `"prototype"`, so all static string indexers include the instance type

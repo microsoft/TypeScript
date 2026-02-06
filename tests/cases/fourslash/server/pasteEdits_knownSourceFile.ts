@@ -15,7 +15,7 @@
 ////const t = 9;|]
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["file1.ts", "file2.ts", "target.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["file1.ts", "file2.ts", "target.ts"] }
 
 const ranges = test.ranges();
 verify.pasteEdits({ 

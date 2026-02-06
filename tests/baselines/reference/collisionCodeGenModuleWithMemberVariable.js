@@ -8,6 +8,7 @@ namespace m1 {
 var foo = m1.m1;
 
 //// [collisionCodeGenModuleWithMemberVariable.js]
+"use strict";
 var m1;
 (function (m1_1) {
     m1_1.m1 = 10;

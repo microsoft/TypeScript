@@ -1,0 +1,16 @@
+addMoreCallSignaturesToBaseSignature2.ts(10,13): error TS2454: Variable 'a' is used before being assigned.
+
+
+==== addMoreCallSignaturesToBaseSignature2.ts (1 errors) ====
+    interface Foo {
+        (bar:number): string;
+    }
+    
+    interface Bar extends Foo {
+        (key: string): string;
+    }
+    
+    var a: Bar;
+    var kitty = a(1);
+                ~
+!!! error TS2454: Variable 'a' is used before being assigned.

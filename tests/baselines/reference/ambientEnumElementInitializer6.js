@@ -8,3 +8,4 @@ declare namespace M {
 }
 
 //// [ambientEnumElementInitializer6.js]
+"use strict";

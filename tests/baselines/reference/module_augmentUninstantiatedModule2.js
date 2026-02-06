@@ -37,6 +37,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 //// [app.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ng = require("angular");
+const ng = require("angular");
 require("./moduleAugmentation");
 var x = ng.getNumber();

@@ -26,6 +26,7 @@ import {
     emptyArray,
     endsWith,
     ensureTrailingDirectorySeparator,
+    equateValues,
     every,
     Extension,
     extensionIsTS,
@@ -33,6 +34,7 @@ import {
     fileExtensionIsOneOf,
     filter,
     firstDefined,
+    flatten,
     forEach,
     forEachAncestorDirectory,
     formatMessage,
@@ -105,6 +107,7 @@ import {
     tryExtractTSExtension,
     tryGetExtensionFromPath,
     tryParsePatterns,
+    usesWildcardTypes,
     Version,
     version,
     versionMajorMinor,
@@ -803,18 +806,17 @@ export function resolvePackageNameToPackageJson(
  * Given a set of options, returns the set of type directive names
  *   that should be included for this program automatically.
  * This list could either come from the config file,
- *   or from enumerating the types root + initial secondary types lookup location.
+ *   and/or from enumerating the types root + initial secondary types lookup location given "*" compat wildcard.
  * More type directives might appear in the program later as a result of loading actual source files;
  *   this list is only the set of defaults that are implicitly included.
  */
 export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: ModuleResolutionHost): string[] {
-    // Use explicit type list from tsconfig.json
-    if (options.types) {
-        return options.types;
+    if (!usesWildcardTypes(options)) {
+        return options.types ?? [];
     }
 
     // Walk the primary type lookup locations
-    const result: string[] = [];
+    const wildcardMatches: string[] = [];
     if (host.directoryExists && host.getDirectories) {
         const typeRoots = getEffectiveTypeRoots(options, host);
         if (typeRoots) {
@@ -833,7 +835,7 @@ export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: M
                             // At this stage, skip results with leading dot.
                             if (baseFileName.charCodeAt(0) !== CharacterCodes.dot) {
                                 // Return just the type directive names
-                                result.push(baseFileName);
+                                wildcardMatches.push(baseFileName);
                             }
                         }
                     }
@@ -841,7 +843,10 @@ export function getAutomaticTypeDirectiveNames(options: CompilerOptions, host: M
             }
         }
     }
-    return result;
+
+    // Order potentially matters in program construction, so substitute
+    // in the wildcard in the position it was specified in the types array
+    return deduplicate(flatten(options.types.map(t => t === "*" ? wildcardMatches : t)), equateValues);
 }
 
 export interface TypeReferenceDirectiveResolutionCache extends PerDirectoryResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, NonRelativeNameResolutionCache<ResolvedTypeReferenceDirectiveWithFailedLookupLocations>, PackageJsonInfoCache {
@@ -1690,13 +1695,16 @@ export enum NodeResolutionFeatures {
     // allowing `*` in the LHS of an export to be followed by more content, eg `"./whatever/*.js"`
     // not supported in node 12 - https://github.com/nodejs/Release/issues/690
     ExportsPatternTrailers = 1 << 4,
-    AllFeatures = Imports | SelfName | Exports | ExportsPatternTrailers,
+    // allowing `#/` root imports in package.json imports field
+    // not supported until mass adoption - https://github.com/nodejs/node/pull/60864
+    ImportsPatternRoot = 1 << 6,
+    AllFeatures = Imports | SelfName | Exports | ExportsPatternTrailers | ImportsPatternRoot,
 
     Node16Default = Imports | SelfName | Exports | ExportsPatternTrailers,
 
     NodeNextDefault = AllFeatures,
 
-    BundlerDefault = Imports | SelfName | Exports | ExportsPatternTrailers,
+    BundlerDefault = Imports | SelfName | Exports | ExportsPatternTrailers | ImportsPatternRoot,
 
     EsmMode = 1 << 5,
 }
@@ -2646,7 +2654,7 @@ function loadModuleFromExports(scope: PackageJsonInfo, extensions: Extensions, s
 }
 
 function loadModuleFromImports(extensions: Extensions, moduleName: string, directory: string, state: ModuleResolutionState, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined): SearchResult<Resolved> {
-    if (moduleName === "#" || startsWith(moduleName, "#/")) {
+    if (moduleName === "#" || (startsWith(moduleName, "#/") && !(state.features & NodeResolutionFeatures.ImportsPatternRoot))) {
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.Invalid_import_specifier_0_has_no_possible_resolutions, moduleName);
         }
@@ -2886,7 +2894,7 @@ function getLoadModuleFromTargetExportOrImport(extensions: Extensions, state: Mo
                 const commonSourceDirGuesses: string[] = [];
                 // A `rootDir` compiler option strongly indicates the root location
                 // A `composite` project is using project references and has it's common src dir set to `.`, so it shouldn't need to check any other locations
-                if (state.compilerOptions.rootDir || (state.compilerOptions.composite && state.compilerOptions.configFilePath)) {
+                if (state.compilerOptions.rootDir || state.compilerOptions.configFilePath) {
                     const commonDir = toAbsolutePath(getCommonSourceDirectory(state.compilerOptions, () => [], state.host.getCurrentDirectory?.() || "", getCanonicalFileName));
                     commonSourceDirGuesses.push(commonDir);
                 }

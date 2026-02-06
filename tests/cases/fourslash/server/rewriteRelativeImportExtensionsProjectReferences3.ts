@@ -3,6 +3,7 @@
 // @Filename: src/tsconfig-base.json
 //// {
 ////     "compilerOptions": {
+////         "lib": ["es5"],
 ////         "module": "nodenext",
 ////         "composite": true,
 ////         "rewriteRelativeImportExtensions": true,
@@ -13,6 +14,7 @@
 //// {
 ////     "extends": "../tsconfig-base.json",
 ////     "compilerOptions": {
+////         "lib": ["es5"],
 ////         "rootDir": ".",
 ////         "outDir": "../../dist/compiler",
 //// }
@@ -24,6 +26,7 @@
 //// {
 ////     "extends": "../tsconfig-base.json",
 ////     "compilerOptions": {
+////         "lib": ["es5"],
 ////         "rootDir": ".",
 ////         "outDir": "../../dist/services",
 ////     },

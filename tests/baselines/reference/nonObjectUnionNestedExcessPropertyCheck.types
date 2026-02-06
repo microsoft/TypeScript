@@ -3,23 +3,23 @@
 === nonObjectUnionNestedExcessPropertyCheck.ts ===
 interface IProps {
     iconProp?: string;
->iconProp : string
->         : ^^^^^^
+>iconProp : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
 
     nestedProp?: {
->nestedProp : { testBool?: boolean; }
->           : ^^^^^^^^^^^^^       ^^^
+>nestedProp : { testBool?: boolean; } | undefined
+>           : ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^
 
         testBool?: boolean;
->testBool : boolean
->         : ^^^^^^^
+>testBool : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
     }
 }
 
 interface INestedProps {
     nestedProps?: IProps;
->nestedProps : IProps
->            : ^^^^^^
+>nestedProps : IProps | undefined
+>            : ^^^^^^^^^^^^^^^^^^
 }
 
 // These are the types of errors we want:

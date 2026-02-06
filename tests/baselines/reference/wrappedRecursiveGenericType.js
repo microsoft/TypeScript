@@ -10,14 +10,14 @@ interface B<T> {
     b: A<X<T>>;
     val: T;
 }
-var x: A<number>;
+declare var x: A<number>;
 x.val = 5;         // val -> number
 x.a.val = 5;       // val -> number
 x.a.b.val = 5;     // val -> X<number> (This should be an error)
 x.a.b.a.val = 5;   // val -> X<number> (This should be an error)
 
 //// [wrappedRecursiveGenericType.js]
-var x;
+"use strict";
 x.val = 5; // val -> number
 x.a.val = 5; // val -> number
 x.a.b.val = 5; // val -> X<number> (This should be an error)

@@ -44,6 +44,7 @@ namespace E {
 }
 
 //// [importStatementsInterfaces.js]
+"use strict";
 // no code gen expected
 var C;
 (function (C) {

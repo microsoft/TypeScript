@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 // There should be no errors in this file
 class Derived extends Base {
     public static createEmpty(): Derived {

@@ -1,3 +1,4 @@
+// @target: es2015
 namespace A {
     export class Point {
         x: number;
@@ -5,7 +6,7 @@ namespace A {
     }
 }
 
-module A{
+namespace A{
     // expected error
     export class Point {
         origin: number;

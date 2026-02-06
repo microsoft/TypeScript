@@ -1,0 +1,32 @@
+infinitelyExpandingTypes4.ts(21,6): error TS2454: Variable 'q2' is used before being assigned.
+infinitelyExpandingTypes4.ts(22,6): error TS2454: Variable 'q3' is used before being assigned.
+
+
+==== infinitelyExpandingTypes4.ts (2 errors) ====
+    interface Query<T> {
+        // ...
+        groupBy<K>(keySelector: (item: T) => K): Query<Grouping<K, T>>;
+        // ...
+    }
+    
+    interface QueryEnumerator<T> {
+        // ...
+        groupBy<K>(keySelector: (item: T) => K): QueryEnumerator<Grouping<K, T>>;
+        // ...
+    }
+    
+    interface Grouping<K, T> extends Query<T> {
+        key(): K;
+    }
+    
+    var q1: Query<number>;
+    var q2: QueryEnumerator<number>;
+    var q3: Query<number>;
+    
+    q1 = q2; // should error
+         ~~
+!!! error TS2454: Variable 'q2' is used before being assigned.
+    q1 = q3; // should not error
+         ~~
+!!! error TS2454: Variable 'q3' is used before being assigned.
+    

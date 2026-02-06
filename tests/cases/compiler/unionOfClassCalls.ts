@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // from https://github.com/microsoft/TypeScript/issues/30717
 declare class Test<T> {

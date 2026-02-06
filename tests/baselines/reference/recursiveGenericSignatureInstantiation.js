@@ -7,6 +7,7 @@ function f6<T>(x: T) {
 
 
 //// [recursiveGenericSignatureInstantiation.js]
+"use strict";
 function f6(x) {
     return f6(x);
 }

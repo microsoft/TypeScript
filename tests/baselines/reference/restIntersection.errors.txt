@@ -1,0 +1,11 @@
+restIntersection.ts(4,22): error TS2454: Variable 'intersection' is used before being assigned.
+
+
+==== restIntersection.ts (1 errors) ====
+    var intersection: { x: number, y: number } & { w: string, z: string };
+    
+    var rest1: { y: number, w: string, z: string };
+    var {x, ...rest1 } = intersection;
+                         ~~~~~~~~~~~~
+!!! error TS2454: Variable 'intersection' is used before being assigned.
+    

@@ -1,3 +1,4 @@
+// @target: es2015
 namespace ObjectLiteral {
     var ThisInObjectLiteral = {
         _foo: '1',

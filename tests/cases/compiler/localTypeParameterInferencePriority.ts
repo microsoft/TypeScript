@@ -1,3 +1,4 @@
+// @target: es2015
 export type UnrollOnHover<O extends object> = O extends object ?
     { [K in keyof O]: O[K]; } :
     never;

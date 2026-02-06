@@ -1,8 +1,10 @@
+error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 a.js(14,13): error TS7008: Member 'inMethodNullable' implicitly has an 'any' type.
 a.js(20,9): error TS2322: Type 'string' is not assignable to type 'number'.
 a.js(39,9): error TS2322: Type 'boolean' is not assignable to type 'number'.
 
 
+!!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== a.js (3 errors) ====
     class C {
         constructor() {

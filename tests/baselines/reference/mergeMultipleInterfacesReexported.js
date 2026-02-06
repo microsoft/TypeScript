@@ -56,7 +56,7 @@ __exportStar(require("./eventList"), exports);
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var t = p012;
+const t = p012;
 //// [foo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

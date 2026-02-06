@@ -10,9 +10,9 @@ class C {
 }
 
 //// [conflictMarkerTrivia1.js]
-var C = /** @class */ (function () {
-    function C() {
+"use strict";
+class C {
+    constructor() {
         this.v = 1;
     }
-    return C;
-}());
+}

@@ -190,6 +190,9 @@ function g<T>() {
 
     x = "str";
 >x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 65, 7))
+
+    x = "whatever"; // error
+>x : Symbol(x, Decl(keyRemappingKeyofResult.ts, 65, 7))
 }
 
 export {};

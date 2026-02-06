@@ -27,6 +27,7 @@ typedArray[2] = 0xCC;
 
 
 //// [a.js]
+"use strict";
 const arr = [1, 2, 3];
 let num = arr[1];
 num = arr["1"];

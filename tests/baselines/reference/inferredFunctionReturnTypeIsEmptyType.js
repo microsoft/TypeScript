@@ -12,6 +12,7 @@ function foo() {
 
 
 //// [inferredFunctionReturnTypeIsEmptyType.js]
+"use strict";
 function foo() {
     if (true) {
         return 42;

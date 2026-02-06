@@ -14,22 +14,22 @@ enum E {
 >b : Symbol(E.b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 4, 6))
 }
 
-var a: any;
->a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+declare var a: any;
+>a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
-var b: number;
->b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+declare var b: number;
+>b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 // operator *
 var rk1 = undefined ** a;
 >rk1 : Symbol(rk1, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 12, 3))
 >undefined : Symbol(undefined)
->a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 
 var rk2 = undefined ** b;
 >rk2 : Symbol(rk2, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 13, 3))
 >undefined : Symbol(undefined)
->b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 
 var rk3 = undefined ** 1;
 >rk3 : Symbol(rk3, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 14, 3))
@@ -44,12 +44,12 @@ var rk4 = undefined ** E.a;
 
 var rk5 = a ** undefined;
 >rk5 : Symbol(rk5, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 16, 3))
->a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 8, 3))
+>a : Symbol(a, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 8, 11))
 >undefined : Symbol(undefined)
 
 var rk6 = b ** undefined;
 >rk6 : Symbol(rk6, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 17, 3))
->b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 9, 3))
+>b : Symbol(b, Decl(exponentiationOperatorWithUndefinedValueAndValidOperands.ts, 9, 11))
 >undefined : Symbol(undefined)
 
 var rk7 = 0 ** undefined;

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // enums are only subtypes of number, any and no other types
 
 enum E { A }

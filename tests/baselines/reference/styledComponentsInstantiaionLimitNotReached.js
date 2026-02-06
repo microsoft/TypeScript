@@ -199,5 +199,4 @@ export type StyledComponentPropsWithRef<
     : React.ComponentPropsWithRef<C>;
 
 //// [styledComponentsInstantiaionLimitNotReached.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

@@ -51,18 +51,18 @@ c.p;
 >c : Symbol(c, Decl(extension.ts, 20, 3))
 >p : Symbol(M.C.p, Decl(extension.ts, 9, 20))
 
-var i:I;
->i : Symbol(i, Decl(extension.ts, 23, 3))
+declare var i:I;
+>i : Symbol(i, Decl(extension.ts, 23, 11))
 >I : Symbol(I, Decl(extension.ts, 0, 0), Decl(extension.ts, 2, 1))
 
 i.x;
 >i.x : Symbol(I.x, Decl(extension.ts, 0, 13))
->i : Symbol(i, Decl(extension.ts, 23, 3))
+>i : Symbol(i, Decl(extension.ts, 23, 11))
 >x : Symbol(I.x, Decl(extension.ts, 0, 13))
 
 i.y;
 >i.y : Symbol(I.y, Decl(extension.ts, 4, 13))
->i : Symbol(i, Decl(extension.ts, 23, 3))
+>i : Symbol(i, Decl(extension.ts, 23, 11))
 >y : Symbol(I.y, Decl(extension.ts, 4, 13))
 
 

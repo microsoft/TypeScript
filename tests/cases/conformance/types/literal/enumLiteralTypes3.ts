@@ -1,3 +1,4 @@
+// @target: es2015
 const enum Choice { Unknown, Yes, No };
 
 type Yes = Choice.Yes;

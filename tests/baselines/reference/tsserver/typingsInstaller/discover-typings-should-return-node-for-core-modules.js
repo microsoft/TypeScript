@@ -33,7 +33,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -65,7 +69,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -97,7 +105,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -129,7 +141,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -161,7 +177,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -193,7 +213,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -225,7 +249,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -257,7 +285,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -289,7 +321,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -321,7 +357,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -353,7 +393,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -385,7 +429,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -417,7 +465,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -449,7 +501,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -481,7 +537,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -513,7 +573,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -545,7 +609,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -577,7 +645,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -609,7 +681,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -641,7 +717,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -673,7 +753,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -705,7 +789,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -737,7 +825,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -769,7 +861,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -801,7 +897,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -833,7 +933,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -865,7 +969,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -897,7 +1005,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -929,7 +1041,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -961,7 +1077,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -993,7 +1113,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1025,7 +1149,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1057,7 +1185,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1089,7 +1221,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1121,7 +1257,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1153,7 +1293,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1185,7 +1329,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1217,7 +1365,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1249,7 +1401,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1281,7 +1437,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1313,7 +1473,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1345,7 +1509,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1377,7 +1545,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1409,7 +1581,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1441,7 +1617,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1473,7 +1653,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1505,7 +1689,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1537,7 +1725,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1569,7 +1761,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1601,7 +1797,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1633,7 +1833,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1665,7 +1869,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1697,7 +1905,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1729,7 +1941,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1761,7 +1977,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1793,7 +2013,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1825,7 +2049,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1857,7 +2085,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1889,7 +2121,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1921,7 +2157,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1953,7 +2193,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1985,7 +2229,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2017,7 +2265,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2049,7 +2301,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2081,7 +2337,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2113,7 +2373,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2145,7 +2409,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2177,7 +2445,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2209,7 +2481,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2241,7 +2517,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2273,7 +2553,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2305,7 +2589,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2337,7 +2625,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2369,7 +2661,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2401,7 +2697,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2433,7 +2733,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2465,7 +2769,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2497,7 +2805,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2529,7 +2841,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2561,7 +2877,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2593,7 +2913,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2625,7 +2949,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2657,7 +2985,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2689,7 +3021,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2721,7 +3057,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2753,7 +3093,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2785,7 +3129,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2817,7 +3165,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2849,7 +3201,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2881,7 +3237,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2913,7 +3273,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2945,7 +3309,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -2977,7 +3345,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3009,7 +3381,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3041,7 +3417,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3073,7 +3453,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3105,7 +3489,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3137,7 +3525,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3169,7 +3561,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3201,7 +3597,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3233,7 +3633,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3265,7 +3669,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3297,7 +3705,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3329,7 +3741,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3361,7 +3777,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3393,7 +3813,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3425,7 +3849,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3457,7 +3885,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3489,7 +3921,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3521,7 +3957,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3553,7 +3993,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3585,7 +4029,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -3617,7 +4065,11 @@ ts.JsTyping.discoverTypings::
         "somename"
       ],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: ["node","somename"]
 TI:: [hh:mm:ss:mss] Finished typings discovery:

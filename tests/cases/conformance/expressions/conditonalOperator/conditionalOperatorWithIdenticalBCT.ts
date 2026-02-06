@@ -1,3 +1,4 @@
+// @target: es2015
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have identical best common type
 class X { propertyX: any; propertyX1: number; propertyX2: string };
 class A extends X { propertyA: number };

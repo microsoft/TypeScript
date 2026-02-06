@@ -8202,6 +8202,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files_1549" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[Ignore the tsconfig found and build with commandline options and files.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Ignorez le fichier tsconfig trouvé et compilez avec les options et fichiers spécifiés en ligne de commande.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";Ignore_this_error_message_90019" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[Ignore this error message]]></Val>
@@ -18642,6 +18651,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block_1548" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['await using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les déclarations 'await using' ne sont pas autorisées dans les clauses 'case' ou 'default', sauf si elles sont contenues dans un bloc.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";await_using_statements_are_only_allowed_at_the_top_level_of_a_file_when_that_file_is_a_module_but_th_2853" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA['await using' statements are only allowed at the top level of a file when that file is a module, but this file has no imports or exports. Consider adding an empty 'export {}' to make this file a module.]]></Val>
@@ -19443,6 +19461,15 @@
         </Str>
         <Disp Icon="Str" />
       </Item>
+      <Item ItemId=";tsconfig_json_is_present_but_will_not_be_loaded_if_files_are_specified_on_commandline_Use_ignoreConf_5112" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA[tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Le fichier tsconfig.json est présent mais ne sera pas chargé si des fichiers sont spécifiés en ligne de commande. Utilisez '--ignoreConfig' pour ignorer cette erreur.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
       <Item ItemId=";type_Colon_6902" ItemType="0" PsrId="306" Leaf="true">
         <Str Cat="Text">
           <Val><![CDATA[type:]]></Val>
@@ -19502,6 +19529,15 @@
           <Val><![CDATA['using' declarations are not allowed in ambient contexts.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
             <Val><![CDATA[Les déclarations « using » ne sont pas autorisées dans les contextes ambiants.]]></Val>
+          </Tgt>
+        </Str>
+        <Disp Icon="Str" />
+      </Item>
+      <Item ItemId=";using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block_1547" ItemType="0" PsrId="306" Leaf="true">
+        <Str Cat="Text">
+          <Val><![CDATA['using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.]]></Val>
+          <Tgt Cat="Text" Stat="Loc" Orig="New">
+            <Val><![CDATA[Les déclarations 'using' ne sont pas autorisées dans les clauses 'case' ou 'default' sauf si elles sont incluses dans un bloc.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

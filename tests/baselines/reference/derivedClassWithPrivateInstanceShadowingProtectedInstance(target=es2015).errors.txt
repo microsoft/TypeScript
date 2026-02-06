@@ -1,0 +1,35 @@
+derivedClassWithPrivateInstanceShadowingProtectedInstance.ts(2,15): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+derivedClassWithPrivateInstanceShadowingProtectedInstance.ts(12,7): error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
+  Property 'x' is private in type 'Derived' but not in type 'Base'.
+derivedClassWithPrivateInstanceShadowingProtectedInstance.ts(13,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== derivedClassWithPrivateInstanceShadowingProtectedInstance.ts (3 errors) ====
+    class Base {
+        protected x: string;
+                  ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+        protected fn(): string {
+            return '';
+        }
+    
+        protected get a() { return 1; }
+        protected set a(v) { }
+    }
+    
+    // error, not a subtype
+    class Derived extends Base {
+          ~~~~~~~
+!!! error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
+!!! error TS2415:   Property 'x' is private in type 'Derived' but not in type 'Base'.
+        private x: string; 
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+        private fn(): string {
+            return '';
+        }
+    
+        private get a() { return 1; }
+        private set a(v) { }
+    }
+    

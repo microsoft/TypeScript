@@ -1,0 +1,138 @@
+typeGuardOfFromPropNameInUnionType.ts(1,11): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+typeGuardOfFromPropNameInUnionType.ts(2,11): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+typeGuardOfFromPropNameInUnionType.ts(3,11): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+typeGuardOfFromPropNameInUnionType.ts(4,11): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+typeGuardOfFromPropNameInUnionType.ts(37,15): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+typeGuardOfFromPropNameInUnionType.ts(51,28): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+typeGuardOfFromPropNameInUnionType.ts(61,29): error TS2564: Property 'outer' has no initializer and is not definitely assigned in the constructor.
+typeGuardOfFromPropNameInUnionType.ts(72,15): error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+typeGuardOfFromPropNameInUnionType.ts(84,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+
+
+==== typeGuardOfFromPropNameInUnionType.ts (9 errors) ====
+    class A { a: string; }
+              ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    class B { b: number; }
+              ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+    class C { b: Object; }
+              ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+    class D { a: Date; }
+              ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+    
+    function namedClasses(x: A | B) {
+        if ("a" in x) {
+            x.a = "1";
+        } else {
+            x.b = 1;
+        }
+    }
+    
+    function multipleClasses(x: A | B | C | D) {
+        if ("a" in x) {
+            let y: string | Date = x.a;
+        } else {
+            let z: number | Object = x.b;
+        }
+    }
+    
+    function anonymousClasses(x: { a: string; } | { b: number; }) {
+        if ("a" in x) {
+            let y: string = x.a;
+        } else {
+            let z: number = x.b;
+        }
+    }
+    
+    class AWithOptionalProp { a?: string; }
+    class BWithOptionalProp { b?: string; }
+    
+    function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
+        if ("a" in x) {
+            x.a = "1";
+        } else {
+            const y: string = x instanceof AWithOptionalProp
+                  ~
+!!! error TS2322: Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:   Type 'undefined' is not assignable to type 'string'.
+                ? x.a
+                : x.b
+        }
+    }
+    
+    function inParenthesizedExpression(x: A | B) {
+        if ("a" in (x)) {
+            let y: string = x.a;
+        } else {
+            let z: number = x.b;
+        }
+    }
+    
+    class ClassWithUnionProp { prop: A | B; }
+                               ~~~~
+!!! error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+    
+    function inProperty(x: ClassWithUnionProp) {
+        if ("a" in x.prop) {
+            let y: string = x.prop.a;
+        } else {
+            let z: number = x.prop.b;
+        }
+    }
+    
+    class NestedClassWithProp { outer: ClassWithUnionProp; }
+                                ~~~~~
+!!! error TS2564: Property 'outer' has no initializer and is not definitely assigned in the constructor.
+    
+    function innestedProperty(x: NestedClassWithProp) {
+        if ("a" in x.outer.prop) {
+            let y: string = x.outer.prop.a;
+        } else {
+            let z: number = x.outer.prop.b;
+        }
+    }
+    
+    class InMemberOfClass {
+        protected prop: A | B;
+                  ~~~~
+!!! error TS2564: Property 'prop' has no initializer and is not definitely assigned in the constructor.
+        inThis() {
+            if ("a" in this.prop) {
+                let y: string = this.prop.a;
+            } else {
+                let z: number = this.prop.b;
+            }
+        }
+    }
+    
+    // added for completeness
+    class SelfAssert {
+        a: string;
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        inThis() {
+            if ("a" in this) {
+                let y: string = this.a;
+            } else {
+            }
+        }
+    }
+    
+    interface Indexed {
+        [s: string]: any;
+    }
+    
+    function f(i: Indexed) {
+        if ("a" in i) {
+            return i.a;
+        }
+        else if ("b" in i) {
+            return i.b;
+        }
+        return "c" in i && i.c;
+    }
+    

@@ -10,7 +10,7 @@ typeParameterExplicitlyExtendsAny.ts(30,14): error TS2339: Property 'children' d
 
 ==== typeParameterExplicitlyExtendsAny.ts (6 errors) ====
     function fee<T>() {
-        var t: T;
+        var t!: T;
         t.blah; // Error
           ~~~~
 !!! error TS2339: Property 'blah' does not exist on type 'T'.
@@ -18,7 +18,7 @@ typeParameterExplicitlyExtendsAny.ts(30,14): error TS2339: Property 'children' d
     }
     
     function fee2<T extends any>() {
-        var t: T;
+        var t!: T;
         t.blah; // ok
           ~~~~
 !!! error TS2339: Property 'blah' does not exist on type 'T'.

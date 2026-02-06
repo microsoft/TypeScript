@@ -7,5 +7,7 @@ var v = { set Foo(a) { } };
 >{ set Foo(a) { } } : { Foo: any; }
 >                   : ^^^^^^^^^^^^^
 >Foo : any
+>    : ^^^
 >a : any
+>  : ^^^
 

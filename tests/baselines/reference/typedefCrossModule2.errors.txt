@@ -2,15 +2,18 @@ mod1.js(3,23): error TS2300: Duplicate identifier 'Foo'.
 mod1.js(4,7): error TS2300: Duplicate identifier 'Foo'.
 mod1.js(9,23): error TS2300: Duplicate identifier 'Baz'.
 mod1.js(11,5): error TS2300: Duplicate identifier 'Baz'.
+use.js(6,15): error TS18048: 'mod.Baz' is possibly 'undefined'.
 
 
-==== use.js (0 errors) ====
+==== use.js (1 errors) ====
     var mod = require('./mod1.js');
     /** @type {import("./mod1.js").Baz} */
     var b;
     /** @type {mod.Baz} */
     var bb;
     var bbb = new mod.Baz();
+                  ~~~~~~~
+!!! error TS18048: 'mod.Baz' is possibly 'undefined'.
     
 ==== mod1.js (4 errors) ====
     // error

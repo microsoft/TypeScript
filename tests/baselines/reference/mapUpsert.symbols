@@ -1,0 +1,116 @@
+//// [tests/cases/compiler/mapUpsert.ts] ////
+
+=== mapUpsert.ts ===
+declare const map: Map<string, number>;
+>map : Symbol(map, Decl(mapUpsert.ts, 0, 13))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+declare const mapR: ReadonlyMap<string, number>;
+>mapR : Symbol(mapR, Decl(mapUpsert.ts, 1, 13))
+>ReadonlyMap : Symbol(ReadonlyMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+
+declare const mapW: WeakMap<object, number>;
+>mapW : Symbol(mapW, Decl(mapUpsert.ts, 2, 13))
+>WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+
+// OK
+map.getOrInsert("key", 123);
+>map.getOrInsert : Symbol(Map.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+>map : Symbol(map, Decl(mapUpsert.ts, 0, 13))
+>getOrInsert : Symbol(Map.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+
+map.getOrInsertComputed("key", () => 123);
+>map.getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>map : Symbol(map, Decl(mapUpsert.ts, 0, 13))
+>getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+
+map.getOrInsertComputed("key", (key: string) => 123);
+>map.getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>map : Symbol(map, Decl(mapUpsert.ts, 0, 13))
+>getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>key : Symbol(key, Decl(mapUpsert.ts, 7, 32))
+
+mapW.getOrInsert({}, 123);
+>mapW.getOrInsert : Symbol(WeakMap.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+>mapW : Symbol(mapW, Decl(mapUpsert.ts, 2, 13))
+>getOrInsert : Symbol(WeakMap.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+
+mapW.getOrInsertComputed({}, () => 123);
+>mapW.getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>mapW : Symbol(mapW, Decl(mapUpsert.ts, 2, 13))
+>getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+
+mapW.getOrInsertComputed({}, (key: object) => 123);
+>mapW.getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>mapW : Symbol(mapW, Decl(mapUpsert.ts, 2, 13))
+>getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>key : Symbol(key, Decl(mapUpsert.ts, 10, 30))
+
+// Errors
+map.getOrInsert("key");
+>map.getOrInsert : Symbol(Map.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+>map : Symbol(map, Decl(mapUpsert.ts, 0, 13))
+>getOrInsert : Symbol(Map.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+
+map.getOrInsert("key", "value");
+>map.getOrInsert : Symbol(Map.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+>map : Symbol(map, Decl(mapUpsert.ts, 0, 13))
+>getOrInsert : Symbol(Map.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+
+map.getOrInsert("key", () => 123);
+>map.getOrInsert : Symbol(Map.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+>map : Symbol(map, Decl(mapUpsert.ts, 0, 13))
+>getOrInsert : Symbol(Map.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+
+map.getOrInsertComputed("key");
+>map.getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>map : Symbol(map, Decl(mapUpsert.ts, 0, 13))
+>getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+
+map.getOrInsertComputed("key", 123);
+>map.getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>map : Symbol(map, Decl(mapUpsert.ts, 0, 13))
+>getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+
+map.getOrInsertComputed("key", () => "value");
+>map.getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>map : Symbol(map, Decl(mapUpsert.ts, 0, 13))
+>getOrInsertComputed : Symbol(Map.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+
+mapW.getOrInsert({});
+>mapW.getOrInsert : Symbol(WeakMap.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+>mapW : Symbol(mapW, Decl(mapUpsert.ts, 2, 13))
+>getOrInsert : Symbol(WeakMap.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+
+mapW.getOrInsert({}, "value");
+>mapW.getOrInsert : Symbol(WeakMap.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+>mapW : Symbol(mapW, Decl(mapUpsert.ts, 2, 13))
+>getOrInsert : Symbol(WeakMap.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+
+mapW.getOrInsert({}, () => 123);
+>mapW.getOrInsert : Symbol(WeakMap.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+>mapW : Symbol(mapW, Decl(mapUpsert.ts, 2, 13))
+>getOrInsert : Symbol(WeakMap.getOrInsert, Decl(lib.esnext.collection.d.ts, --, --))
+
+mapW.getOrInsertComputed({});
+>mapW.getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>mapW : Symbol(mapW, Decl(mapUpsert.ts, 2, 13))
+>getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+
+mapW.getOrInsertComputed({}, 123);
+>mapW.getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>mapW : Symbol(mapW, Decl(mapUpsert.ts, 2, 13))
+>getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+
+mapW.getOrInsertComputed({}, () => "value");
+>mapW.getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+>mapW : Symbol(mapW, Decl(mapUpsert.ts, 2, 13))
+>getOrInsertComputed : Symbol(WeakMap.getOrInsertComputed, Decl(lib.esnext.collection.d.ts, --, --))
+
+// Not present on readonly interface
+mapR.getOrInsert("key", 123);
+>mapR : Symbol(mapR, Decl(mapUpsert.ts, 1, 13))
+
+mapR.getOrInsertComputed("key", () => 123);
+>mapR : Symbol(mapR, Decl(mapUpsert.ts, 1, 13))
+

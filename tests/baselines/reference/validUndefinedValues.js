@@ -5,5 +5,6 @@ var x: typeof undefined;
 x = undefined;
 
 //// [validUndefinedValues.js]
+"use strict";
 var x;
 x = undefined;

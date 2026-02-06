@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @module: commonjs
 
 // @filename: err1.d.ts

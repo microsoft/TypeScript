@@ -9,6 +9,7 @@ class C {
 
 
 //// [classMemberInitializerScoping2.js]
+"use strict";
 const x = 1;
 class C {
     p = x;

@@ -9,9 +9,10 @@ namespace M {
 }
 
 //// [indexIntoEnum.js]
+"use strict";
 var M;
 (function (M) {
-    var E;
+    let E;
     (function (E) {
     })(E || (E = {}));
     var x = E[0];

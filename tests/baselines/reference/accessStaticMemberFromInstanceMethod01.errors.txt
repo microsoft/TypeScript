@@ -1,9 +1,12 @@
+accessStaticMemberFromInstanceMethod01.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 accessStaticMemberFromInstanceMethod01.ts(5,17): error TS2304: Cannot find name 'foo'.
 
 
-==== accessStaticMemberFromInstanceMethod01.ts (1 errors) ====
+==== accessStaticMemberFromInstanceMethod01.ts (2 errors) ====
     class C {
         foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     
         static bar() {
             let k = foo;

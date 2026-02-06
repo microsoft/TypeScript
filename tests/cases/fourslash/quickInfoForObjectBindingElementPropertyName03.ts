@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////interface Recursive {
 ////    next?: Recursive;
 ////    value: any;

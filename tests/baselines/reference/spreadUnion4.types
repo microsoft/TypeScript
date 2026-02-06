@@ -10,8 +10,8 @@ declare const a: { x: () => void }
 declare const b: { x?: () => void }
 >b : { x?: () => void; }
 >  : ^^^^^^          ^^^
->x : () => void
->  : ^^^^^^    
+>x : (() => void) | undefined
+>  : ^^^^^^^    ^^^^^^^^^^^^^
 
 const c = { ...a, ...b };
 >c : { x: () => void; }

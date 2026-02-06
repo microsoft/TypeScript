@@ -35,7 +35,7 @@ class C {
 >C : C
 >  : ^
 
-    foo: string;
+    foo!: string;
 >foo : string
 >    : ^^^^^^
 
@@ -43,7 +43,7 @@ class C {
 >x : string
 >  : ^^^^^^
 }
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 
@@ -66,7 +66,7 @@ interface I {
 >x : string
 >  : ^^^^^^
 }
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
@@ -80,7 +80,7 @@ var r3: string = i[''];
 >'' : ""
 >   : ^^
 
-var o2: {
+declare var o2: {
 >o2 : { [x: string]: string; baz: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 

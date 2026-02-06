@@ -10,6 +10,7 @@ var p1 = import("./0");
 //// [0.js]
 export function foo() { return "foo"; }
 //// [1.js]
+"use strict";
 var p1 = import("./0");
 
 

@@ -1,3 +1,4 @@
+// @target: es2015
 // @verbatimModuleSyntax: true
 // @module: esnext
 // @moduleResolution: bundler

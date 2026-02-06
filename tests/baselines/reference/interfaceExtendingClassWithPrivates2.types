@@ -5,7 +5,7 @@ class Foo {
 >Foo : Foo
 >    : ^^^
 
-    private x: string;
+    private x!: string;
 >x : string
 >  : ^^^^^^
 }
@@ -14,7 +14,7 @@ class Bar {
 >Bar : Bar
 >    : ^^^
 
-    private x: string;
+    private x!: string;
 >x : string
 >  : ^^^^^^
 }
@@ -32,7 +32,7 @@ class Baz {
 >Baz : Baz
 >    : ^^^
 
-    private y: string;
+    private y!: string;
 >y : string
 >  : ^^^^^^
 }
@@ -43,7 +43,7 @@ interface I5 extends Foo, Baz {
 >  : ^^^^^^
 }
 
-var i: I5;
+declare var i: I5;
 >i : I5
 >  : ^^
 

@@ -1,12 +1,13 @@
+// @target: es2015
 interface StrNum extends Array<string|number> {
     0: string;
     1: number;
     length: 2;
 }
 
-var x: [string, number];
-var y: StrNum
-var z: {
+declare var x: [string, number];
+declare var y: StrNum
+declare var z: {
     0: string;
     1: number;
     length: 2;

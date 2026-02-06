@@ -1,3 +1,4 @@
+// @target: es2015
 function combine<T, U>(x: T, y: U): [T, U] {
     return [x, y];
 }

@@ -24,5 +24,5 @@ function test(value) {
     console.log(value);
     return undefined;
 }
-var bar = {};
+const bar = {};
 test(bar);

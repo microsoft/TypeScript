@@ -142,6 +142,7 @@ function f21(x: Item) {
 }
 
 //// [numericLiteralTypes2.js]
+"use strict";
 function f1() {
     var a = 1;
     var a = 1;

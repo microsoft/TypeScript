@@ -13,3 +13,4 @@ declare namespace m {
 declare var m: m.IStatic; // Should be ok to have var 'm' as module is non instantiated
 
 //// [typeAliasDoesntMakeModuleInstantiated.js]
+"use strict";

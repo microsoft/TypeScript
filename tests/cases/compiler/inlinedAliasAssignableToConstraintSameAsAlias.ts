@@ -1,3 +1,4 @@
+// @target: es2015
 interface RelationFields {
   x: A;
   y: A[];

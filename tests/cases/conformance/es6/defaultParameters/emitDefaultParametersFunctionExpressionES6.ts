@@ -1,4 +1,5 @@
-﻿// @target:es6
+﻿// @strict: false
+// @target:es6
 var lambda1 = (y = "hello") => { }
 var lambda2 = (x: number, y = "hello") => { }
 var lambda3 = (x: number, y = "hello", ...rest) => { }

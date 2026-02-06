@@ -12,6 +12,7 @@ new functionVoidNoThis(); // Error
 
 
 //// [newOperatorErrorCases_noImplicitAny.js]
+"use strict";
 function fnNumber() { return 90; }
 new fnNumber(); // Error
 function fnVoid() { }

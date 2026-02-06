@@ -13,7 +13,7 @@ describe("unittests:: tsc:: composite::", () => {
                 "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
                 "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
-                        target: "es5",
+                        target: "es2015",
                         module: "commonjs",
                         composite: true,
                     },
@@ -33,7 +33,7 @@ describe("unittests:: tsc:: composite::", () => {
                 "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
                 "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
-                        target: "es5",
+                        target: "es2015",
                         module: "commonjs",
                         composite: true,
                     },
@@ -53,7 +53,7 @@ describe("unittests:: tsc:: composite::", () => {
                 "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
                 "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
-                        target: "es5",
+                        target: "es2015",
                         module: "commonjs",
                         composite: true,
                         tsBuildInfoFile: "tsconfig.json.tsbuildinfo",
@@ -74,7 +74,7 @@ describe("unittests:: tsc:: composite::", () => {
                 "/home/src/workspaces/project/src/main.ts": "export const x = 10;",
                 "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                     compilerOptions: {
-                        target: "es5",
+                        target: "es2015",
                         module: "commonjs",
                         composite: true,
                         tsBuildInfoFile: "tsconfig.json.tsbuildinfo",

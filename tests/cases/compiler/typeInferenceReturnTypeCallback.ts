@@ -1,3 +1,4 @@
+// @target: es2015
 interface IList<A> {
     map<B>(f: (t: A) => B): IList<B>;
 }

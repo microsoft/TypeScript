@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowJs: true
 // @checkJs: true
 // @noEmit: true
@@ -8,6 +9,6 @@
  * @callback B
  */
 /** @type {B<string>} */
-let b;
+let b = {};
 b();
 b(1);

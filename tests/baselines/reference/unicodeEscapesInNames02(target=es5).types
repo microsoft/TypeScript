@@ -2,11 +2,11 @@
 
 === extendedEscapesForAstralsInVarsAndClasses.ts ===
 // U+102A7 CARIAN LETTER A2
-var 𐊧: string;
+declare var 𐊧: string;
 >string : any
 >       : ^^^
 
-var \u{102A7}: string;
+declare var \u{102A7}: string;
 >u : any
 >  : ^^^
 >A7 : string

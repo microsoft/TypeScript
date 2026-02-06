@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 let obj: { a: { x: string } } & { c: number } = { a: { x: 'hello', y: 2 }, c: 5 };  // Nested excess property

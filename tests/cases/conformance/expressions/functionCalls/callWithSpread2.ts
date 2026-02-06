@@ -1,3 +1,4 @@
+// @target: es2015
 declare function all(a?: number, b?: number): void;
 declare function weird(a?: number | string, b?: number | string): void;
 declare function prefix(s: string, a?: number, b?: number): void;

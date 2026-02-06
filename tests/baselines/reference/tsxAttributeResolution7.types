@@ -7,8 +7,8 @@ declare namespace JSX {
 		test1: { "data-foo"?: string };
 >test1 : { "data-foo"?: string; }
 >      : ^^^^^^^^^^^^^^^      ^^^
->"data-foo" : string
->           : ^^^^^^
+>"data-foo" : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 	}
 }
 

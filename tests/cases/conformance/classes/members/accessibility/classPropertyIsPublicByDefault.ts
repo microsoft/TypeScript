@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class C {
     x: string;
     get y() { return null; }

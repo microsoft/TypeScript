@@ -73,7 +73,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Should report error only once for instantiated module
 var M;
 (function (M) {
-    var inst;
+    let inst;
     (function (inst) {
         var t;
     })(inst || (inst = {}));
@@ -88,7 +88,7 @@ var M2;
     var w;
 })(M2 || (M2 = {}));
 (function (M) {
-    var F;
+    let F;
     (function (F) {
         var t;
     })(F || (F = {}));
@@ -96,11 +96,8 @@ var M2;
     M.F = F;
 })(M || (M = {}));
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     (function (C) {
         var t;
     })(C = M.C || (M.C = {}));

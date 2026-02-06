@@ -12,13 +12,11 @@ namespace c {
 }
 
 //// [internalAliasClass.js]
+"use strict";
 var a;
 (function (a) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     a.c = c;
 })(a || (a = {}));
 var c;

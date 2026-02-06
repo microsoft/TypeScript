@@ -1,19 +1,25 @@
+genericDerivedTypeWithSpecializedBase2.ts(2,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+genericDerivedTypeWithSpecializedBase2.ts(6,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 genericDerivedTypeWithSpecializedBase2.ts(11,1): error TS2322: Type 'B<number>' is not assignable to type 'A<{ length: number; foo: number; }>'.
   Types of property 'x' are incompatible.
     Type 'string' is not assignable to type '{ length: number; foo: number; }'.
 
 
-==== genericDerivedTypeWithSpecializedBase2.ts (1 errors) ====
+==== genericDerivedTypeWithSpecializedBase2.ts (3 errors) ====
     class A<T extends { length: number }> {
         x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     class B<U> extends A<string> {
         y: U;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }
     
-    var x: A<{ length: number; foo: number }>;
-    var y: B<number>;
+    declare var x: A<{ length: number; foo: number }>;
+    declare var y: B<number>;
     x = y;  // error
     ~
 !!! error TS2322: Type 'B<number>' is not assignable to type 'A<{ length: number; foo: number; }>'.

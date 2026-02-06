@@ -1,3 +1,4 @@
+// @target: es2015
 declare function f<T extends unknown = unknown>(x: { [x: string]: T }): T;
 
 var stooges = [

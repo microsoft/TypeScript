@@ -1,21 +1,33 @@
+genericCallWithObjectTypeArgsAndConstraints3.ts(4,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+genericCallWithObjectTypeArgsAndConstraints3.ts(7,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+genericCallWithObjectTypeArgsAndConstraints3.ts(10,5): error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
 genericCallWithObjectTypeArgsAndConstraints3.ts(18,32): error TS2741: Property 'y' is missing in type 'Derived2' but required in type 'Derived'.
+genericCallWithObjectTypeArgsAndConstraints3.ts(30,14): error TS2345: Argument of type 'null' is not assignable to parameter of type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+genericCallWithObjectTypeArgsAndConstraints3.ts(36,21): error TS2345: Argument of type 'null' is not assignable to parameter of type 'Base'.
 
 
-==== genericCallWithObjectTypeArgsAndConstraints3.ts (1 errors) ====
+==== genericCallWithObjectTypeArgsAndConstraints3.ts (6 errors) ====
     // Generic call with constraints infering type parameter from object member properties
     
     class Base {
         x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     class Derived extends Base {
         y: string;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
     }
     class Derived2 extends Base {
         z: string;
+        ~
+!!! error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
     }
     
     function f<T extends Base>(a: { x: T; y: T }) {
-        var r: T;
+        var r!: T;
         return r;
     }
     
@@ -26,7 +38,7 @@ genericCallWithObjectTypeArgsAndConstraints3.ts(18,32): error TS2741: Property '
 !!! related TS6500 genericCallWithObjectTypeArgsAndConstraints3.ts:13:39: The expected type comes from property 'y' which is declared here on type '{ x: Derived; y: Derived; }'
     
     function f2<T extends Base, U extends { x: T; y: T }>(a: U) {
-        var r: T;
+        var r!: T;
         return r;
     }
     
@@ -36,10 +48,15 @@ genericCallWithObjectTypeArgsAndConstraints3.ts(18,32): error TS2741: Property '
     
     function f3<T extends Base>(y: (a: T) => T, x: T) {
         return y(null);
+                 ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'T'.
+!!! error TS2345:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
     }
     
     // all ok - second argument is processed before x is fixed
     var r4 = f3(x => x, new Base());
     var r5 = f3(x => x, new Derived());
     var r6 = f3(x => x, null);
+                        ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'Base'.
     

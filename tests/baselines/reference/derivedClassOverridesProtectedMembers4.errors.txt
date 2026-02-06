@@ -1,17 +1,24 @@
+derivedClassOverridesProtectedMembers4.ts(5,15): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+derivedClassOverridesProtectedMembers4.ts(9,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 derivedClassOverridesProtectedMembers4.ts(12,7): error TS2415: Class 'Derived2' incorrectly extends base class 'Derived1'.
   Property 'a' is protected in type 'Derived2' but public in type 'Derived1'.
+derivedClassOverridesProtectedMembers4.ts(13,15): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 
 
-==== derivedClassOverridesProtectedMembers4.ts (1 errors) ====
+==== derivedClassOverridesProtectedMembers4.ts (4 errors) ====
     var x: { foo: string; }
     var y: { foo: string; bar: string; }
     
     class Base {
         protected a: typeof x;
+                  ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Derived1 extends Base {
         public a: typeof x;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Derived2 extends Derived1 {
@@ -19,4 +26,6 @@ derivedClassOverridesProtectedMembers4.ts(12,7): error TS2415: Class 'Derived2' 
 !!! error TS2415: Class 'Derived2' incorrectly extends base class 'Derived1'.
 !!! error TS2415:   Property 'a' is protected in type 'Derived2' but public in type 'Derived1'.
         protected a: typeof x; // Error, parent was public
+                  ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
     }

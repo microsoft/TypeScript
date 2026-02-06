@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es5
 let o7 = { ...o? };
 let o8 = { ...*o };

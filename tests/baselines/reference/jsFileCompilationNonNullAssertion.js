@@ -5,4 +5,5 @@
 
 
 //// [a.js]
+"use strict";
 0;

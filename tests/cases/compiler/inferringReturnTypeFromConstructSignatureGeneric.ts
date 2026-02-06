@@ -1,3 +1,4 @@
+// @target: es2015
 class GenericObject<T extends {} = {}> {
   give(value: T) {
     return value;

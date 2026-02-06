@@ -70,6 +70,7 @@ class A {
 
         this;
 >this : any
+>     : ^^^
 
     };
 
@@ -85,11 +86,13 @@ class A {
 
             this;
 >this : any
+>     : ^^^
         }
         () => this;
 >() => this : () => any
 >           : ^^^^^^^^^
 >this : any
+>     : ^^^
 
     };
 
@@ -105,6 +108,7 @@ class A {
 
             this;
 >this : any
+>     : ^^^
         }
     };
 
@@ -115,11 +119,12 @@ class A {
 >                                              : ^^^^^^^^^^^^^^^^^
 
         a: function() { return this; },
->a : () => any
->  : ^^^^^^^^^
->function() { return this; } : () => any
->                            : ^^^^^^^^^
->this : any
+>a : () => { a: any; }
+>  : ^^^^^^^^^^^^^^^^^
+>function() { return this; } : () => { a: any; }
+>                            : ^^^^^^^^^^^^^^^^^
+>this : { a: () => any; }
+>     : ^^^^^^^^^^^^^^^^^
 
     };
 
@@ -130,15 +135,16 @@ class A {
 >                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^
 
         return {
->{            a: function() { return this; },        } : { a: () => any; }
->                                                      : ^^^^^^^^^^^^^^^^^
+>{            a: function() { return this; },        } : { a: () => { a: any; }; }
+>                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
             a: function() { return this; },
->a : () => any
->  : ^^^^^^^^^
->function() { return this; } : () => any
->                            : ^^^^^^^^^
->this : any
+>a : () => { a: any; }
+>  : ^^^^^^^^^^^^^^^^^
+>function() { return this; } : () => { a: any; }
+>                            : ^^^^^^^^^^^^^^^^^
+>this : { a: () => any; }
+>     : ^^^^^^^^^^^^^^^^^
 
         };
     };

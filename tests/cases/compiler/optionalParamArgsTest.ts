@@ -1,3 +1,4 @@
+// @target: es2015
 // Optional parameter and default argument tests
 
 // Key:

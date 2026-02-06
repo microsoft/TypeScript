@@ -10,6 +10,7 @@ namespace M {
 
 
 //// [constDeclarations2.js]
+"use strict";
 // No error
 var M;
 (function (M) {

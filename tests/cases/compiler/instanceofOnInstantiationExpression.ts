@@ -1,3 +1,4 @@
+// @target: es2015
 declare class Box<T> {
     value: T;
 }

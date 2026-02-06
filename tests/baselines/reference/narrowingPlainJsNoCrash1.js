@@ -11,6 +11,7 @@ while ((c = a$b != a$b)) c.e;
 
 
 //// [index.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/59594
 var a$b = {};
 var c, d;

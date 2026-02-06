@@ -6,8 +6,7 @@ class C {
 }
 
 //// [parserConstructorDeclaration3.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+    export constructor() { }
+}

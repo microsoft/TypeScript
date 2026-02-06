@@ -24,11 +24,9 @@ var r3 = a.foo;
 var r4 = b.foo;
 
 //// [propertyNameWithoutTypeAnnotation.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 var a;
 var b = {
     foo: null

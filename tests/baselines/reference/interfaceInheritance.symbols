@@ -44,48 +44,48 @@ class C1 implements I2 { // should be an error - it doesn't implement the member
 >C1 : Symbol(C1, Decl(interfaceInheritance.ts, 19, 1))
 >I2 : Symbol(I2, Decl(interfaceInheritance.ts, 3, 1))
 
-    public i2P1: string;
+    public i2P1!: string;
 >i2P1 : Symbol(C1.i2P1, Decl(interfaceInheritance.ts, 21, 24))
 }
 
-var i2: I2;
->i2 : Symbol(i2, Decl(interfaceInheritance.ts, 25, 3))
+declare var i2: I2;
+>i2 : Symbol(i2, Decl(interfaceInheritance.ts, 25, 11))
 >I2 : Symbol(I2, Decl(interfaceInheritance.ts, 3, 1))
 
 var i1: I1;
 >i1 : Symbol(i1, Decl(interfaceInheritance.ts, 26, 3))
 >I1 : Symbol(I1, Decl(interfaceInheritance.ts, 0, 0))
 
-var i3: I3;
->i3 : Symbol(i3, Decl(interfaceInheritance.ts, 27, 3))
+declare var i3: I3;
+>i3 : Symbol(i3, Decl(interfaceInheritance.ts, 27, 11))
 >I3 : Symbol(I3, Decl(interfaceInheritance.ts, 7, 1))
 
 i1 = i2;
 >i1 : Symbol(i1, Decl(interfaceInheritance.ts, 26, 3))
->i2 : Symbol(i2, Decl(interfaceInheritance.ts, 25, 3))
+>i2 : Symbol(i2, Decl(interfaceInheritance.ts, 25, 11))
 
 i2 = i3; // should be an error - i3 does not implement the members of i1
->i2 : Symbol(i2, Decl(interfaceInheritance.ts, 25, 3))
->i3 : Symbol(i3, Decl(interfaceInheritance.ts, 27, 3))
+>i2 : Symbol(i2, Decl(interfaceInheritance.ts, 25, 11))
+>i3 : Symbol(i3, Decl(interfaceInheritance.ts, 27, 11))
 
 var c1: C1;
 >c1 : Symbol(c1, Decl(interfaceInheritance.ts, 31, 3))
 >C1 : Symbol(C1, Decl(interfaceInheritance.ts, 19, 1))
 
-var i4: I4;
->i4 : Symbol(i4, Decl(interfaceInheritance.ts, 33, 3))
+declare var i4: I4;
+>i4 : Symbol(i4, Decl(interfaceInheritance.ts, 33, 11))
 >I4 : Symbol(I4, Decl(interfaceInheritance.ts, 11, 1))
 
-var i5: I5;
->i5 : Symbol(i5, Decl(interfaceInheritance.ts, 34, 3))
+declare var i5: I5;
+>i5 : Symbol(i5, Decl(interfaceInheritance.ts, 34, 11))
 >I5 : Symbol(I5, Decl(interfaceInheritance.ts, 15, 1))
 
 i4 = i5; // should be an error
->i4 : Symbol(i4, Decl(interfaceInheritance.ts, 33, 3))
->i5 : Symbol(i5, Decl(interfaceInheritance.ts, 34, 3))
+>i4 : Symbol(i4, Decl(interfaceInheritance.ts, 33, 11))
+>i5 : Symbol(i5, Decl(interfaceInheritance.ts, 34, 11))
 
 i5 = i4; // should be an error
->i5 : Symbol(i5, Decl(interfaceInheritance.ts, 34, 3))
->i4 : Symbol(i4, Decl(interfaceInheritance.ts, 33, 3))
+>i5 : Symbol(i5, Decl(interfaceInheritance.ts, 34, 11))
+>i4 : Symbol(i4, Decl(interfaceInheritance.ts, 33, 11))
 
 

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // Call signature parameters do not allow accessibility modifiers
 
 function foo(public x, private y) { }

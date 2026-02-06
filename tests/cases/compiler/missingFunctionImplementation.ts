@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 
 export class C1 {
   m(): void;

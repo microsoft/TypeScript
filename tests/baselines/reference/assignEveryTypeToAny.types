@@ -5,11 +5,13 @@
 
 var x: any;
 >x : any
+>  : ^^^
 
 x = 1;
 >x = 1 : 1
 >      : ^
 >x : any
+>  : ^^^
 >1 : 1
 >  : ^
 
@@ -23,6 +25,7 @@ x = a;
 >x = a : number
 >      : ^^^^^^
 >x : any
+>  : ^^^
 >a : number
 >  : ^^^^^^
 
@@ -30,6 +33,7 @@ x = true;
 >x = true : true
 >         : ^^^^
 >x : any
+>  : ^^^
 >true : true
 >     : ^^^^
 
@@ -43,6 +47,7 @@ x = b;
 >x = b : true
 >      : ^^^^
 >x : any
+>  : ^^^
 >b : true
 >  : ^^^^
 
@@ -50,6 +55,7 @@ x = "";
 >x = "" : ""
 >       : ^^
 >x : any
+>  : ^^^
 >"" : ""
 >   : ^^
 
@@ -63,6 +69,7 @@ x = c;
 >x = c : string
 >      : ^^^^^^
 >x : any
+>  : ^^^
 >c : string
 >  : ^^^^^^
 
@@ -74,28 +81,37 @@ x = d;
 >x = d : void
 >      : ^^^^
 >x : any
+>  : ^^^
 >d : void
 >  : ^^^^
 
 var e = undefined;
 >e : any
+>  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 x = e;
->x = e : any
+>x = e : undefined
+>      : ^^^^^^^^^
 >x : any
->e : any
+>  : ^^^
+>e : undefined
+>  : ^^^^^^^^^
 
 var e2: typeof undefined;
->e2 : any
+>e2 : undefined
+>   : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 x = e2;
->x = e2 : any
+>x = e2 : undefined
+>       : ^^^^^^^^^
 >x : any
->e2 : any
+>  : ^^^
+>e2 : undefined
+>   : ^^^^^^^^^
 
 enum E {
 >E : E
@@ -110,6 +126,7 @@ x = E.A;
 >x = E.A : E
 >        : ^
 >x : any
+>  : ^^^
 >E.A : E
 >    : ^
 >E : typeof E
@@ -131,6 +148,7 @@ x = f;
 >x = f : E
 >      : ^
 >x : any
+>  : ^^^
 >f : E
 >  : ^
 
@@ -148,6 +166,7 @@ x = g;
 >x = g : I
 >      : ^
 >x : any
+>  : ^^^
 >g : I
 >  : ^
 
@@ -168,6 +187,7 @@ x = h;
 >x = h : C
 >      : ^
 >x : any
+>  : ^^^
 >h : C
 >  : ^
 
@@ -179,6 +199,7 @@ x = i;
 >x = i : () => string
 >      : ^^^^^^      
 >x : any
+>  : ^^^
 >i : () => string
 >  : ^^^^^^      
 
@@ -186,6 +207,7 @@ x = { f() { return 1; } }
 >x = { f() { return 1; } } : { f(): number; }
 >                          : ^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >{ f() { return 1; } } : { f(): number; }
 >                      : ^^^^^^^^^^^^^^^^
 >f : () => number
@@ -197,6 +219,7 @@ x = { f<T>(x: T) { return x; } }
 >x = { f<T>(x: T) { return x; } } : { f<T>(x: T): T; }
 >                                 : ^^^^ ^^ ^^ ^^^^^^^
 >x : any
+>  : ^^^
 >{ f<T>(x: T) { return x; } } : { f<T>(x: T): T; }
 >                             : ^^^^ ^^ ^^ ^^^^^^^
 >f : <T>(x: T) => T
@@ -216,6 +239,7 @@ function j<T>(a: T) {
 >x = a : T
 >      : ^
 >x : any
+>  : ^^^
 >a : T
 >  : ^
 }

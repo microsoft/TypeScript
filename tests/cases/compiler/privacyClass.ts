@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 export namespace m1 {
     export interface m1_i_public {

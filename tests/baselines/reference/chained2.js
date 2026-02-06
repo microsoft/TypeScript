@@ -24,11 +24,8 @@ const b: types.B = {};
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -69,7 +66,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = void 0;
-var types = __importStar(require("./b"));
+const types = __importStar(require("./b"));
 exports.default = types;
 //// [d.js]
 "use strict";
@@ -77,8 +74,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var c_1 = __importDefault(require("./c"));
+const c_1 = __importDefault(require("./c"));
 new c_1.default.A();
 new c_1.default.B();
-var a = {};
-var b = {};
+const a = {};
+const b = {};

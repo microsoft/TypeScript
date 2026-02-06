@@ -8,6 +8,7 @@ f<number, string>();
 f<number, string, number>();
 
 //// [callWithWrongNumberOfTypeArguments.js]
+"use strict";
 function f() { }
 f();
 f();

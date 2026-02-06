@@ -21,5 +21,5 @@ var Foo;
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var file2_1 = require("./file2");
+const file2_1 = require("./file2");
 console.log(file2_1.Foo.BAR);

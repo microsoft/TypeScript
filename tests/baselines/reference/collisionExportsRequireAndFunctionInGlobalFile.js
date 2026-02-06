@@ -25,6 +25,7 @@ namespace m4 {
 }
 
 //// [collisionExportsRequireAndFunctionInGlobalFile.js]
+"use strict";
 function exports() {
     return 1;
 }

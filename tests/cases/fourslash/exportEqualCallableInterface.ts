@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 // @Filename: exportEqualCallableInterface_file0.ts
 ////interface x {
 ////    (): Date;

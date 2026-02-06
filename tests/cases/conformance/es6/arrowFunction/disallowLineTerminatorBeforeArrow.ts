@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 var f1 = ()
     => { }
 var f2 = (x: string, y: string) /*

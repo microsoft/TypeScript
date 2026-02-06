@@ -1,6 +1,7 @@
+// @module: commonjs
 // @allowJs: true
 // @checkJs: true
-// @target: es5
+// @target: es5, es2015
 // @outDir: tests/cases/conformance/jsdoc/declarations/out
 // @declaration: true
 // @filename: node_modules/@types/node/index.d.ts

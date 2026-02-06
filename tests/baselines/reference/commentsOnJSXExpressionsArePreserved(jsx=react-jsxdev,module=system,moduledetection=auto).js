@@ -35,14 +35,11 @@ System.register(["react/jsx-dev-runtime"], function (exports_1, context_1) {
         ],
         execute: function () {
             _jsxFileName = "commentsOnJSXExpressionsArePreserved.tsx";
-            Component = /** @class */ (function () {
-                function Component() {
+            Component = class Component {
+                render() {
+                    return _jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 16 }, this);
                 }
-                Component.prototype.render = function () {
-                    return _jsxDEV("div", { children: null /* preserved */ }, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 15 }, this);
-                };
-                return Component;
-            }());
+            };
         }
     };
 });

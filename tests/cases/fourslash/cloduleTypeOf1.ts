@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////class C<T> {
 ////    static foo(x: number) { }
 ////    x: T;

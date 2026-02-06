@@ -18,17 +18,12 @@ namespace A {
 
 
 //// [ExportClassWithInaccessibleTypeInIndexerTypeAnnotations.js]
+"use strict";
 var A;
 (function (A) {
-    var Point = /** @class */ (function () {
-        function Point() {
-        }
-        return Point;
-    }());
-    var points = /** @class */ (function () {
-        function points() {
-        }
-        return points;
-    }());
+    class Point {
+    }
+    class points {
+    }
     A.points = points;
 })(A || (A = {}));

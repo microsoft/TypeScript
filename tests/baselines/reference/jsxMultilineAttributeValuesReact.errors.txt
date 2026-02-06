@@ -1,0 +1,38 @@
+jsxMultilineAttributeValuesReact.tsx(2,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxMultilineAttributeValuesReact.tsx(4,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxMultilineAttributeValuesReact.tsx(5,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxMultilineAttributeValuesReact.tsx(7,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxMultilineAttributeValuesReact.tsx(8,11): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+jsxMultilineAttributeValuesReact.tsx(10,3): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== jsxMultilineAttributeValuesReact.tsx (6 errors) ====
+    declare var React: any;
+    const a = <input value="
+              ~~~~~~~~~~~~~~
+    foo: 23
+    ~~~~~~~
+    "></input>;
+    ~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+      ~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    const b = <input value='
+              ~~~~~~~~~~~~~~
+    foo: 23
+    ~~~~~~~
+    '></input>;
+    ~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+      ~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    const c = <input value='
+              ~~~~~~~~~~~~~~
+    foo: 23\n
+    ~~~~~~~~~
+    '></input>;
+    ~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+      ~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    

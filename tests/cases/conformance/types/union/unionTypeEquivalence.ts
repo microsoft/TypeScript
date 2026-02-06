@@ -1,4 +1,5 @@
-﻿// A | B is equivalent to A if B is a subtype of A
+﻿// @target: es2015
+// A | B is equivalent to A if B is a subtype of A
 class C { }
 class D extends C { foo() { } }
 var x: C;

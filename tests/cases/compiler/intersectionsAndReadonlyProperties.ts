@@ -1,3 +1,4 @@
+// @target: es2015
 // readonly and non-readonly
 type Intersection1 = { readonly a: number } & { a: number };
 declare let i1: Intersection1;

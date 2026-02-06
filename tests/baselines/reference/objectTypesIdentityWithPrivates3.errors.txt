@@ -1,29 +1,48 @@
+objectTypesIdentityWithPrivates3.ts(2,16): error TS7008: Member 'z' implicitly has an 'any' type.
+objectTypesIdentityWithPrivates3.ts(5,13): error TS7008: Member 'x' implicitly has an 'any' type.
+objectTypesIdentityWithPrivates3.ts(9,5): error TS7008: Member 'y' implicitly has an 'any' type.
+objectTypesIdentityWithPrivates3.ts(13,5): error TS2454: Variable 'c1' is used before being assigned.
+objectTypesIdentityWithPrivates3.ts(17,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+objectTypesIdentityWithPrivates3.ts(21,5): error TS7008: Member 'y' implicitly has an 'any' type.
 objectTypesIdentityWithPrivates3.ts(25,1): error TS2352: Conversion of type 'C3<T2>' to type 'C4' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Property 'y' is missing in type 'C3<T2>' but required in type 'C4'.
+objectTypesIdentityWithPrivates3.ts(25,5): error TS2454: Variable 'c3' is used before being assigned.
 
 
-==== objectTypesIdentityWithPrivates3.ts (1 errors) ====
+==== objectTypesIdentityWithPrivates3.ts (8 errors) ====
     interface T1 { }
     interface T2 { z }
+                   ~
+!!! error TS7008: Member 'z' implicitly has an 'any' type.
     
     class C1<T> {
         private x;
+                ~
+!!! error TS7008: Member 'x' implicitly has an 'any' type.
     }
     
     class C2 extends C1<T1> {
         y;
+        ~
+!!! error TS7008: Member 'y' implicitly has an 'any' type.
     }
     
     var c1: C1<T2>;
     <C2>c1; // Should succeed (private x originates in the same declaration)
+        ~~
+!!! error TS2454: Variable 'c1' is used before being assigned.
     
     
     class C3<T> {
         private x: T; // This T is the difference between C3 and C1
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
     }
     
     class C4 extends C3<T1> {
         y;
+        ~
+!!! error TS7008: Member 'y' implicitly has an 'any' type.
     }
     
     var c3: C3<T2>;
@@ -32,3 +51,5 @@ objectTypesIdentityWithPrivates3.ts(25,1): error TS2352: Conversion of type 'C3<
 !!! error TS2352: Conversion of type 'C3<T2>' to type 'C4' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'y' is missing in type 'C3<T2>' but required in type 'C4'.
 !!! related TS2728 objectTypesIdentityWithPrivates3.ts:21:5: 'y' is declared here.
+        ~~
+!!! error TS2454: Variable 'c3' is used before being assigned.

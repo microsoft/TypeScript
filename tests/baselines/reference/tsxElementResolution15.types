@@ -17,7 +17,7 @@ interface Obj1type {
 >n : string
 >  : ^^^^^^
 }
-var Obj1: Obj1type;
+declare var Obj1: Obj1type;
 >Obj1 : Obj1type
 >     : ^^^^^^^^
 

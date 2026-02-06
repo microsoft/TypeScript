@@ -1,4 +1,5 @@
-﻿"use strict"
+﻿// @target: es2015
+"use strict"
 namespace public { }
 namespace private { }
 namespace public.whatever {

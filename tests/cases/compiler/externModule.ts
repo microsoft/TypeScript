@@ -1,3 +1,4 @@
+// @target: es2015
 declare module {
     export class XDate {
 		public getDay():number;

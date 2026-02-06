@@ -79,8 +79,8 @@ else {
 >                 : ^^^^^^^
 >num : number
 >    : ^^^^^^
->strOrNum : number
->         : ^^^^^^
+>strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 }
 if (typeof strOrBool === "string") {
 >typeof strOrBool === "string" : boolean
@@ -102,12 +102,12 @@ if (typeof strOrBool === "string") {
 }
 else {
     bool = strOrBool; // boolean
->bool = strOrBool : boolean
->                 : ^^^^^^^
+>bool = strOrBool : string | boolean
+>                 : ^^^^^^^^^^^^^^^^
 >bool : boolean
 >     : ^^^^^^^
->strOrBool : boolean
->          : ^^^^^^^
+>strOrBool : string | boolean
+>          : ^^^^^^^^^^^^^^^^
 }
 if (typeof strOrNumOrBool === "string") {
 >typeof strOrNumOrBool === "string" : boolean
@@ -129,12 +129,12 @@ if (typeof strOrNumOrBool === "string") {
 }
 else {
     numOrBool = strOrNumOrBool; // number | boolean
->numOrBool = strOrNumOrBool : number | boolean
->                           : ^^^^^^^^^^^^^^^^
+>numOrBool = strOrNumOrBool : string | number | boolean
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >numOrBool : number | boolean
 >          : ^^^^^^^^^^^^^^^^
->strOrNumOrBool : number | boolean
->               : ^^^^^^^^^^^^^^^^
+>strOrNumOrBool : string | number | boolean
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 if (typeof strOrC === "string") {
 >typeof strOrC === "string" : boolean
@@ -156,12 +156,12 @@ if (typeof strOrC === "string") {
 }
 else {
     c = strOrC; // C
->c = strOrC : C
->           : ^
+>c = strOrC : string | C
+>           : ^^^^^^^^^^
 >c : C
 >  : ^
->strOrC : C
->       : ^
+>strOrC : string | C
+>       : ^^^^^^^^^^
 }
 
 if (typeof numOrBool === "string") {
@@ -206,8 +206,8 @@ if (typeof strOrNum !== "string") {
 >                 : ^^^^^^^
 >num : number
 >    : ^^^^^^
->strOrNum : number
->         : ^^^^^^
+>strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
 }
 else {
     str = strOrNum; // string
@@ -229,12 +229,12 @@ if (typeof strOrBool !== "string") {
 >         : ^^^^^^^^
 
     bool = strOrBool; // boolean
->bool = strOrBool : boolean
->                 : ^^^^^^^
+>bool = strOrBool : string | boolean
+>                 : ^^^^^^^^^^^^^^^^
 >bool : boolean
 >     : ^^^^^^^
->strOrBool : boolean
->          : ^^^^^^^
+>strOrBool : string | boolean
+>          : ^^^^^^^^^^^^^^^^
 }
 else {
     str = strOrBool; // string
@@ -256,12 +256,12 @@ if (typeof strOrNumOrBool !== "string") {
 >         : ^^^^^^^^
 
     numOrBool = strOrNumOrBool; // number | boolean
->numOrBool = strOrNumOrBool : number | boolean
->                           : ^^^^^^^^^^^^^^^^
+>numOrBool = strOrNumOrBool : string | number | boolean
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >numOrBool : number | boolean
 >          : ^^^^^^^^^^^^^^^^
->strOrNumOrBool : number | boolean
->               : ^^^^^^^^^^^^^^^^
+>strOrNumOrBool : string | number | boolean
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 else {
     str = strOrNumOrBool; // string
@@ -283,12 +283,12 @@ if (typeof strOrC !== "string") {
 >         : ^^^^^^^^
 
     c = strOrC; // C
->c = strOrC : C
->           : ^
+>c = strOrC : string | C
+>           : ^^^^^^^^^^
 >c : C
 >  : ^
->strOrC : C
->       : ^
+>strOrC : string | C
+>       : ^^^^^^^^^^
 }
 else {
     str = strOrC; // string

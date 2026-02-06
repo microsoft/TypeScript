@@ -1,3 +1,4 @@
+// @target: es2015
 // all expected to be errors
 
 class clodule1<T>{

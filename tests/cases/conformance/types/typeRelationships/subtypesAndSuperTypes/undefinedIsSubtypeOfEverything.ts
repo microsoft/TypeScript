@@ -1,3 +1,4 @@
+// @target: es2015
 // undefined is a subtype of every other types, no errors expected below
 
 class Base {

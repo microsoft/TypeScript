@@ -5,6 +5,7 @@ class D { }
 var v = class C extends D {};
 
 //// [classExpressionES62.js]
+"use strict";
 class D {
 }
 var v = class C extends D {

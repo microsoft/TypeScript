@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es5
 describe("my test suite", () => {
     it("should run", () => {

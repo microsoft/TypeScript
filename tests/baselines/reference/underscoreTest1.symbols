@@ -500,7 +500,7 @@ initialize();
 initialize();
 >initialize : Symbol(initialize, Decl(underscoreTest1_underscoreTests.ts, 122, 3))
 
-var notes: any[];
+var notes: any[] = [];
 >notes : Symbol(notes, Decl(underscoreTest1_underscoreTests.ts, 126, 3))
 
 var render = () => alert("rendering...");

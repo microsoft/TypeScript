@@ -25,6 +25,7 @@ declare var React: any;
 <div>&#x1F408;&#x1F415;&#128007;&#128017;</div>;
 
 //// [file.js]
+"use strict";
 React.createElement("div", null, "Dot goes here: \u00B7 &notAnEntity; ");
 React.createElement("div", null, "Be careful of \"-ed strings!");
 React.createElement("div", null, "{{braces}}");

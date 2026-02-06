@@ -1,4 +1,5 @@
-﻿// @allowJS: true
+﻿// @target: es2015
+// @allowJS: true
 // @suppressOutputPathCheck: true
 
 // @filename: 0.js

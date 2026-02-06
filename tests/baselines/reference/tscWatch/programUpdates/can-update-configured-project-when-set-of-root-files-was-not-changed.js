@@ -39,27 +39,21 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/user/username/workspace/solution/projects/project/f1.js]
-var x = 1;
+"use strict";
+let x = 1;
 
 
 //// [/user/username/workspace/solution/projects/project/f2.js]
-var y = 1;
+"use strict";
+let y = 1;
 
 
-
-PolledWatches::
-/user/username/workspace/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/workspace/solution/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/f1.ts: *new*
   {}
@@ -78,17 +72,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/f1.ts
 /user/username/workspace/solution/projects/project/f2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/f1.ts
 /user/username/workspace/solution/projects/project/f2.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/f1.ts (used version)
 /user/username/workspace/solution/projects/project/f2.ts (used version)
 
@@ -121,13 +115,19 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "out.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/user/username/workspace/solution/projects/project/out.js]
-var x = 1;
-var y = 1;
+"use strict";
+let x = 1;
+let y = 1;
 
 
 
@@ -143,14 +143,11 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/f1.ts
 /user/username/workspace/solution/projects/project/f2.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/workspace/solution/projects/project/f1.ts
-/user/username/workspace/solution/projects/project/f2.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 

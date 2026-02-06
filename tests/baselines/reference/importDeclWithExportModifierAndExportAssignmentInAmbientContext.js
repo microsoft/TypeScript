@@ -11,3 +11,4 @@ declare module "m" {
 }
 
 //// [importDeclWithExportModifierAndExportAssignmentInAmbientContext.js]
+"use strict";

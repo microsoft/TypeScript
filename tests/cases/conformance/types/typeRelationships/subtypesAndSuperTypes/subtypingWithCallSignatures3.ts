@@ -1,3 +1,4 @@
+// @target: es2015
 // checking subtype relations for function types as it relates to contextual signature instantiation
 // error cases, so function calls will all result in 'any'
 

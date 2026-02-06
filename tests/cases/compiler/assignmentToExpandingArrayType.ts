@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true
 // Fixes exponential time/space in #14628
 let x = []

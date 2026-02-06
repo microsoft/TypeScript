@@ -138,6 +138,7 @@ function* g311() { // Generator<any (implicit), void, string>
 
 
 //// [generatorReturnTypeInferenceNonStrict.js]
+"use strict";
 function* g000() {
 }
 // 'yield' iteration type inference

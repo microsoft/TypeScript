@@ -16,7 +16,7 @@ var ANY2: any[] = [1, 2];
 >2 : 2
 >  : ^
 
-var obj: () => {}
+declare var obj: () => {}
 >obj : () => {}
 >    : ^^^^^^  
 

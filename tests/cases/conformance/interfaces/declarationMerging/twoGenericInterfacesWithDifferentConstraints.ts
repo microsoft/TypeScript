@@ -1,3 +1,4 @@
+// @target: es2015
 interface A<T extends Date> {
     x: T;
 }

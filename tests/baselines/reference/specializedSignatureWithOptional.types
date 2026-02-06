@@ -4,12 +4,12 @@
 declare function f(x?: "hi"): void;
 >f : { (x?: "hi"): void; (x?: string): void; }
 >  : ^^^ ^^^    ^^^    ^^^ ^^^      ^^^    ^^^
->x : "hi"
->  : ^^^^
+>x : "hi" | undefined
+>  : ^^^^^^^^^^^^^^^^
 
 declare function f(x?: string): void;
 >f : { (x?: "hi"): void; (x?: string): void; }
 >  : ^^^ ^^^    ^^^    ^^^ ^^^      ^^^    ^^^
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 

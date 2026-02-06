@@ -7,4 +7,5 @@
 ;
 
 //// [parserSkippedTokens15.js]
+"use strict";
 ;

@@ -1,3 +1,4 @@
+// @target: es2015
 
 var namespace: number;
 var n: string;

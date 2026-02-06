@@ -19,22 +19,17 @@ namespace Moclodule {
 }
 
 //// [cloduleWithPriorInstantiatedModule.js]
+"use strict";
 // Non-ambient & instantiated module.
 var Moclodule;
 (function (Moclodule) {
     var x = 10;
 })(Moclodule || (Moclodule = {}));
-var Moclodule = /** @class */ (function () {
-    function Moclodule() {
-    }
-    return Moclodule;
-}());
+class Moclodule {
+}
 // Instantiated module.
 (function (Moclodule) {
-    var Manager = /** @class */ (function () {
-        function Manager() {
-        }
-        return Manager;
-    }());
+    class Manager {
+    }
     Moclodule.Manager = Manager;
 })(Moclodule || (Moclodule = {}));

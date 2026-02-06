@@ -40,11 +40,11 @@ declare namespace SomeConstructor3 {
 declare class SomeConstructor3 {
     x: number;
 }
-declare function SelfReference(): SelfReference;
+declare function SelfReference(): SelfReference | undefined;
 declare namespace SelfReference {
     let staticMember_2: string;
     export { staticMember_2 as staticMember };
 }
 declare class SelfReference {
-    x: number;
+    x: number | undefined;
 }

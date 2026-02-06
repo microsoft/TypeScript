@@ -15,6 +15,7 @@ typeof Symbol.toStringTag;
 +(Symbol() || 0);
 
 //// [symbolType3.js]
+"use strict";
 var s = Symbol();
 delete Symbol.iterator;
 void Symbol.toPrimitive;

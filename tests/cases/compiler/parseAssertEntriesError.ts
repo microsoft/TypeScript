@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReferences: true
 // @module: nodenext
 // @declaration: true

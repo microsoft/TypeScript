@@ -42,6 +42,7 @@ type t3 = [string, number][-1]; // undefined
 
 
 //// [indexerWithTuple.js]
+"use strict";
 var strNumTuple = ["foo", 10];
 var numTupleTuple = [10, ["bar", 20]];
 var unionTuple1 = [10, "foo"];

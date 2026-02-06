@@ -9,6 +9,7 @@ m            // this is the identifier 'm'
 { }          // this is a block body
 
 //// [asiPreventsParsingAsNamespace02.js]
+"use strict";
 var module;
 var m;
 module; // this is the identifier 'namespace'

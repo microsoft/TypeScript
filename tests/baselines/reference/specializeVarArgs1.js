@@ -25,6 +25,7 @@ a.push('Some Value');
 
 
 //// [specializeVarArgs1.js]
+"use strict";
 function observableArray() { return null; }
 var a = observableArray();
 a.push('Some Value');

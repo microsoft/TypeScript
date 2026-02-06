@@ -35,7 +35,7 @@ describe("unittests:: tsbuild:: on project with emitDeclarationOnly:: set to tru
             "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
                     incremental: true,
-                    target: "es5",
+                    target: "es2015",
                     module: "commonjs",
                     declaration: true,
                     declarationMap: true,

@@ -1,0 +1,244 @@
+//// [tests/cases/compiler/reverseMappedTypeInferenceWidening1.ts] ////
+
+=== reverseMappedTypeInferenceWidening1.ts ===
+// https://github.com/microsoft/TypeScript/issues/62720
+
+type TypeFunction<ReturnType = unknown> = (...args: any[]) => ReturnType;
+>TypeFunction : TypeFunction<ReturnType>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>args : any[]
+>     : ^^^^^
+
+type Flags = {
+>Flags : Flags
+>      : ^^^^^
+
+  [flagName: string]: {
+>flagName : string
+>         : ^^^^^^
+
+    type: TypeFunction;
+>type : TypeFunction<unknown>
+>     : ^^^^^^^^^^^^^^^^^^^^^
+
+    default?: unknown;
+>default : unknown
+>        : ^^^^^^^
+
+  };
+};
+type TypeFlag<Schemas extends Flags> = {
+>TypeFlag : TypeFlag<Schemas>
+>         : ^^^^^^^^^^^^^^^^^
+
+  [flag in keyof Schemas]: Schemas[flag] extends { type: TypeFunction<infer T> }
+>type : TypeFunction<T>
+>     : ^^^^^^^^^^^^^^^
+
+    ? T
+    : never;
+};
+
+declare function fn1<Options extends Flags>(
+>fn1 : <Options extends Flags>(options: Options) => TypeFlag<Options>
+>    : ^       ^^^^^^^^^     ^^       ^^       ^^^^^                 
+
+  options: Options,
+>options : Options
+>        : ^^^^^^^
+
+): TypeFlag<Options>;
+
+const result1 = fn1({
+>result1 : TypeFlag<{ booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1({  booleanFlag: { type: Boolean },  booleanFlagDefault: {    type: Boolean,    default: false,  },}) : TypeFlag<{ booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }>
+>                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn1 : <Options extends Flags>(options: Options) => TypeFlag<Options>
+>    : ^       ^^^^^^^^^     ^^       ^^       ^^^^^                 
+>{  booleanFlag: { type: Boolean },  booleanFlagDefault: {    type: Boolean,    default: false,  },} : { booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: false; }; }
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  booleanFlag: { type: Boolean },
+>booleanFlag : { type: BooleanConstructor; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ type: Boolean } : { type: BooleanConstructor; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : BooleanConstructor
+>     : ^^^^^^^^^^^^^^^^^^
+>Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+
+  booleanFlagDefault: {
+>booleanFlagDefault : { type: BooleanConstructor; default: false; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    type: Boolean,    default: false,  } : { type: BooleanConstructor; default: false; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: Boolean,
+>type : BooleanConstructor
+>     : ^^^^^^^^^^^^^^^^^^
+>Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+
+    default: false,
+>default : false
+>        : ^^^^^
+>false : false
+>      : ^^^^^
+
+  },
+});
+result1.booleanFlag; // boolean
+>result1.booleanFlag : boolean
+>                    : ^^^^^^^
+>result1 : TypeFlag<{ booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>booleanFlag : boolean
+>            : ^^^^^^^
+
+result1.booleanFlagDefault; // boolean
+>result1.booleanFlagDefault : boolean
+>                           : ^^^^^^^
+>result1 : TypeFlag<{ booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>booleanFlagDefault : boolean
+>                   : ^^^^^^^
+
+declare function fn2<Options extends Flags>(
+>fn2 : <Options extends Flags>(options: Readonly<Options>) => TypeFlag<Options>
+>    : ^       ^^^^^^^^^     ^^       ^^                 ^^^^^                 
+
+  options: Readonly<Options>,
+>options : Readonly<Options>
+>        : ^^^^^^^^^^^^^^^^^
+
+): TypeFlag<Options>;
+
+const result2 = fn2({
+>result2 : TypeFlag<{ booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn2({  booleanFlag: { type: Boolean },  booleanFlagDefault: {    type: Boolean,    default: false,  },}) : TypeFlag<{ booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }>
+>                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn2 : <Options extends Flags>(options: Readonly<Options>) => TypeFlag<Options>
+>    : ^       ^^^^^^^^^     ^^       ^^                 ^^^^^                 
+>{  booleanFlag: { type: Boolean },  booleanFlagDefault: {    type: Boolean,    default: false,  },} : { booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: false; }; }
+>                                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  booleanFlag: { type: Boolean },
+>booleanFlag : { type: BooleanConstructor; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ type: Boolean } : { type: BooleanConstructor; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : BooleanConstructor
+>     : ^^^^^^^^^^^^^^^^^^
+>Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+
+  booleanFlagDefault: {
+>booleanFlagDefault : { type: BooleanConstructor; default: false; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    type: Boolean,    default: false,  } : { type: BooleanConstructor; default: false; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: Boolean,
+>type : BooleanConstructor
+>     : ^^^^^^^^^^^^^^^^^^
+>Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+
+    default: false,
+>default : false
+>        : ^^^^^
+>false : false
+>      : ^^^^^
+
+  },
+});
+result2.booleanFlag; // boolean
+>result2.booleanFlag : boolean
+>                    : ^^^^^^^
+>result2 : TypeFlag<{ booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>booleanFlag : boolean
+>            : ^^^^^^^
+
+result2.booleanFlagDefault; // boolean
+>result2.booleanFlagDefault : boolean
+>                           : ^^^^^^^
+>result2 : TypeFlag<{ booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>booleanFlagDefault : boolean
+>                   : ^^^^^^^
+
+declare function fn3<Options extends Flags>(
+>fn3 : <Options extends Flags>(options: Readonly<Options>) => Options
+>    : ^       ^^^^^^^^^     ^^       ^^                 ^^^^^       
+
+  options: Readonly<Options>,
+>options : Readonly<Options>
+>        : ^^^^^^^^^^^^^^^^^
+
+): Options;
+
+const result3 = fn3({
+>result3 : { booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn3({  booleanFlag: { type: Boolean },  booleanFlagDefault: {    type: Boolean,    default: false, // no cursed EPC failure here  },}) : { booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }
+>                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn3 : <Options extends Flags>(options: Readonly<Options>) => Options
+>    : ^       ^^^^^^^^^     ^^       ^^                 ^^^^^       
+>{  booleanFlag: { type: Boolean },  booleanFlagDefault: {    type: Boolean,    default: false, // no cursed EPC failure here  },} : { booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: false; }; }
+>                                                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  booleanFlag: { type: Boolean },
+>booleanFlag : { type: BooleanConstructor; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ type: Boolean } : { type: BooleanConstructor; }
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : BooleanConstructor
+>     : ^^^^^^^^^^^^^^^^^^
+>Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+
+  booleanFlagDefault: {
+>booleanFlagDefault : { type: BooleanConstructor; default: false; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    type: Boolean,    default: false, // no cursed EPC failure here  } : { type: BooleanConstructor; default: false; }
+>                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    type: Boolean,
+>type : BooleanConstructor
+>     : ^^^^^^^^^^^^^^^^^^
+>Boolean : BooleanConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+
+    default: false, // no cursed EPC failure here
+>default : false
+>        : ^^^^^
+>false : false
+>      : ^^^^^
+
+  },
+});
+
+declare function takeType(arg: { type: unknown }): void;
+>takeType : (arg: { type: unknown; }) => void
+>         : ^   ^^                  ^^^^^    
+>arg : { type: unknown; }
+>    : ^^^^^^^^       ^^^
+>type : unknown
+>     : ^^^^^^^
+
+takeType(result3.booleanFlagDefault);
+>takeType(result3.booleanFlagDefault) : void
+>                                     : ^^^^
+>takeType : (arg: { type: unknown; }) => void
+>         : ^   ^^                  ^^^^^    
+>result3.booleanFlagDefault : { type: BooleanConstructor; default: boolean; }
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result3 : { booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>booleanFlagDefault : { type: BooleanConstructor; default: boolean; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

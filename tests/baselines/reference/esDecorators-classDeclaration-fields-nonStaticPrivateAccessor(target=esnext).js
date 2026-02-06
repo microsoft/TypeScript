@@ -9,6 +9,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-fields-nonStaticPrivateAccessor.js]
+"use strict";
 class C {
     @dec
     accessor #field1 = 0;

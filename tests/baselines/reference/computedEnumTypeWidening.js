@@ -89,56 +89,55 @@ var E;
     E[E["D"] = computed(3)] = "D";
 })(E || (E = {}));
 function f1() {
-    var c1 = E.B; // Fresh E.B
-    var v1 = c1; // E
-    var c2 = c1; // Fresh E.B
-    var v2 = c2; // E
-    var c3 = E.B; // E.B
-    var v3 = c3; // E.B
-    var c4 = c1; // E.B
-    var v4 = c4; // E.B
+    const c1 = E.B; // Fresh E.B
+    let v1 = c1; // E
+    const c2 = c1; // Fresh E.B
+    let v2 = c2; // E
+    const c3 = E.B; // E.B
+    let v3 = c3; // E.B
+    const c4 = c1; // E.B
+    let v4 = c4; // E.B
 }
 function f2(cond) {
-    var c1 = cond ? E.A : E.B; // Fresh E.A | fresh E.B
-    var c2 = c1; // E.A | E.B
-    var c3 = cond ? c1 : c2; // E.A | E.B
-    var c4 = cond ? c3 : E.C; // E.A | E.B | fresh E.C
-    var c5 = c4; // E.A | E.B | E.C
-    var v1 = c1; // E
-    var v2 = c2; // E.A | E.B
-    var v3 = c3; // E.A | E.B
-    var v4 = c4; // E
-    var v5 = c5; // E.A | E.B | E.C
+    const c1 = cond ? E.A : E.B; // Fresh E.A | fresh E.B
+    const c2 = c1; // E.A | E.B
+    const c3 = cond ? c1 : c2; // E.A | E.B
+    const c4 = cond ? c3 : E.C; // E.A | E.B | fresh E.C
+    const c5 = c4; // E.A | E.B | E.C
+    let v1 = c1; // E
+    let v2 = c2; // E.A | E.B
+    let v3 = c3; // E.A | E.B
+    let v4 = c4; // E
+    let v5 = c5; // E.A | E.B | E.C
 }
 function f3() {
-    var c1 = E.B;
-    var v1 = c1; // E
-    var c2 = E.B;
-    var v2 = c2; // E.B
-    var c3 = E.B;
-    var v3 = c3; // E.B
-    var c4 = E.B;
-    var v4 = c4; // E.B
-    var c5 = E.B;
-    var v5 = c5; // E.B
+    const c1 = E.B;
+    let v1 = c1; // E
+    const c2 = E.B;
+    let v2 = c2; // E.B
+    const c3 = E.B;
+    let v3 = c3; // E.B
+    const c4 = E.B;
+    let v4 = c4; // E.B
+    const c5 = E.B;
+    let v5 = c5; // E.B
 }
 function f4() {
-    var c1 = E2.B; // Fresh E2.B
-    var v1 = E.B; // E2
+    const c1 = E2.B; // Fresh E2.B
+    let v1 = E.B; // E2
 }
-var c1 = E.B;
-var c2 = E.B;
-var v1 = E.B;
-var v2 = E.B;
-var C = /** @class */ (function () {
-    function C() {
+const c1 = E.B;
+const c2 = E.B;
+let v1 = E.B;
+let v2 = E.B;
+class C {
+    constructor() {
         this.p1 = E.B;
         this.p2 = E.B;
         this.p3 = E.B;
         this.p4 = E.B;
     }
-    return C;
-}());
+}
 // Repro from #52531
 var MyEnum;
 (function (MyEnum) {
@@ -146,9 +145,9 @@ var MyEnum;
     MyEnum[MyEnum["B"] = 1] = "B";
     MyEnum[MyEnum["C"] = 2] = "C";
 })(MyEnum || (MyEnum = {}));
-var val1 = MyEnum.A;
+let val1 = MyEnum.A;
 val1 = MyEnum.B;
-var val2 = MyDeclaredEnum.A;
+let val2 = MyDeclaredEnum.A;
 val2 = MyDeclaredEnum.B;
 
 

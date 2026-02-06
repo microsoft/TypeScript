@@ -1,1 +1,2 @@
-﻿var v = || b;
+﻿// @target: es2015
+var v = || b;

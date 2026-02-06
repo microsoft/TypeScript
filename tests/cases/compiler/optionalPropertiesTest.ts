@@ -1,3 +1,4 @@
+// @target: es2015
 var x: {p1:number; p2?:string; p3?:{():number;};};
 
 interface IFoo
@@ -33,8 +34,8 @@ test7 = {};
 var test8: i4 = { M: 5 }
 test8 = {};
 var test9_1: i2;
-var test9_2: i1;
+declare var test9_2: i1;
 test9_1 = test9_2;
 var test10_1: i1;
-var test10_2: i2;
+declare var test10_2: i2;
 test10_1 = test10_2;

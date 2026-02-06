@@ -1,0 +1,16 @@
+file.tsx(3,32): error TS7008: Member 'div' implicitly has an 'any' type.
+file.tsx(3,37): error TS7008: Member 'span' implicitly has an 'any' type.
+
+
+==== file.tsx (2 errors) ====
+    declare namespace JSX {
+    	interface Element { }
+    	interface IntrinsicElements { div; span; }
+    	                              ~~~
+!!! error TS7008: Member 'div' implicitly has an 'any' type.
+    	                                   ~~~~
+!!! error TS7008: Member 'span' implicitly has an 'any' type.
+    }
+    
+    var x = <div><div><span><div></div></span></div></div>;
+    

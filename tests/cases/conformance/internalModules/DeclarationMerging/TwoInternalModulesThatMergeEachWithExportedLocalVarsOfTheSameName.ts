@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 //@filename: part1.ts
 export namespace A {
     export interface Point {

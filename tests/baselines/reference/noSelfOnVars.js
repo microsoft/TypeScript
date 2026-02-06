@@ -10,6 +10,7 @@ function foo() {
 
 
 //// [noSelfOnVars.js]
+"use strict";
 function foo() {
     function bar() { }
     var x = bar;

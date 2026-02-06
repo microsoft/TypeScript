@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 
 type F1 = {
     (n: number) => string; // should be : not =>

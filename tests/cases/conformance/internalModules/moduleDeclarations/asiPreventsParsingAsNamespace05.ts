@@ -1,3 +1,4 @@
+// @target: es2015
 
 let namespace = 10;
 namespace a.b {

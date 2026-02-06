@@ -27,8 +27,5 @@ type TGI = Omit<I, number>
 
 //// [staticIndexSignature5.js]
 "use strict";
-var B = /** @class */ (function () {
-    function B() {
-    }
-    return B;
-}());
+class B {
+}

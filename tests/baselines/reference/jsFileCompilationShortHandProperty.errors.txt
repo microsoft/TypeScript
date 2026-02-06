@@ -1,0 +1,14 @@
+error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== a.js (0 errors) ====
+    function foo() {
+        var a = 10;
+        var b = "Hello";
+        return {
+            a,
+            b
+        };
+    }
+    

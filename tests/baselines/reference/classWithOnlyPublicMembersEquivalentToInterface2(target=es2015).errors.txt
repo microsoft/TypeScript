@@ -1,0 +1,39 @@
+classWithOnlyPublicMembersEquivalentToInterface2.ts(4,12): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+classWithOnlyPublicMembersEquivalentToInterface2.ts(5,35): error TS2322: Type 'null' is not assignable to type 'number'.
+classWithOnlyPublicMembersEquivalentToInterface2.ts(26,5): error TS2454: Variable 'i' is used before being assigned.
+
+
+==== classWithOnlyPublicMembersEquivalentToInterface2.ts (3 errors) ====
+    // no errors expected
+    
+    class C {
+        public x: string;
+               ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+        public y(a: number): number { return null; }
+                                      ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'number'.
+        public get z() { return 1; }
+        public set z(v) { }
+        [x: string]: Object;
+        [x: number]: Object;
+        0: number;
+    
+        public static foo: string; // doesn't effect equivalence
+    }
+    
+    interface I {
+        x: string;
+        y(b: number): number;
+        z: number;
+        [x: string]: Object;
+        [x: number]: Object;
+        0: number;
+    }
+    
+    var c: C;
+    var i: I;
+    c = i;
+        ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    i = c;

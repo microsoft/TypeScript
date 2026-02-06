@@ -22,10 +22,10 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 116
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 121
 { "private": true }
 
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 118
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 123
 {
   "entries": {}
 }
@@ -139,7 +139,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 19
+//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 20
 
 
 PolledWatches::
@@ -152,9 +152,9 @@ PolledWatches::
 
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
-  {"inode":116}
+  {"inode":121}
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
-  {"inode":19}
+  {"inode":20}
 
 FsWatchesRecursive::
 /home/src/Library/Caches/typescript/node_modules: *new*
@@ -240,8 +240,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] Skipping watcher creation at /bower_components:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Skipping watcher creation at /node_modules:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["undici-types"]
 TI:: [hh:mm:ss:mss] 'undici-types':: Entry for package 'undici-types' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings

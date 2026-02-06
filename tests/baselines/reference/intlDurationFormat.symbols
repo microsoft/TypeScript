@@ -1,0 +1,24 @@
+//// [tests/cases/conformance/es2025/intlDurationFormat.ts] ////
+
+=== intlDurationFormat.ts ===
+new Intl.DurationFormat('en').format({
+>new Intl.DurationFormat('en').format : Symbol(Intl.DurationFormat.format, Decl(lib.es2025.intl.d.ts, --, --))
+>Intl.DurationFormat : Symbol(Intl.DurationFormat, Decl(lib.es2025.intl.d.ts, --, --), Decl(lib.es2025.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 6 more)
+>DurationFormat : Symbol(Intl.DurationFormat, Decl(lib.es2025.intl.d.ts, --, --), Decl(lib.es2025.intl.d.ts, --, --))
+>format : Symbol(Intl.DurationFormat.format, Decl(lib.es2025.intl.d.ts, --, --))
+
+  years: 1,
+>years : Symbol(years, Decl(intlDurationFormat.ts, 0, 38))
+
+  hours: 20,
+>hours : Symbol(hours, Decl(intlDurationFormat.ts, 1, 11))
+
+  minutes: 15,
+>minutes : Symbol(minutes, Decl(intlDurationFormat.ts, 2, 12))
+
+  seconds: 35
+>seconds : Symbol(seconds, Decl(intlDurationFormat.ts, 3, 14))
+
+});
+

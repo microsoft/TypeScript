@@ -48,22 +48,29 @@ Output::
 Module resolution kind is not specified, using 'Classic'.
 File '/home/src/workspaces/solution/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/home/src/workspaces/solution/child/child2.ts'. ========
+[96mchild/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../childResult.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mchild/tsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m4[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 child/child2.ts
   Imported via "../child/child2" from file 'child/child.ts'
   Matched by default include pattern '**/*'
 child/child.ts
   Matched by default include pattern '**/*'
 
-Found 1 error.
+Found 2 errors.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/solution/childResult.js]
 define("child2", ["require", "exports"], function (require, exports) {
@@ -122,17 +129,22 @@ File '/home/src/workspaces/solution/child/child2.d.ts' does not exist.
 File '/home/src/workspaces/solution/child/child2.js' does not exist.
 File '/home/src/workspaces/solution/child/child2.jsx' does not exist.
 ======== Module name '../child/child2' was not resolved. ========
+[96mchild/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../childResult.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mchild/tsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m4[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 child/child.ts
   Matched by default include pattern '**/*'
 
-Found 1 error.
+Found 2 errors.
 
 
 

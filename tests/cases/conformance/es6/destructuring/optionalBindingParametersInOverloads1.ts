@@ -1,4 +1,5 @@
-﻿
+﻿// @target: es2015
+
 function foo([x, y, z] ?: [string, number, boolean]);
 function foo(...rest: any[]) {
 

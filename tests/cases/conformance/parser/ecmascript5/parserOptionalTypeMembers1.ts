@@ -1,3 +1,4 @@
+// @target: es2015
 interface PropertyDescriptor2 {
     configurable?: boolean;
     enumerable?: boolean;

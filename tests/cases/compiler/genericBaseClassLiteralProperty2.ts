@@ -1,3 +1,4 @@
+// @target: es2015
 class CollectionItem2 { }
 
 class BaseCollection2<TItem extends CollectionItem2> {

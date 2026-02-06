@@ -1,3 +1,4 @@
+// @target: es2015
 interface FileSystem {
   read: number;
 }
@@ -13,8 +14,8 @@ class WorkerFS implements FileSystem {
 
 interface Alpha { x: string; }
 interface Beta { y: number; }
-var x: Alpha;
-var y: Beta;
+declare var x: Alpha;
+declare var y: Beta;
 
 // Only one of these errors should be large
 x = y;

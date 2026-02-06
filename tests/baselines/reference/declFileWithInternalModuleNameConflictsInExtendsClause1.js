@@ -13,6 +13,7 @@ namespace X.A.B.C {
 }
 
 //// [declFileWithInternalModuleNameConflictsInExtendsClause1.js]
+"use strict";
 var X;
 (function (X) {
     var A;
@@ -21,11 +22,8 @@ var X;
         (function (B) {
             var C;
             (function (C) {
-                var W = /** @class */ (function () {
-                    function W() {
-                    }
-                    return W;
-                }());
+                class W {
+                }
                 C.W = W;
             })(C = B.C || (B.C = {}));
         })(B = A.B || (A.B = {}));

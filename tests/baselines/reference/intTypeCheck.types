@@ -267,7 +267,7 @@ var anyVar: any;
 //
 // Property signatures
 //
-var obj0: i1;
+declare var obj0: i1;
 >obj0 : i1
 >     : ^^
 
@@ -382,7 +382,7 @@ var obj10: i1 = new {};
 //
 // Call signatures
 //
-var obj11: i2;
+declare var obj11: i2;
 >obj11 : i2
 >      : ^^
 
@@ -464,7 +464,7 @@ var obj21: i2 = new {};
 //
 // Construct Signatures
 //
-var obj22: i3;
+declare var obj22: i3;
 >obj22 : i3
 >      : ^^
 
@@ -544,7 +544,7 @@ var obj32: i3 = new {};
 //
 // Index Signatures
 //
-var obj33: i4;
+declare var obj33: i4;
 >obj33 : i4
 >      : ^^
 
@@ -624,7 +624,7 @@ var obj43: i4 = new {};
 //
 // Interface Derived I1
 //
-var obj44: i5;
+declare var obj44: i5;
 >obj44 : i5
 >      : ^^
 
@@ -704,7 +704,7 @@ var obj54: i5 = new {};
 //
 // Interface Derived I2
 //
-var obj55: i6;
+declare var obj55: i6;
 >obj55 : i6
 >      : ^^
 
@@ -784,7 +784,7 @@ var obj65: i6 = new {};
 //
 // Interface Derived I3
 //
-var obj66: i7;
+declare var obj66: i7;
 >obj66 : i7
 >      : ^^
 
@@ -866,7 +866,7 @@ var obj76: i7 = new {};
 //
 // Interface Derived I4
 //
-var obj77: i8;
+declare var obj77: i8;
 >obj77 : i8
 >      : ^^
 

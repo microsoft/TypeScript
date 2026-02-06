@@ -19,6 +19,7 @@ namespace ObjectLiteral {
 
 
 //// [this_inside-object-literal-getters-and-setters.js]
+"use strict";
 var ObjectLiteral;
 (function (ObjectLiteral) {
     var ThisInObjectLiteral = {

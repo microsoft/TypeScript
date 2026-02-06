@@ -6,5 +6,6 @@ function foo() { return null; }
 
 
 //// [ambientClassOverloadForFunction.js]
+"use strict";
 ;
 function foo() { return null; }

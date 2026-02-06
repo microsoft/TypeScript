@@ -1,3 +1,4 @@
+// @target: es2015
 // @moduleResolution: bundler
 // @module: commonjs
 // @baseUrl: c:/root

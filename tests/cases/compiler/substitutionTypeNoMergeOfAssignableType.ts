@@ -1,3 +1,4 @@
+// @target: es2015
 interface Entry {
     comment?: string;
  }

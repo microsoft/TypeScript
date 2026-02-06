@@ -18,6 +18,7 @@ a;
 
 
 //// [checkJsdocTypeTagOnExportAssignment6.js]
+"use strict";
 //// [a.js]
 "use strict";
 /**
@@ -34,5 +35,5 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var a_1 = __importDefault(require("./a"));
+const a_1 = __importDefault(require("./a"));
 a_1.default;

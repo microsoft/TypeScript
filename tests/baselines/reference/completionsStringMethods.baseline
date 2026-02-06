@@ -1120,7 +1120,7 @@
                   "text": "searchValue",
                   "kind": "linkName",
                   "target": {
-                    "fileName": "lib.d.ts",
+                    "fileName": "/home/src/tslibs/TS/Lib/lib.es5.d.ts",
                     "textSpan": {
                       "start": "--",
                       "length": "--"
@@ -1143,7 +1143,7 @@
                   "text": "searchValue",
                   "kind": "linkName",
                   "target": {
-                    "fileName": "lib.d.ts",
+                    "fileName": "/home/src/tslibs/TS/Lib/lib.es5.d.ts",
                     "textSpan": {
                       "start": "--",
                       "length": "--"

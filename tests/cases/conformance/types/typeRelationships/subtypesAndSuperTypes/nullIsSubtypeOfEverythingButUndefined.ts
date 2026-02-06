@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // null is a subtype of any other types except undefined
 
 var r0 = true ? null : null;

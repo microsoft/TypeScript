@@ -16,6 +16,7 @@ class SymbolIterator {
 var array = [...new SymbolIterator];
 
 //// [iteratorSpreadInArray9.js]
+"use strict";
 class SymbolIterator {
     next() {
         return {

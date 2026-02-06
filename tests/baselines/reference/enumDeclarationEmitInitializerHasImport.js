@@ -23,7 +23,7 @@ var Enum;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.value = void 0;
-var provider = require("./provider");
+const provider = require("./provider");
 exports.value = provider.Enum.Value1;
 
 

@@ -46,6 +46,7 @@ M.x.toString();
 
 
 //// [constDeclarations-access4.js]
+"use strict";
 // Errors
 M.x = 1;
 M.x += 2;

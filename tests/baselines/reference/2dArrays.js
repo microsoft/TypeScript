@@ -5,12 +5,12 @@ class Cell {
 }
 
 class Ship {
-    isSunk: boolean;
+    isSunk: boolean = false;
 }
 
 class Board {
-    ships: Ship[];
-    cells: Cell[];
+    ships: Ship[] = [];
+    cells: Cell[] = [];
 
     private allShipsSunk() {
         return this.ships.every(function (val) { return val.isSunk; });
@@ -18,21 +18,20 @@ class Board {
 }
 
 //// [2dArrays.js]
-var Cell = /** @class */ (function () {
-    function Cell() {
+"use strict";
+class Cell {
+}
+class Ship {
+    constructor() {
+        this.isSunk = false;
     }
-    return Cell;
-}());
-var Ship = /** @class */ (function () {
-    function Ship() {
+}
+class Board {
+    constructor() {
+        this.ships = [];
+        this.cells = [];
     }
-    return Ship;
-}());
-var Board = /** @class */ (function () {
-    function Board() {
-    }
-    Board.prototype.allShipsSunk = function () {
+    allShipsSunk() {
         return this.ships.every(function (val) { return val.isSunk; });
-    };
-    return Board;
-}());
+    }
+}

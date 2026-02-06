@@ -18,8 +18,8 @@ assignFromNumberInterface2.ts(25,1): error TS2322: Type 'NotNumber' is not assig
     }
     
     var x = 1;
-    var a: Number;
-    var b: NotNumber;
+    declare var a: Number;
+    declare var b: NotNumber;
     
     a = x; 
     a = b; 

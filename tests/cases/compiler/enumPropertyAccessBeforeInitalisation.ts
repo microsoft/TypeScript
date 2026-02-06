@@ -1,3 +1,4 @@
+// @target: es2015
 enum E {
     A = A,
     B = E.B,

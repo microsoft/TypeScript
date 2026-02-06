@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: file1.ts
 interface Q<T> {
     each(action: (item: T, index: number) => void): void;

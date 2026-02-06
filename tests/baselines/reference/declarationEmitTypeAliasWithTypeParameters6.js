@@ -12,6 +12,7 @@ function foo() {
 
 
 //// [declarationEmitTypeAliasWithTypeParameters6.js]
+"use strict";
 function foo() {
     return {};
 }

@@ -26,6 +26,7 @@ if (c !== undefined) {
 }
 
 //// [discriminantsAndNullOrUndefined.js]
+"use strict";
 // Repro from #10228
 function never(_) {
     throw new Error();

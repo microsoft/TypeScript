@@ -7,6 +7,7 @@ function foo():any { if (true) return ""; else return 0;}
 
 
 //// [functionOverloads12.js]
+"use strict";
 function foo() { if (true)
     return "";
 else

@@ -6,12 +6,12 @@ class C1 {
 >C1 : C1
 >   : ^^
 
-    property1: string;
+    property1!: string;
 >property1 : string
 >          : ^^^^^^
 }
 
-let var1: C1 | number;
+declare let var1: C1 | number;
 >var1 : number | C1
 >     : ^^^^^^^^^^^
 
@@ -484,8 +484,8 @@ else {
 // Repro from #37660
 
 function foo(instance: Function | object) {
->foo : (instance: Function | object) => number
->    : ^        ^^                 ^^^^^^^^^^^
+>foo : (instance: Function | object) => number | undefined
+>    : ^        ^^                 ^^^^^^^^^^^^^^^^^^^^^^^
 >instance : object | Function
 >         : ^^^^^^^^^^^^^^^^^
 

@@ -1,3 +1,4 @@
+// @target: es2015
 namespace Events {
     export interface ListenerCallback {
         (value:any):void;

@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: exportSpecifierReferencingOuterDeclaration2_A.ts
 declare namespace X { export interface bar { } }

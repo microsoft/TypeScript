@@ -7,10 +7,11 @@ let z: E | boolean = n;
 
 
 //// [numberAssignableToEnumInsideUnion.js]
+"use strict";
 var E;
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
 })(E || (E = {}));
-var n;
-var z = n;
+let n;
+let z = n;

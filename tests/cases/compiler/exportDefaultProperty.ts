@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // This test is just like exportEqualsProperty, but with `export default`.
 
 // @Filename: declarations.d.ts

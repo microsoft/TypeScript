@@ -23,6 +23,7 @@
     var rr_v = o.name.r;  // should be 'string'
 
 //// [genericInference2.js]
+"use strict";
 var o = {
     name: ko.observable("Bob"),
     age: ko.observable(37)

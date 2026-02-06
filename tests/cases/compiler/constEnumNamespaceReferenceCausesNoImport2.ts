@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @preserveConstEnums: true
 // @noTypesAndSymbols: true
 

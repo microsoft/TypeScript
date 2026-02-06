@@ -1,3 +1,4 @@
+// @target: es2015
 // @noEmit: true
 // @allowJs: true
 // @filename: spellingUncheckedJS.js

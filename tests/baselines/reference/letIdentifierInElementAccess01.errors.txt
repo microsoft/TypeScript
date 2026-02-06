@@ -1,0 +1,11 @@
+letIdentifierInElementAccess01.ts(1,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+letIdentifierInElementAccess01.ts(2,2): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+
+
+==== letIdentifierInElementAccess01.ts (2 errors) ====
+    var let: any = {};
+        ~~~
+!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+    (let[0] = 100);
+     ~~~
+!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.

@@ -66,14 +66,6 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferred
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/c/f1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/d 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/d 0 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/d/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/d/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/c/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
@@ -108,24 +100,16 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project/c/d/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/project/c/d/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project/c/d/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/c/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/project/c/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project/c/tsconfig.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -394,34 +378,6 @@ Info seq  [hh:mm:ss:mss] directoryExists:: [
   {
     "key": "/node_modules",
     "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/d/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/node_modules/@types",
-    "count": 1
   }
 ]
 Info seq  [hh:mm:ss:mss] getDirectories:: []
@@ -480,34 +436,6 @@ Info seq  [hh:mm:ss:mss] directoryExists:: [
   {
     "key": "/user/username/projects/project/c",
     "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/d/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/node_modules/@types",
-    "count": 1
   }
 ]
 Info seq  [hh:mm:ss:mss] getDirectories:: []
@@ -516,24 +444,16 @@ Info seq  [hh:mm:ss:mss] readDirectory:: []
 Before request
 
 PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/c/d/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/c/d/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/c/d/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/c/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/c/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/c/tsconfig.json:
   {"pollingInterval":2000}
 /user/username/projects/project/jsconfig.json:
   {"pollingInterval":2000}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json:
   {"pollingInterval":2000}
 
@@ -623,34 +543,6 @@ Info seq  [hh:mm:ss:mss] directoryExists:: [
   },
   {
     "key": "/user/username/projects/project/c",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/d/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/c/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/project/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/projects/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/username/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/user/node_modules/@types",
-    "count": 1
-  },
-  {
-    "key": "/node_modules/@types",
     "count": 1
   }
 ]

@@ -1,9 +1,12 @@
+FunctionDeclaration6.ts(2,14): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
 FunctionDeclaration6.ts(3,14): error TS2389: Function implementation name must be 'foo'.
 
 
-==== FunctionDeclaration6.ts (1 errors) ====
+==== FunctionDeclaration6.ts (2 errors) ====
     {
         function foo();
+                 ~~~
+!!! error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
         function bar() { }
                  ~~~
 !!! error TS2389: Function implementation name must be 'foo'.

@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // moduleSuffixes has three entries, and the last one is blank. Module resolution should match on the blank suffix.
 
 // @filename: /tsconfig.json

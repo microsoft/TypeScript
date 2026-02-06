@@ -7,9 +7,6 @@ export function foo() {
 
 
 //// [parserModifierOnStatementInBlock1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = foo;
-function foo() {
+export function foo() {
     export var x = this;
 }

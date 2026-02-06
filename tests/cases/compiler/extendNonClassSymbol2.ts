@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 function Foo() {
    this.x = 1;
 }

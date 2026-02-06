@@ -12,6 +12,7 @@ Foo.m`test`;
 
 
 //// [thisTypeInTaggedTemplateCall.js]
+"use strict";
 class Foo {
     static m(strings) {
         return new this();

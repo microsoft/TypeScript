@@ -1,3 +1,4 @@
+// @target: es2015
 // @experimentalDecorators: true
 declare function decorator(x: string): any;
 

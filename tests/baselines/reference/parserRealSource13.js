@@ -149,6 +149,7 @@ namespace TypeScript.AstWalkerWithDetailCallback {
 }
 
 //// [parserRealSource13.js]
+"use strict";
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />
@@ -157,11 +158,11 @@ var TypeScript;
     var AstWalkerWithDetailCallback;
     (function (AstWalkerWithDetailCallback) {
         function walk(script, callback) {
-            var pre = function (cur, parent) {
+            var pre = (cur, parent) => {
                 walker.options.goChildren = AstWalkerCallback(true, cur, callback);
                 return cur;
             };
-            var post = function (cur, parent) {
+            var post = (cur, parent) => {
                 AstWalkerCallback(false, cur, callback);
                 return cur;
             };

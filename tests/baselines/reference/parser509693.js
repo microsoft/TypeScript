@@ -4,5 +4,6 @@
 if (!module.exports) module.exports = "";
 
 //// [parser509693.js]
+"use strict";
 if (!module.exports)
     module.exports = "";

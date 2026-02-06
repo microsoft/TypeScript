@@ -1,3 +1,4 @@
+// @target: es2015
 
 function Foo():Foo; // error
 function Foo(s:string):Foo; // error

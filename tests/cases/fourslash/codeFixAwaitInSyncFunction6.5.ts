@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 ////const f = promise => {
 ////    await promise;
 ////}

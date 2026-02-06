@@ -1,3 +1,4 @@
+// @target: es2015
 // Enum with only constant members across 2 declarations with the same root module
 // Enum with initializer in all declarations with constant members with the same root module
 namespace M1 {

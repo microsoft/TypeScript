@@ -1,3 +1,4 @@
+// @target: es2015
 function f(onethree: 1 | 3, two: 2) {
     const t = true;
     const f = false;

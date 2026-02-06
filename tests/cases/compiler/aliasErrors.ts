@@ -1,3 +1,4 @@
+// @target: es2015
 namespace foo {    
     export class Provide {
     }

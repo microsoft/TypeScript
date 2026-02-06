@@ -15,6 +15,7 @@ var y = A.y;
 
 
 //// [ModuleWithExportedAndNonExportedVariables.js]
+"use strict";
 var A;
 (function (A) {
     A.x = 'hello world';

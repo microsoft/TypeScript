@@ -1,3 +1,4 @@
+// @target: es2015
 class Base {
     public static x: string;
     public static fn(): string {

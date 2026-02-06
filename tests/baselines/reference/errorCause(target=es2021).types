@@ -184,8 +184,8 @@ new AggregateError([], "foo", { cause: new Error("bar") });
 >                                                           : ^^^^^^^^^^^^^^
 >AggregateError : AggregateErrorConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >"foo" : "foo"
 >      : ^^^^^
 >{ cause: new Error("bar") } : { cause: Error; }

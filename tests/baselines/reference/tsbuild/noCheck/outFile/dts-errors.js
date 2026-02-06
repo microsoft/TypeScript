@@ -54,24 +54,29 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
-Found 2 errors.
+Found 3 errors.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/outFile.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
-    exports.a = /** @class */ (function () {
-        function class_1() {
-            this.p = 10;
-        }
-        return class_1;
-    }());
+    const a = class {
+        p = 10;
+    };
+    exports.a = a;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -111,7 +116,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -149,10 +154,15 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
-Found 2 errors.
+Found 3 errors.
 
 
 
@@ -174,7 +184,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -205,8 +215,13 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error.
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors.
 
 
 
@@ -251,7 +266,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -295,8 +310,13 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error.
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors.
 
 
 
@@ -330,7 +350,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -358,8 +378,13 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error.
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors.
 
 
 
@@ -381,7 +406,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -438,10 +463,15 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
-Found 2 errors.
+Found 3 errors.
 
 
 
@@ -450,12 +480,10 @@ define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
-    exports.a = /** @class */ (function () {
-        function class_1() {
-            this.p = 10;
-        }
-        return class_1;
-    }());
+    const a = class {
+        p = 10;
+    };
+    exports.a = a;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -496,7 +524,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -550,10 +578,15 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
-Found 2 errors.
+Found 3 errors.
 
 
 
@@ -587,7 +620,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -618,8 +651,13 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error.
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors.
 
 
 
@@ -669,7 +707,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -697,8 +735,13 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error.
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors.
 
 
 
@@ -732,7 +775,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 
@@ -763,8 +806,13 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error.
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors.
 
 
 
@@ -831,7 +879,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -873,10 +921,15 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Updating unchanged output timestamps of project '/home/src/workspaces/project/tsconfig.json'...
 
 
-Found 2 errors.
+Found 3 errors.
 
 
 
@@ -885,12 +938,10 @@ define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
-    exports.a = /** @class */ (function () {
-        function class_1() {
-            this.p = 10;
-        }
-        return class_1;
-    }());
+    const a = class {
+        p = 10;
+    };
+    exports.a = a;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -939,7 +990,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -971,8 +1022,13 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error.
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors.
 
 
 
@@ -1016,7 +1072,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1045,8 +1101,13 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error.
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors.
 
 
 
@@ -1082,7 +1143,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts
@@ -1127,8 +1188,13 @@ Output::
 [7m4[0m     "module": "amd",
 [7m [0m [91m              ~~~~~[0m
 
+[96mtsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-Found 1 error.
+[7m5[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 2 errors.
 
 
 
@@ -1151,7 +1217,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/a.ts
 /home/src/workspaces/project/b.ts
 /home/src/workspaces/project/c.ts

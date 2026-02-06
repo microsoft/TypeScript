@@ -1,3 +1,4 @@
+// @target: es5, es2015
 //@sourcemap: true
 //@downlevelIteration: true
 for (const {x: a = 0, y: b = 1} of [2, 3]) {

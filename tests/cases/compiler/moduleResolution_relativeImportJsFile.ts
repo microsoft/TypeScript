@@ -1,3 +1,6 @@
+// @module: commonjs
+// @target: es2015
+// @strict: false
 // @noImplicitReferences: true
 
 // @Filename: /src/b.js

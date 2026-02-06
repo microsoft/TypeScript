@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // moduleSuffixes has one entry and there's a matching package with a specific path.
 // @fullEmitPaths: true
 // @filename: /tsconfig.json

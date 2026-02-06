@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////declare const fnTest: undefined | ((str: string, num: number) => void);
 ////fnTest?.(/*1*/);
 

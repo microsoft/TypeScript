@@ -1,3 +1,4 @@
+// @target: es2015
 interface A {
     subType: "b";
     type: "a";

@@ -5,4 +5,5 @@ function A<X, X>() { }
 
 
 //// [duplicateTypeParameters1.js]
+"use strict";
 function A() { }

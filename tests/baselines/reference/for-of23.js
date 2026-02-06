@@ -19,6 +19,7 @@ for (const v of new FooIterator) {
 }
 
 //// [for-of23.js]
+"use strict";
 class Foo {
 }
 class FooIterator {

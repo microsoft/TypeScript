@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @lib: es2015
 // @declaration: true
 // @filename: Types.ts

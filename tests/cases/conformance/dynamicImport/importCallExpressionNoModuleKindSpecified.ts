@@ -1,4 +1,6 @@
-﻿// @lib: es5
+﻿// @target: es2015
+// @module: commonjs
+// @lib: es5
 // @filename: 0.ts
 export class B {
     print() { return "I am B"}

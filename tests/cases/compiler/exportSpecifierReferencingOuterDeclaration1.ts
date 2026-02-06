@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace X { export interface bar { } }
 declare module "m" {
     export { X };

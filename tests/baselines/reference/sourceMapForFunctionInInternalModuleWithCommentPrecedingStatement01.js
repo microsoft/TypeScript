@@ -9,6 +9,7 @@ namespace Q {
 }
 
 //// [sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.js]
+"use strict";
 var Q;
 (function (Q) {
     function P() {

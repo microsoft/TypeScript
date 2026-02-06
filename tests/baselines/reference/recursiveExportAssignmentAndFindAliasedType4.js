@@ -15,15 +15,12 @@ export var b: ClassB; // This should result in type ClassB
 
 //// [recursiveExportAssignmentAndFindAliasedType4_moduleC.js]
 "use strict";
-var self = require("./recursiveExportAssignmentAndFindAliasedType4_moduleC");
+const self = require("./recursiveExportAssignmentAndFindAliasedType4_moduleC");
 module.exports = self;
 //// [recursiveExportAssignmentAndFindAliasedType4_moduleB.js]
 "use strict";
-var ClassB = /** @class */ (function () {
-    function ClassB() {
-    }
-    return ClassB;
-}());
+class ClassB {
+}
 module.exports = ClassB;
 //// [recursiveExportAssignmentAndFindAliasedType4_moduleA.js]
 "use strict";

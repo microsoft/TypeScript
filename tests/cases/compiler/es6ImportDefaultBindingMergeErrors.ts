@@ -1,5 +1,5 @@
 // @module: commonjs
-// @target: ES5
+// @target: ES5, ES2015
 
 // @filename: es6ImportDefaultBindingMergeErrors_0.ts
 var a = 10;

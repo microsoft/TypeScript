@@ -1,3 +1,4 @@
+// @target: es2015
 // Tests that types are marked as used, even if used in places that don't accept type arguments.
 
 // @noUnusedLocals: true

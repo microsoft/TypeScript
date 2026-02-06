@@ -1,0 +1,10 @@
+//// [tests/cases/conformance/statements/for-ofStatements/ES3For-ofTypeCheck2.ts] ////
+
+//// [ES3For-ofTypeCheck2.ts]
+for (var v of [true]) { }
+
+//// [ES3For-ofTypeCheck2.js]
+"use strict";
+for (var _i = 0, _a = [true]; _i < _a.length; _i++) {
+    var v = _a[_i];
+}

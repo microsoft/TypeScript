@@ -20,5 +20,5 @@ module.exports = 10;
 //// [out/projects/file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var f = require("f"); // should work to f.ts
-var fnumber = f;
+const f = require("f"); // should work to f.ts
+let fnumber = f;

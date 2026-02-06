@@ -33,7 +33,7 @@
 //// export const tomato = 4;
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["a.ts", "b.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["a.ts", "b.ts"] }
 
 verify.pasteEdits({
     args: {

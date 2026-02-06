@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: system,commonjs
 // @jsx: react,react-jsx,react-jsxdev,preserve
 // @moduleDetection: legacy,auto,force

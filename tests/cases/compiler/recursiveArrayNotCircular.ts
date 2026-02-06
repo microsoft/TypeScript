@@ -1,3 +1,4 @@
+// @target: es2015
 type Action<T, P> = P extends void ? { type : T } : { type: T, payload: P }
 
 enum ActionType {

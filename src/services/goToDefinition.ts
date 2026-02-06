@@ -6,6 +6,7 @@ import {
     CallLikeExpression,
     canHaveSymbol,
     concatenate,
+    ContextFlags,
     createTextSpan,
     createTextSpanFromBounds,
     createTextSpanFromNode,
@@ -72,6 +73,8 @@ import {
     isNameOfFunctionDeclaration,
     isNewExpressionTarget,
     isObjectBindingPattern,
+    isObjectLiteralElementLike,
+    isObjectLiteralExpression,
     isPropertyName,
     isRightSideOfPropertyAccess,
     isStaticModifier,
@@ -312,7 +315,17 @@ function getDefinitionFromObjectLiteralElement(typeChecker: TypeChecker, node: N
     if (element) {
         const contextualType = element && typeChecker.getContextualType(element.parent);
         if (contextualType) {
-            return flatMap(getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false), propertySymbol => getDefinitionFromSymbol(typeChecker, propertySymbol, node));
+            let properties = getPropertySymbolsFromContextualType(element, typeChecker, contextualType, /*unionSymbolOk*/ false);
+            if (some(properties, p => !!(p.valueDeclaration && isObjectLiteralExpression(p.valueDeclaration.parent) && isObjectLiteralElementLike(p.valueDeclaration) && p.valueDeclaration.name === node))) {
+                const withoutNodeInferencesType = typeChecker.getContextualType(element.parent, ContextFlags.IgnoreNodeInferences);
+                if (withoutNodeInferencesType) {
+                    const withoutNodeInferencesProperties = getPropertySymbolsFromContextualType(element, typeChecker, withoutNodeInferencesType, /*unionSymbolOk*/ false);
+                    if (withoutNodeInferencesProperties.length) {
+                        properties = withoutNodeInferencesProperties;
+                    }
+                }
+            }
+            return flatMap(properties, propertySymbol => getDefinitionFromSymbol(typeChecker, propertySymbol, node));
         }
     }
     return emptyArray;

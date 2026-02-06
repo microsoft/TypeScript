@@ -44,12 +44,12 @@ export default React.createClass({
 >      : ^^^^^^^^^^^^^^^^^^^^^^
 >createClass : (spec: any) => import("react").ClassicComponentClass
 >            : ^    ^^   ^^^^^       ^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^
->{  render() {    return (      null    );  }} : { render(): any; }
->                                              : ^^^^^^^^^^^^^^^^^^
+>{  render() {    return (      null    );  }} : { render(): null; }
+>                                              : ^^^^^^^^^^^^^^^^^^^
 
   render() {
->render : () => any
->       : ^^^^^^^^^
+>render : () => null
+>       : ^^^^^^^^^^
 
     return (
 >(      null    ) : null
