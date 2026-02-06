@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/declarationEmitSymbolPropertyKey.ts] ////
+
+=== node_modules/test-pkg/index.d.ts ===
+declare const lostSymbol: unique symbol;
+>lostSymbol : Symbol(lostSymbol, Decl(index.d.ts, 0, 13), Decl(index.d.ts, 0, 40))
+
+type lostSymbol = typeof lostSymbol;
+>lostSymbol : Symbol(lostSymbol, Decl(index.d.ts, 0, 13), Decl(index.d.ts, 0, 40))
+>lostSymbol : Symbol(lostSymbol, Decl(index.d.ts, 0, 13), Decl(index.d.ts, 0, 40))
+
+type SomeGeneric<T> = {
+>SomeGeneric : Symbol(SomeGeneric, Decl(index.d.ts, 1, 36))
+>T : Symbol(T, Decl(index.d.ts, 3, 17))
+
+    [lostSymbol]: T;
+>[lostSymbol] : Symbol([lostSymbol], Decl(index.d.ts, 3, 23))
+>lostSymbol : Symbol(lostSymbol, Decl(index.d.ts, 0, 13), Decl(index.d.ts, 0, 40))
+>T : Symbol(T, Decl(index.d.ts, 3, 17))
+
+};
+
+declare function fn(): SomeGeneric<unknown>;
+>fn : Symbol(fn, Decl(index.d.ts, 5, 2))
+>SomeGeneric : Symbol(SomeGeneric, Decl(index.d.ts, 1, 36))
+
+export {
+    lostSymbol,
+>lostSymbol : Symbol(lostSymbol, Decl(index.d.ts, 9, 8))
+
+    fn
+>fn : Symbol(fn, Decl(index.d.ts, 10, 15))
+
+};
+
+=== index.ts ===
+import { fn } from 'test-pkg';
+>fn : Symbol(fn, Decl(index.ts, 0, 8))
+
+export const value = fn();
+>value : Symbol(value, Decl(index.ts, 1, 12))
+>fn : Symbol(fn, Decl(index.ts, 0, 8))
+

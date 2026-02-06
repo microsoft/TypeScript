@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/declarationEmitSymbolPropertyKey.ts] ////
+
+=== node_modules/test-pkg/index.d.ts ===
+declare const lostSymbol: unique symbol;
+>lostSymbol : unique symbol
+>           : ^^^^^^^^^^^^^
+
+type lostSymbol = typeof lostSymbol;
+>lostSymbol : unique symbol
+>           : ^^^^^^^^^^^^^
+>lostSymbol : unique symbol
+>           : ^^^^^^^^^^^^^
+
+type SomeGeneric<T> = {
+>SomeGeneric : SomeGeneric<T>
+>            : ^^^^^^^^^^^^^^
+
+    [lostSymbol]: T;
+>[lostSymbol] : T
+>             : ^
+>lostSymbol : unique symbol
+>           : ^^^^^^^^^^^^^
+
+};
+
+declare function fn(): SomeGeneric<unknown>;
+>fn : () => SomeGeneric<unknown>
+>   : ^^^^^^                    
+
+export {
+    lostSymbol,
+>lostSymbol : unique symbol
+>           : ^^^^^^^^^^^^^
+
+    fn
+>fn : () => SomeGeneric<unknown>
+>   : ^^^^^^                    
+
+};
+
+=== index.ts ===
+import { fn } from 'test-pkg';
+>fn : () => { [lostSymbol]: unknown; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export const value = fn();
+>value : { [lostSymbol]: unknown; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn() : { [lostSymbol]: unknown; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fn : () => { [lostSymbol]: unknown; }
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

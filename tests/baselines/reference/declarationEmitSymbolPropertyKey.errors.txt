@@ -1,0 +1,24 @@
+index.ts(2,14): error TS4118: The type of this node cannot be serialized because its property 'lostSymbol' cannot be serialized.
+
+
+==== node_modules/test-pkg/index.d.ts (0 errors) ====
+    declare const lostSymbol: unique symbol;
+    type lostSymbol = typeof lostSymbol;
+    
+    type SomeGeneric<T> = {
+        [lostSymbol]: T;
+    };
+    
+    declare function fn(): SomeGeneric<unknown>;
+    
+    export {
+        lostSymbol,
+        fn
+    };
+    
+==== index.ts (1 errors) ====
+    import { fn } from 'test-pkg';
+    export const value = fn();
+                 ~~~~~
+!!! error TS4118: The type of this node cannot be serialized because its property 'lostSymbol' cannot be serialized.
+    

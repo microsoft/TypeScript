@@ -7777,7 +7777,13 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     context.tracker.reportNonSerializableProperty(symbolToString(propertySymbol));
                 }
             }
-            context.enclosingDeclaration = propertySymbol.valueDeclaration || propertySymbol.declarations?.[0] || saveEnclosingDeclaration;
+            // For unique symbol property keys, preserve the original enclosing declaration
+            // to enable proper symbol accessibility checking and import tracking
+            const propNameType = getSymbolLinks(propertySymbol).nameType;
+            const useOriginalEnclosing = propNameType && (propNameType.flags & TypeFlags.UniqueESSymbol);
+            context.enclosingDeclaration = useOriginalEnclosing
+                ? saveEnclosingDeclaration
+                : (propertySymbol.valueDeclaration || propertySymbol.declarations?.[0] || saveEnclosingDeclaration);
             const propertyName = getPropertyNameNodeForSymbol(propertySymbol, context);
             context.enclosingDeclaration = saveEnclosingDeclaration;
             context.approximateLength += symbolName(propertySymbol).length + 1;
@@ -9015,7 +9021,18 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     return createPropertyNameNodeForIdentifierOrLiteral(name, getEmitScriptTarget(compilerOptions), singleQuote, stringNamed, isMethod);
                 }
                 if (nameType.flags & TypeFlags.UniqueESSymbol) {
-                    return factory.createComputedPropertyName(symbolToExpression((nameType as UniqueESSymbolType).symbol, context, SymbolFlags.Value));
+                    const uniqueSymbol = (nameType as UniqueESSymbolType).symbol;
+                    // Check if the unique symbol is directly accessible as a value from the enclosing declaration
+                    // Use isSymbolAccessibleByFlags with allowModules=false to ensure the symbol itself is accessible
+                    // (not just via parent module import type). If not directly accessible as a value,
+                    // report as non-serializable to trigger proper error message.
+                    if (context.tracker.canTrackSymbol && context.enclosingDeclaration) {
+                        const directlyAccessible = isSymbolAccessibleByFlags(uniqueSymbol, context.enclosingDeclaration, SymbolFlags.Value);
+                        if (!directlyAccessible && context.tracker.reportNonSerializableProperty) {
+                            context.tracker.reportNonSerializableProperty(symbolToString(uniqueSymbol));
+                        }
+                    }
+                    return factory.createComputedPropertyName(symbolToExpression(uniqueSymbol, context, SymbolFlags.Value));
                 }
             }
         }
