@@ -75,7 +75,6 @@ declare namespace Intl {
         resolvedOptions(): ResolvedDurationFormatOptions;
     }
 
-
     interface ResolvedDurationFormatOptions {
         locale: string;
         numberingSystem: string;
