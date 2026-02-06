@@ -29,8 +29,9 @@ declare namespace Intl {
         trailingZeroDisplay: "auto" | "stripIfInteger";
     }
 
-    interface NumberRangeFormatPart extends NumberFormatPart {
+    interface NumberRangeFormatPart {
         type: NumberFormatRangePartTypes;
+        value: string;
         source: "startRange" | "endRange" | "shared";
     }
 

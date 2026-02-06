@@ -169,9 +169,9 @@ const filtered = nf
   .map((part) => part.value)
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >part : Symbol(part, Decl(intlNumberFormatES2023.ts, 41, 8))
->part.value : Symbol(Intl.NumberFormatPart.value, Decl(lib.es2018.intl.d.ts, --, --))
+>part.value : Symbol(Intl.NumberRangeFormatPart.value, Decl(lib.es2023.intl.d.ts, --, --))
 >part : Symbol(part, Decl(intlNumberFormatES2023.ts, 41, 8))
->value : Symbol(Intl.NumberFormatPart.value, Decl(lib.es2018.intl.d.ts, --, --))
+>value : Symbol(Intl.NumberRangeFormatPart.value, Decl(lib.es2023.intl.d.ts, --, --))
 
   .join("");
 >join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
