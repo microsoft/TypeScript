@@ -4,20 +4,20 @@
 new Intl.DurationFormat('en').format({
 >new Intl.DurationFormat('en').format({  years: 1,  hours: 20,  minutes: 15,  seconds: 35}) : string
 >                                                                                           : ^^^^^^
->new Intl.DurationFormat('en').format : (duration: Intl.DurationType) => string
->                                     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^      
+>new Intl.DurationFormat('en').format : (duration: Partial<Record<"years" | "months" | "weeks" | "days" | "hours" | "minutes" | "seconds" | "milliseconds" | "microseconds" | "nanoseconds", number>>) => string
+>                                     : ^        ^^                                                                                                                                                  ^^^^^      
 >new Intl.DurationFormat('en') : Intl.DurationFormat
 >                              : ^^^^^^^^^^^^^^^^^^^
->Intl.DurationFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions): Intl.DurationFormat; prototype: Intl.DurationFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.DurationTimeFormatLocaleMatcher; }): Intl.UnicodeBCP47LocaleIdentifier[]; }
->                    : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>Intl.DurationFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions): Intl.DurationFormat; prototype: Intl.DurationFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Pick<Intl.DurationFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>                    : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >Intl : typeof Intl
 >     : ^^^^^^^^^^^
->DurationFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions): Intl.DurationFormat; prototype: Intl.DurationFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.DurationTimeFormatLocaleMatcher; }): Intl.UnicodeBCP47LocaleIdentifier[]; }
->               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
+>DurationFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions): Intl.DurationFormat; prototype: Intl.DurationFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: Pick<Intl.DurationFormatOptions, "localeMatcher">): Intl.UnicodeBCP47LocaleIdentifier[]; }
+>               : ^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^
 >'en' : "en"
 >     : ^^^^
->format : (duration: Intl.DurationType) => string
->       : ^        ^^^^^^^^^^^^^^^^^^^^^^^^      
+>format : (duration: Partial<Record<"years" | "months" | "weeks" | "days" | "hours" | "minutes" | "seconds" | "milliseconds" | "microseconds" | "nanoseconds", number>>) => string
+>       : ^        ^^                                                                                                                                                  ^^^^^      
 >{  years: 1,  hours: 20,  minutes: 15,  seconds: 35} : { years: number; hours: number; minutes: number; seconds: number; }
 >                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
