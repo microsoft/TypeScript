@@ -22,10 +22,10 @@ interface Buzz {
 }
 
 ([] as Fizz[] | Buzz[]).filter(item => item.id < 5);
->([] as Fizz[] | Buzz[]).filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>([] as Fizz[] | Buzz[]).filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
 >Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
->filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 10, 31))
 >item.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
 >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 10, 31))
@@ -42,10 +42,10 @@ interface Buzz {
 >id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
 
 ([] as Fizz[] | Buzz[]).find(item => item);
->([] as Fizz[] | Buzz[]).find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>([] as Fizz[] | Buzz[]).find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
 >Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
->find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 13, 29))
 >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 13, 29))
 
@@ -56,10 +56,10 @@ declare function isFizz(x: unknown): x is Fizz;
 >Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
 
 ([] as Fizz[] | Buzz[]).find(isFizz);
->([] as Fizz[] | Buzz[]).find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>([] as Fizz[] | Buzz[]).find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
 >Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
->find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >isFizz : Symbol(isFizz, Decl(unionOfArraysFilterCall.ts, 13, 43))
 
 declare function isBuzz(x: unknown): x is Buzz;
@@ -69,27 +69,27 @@ declare function isBuzz(x: unknown): x is Buzz;
 >Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
 
 ([] as Fizz[] | Buzz[]).find(isBuzz);
->([] as Fizz[] | Buzz[]).find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>([] as Fizz[] | Buzz[]).find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
 >Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
->find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>find : Symbol(Array.find, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
 >isBuzz : Symbol(isBuzz, Decl(unionOfArraysFilterCall.ts, 15, 37))
 
 ([] as Fizz[] | Buzz[]).every(item => item.id < 5);
->([] as Fizz[] | Buzz[]).every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>([] as Fizz[] | Buzz[]).every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
 >Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
->every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>every : Symbol(Array.every, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 19, 30))
 >item.id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
 >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 19, 30))
 >id : Symbol(id, Decl(unionOfArraysFilterCall.ts, 0, 16), Decl(unionOfArraysFilterCall.ts, 5, 16))
 
 ([] as Fizz[] | Buzz[]).reduce(item => item);
->([] as Fizz[] | Buzz[]).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>([] as Fizz[] | Buzz[]).reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Fizz : Symbol(Fizz, Decl(unionOfArraysFilterCall.ts, 0, 0))
 >Buzz : Symbol(Buzz, Decl(unionOfArraysFilterCall.ts, 3, 1))
->reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --) ... and 1 more)
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 21, 31))
 >item : Symbol(item, Decl(unionOfArraysFilterCall.ts, 21, 31))
 

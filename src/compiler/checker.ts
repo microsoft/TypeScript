@@ -15697,7 +15697,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             else if (prop.valueDeclaration && prop.valueDeclaration !== firstValueDeclaration) {
                 hasNonUniformValueDeclaration = true;
             }
-            declarations = addRange(declarations, prop.declarations);
+            if (prop.declarations) {
+                for (const d of prop.declarations) {
+                    declarations = appendIfUnique(declarations, d);
+                }
+            }
             const type = getTypeOfSymbol(prop);
             if (!firstType) {
                 firstType = type;

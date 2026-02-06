@@ -318,9 +318,9 @@ function handleOption<K extends Options['kind']>(option: Options & { kind: K }):
 
   const kind = option.kind;
 >kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 88, 7))
->option.kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 65, 18), Decl(typeVariableConstraintIntersections.ts, 87, 68), Decl(typeVariableConstraintIntersections.ts, 70, 18), Decl(typeVariableConstraintIntersections.ts, 87, 68))
+>option.kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 65, 18), Decl(typeVariableConstraintIntersections.ts, 87, 68), Decl(typeVariableConstraintIntersections.ts, 70, 18))
 >option : Symbol(option, Decl(typeVariableConstraintIntersections.ts, 87, 49))
->kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 65, 18), Decl(typeVariableConstraintIntersections.ts, 87, 68), Decl(typeVariableConstraintIntersections.ts, 70, 18), Decl(typeVariableConstraintIntersections.ts, 87, 68))
+>kind : Symbol(kind, Decl(typeVariableConstraintIntersections.ts, 65, 18), Decl(typeVariableConstraintIntersections.ts, 87, 68), Decl(typeVariableConstraintIntersections.ts, 70, 18))
 
   const handler = optionHandlers[kind];
 >handler : Symbol(handler, Decl(typeVariableConstraintIntersections.ts, 89, 7))
