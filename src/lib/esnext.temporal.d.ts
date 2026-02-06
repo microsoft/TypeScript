@@ -63,8 +63,16 @@ declare namespace Temporal {
     type DateUnit = "year" | "month" | "week" | "day" | "years" | "months" | "weeks" | "days";
     type TimeUnit = "hour" | "minute" | "second" | "millisecond" | "microsecond" | "nanosecond" | "hours" | "minutes" | "seconds" | "milliseconds" | "microseconds" | "nanoseconds";
 
+    interface DisambiguationOptions {
+        disambiguation?: "compatible" | "earlier" | "later" | "reject" | undefined;
+    }
+
     interface OverflowOptions {
         overflow?: "constrain" | "reject" | undefined;
+    }
+
+    interface TransitionOptions {
+        direction: "next" | "previous";
     }
 
     interface RoundingOptions<Units extends DateUnit | TimeUnit> {
@@ -179,8 +187,6 @@ declare namespace Temporal {
 
     interface PlainDateTimeToStringOptions extends PlainDateToStringOptions, PlainTimeToStringOptions {}
 
-    interface PlainDateTimeToZonedDateTimeOptions extends Pick<ZonedDateTimeToZonedDateTimeOptions, "disambiguation"> {}
-
     interface PlainDateTime {
         readonly calendarId: string;
         readonly era: string | undefined;
@@ -218,7 +224,7 @@ declare namespace Temporal {
         toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string;
         toJSON(): string;
         valueOf(): never;
-        toZonedDateTime(timeZone: TimeZoneLike, options?: PlainDateTimeToZonedDateTimeOptions): ZonedDateTime;
+        toZonedDateTime(timeZone: TimeZoneLike, options?: DisambiguationOptions): ZonedDateTime;
         toPlainDate(): PlainDate;
         toPlainTime(): PlainTime;
         readonly [Symbol.toStringTag]: "Temporal.PlainDateTime";
@@ -237,13 +243,8 @@ declare namespace Temporal {
         timeZoneName?: "auto" | "never" | "critical" | undefined;
     }
 
-    interface ZonedDateTimeToZonedDateTimeOptions extends OverflowOptions {
-        disambiguation?: "compatible" | "earlier" | "later" | "reject" | undefined;
+    interface ZonedDateTimeFromOptions extends OverflowOptions, DisambiguationOptions {
         offset?: "use" | "ignore" | "prefer" | "reject" | undefined;
-    }
-
-    interface ZonedDateTimeTransitionOptions {
-        direction: "next" | "previous";
     }
 
     interface ZonedDateTime {
@@ -275,7 +276,7 @@ declare namespace Temporal {
         readonly inLeapYear: boolean;
         readonly offsetNanoseconds: number;
         readonly offset: string;
-        with(zonedDateTimeLike: PartialTemporalLike<ZonedDateTimeLikeObject>, options?: ZonedDateTimeToZonedDateTimeOptions): ZonedDateTime;
+        with(zonedDateTimeLike: PartialTemporalLike<ZonedDateTimeLikeObject>, options?: ZonedDateTimeFromOptions): ZonedDateTime;
         withPlainTime(plainTime?: PlainTimeLike): ZonedDateTime;
         withTimeZone(timeZone: TimeZoneLike): ZonedDateTime;
         withCalendar(calendar: CalendarLike): ZonedDateTime;
@@ -292,7 +293,7 @@ declare namespace Temporal {
         valueOf(): never;
         startOfDay(): ZonedDateTime;
         getTimeZoneTransition(direction: "next" | "previous"): ZonedDateTime | null;
-        getTimeZoneTransition(direction: ZonedDateTimeTransitionOptions): ZonedDateTime | null;
+        getTimeZoneTransition(direction: TransitionOptions): ZonedDateTime | null;
         toInstant(): Instant;
         toPlainDate(): PlainDate;
         toPlainTime(): PlainTime;
@@ -303,7 +304,7 @@ declare namespace Temporal {
     interface ZonedDateTimeConstructor {
         new (epochNanoseconds: bigint, timeZone: string, calendar?: string): ZonedDateTime;
         readonly prototype: ZonedDateTime;
-        from(item: ZonedDateTimeLike, options?: ZonedDateTimeToZonedDateTimeOptions): ZonedDateTime;
+        from(item: ZonedDateTimeLike, options?: ZonedDateTimeFromOptions): ZonedDateTime;
         compare(one: ZonedDateTimeLike, two: ZonedDateTimeLike): number;
     }
     var ZonedDateTime: ZonedDateTimeConstructor;
@@ -393,8 +394,6 @@ declare namespace Temporal {
         day: number;
     }
 
-    interface PlainYearMonthToStringOptions extends Pick<PlainDateToStringOptions, "calendarName"> {}
-
     interface PlainYearMonth {
         readonly calendarId: string;
         readonly era: string | undefined;
@@ -412,7 +411,7 @@ declare namespace Temporal {
         until(other: PlainYearMonthLike, options?: RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">): Duration;
         since(other: PlainYearMonthLike, options?: RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">): Duration;
         equals(other: PlainYearMonthLike): boolean;
-        toString(options?: PlainYearMonthToStringOptions): string;
+        toString(options?: PlainDateToStringOptions): string;
         toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string;
         toJSON(): string;
         valueOf(): never;
@@ -432,15 +431,13 @@ declare namespace Temporal {
         year: number;
     }
 
-    interface PlainMonthDayToStringOptions extends Pick<PlainDateTimeToStringOptions, "calendarName"> {}
-
     interface PlainMonthDay {
         readonly calendarId: string;
         readonly monthCode: string;
         readonly day: number;
         with(monthDayLike: PartialTemporalLike<MonthDayLikeObject>, options?: OverflowOptions): PlainMonthDay;
         equals(other: PlainMonthDayLike): boolean;
-        toString(options?: PlainMonthDayToStringOptions): string;
+        toString(options?: PlainDateToStringOptions): string;
         toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string;
         toJSON(): string;
         valueOf(): never;
