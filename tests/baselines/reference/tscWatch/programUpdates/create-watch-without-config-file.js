@@ -38,6 +38,8 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/user/username/workspace/solution/projects/project/c/app.js]
 import { f } from "./module";
 console.log(f);
@@ -45,7 +47,7 @@ console.log(f);
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/c/app.ts: *new*
   {}
@@ -64,17 +66,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/c/module.d.ts
 /user/username/workspace/solution/projects/project/c/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/c/module.d.ts
 /user/username/workspace/solution/projects/project/c/app.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/c/module.d.ts (used version)
 /user/username/workspace/solution/projects/project/c/app.ts (used version)
 

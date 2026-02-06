@@ -147,7 +147,7 @@ Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/inde
 [7m3[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
@@ -174,6 +174,8 @@ FileWatcher:: Added:: WatchInfo: /home/package.json 2000 {"excludeFiles":["/home
 FileWatcher:: Added:: WatchInfo: /package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/package.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} package.json file /home/src/projects/myproject/tsconfig.json
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/projects/myproject/outDir/types/sometype.js]
 export const x = 10;
@@ -279,7 +281,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts
@@ -288,7 +290,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/myproject/types/sometype.ts (computed .d.ts during emit)
 /home/src/projects/myproject/main.ts (computed .d.ts during emit)
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts (used version)
@@ -384,7 +386,7 @@ Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/inde
 [7m3[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
@@ -431,7 +433,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts

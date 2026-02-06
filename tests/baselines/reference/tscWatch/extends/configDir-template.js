@@ -144,7 +144,7 @@ File '/home/src/projects/myproject/root2/other/sometype2/index.d.ts' exists - us
 Resolving real path for '/home/src/projects/myproject/root2/other/sometype2/index.d.ts', result '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'.
 ======== Module name 'other/sometype2' was successfully resolved to '/home/src/projects/myproject/root2/other/sometype2/index.d.ts'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/projects/myproject/root2/other/sometype2/index.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/other 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject/src 1 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Failed Lookup Locations
@@ -171,7 +171,7 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/myproject/dec
 [7m3[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
@@ -188,6 +188,8 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/myproject
 FileWatcher:: Added:: WatchInfo: /home/src/projects/configs/first/tsconfig.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Extended config file
 FileWatcher:: Added:: WatchInfo: /home/src/projects/configs/second/tsconfig.json 2000 {"excludeFiles":["/home/src/projects/myproject/main.ts"]} Extended config file
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/projects/myproject/outDir/types/sometype.js]
 export const x = 10;
@@ -241,7 +243,7 @@ FsWatches::
   {}
 /home/src/projects/myproject/types/sometype.ts: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -284,7 +286,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts
@@ -293,7 +295,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/myproject/types/sometype.ts (computed .d.ts during emit)
 /home/src/projects/myproject/main.ts (computed .d.ts during emit)
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts (used version)
@@ -393,7 +395,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/configs 1
 [7m3[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 types/sometype.ts
   Imported via "@myscope/sometype" from file 'main.ts'
@@ -433,7 +435,7 @@ FsWatches::
   {}
 /home/src/projects/myproject/types/sometype.ts:
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -477,7 +479,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/myproject/types/sometype.ts
 /home/src/projects/myproject/main.ts
 /home/src/projects/myproject/root2/other/sometype2/index.d.ts

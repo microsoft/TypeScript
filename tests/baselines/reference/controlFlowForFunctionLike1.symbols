@@ -61,7 +61,7 @@ function test3(a: number | string) {
 >a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 22, 15))
   }
   throw new Error("");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 }
 
 test3(1)(100);
@@ -81,7 +81,7 @@ function test4(a: number | string) {
 
   if (Math.random() && typeof a === "number") {
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 32, 15))
 
@@ -89,7 +89,7 @@ function test4(a: number | string) {
 >fn : Symbol(fn, Decl(controlFlowForFunctionLike1.ts, 33, 5))
   }
   throw new Error("");
->Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
 }
 
 test4(1)?.(100);

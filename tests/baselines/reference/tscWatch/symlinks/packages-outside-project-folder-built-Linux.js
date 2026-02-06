@@ -90,6 +90,8 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 44
+
 //// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 148
 export const c = 'test';
 
@@ -231,7 +233,7 @@ File '/home/src/projects/c/3/c-impl/c/lib/c.d.ts' exists - use it as a name reso
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/c.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl 0 undefined Failed Lookup Locations
@@ -254,7 +256,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-imp
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
-../../../../../tslibs/TS/Lib/lib.d.ts
+../../../../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
@@ -318,8 +320,8 @@ FsWatches::
   {"inode":151}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":42}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {"inode":44}
 
 Program root files: [
   "/home/src/projects/b/2/b-impl/b/src/index.ts"
@@ -336,7 +338,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts
@@ -344,7 +346,7 @@ Program files::
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts
@@ -352,7 +354,7 @@ Semantic diagnostics in builder refreshed for::
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts (used version)
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts (used version)
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts (used version)
@@ -537,8 +539,8 @@ FsWatches::
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/package.json:
   {"inode":12}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":42}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":44}
 
 FsWatches *deleted*::
 /home/src/projects/a/1/a-impl/a/lib:
@@ -648,7 +650,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 20
 [7m1[0m import { a } from 'a';
 [7m [0m [91m                  ~~~[0m
 
-../../../../../tslibs/TS/Lib/lib.d.ts
+../../../../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 src/index.ts
   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
@@ -713,8 +715,8 @@ FsWatches::
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":42}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":44}
 
 FsWatches *deleted*::
 /home/src/projects/c/3/c-impl/c/package.json:
@@ -739,7 +741,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -869,8 +871,8 @@ FsWatches::
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":42}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":44}
 
 Timeout callback:: count: 1
 18: timerToInvalidateFailedLookupResolutions *new*
@@ -982,7 +984,7 @@ DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-../../../../../tslibs/TS/Lib/lib.d.ts
+../../../../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
@@ -1051,8 +1053,8 @@ FsWatches::
   {"inode":171}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":42}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":44}
 
 FsWatches *deleted*::
 /home/src/projects/a/1/a-impl/a:
@@ -1078,7 +1080,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts

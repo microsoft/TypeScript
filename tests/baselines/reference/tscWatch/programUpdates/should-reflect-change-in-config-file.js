@@ -32,7 +32,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-../../../../../../home/src/tslibs/TS/Lib/lib.d.ts
+../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 commonFile1.ts
   Part of 'files' list in tsconfig.json
@@ -41,6 +41,8 @@ commonFile2.ts
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/commonFile1.js]
 "use strict";
@@ -54,7 +56,7 @@ let y = 1;
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/commonFile1.ts: *new*
   {}
@@ -74,17 +76,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/commonfile1.ts (used version)
 /user/username/workspace/solution/projects/project/commonfile2.ts (used version)
 
@@ -109,7 +111,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-../../../../../../home/src/tslibs/TS/Lib/lib.d.ts
+../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 commonFile1.ts
   Part of 'files' list in tsconfig.json
@@ -139,18 +141,18 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 /user/username/workspace/solution/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
 /user/username/workspace/solution/projects/project/commonfile2.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/commonfile1.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
@@ -177,7 +179,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-../../../../../../home/src/tslibs/TS/Lib/lib.d.ts
+../../../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 commonFile1.ts
   Part of 'files' list in tsconfig.json
@@ -188,7 +190,7 @@ commonFile1.ts
 //// [/user/username/workspace/solution/projects/project/commonFile1.js] file written with same contents
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/workspace/solution/projects/project/commonFile1.ts:
   {}
@@ -210,7 +212,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/commonFile1.ts
 
 Semantic diagnostics in builder refreshed for::

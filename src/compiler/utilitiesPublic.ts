@@ -328,6 +328,7 @@ export function getDefaultLibFileName(options: CompilerOptions): string {
     const target = getEmitScriptTarget(options);
     switch (target) {
         case ScriptTarget.ESNext:
+        case ScriptTarget.ES2025:
         case ScriptTarget.ES2024:
         case ScriptTarget.ES2023:
         case ScriptTarget.ES2022:

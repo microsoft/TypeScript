@@ -57,6 +57,8 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/home/src/projects/a/b/out.js]
 "use strict";
 System.register("moduleFile1", [], function (exports_1, context_1) {
@@ -120,7 +122,7 @@ FsWatches::
   {}
 /home/src/projects/a/b/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -142,7 +144,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer2.ts
@@ -255,7 +257,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer2.ts

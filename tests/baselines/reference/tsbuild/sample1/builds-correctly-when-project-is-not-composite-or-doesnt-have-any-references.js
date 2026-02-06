@@ -105,6 +105,8 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/user/username/projects/sample1/core/anotherModule.js]
 export const World = "hello";
 

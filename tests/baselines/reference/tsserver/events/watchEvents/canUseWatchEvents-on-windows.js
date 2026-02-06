@@ -130,7 +130,7 @@ Info seq  [hh:mm:ss:mss] event:
     }
 Custom watchDirectory:: Added:: {"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/projects/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -138,10 +138,10 @@ Info seq  [hh:mm:ss:mss] event:
       "event": "createFileWatcher",
       "body": {
         "id": 6,
-        "path": "c:/home/src/tslibs/TS/Lib/lib.d.ts"
+        "path": "c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts"
       }
     }
-Custom watchFile:: Added:: {"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}
+Custom watchFile:: Added:: {"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts"}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/projects 0 undefined Project: c:/projects/myproject/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] event:
     {
@@ -225,14 +225,14 @@ Custom watchFile:: Added:: {"id":12,"path":"c:/projects/package.json"}
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-1 "export class b { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
 	c:/projects/myproject/m.ts Text-1 "import { x } from \"something\""
 
 
-	../../home/src/tslibs/TS/Lib/lib.d.ts
+	../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 	  Default library
 	a.ts
 	  Matched by default include pattern '**/*'
@@ -324,10 +324,12 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 
 PolledWatches::
-c:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts"}}
 c:/projects/myproject/b.ts: *new*
   {"event":{"id":3,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/m.ts: *new*
@@ -362,7 +364,7 @@ c:/projects/myproject/tsconfig.json (Configured) *new*
     autoImportProviderHost: false
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts *new*
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -462,7 +464,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproj
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-1 "export class b { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
@@ -470,7 +472,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	c:/projects/myproject/c.ts Text-1 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 
 
-	../../home/src/tslibs/TS/Lib/lib.d.ts
+	../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 	  Default library
 	a.ts
 	  Matched by default include pattern '**/*'
@@ -516,8 +518,8 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-c:/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts"}}
 c:/projects/myproject/b.ts:
   {"event":{"id":3,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/c.ts: *new*
@@ -555,7 +557,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -621,7 +623,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: true *changed*
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -656,7 +658,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproj
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 3 projectProgramVersion: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
@@ -702,7 +704,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: false *changed*
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -771,8 +773,8 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts"}}
 c:/projects/myproject/c.ts:
   {"event":{"id":13,"path":"c:/projects/myproject/c.ts"}}
 c:/projects/myproject/m.ts:
@@ -805,7 +807,7 @@ c:/projects/myproject/node_modules:
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -872,8 +874,8 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts"}}
 c:/projects/myproject/b.ts: *new*
   {"event":{"id":14,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/c.ts:
@@ -904,7 +906,7 @@ c:/projects/myproject/node_modules:
   {"event":{"id":5,"path":"c:/projects/myproject/node_modules","recursive":true}}
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -971,7 +973,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: true *changed*
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -1006,7 +1008,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproj
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 4 projectProgramVersion: 2 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
@@ -1052,7 +1054,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: false *changed*
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -1176,7 +1178,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: true *changed*
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -1237,7 +1239,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproj
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 5 projectProgramVersion: 2 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
-	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-1 "export const x = 10;"
@@ -1247,7 +1249,7 @@ Info seq  [hh:mm:ss:mss] 	Files (8)
 	c:/projects/myproject/e.ts Text-1 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 
 
-	../../home/src/tslibs/TS/Lib/lib.d.ts
+	../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 	  Default library
 	a.ts
 	  Matched by default include pattern '**/*'
@@ -1297,8 +1299,8 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-c:/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.d.ts"}}
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"event":{"id":6,"path":"c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts"}}
 c:/projects/myproject/b.ts:
   {"event":{"id":14,"path":"c:/projects/myproject/b.ts"}}
 c:/projects/myproject/c.ts:
@@ -1339,7 +1341,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: false *changed*
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -1417,7 +1419,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: true *changed*
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json
@@ -1462,7 +1464,7 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: c:/projects/myproj
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: c:/projects/myproject/tsconfig.json projectStateVersion: 6 projectProgramVersion: 3 structureChanged: true structureIsReused:: SafeModules Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'c:/projects/myproject/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
-	c:/home/src/tslibs/TS/Lib/lib.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/projects/myproject/a.ts SVC-1-0 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/b.ts Text-2 "export class a { prop = \"hello\"; foo() { return this.prop; } }"
 	c:/projects/myproject/node_modules/something/index.d.ts Text-2 "export const x = 10;export const y = 20;"
@@ -1486,7 +1488,7 @@ c:/projects/myproject/tsconfig.json (Configured) *changed*
     dirty: false *changed*
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.d.ts
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         c:/projects/myproject/tsconfig.json

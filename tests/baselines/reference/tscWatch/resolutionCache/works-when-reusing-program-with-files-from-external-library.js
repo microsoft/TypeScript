@@ -52,6 +52,8 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/a/b/projects/myProject/dist/file1.js]
 module1("hello");
 export {};
@@ -86,7 +88,7 @@ FsWatches::
   {}
 /a/b/projects/myProject/src/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -111,7 +113,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /a/b/projects/myProject/node_modules/module1/index.js
 /a/b/projects/myProject/src/file1.ts
 /a/b/projects/myProject/src/file2.ts
@@ -119,7 +121,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /a/b/projects/myproject/node_modules/module1/index.js (used version)
 /a/b/projects/myproject/src/file1.ts (used version)
 /a/b/projects/myproject/src/file2.ts (used version)
@@ -181,7 +183,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /a/b/projects/myProject/node_modules/module1/index.js
 /a/b/projects/myProject/src/file1.ts
 /a/b/projects/myProject/src/file2.ts

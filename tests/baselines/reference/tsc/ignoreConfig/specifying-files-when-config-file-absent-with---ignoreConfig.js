@@ -28,6 +28,8 @@ declare const console: { log(msg: any): void; };
 Output::
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/project/src/a.js]
 export const a = 10;
 

@@ -38,6 +38,8 @@ Found 1 error in tsconfig.json[90m:3[0m
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 
 Program root files: [
   "/home/src/projects/project/a.ts"
@@ -51,7 +53,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
@@ -85,7 +87,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
@@ -122,7 +124,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
@@ -156,7 +158,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
@@ -198,7 +200,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
@@ -232,7 +234,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
@@ -269,7 +271,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
@@ -322,7 +324,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
@@ -356,7 +358,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/a.ts
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

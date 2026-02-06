@@ -67,7 +67,7 @@ Output::
 
 TSFILE: /home/src/workspaces/project/index.js
 TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'index.ts'
@@ -81,6 +81,8 @@ index.ts
 Found 1 error.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/index.js]
 import ky from 'ky';
@@ -123,7 +125,7 @@ Output::
 
 TSFILE: /home/src/workspaces/project/index.js
 TSFILE: /home/src/workspaces/project/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 node_modules/ky/distribution/index.d.ts
   Imported via 'ky' from file 'index.ts'

@@ -38,11 +38,13 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 project/src/main.tsx
   Matched by include pattern 'src/**/*.tsx' in 'project/tsconfig.json'
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/solution/project/src/main.js]
 export const x = 10;

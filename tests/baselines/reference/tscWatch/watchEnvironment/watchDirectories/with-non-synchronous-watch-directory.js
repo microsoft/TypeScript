@@ -39,6 +39,8 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 18
+
 //// [/user/username/projects/myproject/src/file1.js] Inode:: 121
 export {};
 
@@ -55,8 +57,8 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {"inode":18}
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
@@ -85,14 +87,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/node_modules/file2/index.d.ts (used version)
 /user/username/projects/myproject/src/file1.ts (used version)
 
@@ -136,8 +138,8 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":18}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/src:
@@ -203,8 +205,8 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":18}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/src:
@@ -229,7 +231,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 No cached semantic diagnostics in the builder::
@@ -294,7 +296,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 No cached semantic diagnostics in the builder::
@@ -321,8 +323,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":18}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules: *new*
@@ -375,8 +377,8 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":18}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules:
@@ -455,8 +457,8 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"inode":16}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":18}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/node_modules:
@@ -483,7 +485,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/node_modules/file2/index.d.ts
 /user/username/projects/myproject/src/file1.ts
 

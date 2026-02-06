@@ -56,6 +56,8 @@ declare const console: { log(msg: any): void; };
 Output::
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/project/out/copy1/node_modules/target/index.js]
 export const a = 1;
 

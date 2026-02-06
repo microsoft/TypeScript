@@ -66,7 +66,7 @@ Output::
 [7m [0m [91m    ~~~~~~~~~[0m
 
 TSFILE: /home/src/workspaces/project/outFile.js
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'
@@ -79,6 +79,8 @@ Errors  Files
      1  src/index.ts[90m:2[0m
      3  tsconfig.json[90m:3[0m
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/outFile.js]
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -124,7 +126,7 @@ Output::
 [7m [0m [91m    ~~~~~~~~~[0m
 
 TSFILE: /home/src/workspaces/project/outFile.js
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'
@@ -178,7 +180,7 @@ Output::
 
 TSFILE: /home/src/workspaces/project/outFile.js
 TSFILE: /home/src/workspaces/project/outFile.tsbuildinfo
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'

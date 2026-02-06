@@ -45,6 +45,8 @@ Found 1 error.
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/project/dist/src/index.js]
 export const x = 10;
 

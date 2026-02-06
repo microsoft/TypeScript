@@ -255,18 +255,23 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Li
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/tslibs/TS/Lib/lib.d.ts SVC-1-0 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 
 
+	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library
 	../../../tslibs/TS/Lib/lib.d.ts
 	  Root file specified for compilation
-	  Default library
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 
 PolledWatches::
 /home/src/tslibs/TS/Lib/jsconfig.json: *new*
@@ -279,6 +284,8 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {}
 /home/src/tslibs/TS/Lib/lib.es6.d.ts:
   {}
 /user/username/projects/project/main.ts:
@@ -301,6 +308,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es6.d.ts
     version: Text-1
     containingProjects: 1
@@ -333,6 +344,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
+        "/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts",
         "/home/src/tslibs/TS/Lib/lib.d.ts"
       ],
       "compilerOptions": {
@@ -433,7 +445,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /user/username/projects/project/main.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es6.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
-Info seq  [hh:mm:ss:mss] 	Files (1)
+Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
@@ -462,6 +474,10 @@ PolledWatches::
 /home/src/tslibs/TS/tsconfig.json:
   {"pollingInterval":2000}
 
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {}
+
 FsWatches *deleted*::
 /home/src/tslibs/TS/Lib/lib.es6.d.ts:
   {}
@@ -487,6 +503,10 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.es6.d.ts *deleted*
     version: Text-1
     containingProjects: 0 *changed*

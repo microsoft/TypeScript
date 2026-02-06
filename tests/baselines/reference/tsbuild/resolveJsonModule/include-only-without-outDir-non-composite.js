@@ -57,7 +57,7 @@ Output::
 
 TSFILE: /home/src/workspaces/solution/project/src/index.js
 TSFILE: /home/src/workspaces/solution/project/tsconfig.tsbuildinfo
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 project/src/hello.json
   Imported via "./hello.json" from file 'project/src/index.ts'
@@ -67,6 +67,8 @@ project/src/index.ts
 Found 1 error.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/solution/project/src/index.js]
 "use strict";

@@ -47,6 +47,8 @@ Found 2 errors in the same file, starting at: alpha/src/a.ts[90m:1[0m
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/project/beta/b.js]
 export {};
 
@@ -64,12 +66,12 @@ export {};
 
 
 //// [/home/src/workspaces/project/alpha/bin/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../tslibs/ts/lib/lib.d.ts","../../beta/b.ts","../src/a.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3360792065-export { }","signature":"-3531856636-export {};\n"},{"version":"-5654511483-import * as b from '../../beta/b'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/a.d.ts","errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../../tslibs/ts/lib/lib.es2025.full.d.ts","../../beta/b.ts","../src/a.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-3360792065-export { }","signature":"-3531856636-export {};\n"},{"version":"-5654511483-import * as b from '../../beta/b'","signature":"-3531856636-export {};\n"}],"root":[3],"options":{"composite":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./src/a.d.ts","errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/alpha/bin/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../tslibs/ts/lib/lib.d.ts",
+    "../../../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "../../beta/b.ts",
     "../src/a.ts"
   ],
@@ -79,7 +81,7 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -123,7 +125,7 @@ export {};
   "latestChangedDtsFile": "./src/a.d.ts",
   "errors": true,
   "version": "FakeTSVersion",
-  "size": 888
+  "size": 900
 }
 
 

@@ -41,7 +41,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-../../home/src/tslibs/TS/Lib/lib.d.ts
+../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 project/a.ts
   Matched by default include pattern '**/*'
@@ -52,6 +52,8 @@ project/b.ts
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [C:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [C:/workspaces/solution/project/a.js]
 export const a = 1;
@@ -67,7 +69,7 @@ b;
 
 
 FsWatches::
-C:/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+C:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 C:/workspaces/solution/project/a.ts: *new*
   {}
@@ -93,17 +95,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-C:/home/src/tslibs/TS/Lib/lib.d.ts
+C:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 C:/workspaces/solution/project/a.ts
 C:/workspaces/solution/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
-C:/home/src/tslibs/TS/Lib/lib.d.ts
+C:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 C:/workspaces/solution/project/a.ts
 C:/workspaces/solution/project/b.ts
 
 Shape signatures in builder refreshed for::
-c:/home/src/tslibs/ts/lib/lib.d.ts (used version)
+c:/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 c:/workspaces/solution/project/a.ts (used version)
 c:/workspaces/solution/project/b.ts (used version)
 
@@ -132,7 +134,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-../../home/src/tslibs/TS/Lib/lib.d.ts
+../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 project/a.ts
   Matched by default include pattern '**/*'
@@ -166,7 +168,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-C:/home/src/tslibs/TS/Lib/lib.d.ts
+C:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 C:/workspaces/solution/project/a.ts
 C:/workspaces/solution/project/b.ts
 

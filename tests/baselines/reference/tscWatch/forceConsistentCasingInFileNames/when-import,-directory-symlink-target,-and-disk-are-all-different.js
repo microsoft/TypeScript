@@ -53,7 +53,7 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/xY/a.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/link/a.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 undefined Source file
 [96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m4[0m     "outFile": "out.js",
@@ -64,7 +64,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined 
 [7m5[0m     "module": "system"
 [7m [0m [91m              ~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 xY/a.ts
   Imported via "./xY/a" from file 'b.ts'
@@ -78,6 +78,8 @@ b.ts
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/out.js]
 System.register("xY/a", [], function (exports_1, context_1) {
@@ -127,7 +129,7 @@ System.register("b", ["xY/a", "link/a"], function (exports_3, context_3) {
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/myproject/b.ts: *new*
   {}
@@ -158,7 +160,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/xY/a.ts
 /user/username/projects/myproject/link/a.ts
 /user/username/projects/myproject/b.ts
@@ -214,7 +216,7 @@ CreatingProgramWith::
 [7m5[0m     "module": "system"
 [7m [0m [91m              ~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 xY/a.ts
   Imported via "./xY/a" from file 'b.ts'
@@ -293,7 +295,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/xY/a.ts
 /user/username/projects/myproject/link/a.ts
 /user/username/projects/myproject/b.ts

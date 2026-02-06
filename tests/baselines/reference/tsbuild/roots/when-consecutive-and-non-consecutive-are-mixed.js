@@ -75,6 +75,8 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/home/src/workspaces/project/file1.js]
 export const x = "hello";
 
@@ -132,12 +134,12 @@ export declare const nonConsecutive = "hello";
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./file1.ts","./file2.ts","./random.d.ts","./nonconsecutive.ts","./random1.d.ts","./asarray1.ts","./asarray2.ts","./asarray3.ts","./random2.d.ts","./anothernonconsecutive.ts"],"fileIdsList":[[10],[6],[4]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-4807644630-import { random } from \"./random\";\nexport const nonConsecutive = \"hello\";\n","signature":"-7909998901-export declare const nonConsecutive = \"hello\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-21033449408-import { random } from \"./random1\";\nexport const x = \"hello\";\n","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-23429155204-import { random } from \"./random2\";\nexport const nonConsecutive = \"hello\";\n","signature":"-7909998901-export declare const nonConsecutive = \"hello\";\n"}],"root":[2,3,5,[7,9],11],"options":{"composite":true},"referencedMap":[[11,1],[7,2],[5,3]],"latestChangedDtsFile":"./anotherNonConsecutive.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./file1.ts","./file2.ts","./random.d.ts","./nonconsecutive.ts","./random1.d.ts","./asarray1.ts","./asarray2.ts","./asarray3.ts","./random2.d.ts","./anothernonconsecutive.ts"],"fileIdsList":[[10],[6],[4]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-4807644630-import { random } from \"./random\";\nexport const nonConsecutive = \"hello\";\n","signature":"-7909998901-export declare const nonConsecutive = \"hello\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-21033449408-import { random } from \"./random1\";\nexport const x = \"hello\";\n","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-23429155204-import { random } from \"./random2\";\nexport const nonConsecutive = \"hello\";\n","signature":"-7909998901-export declare const nonConsecutive = \"hello\";\n"}],"root":[2,3,5,[7,9],11],"options":{"composite":true},"referencedMap":[[11,1],[7,2],[5,3]],"latestChangedDtsFile":"./anotherNonConsecutive.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./file1.ts",
     "./file2.ts",
     "./random.d.ts",
@@ -161,7 +163,7 @@ export declare const nonConsecutive = "hello";
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -284,7 +286,7 @@ export declare const nonConsecutive = "hello";
   },
   "latestChangedDtsFile": "./anotherNonConsecutive.d.ts",
   "version": "FakeTSVersion",
-  "size": 2023
+  "size": 2035
 }
 
 
@@ -309,12 +311,12 @@ Output::
 
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.d.ts","./file2.ts","./random.d.ts","./nonconsecutive.ts","./random1.d.ts","./asarray1.ts","./asarray2.ts","./asarray3.ts","./random2.d.ts","./anothernonconsecutive.ts"],"fileIdsList":[[9],[5],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-4807644630-import { random } from \"./random\";\nexport const nonConsecutive = \"hello\";\n","signature":"-7909998901-export declare const nonConsecutive = \"hello\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-21033449408-import { random } from \"./random1\";\nexport const x = \"hello\";\n","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-23429155204-import { random } from \"./random2\";\nexport const nonConsecutive = \"hello\";\n","signature":"-7909998901-export declare const nonConsecutive = \"hello\";\n"}],"root":[2,4,[6,8],10],"options":{"composite":true},"referencedMap":[[10,1],[6,2],[4,3]],"latestChangedDtsFile":"./anotherNonConsecutive.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./file2.ts","./random.d.ts","./nonconsecutive.ts","./random1.d.ts","./asarray1.ts","./asarray2.ts","./asarray3.ts","./random2.d.ts","./anothernonconsecutive.ts"],"fileIdsList":[[9],[5],[3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-11520681045-export const y = \"world\";","signature":"-5502661211-export declare const y = \"world\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-4807644630-import { random } from \"./random\";\nexport const nonConsecutive = \"hello\";\n","signature":"-7909998901-export declare const nonConsecutive = \"hello\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-21033449408-import { random } from \"./random1\";\nexport const x = \"hello\";\n","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},{"version":"-10637577098-export const x = \"hello\";","signature":"-6425002032-export declare const x = \"hello\";\n"},"-10812219521-export const random = \"hello\";",{"version":"-23429155204-import { random } from \"./random2\";\nexport const nonConsecutive = \"hello\";\n","signature":"-7909998901-export declare const nonConsecutive = \"hello\";\n"}],"root":[2,4,[6,8],10],"options":{"composite":true},"referencedMap":[[10,1],[6,2],[4,3]],"latestChangedDtsFile":"./anotherNonConsecutive.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./file2.ts",
     "./random.d.ts",
     "./nonconsecutive.ts",
@@ -337,7 +339,7 @@ Output::
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -448,7 +450,7 @@ Output::
   },
   "latestChangedDtsFile": "./anotherNonConsecutive.d.ts",
   "version": "FakeTSVersion",
-  "size": 1888
+  "size": 1900
 }
 
 

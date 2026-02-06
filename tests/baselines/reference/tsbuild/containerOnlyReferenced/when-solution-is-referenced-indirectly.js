@@ -79,7 +79,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 project2/src/b.ts
   Matched by default include pattern '**/*'
@@ -87,7 +87,7 @@ project2/src/b.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project3/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 project3/src/c.ts
   Matched by default include pattern '**/*'
@@ -95,11 +95,13 @@ project3/src/c.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project4/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 project4/src/d.ts
   Matched by default include pattern '**/*'
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/solution/project2/src/b.js]
 export const b = 10;
@@ -110,16 +112,16 @@ export declare const b = 10;
 
 
 //// [/home/src/workspaces/solution/project2/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/b.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/b.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2025.full.d.ts","./src/b.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-13368947479-export const b = 10;","signature":"-3829150557-export declare const b = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/b.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project2/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./src/b.ts"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -148,7 +150,7 @@ export declare const b = 10;
   },
   "latestChangedDtsFile": "./src/b.d.ts",
   "version": "FakeTSVersion",
-  "size": 724
+  "size": 736
 }
 
 //// [/home/src/workspaces/solution/project3/src/c.js]
@@ -160,16 +162,16 @@ export declare const c = 10;
 
 
 //// [/home/src/workspaces/solution/project3/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/c.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12077479510-export const c = 10;","signature":"-4160380540-export declare const c = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/c.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2025.full.d.ts","./src/c.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12077479510-export const c = 10;","signature":"-4160380540-export declare const c = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/c.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./src/c.ts"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -198,7 +200,7 @@ export declare const c = 10;
   },
   "latestChangedDtsFile": "./src/c.d.ts",
   "version": "FakeTSVersion",
-  "size": 724
+  "size": 736
 }
 
 //// [/home/src/workspaces/solution/project4/src/d.js]
@@ -210,16 +212,16 @@ export declare const d = 10;
 
 
 //// [/home/src/workspaces/solution/project4/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10786011541-export const d = 10;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/d.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2025.full.d.ts","./src/d.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-10786011541-export const d = 10;","signature":"-4491610523-export declare const d = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/d.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project4/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./src/d.ts"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -248,7 +250,7 @@ export declare const d = 10;
   },
   "latestChangedDtsFile": "./src/d.d.ts",
   "version": "FakeTSVersion",
-  "size": 724
+  "size": 736
 }
 
 
@@ -275,7 +277,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project3/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 project3/src/c.ts
   Matched by default include pattern '**/*'
@@ -283,7 +285,7 @@ project3/src/c.ts
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project4/tsconfig.json'...
 
-../../tslibs/TS/Lib/lib.d.ts
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
   Default library
 project4/src/d.ts
   Matched by default include pattern '**/*'
@@ -300,16 +302,16 @@ export declare const cc = 10;
 
 
 //// [/home/src/workspaces/solution/project3/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./src/c.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12481904019-export const cc = 10;","signature":"-2549218137-export declare const cc = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/c.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.es2025.full.d.ts","./src/c.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12481904019-export const cc = 10;","signature":"-2549218137-export declare const cc = 10;\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./src/c.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project3/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../tslibs/ts/lib/lib.d.ts",
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./src/c.ts"
   ],
   "fileInfos": {
-    "../../../tslibs/ts/lib/lib.d.ts": {
+    "../../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -338,7 +340,7 @@ export declare const cc = 10;
   },
   "latestChangedDtsFile": "./src/c.d.ts",
   "version": "FakeTSVersion",
-  "size": 726
+  "size": 738
 }
 
 //// [/home/src/workspaces/solution/project4/tsconfig.tsbuildinfo] file changed its modified time

@@ -43,13 +43,15 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/users/username/projects/project/index.js]
 export const x = { ...{} };
 
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /users/username/projects: *new*
   {}
@@ -80,17 +82,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/node_modules/tslib/index.d.ts
 /users/username/projects/project/index.tsx
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/node_modules/tslib/index.d.ts
 /users/username/projects/project/index.tsx
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /users/username/projects/project/node_modules/tslib/index.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
@@ -103,7 +105,7 @@ Input::
 //// [/users/username/projects/project/node_modules/tslib/package.json] deleted
 
 FsWatches *deleted*::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /users/username/projects:
   {}
@@ -139,7 +141,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /users/username/projects: *new*
   {}
@@ -166,15 +168,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/index.tsx
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/index.tsx
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /users/username/projects/project/index.tsx (used version)
 
 exitCode:: ExitStatus.undefined
