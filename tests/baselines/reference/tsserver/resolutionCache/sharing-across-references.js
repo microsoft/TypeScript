@@ -166,7 +166,7 @@ Info seq  [hh:mm:ss:mss] Searching all ancestor node_modules directories for pre
 Info seq  [hh:mm:ss:mss] Directory '/users/username/projects/common/node_modules' does not exist, skipping all lookups in it.
 Info seq  [hh:mm:ss:mss] Resolution for module 'moduleX' was found in cache from location '/users/username/projects'.
 Info seq  [hh:mm:ss:mss] ======== Module name 'moduleX' was successfully resolved to '/users/username/projects/node_modules/moduleX/index.d.ts'. ========
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects 0 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects 0 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/app/node_modules 1 undefined Project: /users/username/projects/app/tsconfig.json WatchType: Failed Lookup Locations
@@ -185,15 +185,15 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /users/username/projec
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /users/username/projects/app/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/users/username/projects/app/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/users/username/projects/node_modules/moduleX/index.d.ts Text-1 "export const x = 10;"
 	/users/username/projects/app/appA.ts Text-1 "import { x } from \"moduleX\";\nexport const y = x;\n"
 	/users/username/projects/common/moduleB.ts Text-1 "import { x } from \"moduleX\";\nexport const b = x;\n"
 	/users/username/projects/app/appB.ts SVC-1-0 "import { x } from \"../common/moduleB\";\nexport const y = x;\n"
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-	  Default library for target 'es2024'
+	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	../node_modules/moduleX/index.d.ts
 	  Imported via "moduleX" from file 'appA.ts'
 	  Imported via "moduleX" from file '../common/moduleB.ts'
@@ -289,7 +289,7 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 
 PolledWatches::
@@ -305,7 +305,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /users/username/projects: *new*
   {}
@@ -335,7 +335,7 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /users/username/projects/app/tsconfig.json

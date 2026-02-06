@@ -147,7 +147,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: e:/solution/myproject/
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules 1 undefined WatchType: node_modules for closed script infos and package.jsons affecting module specifier cache
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/src/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: e:/solution/myproject/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
@@ -167,7 +167,7 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/typescript/node_mod
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (6)
-	c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	e:/solution/myproject/node_modules/@types/prop-types/index.d.ts Text-1 "export type ReactComponentLike =\n    | string\n    | ((props: any, context?: any) => any)\n    | (new (props: any, context?: any) => any);\n\nexport const PropTypes = {};\n"
 	e:/solution/myproject/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\nexport class Component {}\n"
 	c:/typescript/node_modules/@types/react/index.d.ts Text-1 "import * as PropTypes from 'prop-types';\nexport class Component {}\n"
@@ -175,8 +175,8 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 	e:/solution/myproject/src/app.js SVC-1-0 "import React from 'react';\nimport {\n  BrowserRouter as Router,\n} from \"react-router-dom\";\n"
 
 
-	c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-	  Default library for target 'es2024'
+	c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	../node_modules/@types/prop-types/index.d.ts
 	  Imported via 'prop-types' from file '../node_modules/@types/react/index.d.ts' with packageId '@types/prop-types/index.d.ts@15.7.3'
 	../node_modules/@types/react/index.d.ts
@@ -191,7 +191,7 @@ Info seq  [hh:mm:ss:mss] 	Files (6)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 
 PolledWatches::
@@ -209,7 +209,7 @@ e:/solution/node_modules: *new*
   {"pollingInterval":500}
 
 FsWatches::
-c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 c:/typescript/node_modules/@types/react-router-dom/package.json: *new*
   {}
@@ -238,7 +238,7 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -277,11 +277,11 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
+        "c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts",
         "e:/solution/myproject/src/app.js"
       ],
       "compilerOptions": {
-        "target": 11,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -331,7 +331,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 11,
+        "target": 12,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -355,7 +355,7 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 11,
+          "target": 12,
           "jsx": 1,
           "allowNonTsExtensions": true,
           "allowJs": true,
@@ -406,7 +406,7 @@ e:/solution/node_modules:
   {"pollingInterval":500}
 
 FsWatches::
-c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+c:/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 c:/typescript/node_modules/@types/react-router-dom/package.json:
   {}

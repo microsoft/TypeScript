@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @stableTypeOrdering: true
 // @isolatedDeclarations: true
 // @declaration: true
 //// function foo() {
@@ -17,5 +18,5 @@ verify.codeFix({
 const dest = foo();
 export const x: 1 = dest.x;
 const temp = dest.y;
-export const y: 1 | 0 = temp === undefined ? 0 : dest.y;`
+export const y: 0 | 1 = temp === undefined ? 0 : dest.y;`
 });

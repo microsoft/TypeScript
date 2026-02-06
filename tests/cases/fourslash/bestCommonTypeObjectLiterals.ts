@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @stableTypeOrdering: true
+
 ////var a = { name: 'bob', age: 18 };
 ////var b = { name: 'jim', age: 20 };
 ////var /*1*/c = [a, b];
@@ -33,5 +35,5 @@ verify.quickInfos({
     age: number;
     dob: Date;
 })[]`,
-    4: "var c3: {\n    name: string;\n    age: number;\n}[]"
+    4: "var c3: I[]"
 });

@@ -53,17 +53,17 @@ Info seq  [hh:mm:ss:mss] Creating ExternalProject: /home/src/workspace/projects/
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/b/file1.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/workspace/projects/b/file2.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/workspace/projects/b/externalproject
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/workspace/projects/b/externalproject projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/workspace/projects/b/externalproject' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/workspace/projects/b/file1.ts Text-1 "consonle.log('file1');"
 	/home/src/workspace/projects/b/file2.js Text-1 "console.log'file2');"
 
 
-	../../../tslibs/TS/Lib/lib.es2024.full.d.ts
-	  Default library for target 'es2024'
+	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	file1.ts
 	  Root file specified for compilation
 	file2.js
@@ -124,11 +124,11 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /home/src/workspace/projects/b/file1.ts: *new*
   {}
@@ -141,7 +141,7 @@ Projects::
     projectProgramVersion: 1
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/workspace/projects/b/externalproject

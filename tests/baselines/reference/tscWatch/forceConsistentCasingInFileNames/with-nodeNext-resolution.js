@@ -95,8 +95,8 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 node_modules/@types/yargs/index.d.mts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.mts@17.0.12'
 src/bin.ts
@@ -105,7 +105,7 @@ src/bin.ts
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/Users/name/projects/web/src/bin.js]
 export {};
@@ -139,7 +139,7 @@ FsWatches::
   {}
 /Users/name/projects/web/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -163,14 +163,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /Users/name/projects/web/node_modules/@types/yargs/index.d.mts
 /Users/name/projects/web/src/bin.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /users/name/projects/web/node_modules/@types/yargs/index.d.mts (used version)
 /users/name/projects/web/src/bin.ts (used version)
 

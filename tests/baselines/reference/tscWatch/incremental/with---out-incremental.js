@@ -41,7 +41,7 @@ Found 1 error in tsconfig.json[90m:4[0m
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/users/username/projects/project/out.js]
 "use strict";
@@ -50,17 +50,17 @@ const y = 20;
 
 
 //// [/users/username/projects/project/out.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./file1.ts","./file2.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5029505981-const x = 10;","2026007743-const y = 20;"],"root":[2,3],"options":{"outFile":"./out.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts","./file1.ts","./file2.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5029505981-const x = 10;","2026007743-const y = 20;"],"root":[2,3],"options":{"outFile":"./out.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
     "./file1.ts",
     "./file2.ts"
   ],
   "fileInfos": {
-    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./file1.ts": "5029505981-const x = 10;",
     "./file2.ts": "2026007743-const y = 20;"
   },
@@ -79,7 +79,7 @@ const y = 20;
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -107,7 +107,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
 

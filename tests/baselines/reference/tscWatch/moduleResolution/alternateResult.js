@@ -344,7 +344,7 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules 1 undefined Failed Lookup Locations
@@ -380,19 +380,19 @@ Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/project 0 undefined Failed Lookup Locations
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/projects/project/index.mjs]
 export {};
 
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./node_modules/foo2/index.d.ts",
     "./node_modules/@types/bar2/index.d.ts",
     "./index.mts"
@@ -404,7 +404,7 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -460,7 +460,7 @@ export {};
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -516,7 +516,7 @@ FsWatches::
   {}
 /home/src/projects/project/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -541,7 +541,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -549,7 +549,7 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/project/node_modules/foo2/index.d.ts (used version)
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts (used version)
 /home/src/projects/project/index.mts (used version)
@@ -723,7 +723,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -880,7 +880,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -1047,7 +1047,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -1193,7 +1193,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
 /home/src/projects/project/index.mts
@@ -1317,12 +1317,12 @@ File '/package.json' does not exist according to earlier cached lookups.
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./node_modules/@types/bar/index.d.ts",
     "./node_modules/foo2/index.d.ts",
     "./node_modules/@types/bar2/index.d.ts",
@@ -1336,7 +1336,7 @@ File '/package.json' does not exist according to earlier cached lookups.
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -1403,7 +1403,7 @@ File '/package.json' does not exist according to earlier cached lookups.
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -1465,7 +1465,7 @@ FsWatches::
   {}
 /home/src/projects/project/tsconfig.json:
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -1488,7 +1488,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
 /home/src/projects/project/node_modules/@types/bar2/index.d.ts
@@ -1611,12 +1611,12 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4,5]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"referencedMap":[[6,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./node_modules/@types/bar2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4,5]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-7439170493-export declare const bar2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[6],"options":{"strict":true},"referencedMap":[[6,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5,6],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./node_modules/foo/index.d.ts",
     "./node_modules/@types/bar/index.d.ts",
     "./node_modules/foo2/index.d.ts",
@@ -1632,7 +1632,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -1709,7 +1709,7 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -1779,7 +1779,7 @@ FsWatches::
   {}
 /home/src/projects/project/tsconfig.json:
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -1802,7 +1802,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
@@ -1975,12 +1975,12 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./node_modules/foo2/index.d.ts","./index.mts"],"fileIdsList":[[2,3,4]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-1622383150-export declare const foo2: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[5],"options":{"strict":true},"referencedMap":[[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./node_modules/foo/index.d.ts",
     "./node_modules/@types/bar/index.d.ts",
     "./node_modules/foo2/index.d.ts",
@@ -1994,7 +1994,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -2061,7 +2061,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -2123,7 +2123,7 @@ FsWatches::
   {}
 /home/src/projects/project/tsconfig.json:
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -2150,7 +2150,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/node_modules/foo2/index.d.ts
@@ -2296,12 +2296,12 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
 
 //// [/home/src/projects/project/index.mjs] file written with same contents
 //// [/home/src/projects/project/tsconfig.tsbuildinfo]
-{"fileNames":["../../tslibs/ts/lib/lib.es2024.full.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
+{"fileNames":["../../tslibs/ts/lib/lib.es2025.full.d.ts","./node_modules/foo/index.d.ts","./node_modules/@types/bar/index.d.ts","./index.mts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-5214938848-export declare const foo: number;","impliedFormat":1},{"version":"-9556021903-export declare const bar: number;","impliedFormat":1},{"version":"-4806968175-import { foo } from \"foo\";\nimport { bar } from \"bar\";\nimport { foo2 } from \"foo2\";\nimport { bar2 } from \"bar2\";\n","signature":"-3531856636-export {};\n","impliedFormat":99}],"root":[4],"options":{"strict":true},"referencedMap":[[4,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"version":"FakeTSVersion"}
 
 //// [/home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts",
     "./node_modules/foo/index.d.ts",
     "./node_modules/@types/bar/index.d.ts",
     "./index.mts"
@@ -2313,7 +2313,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
     ]
   ],
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
@@ -2370,7 +2370,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -2426,7 +2426,7 @@ FsWatches::
   {}
 /home/src/projects/project/tsconfig.json:
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 FsWatches *deleted*::
@@ -2453,7 +2453,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -2631,7 +2631,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -2788,7 +2788,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -2955,7 +2955,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts
@@ -3101,7 +3101,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/project/node_modules/foo/index.d.ts
 /home/src/projects/project/node_modules/@types/bar/index.d.ts
 /home/src/projects/project/index.mts

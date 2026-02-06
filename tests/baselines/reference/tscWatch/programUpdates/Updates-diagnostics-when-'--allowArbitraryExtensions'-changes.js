@@ -45,7 +45,7 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/a.js]
 export {};
@@ -53,7 +53,7 @@ export {};
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/a.ts: *new*
   {}
@@ -73,17 +73,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/b.d.css.ts
 /user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/b.d.css.ts
 /user/username/workspace/solution/projects/project/a.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/b.d.css.ts (used version)
 /user/username/workspace/solution/projects/project/a.ts (used version)
 
@@ -127,7 +127,7 @@ Output::
 //// [/user/username/workspace/solution/projects/project/a.js] file written with same contents
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/workspace/solution/projects/project/a.ts:
   {}
@@ -150,7 +150,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -199,7 +199,7 @@ Output::
 //// [/user/username/workspace/solution/projects/project/a.js] file written with same contents
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/workspace/solution/projects/project/a.ts:
   {}
@@ -220,12 +220,12 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/b.d.css.ts
 /user/username/workspace/solution/projects/project/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/b.d.css.ts
 /user/username/workspace/solution/projects/project/a.ts
 

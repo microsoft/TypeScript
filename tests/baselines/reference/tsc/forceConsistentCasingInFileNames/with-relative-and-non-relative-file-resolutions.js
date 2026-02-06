@@ -54,8 +54,8 @@ Output::
     [7m [0m [96m                     ~~~~~~~~~~[0m
     File is included via import here.
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 node_modules/fp-ts/lib/Struct.d.ts
   Imported via "fp-ts/lib/Struct" from file 'src/struct.d.ts'
   Imported via "fp-ts/lib/struct" from file 'src/struct.d.ts'
@@ -68,7 +68,7 @@ Found 2 errors in the same file, starting at: src/struct.d.ts[90m:2[0m
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

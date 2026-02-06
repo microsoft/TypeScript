@@ -5,7 +5,7 @@ TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/projec
 CleanBuild:
 {
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -35,7 +35,7 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -68,7 +68,7 @@ TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/projec
 CleanBuild:
 {
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
@@ -104,7 +104,7 @@ CleanBuild:
 IncrementalBuild:
 {
   "fileInfos": {
-    "../../tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../tslibs/ts/lib/lib.es2025.full.d.ts": {
       "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },

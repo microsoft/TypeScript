@@ -31,7 +31,7 @@ CreatingProgramWith::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/f.js]
 "use strict";
@@ -39,7 +39,7 @@ CreatingProgramWith::
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/myproject/f.ts: *new*
   {}
@@ -53,15 +53,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/f.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/f.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/f.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -114,7 +114,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/f.ts
 
 Semantic diagnostics in builder refreshed for::

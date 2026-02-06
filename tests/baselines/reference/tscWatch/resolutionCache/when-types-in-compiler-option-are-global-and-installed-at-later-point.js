@@ -51,7 +51,7 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/lib/app.js]
 "use strict";
@@ -66,7 +66,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/myproject/lib/app.ts: *new*
   {}
@@ -90,13 +90,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/lib/app.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/lib/app.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -130,7 +130,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/myproject/lib/app.ts:
   {}
@@ -185,7 +185,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/myproject/lib/app.ts:
   {}
@@ -216,7 +216,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/lib/app.ts
 /user/username/projects/myproject/node_modules/@myapp/ts-types/types/somefile.define.d.ts
 

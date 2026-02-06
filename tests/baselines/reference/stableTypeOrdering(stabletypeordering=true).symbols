@@ -1,0 +1,75 @@
+//// [tests/cases/compiler/stableTypeOrdering.ts] ////
+
+=== stableTypeOrdering.ts ===
+class Message { value: string = ""; }
+>Message : Symbol(Message, Decl(stableTypeOrdering.ts, 0, 0))
+>value : Symbol(Message.value, Decl(stableTypeOrdering.ts, 0, 15))
+
+function takeMessageOrArray(message: Message | Message[]) { return message; }
+>takeMessageOrArray : Symbol(takeMessageOrArray, Decl(stableTypeOrdering.ts, 0, 37))
+>message : Symbol(message, Decl(stableTypeOrdering.ts, 2, 28))
+>Message : Symbol(Message, Decl(stableTypeOrdering.ts, 0, 0))
+>Message : Symbol(Message, Decl(stableTypeOrdering.ts, 0, 0))
+>message : Symbol(message, Decl(stableTypeOrdering.ts, 2, 28))
+
+const result1 = takeMessageOrArray(null!);
+>result1 : Symbol(result1, Decl(stableTypeOrdering.ts, 3, 5))
+>takeMessageOrArray : Symbol(takeMessageOrArray, Decl(stableTypeOrdering.ts, 0, 37))
+
+function checkType(x: string | number | boolean) {
+>checkType : Symbol(checkType, Decl(stableTypeOrdering.ts, 3, 42))
+>x : Symbol(x, Decl(stableTypeOrdering.ts, 5, 19))
+
+    const t = typeof x;
+>t : Symbol(t, Decl(stableTypeOrdering.ts, 6, 9))
+>x : Symbol(x, Decl(stableTypeOrdering.ts, 5, 19))
+
+    return t;
+>t : Symbol(t, Decl(stableTypeOrdering.ts, 6, 9))
+}
+
+function mixedUnion(x: string | number[] | { a: number }) {
+>mixedUnion : Symbol(mixedUnion, Decl(stableTypeOrdering.ts, 8, 1))
+>x : Symbol(x, Decl(stableTypeOrdering.ts, 10, 20))
+>a : Symbol(a, Decl(stableTypeOrdering.ts, 10, 44))
+
+    return x;
+>x : Symbol(x, Decl(stableTypeOrdering.ts, 10, 20))
+}
+
+enum Color { Red, Green, Blue }
+>Color : Symbol(Color, Decl(stableTypeOrdering.ts, 12, 1))
+>Red : Symbol(Color.Red, Decl(stableTypeOrdering.ts, 14, 12))
+>Green : Symbol(Color.Green, Decl(stableTypeOrdering.ts, 14, 17))
+>Blue : Symbol(Color.Blue, Decl(stableTypeOrdering.ts, 14, 24))
+
+function enumUnion(x: Color | string | string[]) {
+>enumUnion : Symbol(enumUnion, Decl(stableTypeOrdering.ts, 14, 31))
+>x : Symbol(x, Decl(stableTypeOrdering.ts, 15, 19))
+>Color : Symbol(Color, Decl(stableTypeOrdering.ts, 12, 1))
+
+    return x;
+>x : Symbol(x, Decl(stableTypeOrdering.ts, 15, 19))
+}
+
+type Named = { name: string };
+>Named : Symbol(Named, Decl(stableTypeOrdering.ts, 17, 1))
+>name : Symbol(name, Decl(stableTypeOrdering.ts, 19, 14))
+
+type Aged = { age: number };
+>Aged : Symbol(Aged, Decl(stableTypeOrdering.ts, 19, 30))
+>age : Symbol(age, Decl(stableTypeOrdering.ts, 20, 13))
+
+type Person = Named & Aged;
+>Person : Symbol(Person, Decl(stableTypeOrdering.ts, 20, 28))
+>Named : Symbol(Named, Decl(stableTypeOrdering.ts, 17, 1))
+>Aged : Symbol(Aged, Decl(stableTypeOrdering.ts, 19, 30))
+
+declare const person: Person | null;
+>person : Symbol(person, Decl(stableTypeOrdering.ts, 22, 13))
+>Person : Symbol(Person, Decl(stableTypeOrdering.ts, 20, 28))
+
+const p = person;
+>p : Symbol(p, Decl(stableTypeOrdering.ts, 23, 5))
+>person : Symbol(person, Decl(stableTypeOrdering.ts, 22, 13))
+

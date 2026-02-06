@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
+// @stableTypeOrdering: true
 // @lib: es5
 
 //// interface I {
@@ -17,4 +18,4 @@
 //// f.colour/*1*/
 
 goTo.marker("1")
-verify.quickInfoIs("(property) colour: \"red\" | \"green\" | \"yellow\"", "The colour")
+verify.quickInfoIs("(property) colour: \"green\" | \"red\" | \"yellow\"", "The colour")

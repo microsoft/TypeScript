@@ -41,7 +41,7 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/projects/a/b/referenceFile1.js]
 /// <reference path="./moduleFile2.ts" />
@@ -58,7 +58,7 @@ FsWatches::
   {}
 /home/src/projects/a/b/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -74,15 +74,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/referenceFile1.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/referenceFile1.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/b/referencefile1.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -143,7 +143,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/referenceFile1.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -170,7 +170,7 @@ FsWatches::
   {}
 /home/src/projects/a/b/tsconfig.json:
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -216,7 +216,7 @@ FsWatches::
   {}
 /home/src/projects/a/b/tsconfig.json:
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -234,7 +234,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile2.ts
 /home/src/projects/a/b/referenceFile1.ts
 

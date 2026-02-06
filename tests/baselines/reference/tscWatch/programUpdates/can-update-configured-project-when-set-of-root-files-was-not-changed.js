@@ -39,7 +39,7 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/workspace/solution/projects/project/f1.js]
 "use strict";
@@ -53,7 +53,7 @@ let y = 1;
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/workspace/solution/projects/project/f1.ts: *new*
   {}
@@ -72,17 +72,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/f1.ts
 /user/username/workspace/solution/projects/project/f2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/f1.ts
 /user/username/workspace/solution/projects/project/f2.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/workspace/solution/projects/project/f1.ts (used version)
 /user/username/workspace/solution/projects/project/f2.ts (used version)
 
@@ -143,7 +143,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/workspace/solution/projects/project/f1.ts
 /user/username/workspace/solution/projects/project/f2.ts
 

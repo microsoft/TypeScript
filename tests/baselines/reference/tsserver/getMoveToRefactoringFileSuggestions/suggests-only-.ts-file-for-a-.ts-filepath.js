@@ -98,11 +98,11 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/pro
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/file6.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/file7.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (8)
-	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/file1.ts SVC-1-0 "interface ka {\n                name: string;\n            }\n            "
 	/home/src/projects/project/file2.tsx Text-1 ""
 	/home/src/projects/project/file3.mts Text-1 ""
@@ -112,8 +112,8 @@ Info seq  [hh:mm:ss:mss] 	Files (8)
 	/home/src/projects/project/file7.ts Text-1 ""
 
 
-	../../tslibs/TS/Lib/lib.es2024.full.d.ts
-	  Default library for target 'es2024'
+	../../tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	file1.ts
 	  Part of 'files' list in tsconfig.json
 	file2.tsx
@@ -216,7 +216,7 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 
 FsWatches::
@@ -234,7 +234,7 @@ FsWatches::
   {}
 /home/src/projects/project/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 Projects::
@@ -272,7 +272,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/tsconfig.json

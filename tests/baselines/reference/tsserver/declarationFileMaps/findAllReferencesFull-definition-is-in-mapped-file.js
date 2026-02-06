@@ -94,16 +94,16 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a 1 undefined Config: /home/src/projects/project/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/a 1 undefined Config: /home/src/projects/project/a/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/a/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/a/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/a/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/a/a.ts SVC-1-0 "function f() {}"
 
 
-	../../../tslibs/TS/Lib/lib.es2024.full.d.ts
-	  Default library for target 'es2024'
+	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	a.ts
 	  Matched by default include pattern '**/*'
 
@@ -207,13 +207,13 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 
 FsWatches::
 /home/src/projects/project/a/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -231,7 +231,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/a/tsconfig.json *default*
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/a/tsconfig.json
@@ -284,7 +284,7 @@ FsWatches::
   {}
 /home/src/projects/project/a/tsconfig.json:
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -304,7 +304,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/a/tsconfig.json
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         /home/src/projects/project/a/tsconfig.json
@@ -353,13 +353,13 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/b/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/b/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/a/a.ts SVC-1-0 "function f() {}"
 	/home/src/projects/project/b/b.ts SVC-1-0 "f();"
 
 
-	../../../tslibs/TS/Lib/lib.es2024.full.d.ts
-	  Default library for target 'es2024'
+	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	../a/a.ts
 	  Source from referenced project '../a/tsconfig.json' included because '--module' is specified as 'none'
 	b.ts
@@ -473,7 +473,7 @@ FsWatches::
   {}
 /home/src/projects/project/b/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -503,7 +503,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /home/src/projects/project/b/tsconfig.json *default*
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *changed*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /home/src/projects/project/a/tsconfig.json

@@ -54,17 +54,17 @@ Info seq  [hh:mm:ss:mss] Creating ExternalProject: project1, currentDirectory:
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/file1.js 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/b/file2.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: project1
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: project1 projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project 'project1' (External)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/home/src/projects/project/a/b/file1.js Text-1 "let x =1;"
 	/home/src/projects/project/a/b/file2.d.ts Text-1 "\n                interface T {\n                    name: string;\n                };\n                interface T {\n                    name: number;\n                };"
 
 
-	../../../tslibs/TS/Lib/lib.es2024.full.d.ts
-	  Default library for target 'es2024'
+	../../../tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	../../../projects/project/a/b/file1.js
 	  Root file specified for compilation
 	../../../projects/project/a/b/file2.d.ts
@@ -72,7 +72,7 @@ Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 
 FsWatches::
@@ -80,7 +80,7 @@ FsWatches::
   {}
 /home/src/projects/project/a/b/file2.d.ts: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 Projects::
@@ -97,7 +97,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         project1
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         project1
@@ -125,7 +125,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "project1",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts",
         "/home/src/projects/project/a/b/file1.js",
         "/home/src/projects/project/a/b/file2.d.ts"
       ],

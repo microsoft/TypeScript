@@ -6320,42 +6320,49 @@ export interface SerializedTypeEntry {
     trackedSymbols: readonly TrackedSymbol[] | undefined;
 }
 
+// Note that for types of different kinds, the numeric values of TypeFlags determine the order
+// computed by the CompareTypes function and therefore the order of constituent types in union types.
+// Since union type processing often bails out early when a result is known, it is important to order
+// TypeFlags in increasing order of potential type complexity. In particular, indexed access and
+// conditional types should sort last as those types are potentially recursive and possibly infinite.
+
 // dprint-ignore
 export const enum TypeFlags {
     Any             = 1 << 0,
     Unknown         = 1 << 1,
-    String          = 1 << 2,
-    Number          = 1 << 3,
-    Boolean         = 1 << 4,
-    Enum            = 1 << 5,   // Numeric computed enum member value
-    BigInt          = 1 << 6,
-    StringLiteral   = 1 << 7,
-    NumberLiteral   = 1 << 8,
-    BooleanLiteral  = 1 << 9,
-    EnumLiteral     = 1 << 10,  // Always combined with StringLiteral, NumberLiteral, or Union
-    BigIntLiteral   = 1 << 11,
-    ESSymbol        = 1 << 12,  // Type of symbol primitive introduced in ES6
-    UniqueESSymbol  = 1 << 13,  // unique symbol
-    Void            = 1 << 14,
-    Undefined       = 1 << 15,
-    Null            = 1 << 16,
-    Never           = 1 << 17,  // Never type
-    TypeParameter   = 1 << 18,  // Type parameter
-    Object          = 1 << 19,  // Object type
-    Union           = 1 << 20,  // Union (T | U)
-    Intersection    = 1 << 21,  // Intersection (T & U)
-    Index           = 1 << 22,  // keyof T
-    IndexedAccess   = 1 << 23,  // T[K]
-    Conditional     = 1 << 24,  // T extends U ? X : Y
-    Substitution    = 1 << 25,  // Type parameter substitution
-    NonPrimitive    = 1 << 26,  // intrinsic object type
-    TemplateLiteral = 1 << 27,  // Template literal type
-    StringMapping   = 1 << 28,  // Uppercase/Lowercase type
+    Undefined       = 1 << 2,
+    Null            = 1 << 3,
+    Void            = 1 << 4,
+    String          = 1 << 5,
+    Number          = 1 << 6,
+    BigInt          = 1 << 7,
+    Boolean         = 1 << 8,
+    ESSymbol        = 1 << 9,  // Type of symbol primitive introduced in ES6
+    StringLiteral   = 1 << 10,
+    NumberLiteral   = 1 << 11,
+    BigIntLiteral   = 1 << 12,
+    BooleanLiteral  = 1 << 13,
+    UniqueESSymbol  = 1 << 14,  // unique symbol
+    EnumLiteral     = 1 << 15,  // Always combined with StringLiteral, NumberLiteral, or Union
+    Enum            = 1 << 16,  // Numeric computed enum member value (must be right after EnumLiteral, see getSortOrderFlags)
+    NonPrimitive    = 1 << 17,  // intrinsic object type
+    Never           = 1 << 18,  // Never type
+    TypeParameter   = 1 << 19,  // Type parameter
+    Object          = 1 << 20,  // Object type
+    Index           = 1 << 21,  // keyof T
+    TemplateLiteral = 1 << 22,  // Template literal type
+    StringMapping   = 1 << 23,  // Uppercase/Lowercase type
+    Substitution    = 1 << 24,  // Type parameter substitution
+    IndexedAccess   = 1 << 25,  // T[K]
+    Conditional     = 1 << 26,  // T extends U ? X : Y
+    Union           = 1 << 27,  // Union (T | U)
+    Intersection    = 1 << 28,  // Intersection (T & U)
     /** @internal */
     Reserved1       = 1 << 29,  // Used by union/intersection type construction
     /** @internal */
     Reserved2       = 1 << 30,  // Used by union/intersection type construction
-
+    /** @internal */
+    Reserved3       = 1 << 31,
     /** @internal */
     AnyOrUnknown = Any | Unknown,
     /** @internal */
@@ -6539,14 +6546,16 @@ export const enum ObjectFlags {
     PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,
     /** @internal */
     InstantiatedMapped = Mapped | Instantiated,
-    // Object flags that uniquely identify the kind of ObjectType
-    /** @internal */
-    ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray,
-
+    
     // Flags that require TypeFlags.Object
     ContainsSpread   = 1 << 21,  // Object literal contains spread operation
     ObjectRestType   = 1 << 22,  // Originates in object rest declaration
     InstantiationExpressionType = 1 << 23,  // Originates in instantiation expression
+
+    // Object flags that uniquely identify the kind of ObjectType
+    /** @internal */
+    ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray | InstantiationExpressionType | SingleSignatureType,
+
     /** @internal */
     IsClassInstanceClone = 1 << 24, // Type is a clone of a class instance type
     // Flags that require TypeFlags.Object and ObjectFlags.Reference
@@ -7533,6 +7542,8 @@ export interface CompilerOptions {
     strictNullChecks?: boolean; // Always combine with strict property
     strictPropertyInitialization?: boolean; // Always combine with strict property
     strictBuiltinIteratorReturn?: boolean; // Always combine with strict property
+    /** @internal */
+    stableTypeOrdering?: boolean;
     stripInternal?: boolean;
     /** @deprecated */
     suppressExcessPropertyErrors?: boolean;
@@ -7655,7 +7666,7 @@ export const enum ScriptKind {
 
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
 //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const enum ScriptTarget {
     /** @deprecated */
@@ -7672,10 +7683,11 @@ export const enum ScriptTarget {
     ES2022 = 9,
     ES2023 = 10,
     ES2024 = 11,
+    ES2025 = 12,
     ESNext = 99,
     JSON = 100,
     Latest = ESNext,
-    LatestStandard = ES2024,
+    LatestStandard = ES2025,
 }
 
 export const enum LanguageVariant {
@@ -7750,6 +7762,7 @@ export interface CommandLineOptionBase {
     isTSConfigOnly?: boolean;                               // True if option can only be specified via tsconfig.json file
     isCommandLineOnly?: boolean;
     showInSimplifiedHelpView?: boolean;
+    showInHelp?: boolean;
     category?: DiagnosticMessage;
     strictFlag?: true;                                      // true if the option is one of the flag under strict
     allowJsFlag?: true;
@@ -8461,7 +8474,7 @@ export type LanugageFeatures =
     // Upcoming Features
     // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
     //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+    //       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
     //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
     | "UsingAndAwaitUsing" // `using x = y`, `await using x = y`
     | "ClassAndClassElementDecorators" // `@dec class C {}`, `class C { @dec m() {} }`

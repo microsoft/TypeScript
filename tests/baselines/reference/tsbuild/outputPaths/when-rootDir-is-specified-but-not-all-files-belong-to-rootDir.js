@@ -47,7 +47,7 @@ Found 1 error.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/dist/index.js]
 export const x = 10;

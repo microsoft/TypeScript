@@ -80,7 +80,7 @@ File '/package.json' does not exist.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/dist/index.js]
 import * as me from "@this/package";
@@ -110,7 +110,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/myproject/index.ts: *new*
   {}
@@ -140,14 +140,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/index.ts
 /user/username/projects/myproject/index2.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/index.ts (computed .d.ts during emit)
 /user/username/projects/myproject/index2.ts (computed .d.ts during emit)
 
@@ -225,7 +225,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/index.ts
 /user/username/projects/myproject/index2.ts
 

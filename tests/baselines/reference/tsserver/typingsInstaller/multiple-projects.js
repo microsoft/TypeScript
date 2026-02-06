@@ -103,7 +103,7 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project 1 undefined Config: /user/username/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/tsconfig.json WatchType: Type roots
@@ -111,18 +111,18 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/app.js SVC-1-0 ""
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-	  Default library for target 'es2024'
+	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	app.js
 	  Matched by default include pattern '**/*'
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 
 PolledWatches::
@@ -132,7 +132,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/project/tsconfig.json: *new*
   {}
@@ -147,7 +147,7 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
@@ -202,7 +202,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/project/tsconfig.json",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts",
         "/user/username/projects/project/app.js"
       ],
       "compilerOptions": {
@@ -378,7 +378,7 @@ PolledWatches::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/project/package.json: *new*
   {}
@@ -515,13 +515,13 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/Library/Cach
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/app.js SVC-1-0 ""
 	/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts Text-1 "declare const $: { x: number }"
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-	  Default library for target 'es2024'
+	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	app.js
 	  Matched by default include pattern '**/*'
 	../../../../home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts
@@ -532,7 +532,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/project/tsconfig.json",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts",
         "/user/username/projects/project/app.js",
         "/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts"
       ],
@@ -673,7 +673,7 @@ PolledWatches::
 FsWatches::
 /home/src/Library/Caches/typescript/package.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/project/package.json:
   {}
@@ -696,7 +696,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
@@ -751,7 +751,7 @@ PolledWatches::
 FsWatches::
 /home/src/Library/Caches/typescript/package.json:
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/project/app.js: *new*
   {}
@@ -775,7 +775,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
     version: Text-1
     containingProjects: 1
         /user/username/projects/project/tsconfig.json
@@ -831,12 +831,12 @@ Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /us
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project2/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project2/app.js SVC-1-0 ""
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-	  Default library for target 'es2024'
+	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	app.js
 	  Matched by default include pattern '**/*'
 
@@ -845,7 +845,7 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/user/username/projects/project2/tsconfig.json",
       "fileNames": [
-        "/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
+        "/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts",
         "/user/username/projects/project2/app.js"
       ],
       "compilerOptions": {
@@ -992,13 +992,13 @@ Info seq  [hh:mm:ss:mss] event:
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 	/user/username/projects/project/app.js
 	/home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts
 
 
-	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-	  Default library for target 'es2024'
+	../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+	  Default library for target 'es2025'
 	app.js
 	  Matched by default include pattern '**/*'
 	../../../../home/src/Library/Caches/typescript/node_modules/@types/jquery/index.d.ts
@@ -1076,7 +1076,7 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/project2/package.json: *new*
   {}
@@ -1122,7 +1122,7 @@ ScriptInfos::
     version: Text-1
     containingProjects: 0 *changed*
         /user/username/projects/project/tsconfig.json *deleted*
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *changed*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
         /user/username/projects/project2/tsconfig.json *new*

@@ -58,8 +58,8 @@ File '/home/src/workspaces/solution/child/child2.ts' exists - use it as a name r
 [7m4[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 child/child2.ts
   Imported via "../child/child2" from file 'child/child.ts'
   Matched by default include pattern '**/*'
@@ -70,7 +70,7 @@ Found 2 errors.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/solution/childResult.js]
 define("child2", ["require", "exports"], function (require, exports) {
@@ -139,8 +139,8 @@ File '/home/src/workspaces/solution/child/child2.jsx' does not exist.
 [7m4[0m     "module": "amd"
 [7m [0m [91m              ~~~~~[0m
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 child/child.ts
   Matched by default include pattern '**/*'
 

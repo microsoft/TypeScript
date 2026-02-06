@@ -176,7 +176,7 @@ File '/home/src/package.json' does not exist according to earlier cached lookups
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/witha 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces 0 undefined Failed Lookup Locations
@@ -197,8 +197,8 @@ FileWatcher:: Added:: WatchInfo: /home/src/workspaces/package.json 2000 undefine
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/package.json 2000 undefined File location affecting resolution
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 witha/node_modules/mymodule/index.d.ts
   Imported via 'mymodule' from file 'witha/a.ts'
 witha/a.ts
@@ -213,7 +213,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined W
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 
 PolledWatches::
@@ -239,7 +239,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /home/src/workspaces: *new*
   {}
@@ -278,21 +278,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts
 /home/src/workspaces/project/witha/a.ts
 /home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts
 /home/src/workspaces/project/withb/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts
 /home/src/workspaces/project/witha/a.ts
 /home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts
 /home/src/workspaces/project/withb/b.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts (used version)
 /home/src/workspaces/project/witha/a.ts (used version)
 /home/src/workspaces/project/withb/node_modules/mymodule/index.d.ts (used version)
@@ -491,8 +491,8 @@ File '/package.json' does not exist according to earlier cached lookups.
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymoduleutils/index.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymoduleutils/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/withb/node_modules/mymodule/package.json 2000 undefined File location affecting resolution
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 witha/node_modules/mymodule/index.d.ts
   Imported via 'mymodule' from file 'witha/a.ts'
 witha/a.ts
@@ -533,7 +533,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /home/src/workspaces:
   {}
@@ -577,21 +577,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts
 /home/src/workspaces/project/witha/a.ts
 /home/src/workspaces/project/withb/node_modules/mymoduleutils/index.d.ts
 /home/src/workspaces/project/withb/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts
 /home/src/workspaces/project/witha/a.ts
 /home/src/workspaces/project/withb/node_modules/mymoduleutils/index.d.ts
 /home/src/workspaces/project/withb/b.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/workspaces/project/witha/node_modules/mymodule/index.d.ts (used version)
 /home/src/workspaces/project/witha/a.ts (computed .d.ts)
 /home/src/workspaces/project/withb/node_modules/mymoduleutils/index.d.ts (used version)

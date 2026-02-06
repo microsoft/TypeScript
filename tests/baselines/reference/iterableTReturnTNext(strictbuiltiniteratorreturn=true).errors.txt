@@ -4,7 +4,7 @@ iterableTReturnTNext.ts(14,7): error TS2322: Type 'IteratorResult<number, undefi
   Type 'IteratorReturnResult<undefined>' is not assignable to type 'Next<number>'.
     Types of property 'value' are incompatible.
       Type 'undefined' is not assignable to type 'number'.
-iterableTReturnTNext.ts(42,7): error TS2416: Property 'values' in type 'MyMap' is not assignable to the same property in base type 'Map<string, number>'.
+iterableTReturnTNext.ts(44,7): error TS2416: Property 'values' in type 'MyMap' is not assignable to the same property in base type 'Map<string, number>'.
   Type '() => Generator<number, void, unknown>' is not assignable to type '() => MapIterator<number>'.
     Call signature return types 'Generator<number, void, unknown>' and 'MapIterator<number>' are incompatible.
       The types returned by 'next(...)' are incompatible between these types.
@@ -57,6 +57,8 @@ iterableTReturnTNext.ts(42,7): error TS2416: Property 'values' in type 'MyMap' i
         delete(key: string): boolean { return false; }
         forEach(callbackfn: (value: number, key: string, map: Map<string, number>) => void, thisArg?: any): void { }
         get(key: string): number | undefined { return undefined; }
+        getOrInsert(key: string, defaultValue: number): number { return Number.NaN; }
+        getOrInsertComputed(key: string, callback: (key: string) => number): number { return Number.NaN; }
         has(key: string): boolean { return false; }
         set(key: string, value: number): this { return this; }
         entries(): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
