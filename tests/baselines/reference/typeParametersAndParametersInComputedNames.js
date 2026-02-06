@@ -11,13 +11,11 @@ class A {
 }
 
 //// [typeParametersAndParametersInComputedNames.js]
+"use strict";
 function foo(a) {
     return "";
 }
-var A = /** @class */ (function () {
-    function A() {
+class A {
+    [foo(a)](a) {
     }
-    A.prototype[foo(a)] = function (a) {
-    };
-    return A;
-}());
+}

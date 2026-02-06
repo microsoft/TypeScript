@@ -1,0 +1,99 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== declFileConstructors_0.ts (0 errors) ====
+    export class SimpleConstructor {
+        /** This comment should appear for foo*/
+        constructor() {
+        }
+    }
+    export class ConstructorWithParameters {
+        /** This is comment for function signature*/
+        constructor(/** this is comment about a*/a: string,
+            /** this is comment for b*/
+            b: number) {
+            var d = a;
+        }
+    }
+    
+    export class ConstructorWithRestParamters {
+        constructor(a: string, ...rests: string[]) {
+            return a + rests.join("");
+        }
+    }
+    
+    export class ConstructorWithOverloads {
+        constructor(a: string);
+        constructor(a: number);
+        constructor(a: any) {
+        }
+    }
+    
+    export class ConstructorWithPublicParameterProperty {
+        constructor(public x: string) {
+        }
+    }
+    
+    export class ConstructorWithPrivateParameterProperty {
+        constructor(private x: string) {
+        }
+    }
+    
+    export class ConstructorWithOptionalParameterProperty {
+        constructor(public x?: string) {
+        }
+    }
+    
+    export class ConstructorWithParameterInitializer {
+        constructor(public x = "hello") {
+        }
+    }
+    
+==== declFileConstructors_1.ts (0 errors) ====
+    class GlobalSimpleConstructor {
+        /** This comment should appear for foo*/
+        constructor() {
+        }
+    }
+    class GlobalConstructorWithParameters {
+        /** This is comment for function signature*/
+        constructor(/** this is comment about a*/a: string,
+            /** this is comment for b*/
+            b: number) {
+            var d = a;
+        }
+    }
+    
+    class GlobalConstructorWithRestParamters {
+        constructor(a: string, ...rests: string[]) {
+            return a + rests.join("");
+        }
+    }
+    
+    class GlobalConstructorWithOverloads {
+        constructor(a: string);
+        constructor(a: number);
+        constructor(a: any) {
+        }
+    }
+    
+    class GlobalConstructorWithPublicParameterProperty {
+        constructor(public x: string) {
+        }
+    }
+    
+    class GlobalConstructorWithPrivateParameterProperty {
+        constructor(private x: string) {
+        }
+    }
+    
+    class GlobalConstructorWithOptionalParameterProperty {
+        constructor(public x?: string) {
+        }
+    }
+    
+    class GlobalConstructorWithParameterInitializer {
+        constructor(public x = "hello") {
+        }
+    }

@@ -4,11 +4,9 @@ implicitAnyDeclareFunctionWithoutFormalType.ts(4,16): error TS7006: Parameter 'a
 implicitAnyDeclareFunctionWithoutFormalType.ts(4,19): error TS7006: Parameter 'b' implicitly has an 'any' type.
 implicitAnyDeclareFunctionWithoutFormalType.ts(4,22): error TS7006: Parameter 'c' implicitly has an 'any' type.
 implicitAnyDeclareFunctionWithoutFormalType.ts(5,16): error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
-implicitAnyDeclareFunctionWithoutFormalType.ts(6,16): error TS7006: Parameter 'z' implicitly has an 'any' type.
-implicitAnyDeclareFunctionWithoutFormalType.ts(6,25): error TS7006: Parameter 'w' implicitly has an 'any' type.
 
 
-==== implicitAnyDeclareFunctionWithoutFormalType.ts (8 errors) ====
+==== implicitAnyDeclareFunctionWithoutFormalType.ts (6 errors) ====
     // these should be errors
     function foo(x) { };
                  ~
@@ -27,10 +25,6 @@ implicitAnyDeclareFunctionWithoutFormalType.ts(6,25): error TS7006: Parameter 'w
                    ~~~~~~~
 !!! error TS7019: Rest parameter 'args' implicitly has an 'any[]' type.
     function func4(z= null, w= undefined) { };  // error at "z,w"
-                   ~~~~~~~
-!!! error TS7006: Parameter 'z' implicitly has an 'any' type.
-                            ~~~~~~~~~~~~
-!!! error TS7006: Parameter 'w' implicitly has an 'any' type.
     
     // these shouldn't be errors
     function noError1(x= 3, y= 2) { };

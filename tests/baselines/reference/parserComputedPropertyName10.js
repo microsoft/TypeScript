@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserComputedPropertyName10.js]
+"use strict";
 var _a;
 class C {
     constructor() {

@@ -1,3 +1,4 @@
+// @target: es2015
 declare const sb: [string, boolean];
 
 let k1: [number, string, boolean];

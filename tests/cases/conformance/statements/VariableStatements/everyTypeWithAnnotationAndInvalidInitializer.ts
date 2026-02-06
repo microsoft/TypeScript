@@ -1,3 +1,4 @@
+// @target: es2015
 interface I {
     id: number;
 }
@@ -15,7 +16,7 @@ class D<T>{
 function F(x: string): number { return 42; }
 function F2(x: number): boolean { return x < 42; }
 
-module M {
+namespace M {
     export class A {
         name: string;
     }
@@ -23,7 +24,7 @@ module M {
     export function F2(x: number): string { return x.toString(); }
 }
 
-module N {
+namespace N {
     export class A {
         id: number;
     }

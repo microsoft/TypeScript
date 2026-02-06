@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
 // @module: commonjs
 
 // @Filename: /home/src/workspaces/project/node_modules/aws-sdk/package.json

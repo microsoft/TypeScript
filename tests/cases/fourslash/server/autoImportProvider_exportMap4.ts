@@ -5,7 +5,8 @@
 // @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
-////     "module": "nodenext"
+////     "module": "nodenext",
+////     "lib": ["es5"]
 ////   }
 //// }
 

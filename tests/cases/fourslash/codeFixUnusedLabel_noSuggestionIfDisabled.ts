@@ -2,6 +2,6 @@
 
 // @allowUnusedLabels: true
 
-////foo: while (true) {}
+////[|foo|]: while (true) {}
 
 verify.getSuggestionDiagnostics([]);

@@ -1,3 +1,6 @@
+tupleTypes.ts(7,10): error TS2454: Variable 't' is used before being assigned.
+tupleTypes.ts(9,10): error TS2454: Variable 't' is used before being assigned.
+tupleTypes.ts(11,10): error TS2454: Variable 't' is used before being assigned.
 tupleTypes.ts(11,12): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
 tupleTypes.ts(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 't2' must be of type 'undefined', but here has type 'string | number'.
 tupleTypes.ts(14,1): error TS2322: Type '[]' is not assignable to type '[number, string]'.
@@ -10,27 +13,39 @@ tupleTypes.ts(18,1): error TS2322: Type '[number, string, number]' is not assign
   Source has 3 element(s) but target allows only 2.
 tupleTypes.ts(35,14): error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
 tupleTypes.ts(36,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'tt2' must be of type 'undefined', but here has type 'string | number'.
+tupleTypes.ts(38,1): error TS2322: Type '[number, undefined]' is not assignable to type '[number, string]'.
+  Type at position 1 in source is not compatible with type at position 1 in target.
+    Type 'undefined' is not assignable to type 'string'.
+tupleTypes.ts(39,10): error TS2322: Type 'undefined' is not assignable to type 'string'.
+tupleTypes.ts(40,7): error TS2322: Type 'undefined' is not assignable to type 'number'.
+tupleTypes.ts(40,18): error TS2322: Type 'undefined' is not assignable to type 'string'.
 tupleTypes.ts(41,1): error TS2322: Type '[]' is not assignable to type '[number, string]'.
   Source has 0 element(s) but target requires 2.
 tupleTypes.ts(47,1): error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
   Type 'string | number' is not assignable to type 'number'.
     Type 'string' is not assignable to type 'number'.
+tupleTypes.ts(47,5): error TS2454: Variable 'a1' is used before being assigned.
+tupleTypes.ts(48,5): error TS2454: Variable 'a2' is used before being assigned.
 tupleTypes.ts(49,1): error TS2322: Type '[number, {}]' is not assignable to type 'number[]'.
   Type 'number | {}' is not assignable to type 'number'.
     Type '{}' is not assignable to type 'number'.
+tupleTypes.ts(49,5): error TS2454: Variable 'a3' is used before being assigned.
 tupleTypes.ts(50,1): error TS2322: Type '[number, number]' is not assignable to type '[number, string]'.
   Type at position 1 in source is not compatible with type at position 1 in target.
     Type 'number' is not assignable to type 'string'.
+tupleTypes.ts(50,6): error TS2454: Variable 'a2' is used before being assigned.
 tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is not assignable to type '[number, string]'.
   Type at position 1 in source is not compatible with type at position 1 in target.
     Type '{}' is not assignable to type 'string'.
+tupleTypes.ts(51,6): error TS2454: Variable 'a3' is used before being assigned.
+tupleTypes.ts(53,6): error TS2454: Variable 'a2' is used before being assigned.
 tupleTypes.ts(57,1): error TS2322: Type '0' is not assignable to type '1'.
 tupleTypes.ts(59,4): error TS2540: Cannot assign to 'length' because it is a read-only property.
 tupleTypes.ts(61,4): error TS2540: Cannot assign to 'length' because it is a read-only property.
 tupleTypes.ts(63,4): error TS2540: Cannot assign to 'length' because it is a read-only property.
 
 
-==== tupleTypes.ts (18 errors) ====
+==== tupleTypes.ts (31 errors) ====
     var v1: [];  // Error
     var v2: [number];
     var v3: [number, string];
@@ -38,10 +53,16 @@ tupleTypes.ts(63,4): error TS2540: Cannot assign to 'length' because it is a rea
     
     var t: [number, string];
     var t0 = t[0];   // number
+             ~
+!!! error TS2454: Variable 't' is used before being assigned.
     var t0: number;
     var t1 = t[1];   // string
+             ~
+!!! error TS2454: Variable 't' is used before being assigned.
     var t1: string;
     var t2 = t[2];   // number|string
+             ~
+!!! error TS2454: Variable 't' is used before being assigned.
                ~
 !!! error TS2493: Tuple type '[number, string]' of length '2' has no element at index '2'.
     var t2: number|string;
@@ -92,8 +113,18 @@ tupleTypes.ts(63,4): error TS2540: Cannot assign to 'length' because it is a rea
 !!! related TS6203 tupleTypes.ts:35:5: 'tt2' was also declared here.
     
     tt = tuple2(1, undefined);
+    ~~
+!!! error TS2322: Type '[number, undefined]' is not assignable to type '[number, string]'.
+!!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
+!!! error TS2322:     Type 'undefined' is not assignable to type 'string'.
     tt = [1, undefined];
+             ~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
     tt = [undefined, undefined];
+          ~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'number'.
+                     ~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string'.
     tt = [];  // Error
     ~~
 !!! error TS2322: Type '[]' is not assignable to type '[number, string]'.
@@ -108,24 +139,36 @@ tupleTypes.ts(63,4): error TS2540: Cannot assign to 'length' because it is a rea
 !!! error TS2322: Type '[number, string]' is not assignable to type 'number[]'.
 !!! error TS2322:   Type 'string | number' is not assignable to type 'number'.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
+        ~~
+!!! error TS2454: Variable 'a1' is used before being assigned.
     a = a2;
+        ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
     a = a3;   // Error
     ~
 !!! error TS2322: Type '[number, {}]' is not assignable to type 'number[]'.
 !!! error TS2322:   Type 'number | {}' is not assignable to type 'number'.
 !!! error TS2322:     Type '{}' is not assignable to type 'number'.
+        ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
     a1 = a2;  // Error
     ~~
 !!! error TS2322: Type '[number, number]' is not assignable to type '[number, string]'.
 !!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
 !!! error TS2322:     Type 'number' is not assignable to type 'string'.
+         ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
     a1 = a3;  // Error
     ~~
 !!! error TS2322: Type '[number, {}]' is not assignable to type '[number, string]'.
 !!! error TS2322:   Type at position 1 in source is not compatible with type at position 1 in target.
 !!! error TS2322:     Type '{}' is not assignable to type 'string'.
+         ~~
+!!! error TS2454: Variable 'a3' is used before being assigned.
     a3 = a1;
     a3 = a2;
+         ~~
+!!! error TS2454: Variable 'a2' is used before being assigned.
     
     type B = Pick<[number], 'length'>;
     declare const b: B;

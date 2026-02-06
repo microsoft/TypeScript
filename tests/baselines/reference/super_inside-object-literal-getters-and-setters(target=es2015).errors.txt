@@ -1,0 +1,33 @@
+super_inside-object-literal-getters-and-setters.ts(11,20): error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+
+
+==== super_inside-object-literal-getters-and-setters.ts (1 errors) ====
+    namespace ObjectLiteral {
+        var ThisInObjectLiteral = {
+            _foo: '1',
+            get foo(): string {
+                return super._foo;
+            },
+            set foo(value: string) {
+                super._foo = value;
+            },
+            test: function () {
+                return super._foo;
+                       ~~~~~
+!!! error TS2660: 'super' can only be referenced in members of derived classes or object literal expressions.
+            }
+        }
+    }
+    
+    class F { public test(): string { return ""; } }
+    class SuperObjectTest extends F {
+        public testing() {
+            var test = {
+                get F() {
+                    return super.test();
+                }
+            };
+        }
+    }
+    
+    

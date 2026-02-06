@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 declare function each<T extends ReadonlyArray<any>>(cases: ReadonlyArray<T>): (fn: (...args: T) => any) => void;

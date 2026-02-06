@@ -94,61 +94,72 @@ namespace N {
 }
 
 switch (Math.random()) {
-    case 0:
+    case 0: {
         using d20 = { [Symbol.dispose]() {} };
         break;
+    }
 
-    case 1:
+    case 1: {
         using d21 = { [Symbol.dispose]() {} };
         break;
+    }
+
+    default: {
+        using d22 = { [Symbol.dispose]() {} };
+    }
 }
 
 if (true)
     switch (0) {
-        case 0:
-            using d22 = { [Symbol.dispose]() {} };
+        case 0: {
+            using d23 = { [Symbol.dispose]() {} };
             break;
+        }
+
+        default: {
+            using d24 = { [Symbol.dispose]() {} };
+        }
     }
 
 try {
-    using d23 = { [Symbol.dispose]() {} };
-}
-catch {
-    using d24 = { [Symbol.dispose]() {} };
-}
-finally {
     using d25 = { [Symbol.dispose]() {} };
 }
-
-if (true) {
+catch {
     using d26 = { [Symbol.dispose]() {} };
 }
-else {
+finally {
     using d27 = { [Symbol.dispose]() {} };
 }
 
-while (true) {
+if (true) {
     using d28 = { [Symbol.dispose]() {} };
+}
+else {
+    using d29 = { [Symbol.dispose]() {} };
+}
+
+while (true) {
+    using d30 = { [Symbol.dispose]() {} };
     break;
 }
 
 do {
-    using d29 = { [Symbol.dispose]() {} };
+    using d31 = { [Symbol.dispose]() {} };
     break;
 }
 while (true);
 
 for (;;) {
-    using d30 = { [Symbol.dispose]() {} };
+    using d32 = { [Symbol.dispose]() {} };
     break;
 }
 
 for (const x in {}) {
-    using d31 = { [Symbol.dispose]() {} };
+    using d33 = { [Symbol.dispose]() {} };
 }
 
 for (const x of []) {
-    using d32 = { [Symbol.dispose]() {} };
+    using d34 = { [Symbol.dispose]() {} };
 }
 
 export {};
@@ -229,50 +240,59 @@ var N;
     using d19 = { [Symbol.dispose]() { } };
 }
 switch (Math.random()) {
-    case 0:
+    case 0: {
         using d20 = { [Symbol.dispose]() { } };
         break;
-    case 1:
+    }
+    case 1: {
         using d21 = { [Symbol.dispose]() { } };
         break;
+    }
+    default: {
+        using d22 = { [Symbol.dispose]() { } };
+    }
 }
 if (true)
     switch (0) {
-        case 0:
-            using d22 = { [Symbol.dispose]() { } };
+        case 0: {
+            using d23 = { [Symbol.dispose]() { } };
             break;
+        }
+        default: {
+            using d24 = { [Symbol.dispose]() { } };
+        }
     }
 try {
-    using d23 = { [Symbol.dispose]() { } };
-}
-catch {
-    using d24 = { [Symbol.dispose]() { } };
-}
-finally {
     using d25 = { [Symbol.dispose]() { } };
 }
-if (true) {
+catch {
     using d26 = { [Symbol.dispose]() { } };
 }
-else {
+finally {
     using d27 = { [Symbol.dispose]() { } };
 }
-while (true) {
+if (true) {
     using d28 = { [Symbol.dispose]() { } };
-    break;
 }
-do {
+else {
     using d29 = { [Symbol.dispose]() { } };
-    break;
-} while (true);
-for (;;) {
+}
+while (true) {
     using d30 = { [Symbol.dispose]() { } };
     break;
 }
-for (const x in {}) {
+do {
     using d31 = { [Symbol.dispose]() { } };
+    break;
+} while (true);
+for (;;) {
+    using d32 = { [Symbol.dispose]() { } };
+    break;
+}
+for (const x in {}) {
+    using d33 = { [Symbol.dispose]() { } };
 }
 for (const x of []) {
-    using d32 = { [Symbol.dispose]() { } };
+    using d34 = { [Symbol.dispose]() { } };
 }
 export {};

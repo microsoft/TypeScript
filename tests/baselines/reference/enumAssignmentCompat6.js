@@ -79,16 +79,17 @@ export let x: DiagnosticCategory;
 })()
 
 //// [a.js]
+"use strict";
 var numerics;
 (function (numerics) {
-    var DiagnosticCategory;
+    let DiagnosticCategory;
     (function (DiagnosticCategory) {
         DiagnosticCategory[DiagnosticCategory["Warning"] = 0] = "Warning";
         DiagnosticCategory[DiagnosticCategory["Error"] = 1] = "Error";
         DiagnosticCategory[DiagnosticCategory["Suggestion"] = 2] = "Suggestion";
         DiagnosticCategory[DiagnosticCategory["Message"] = 3] = "Message";
     })(DiagnosticCategory = numerics.DiagnosticCategory || (numerics.DiagnosticCategory = {}));
-    var DiagnosticCategory2;
+    let DiagnosticCategory2;
     (function (DiagnosticCategory2) {
         DiagnosticCategory2[DiagnosticCategory2["Warning"] = 0] = "Warning";
         DiagnosticCategory2[DiagnosticCategory2["Error"] = 1] = "Error";
@@ -98,7 +99,7 @@ var numerics;
 })(numerics || (numerics = {}));
 var strings;
 (function (strings) {
-    var DiagnosticCategory;
+    let DiagnosticCategory;
     (function (DiagnosticCategory) {
         DiagnosticCategory["Warning"] = "Warning";
         DiagnosticCategory["Error"] = "Error";
@@ -133,8 +134,8 @@ var DiagnosticCategory;
     DiagnosticCategory[DiagnosticCategory["Suggestion"] = 2] = "Suggestion";
     DiagnosticCategory[DiagnosticCategory["Message"] = 3] = "Message";
 })(DiagnosticCategory || (exports.DiagnosticCategory = DiagnosticCategory = {}));
-(function () {
-    var DiagnosticCategory;
+(() => {
+    let DiagnosticCategory;
     (function (DiagnosticCategory) {
         DiagnosticCategory["Warning"] = "Warning";
         DiagnosticCategory["Error"] = "Error";

@@ -3269,6 +3269,7 @@ export const enum ModuleResolutionKind {
     Node = "node",
     /** @deprecated Renamed to `Node10` */
     NodeJs = "node",
+    /** @deprecated */
     Node10 = "node10",
     Node16 = "node16",
     NodeNext = "nodenext",
@@ -3283,6 +3284,7 @@ export const enum NewLineKind {
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = "es3",
+    /** @deprecated */
     ES5 = "es5",
     ES6 = "es6",
     ES2015 = "es2015",
@@ -3298,6 +3300,7 @@ export const enum ScriptTarget {
     ESNext = "esnext",
     JSON = "json",
     Latest = ESNext,
+    LatestStandard = ES2024,
 }
 
 {

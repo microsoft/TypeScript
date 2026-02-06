@@ -14,6 +14,7 @@ var v: string;
 for (v of new MyStringIterator) { } // Should fail
 
 //// [for-of15.js]
+"use strict";
 class MyStringIterator {
     next() {
         return "";

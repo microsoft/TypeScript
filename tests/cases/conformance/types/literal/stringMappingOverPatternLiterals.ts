@@ -1,3 +1,4 @@
+// @target: es2015
 // non-template
 type A = "aA";
 type B = Uppercase<A>;

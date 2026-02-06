@@ -1,5 +1,6 @@
+// @target: es2015
 //@noimplicitany: true
-module Test {
+namespace Test {
     declare class C {
         public publicMember;  // this should be an error
         private privateMember;  // this should not be an error

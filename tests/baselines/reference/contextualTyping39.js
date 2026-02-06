@@ -4,4 +4,5 @@
 var foo = <{ (): number; }> function() { return "err"; };
 
 //// [contextualTyping39.js]
+"use strict";
 var foo = function () { return "err"; };

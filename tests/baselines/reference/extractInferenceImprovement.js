@@ -32,6 +32,7 @@ prop = getProperty3(obj, s);
 
 
 //// [extractInferenceImprovement.js]
+"use strict";
 // repro mostly from https://github.com/Microsoft/TypeScript/issues/25065
 function getProperty2(obj, key) {
     return obj[key];

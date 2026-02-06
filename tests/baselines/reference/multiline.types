@@ -1,58 +1,12 @@
 //// [tests/cases/conformance/directives/multiline.tsx] ////
 
 === Performance Stats ===
-Type Count: 2,500
-
-=== a.ts ===
-export const texts: string[] = [];
->texts : string[]
->      : ^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
-
-/**
- @ts-ignore */
-texts.push(100);
->texts.push(100) : number
->                : ^^^^^^
->texts.push : (...items: string[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^      
->texts : string[]
->      : ^^^^^^^^
->push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^      
->100 : 100
->    : ^^^
-
-/**
- @ts-expect-error */
-texts.push(100);
->texts.push(100) : number
->                : ^^^^^^
->texts.push : (...items: string[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^      
->texts : string[]
->      : ^^^^^^^^
->push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^      
->100 : 100
->    : ^^^
-
-/**
- @ts-expect-error */
-texts.push("100");
->texts.push("100") : number
->                  : ^^^^^^
->texts.push : (...items: string[]) => number
->           : ^^^^     ^^^^^^^^^^^^^^^      
->texts : string[]
->      : ^^^^^^^^
->push : (...items: string[]) => number
->     : ^^^^     ^^^^^^^^^^^^^^^      
->"100" : "100"
->      : ^^^^^
+Assignability cache: 2,500
+Type Count: 5,000
+Instantiation count: 10,000
 
 === b.tsx ===
+/// <reference path="react.d.ts" />
 import * as React from "react";
 >React : typeof React
 >      : ^^^^^^^^^^^^

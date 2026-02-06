@@ -13,14 +13,15 @@ const x = { a: 1 };
 const y = "a";
 
 //// [file.js]
+"use strict";
 /**
  * @template T
  * @template {keyof T} K
  * @typedef {T[K]} Foo
  */
-var x = { a: 1 };
+const x = { a: 1 };
 /** @type {Foo<typeof x, "a">} */
-var y = "a";
+const y = "a";
 
 
 //// [file.d.ts]

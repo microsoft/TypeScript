@@ -56,7 +56,8 @@ class B extends A {
             return
         }
         catch (e) {
->e : any
+>e : unknown
+>  : ^^^^^^^
 
             return;
         }

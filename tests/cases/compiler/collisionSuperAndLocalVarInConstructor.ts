@@ -1,3 +1,4 @@
+// @target: es2015
 var _super = 10; // No Error
 class Foo {
     constructor() {

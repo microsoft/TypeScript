@@ -6,3 +6,4 @@ global {
 }
 
 //// [moduleAugmentationGlobal6_1.js]
+"use strict";

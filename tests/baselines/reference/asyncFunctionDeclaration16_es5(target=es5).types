@@ -1,0 +1,104 @@
+//// [tests/cases/conformance/async/es5/functionDeclarations/asyncFunctionDeclaration16_es5.ts] ////
+
+=== /types.d.ts ===
+declare class Thenable { then(): void; }
+>Thenable : Thenable
+>         : ^^^^^^^^
+>then : () => void
+>     : ^^^^^^    
+
+=== /a.js ===
+/**
+ * @callback T1
+ * @param {string} str
+ * @returns {string}
+ */
+
+/**
+ * @callback T2
+ * @param {string} str
+ * @returns {Promise<string>}
+ */
+
+/**
+ * @callback T3
+ * @param {string} str
+ * @returns {Thenable}
+ */
+
+/**
+ * @param {string} str
+ * @returns {string}
+ */
+const f1 = async str => {
+>f1 : (str: string) => string
+>   : ^   ^^      ^^^^^      
+>async str => {    return str;} : (str: string) => string
+>                               : ^   ^^      ^^^^^      
+>str : string
+>    : ^^^^^^
+
+    return str;
+>str : string
+>    : ^^^^^^
+}
+
+/** @type {T1} */
+const f2 = async str => {
+>f2 : T1
+>   : ^^
+>async str => {    return str;} : (str: string) => string
+>                               : ^   ^^^^^^^^^^^^^^^^^^^
+>str : string
+>    : ^^^^^^
+
+    return str;
+>str : string
+>    : ^^^^^^
+}
+
+/**
+ * @param {string} str
+ * @returns {Promise<string>}
+ */
+const f3 = async str => {
+>f3 : (str: string) => Promise<string>
+>   : ^   ^^      ^^^^^               
+>async str => {    return str;} : (str: string) => Promise<string>
+>                               : ^   ^^      ^^^^^               
+>str : string
+>    : ^^^^^^
+
+    return str;
+>str : string
+>    : ^^^^^^
+}
+
+/** @type {T2} */
+const f4 = async str => {
+>f4 : T2
+>   : ^^
+>async str => {    return str;} : (str: string) => Promise<string>
+>                               : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>str : string
+>    : ^^^^^^
+
+    return str;
+>str : string
+>    : ^^^^^^
+}
+
+/** @type {T3} */
+const f5 = async str => {
+>f5 : T3
+>   : ^^
+>async str => {    return str;} : (str: string) => Thenable
+>                               : ^   ^^^^^^^^^^^^^^^^^^^^^
+>str : string
+>    : ^^^^^^
+
+    return str;
+>str : string
+>    : ^^^^^^
+}
+

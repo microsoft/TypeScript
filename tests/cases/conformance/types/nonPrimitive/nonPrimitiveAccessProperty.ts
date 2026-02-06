@@ -1,4 +1,5 @@
-var a: object;
+// @target: es2015
+var a: object = {};
 a.toString();
 a.nonExist(); // error
 

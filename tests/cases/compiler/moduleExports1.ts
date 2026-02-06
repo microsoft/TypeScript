@@ -1,5 +1,6 @@
-//@module: amd
-export module TypeScript.Strasse.Street {
+// @target: es2015
+//@module: commonjs
+export namespace TypeScript.Strasse.Street {
 	export class Rue {
 		public address:string;
 	}	

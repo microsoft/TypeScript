@@ -1,3 +1,4 @@
+// @target: es2015
 enum Enum { None = 0 }
 var enumType: Enum = Enum.None;
 var numberType: number = 0;

@@ -12,6 +12,6 @@ function f() {
     var a = [];
 >a : any[]
 >  : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 }

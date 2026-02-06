@@ -1,27 +1,27 @@
 //// [tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithCallSignatures.ts] ////
 
 === subtypingWithCallSignatures.ts ===
-module CallSignature {
+namespace CallSignature {
 >CallSignature : Symbol(CallSignature, Decl(subtypingWithCallSignatures.ts, 0, 0))
 
     declare function foo1(cb: (x: number) => void): typeof cb;
->foo1 : Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 22), Decl(subtypingWithCallSignatures.ts, 1, 62))
+>foo1 : Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 25), Decl(subtypingWithCallSignatures.ts, 1, 62))
 >cb : Symbol(cb, Decl(subtypingWithCallSignatures.ts, 1, 26))
 >x : Symbol(x, Decl(subtypingWithCallSignatures.ts, 1, 31))
 >cb : Symbol(cb, Decl(subtypingWithCallSignatures.ts, 1, 26))
 
     declare function foo1(cb: any): any;
->foo1 : Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 22), Decl(subtypingWithCallSignatures.ts, 1, 62))
+>foo1 : Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 25), Decl(subtypingWithCallSignatures.ts, 1, 62))
 >cb : Symbol(cb, Decl(subtypingWithCallSignatures.ts, 2, 26))
 
     var r = foo1((x: number) => 1); // ok because base returns void
 >r : Symbol(r, Decl(subtypingWithCallSignatures.ts, 3, 7))
->foo1 : Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 22), Decl(subtypingWithCallSignatures.ts, 1, 62))
+>foo1 : Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 25), Decl(subtypingWithCallSignatures.ts, 1, 62))
 >x : Symbol(x, Decl(subtypingWithCallSignatures.ts, 3, 18))
 
     var r2 = foo1(<T>(x: T) => ''); // ok because base returns void
 >r2 : Symbol(r2, Decl(subtypingWithCallSignatures.ts, 4, 7))
->foo1 : Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 22), Decl(subtypingWithCallSignatures.ts, 1, 62))
+>foo1 : Symbol(foo1, Decl(subtypingWithCallSignatures.ts, 0, 25), Decl(subtypingWithCallSignatures.ts, 1, 62))
 >T : Symbol(T, Decl(subtypingWithCallSignatures.ts, 4, 19))
 >x : Symbol(x, Decl(subtypingWithCallSignatures.ts, 4, 22))
 >T : Symbol(T, Decl(subtypingWithCallSignatures.ts, 4, 19))

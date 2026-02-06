@@ -10,9 +10,10 @@ foo: 23
 
 
 //// [jsxMultilineAttributeStringValues.jsx]
-var a = <input value="
+"use strict";
+const a = <input value="
   foo: 23
 "></input>;
-var b = <input value='
+const b = <input value='
 foo: 23
 '></input>;

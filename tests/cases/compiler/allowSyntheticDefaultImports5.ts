@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: system
 // @Filename: b.d.ts
 declare class Foo {

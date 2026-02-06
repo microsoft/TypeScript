@@ -1,3 +1,4 @@
+// @target: es2015
 type Style = StyleBase | StyleArray;
 interface StyleArray extends Array<Style> {}
 interface StyleBase {

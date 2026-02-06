@@ -53,7 +53,7 @@ var y = e2.x;
 >x : e2.x
 >  : ^^^^
 
-export module m1 {
+export namespace m1 {
 >m1 : typeof m1
 >   : ^^^^^^^^^
 
@@ -129,7 +129,7 @@ export module m1 {
 >x : e4.x
 >  : ^^^^
 }
-module m2 {
+namespace m2 {
 >m2 : typeof m2
 >   : ^^^^^^^^^
 

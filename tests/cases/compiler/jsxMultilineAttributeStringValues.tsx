@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: preserve
 const a = <input value="
   foo: 23

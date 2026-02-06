@@ -13,13 +13,12 @@ function bar() {
 }
 
 //// [a.js]
-var c = /** @class */ (function () {
-    function c() {
-    }
-    return c;
-}());
+"use strict";
+class c {
+}
 //# sourceMappingURL=a.js.map
 //// [b.js]
+"use strict";
 function bar() {
 }
 //# sourceMappingURL=b.js.map

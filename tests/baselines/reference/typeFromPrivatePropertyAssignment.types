@@ -4,20 +4,20 @@
 type Foo = { foo?: string };
 >Foo : Foo
 >    : ^^^
->foo : string
->    : ^^^^^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
 class C {
 >C : C
 >  : ^
 
     #a?: Foo;
->#a : Foo
->   : ^^^
+>#a : Foo | undefined
+>   : ^^^^^^^^^^^^^^^
 
     #b?: Foo;
->#b : Foo
->   : ^^^
+>#b : Foo | undefined
+>   : ^^^^^^^^^^^^^^^
 
     m() {
 >m : () => void
@@ -28,8 +28,8 @@ class C {
 >  : ^^^
 >this.#a || {} : Foo
 >              : ^^^
->this.#a : Foo
->        : ^^^
+>this.#a : Foo | undefined
+>        : ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >{} : {}
@@ -38,14 +38,14 @@ class C {
         this.#b = this.#b || {};
 >this.#b = this.#b || {} : Foo
 >                        : ^^^
->this.#b : Foo
->        : ^^^
+>this.#b : Foo | undefined
+>        : ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >this.#b || {} : Foo
 >              : ^^^
->this.#b : Foo
->        : ^^^
+>this.#b : Foo | undefined
+>        : ^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
 >{} : {}

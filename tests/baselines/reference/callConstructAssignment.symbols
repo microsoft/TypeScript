@@ -1,17 +1,17 @@
 //// [tests/cases/compiler/callConstructAssignment.ts] ////
 
 === callConstructAssignment.ts ===
-var foo:{ ( ):void; }
->foo : Symbol(foo, Decl(callConstructAssignment.ts, 0, 3))
+declare var foo:{ ( ):void; }
+>foo : Symbol(foo, Decl(callConstructAssignment.ts, 0, 11))
 
-var bar:{ new ( ):any; }
->bar : Symbol(bar, Decl(callConstructAssignment.ts, 2, 3))
+declare var bar:{ new ( ):any; }
+>bar : Symbol(bar, Decl(callConstructAssignment.ts, 2, 11))
 
 foo = bar; // error
->foo : Symbol(foo, Decl(callConstructAssignment.ts, 0, 3))
->bar : Symbol(bar, Decl(callConstructAssignment.ts, 2, 3))
+>foo : Symbol(foo, Decl(callConstructAssignment.ts, 0, 11))
+>bar : Symbol(bar, Decl(callConstructAssignment.ts, 2, 11))
 
 bar = foo; // error
->bar : Symbol(bar, Decl(callConstructAssignment.ts, 2, 3))
->foo : Symbol(foo, Decl(callConstructAssignment.ts, 0, 3))
+>bar : Symbol(bar, Decl(callConstructAssignment.ts, 2, 11))
+>foo : Symbol(foo, Decl(callConstructAssignment.ts, 0, 11))
 

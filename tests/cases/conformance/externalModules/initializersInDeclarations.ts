@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @Filename: file1.d.ts
 
 // Errors: Initializers & statements in declaration file
@@ -13,7 +15,7 @@ declare class Foo {
 declare var x = [];
 declare var y = {};
 
-declare module M1 {
+declare namespace M1 {
 	while(true);
 
 	export var v1 = () => false;

@@ -16,6 +16,7 @@ ENUM1[A]--;
 
 
 //// [decrementOperatorWithEnumType.js]
+"use strict";
 // -- operator on enum type
 var ENUM1;
 (function (ENUM1) {

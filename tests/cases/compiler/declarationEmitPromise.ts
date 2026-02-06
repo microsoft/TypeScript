@@ -1,4 +1,5 @@
 // @declaration: true
+// @noImplicitThis: false
 // @module: commonjs
 // @target: es6
 

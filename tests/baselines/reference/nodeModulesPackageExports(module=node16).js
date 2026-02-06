@@ -44,6 +44,9 @@ mjsi;
 typei;
 //// [index.d.ts]
 // cjs format file
+export const implicitCjsSource = true;
+//// [test.d.ts]
+// cjs format file
 import * as cjs from "inner/cjs";
 import * as mjs from "inner/mjs";
 import * as type from "inner";
@@ -52,6 +55,9 @@ export { mjs };
 export { type };
 //// [index.d.mts]
 // esm format file
+export const mjsSource = true;
+//// [test.d.mts]
+// esm format file
 import * as cjs from "inner/cjs";
 import * as mjs from "inner/mjs";
 import * as type from "inner";
@@ -59,6 +65,9 @@ export { cjs };
 export { mjs };
 export { type };
 //// [index.d.cts]
+// cjs format file
+export const cjsSource = true;
+//// [test.d.cts]
 // cjs format file
 import * as cjs from "inner/cjs";
 import * as mjs from "inner/mjs";
@@ -87,6 +96,7 @@ export { type };
         ".": "./index.js"
     }
 }
+
 
 //// [index.mjs]
 // esm format file

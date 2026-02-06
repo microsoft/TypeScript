@@ -1,6 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
-// module m {
+// namespace m {
 //     export class C1 {
 //         /*HIGHLIGHTS*/[|{| kind: "none" |}public|] pub1;
 //         [|{| kind: "none" |}public|] pub2;
@@ -32,7 +32,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
-// module m {
+// namespace m {
 //     export class C1 {
 //         [|{| kind: "none" |}public|] pub1;
 //         /*HIGHLIGHTS*/[|{| kind: "none" |}public|] pub2;
@@ -64,7 +64,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
-// module m {
+// namespace m {
 //     export class C1 {
 //         [|{| kind: "none" |}public|] pub1;
 //         [|{| kind: "none" |}public|] pub2;
@@ -96,7 +96,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
-// module m {
+// namespace m {
 //     export class C1 {
 //         [|{| kind: "none" |}public|] pub1;
 //         [|{| kind: "none" |}public|] pub2;
@@ -128,7 +128,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
-// module m {
+// namespace m {
 //     export class C1 {
 //         [|{| kind: "none" |}public|] pub1;
 //         [|{| kind: "none" |}public|] pub2;
@@ -160,7 +160,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
-// module m {
+// namespace m {
 //     export class C1 {
 //         [|{| kind: "none" |}public|] pub1;
 //         [|{| kind: "none" |}public|] pub2;
@@ -192,7 +192,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
-// module m {
+// namespace m {
 //     export class C1 {
 //         [|{| kind: "none" |}public|] pub1;
 //         [|{| kind: "none" |}public|] pub2;
@@ -224,7 +224,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
-// module m {
+// namespace m {
 //     export class C1 {
 //         [|{| kind: "none" |}public|] pub1;
 //         [|{| kind: "none" |}public|] pub2;
@@ -256,7 +256,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPublic1.ts ===
-// module m {
+// namespace m {
 //     export class C1 {
 //         [|{| kind: "none" |}public|] pub1;
 //         [|{| kind: "none" |}public|] pub2;

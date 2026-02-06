@@ -7,11 +7,9 @@ function f() {
 class C2 { }
 
 //// [classDeclarationCheckUsedBeforeDefinitionInFunctionDeclaration.js]
+"use strict";
 function f() {
     new C2(); // OK
 }
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    return C2;
-}());
+class C2 {
+}

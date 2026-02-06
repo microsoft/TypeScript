@@ -226,7 +226,7 @@ namespace Test6 {
     }
 }
 
-module Test7 {
+namespace Test7 {
 >Test7 : typeof Test7
 >      : ^^^^^^^^^^^^
 

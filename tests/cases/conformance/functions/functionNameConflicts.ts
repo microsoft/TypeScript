@@ -1,7 +1,9 @@
+// @target: es2015
+// @strict: false
 //Function and variable of the same name in same declaration space
 //Function overload with different name from implementation signature 
 
-module M {
+namespace M {
     function fn1() { }
     var fn1;
 

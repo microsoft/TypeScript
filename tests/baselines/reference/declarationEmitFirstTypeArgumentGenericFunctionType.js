@@ -26,6 +26,7 @@ var prop4: Y<(<Tany>() => Tany), <Tany>() => Tany>; // parenthesized first type 
 
 
 //// [declarationEmitFirstTypeArgumentGenericFunctionType.js]
+"use strict";
 class X {
 }
 var prop11; // spaces before the first type argument

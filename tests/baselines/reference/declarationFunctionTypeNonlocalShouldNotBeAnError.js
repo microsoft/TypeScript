@@ -11,11 +11,12 @@ namespace foo {
 
 
 //// [declarationFunctionTypeNonlocalShouldNotBeAnError.js]
+"use strict";
 var foo;
 (function (foo) {
     function bar() { }
     foo.obj = {
-        bar: bar
+        bar
     };
 })(foo || (foo = {}));
 

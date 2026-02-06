@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/moduleDeclarations/nestedModules.ts] ////
 
 === nestedModules.ts ===
-module A.B.C {
+namespace A.B.C {
     export interface Point {
         x: number;
 >x : number
@@ -13,11 +13,11 @@ module A.B.C {
     }
 }
 
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
-    export module B {
+    export namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 
@@ -39,7 +39,7 @@ module A {
     }
 }
 
-module M2.X {
+namespace M2.X {
     export interface Point {
         x: number; y: number;
 >x : number
@@ -49,11 +49,11 @@ module M2.X {
     }
 }
 
-module M2 {
+namespace M2 {
 >M2 : typeof M2
 >   : ^^^^^^^^^
 
-    export module X {
+    export namespace X {
 >X : typeof X
 >  : ^^^^^^^^
 

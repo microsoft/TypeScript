@@ -100,6 +100,7 @@ const res: (() => void) & { func: any } = assign(() => {}, { func });
 
 
 //// [unionAndIntersectionInference1.js]
+"use strict";
 // Repro from #2264
 var y = undefined;
 function destructure(something, haveValue, haveY) {

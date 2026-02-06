@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @declaration: true
 function bar([x, z, ...w]) { }
 function foo([x, ...y] = [1, "string", true]) { }

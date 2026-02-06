@@ -41,6 +41,7 @@ str = c2Ord1 instanceof d1 && c2Ord1.p1; // D1
 var r2: D1 | C2 = c2Ord1 instanceof c1 && c2Ord1; // C2 | D1
 
 //// [typeGuardOfFormInstanceOfOnInterface.js]
+"use strict";
 // A type guard of the form x instanceof C, where C is of a subtype of the global type 'Function' 
 // and C has a property named 'prototype'
 //  - when true, narrows the type of x to the type of the 'prototype' property in C provided 

@@ -6,7 +6,7 @@ export const x = 10;
 //// [/home/src/workspaces/project/tsconfig.json]
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs",
     "composite": true
   },
@@ -16,7 +16,6 @@ export const x = 10;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -34,6 +33,8 @@ declare const console: { log(msg: any): void; };
 /home/src/tslibs/TS/Lib/tsc.js --composite false
 Output::
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/src/main.js]
 "use strict";

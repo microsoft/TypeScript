@@ -19,6 +19,7 @@ f2(obj, 'b');
 
 
 //// [intersectionTypeInference2.js]
+"use strict";
 f(a); // never
 f(b); // never
 f2(obj, 'a');

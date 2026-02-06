@@ -14,8 +14,7 @@ import {
 
 const libFile: File = {
     path: vfsWatch_LibFile.path,
-    content: `/// <reference no-default-lib="true"/>
-interface Boolean {}
+    content: `interface Boolean {}
 interface Function {}
 interface IArguments {}
 interface Number { toExponential: any; }
@@ -415,6 +414,7 @@ function testConvertToAsyncFunction(it: Mocha.PendingTestFunction, caption: stri
         }
         const host = TestServerHost.createServerHost(files);
         const projectService = new TestProjectService(host);
+        projectService.setCompilerOptionsForInferredProjects({ target: ts.server.protocol.ScriptTarget.ES5 });
         projectService.openClientFile(file.path);
         return ts.first(projectService.inferredProjects).getLanguageService();
     }

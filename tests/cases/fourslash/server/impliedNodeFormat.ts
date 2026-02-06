@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "module": "nodenext" } }
+//// { "compilerOptions": { "module": "nodenext", "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/package.json
 //// { "name": "foo", "type": "module", "exports": { ".": "./main.js" } }

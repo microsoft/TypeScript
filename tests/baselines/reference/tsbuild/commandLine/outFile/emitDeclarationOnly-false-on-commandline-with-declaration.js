@@ -47,7 +47,6 @@ import { a } from "a"; export const f = a;
 import { b } from "b"; export const g = b;
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -72,9 +71,29 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
 
+[96mproject1/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because output file 'project2/outFile.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -86,9 +105,11 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 5 errors.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/solution/project1/outFile.d.ts]
 declare module "a" {
@@ -106,7 +127,7 @@ declare module "d" {
 
 
 //// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo]
-{"root":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"version":"FakeTSVersion"}
+{"root":["./src/a.ts","./src/b.ts","./src/c.ts","./src/d.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo.readable.baseline.txt]
 {
@@ -116,8 +137,9 @@ declare module "d" {
     "./src/c.ts",
     "./src/d.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 88
+  "size": 102
 }
 
 //// [/home/src/workspaces/solution/project2/outFile.d.ts]
@@ -164,82 +186,16 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
-
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/solution/project1/src/a.ts
-/home/src/workspaces/solution/project1/src/b.ts
-/home/src/workspaces/solution/project1/src/c.ts
-/home/src/workspaces/solution/project1/src/d.ts
-
-No shapes updated in the builder::
-
-Program root files: [
-  "/home/src/workspaces/solution/project2/src/e.ts",
-  "/home/src/workspaces/solution/project2/src/f.ts",
-  "/home/src/workspaces/solution/project2/src/g.ts"
-]
-Program options: {
-  "declaration": true,
-  "emitDeclarationOnly": true,
-  "outFile": "/home/src/workspaces/solution/project2/outFile.js",
-  "module": 2,
-  "tscBuild": true,
-  "configFilePath": "/home/src/workspaces/solution/project2/src/tsconfig.json"
-}
-Program structureReused: Not
-Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/solution/project1/outFile.d.ts
-/home/src/workspaces/solution/project2/src/e.ts
-/home/src/workspaces/solution/project2/src/f.ts
-/home/src/workspaces/solution/project2/src/g.ts
 
 No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
-
-Change:: no-change-run
-
-Input::
-
-/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose
-Output::
-[[90mHH:MM:SS AM[0m] Projects in this build: 
-    * project1/src/tsconfig.json
-    * project2/src/tsconfig.json
-
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is up to date because newest input 'project1/src/d.ts' is older than output 'project1/outFile.d.ts'
-
-[[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
-
-[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
-
-[96mproject2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
-
-[7m 9[0m     {
-[7m  [0m [91m    ~[0m
-[7m10[0m       "path": "../../project1/src"
-[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
-[7m11[0m     }
-[7m  [0m [91m~~~~~[0m
-
-
-Found 1 error.
-
-
-
-//// [/home/src/workspaces/solution/project2/outFile.d.ts] file written with same contents
-//// [/home/src/workspaces/solution/project2/outFile.tsbuildinfo] file written with same contents
-//// [/home/src/workspaces/solution/project2/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
-
 Program root files: [
   "/home/src/workspaces/solution/project2/src/e.ts",
   "/home/src/workspaces/solution/project2/src/f.ts",
@@ -255,7 +211,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/outFile.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -267,12 +223,9 @@ No shapes updated in the builder::
 
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-Change:: change
+Change:: no-change-run
 
 Input::
-//// [/home/src/workspaces/solution/project1/src/a.ts]
-export const a = 10;const aLocal = 10;const aa = 10;
-
 
 /home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose
 Output::
@@ -280,13 +233,33 @@ Output::
     * project1/src/tsconfig.json
     * project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because output 'project1/outFile.tsbuildinfo' is older than input 'project1/src/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -298,7 +271,7 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 5 errors.
 
 
 
@@ -325,18 +298,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/solution/project1/src/a.ts
-/home/src/workspaces/solution/project1/src/b.ts
-/home/src/workspaces/solution/project1/src/c.ts
-/home/src/workspaces/solution/project1/src/d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -355,7 +323,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/outFile.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -365,25 +333,48 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
-Change:: emit js files
+Change:: change
 
 Input::
+//// [/home/src/workspaces/solution/project1/src/a.ts]
+export const a = 10;const aLocal = 10;const aa = 10;
 
-/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose --emitDeclarationOnly false
+
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project1/src/tsconfig.json
     * project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because output file 'project1/outFile.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -395,7 +386,119 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 5 errors.
+
+
+
+//// [/home/src/workspaces/solution/project1/outFile.d.ts] file written with same contents
+//// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo] file written with same contents
+//// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/home/src/workspaces/solution/project2/outFile.d.ts] file written with same contents
+//// [/home/src/workspaces/solution/project2/outFile.tsbuildinfo] file written with same contents
+//// [/home/src/workspaces/solution/project2/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+Program root files: [
+  "/home/src/workspaces/solution/project1/src/a.ts",
+  "/home/src/workspaces/solution/project1/src/b.ts",
+  "/home/src/workspaces/solution/project1/src/c.ts",
+  "/home/src/workspaces/solution/project1/src/d.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "outFile": "/home/src/workspaces/solution/project1/outFile.js",
+  "module": 2,
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspaces/solution/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/workspaces/solution/project1/src/a.ts
+/home/src/workspaces/solution/project1/src/b.ts
+/home/src/workspaces/solution/project1/src/c.ts
+/home/src/workspaces/solution/project1/src/d.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+Program root files: [
+  "/home/src/workspaces/solution/project2/src/e.ts",
+  "/home/src/workspaces/solution/project2/src/f.ts",
+  "/home/src/workspaces/solution/project2/src/g.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "outFile": "/home/src/workspaces/solution/project2/outFile.js",
+  "module": 2,
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspaces/solution/project2/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/workspaces/solution/project1/outFile.d.ts
+/home/src/workspaces/solution/project2/src/e.ts
+/home/src/workspaces/solution/project2/src/f.ts
+/home/src/workspaces/solution/project2/src/g.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
+
+Change:: emit js files
+
+Input::
+
+/home/src/tslibs/TS/Lib/tsc.js --b project2/src --verbose --emitDeclarationOnly false
+Output::
+[[90mHH:MM:SS AM[0m] Projects in this build: 
+    * project1/src/tsconfig.json
+    * project2/src/tsconfig.json
+
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+[96mproject2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
+
+[7m 9[0m     {
+[7m  [0m [91m    ~[0m
+[7m10[0m       "path": "../../project1/src"
+[7m  [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+[7m11[0m     }
+[7m  [0m [91m~~~~~[0m
+
+
+Found 5 errors.
 
 
 
@@ -411,15 +514,15 @@ define("a", ["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
     exports.a = 10;
-    var aLocal = 10;
-    var aa = 10;
+    const aLocal = 10;
+    const aa = 10;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = void 0;
     exports.b = 10;
-    var bLocal = 10;
+    const bLocal = 10;
 });
 define("c", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
@@ -473,18 +576,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/solution/project1/src/a.ts
-/home/src/workspaces/solution/project1/src/b.ts
-/home/src/workspaces/solution/project1/src/c.ts
-/home/src/workspaces/solution/project1/src/d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -503,7 +601,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/outFile.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -513,7 +611,7 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: no-change-run
 
@@ -525,11 +623,33 @@ Output::
     * project1/src/tsconfig.json
     * project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is up to date because newest input 'project1/src/a.ts' is older than output 'project1/outFile.d.ts'
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -541,13 +661,42 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 5 errors.
 
 
 
+//// [/home/src/workspaces/solution/project1/outFile.d.ts] file written with same contents
+//// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo] file written with same contents
+//// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/workspaces/solution/project2/outFile.d.ts] file written with same contents
 //// [/home/src/workspaces/solution/project2/outFile.tsbuildinfo] file written with same contents
 //// [/home/src/workspaces/solution/project2/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+
+Program root files: [
+  "/home/src/workspaces/solution/project1/src/a.ts",
+  "/home/src/workspaces/solution/project1/src/b.ts",
+  "/home/src/workspaces/solution/project1/src/c.ts",
+  "/home/src/workspaces/solution/project1/src/d.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": true,
+  "outFile": "/home/src/workspaces/solution/project1/outFile.js",
+  "module": 2,
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspaces/solution/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/workspaces/solution/project1/src/a.ts
+/home/src/workspaces/solution/project1/src/b.ts
+/home/src/workspaces/solution/project1/src/c.ts
+/home/src/workspaces/solution/project1/src/d.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 Program root files: [
   "/home/src/workspaces/solution/project2/src/e.ts",
@@ -564,7 +713,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/outFile.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -586,11 +735,33 @@ Output::
     * project1/src/tsconfig.json
     * project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is up to date because newest input 'project1/src/a.ts' is older than output 'project1/outFile.js'
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -602,14 +773,44 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 5 errors.
 
 
 
+//// [/home/src/workspaces/solution/project1/outFile.d.ts] file written with same contents
+//// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo] file written with same contents
+//// [/home/src/workspaces/solution/project1/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/workspaces/solution/project2/outFile.d.ts] file written with same contents
 //// [/home/src/workspaces/solution/project2/outFile.tsbuildinfo] file written with same contents
 //// [/home/src/workspaces/solution/project2/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
+//// [/home/src/workspaces/solution/project1/outFile.js] file written with same contents
 //// [/home/src/workspaces/solution/project2/outFile.js] file written with same contents
+
+Program root files: [
+  "/home/src/workspaces/solution/project1/src/a.ts",
+  "/home/src/workspaces/solution/project1/src/b.ts",
+  "/home/src/workspaces/solution/project1/src/c.ts",
+  "/home/src/workspaces/solution/project1/src/d.ts"
+]
+Program options: {
+  "declaration": true,
+  "emitDeclarationOnly": false,
+  "outFile": "/home/src/workspaces/solution/project1/outFile.js",
+  "module": 2,
+  "tscBuild": true,
+  "configFilePath": "/home/src/workspaces/solution/project1/src/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/workspaces/solution/project1/src/a.ts
+/home/src/workspaces/solution/project1/src/b.ts
+/home/src/workspaces/solution/project1/src/c.ts
+/home/src/workspaces/solution/project1/src/d.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
 
 Program root files: [
   "/home/src/workspaces/solution/project2/src/e.ts",
@@ -626,7 +827,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/outFile.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -651,13 +852,33 @@ Output::
     * project1/src/tsconfig.json
     * project2/src/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because output 'project1/outFile.tsbuildinfo' is older than input 'project1/src/b.ts'
+[[90mHH:MM:SS AM[0m] Project 'project1/src/tsconfig.json' is out of date because buildinfo file 'project1/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project1/src/tsconfig.json'...
+
+[96mproject1/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject1/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'project2/src/tsconfig.json' is out of date because buildinfo file 'project2/outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/project2/src/tsconfig.json'...
+
+[96mproject2/src/tsconfig.json[0m:[93m5[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m5[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mproject2/src/tsconfig.json[0m:[93m6[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m6[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
 
 [96mproject2/src/tsconfig.json[0m:[93m9[0m:[93m5[0m - [91merror[0m[90m TS6306: [0mReferenced project '/home/src/workspaces/solution/project1/src' must have setting "composite": true.
 
@@ -669,7 +890,7 @@ Output::
 [7m  [0m [91m~~~~~[0m
 
 
-Found 1 error.
+Found 5 errors.
 
 
 
@@ -685,16 +906,16 @@ define("a", ["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.a = void 0;
     exports.a = 10;
-    var aLocal = 10;
-    var aa = 10;
+    const aLocal = 10;
+    const aa = 10;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.b = void 0;
     exports.b = 10;
-    var bLocal = 10;
-    var blocal = 10;
+    const bLocal = 10;
+    const blocal = 10;
 });
 define("c", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
@@ -728,18 +949,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/src/a.ts
 /home/src/workspaces/solution/project1/src/b.ts
 /home/src/workspaces/solution/project1/src/c.ts
 /home/src/workspaces/solution/project1/src/d.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/home/src/workspaces/solution/project1/src/a.ts
-/home/src/workspaces/solution/project1/src/b.ts
-/home/src/workspaces/solution/project1/src/c.ts
-/home/src/workspaces/solution/project1/src/d.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -758,7 +974,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/workspaces/solution/project1/outFile.d.ts
 /home/src/workspaces/solution/project2/src/e.ts
 /home/src/workspaces/solution/project2/src/f.ts
@@ -768,4 +984,4 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

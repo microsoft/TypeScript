@@ -15,6 +15,7 @@ function b(): IPromise<void> { return null; }
 function d(): IPromise<any> { return null; }
 
 //// [bestCommonTypeReturnStatement.js]
+"use strict";
 function f() {
     if (true)
         return b();

@@ -1,0 +1,16 @@
+stringLiteralTypesAndParenthesizedExpressions01.ts(5,17): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+stringLiteralTypesAndParenthesizedExpressions01.ts(6,25): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+
+
+==== stringLiteralTypesAndParenthesizedExpressions01.ts (2 errors) ====
+    declare function myRandBool(): boolean;
+    
+    let a: "foo" = ("foo");
+    let b: "foo" | "bar" = ("foo");
+    let c: "foo" = (myRandBool ? "foo" : ("foo"));
+                    ~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    let d: "foo" | "bar" = (myRandBool ? "foo" : ("bar"));
+                            ~~~~~~~~~~
+!!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+    

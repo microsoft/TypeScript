@@ -1,3 +1,4 @@
+// @target: es2015
 /// <reference path="/.lib/react16.d.ts" />
 
 class I<T1 extends keyof JSX.IntrinsicElements, T2 extends keyof JSX.IntrinsicElements> {

@@ -1,3 +1,4 @@
+// @target: es2015
 function foo(f: (x: string) => string) {
     return f("");
 }

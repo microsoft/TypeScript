@@ -5,6 +5,7 @@
         "commands.ts"
     ],
     "baselineCheck": true,
+    "strict": false,
     "resolvedInputFiles": [
         "lib.es5.d.ts",
         "lib.decorators.d.ts",

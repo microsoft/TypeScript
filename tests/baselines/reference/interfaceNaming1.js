@@ -7,6 +7,7 @@ interface & { }
 
 
 //// [interfaceNaming1.js]
+"use strict";
 interface;
 { }
 interface & {};

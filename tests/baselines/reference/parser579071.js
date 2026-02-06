@@ -4,4 +4,5 @@
 var x = /fo(o/;
 
 //// [parser579071.js]
+"use strict";
 var x = /fo(o/;

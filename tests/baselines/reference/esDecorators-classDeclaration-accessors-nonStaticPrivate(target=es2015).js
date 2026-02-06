@@ -10,6 +10,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-accessors-nonStaticPrivate.js]
+"use strict";
 let C = (() => {
     var _C_instances, _a, _C_method1_get, _C_method1_set;
     let _instanceExtraInitializers = [];

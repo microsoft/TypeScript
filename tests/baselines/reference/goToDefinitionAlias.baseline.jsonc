@@ -1,7 +1,7 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/b.ts ===
 // <|import [|alias1|] = require("fileb");|>
-// module Module {
+// namespace Module {
 //     export import alias2 = alias1;
 // }
 // 
@@ -31,7 +31,7 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/b.ts ===
 // <|import [|alias1|] = require("fileb");|>
-// module Module {
+// namespace Module {
 //     export import alias2 = alias1;
 // }
 // 
@@ -61,7 +61,7 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/b.ts ===
 // import alias1 = require("fileb");
-// module Module {
+// namespace Module {
 //     <|export import [|alias2|] = alias1;|>
 // }
 // 
@@ -91,7 +91,7 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/b.ts ===
 // import alias1 = require("fileb");
-// module Module {
+// namespace Module {
 //     <|export import [|alias2|] = alias1;|>
 // }
 // 

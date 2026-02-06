@@ -68,6 +68,7 @@ class Cls3 {
 }
 
 //// [uniqueSymbolsPropertyNames.js]
+"use strict";
 var OpNamespace;
 (function (OpNamespace) {
 })(OpNamespace || (OpNamespace = {}));

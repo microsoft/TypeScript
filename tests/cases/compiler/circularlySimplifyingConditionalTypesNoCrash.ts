@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 

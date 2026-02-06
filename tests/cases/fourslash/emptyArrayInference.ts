@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////var x/*1*/x = true ? [1] : [undefined]; 
 ////var y/*2*/y = true ? [1] : [];
 

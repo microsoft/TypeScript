@@ -22,10 +22,13 @@ declare var xx: number;
 
 
 //// [a.js]
+"use strict";
 var aa = 1;
 //// [c.js]
+"use strict";
 var cc = 1;
 //// [t.js]
+"use strict";
 /// <reference path="a"/>
 /// <reference path="b"/>
 /// <reference path="c"/>

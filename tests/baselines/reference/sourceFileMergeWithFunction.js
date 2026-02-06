@@ -11,4 +11,5 @@ declare function foo(): any;
 
 
 //// [foo.js]
+"use strict";
 /// <reference path="types.d.ts" />

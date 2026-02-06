@@ -1,0 +1,47 @@
+derivedTypeDoesNotRequireExtendsClause.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+derivedTypeDoesNotRequireExtendsClause.ts(6,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+derivedTypeDoesNotRequireExtendsClause.ts(7,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+derivedTypeDoesNotRequireExtendsClause.ts(11,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+derivedTypeDoesNotRequireExtendsClause.ts(17,5): error TS2454: Variable 'd1' is used before being assigned.
+derivedTypeDoesNotRequireExtendsClause.ts(18,5): error TS2454: Variable 'd2' is used before being assigned.
+derivedTypeDoesNotRequireExtendsClause.ts(20,18): error TS2454: Variable 'd1' is used before being assigned.
+derivedTypeDoesNotRequireExtendsClause.ts(20,22): error TS2454: Variable 'd2' is used before being assigned.
+
+
+==== derivedTypeDoesNotRequireExtendsClause.ts (8 errors) ====
+    class Base {
+        foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class Derived {
+        foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+        bar: number;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class Derived2 extends Base {
+        bar: string;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var b: Base;
+    var d1: Derived;
+    var d2: Derived2;
+    b = d1;
+        ~~
+!!! error TS2454: Variable 'd1' is used before being assigned.
+    b = d2;
+        ~~
+!!! error TS2454: Variable 'd2' is used before being assigned.
+    
+    var r: Base[] = [d1, d2];
+                     ~~
+!!! error TS2454: Variable 'd1' is used before being assigned.
+                         ~~
+!!! error TS2454: Variable 'd2' is used before being assigned.

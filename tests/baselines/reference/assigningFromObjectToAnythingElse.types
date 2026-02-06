@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/assigningFromObjectToAnythingElse.ts] ////
 
 === assigningFromObjectToAnythingElse.ts ===
-var x: Object;
+declare var x: Object;
 >x : Object
 >  : ^^^^^^
 

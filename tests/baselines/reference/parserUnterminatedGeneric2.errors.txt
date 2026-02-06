@@ -16,7 +16,7 @@ parserUnterminatedGeneric2.ts(8,54): error TS1005: '>' expected.
 
 
 ==== parserUnterminatedGeneric2.ts (15 errors) ====
-    declare module ng {
+    declare namespace ng {
         interfaceICompiledExpression {
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS1435: Unknown keyword or identifier. Did you mean 'interface ICompiledExpression'?
@@ -50,7 +50,9 @@ parserUnterminatedGeneric2.ts(8,54): error TS1005: '>' expected.
             all(promises: IPromise < any > []): IPromise<
                           ~~~~~~~~
 !!! error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
+!!! related TS2728 lib.es2015.promise.d.ts:--:--: 'Promise' is declared here.
                                                 ~~~~~~~~
 !!! error TS2552: Cannot find name 'IPromise'. Did you mean 'Promise'?
+!!! related TS2728 lib.es2015.promise.d.ts:--:--: 'Promise' is declared here.
                                                          
 !!! error TS1005: '>' expected.

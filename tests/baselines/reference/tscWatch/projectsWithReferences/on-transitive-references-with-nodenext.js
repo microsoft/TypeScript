@@ -25,7 +25,7 @@ X;
 {
   "compilerOptions": {
     "module": "nodenext",
-    "target": "es5",
+    "target": "es2015",
     "composite": true
   },
   "files": [
@@ -37,7 +37,7 @@ X;
 {
   "compilerOptions": {
     "module": "nodenext",
-    "target": "es5",
+    "target": "es2015",
     "composite": true,
     "baseUrl": "./",
     "paths": {
@@ -63,7 +63,7 @@ X;
   ],
   "compilerOptions": {
     "module": "nodenext",
-    "target": "es5",
+    "target": "es2015",
     "baseUrl": "./",
     "paths": {
       "@ref/*": [
@@ -79,7 +79,6 @@ X;
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -93,15 +92,14 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
+//// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*
+
 //// [/user/username/projects/transitiveReferences/a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
 
 
@@ -111,23 +109,23 @@ export declare class A {
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.a.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./a.ts"],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7808316224-export class A {}\n","signature":"-8728835846-export declare class A {\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"module":199,"target":1},"latestChangedDtsFile":"./a.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es6.d.ts","./a.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-7808316224-export class A {}\n","signature":"-8728835846-export declare class A {\n}\n","impliedFormat":1}],"root":[2],"options":{"composite":true,"module":199,"target":2},"latestChangedDtsFile":"./a.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.a.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es6.d.ts",
     "./a.ts"
   ],
   "fileInfos": {
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.es6.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": 1
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
       "impliedFormat": "commonjs"
     },
@@ -151,18 +149,18 @@ export declare class A {
   "options": {
     "composite": true,
     "module": 199,
-    "target": 1
+    "target": 2
   },
   "latestChangedDtsFile": "./a.d.ts",
   "version": "FakeTSVersion",
-  "size": 825
+  "size": 789
 }
 
 //// [/user/username/projects/transitiveReferences/b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
-var a_1 = require("@ref/a");
+const a_1 = require("@ref/a");
 exports.b = new a_1.A();
 
 
@@ -172,12 +170,12 @@ export declare const b: A;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8728835846-export declare class A {\n}\n","impliedFormat":1},{"version":"-3899816362-import {A} from '@ref/a';\nexport const b = new A();\n","signature":"-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"module":199,"target":1},"referencedMap":[[3,1]],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es6.d.ts","./a.d.ts","./b.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8728835846-export declare class A {\n}\n","impliedFormat":1},{"version":"-3899816362-import {A} from '@ref/a';\nexport const b = new A();\n","signature":"-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"module":199,"target":2},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es6.d.ts",
     "./a.d.ts",
     "./b.ts"
   ],
@@ -187,14 +185,14 @@ export declare const b: A;
     ]
   ],
   "fileInfos": {
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.es6.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": 1
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
       "impliedFormat": "commonjs"
     },
@@ -227,37 +225,52 @@ export declare const b: A;
   "options": {
     "composite": true,
     "module": 199,
-    "target": 1
+    "target": 2
   },
   "referencedMap": {
     "./b.ts": [
       "./a.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../home/src/tslibs/ts/lib/lib.es6.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./a.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./b.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./b.d.ts",
   "version": "FakeTSVersion",
-  "size": 1017
+  "size": 1018
 }
 
 //// [/user/username/projects/transitiveReferences/c.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var a_1 = require("@ref/a");
+const b_1 = require("./b");
+const a_1 = require("@ref/a");
 b_1.b;
 a_1.X;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.c.tsbuildinfo]
-{"root":["./c.ts"],"version":"FakeTSVersion"}
+{"root":["./c.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.c.tsbuildinfo.readable.baseline.txt]
 {
   "root": [
     "./c.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 45
+  "size": 59
 }
 
 
@@ -315,8 +328,14 @@ File '/home/src/tslibs/package.json' does not exist.
 File '/home/src/package.json' does not exist.
 File '/home/package.json' does not exist.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+[96mtsconfig.c.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -331,7 +350,7 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -344,19 +363,15 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/transitiveReferences/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es6.d.ts: *new*
   {}
 /user/username/projects/transitiveReferences/a.d.ts: *new*
   {}
@@ -382,7 +397,7 @@ Program root files: [
 ]
 Program options: {
   "module": 199,
-  "target": 1,
+  "target": 2,
   "baseUrl": "/user/username/projects/transitiveReferences",
   "paths": {
     "@ref/*": [
@@ -398,29 +413,24 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
-/user/username/projects/transitiveReferences/a.d.ts
-/user/username/projects/transitiveReferences/b.d.ts
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es6.d.ts (used version)
 /user/username/projects/transitivereferences/a.d.ts (used version)
 /user/username/projects/transitivereferences/b.d.ts (used version)
 /user/username/projects/transitivereferences/refs/a.d.ts (used version)
 /user/username/projects/transitivereferences/c.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  /home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es6.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -453,7 +463,7 @@ export function gfoo() { }
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = void 0;
 exports.gfoo = gfoo;
-var a_1 = require("@ref/a");
+const a_1 = require("@ref/a");
 exports.b = new a_1.A();
 function gfoo() { }
 
@@ -465,12 +475,12 @@ export declare function gfoo(): void;
 
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo]
-{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.d.ts","./a.d.ts","./b.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8728835846-export declare class A {\n}\n","impliedFormat":1},{"version":"-3352421102-import {A} from '@ref/a';\nexport const b = new A();\nexport function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"module":199,"target":1},"referencedMap":[[3,1]],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es6.d.ts","./a.d.ts","./b.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedFormat":1},{"version":"-8728835846-export declare class A {\n}\n","impliedFormat":1},{"version":"-3352421102-import {A} from '@ref/a';\nexport const b = new A();\nexport function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n","impliedFormat":1}],"root":[3],"options":{"composite":true,"module":199,"target":2},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./b.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/tsconfig.b.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es6.d.ts",
     "./a.d.ts",
     "./b.ts"
   ],
@@ -480,14 +490,14 @@ export declare function gfoo(): void;
     ]
   ],
   "fileInfos": {
-    "../../../../home/src/tslibs/ts/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.es6.d.ts": {
       "original": {
-        "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true,
         "impliedFormat": 1
       },
-      "version": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
-      "signature": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true,
       "impliedFormat": "commonjs"
     },
@@ -520,17 +530,40 @@ export declare function gfoo(): void;
   "options": {
     "composite": true,
     "module": 199,
-    "target": 1
+    "target": 2
   },
   "referencedMap": {
     "./b.ts": [
       "./a.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../home/src/tslibs/ts/lib/lib.es6.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./a.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./b.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./b.d.ts",
   "version": "FakeTSVersion",
-  "size": 1081
+  "size": 1082
 }
+
+
+Output::
+[96mtsconfig.b.json[0m:[93m6[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m6[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 
 
 Timeout callback:: count: 1
@@ -572,8 +605,14 @@ File '/user/username/package.json' does not exist according to earlier cached lo
 File '/user/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveReferences/b.ts' of old program, it was successfully resolved to '/user/username/projects/transitiveReferences/a.ts'.
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+[96mtsconfig.c.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -588,7 +627,7 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -600,7 +639,7 @@ Program root files: [
 ]
 Program options: {
   "module": 199,
-  "target": 1,
+  "target": 2,
   "baseUrl": "/user/username/projects/transitiveReferences",
   "paths": {
     "@ref/*": [
@@ -616,23 +655,21 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/b.d.ts
-/user/username/projects/transitiveReferences/c.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/b.d.ts (used version)
 /user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  /home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es6.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -662,7 +699,7 @@ Input::
   ],
   "compilerOptions": {
     "module": "nodenext",
-    "target": "es5",
+    "target": "es2015",
     "baseUrl": "./",
     "paths": {
       "@ref/*": [
@@ -744,8 +781,14 @@ File '/home/src/tslibs/package.json' does not exist according to earlier cached 
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+[96mtsconfig.c.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -760,7 +803,7 @@ nrefs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -773,12 +816,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json:
   {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/transitiveReferences/nrefs/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/package.json:
@@ -789,7 +828,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
   {}
 /user/username/projects/transitiveReferences/a.d.ts:
   {}
@@ -824,7 +863,7 @@ Program root files: [
 ]
 Program options: {
   "module": 199,
-  "target": 1,
+  "target": 2,
   "baseUrl": "/user/username/projects/transitiveReferences",
   "paths": {
     "@ref/*": [
@@ -840,23 +879,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/nrefs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/nrefs/a.d.ts
-/user/username/projects/transitiveReferences/c.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
 /user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  /home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es6.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/nrefs/a.d.ts
@@ -886,7 +923,7 @@ Input::
   ],
   "compilerOptions": {
     "module": "nodenext",
-    "target": "es5",
+    "target": "es2015",
     "baseUrl": "./",
     "paths": {
       "@ref/*": [
@@ -963,8 +1000,14 @@ File '/home/src/tslibs/package.json' does not exist according to earlier cached 
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+[96mtsconfig.c.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -979,7 +1022,7 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -992,12 +1035,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json:
   {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json: *new*
@@ -1008,7 +1047,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
   {}
 /user/username/projects/transitiveReferences/a.d.ts:
   {}
@@ -1043,7 +1082,7 @@ Program root files: [
 ]
 Program options: {
   "module": 199,
-  "target": 1,
+  "target": 2,
   "baseUrl": "/user/username/projects/transitiveReferences",
   "paths": {
     "@ref/*": [
@@ -1059,23 +1098,21 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/refs/a.d.ts
-/user/username/projects/transitiveReferences/c.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/refs/a.d.ts (used version)
 /user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  /home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es6.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1102,7 +1139,7 @@ Input::
 {
   "compilerOptions": {
     "module": "nodenext",
-    "target": "es5",
+    "target": "es2015",
     "composite": true,
     "baseUrl": "./",
     "paths": {
@@ -1168,8 +1205,14 @@ File '/home/src/tslibs/package.json' does not exist according to earlier cached 
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+[96mtsconfig.c.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 nrefs/a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is CommonJS module because 'package.json' was not found
@@ -1183,7 +1226,7 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1195,12 +1238,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json:
   {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/transitiveReferences/nrefs/package.json: *new*
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/package.json:
@@ -1209,7 +1248,7 @@ PolledWatches::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
   {}
 /user/username/projects/transitiveReferences/b.d.ts:
   {}
@@ -1242,7 +1281,7 @@ Program root files: [
 ]
 Program options: {
   "module": 199,
-  "target": 1,
+  "target": 2,
   "baseUrl": "/user/username/projects/transitiveReferences",
   "paths": {
     "@ref/*": [
@@ -1258,16 +1297,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
 /user/username/projects/transitiveReferences/nrefs/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/nrefs/a.d.ts
-/user/username/projects/transitiveReferences/b.d.ts
-/user/username/projects/transitiveReferences/c.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/nrefs/a.d.ts (used version)
@@ -1275,8 +1311,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  /home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es6.d.ts
   /user/username/projects/transitiveReferences/nrefs/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1303,7 +1339,7 @@ Input::
 {
   "compilerOptions": {
     "module": "nodenext",
-    "target": "es5",
+    "target": "es2015",
     "composite": true,
     "baseUrl": "./",
     "paths": {
@@ -1363,8 +1399,14 @@ File '/home/src/tslibs/package.json' does not exist according to earlier cached 
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+[96mtsconfig.c.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   Imported via "@ref/a" from file 'c.ts'
@@ -1376,7 +1418,7 @@ b.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1388,12 +1430,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json:
   {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json:
@@ -1404,7 +1442,7 @@ PolledWatches *deleted*::
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
   {}
 /user/username/projects/transitiveReferences/b.d.ts:
   {}
@@ -1437,7 +1475,7 @@ Program root files: [
 ]
 Program options: {
   "module": 199,
-  "target": 1,
+  "target": 2,
   "baseUrl": "/user/username/projects/transitiveReferences",
   "paths": {
     "@ref/*": [
@@ -1453,20 +1491,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/b.d.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/b.d.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  /home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es6.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/c.ts
@@ -1535,6 +1572,12 @@ File '/home/src/tslibs/package.json' does not exist according to earlier cached 
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
+[96mtsconfig.c.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
 [96mtsconfig.c.json[0m:[93m16[0m:[93m5[0m - [91merror[0m[90m TS6053: [0mFile '/user/username/projects/transitiveReferences/tsconfig.b.json' not found.
 
 [7m16[0m     {
@@ -1544,8 +1587,8 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m18[0m     }
 [7m  [0m [91m~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b.ts'
   Imported via "@ref/a" from file 'c.ts'
@@ -1556,7 +1599,7 @@ b.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -1570,19 +1613,15 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json:
   {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
   {}
 /user/username/projects/transitiveReferences/b.ts: *new*
   {}
@@ -1611,7 +1650,7 @@ Program root files: [
 ]
 Program options: {
   "module": 199,
-  "target": 1,
+  "target": 2,
   "baseUrl": "/user/username/projects/transitiveReferences",
   "paths": {
     "@ref/*": [
@@ -1627,22 +1666,20 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/b.ts
 /user/username/projects/transitiveReferences/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/b.ts
-/user/username/projects/transitiveReferences/c.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/b.ts (computed .d.ts)
 /user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  /home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es6.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b.ts
   /user/username/projects/transitiveReferences/c.ts
@@ -1665,7 +1702,7 @@ Input::
 {
   "compilerOptions": {
     "module": "nodenext",
-    "target": "es5",
+    "target": "es2015",
     "composite": true,
     "baseUrl": "./",
     "paths": {
@@ -1730,8 +1767,14 @@ File '/home/src/tslibs/package.json' does not exist according to earlier cached 
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+[96mtsconfig.c.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -1746,7 +1789,7 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -1759,19 +1802,15 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json:
   {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
   {}
 /user/username/projects/transitiveReferences/a.d.ts: *new*
   {}
@@ -1802,7 +1841,7 @@ Program root files: [
 ]
 Program options: {
   "module": 199,
-  "target": 1,
+  "target": 2,
   "baseUrl": "/user/username/projects/transitiveReferences",
   "paths": {
     "@ref/*": [
@@ -1818,16 +1857,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/a.d.ts
-/user/username/projects/transitiveReferences/b.d.ts
-/user/username/projects/transitiveReferences/c.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/a.d.ts (used version)
@@ -1835,8 +1871,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  /home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es6.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1912,8 +1948,14 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m19[0m     }
 [7m  [0m [91m~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+[96mtsconfig.c.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 a.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is CommonJS module because 'package.json' was not found
@@ -1927,7 +1969,7 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -1940,19 +1982,15 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json:
   {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
   {}
 /user/username/projects/transitiveReferences/a.ts: *new*
   {}
@@ -1983,7 +2021,7 @@ Program root files: [
 ]
 Program options: {
   "module": 199,
-  "target": 1,
+  "target": 2,
   "baseUrl": "/user/username/projects/transitiveReferences",
   "paths": {
     "@ref/*": [
@@ -1999,16 +2037,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
 /user/username/projects/transitiveReferences/a.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/a.ts
-/user/username/projects/transitiveReferences/b.d.ts
-/user/username/projects/transitiveReferences/c.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/a.ts (computed .d.ts)
@@ -2016,8 +2051,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  /home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es6.d.ts
   /user/username/projects/transitiveReferences/a.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -2044,7 +2079,7 @@ Input::
 {
   "compilerOptions": {
     "module": "nodenext",
-    "target": "es5",
+    "target": "es2015",
     "composite": true
   },
   "files": [
@@ -2095,8 +2130,14 @@ File '/home/src/tslibs/package.json' does not exist according to earlier cached 
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+[96mtsconfig.c.json[0m:[93m8[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m8[0m     "baseUrl": "./",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+../../../../home/src/tslibs/TS/Lib/lib.es6.d.ts
+  Default library for target 'es6'
 a.d.ts
   Imported via '@ref/a' from file 'b.d.ts'
   File is output of project reference source 'a.ts'
@@ -2111,7 +2152,7 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -2123,19 +2164,15 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json:
   {"pollingInterval":2000}
-/user/username/projects/transitiveReferences/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/transitiveReferences/package.json:
   {"pollingInterval":2000}
 /user/username/projects/transitiveReferences/refs/package.json:
   {"pollingInterval":2000}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
   {}
 /user/username/projects/transitiveReferences/a.d.ts: *new*
   {}
@@ -2166,7 +2203,7 @@ Program root files: [
 ]
 Program options: {
   "module": 199,
-  "target": 1,
+  "target": 2,
   "baseUrl": "/user/username/projects/transitiveReferences",
   "paths": {
     "@ref/*": [
@@ -2182,16 +2219,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts
 /user/username/projects/transitiveReferences/a.d.ts
 /user/username/projects/transitiveReferences/b.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/c.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/transitiveReferences/a.d.ts
-/user/username/projects/transitiveReferences/b.d.ts
-/user/username/projects/transitiveReferences/c.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/a.d.ts (used version)
@@ -2199,8 +2233,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  /home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es6.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es6.d.ts
   /user/username/projects/transitiveReferences/a.d.ts
   /user/username/projects/transitiveReferences/b.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts

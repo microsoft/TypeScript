@@ -4,4 +4,5 @@
 var v: typeof A;
 
 //// [parserTypeQuery2.js]
+"use strict";
 var v;

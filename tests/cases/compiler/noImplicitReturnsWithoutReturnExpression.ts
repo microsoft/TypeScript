@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @noImplicitReturns: true
 function isMissingReturnExpression(): number {
     return;

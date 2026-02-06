@@ -1,0 +1,29 @@
+/p1/index.ts(8,58): error TS2345: Argument of type 'null' is not assignable to parameter of type 'typeof import("/p1/node_modules/csv-parse/lib/index")'.
+
+
+==== /p1/node_modules/csv-parse/lib/index.d.ts (0 errors) ====
+    export function bar(): number;
+==== /p1/node_modules/csv-parse/package.json (0 errors) ====
+    {
+      "main": "./lib",
+      "name": "csv-parse",
+      "types": [
+        "./lib/index.d.ts",
+        "./lib/sync.d.ts"
+      ],
+      "version": "4.8.2"
+    }
+==== /p1/index.ts (1 errors) ====
+    export interface MutableRefObject<T> {
+        current: T;
+    }
+    export function useRef<T>(current: T): MutableRefObject<T> {
+        return { current };
+    }
+    export const useCsvParser = () => {
+        const parserRef = useRef<typeof import("csv-parse")>(null);
+                                                             ~~~~
+!!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'typeof import("/p1/node_modules/csv-parse/lib/index")'.
+        return parserRef;
+    };
+    

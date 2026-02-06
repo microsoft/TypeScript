@@ -1,3 +1,4 @@
+// @target: es2015
 interface Comparable {}
 class A extends Comparable {}
 class B implements Comparable {}

@@ -13,7 +13,7 @@ verify.completions({
   marker: "",
   includes: {
       name: "x",
-      source: "/a",
+      source: "./a",
       sourceDisplay: "./a",
       text: "(alias) const x: 0\nimport x",
       hasAction: true,
@@ -23,7 +23,7 @@ verify.completions({
 });
 verify.applyCodeActionFromCompletion("", {
   name: "x",
-  source: "/a",
+  source: "./a",
   description: `Add import from "./a"`,
   newFileContent: `const { x } = require("./a");
 

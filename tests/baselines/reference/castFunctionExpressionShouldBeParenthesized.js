@@ -4,4 +4,5 @@
 (function a() { } as any)().foo()
 
 //// [castFunctionExpressionShouldBeParenthesized.js]
+"use strict";
 (function a() { }().foo());

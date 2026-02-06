@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es6
 // https://github.com/Microsoft/TypeScript/issues/21962
 export const SYM = Symbol('a unique symbol');

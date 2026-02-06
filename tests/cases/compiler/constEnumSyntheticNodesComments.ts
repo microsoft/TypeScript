@@ -1,3 +1,4 @@
+// @target: es2015
 const enum En { A, B, C, D }
 
 function assert<T>(x: T) {

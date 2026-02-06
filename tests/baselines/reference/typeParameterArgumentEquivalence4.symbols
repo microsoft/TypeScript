@@ -6,14 +6,14 @@ function foo<T,U>() {
 >T : Symbol(T, Decl(typeParameterArgumentEquivalence4.ts, 0, 13))
 >U : Symbol(U, Decl(typeParameterArgumentEquivalence4.ts, 0, 15))
 
-    var x: (item) => U;
+    var x!: (item: any) => U;
 >x : Symbol(x, Decl(typeParameterArgumentEquivalence4.ts, 1, 7))
->item : Symbol(item, Decl(typeParameterArgumentEquivalence4.ts, 1, 12))
+>item : Symbol(item, Decl(typeParameterArgumentEquivalence4.ts, 1, 13))
 >U : Symbol(U, Decl(typeParameterArgumentEquivalence4.ts, 0, 15))
 
-    var y: (item) => T;
+    var y!: (item: any) => T;
 >y : Symbol(y, Decl(typeParameterArgumentEquivalence4.ts, 2, 7))
->item : Symbol(item, Decl(typeParameterArgumentEquivalence4.ts, 2, 12))
+>item : Symbol(item, Decl(typeParameterArgumentEquivalence4.ts, 2, 13))
 >T : Symbol(T, Decl(typeParameterArgumentEquivalence4.ts, 0, 13))
 
     x = y;  // Should be an error

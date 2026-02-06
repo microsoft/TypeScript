@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 
 class A {
   get x() { return 0; }

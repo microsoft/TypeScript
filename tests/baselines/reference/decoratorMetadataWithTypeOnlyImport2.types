@@ -17,6 +17,7 @@ import type { Services } from './services';
 
 declare const decorator: any;
 >decorator : any
+>          : ^^^
 
 export class Main {
 >Main : Main
@@ -24,7 +25,9 @@ export class Main {
 
   @decorator()
 >decorator() : any
+>            : ^^^
 >decorator : any
+>          : ^^^
 
   field: Services.Service;
 >field : Services.Service

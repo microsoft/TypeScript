@@ -2,7 +2,7 @@
 
 //// [typeParametersShouldNotBeEqual3.ts]
 function ff<T extends Object, U extends Object>(x: T, y: U) {
-    var z: Object;
+    var z!: Object;
     x = x;  // Ok
     x = y;  // Ok
     x = z;  // Ok
@@ -11,6 +11,7 @@ function ff<T extends Object, U extends Object>(x: T, y: U) {
 
 
 //// [typeParametersShouldNotBeEqual3.js]
+"use strict";
 function ff(x, y) {
     var z;
     x = x; // Ok

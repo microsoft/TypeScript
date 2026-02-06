@@ -12,6 +12,7 @@ foo("", function* () {
 }, p => undefined); // T is fixed, should be string
 
 //// [generatorTypeCheck46.js]
+"use strict";
 foo("", function* () {
     yield* {
         *[Symbol.iterator]() {

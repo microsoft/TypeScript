@@ -1,3 +1,4 @@
+// @target: es2015
 interface X { foo: string }
 interface Y extends X { bar?: number }
 interface Z extends X { bar: string }

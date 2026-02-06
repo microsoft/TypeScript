@@ -29,7 +29,7 @@ interface NamedColors {
 >"pale blue" : _Color
 >            : ^^^^^^
 }
-module Color {
+namespace Color {
 >Color : typeof Color
 >      : ^^^^^^^^^^^^
 

@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @module: commonjs
 // @filename: a.ts
 import { b } from './b';

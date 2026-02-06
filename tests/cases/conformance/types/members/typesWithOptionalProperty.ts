@@ -1,3 +1,4 @@
+// @target: es2015
 // basic uses of optional properties without errors
 
 interface I {

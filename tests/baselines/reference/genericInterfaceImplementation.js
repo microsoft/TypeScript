@@ -19,14 +19,12 @@ class None<T> implements IOption<T>{
 
 
 //// [genericInterfaceImplementation.js]
-var None = /** @class */ (function () {
-    function None() {
-    }
-    None.prototype.get = function () {
+"use strict";
+class None {
+    get() {
         throw null;
-    };
-    None.prototype.flatten = function () {
+    }
+    flatten() {
         return new None();
-    };
-    return None;
-}());
+    }
+}

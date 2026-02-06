@@ -1,9 +1,9 @@
 //// [tests/cases/compiler/genericFunduleInModule.ts] ////
 
 //// [genericFunduleInModule.ts]
-module A {
+namespace A {
     export function B<T>(x: T) { return x; }
-    export module B {
+    export namespace B {
         export var x = 1;
     }
 }
@@ -12,6 +12,7 @@ var b: A.B;
 A.B(1);
 
 //// [genericFunduleInModule.js]
+"use strict";
 var A;
 (function (A) {
     function B(x) { return x; }

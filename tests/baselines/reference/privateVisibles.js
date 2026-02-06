@@ -12,11 +12,11 @@ class Foo {
 
 
 //// [privateVisibles.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+"use strict";
+class Foo {
+    constructor() {
         this.pvar = 0;
         var n = this.pvar;
     }
-    Foo.prototype.meth = function () { var q = this.pvar; };
-    return Foo;
-}());
+    meth() { var q = this.pvar; }
+}

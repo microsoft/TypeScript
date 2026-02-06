@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnreachableCode: true
 // @module: commonjs
 
@@ -32,7 +33,7 @@ export class TestRunner {
             try {
                 testResult = testcase.test();
             }
-            catch (e) {
+            catch (e: any) {
                 exception = true;
                 testResult = false;
                 if (typeof testcase.errorMessageRegEx === "string") {

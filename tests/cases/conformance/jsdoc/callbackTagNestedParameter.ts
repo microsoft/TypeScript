@@ -1,3 +1,4 @@
+// @target: es2015
 // @emitDeclarationOnly: true
 // @declaration: true
 // @allowJs: true

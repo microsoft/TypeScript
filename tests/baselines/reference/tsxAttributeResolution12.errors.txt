@@ -2,15 +2,18 @@ file.tsx(25,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAtt
   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
 file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
   Property 'reqd' is missing in type '{}' but required in type '{ reqd: any; }'.
+react.d.ts(6,3): error TS7008: Member 'props' implicitly has an 'any' type.
 
 
-==== react.d.ts (0 errors) ====
-    declare module JSX {
+==== react.d.ts (1 errors) ====
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     	}
     	interface ElementAttributesProperty {
     		props;
+    		~~~~~
+!!! error TS7008: Member 'props' implicitly has an 'any' type.
     	}
     	interface IntrinsicAttributes {
     		ref?: string;
@@ -34,7 +37,7 @@ file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAtt
     	new (props?: P, context?: any): Component<P, any>;
     }
     
-    declare module TestMod {
+    declare namespace TestMod {
     	interface TestClass extends ComponentClass<{reqd: any}> {
     	}
     	var Test: TestClass;

@@ -15,4 +15,4 @@ var E;
 (function (E) {
     E[E["static"] = 0] = "static";
 })(E || (E = {}));
-var x1 = E.static;
+const x1 = E.static;

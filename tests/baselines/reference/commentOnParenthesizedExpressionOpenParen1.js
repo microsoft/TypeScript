@@ -7,6 +7,7 @@ var f: () => any;
 
 
 //// [commentOnParenthesizedExpressionOpenParen1.js]
+"use strict";
 var j;
 var f;
 ( /* Preserve */j = f());

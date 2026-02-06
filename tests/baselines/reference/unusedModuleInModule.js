@@ -1,8 +1,9 @@
 //// [tests/cases/compiler/unusedModuleInModule.ts] ////
 
 //// [unusedModuleInModule.ts]
-module A {
-    module B {}
+namespace A {
+    namespace B {}
 }
 
 //// [unusedModuleInModule.js]
+"use strict";

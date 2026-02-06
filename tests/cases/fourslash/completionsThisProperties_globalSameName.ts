@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
+
 // @Filename: globals.d.ts
 //// declare var foot: string;
 

@@ -25,18 +25,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.dropPrivateProps2 = exports.dropPrivateProps1 = void 0;
-var internal_1 = require("./internal");
-var dropPrivateProps1 = function (obj) { return (0, internal_1.excludePrivateKeys1)(obj); };
+const internal_1 = require("./internal");
+const dropPrivateProps1 = (obj) => (0, internal_1.excludePrivateKeys1)(obj);
 exports.dropPrivateProps1 = dropPrivateProps1;
-var dropPrivateProps2 = function (obj) { return (0, internal_1.excludePrivateKeys2)(obj); };
+const dropPrivateProps2 = (obj) => (0, internal_1.excludePrivateKeys2)(obj);
 exports.dropPrivateProps2 = dropPrivateProps2;
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var api_1 = require("./api");
-var a = (0, api_1.dropPrivateProps1)({ foo: 42, _bar: 'secret' }); // type is {foo: number}
+const api_1 = require("./api");
+const a = (0, api_1.dropPrivateProps1)({ foo: 42, _bar: 'secret' }); // type is {foo: number}
 //a._bar                                                // error: _bar does not exist           <===== as expected
-var b = (0, api_1.dropPrivateProps2)({ foo: 42, _bar: 'secret' }); // type is {foo: number, _bar: string}
+const b = (0, api_1.dropPrivateProps2)({ foo: 42, _bar: 'secret' }); // type is {foo: number, _bar: string}
 //b._bar                                                // no error, type of b._bar is string   <===== NOT expected
 
 

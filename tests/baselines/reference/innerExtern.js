@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/innerExtern.ts] ////
 
 //// [innerExtern.ts]
-module A {
-    export declare module BB {
+namespace A {
+    export declare namespace BB {
         export var Elephant;
     }
-    export module B {
+    export namespace B {
         export class C {
             x = BB.Elephant.X;
         }
@@ -16,16 +16,16 @@ module A {
 
 
 //// [innerExtern.js]
+"use strict";
 var A;
 (function (A) {
-    var B;
+    let B;
     (function (B) {
-        var C = /** @class */ (function () {
-            function C() {
+        class C {
+            constructor() {
                 this.x = BB.Elephant.X;
             }
-            return C;
-        }());
+        }
         B.C = C;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));

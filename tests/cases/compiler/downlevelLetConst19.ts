@@ -1,3 +1,5 @@
+// @target: es5, es2015
+// @strict: false
 'use strict'
 declare function use(a: any);
 var x;

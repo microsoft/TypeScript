@@ -5,13 +5,17 @@ declare function forwardRef(x: any): any;
 >forwardRef : (x: any) => any
 >           : ^ ^^   ^^^^^   
 >x : any
+>  : ^^^
 
 declare var Something: any;
 >Something : any
+>          : ^^^
 
 @Something({ v: () => Testing123 })
 >Something({ v: () => Testing123 }) : any
+>                                   : ^^^
 >Something : any
+>          : ^^^
 >{ v: () => Testing123 } : { v: () => typeof Testing123; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >v : () => typeof Testing123

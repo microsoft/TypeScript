@@ -1,5 +1,6 @@
+// @target: es2015
 // @sourcemap: true
-module Foo.Bar {
+namespace Foo.Bar {
     "use strict";
 
     class Greeter {

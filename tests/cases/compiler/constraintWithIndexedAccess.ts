@@ -1,3 +1,4 @@
+// @target: es2015
 // #52399
 type DataFetchFns = {
     Boat: {

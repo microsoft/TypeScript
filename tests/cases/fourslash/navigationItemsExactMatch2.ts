@@ -1,6 +1,8 @@
 /// <reference path="fourslash.ts"/>
 
-////module Shapes {
+// @lib: es5
+
+////namespace Shapes {
 ////    [|class Point {
 ////        [|private _origin = 0.0;|]
 ////        [|private distanceFromA = 0.0;|]

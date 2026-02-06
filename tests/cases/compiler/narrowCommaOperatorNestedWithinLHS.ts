@@ -1,3 +1,4 @@
+// @target: es2015
 const otherValue = () => true;
 const value: { inner: number | string } = null as any;
 

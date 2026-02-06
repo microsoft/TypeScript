@@ -40,6 +40,7 @@ class D extends DecoratorProvider {
 
 
 //// [esDecorators-preservesThis.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/53752
 var __runInitializers = (this && this.__runInitializers) || function (thisArg, initializers, value) {
     var useValue = arguments.length > 2;

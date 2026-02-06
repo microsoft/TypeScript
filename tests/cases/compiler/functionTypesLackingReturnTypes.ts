@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 
 // Error (no '=>')
 function f(x: ()) {

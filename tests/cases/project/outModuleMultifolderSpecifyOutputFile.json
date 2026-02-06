@@ -6,5 +6,6 @@
     ],
     "outFile": "bin/test.js",
     "declaration": true,
-    "baselineCheck": true
+    "baselineCheck": true,
+    "strict": false
 }

@@ -20,8 +20,6 @@ o instanceof TableClass;
 
 
 //// [instanceofTypeAliasToGenericClass.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function fn(o) {
     return o instanceof TableClass;
 }
@@ -29,3 +27,4 @@ function fn2(o) {
     return o instanceof TableClass;
 }
 o instanceof TableClass;
+export {};

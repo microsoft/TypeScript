@@ -1,6 +1,7 @@
+// @target: es2015
 // @module: system
 // @filename: core-js.d.ts
-declare module core {
+declare namespace core {
     var String: {
         repeat(text: string, count: number): string;
     };

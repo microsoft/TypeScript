@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 // @Filename: jquery.d.ts
 interface JQueryEventObjectTest {

@@ -1,0 +1,8 @@
+iteratorSpreadInArray11.ts(2,17): error TS2454: Variable 'iter' is used before being assigned.
+
+
+==== iteratorSpreadInArray11.ts (1 errors) ====
+    var iter: Iterable<number>;
+    var array = [...iter];
+                    ~~~~
+!!! error TS2454: Variable 'iter' is used before being assigned.

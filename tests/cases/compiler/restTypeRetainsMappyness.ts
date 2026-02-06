@@ -1,3 +1,4 @@
+// @target: es2015
 type Foo<T extends any[]> = {
     [P in keyof T]: T[P]
 }

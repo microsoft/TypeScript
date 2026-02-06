@@ -1,0 +1,22 @@
+file1.ts(5,9): error TS2454: Variable 'q1' is used before being assigned.
+
+
+==== file2.ts (0 errors) ====
+    ///<reference path='file1.ts'/>
+    declare var c: C;
+    interface C {
+        count(countTitle?: string): void;
+    }
+    interface C {
+        log(message?: any, ...optionalParams: any[]): void;
+    }
+    
+==== file1.ts (1 errors) ====
+    interface Q<T> {
+        each(action: (item: T, index: number) => void): void;
+    }
+    var q1: Q<{ a: number; }>;
+    var x = q1.each(x => c.log(x));
+            ~~
+!!! error TS2454: Variable 'q1' is used before being assigned.
+    

@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxSfcReturnNullStrictNullChecks.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 const Foo = (props: any) => null;
@@ -13,13 +15,14 @@ const foo = <Foo />;
 const G = <Greet />;
 
 //// [file.jsx]
+/// <reference path="/.lib/react.d.ts" />
 define(["require", "exports", "react"], function (require, exports, React) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var Foo = function (props) { return null; };
+    const Foo = (props) => null;
     function Greet(x) {
         return null;
     }
-    var foo = <Foo />;
-    var G = <Greet />;
+    const foo = <Foo />;
+    const G = <Greet />;
 });

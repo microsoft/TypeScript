@@ -5,7 +5,7 @@ import r = require('./importAliasAnExternalModuleInsideAnInternalModule_file0');
 >r : typeof r
 >  : ^^^^^^^^
 
-module m_private {
+namespace m_private {
 >m_private : typeof m_private
 >          : ^^^^^^^^^^^^^^^^
 
@@ -32,7 +32,7 @@ module m_private {
 }
 
 === importAliasAnExternalModuleInsideAnInternalModule_file0.ts ===
-export module m {
+export namespace m {
 >m : typeof m
 >  : ^^^^^^^^
 

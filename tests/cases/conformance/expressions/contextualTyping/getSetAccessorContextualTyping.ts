@@ -1,4 +1,4 @@
-﻿// @target: es5
+﻿// @target: es5, es2015
 // In the body of a get accessor with no return type annotation,
 // if a matching set accessor exists and that set accessor has a parameter type annotation,
 // return expressions are contextually typed by the type given in the set accessor's parameter type annotation.

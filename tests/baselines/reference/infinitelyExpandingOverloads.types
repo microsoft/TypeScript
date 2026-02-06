@@ -15,8 +15,9 @@ interface KnockoutObservableBase2<T> {
 >newValue : T
 >         : ^
 >target : any
->topic : string
->      : ^^^^^^
+>       : ^^^
+>topic : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 }
 interface ValidationPlacement2<TValue> {
     initialize(validatable: Validatable2<TValue>): void;

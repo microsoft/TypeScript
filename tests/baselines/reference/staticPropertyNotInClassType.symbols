@@ -1,15 +1,15 @@
 //// [tests/cases/conformance/classes/members/classTypes/staticPropertyNotInClassType.ts] ////
 
 === staticPropertyNotInClassType.ts ===
-module NonGeneric {
+namespace NonGeneric {
 >NonGeneric : Symbol(NonGeneric, Decl(staticPropertyNotInClassType.ts, 0, 0))
 
     class C {
->C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 0, 19), Decl(staticPropertyNotInClassType.ts, 7, 5))
+>C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 0, 22), Decl(staticPropertyNotInClassType.ts, 7, 5))
 
         fn() { return this; }
 >fn : Symbol(C.fn, Decl(staticPropertyNotInClassType.ts, 1, 13))
->this : Symbol(C, Decl(staticPropertyNotInClassType.ts, 0, 19), Decl(staticPropertyNotInClassType.ts, 7, 5))
+>this : Symbol(C, Decl(staticPropertyNotInClassType.ts, 0, 22), Decl(staticPropertyNotInClassType.ts, 7, 5))
 
         static get x() { return 1; }
 >x : Symbol(C.x, Decl(staticPropertyNotInClassType.ts, 2, 29), Decl(staticPropertyNotInClassType.ts, 3, 36))
@@ -26,8 +26,8 @@ module NonGeneric {
 >foo : Symbol(C.foo, Decl(staticPropertyNotInClassType.ts, 5, 60))
     }
 
-    module C {
->C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 0, 19), Decl(staticPropertyNotInClassType.ts, 7, 5))
+    namespace C {
+>C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 0, 22), Decl(staticPropertyNotInClassType.ts, 7, 5))
 
         export var bar = ''; // not reflected in class type
 >bar : Symbol(bar, Decl(staticPropertyNotInClassType.ts, 10, 18))
@@ -35,7 +35,7 @@ module NonGeneric {
 
     var c = new C(1, 2);
 >c : Symbol(c, Decl(staticPropertyNotInClassType.ts, 13, 7))
->C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 0, 19), Decl(staticPropertyNotInClassType.ts, 7, 5))
+>C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 0, 22), Decl(staticPropertyNotInClassType.ts, 7, 5))
 
     var r = c.fn();
 >r : Symbol(r, Decl(staticPropertyNotInClassType.ts, 14, 7))
@@ -56,17 +56,17 @@ module NonGeneric {
 >c : Symbol(c, Decl(staticPropertyNotInClassType.ts, 13, 7))
 }
 
-module Generic {
+namespace Generic {
 >Generic : Symbol(Generic, Decl(staticPropertyNotInClassType.ts, 18, 1))
 
     class C<T, U> {
->C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 20, 16), Decl(staticPropertyNotInClassType.ts, 27, 5))
+>C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 20, 19), Decl(staticPropertyNotInClassType.ts, 27, 5))
 >T : Symbol(T, Decl(staticPropertyNotInClassType.ts, 21, 12))
 >U : Symbol(U, Decl(staticPropertyNotInClassType.ts, 21, 14))
 
         fn() { return this; }
 >fn : Symbol(C.fn, Decl(staticPropertyNotInClassType.ts, 21, 19))
->this : Symbol(C, Decl(staticPropertyNotInClassType.ts, 20, 16), Decl(staticPropertyNotInClassType.ts, 27, 5))
+>this : Symbol(C, Decl(staticPropertyNotInClassType.ts, 20, 19), Decl(staticPropertyNotInClassType.ts, 27, 5))
 
         static get x() { return 1; }
 >x : Symbol(C.x, Decl(staticPropertyNotInClassType.ts, 22, 29), Decl(staticPropertyNotInClassType.ts, 23, 36))
@@ -86,8 +86,8 @@ module Generic {
 >T : Symbol(T)
     }
 
-    module C {
->C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 20, 16), Decl(staticPropertyNotInClassType.ts, 27, 5))
+    namespace C {
+>C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 20, 19), Decl(staticPropertyNotInClassType.ts, 27, 5))
 
         export var bar = ''; // not reflected in class type
 >bar : Symbol(bar, Decl(staticPropertyNotInClassType.ts, 30, 18))
@@ -95,7 +95,7 @@ module Generic {
 
     var c = new C(1, '');
 >c : Symbol(c, Decl(staticPropertyNotInClassType.ts, 33, 7))
->C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 20, 16), Decl(staticPropertyNotInClassType.ts, 27, 5))
+>C : Symbol(C, Decl(staticPropertyNotInClassType.ts, 20, 19), Decl(staticPropertyNotInClassType.ts, 27, 5))
 
     var r = c.fn();
 >r : Symbol(r, Decl(staticPropertyNotInClassType.ts, 34, 7))

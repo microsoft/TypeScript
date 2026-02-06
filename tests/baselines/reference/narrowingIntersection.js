@@ -27,6 +27,7 @@ function test2(a: 0 | TrivialIntersection) {
 }
 
 //// [narrowingIntersection.js]
+"use strict";
 function test1(result) {
     if (result.err) {
         throw result.err;

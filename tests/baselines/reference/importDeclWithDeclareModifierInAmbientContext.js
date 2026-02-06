@@ -2,7 +2,7 @@
 
 //// [importDeclWithDeclareModifierInAmbientContext.ts]
 declare module "m" {
-    module x {
+    namespace x {
         interface c {
         }
     }
@@ -12,3 +12,4 @@ declare module "m" {
 
 
 //// [importDeclWithDeclareModifierInAmbientContext.js]
+"use strict";

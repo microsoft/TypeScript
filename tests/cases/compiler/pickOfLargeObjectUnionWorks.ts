@@ -1,3 +1,4 @@
+// @target: es2015
 interface HTMLDataAttributes {
     [data: `data-${string}`]: unknown
 }

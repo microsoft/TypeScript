@@ -1,3 +1,4 @@
+// @strict: false
 // @target: esnext, es2022, es2015
 
 class Foo {

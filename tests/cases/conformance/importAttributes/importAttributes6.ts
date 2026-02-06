@@ -1,3 +1,4 @@
+// @target: es2022
 // @module: node18,node20,nodenext
 // @filename: mod.mts
 import * as thing1 from "./mod.mjs" with { field: 0 };

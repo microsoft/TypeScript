@@ -23,7 +23,7 @@
 //// [|export const m = t3 + t2 + n;|]
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["target.ts", "originalFile.ts", "other.ts", "other2.ts", "other3.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["target.ts", "originalFile.ts", "other.ts", "other2.ts", "other3.ts"] }
 
 const ranges = test.ranges();
 verify.pasteEdits({

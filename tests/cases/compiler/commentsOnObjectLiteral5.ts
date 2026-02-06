@@ -1,5 +1,5 @@
 // @removeComments: false
-// @target: ES5
+// @target: ES5, ES2015
 
 const a = {
     p0: 0, // Comment 0

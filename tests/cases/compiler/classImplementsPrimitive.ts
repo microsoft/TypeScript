@@ -1,3 +1,4 @@
+// @target: es2015
 // classes cannot implement primitives
 
 class C implements number { }

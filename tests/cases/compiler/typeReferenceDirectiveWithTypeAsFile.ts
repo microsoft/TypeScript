@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReferences: true
 // @typeRoots: /node_modules/phaser/types
 // @types: phaser

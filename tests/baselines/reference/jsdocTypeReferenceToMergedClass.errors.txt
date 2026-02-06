@@ -1,0 +1,16 @@
+jsdocTypeReferenceToMergedClass.js(4,1): error TS2454: Variable 'p' is used before being assigned.
+
+
+==== jsdocTypeReferenceToMergedClass.js (1 errors) ====
+    var Workspace = {}
+    /** @type {Workspace.Project} */
+    var p;
+    p.isServiceProject()
+    ~
+!!! error TS2454: Variable 'p' is used before being assigned.
+    
+    Workspace.Project = function wp() { }
+    Workspace.Project.prototype = {
+      isServiceProject() {}
+    }
+    

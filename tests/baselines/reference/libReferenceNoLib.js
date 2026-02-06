@@ -18,6 +18,7 @@ export const elem: HTMLElement = { field: 'a' };
 
 
 //// [fakelib.js]
+"use strict";
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

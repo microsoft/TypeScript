@@ -17,6 +17,7 @@ declare function use(x: string);
 
 use(x.toFixed());
 >use(x.toFixed()) : any
+>                 : ^^^
 >use : (x: string) => any
 >    : ^ ^^      ^^^^^^^^
 >x.toFixed() : string
@@ -30,6 +31,7 @@ use(x.toFixed());
 
 use(y.toFixed());
 >use(y.toFixed()) : any
+>                 : ^^^
 >use : (x: string) => any
 >    : ^ ^^      ^^^^^^^^
 >y.toFixed() : string

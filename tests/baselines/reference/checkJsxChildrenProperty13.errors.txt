@@ -1,7 +1,9 @@
-file.tsx(12,30): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
+file.tsx(14,30): error TS2710: 'children' are specified twice. The attribute named 'children' will be overwritten.
 
 
 ==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react');
     
     interface ButtonProp {

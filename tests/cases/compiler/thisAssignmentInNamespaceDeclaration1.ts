@@ -1,8 +1,9 @@
+// @target: es2015
 // @checkJs: true
 // @outDir: out/
 
 // @filename: a.js
-module foo {
+namespace foo {
     this.bar = 4;
 }
 

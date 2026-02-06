@@ -31,7 +31,8 @@ class B extends A {
 	 * @param {object} [foo={}]
 	 */
 	constructor(foo = {}) {
->foo : any
+>foo : object | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -45,24 +46,28 @@ class B extends A {
 		 * @type object
 		 */
 		this.foo = foo;
->this.foo = foo : any
->this.foo : any
+>this.foo = foo : object
+>               : ^^^^^^
+>this.foo : object
+>         : ^^^^^^
 >this : this
 >     : ^^^^
->foo : any
->    : ^^^
->foo : any
+>foo : object
+>    : ^^^^^^
+>foo : object
+>    : ^^^^^^
 
 		/**
 		 * @type object
 		 */
 		this.bar = super.arguments.foo;
 >this.bar = super.arguments.foo : error
->this.bar : any
+>this.bar : object
+>         : ^^^^^^
 >this : this
 >     : ^^^^
->bar : any
->    : ^^^
+>bar : object
+>    : ^^^^^^
 >super.arguments.foo : error
 >super.arguments : { bar: {}; }
 >                : ^^^^^^^^^^^^

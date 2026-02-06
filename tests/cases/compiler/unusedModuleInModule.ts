@@ -1,6 +1,7 @@
+// @target: es2015
 //@noUnusedLocals:true
 //@noUnusedParameters:true
 
-module A {
-    module B {}
+namespace A {
+    namespace B {}
 }

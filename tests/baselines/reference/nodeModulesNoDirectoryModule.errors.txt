@@ -1,4 +1,4 @@
-/index.ts(2,8): error TS2307: Cannot find module 'i-have-a-dir-and-main/dist/dir' or its corresponding type declarations.
+/index.ts(2,8): error TS2882: Cannot find module or type declarations for side-effect import of 'i-have-a-dir-and-main/dist/dir'.
 
 
 ==== /node_modules/i-have-a-dir-and-main/package.json (0 errors) ====
@@ -22,5 +22,5 @@
     import 'i-have-a-dir-and-main' // ok
     import 'i-have-a-dir-and-main/dist/dir' // error
            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'i-have-a-dir-and-main/dist/dir' or its corresponding type declarations.
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'i-have-a-dir-and-main/dist/dir'.
     

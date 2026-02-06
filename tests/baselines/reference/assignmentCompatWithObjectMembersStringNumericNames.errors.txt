@@ -33,19 +33,19 @@ assignmentCompatWithObjectMembersStringNumericNames.ts(84,5): error TS2741: Prop
     // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
     // string named numeric properties work correctly, errors below unless otherwise noted
     
-    module JustStrings {
+    namespace JustStrings {
         class S { '1': string; }
         class T { '1.': string; }
-        var s: S;
-        var t: T;
+        declare var s: S;
+        declare var t: T;
     
         interface S2 { '1': string; bar?: string }
         interface T2 { '1.0': string; baz?: string }
-        var s2: S2;
-        var t2: T2;
+        declare var s2: S2;
+        declare var t2: T2;
     
-        var a: { '1.': string; bar?: string }
-        var b: { '1.0': string; baz?: string }
+        declare var a: { '1.': string; bar?: string };
+        declare var b: { '1.0': string; baz?: string };
     
         var a2 = { '1.0': '' };
         var b2 = { '1': '' };
@@ -88,23 +88,23 @@ assignmentCompatWithObjectMembersStringNumericNames.ts(84,5): error TS2741: Prop
         a = b;
         ~
 !!! error TS2741: Property ''1.'' is missing in type '{ '1.0': string; baz?: string; }' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:22: ''1.'' is declared here.
         b = a;
         ~
 !!! error TS2741: Property ''1.0'' is missing in type '{ '1.': string; bar?: string; }' but required in type '{ '1.0': string; baz?: string; }'.
-!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:16:14: ''1.0'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:16:22: ''1.0'' is declared here.
         a = s;
         ~
 !!! error TS2741: Property ''1.'' is missing in type 'S' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:22: ''1.'' is declared here.
         a = s2;
         ~
 !!! error TS2741: Property ''1.'' is missing in type 'S2' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:22: ''1.'' is declared here.
         a = a2;
         ~
 !!! error TS2741: Property ''1.'' is missing in type '{ '1.0': string; }' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:15:22: ''1.'' is declared here.
     
         a2 = b2;
         ~~
@@ -122,19 +122,19 @@ assignmentCompatWithObjectMembersStringNumericNames.ts(84,5): error TS2741: Prop
 !!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:18:16: ''1.0'' is declared here.
     }
     
-    module NumbersAndStrings {
+    namespace NumbersAndStrings {
         class S { '1': string; }
         class T { 1: string; }
-        var s: S;
-        var t: T;
+        declare var s: S;
+        declare var t: T;
     
         interface S2 { '1': string; bar?: string }
         interface T2 { 1.0: string; baz?: string }
-        var s2: S2;
-        var t2: T2;
+        declare var s2: S2;
+        declare var t2: T2;
     
-        var a: { '1.': string; bar?: string }
-        var b: { 1.0: string; baz?: string }
+        declare var a: { '1.': string; bar?: string };
+        declare var b: { 1.0: string; baz?: string };
     
         var a2 = { '1.0': '' };
         var b2 = { 1.: '' };
@@ -159,27 +159,27 @@ assignmentCompatWithObjectMembersStringNumericNames.ts(84,5): error TS2741: Prop
         a = b; // error
         ~
 !!! error TS2741: Property ''1.'' is missing in type '{ 1: string; baz?: string; }' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:22: ''1.'' is declared here.
         b = a; // error
         ~
 !!! error TS2741: Property '1.0' is missing in type '{ '1.': string; bar?: string; }' but required in type '{ 1: string; baz?: string; }'.
-!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:57:14: '1.0' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:57:22: '1.0' is declared here.
         a = s; // error
         ~
 !!! error TS2741: Property ''1.'' is missing in type 'S' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:22: ''1.'' is declared here.
         a = s2; // error
         ~
 !!! error TS2741: Property ''1.'' is missing in type 'S2' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:22: ''1.'' is declared here.
         a = a2; // error
         ~
 !!! error TS2741: Property ''1.'' is missing in type '{ '1.0': string; }' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:22: ''1.'' is declared here.
         a = b2; // error
         ~
 !!! error TS2741: Property ''1.'' is missing in type '{ 1: string; }' but required in type '{ '1.': string; bar?: string; }'.
-!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:14: ''1.'' is declared here.
+!!! related TS2728 assignmentCompatWithObjectMembersStringNumericNames.ts:56:22: ''1.'' is declared here.
     
         a2 = b2; // error
         ~~

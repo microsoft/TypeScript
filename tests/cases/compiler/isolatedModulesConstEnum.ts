@@ -1,3 +1,4 @@
+// @target: es2015
 // @isolatedModules: true
 // @filename: /foo.d.ts
 declare const enum EventName {

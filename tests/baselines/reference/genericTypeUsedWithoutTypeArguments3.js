@@ -6,3 +6,4 @@ interface Bar<T> extends Foo { }
 
 
 //// [genericTypeUsedWithoutTypeArguments3.js]
+"use strict";

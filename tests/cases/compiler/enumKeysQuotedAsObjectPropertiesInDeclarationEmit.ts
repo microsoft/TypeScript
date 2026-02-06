@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 export enum MouseButton {
 	LEFT_BUTTON = 1,

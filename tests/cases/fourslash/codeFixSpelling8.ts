@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////module Foo {
+////namespace Foo {
 ////    export type nums = number;
 ////}
 ////let x: Foo.[|num|];

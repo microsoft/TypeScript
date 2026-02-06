@@ -1,3 +1,4 @@
+// @target: es2015
 
 // @module: esnext
 // @filename: a.ts
@@ -6,6 +7,6 @@ export default function foo() {
 }
 
 // @filename: b.ts
-import defer foo from "a";
+import defer foo from "./a";
 
 foo();

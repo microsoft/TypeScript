@@ -125,7 +125,7 @@ compoundAssignmentLHSIsValue.ts(122,1): error TS2364: The left-hand side of an a
 !!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
     
     // identifiers: module, class, enum, function
-    module M { export var a; }
+    namespace M { export var a; }
     M *= value;
     ~
 !!! error TS2631: Cannot assign to 'M' because it is a namespace.

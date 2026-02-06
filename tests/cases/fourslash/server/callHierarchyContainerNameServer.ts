@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
+
 ////function /**/f() {}
 ////
 ////class A {
@@ -32,7 +34,7 @@
 ////  }
 ////}
 ////
-////module Foo.Bar {
+////namespace Foo.Bar {
 ////  const sameName = () => new Foo.C();
 ////}
 

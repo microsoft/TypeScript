@@ -2,7 +2,7 @@
 
 //// [functionCalls.ts]
 // Invoke function call on value of type 'any' with no type arguments
-var anyVar: any;
+declare var anyVar: any;
 anyVar(0);
 anyVar('');
 
@@ -17,7 +17,7 @@ anyVar<Window>(undefined);
 interface SubFunc extends Function {
     prop: number;
 }
-var subFunc: SubFunc;
+declare var subFunc: SubFunc;
 subFunc(0);
 subFunc('');
 subFunc();
@@ -31,15 +31,14 @@ subFunc<any>();
 
 // Invoke function call on value of type Function with no call signatures with type arguments
 // These should be errors
-var func: Function;
+declare var func: Function;
 func<number>(0);
 func<string>('');
 func<any>();
 
 
 //// [functionCalls.js]
-// Invoke function call on value of type 'any' with no type arguments
-var anyVar;
+"use strict";
 anyVar(0);
 anyVar('');
 // Invoke function call on value of type 'any' with type arguments
@@ -47,7 +46,6 @@ anyVar('');
 anyVar('hello');
 anyVar();
 anyVar(undefined);
-var subFunc;
 subFunc(0);
 subFunc('');
 subFunc();
@@ -56,9 +54,6 @@ subFunc();
 subFunc(0);
 subFunc('');
 subFunc();
-// Invoke function call on value of type Function with no call signatures with type arguments
-// These should be errors
-var func;
 func(0);
 func('');
 func();

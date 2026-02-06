@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @module: commonjs
 // @declaration: true
 
@@ -7,11 +7,11 @@ class c {
 }
 interface i {
 }
-module m {
+namespace m {
     export var x = 10;
 }
 var x = 10;
-module uninstantiated {
+namespace uninstantiated {
 }
 export { c };
 export { c as c2 };

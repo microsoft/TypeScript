@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleIdentifiers.ts] ////
 
 //// [moduleIdentifiers.ts]
-module M {
+namespace M {
     interface P { x: number; y: number; }
     export var a = 1
 }
@@ -13,6 +13,7 @@ var x1 = M.a;
 //var q: m.P;
 
 //// [moduleIdentifiers.js]
+"use strict";
 var M;
 (function (M) {
     M.a = 1;

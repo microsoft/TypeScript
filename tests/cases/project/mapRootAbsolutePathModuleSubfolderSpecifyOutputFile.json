@@ -9,5 +9,6 @@
     "declaration": true,
     "baselineCheck": true,
     "mapRoot": "tests/cases/projects/outputdir_module_subfolder/mapFiles",
-    "resolveMapRoot": true
+    "resolveMapRoot": true,
+    "strict": false
 }

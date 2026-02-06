@@ -2,7 +2,7 @@ tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be a
 
 
 ==== tsxSpreadChildrenInvalidType.tsx (1 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;
@@ -33,6 +33,6 @@ tsxSpreadChildrenInvalidType.tsx(21,9): error TS2609: JSX spread child must be a
             {...(<Todo key={todos[0].id} todo={todos[0].todo} /> as any)}
         </div>;
     }
-    let x: TodoListProps;
+    declare let x: TodoListProps;
         <TodoList {...x}/>
     

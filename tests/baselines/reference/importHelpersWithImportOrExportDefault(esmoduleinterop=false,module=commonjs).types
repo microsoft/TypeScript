@@ -36,4 +36,5 @@ declare module "tslib" {
 >__importDefault : (m: any) => void
 >                : ^ ^^   ^^^^^    
 >m : any
+>  : ^^^
 }

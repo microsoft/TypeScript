@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @noImplicitAny: true
 // @strictNullChecks: true

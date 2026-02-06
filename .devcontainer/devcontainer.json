@@ -15,7 +15,7 @@
 
     // Use 'postCreateCommand' to run commands after the container is created.
     "postCreateCommand": {
-        "Configure Build Tools": "sudo corepack enable npm; sudo npm install -g hereby; npm ci",
+        "Configure Build Tools": "sudo npm install -g hereby; npm ci",
         "Install pprof": "go install github.com/google/pprof@latest",
         "Install Graphviz": "sudo apt install graphviz"
     },

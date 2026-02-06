@@ -7,7 +7,7 @@ License at http://www.apache.org/licenses/LICENSE-2.0
 THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
 KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
 WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
+MERCHANTABILITY OR NON-INFRINGEMENT.
 
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
@@ -2530,6 +2530,7 @@ declare namespace ts {
                 Node = "node",
                 /** @deprecated Renamed to `Node10` */
                 NodeJs = "node",
+                /** @deprecated */
                 Node10 = "node10",
                 Node16 = "node16",
                 NodeNext = "nodenext",
@@ -2542,6 +2543,7 @@ declare namespace ts {
             export enum ScriptTarget {
                 /** @deprecated */
                 ES3 = "es3",
+                /** @deprecated */
                 ES5 = "es5",
                 ES6 = "es6",
                 ES2015 = "es2015",
@@ -2557,6 +2559,7 @@ declare namespace ts {
                 ESNext = "esnext",
                 JSON = "json",
                 Latest = "esnext",
+                LatestStandard = "es2024",
             }
         }
         namespace typingsInstaller {
@@ -3646,7 +3649,7 @@ declare namespace ts {
             readDirectory(rootDir: string, extensions: readonly string[], excludes: readonly string[] | undefined, includes: readonly string[] | undefined, depth?: number): string[];
         }
     }
-    const versionMajorMinor = "5.9";
+    const versionMajorMinor = "6.0";
     /** The version of the TypeScript compiler release */
     const version: string;
     /**
@@ -5907,7 +5910,6 @@ declare namespace ts {
      */
     interface SourceFileLike {
         readonly text: string;
-        languageVariant?: LanguageVariant;
     }
     interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
@@ -5926,14 +5928,7 @@ declare namespace ts {
         libReferenceDirectives: readonly FileReference[];
         languageVariant: LanguageVariant;
         isDeclarationFile: boolean;
-        /**
-         * lib.d.ts should have a reference comment like
-         *
-         *  /// <reference no-default-lib="true"/>
-         *
-         * If any other file has this comment, it signals not to include lib.d.ts
-         * because this containing file is intended to act as a default library.
-         */
+        /** @deprecated Always false. Use a Program to determine if a file is a lib file. */
         hasNoDefaultLib: boolean;
         languageVersion: ScriptTarget;
         /**
@@ -6951,6 +6946,7 @@ declare namespace ts {
         Message = 3,
     }
     enum ModuleResolutionKind {
+        /** @deprecated */
         Classic = 1,
         /**
          * @deprecated
@@ -6958,6 +6954,9 @@ declare namespace ts {
          * Use the new name or consider switching to a modern module resolution target.
          */
         NodeJs = 2,
+        /**
+         * @deprecated
+         */
         Node10 = 2,
         Node16 = 3,
         NodeNext = 99,
@@ -7020,6 +7019,7 @@ declare namespace ts {
         allowUnreachableCode?: boolean;
         allowUnusedLabels?: boolean;
         alwaysStrict?: boolean;
+        /** @deprecated */
         baseUrl?: string;
         /** @deprecated */
         charset?: string;
@@ -7033,6 +7033,7 @@ declare namespace ts {
         disableSourceOfProjectReferenceRedirect?: boolean;
         disableSolutionSearching?: boolean;
         disableReferencedProjectLoad?: boolean;
+        /** @deprecated */
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
@@ -7150,10 +7151,14 @@ declare namespace ts {
         [option: string]: CompilerOptionsValue | undefined;
     }
     enum ModuleKind {
+        /** @deprecated */
         None = 0,
         CommonJS = 1,
+        /** @deprecated */
         AMD = 2,
+        /** @deprecated */
         UMD = 3,
+        /** @deprecated */
         System = 4,
         ES2015 = 5,
         ES2020 = 6,
@@ -7205,6 +7210,7 @@ declare namespace ts {
     enum ScriptTarget {
         /** @deprecated */
         ES3 = 0,
+        /** @deprecated */
         ES5 = 1,
         ES2015 = 2,
         ES2016 = 3,
@@ -7219,6 +7225,7 @@ declare namespace ts {
         ESNext = 99,
         JSON = 100,
         Latest = 99,
+        LatestStandard = 11,
     }
     enum LanguageVariant {
         Standard = 0,
@@ -9320,7 +9327,7 @@ declare namespace ts {
      * Given a set of options, returns the set of type directive names
      *   that should be included for this program automatically.
      * This list could either come from the config file,
-     *   or from enumerating the types root + initial secondary types lookup location.
+     *   and/or from enumerating the types root + initial secondary types lookup location given "*" compat wildcard.
      * More type directives might appear in the program later as a result of loading actual source files;
      *   this list is only the set of defaults that are implicitly included.
      */
@@ -10039,6 +10046,7 @@ declare namespace ts {
         libReferenceDirectives: FileReference[];
         importedFiles: FileReference[];
         ambientExternalModules?: string[];
+        /** @deprecated Always false. Use a Program to determine if a file is a lib file. */
         isLibFile: boolean;
     }
     interface HostCancellationToken {

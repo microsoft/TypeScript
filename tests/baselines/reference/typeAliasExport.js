@@ -8,3 +8,4 @@ declare module "a" {
 }
 
 //// [typeAliasExport.js]
+"use strict";

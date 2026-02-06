@@ -1,8 +1,10 @@
+// @target: es2015
+// @module: commonjs
 // @preserveConstEnums: true
 // @noTypesAndSymbols: true
 
 // @filename: foo.ts
-export module ConstEnumOnlyModule {
+export namespace ConstEnumOnlyModule {
   export const enum ConstFooEnum {
     Some,
     Values,

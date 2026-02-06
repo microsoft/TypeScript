@@ -12,7 +12,6 @@ class D extends C { prop = 1; }
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -44,6 +43,7 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es6.d.ts] *Lib*
 
 //// [/user/username/projects/project/a.js]
+"use strict";
 class C {
     get prop() { return 1; }
 }
@@ -55,12 +55,6 @@ class D extends C {
 }
 
 
-
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es6.d.ts: *new*
@@ -131,6 +125,7 @@ Output::
 
 
 //// [/user/username/projects/project/a.js]
+"use strict";
 class C {
     get prop() { return 1; }
 }

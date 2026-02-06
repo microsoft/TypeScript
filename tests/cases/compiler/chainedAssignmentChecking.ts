@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class X {
   constructor(public z) { }
   a: number;

@@ -23,8 +23,8 @@ declare class MyClass {
 >    : ^ ^^      ^^ ^^^      ^^^^^    
 >x : string
 >  : ^^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     constructor(x: MyClass.Bar);
 >x : MyClass.Bar

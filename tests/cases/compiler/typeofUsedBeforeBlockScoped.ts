@@ -1,3 +1,4 @@
+// @target: es2015
 type T = typeof C & typeof C.s & typeof o & typeof o.n;
 class C {
     static s = 2;

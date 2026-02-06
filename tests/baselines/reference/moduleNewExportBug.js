@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleNewExportBug.ts] ////
 
 //// [moduleNewExportBug.ts]
-module mod1 {
+namespace mod1 {
 	interface mInt {
 		new (bar:any):any;
         foo (bar:any):any;
@@ -16,13 +16,11 @@ var c : mod1.C; // ERROR: C should not be visible
 
 
 //// [moduleNewExportBug.js]
+"use strict";
 var mod1;
 (function (mod1) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        C.prototype.moo = function () { };
-        return C;
-    }());
+    class C {
+        moo() { }
+    }
 })(mod1 || (mod1 = {}));
 var c; // ERROR: C should not be visible

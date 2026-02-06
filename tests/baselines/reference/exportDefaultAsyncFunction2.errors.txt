@@ -12,7 +12,7 @@ e.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
     
 ==== a.ts (1 errors) ====
-    import { async, await } from 'asyncawait';
+    import { async, await } from './asyncawait';
                     ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
     export default async(() => await(Promise.resolve(1)));
@@ -21,20 +21,20 @@ e.ts(1,17): error TS1262: Identifier expected. 'await' is a reserved word at the
     export default async () => { return 0; };
     
 ==== c.ts (1 errors) ====
-    import { async, await } from 'asyncawait';
+    import { async, await } from './asyncawait';
                     ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
     export default async<number>();
     
 ==== d.ts (1 errors) ====
-    import { async, await } from 'asyncawait';
+    import { async, await } from './asyncawait';
                     ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
     
     export default async;
     
 ==== e.ts (1 errors) ====
-    import { async, await } from 'asyncawait';
+    import { async, await } from './asyncawait';
                     ~~~~~
 !!! error TS1262: Identifier expected. 'await' is a reserved word at the top-level of a module.
     

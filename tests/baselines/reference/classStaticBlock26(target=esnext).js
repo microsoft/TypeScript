@@ -32,6 +32,7 @@ class C {
 
 
 //// [classStaticBlock26.js]
+"use strict";
 class C {
     static {
         await ; // illegal

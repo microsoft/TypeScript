@@ -10,11 +10,9 @@ var v1 : C<string>;
 var y = v1.x; // should be 'string'
 
 //// [genericClasses0.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 var v1;
 var y = v1.x; // should be 'string'
 

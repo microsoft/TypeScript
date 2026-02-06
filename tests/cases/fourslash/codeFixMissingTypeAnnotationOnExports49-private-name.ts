@@ -2,7 +2,7 @@
 
 // @isolatedDeclarations: true
 // @declaration: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @target: es2018
 // @jsx: react-jsx
 

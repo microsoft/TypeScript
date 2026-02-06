@@ -431,7 +431,7 @@
 // --- (line: 15) skipped ---
 // }
 // 
-// module m {
+// namespace m {
 //     /*HIGHLIGHTS*/static a;
 //     public b;
 //     private c;
@@ -444,7 +444,7 @@
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
 // --- (line: 16) skipped ---
 // 
-// module m {
+// namespace m {
 //     static a;
 //     /*HIGHLIGHTS*/public b;
 //     private c;
@@ -457,7 +457,7 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesModifiersNegatives1.ts ===
 // --- (line: 17) skipped ---
-// module m {
+// namespace m {
 //     static a;
 //     public b;
 //     /*HIGHLIGHTS*/private c;

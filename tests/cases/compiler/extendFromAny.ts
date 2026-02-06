@@ -1,3 +1,4 @@
+// @target: es2015
 declare var Base: any;
 class C extends Base {
     known = 1;

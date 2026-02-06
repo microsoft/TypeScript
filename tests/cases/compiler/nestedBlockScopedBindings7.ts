@@ -1,3 +1,4 @@
+// @target: es2015
 for (let x; false;) {
     () => x;
 }

@@ -1,3 +1,4 @@
+// @target: es2015
 // Error for construct signature overloads to differ only by return type
 
 class C {

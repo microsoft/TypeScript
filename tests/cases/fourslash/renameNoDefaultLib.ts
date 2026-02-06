@@ -5,7 +5,6 @@
 
 // @Filename: /foo.js
 //// // @ts-check
-//// /// <reference no-default-lib="true" />
 //// const [|/**/foo|] = 1;
 
 goTo.marker("");

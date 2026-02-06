@@ -1,3 +1,4 @@
+// @target: es2015
 // Errors
 interface Foo {
     public a: any;

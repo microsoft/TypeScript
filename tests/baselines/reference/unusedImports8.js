@@ -26,12 +26,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Calculator = void 0;
 exports.test = test;
 exports.test2 = test2;
-var Calculator = /** @class */ (function () {
-    function Calculator() {
-    }
-    Calculator.prototype.handleChar = function () { };
-    return Calculator;
-}());
+class Calculator {
+    handleChar() { }
+}
 exports.Calculator = Calculator;
 function test() {
 }
@@ -40,7 +37,7 @@ function test2() {
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var file1_1 = require("./file1");
+const file1_1 = require("./file1");
 var x = new file1_1.Calculator();
 x.handleChar();
 (0, file1_1.test)();

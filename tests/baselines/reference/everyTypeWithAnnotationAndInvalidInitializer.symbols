@@ -45,11 +45,11 @@ function F2(x: number): boolean { return x < 42; }
 >x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 15, 12))
 >x : Symbol(x, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 15, 12))
 
-module M {
+namespace M {
 >M : Symbol(M, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 15, 50))
 
     export class A {
->A : Symbol(A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 17, 10))
+>A : Symbol(A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 17, 13))
 
         name: string;
 >name : Symbol(A.name, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 18, 20))
@@ -63,11 +63,11 @@ module M {
 >toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
-module N {
+namespace N {
 >N : Symbol(N, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 23, 1))
 
     export class A {
->A : Symbol(A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 10))
+>A : Symbol(A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 13))
 
         id: number;
 >id : Symbol(A.id, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 26, 20))
@@ -89,7 +89,7 @@ var aString: string = 9.9;
 
 var aDate: Date = 9.9;
 >aDate : Symbol(aDate, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 35, 3))
->Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 var aVoid: void = 9.9;
 >aVoid : Symbol(aVoid, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 37, 3))
@@ -142,10 +142,10 @@ var aModule: typeof M = N;
 var aClassInModule: M.A = new N.A();
 >aClassInModule : Symbol(aClassInModule, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 50, 3))
 >M : Symbol(M, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 15, 50))
->A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 17, 10))
->N.A : Symbol(N.A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 10))
+>A : Symbol(M.A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 17, 13))
+>N.A : Symbol(N.A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 13))
 >N : Symbol(N, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 23, 1))
->A : Symbol(N.A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 10))
+>A : Symbol(N.A, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 25, 13))
 
 var aFunctionInModule: typeof M.F2 = F2;
 >aFunctionInModule : Symbol(aFunctionInModule, Decl(everyTypeWithAnnotationAndInvalidInitializer.ts, 51, 3))

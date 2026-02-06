@@ -1,3 +1,4 @@
+// @target: es2015
 // Derived type indexer must be subtype of base type indexer
 
 interface Base { foo: string; }
@@ -12,7 +13,7 @@ class B extends A {
     [x: number]: string; // error
 }
 
-module Generics {
+namespace Generics {
     class A<T extends Derived> {
         [x: number]: T;
     }

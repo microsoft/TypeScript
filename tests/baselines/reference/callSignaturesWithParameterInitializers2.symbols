@@ -30,18 +30,18 @@ class C {
 >x : Symbol(x, Decl(callSignaturesWithParameterInitializers2.ts, 11, 8))
 }
 
-var c: C;
->c : Symbol(c, Decl(callSignaturesWithParameterInitializers2.ts, 14, 3))
+declare var c: C;
+>c : Symbol(c, Decl(callSignaturesWithParameterInitializers2.ts, 14, 11))
 >C : Symbol(C, Decl(callSignaturesWithParameterInitializers2.ts, 7, 6))
 
 c.foo();
 >c.foo : Symbol(C.foo, Decl(callSignaturesWithParameterInitializers2.ts, 9, 9), Decl(callSignaturesWithParameterInitializers2.ts, 10, 15))
->c : Symbol(c, Decl(callSignaturesWithParameterInitializers2.ts, 14, 3))
+>c : Symbol(c, Decl(callSignaturesWithParameterInitializers2.ts, 14, 11))
 >foo : Symbol(C.foo, Decl(callSignaturesWithParameterInitializers2.ts, 9, 9), Decl(callSignaturesWithParameterInitializers2.ts, 10, 15))
 
 c.foo(1);
 >c.foo : Symbol(C.foo, Decl(callSignaturesWithParameterInitializers2.ts, 9, 9), Decl(callSignaturesWithParameterInitializers2.ts, 10, 15))
->c : Symbol(c, Decl(callSignaturesWithParameterInitializers2.ts, 14, 3))
+>c : Symbol(c, Decl(callSignaturesWithParameterInitializers2.ts, 14, 11))
 >foo : Symbol(C.foo, Decl(callSignaturesWithParameterInitializers2.ts, 9, 9), Decl(callSignaturesWithParameterInitializers2.ts, 10, 15))
 
 var b = {

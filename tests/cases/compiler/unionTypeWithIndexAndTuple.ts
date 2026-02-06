@@ -1,3 +1,4 @@
+// @target: es2015
 interface I {
     [index: number]: any;
     someOtherProperty: number;

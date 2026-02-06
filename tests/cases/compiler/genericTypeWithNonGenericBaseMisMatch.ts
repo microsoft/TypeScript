@@ -1,3 +1,4 @@
+// @target: es2015
 interface I {
 	f: (a: { a: number }) => void
 }

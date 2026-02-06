@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @strict: false
 // @module: CommonJS
 // @declaration: true
 //// export function /*1*/foo/*2*/() {

@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/AmbientModuleAndAmbientWithSameNameAndCommonRoot.ts] ////
 
 === module.d.ts ===
-declare module A {
+declare namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
-    export module Point {
+    export namespace Point {
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
 
@@ -25,7 +25,7 @@ declare module A {
 }
 
 === class.d.ts ===
-declare module A {
+declare namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 

@@ -80,7 +80,7 @@ const enumerationKeys = ['calendar', 'collation', 'currency', 'numberingSystem',
 >       : ^^^^^^
 
 for (const key of enumerationKeys) {
->key : "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"
+>key : "timeZone" | "calendar" | "collation" | "currency" | "numberingSystem" | "unit"
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >enumerationKeys : readonly ["calendar", "collation", "currency", "numberingSystem", "timeZone", "unit"]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -96,7 +96,7 @@ for (const key of enumerationKeys) {
 >     : ^^^^^^^^^^^
 >supportedValuesOf : (key: "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit") => string[]
 >                  : ^   ^^                                                                               ^^^^^        
->key : "calendar" | "collation" | "currency" | "numberingSystem" | "timeZone" | "unit"
+>key : "timeZone" | "calendar" | "collation" | "currency" | "numberingSystem" | "unit"
 >    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

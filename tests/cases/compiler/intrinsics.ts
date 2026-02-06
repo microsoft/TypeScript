@@ -1,8 +1,10 @@
+// @target: es2015
+// @strict: false
 // @declaration: true
 
 var hasOwnProperty: hasOwnProperty; // Error
 
-module m1 {
+namespace m1 {
     export var __proto__;
     interface __proto__ {}
 

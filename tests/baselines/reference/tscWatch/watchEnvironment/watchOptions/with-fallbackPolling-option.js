@@ -14,7 +14,6 @@ let y = 1
 }
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 13
-/// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -37,34 +36,34 @@ Output::
 sysLog:: /user/username/projects/project/tsconfig.json:: Changing to watchFile
 sysLog:: /user/username/projects/project/commonFile1.ts:: Changing to watchFile
 sysLog:: /user/username/projects/project/commonFile2.ts:: Changing to watchFile
-sysLog:: /home/src/tslibs/TS/Lib/lib.d.ts:: Changing to watchFile
+sysLog:: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:: Changing to watchFile
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 sysLog:: /user/username/projects/project:: Changing to watchFile
 
 
-//// [/user/username/projects/project/commonFile1.js] Inode:: 113
-var x = 1;
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 15
+
+//// [/user/username/projects/project/commonFile1.js] Inode:: 114
+"use strict";
+let x = 1;
 
 
-//// [/user/username/projects/project/commonFile2.js] Inode:: 114
-var y = 1;
+//// [/user/username/projects/project/commonFile2.js] Inode:: 115
+"use strict";
+let y = 1;
 
 
 
 PolledWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {"pollingInterval":250}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project: *new*
   {"pollingInterval":500}
 /user/username/projects/project/commonFile1.ts: *new*
   {"pollingInterval":250}
 /user/username/projects/project/commonFile2.ts: *new*
   {"pollingInterval":250}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
@@ -78,17 +77,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/project/commonFile1.ts
 /user/username/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/project/commonFile1.ts
 /user/username/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/project/commonfile1.ts (used version)
 /user/username/projects/project/commonfile2.ts (used version)
 

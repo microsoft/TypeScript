@@ -1,3 +1,4 @@
+// @target: es2015
 var x: string[];
 x = new Array(1);
 x = new Array('hi', 'bye'); 

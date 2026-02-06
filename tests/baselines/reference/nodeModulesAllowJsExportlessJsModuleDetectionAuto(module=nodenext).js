@@ -10,4 +10,5 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 // this file is a module despite having no imports
 //// [bar.js]
+"use strict";
 // however this file is _not_ a module

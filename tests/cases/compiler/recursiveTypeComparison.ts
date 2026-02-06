@@ -1,3 +1,4 @@
+// @target: es2015
 // Before fix this would take an exceeding long time to complete (#1170)
 
 interface Observable<T> {

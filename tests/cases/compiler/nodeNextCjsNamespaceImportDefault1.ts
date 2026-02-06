@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: nodenext
 // @moduleResolution: nodenext
 // @outDir: ./out

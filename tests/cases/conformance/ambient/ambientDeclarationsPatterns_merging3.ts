@@ -1,3 +1,6 @@
+// @module: commonjs
+// @target: es2015
+// @strict: false
 // @filename: types.ts
 declare module "*.foo" {
   export interface OhNo { star: string }

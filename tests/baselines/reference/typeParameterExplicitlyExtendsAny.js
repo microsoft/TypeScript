@@ -2,13 +2,13 @@
 
 //// [typeParameterExplicitlyExtendsAny.ts]
 function fee<T>() {
-    var t: T;
+    var t!: T;
     t.blah; // Error
     t.toString; // ok
 }
 
 function fee2<T extends any>() {
-    var t: T;
+    var t!: T;
     t.blah; // ok
     t.toString; // ok
 }
@@ -36,6 +36,7 @@ class MyClass {
 
 
 //// [typeParameterExplicitlyExtendsAny.js]
+"use strict";
 function fee() {
     var t;
     t.blah; // Error
@@ -53,12 +54,9 @@ function f(x) {
     x[100];
     x['hello'];
 }
-var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
-    MyClass.displayTree1 = function (tree) {
+class MyClass {
+    static displayTree1(tree) {
         // error "Property 'children' does not exist on type 'T'"
         tree.children;
-    };
-    return MyClass;
-}());
+    }
+}

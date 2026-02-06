@@ -19,6 +19,7 @@ declare module "a.foo" {
 }
 
 //// [types.js]
+"use strict";
 //// [testA.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

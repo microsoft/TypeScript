@@ -1,3 +1,4 @@
+// @target: es2015
 type A = 1;
 type B = 2 | 3;
 type C = 1 | 2 | 3;

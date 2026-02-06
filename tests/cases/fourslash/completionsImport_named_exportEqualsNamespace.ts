@@ -15,7 +15,7 @@ verify.completions({
     marker: "",
     includes: {
         name: "foo",
-        source: "/a",
+        source: "./a",
         sourceDisplay: "./a",
         text: "const N.foo: 0",
         kind: "const",
@@ -27,7 +27,7 @@ verify.completions({
 });
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
-    source: "/a",
+    source: "./a",
     description: `Add import from "./a"`,
     newFileContent: `import { foo } from "./a";
 

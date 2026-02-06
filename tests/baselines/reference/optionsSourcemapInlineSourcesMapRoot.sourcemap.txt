@@ -9,6 +9,7 @@ sourcesContent: ["var a = 10;"]
 emittedFile:optionsSourcemapInlineSourcesMapRoot.js
 sourceFile:../optionsSourcemapInlineSourcesMapRoot.ts
 -------------------------------------------------------------------
+>>>"use strict";
 >>>var a = 10;
 1 >
 2 >^^^^
@@ -23,11 +24,11 @@ sourceFile:../optionsSourcemapInlineSourcesMapRoot.ts
 4 >      = 
 5 >        10
 6 >          ;
-1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
-3 >Emitted(1, 6) Source(1, 6) + SourceIndex(0)
-4 >Emitted(1, 9) Source(1, 9) + SourceIndex(0)
-5 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
-6 >Emitted(1, 12) Source(1, 12) + SourceIndex(0)
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 5) Source(1, 5) + SourceIndex(0)
+3 >Emitted(2, 6) Source(1, 6) + SourceIndex(0)
+4 >Emitted(2, 9) Source(1, 9) + SourceIndex(0)
+5 >Emitted(2, 11) Source(1, 11) + SourceIndex(0)
+6 >Emitted(2, 12) Source(1, 12) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=local/optionsSourcemapInlineSourcesMapRoot.js.map

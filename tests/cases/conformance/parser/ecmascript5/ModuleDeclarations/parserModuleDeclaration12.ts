@@ -1,2 +1,3 @@
-module A.string {
+// @target: es2015
+namespace A.string {
 }

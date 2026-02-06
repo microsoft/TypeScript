@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/jsx/tsxOpeningClosingNames.tsx] ////
 
 === file.tsx ===
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 }
 
-declare module A.B.C {
+declare namespace A.B.C {
 >A : typeof A
 >  : ^^^^^^^^
 >B : typeof B

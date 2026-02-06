@@ -6,7 +6,7 @@ export function foo() {
 }
 
 //// [b.ts]
-import defer type * as ns1 from "a";
+import defer type * as ns1 from "./a";
 
 
 //// [a.js]
@@ -16,5 +16,5 @@ export function foo() {
 //// [b.js]
 ns1;
 from;
-"a";
+"./a";
 export {};

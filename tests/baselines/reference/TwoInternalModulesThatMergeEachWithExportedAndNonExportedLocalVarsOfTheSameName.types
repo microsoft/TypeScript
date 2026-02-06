@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedLocalVarsOfTheSameName.ts] ////
 
 === part1.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -15,7 +15,7 @@ module A {
 >  : ^^^^^^
     }
 
-    export module Utils {
+    export namespace Utils {
 >Utils : typeof Utils
 >      : ^^^^^^^^^^^^
 
@@ -62,7 +62,7 @@ module A {
 }
 
 === part2.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
@@ -73,7 +73,7 @@ module A {
 >"0,0" : "0,0"
 >      : ^^^^^
 
-    export module Utils {
+    export namespace Utils {
 >Utils : typeof Utils
 >      : ^^^^^^^^^^^^
 

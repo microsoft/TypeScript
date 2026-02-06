@@ -3,7 +3,7 @@ tsxDynamicTagName2.tsx(9,25): error TS2339: Property 'customTag' does not exist 
 
 
 ==== tsxDynamicTagName2.tsx (2 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
             div: any

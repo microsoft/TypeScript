@@ -1,5 +1,6 @@
+// @target: es2015
 //@declaration: true
-module M {
+namespace M {
     interface I { }
     export class C {
         private x: I;

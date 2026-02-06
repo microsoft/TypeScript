@@ -1,8 +1,9 @@
+// @target: es2015
 //@module: commonjs
 // @Filename: aliasOnMergedModuleInterface_0.ts
 declare module "foo"
 {
-    module B {
+    namespace B {
         export interface A {
         }
     }
@@ -15,6 +16,6 @@ declare module "foo"
 // @Filename: aliasOnMergedModuleInterface_1.ts
 ///<reference path='aliasOnMergedModuleInterface_0.ts' />
 import foo = require("foo")
-var z: foo;
+declare var z: foo;
 z.bar("hello"); // This should be ok
 var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be error

@@ -1,9 +1,9 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @declaration: true
 // @removeComments: false
 
 /** this is multi declare module*/
-module multiM {
+namespace multiM {
     /** class b*/
     export class b {
     }
@@ -14,7 +14,7 @@ module multiM {
 }
 
 /// this is multi module 2
-module multiM {
+namespace multiM {
     /** class c comment*/
     export class c {
     }

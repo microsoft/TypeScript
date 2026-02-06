@@ -1,11 +1,11 @@
 //// [tests/cases/conformance/internalModules/moduleDeclarations/nonInstantiatedModule.ts] ////
 
 === nonInstantiatedModule.ts ===
-module M {
+namespace M {
 >M : Symbol(M, Decl(nonInstantiatedModule.ts, 0, 0))
 
     export interface Point { x: number; y: number }
->Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 0, 10))
+>Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 0, 13))
 >x : Symbol(Point.x, Decl(nonInstantiatedModule.ts, 1, 28))
 >y : Symbol(Point.y, Decl(nonInstantiatedModule.ts, 1, 39))
 
@@ -40,15 +40,15 @@ var a2 = m.a;
 >m : Symbol(m, Decl(nonInstantiatedModule.ts, 6, 3), Decl(nonInstantiatedModule.ts, 7, 3))
 >a : Symbol(M.a, Decl(nonInstantiatedModule.ts, 2, 14))
 
-module M2 {
+namespace M2 {
 >M2 : Symbol(M2, Decl(nonInstantiatedModule.ts, 13, 13))
 
-    export module Point {
->Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
+    export namespace Point {
+>Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 14), Decl(nonInstantiatedModule.ts, 20, 5))
 
         export function Origin(): Point {
->Origin : Symbol(Origin, Decl(nonInstantiatedModule.ts, 16, 25))
->Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
+>Origin : Symbol(Origin, Decl(nonInstantiatedModule.ts, 16, 28))
+>Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 14), Decl(nonInstantiatedModule.ts, 20, 5))
 
             return { x: 0, y: 0 };
 >x : Symbol(x, Decl(nonInstantiatedModule.ts, 18, 20))
@@ -57,7 +57,7 @@ module M2 {
     }
 
     export interface Point {
->Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
+>Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 15, 14), Decl(nonInstantiatedModule.ts, 20, 5))
 
         x: number;
 >x : Symbol(Point.x, Decl(nonInstantiatedModule.ts, 22, 28))
@@ -75,7 +75,7 @@ var p: { x: number; y: number; };
 var p: M2.Point;
 >p : Symbol(p, Decl(nonInstantiatedModule.ts, 28, 3), Decl(nonInstantiatedModule.ts, 29, 3))
 >M2 : Symbol(M2, Decl(nonInstantiatedModule.ts, 13, 13))
->Point : Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
+>Point : Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 14), Decl(nonInstantiatedModule.ts, 20, 5))
 
 var p2: { Origin() : { x: number; y: number; } };
 >p2 : Symbol(p2, Decl(nonInstantiatedModule.ts, 31, 3), Decl(nonInstantiatedModule.ts, 32, 3))
@@ -85,18 +85,18 @@ var p2: { Origin() : { x: number; y: number; } };
 
 var p2: typeof M2.Point;
 >p2 : Symbol(p2, Decl(nonInstantiatedModule.ts, 31, 3), Decl(nonInstantiatedModule.ts, 32, 3))
->M2.Point : Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
+>M2.Point : Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 14), Decl(nonInstantiatedModule.ts, 20, 5))
 >M2 : Symbol(M2, Decl(nonInstantiatedModule.ts, 13, 13))
->Point : Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 11), Decl(nonInstantiatedModule.ts, 20, 5))
+>Point : Symbol(M2.Point, Decl(nonInstantiatedModule.ts, 15, 14), Decl(nonInstantiatedModule.ts, 20, 5))
 
-module M3 {
+namespace M3 {
 >M3 : Symbol(M3, Decl(nonInstantiatedModule.ts, 32, 24))
 
-    export module Utils {
->Utils : Symbol(Utils, Decl(nonInstantiatedModule.ts, 34, 11), Decl(nonInstantiatedModule.ts, 39, 5))
+    export namespace Utils {
+>Utils : Symbol(Utils, Decl(nonInstantiatedModule.ts, 34, 14), Decl(nonInstantiatedModule.ts, 39, 5))
 
         export interface Point {
->Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 35, 25))
+>Point : Symbol(Point, Decl(nonInstantiatedModule.ts, 35, 28))
 
             x: number; y: number;
 >x : Symbol(Point.x, Decl(nonInstantiatedModule.ts, 36, 32))
@@ -105,7 +105,7 @@ module M3 {
     }
 
     export class Utils {
->Utils : Symbol(Utils, Decl(nonInstantiatedModule.ts, 34, 11), Decl(nonInstantiatedModule.ts, 39, 5))
+>Utils : Symbol(Utils, Decl(nonInstantiatedModule.ts, 34, 14), Decl(nonInstantiatedModule.ts, 39, 5))
 
         name: string;
 >name : Symbol(Utils.name, Decl(nonInstantiatedModule.ts, 41, 24))

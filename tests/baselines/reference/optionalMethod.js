@@ -7,6 +7,7 @@ class Base {
 
 
 //// [optionalMethod.js]
+"use strict";
 class Base {
     method() { }
 }

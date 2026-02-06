@@ -4,9 +4,9 @@
 // If one operand is the undefined or undefined value, it is treated as having the type of the
 // other operand.
 
-var a: boolean;
-var b: string;
-var c: Object;
+declare var a: boolean;
+declare var b: string;
+declare var c: Object;
 
 // operator **
 var r1a1 = undefined ** a;
@@ -26,11 +26,9 @@ var r1d2 = '' ** undefined;
 var r1d3 = {} ** undefined;
 
 //// [exponentiationOperatorWithUndefinedValueAndInvalidOperands.js]
+"use strict";
 // If one operand is the undefined or undefined value, it is treated as having the type of the
 // other operand.
-var a;
-var b;
-var c;
 // operator **
 var r1a1 = Math.pow(undefined, a);
 var r1a2 = Math.pow(undefined, b);

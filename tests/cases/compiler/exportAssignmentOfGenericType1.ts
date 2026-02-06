@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 // @Filename: exportAssignmentOfGenericType1_0.ts
 export = T;

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/jsxParsingError2.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		[s: string]: any;
@@ -29,19 +29,25 @@ let x5 = <div><span>
 
 
 //// [file.jsx]
+"use strict";
 //// [Error1.jsx]
+"use strict";
 // Issue error about missing span closing tag, not missing div closing tag
-var x1 = <div><span></></div>;
+let x1 = <div><span></></div>;
 //// [Error2.jsx]
-var x2 = <div></span>;
+"use strict";
+let x2 = <div></span>;
 //// [Error3.jsx]
-var x3 = <div>;
+"use strict";
+let x3 = <div>;
 
 </>;
 //// [Error4.jsx]
-var x4 = <div><div></span>;
+"use strict";
+let x4 = <div><div></span>;
 </>;
 //// [Error5.jsx]
-var x5 = <div><span>
+"use strict";
+let x5 = <div><span>
 
 </></>;

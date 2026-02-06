@@ -3,13 +3,13 @@ moduleAssignmentCompat4.ts(13,8): error TS2709: Cannot use namespace 'B' as a ty
 
 
 ==== moduleAssignmentCompat4.ts (2 errors) ====
-    module A {
-       export module M {
+    namespace A {
+       export namespace M {
             class C { }
         }
     }
-    module B {
-        export module M {
+    namespace B {
+        export namespace M {
             export class D { }
         }
     }

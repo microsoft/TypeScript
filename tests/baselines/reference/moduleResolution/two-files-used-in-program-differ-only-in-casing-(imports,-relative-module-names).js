@@ -9,4 +9,5 @@ moduleA.ts(1,17): error TS1261: Already included file name 'ModuleB.ts' differs 
   The file is in the program because:
     Imported via "./ModuleB" from file 'moduleA.ts'
     Root file specified for compilation
+ModuleB.ts(1,12): error TS7005: Variable 'x' implicitly has an 'any' type.
 

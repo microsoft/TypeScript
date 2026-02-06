@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/internalAliasVarInsideLocalModuleWithoutExport.ts] ////
 
 //// [internalAliasVarInsideLocalModuleWithoutExport.ts]
-export module a {
+export namespace a {
     export var x = 10;
 }
 
-export module c {
+export namespace c {
     import b = a.x;
     export var bVal = b;
 }

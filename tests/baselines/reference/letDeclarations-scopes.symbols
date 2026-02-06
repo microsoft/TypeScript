@@ -212,7 +212,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
 >m : Symbol(m, Decl(letDeclarations-scopes.ts, 106, 2))
 
     let l = 0;

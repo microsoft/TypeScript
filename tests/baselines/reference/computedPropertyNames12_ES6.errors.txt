@@ -1,18 +1,24 @@
+computedPropertyNames12_ES6.ts(5,5): error TS2564: Property '[s]' has no initializer and is not definitely assigned in the constructor.
 computedPropertyNames12_ES6.ts(7,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 computedPropertyNames12_ES6.ts(8,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 computedPropertyNames12_ES6.ts(9,5): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 computedPropertyNames12_ES6.ts(9,5): error TS2411: Property '[+s]' of type 'string' is not assignable to 'number' index type 'number'.
 computedPropertyNames12_ES6.ts(9,5): error TS2411: Property '[+s]' of type 'string' is not assignable to 'string' index type 'number'.
+computedPropertyNames12_ES6.ts(9,5): error TS2564: Property '[+s]' has no initializer and is not definitely assigned in the constructor.
+computedPropertyNames12_ES6.ts(11,5): error TS2564: Property '[0]' has no initializer and is not definitely assigned in the constructor.
+computedPropertyNames12_ES6.ts(12,5): error TS2564: Property '[a]' has no initializer and is not definitely assigned in the constructor.
 computedPropertyNames12_ES6.ts(13,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 computedPropertyNames12_ES6.ts(15,12): error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.
 
 
-==== computedPropertyNames12_ES6.ts (7 errors) ====
+==== computedPropertyNames12_ES6.ts (11 errors) ====
     var s: string;
     var n: number;
     var a: any;
     class C {
         [s]: number;
+        ~~~
+!!! error TS2564: Property '[s]' has no initializer and is not definitely assigned in the constructor.
         [n] = n;
         static [s + s]: string;
                ~~~~~~~
@@ -27,9 +33,15 @@ computedPropertyNames12_ES6.ts(15,12): error TS1166: A computed property name in
 !!! error TS2411: Property '[+s]' of type 'string' is not assignable to 'number' index type 'number'.
         ~~~~
 !!! error TS2411: Property '[+s]' of type 'string' is not assignable to 'string' index type 'number'.
+        ~~~~
+!!! error TS2564: Property '[+s]' has no initializer and is not definitely assigned in the constructor.
         static [""]: number;
         [0]: number;
+        ~~~
+!!! error TS2564: Property '[0]' has no initializer and is not definitely assigned in the constructor.
         [a]: number;
+        ~~~
+!!! error TS2564: Property '[a]' has no initializer and is not definitely assigned in the constructor.
         static [<any>true]: number;
                ~~~~~~~~~~~
 !!! error TS1166: A computed property name in a class property declaration must have a simple literal type or a 'unique symbol' type.

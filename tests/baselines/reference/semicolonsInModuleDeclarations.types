@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/semicolonsInModuleDeclarations.ts] ////
 
 === semicolonsInModuleDeclarations.ts ===
-declare module ambiModule {
+declare namespace ambiModule {
 >ambiModule : typeof ambiModule
 >           : ^^^^^^^^^^^^^^^^^
 

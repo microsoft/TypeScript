@@ -1,3 +1,4 @@
+// @target: es2015
 // should be x
 type H_inline1<x> = (<o extends x>() => o) extends (() => infer o) ? o : never;
 

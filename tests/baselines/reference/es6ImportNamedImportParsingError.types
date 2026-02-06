@@ -20,7 +20,7 @@ export var m = a;
 >  : ^^^^^^
 
 === es6ImportNamedImportParsingError_1.ts ===
-import { * } from "es6ImportNamedImportParsingError_0";
+import { * } from "./es6ImportNamedImportParsingError_0";
 >* : number
 >  : ^^^^^^
 > : any
@@ -29,22 +29,22 @@ import { * } from "es6ImportNamedImportParsingError_0";
 > : ^^^
 >from : any
 >     : ^^^
->"es6ImportNamedImportParsingError_0" : "es6ImportNamedImportParsingError_0"
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./es6ImportNamedImportParsingError_0" : "./es6ImportNamedImportParsingError_0"
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-import defaultBinding, from "es6ImportNamedImportParsingError_0";
+import defaultBinding, from "./es6ImportNamedImportParsingError_0";
 >defaultBinding : any
 >               : ^^^
 
-import , { a } from "es6ImportNamedImportParsingError_0";
+import , { a } from "./es6ImportNamedImportParsingError_0";
 >a : any
 >  : ^^^
 >from : any
 >     : ^^^
->"es6ImportNamedImportParsingError_0" : "es6ImportNamedImportParsingError_0"
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./es6ImportNamedImportParsingError_0" : "./es6ImportNamedImportParsingError_0"
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-import { a }, from "es6ImportNamedImportParsingError_0";
+import { a }, from "./es6ImportNamedImportParsingError_0";
 >a : any
 >  : ^^^
 >, from : any
@@ -53,6 +53,6 @@ import { a }, from "es6ImportNamedImportParsingError_0";
 > : ^^^
 >from : any
 >     : ^^^
->"es6ImportNamedImportParsingError_0" : "es6ImportNamedImportParsingError_0"
->                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"./es6ImportNamedImportParsingError_0" : "./es6ImportNamedImportParsingError_0"
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

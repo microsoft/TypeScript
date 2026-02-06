@@ -1,3 +1,4 @@
+// @target: es2015
 declare function use(a: any): void;
 
 class A {

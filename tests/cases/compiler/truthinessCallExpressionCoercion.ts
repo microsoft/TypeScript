@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks:true
 
 function onlyErrorsWhenTestingNonNullableFunctionType(required: () => boolean, optional?: () => boolean) {

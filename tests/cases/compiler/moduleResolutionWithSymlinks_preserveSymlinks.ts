@@ -1,9 +1,9 @@
+// @target: es2015
 // @noImplicitReferences: true
 
 // @traceResolution: true
 // @preserveSymlinks: true
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @filename: /linked/index.d.ts
 // @symlink: /app/node_modules/linked/index.d.ts,/app/node_modules/linked2/index.d.ts
 export { real } from "real";

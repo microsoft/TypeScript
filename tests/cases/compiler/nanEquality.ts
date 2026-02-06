@@ -1,3 +1,4 @@
+// @target: es2015
 declare const x: number;
 
 if (x === NaN) {}

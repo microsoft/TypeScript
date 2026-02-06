@@ -1,3 +1,4 @@
+// @target: es2015
 function fn(): typeof fn { return 1; }
 
 var x: number = fn; // error

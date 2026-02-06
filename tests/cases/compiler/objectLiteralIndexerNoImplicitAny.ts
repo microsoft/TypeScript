@@ -1,4 +1,5 @@
-﻿//@noImplicitAny: true
+﻿// @target: es2015
+//@noImplicitAny: true
 interface I {
     [s: string]: any;
 }

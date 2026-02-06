@@ -1,4 +1,5 @@
-﻿// @lib: es5,es2015.core
+﻿// @target: es2015
+// @lib: es5,es2015.core
 
 function f(x: number, y: number, z: number) {
     return Array.from(arguments);

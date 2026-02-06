@@ -46,6 +46,7 @@ foo2({x: 'abc'});
 
 
 //// [0.js]
+"use strict";
 // @ts-check
 /**
  * @typedef {Object} Opts

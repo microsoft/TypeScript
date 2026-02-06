@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedClasses.ts] ////
 
 === ModuleWithExportedAndNonExportedClasses.ts ===
-module A {
+namespace A {
 >A : typeof globalThis.A
 >  : ^^^^^^^^^^^^^^^^^^^
 

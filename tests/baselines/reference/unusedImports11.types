@@ -18,8 +18,8 @@ import * as ns from './b';
 >   : ^^^^^^^^^
 
 import r = require("./b");
->r : typeof ns
->  : ^^^^^^^^^
+>r : typeof r
+>  : ^^^^^^^^
 
 new Member();
 >new Member() : Member
@@ -54,8 +54,8 @@ new r.Member();
 >               : ^^^^^^
 >r.Member : typeof Member
 >         : ^^^^^^^^^^^^^
->r : typeof ns
->  : ^^^^^^^^^
+>r : typeof r
+>  : ^^^^^^^^
 >Member : typeof Member
 >       : ^^^^^^^^^^^^^
 

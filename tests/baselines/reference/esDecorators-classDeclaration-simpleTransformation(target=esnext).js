@@ -9,6 +9,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-simpleTransformation.js]
+"use strict";
 @dec
 class C {
 }

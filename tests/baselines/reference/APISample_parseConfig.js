@@ -53,24 +53,23 @@ export function createProgram(rootFiles: string[], compilerOptionsJson: string):
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createProgram = createProgram;
-var ts = require("typescript");
+const ts = require("typescript");
 function printError(error) {
     if (!error) {
         return;
     }
-    console.log("".concat(error.file && error.file.fileName, ": ").concat(error.messageText));
+    console.log(`${error.file && error.file.fileName}: ${error.messageText}`);
 }
 function createProgram(rootFiles, compilerOptionsJson) {
-    var _a = ts.parseConfigFileTextToJson("tsconfig.json", compilerOptionsJson), config = _a.config, error = _a.error;
+    const { config, error } = ts.parseConfigFileTextToJson("tsconfig.json", compilerOptionsJson);
     if (error) {
         printError(error);
         return undefined;
     }
-    var basePath = process.cwd();
-    var settings = ts.convertCompilerOptionsFromJson(config.config["compilerOptions"], basePath);
+    const basePath = process.cwd();
+    const settings = ts.convertCompilerOptionsFromJson(config.config["compilerOptions"], basePath);
     if (!settings.options) {
-        for (var _i = 0, _b = settings.errors; _i < _b.length; _i++) {
-            var err = _b[_i];
+        for (const err of settings.errors) {
             printError(err);
         }
         return undefined;

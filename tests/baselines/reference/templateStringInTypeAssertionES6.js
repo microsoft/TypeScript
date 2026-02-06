@@ -4,4 +4,5 @@
 var x = <any>`abc${ 123 }def`;
 
 //// [templateStringInTypeAssertionES6.js]
+"use strict";
 var x = `abc${123}def`;

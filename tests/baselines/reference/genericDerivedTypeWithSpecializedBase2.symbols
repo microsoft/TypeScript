@@ -21,17 +21,17 @@ class B<U> extends A<string> {
 >U : Symbol(U, Decl(genericDerivedTypeWithSpecializedBase2.ts, 4, 8))
 }
 
-var x: A<{ length: number; foo: number }>;
->x : Symbol(x, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 3))
+declare var x: A<{ length: number; foo: number }>;
+>x : Symbol(x, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 11))
 >A : Symbol(A, Decl(genericDerivedTypeWithSpecializedBase2.ts, 0, 0))
->length : Symbol(length, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 10))
->foo : Symbol(foo, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 26))
+>length : Symbol(length, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 18))
+>foo : Symbol(foo, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 34))
 
-var y: B<number>;
->y : Symbol(y, Decl(genericDerivedTypeWithSpecializedBase2.ts, 9, 3))
+declare var y: B<number>;
+>y : Symbol(y, Decl(genericDerivedTypeWithSpecializedBase2.ts, 9, 11))
 >B : Symbol(B, Decl(genericDerivedTypeWithSpecializedBase2.ts, 2, 1))
 
 x = y;  // error
->x : Symbol(x, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 3))
->y : Symbol(y, Decl(genericDerivedTypeWithSpecializedBase2.ts, 9, 3))
+>x : Symbol(x, Decl(genericDerivedTypeWithSpecializedBase2.ts, 8, 11))
+>y : Symbol(y, Decl(genericDerivedTypeWithSpecializedBase2.ts, 9, 11))
 

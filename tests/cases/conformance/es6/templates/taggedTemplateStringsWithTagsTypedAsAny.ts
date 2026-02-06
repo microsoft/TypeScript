@@ -1,4 +1,5 @@
-﻿var f: any;
+﻿// @target: es2015
+var f: any;
 
 f `abc`
 

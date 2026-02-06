@@ -7,6 +7,7 @@ function foo(args: { (x): number }[]) {
 
 
 //// [functionDeclarationWithArgumentOfTypeFunctionTypeArray.js]
+"use strict";
 function foo(args) {
     return args.length;
 }

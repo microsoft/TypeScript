@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @jsx: react
 // @strict: true
 // @esModuleInterop: true

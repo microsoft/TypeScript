@@ -1,5 +1,6 @@
+// @target: es2015
 function ff<T, U>(x: T, y: U) {
-    var z: Object;
+    var z!: Object;
     x = x;  // Ok
     x = y;  // Error
     x = z;  // Error

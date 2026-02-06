@@ -1,3 +1,4 @@
+// @target: es2015
 const n = 1;
 const s = "s";
 enum E1 { A = "ENUM_KEY" }

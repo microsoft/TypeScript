@@ -1,3 +1,4 @@
+// @target: es2015
 export function tag(parts: TemplateStringsArray, ...values: any[]) {
     return parts[0];
 }

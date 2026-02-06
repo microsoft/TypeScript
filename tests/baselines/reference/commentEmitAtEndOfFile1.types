@@ -9,7 +9,7 @@ var f = ''
 >   : ^^
 
 // test #2
-module foo {
+namespace foo {
 >foo : typeof foo
 >    : ^^^^^^^^^^
 
@@ -18,6 +18,6 @@ module foo {
 >    : ^^^^^^^^^^
 }
 // test #3
-module empty {
+namespace empty {
 }
 // test #4

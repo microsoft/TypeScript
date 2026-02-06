@@ -4,4 +4,5 @@
 var v = `foo ${ a 
 
 //// [TemplateExpression1.js]
-var v = "foo ".concat(a);
+"use strict";
+var v = `foo ${a;

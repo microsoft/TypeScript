@@ -1,3 +1,4 @@
+// @target: es2015
 // allowed per spec
 var a = +1;
 var b = +(<any>"");

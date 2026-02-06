@@ -1,3 +1,4 @@
+// @target: es2015
 function test1(x: number | string) {
     if (x instanceof Object) {
         x;

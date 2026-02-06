@@ -1,3 +1,4 @@
+// @target: es2015
 function f18(a?:string, ...b:number[]){}
  
 function f19(a?:string, b?:number, ...c:number[]){}

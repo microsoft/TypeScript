@@ -12,6 +12,6 @@
 ////foo
 
 goTo.file('/index.ts');
-verify.importFixAtPosition([`import * as foo from "foo";
+verify.importFixAtPosition([`import foo from "foo";
 
 foo`]);

@@ -34,7 +34,7 @@ function toCamelCase(text: string): string {
 //// [test.tsx]
 import { Element} from './Element';
 
-let c: {
+declare let c: {
 	a?: {
 		b: string
 	}
@@ -71,7 +71,6 @@ function toCamelCase(text) {
 //// [test.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-let c;
 class A {
     view() {
         return [

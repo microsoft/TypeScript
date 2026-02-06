@@ -1,8 +1,9 @@
+// @target: es2015
 let x;
 function foo() {
     let x;
 }
 
-module A {
+namespace A {
     let x;
 }

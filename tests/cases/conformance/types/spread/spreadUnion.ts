@@ -1,3 +1,4 @@
+// @target: es2015
 var union: { a: number } | { b: string };
 
 var o3: { a: number } | { b: string };

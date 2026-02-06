@@ -1,0 +1,51 @@
+memberVariableDeclarations1.ts(4,12): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+memberVariableDeclarations1.ts(5,12): error TS2564: Property 'address' has no initializer and is not definitely assigned in the constructor.
+memberVariableDeclarations1.ts(7,12): error TS2322: Type 'null' is not assignable to type 'Employee'.
+memberVariableDeclarations1.ts(12,12): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+memberVariableDeclarations1.ts(13,12): error TS2564: Property 'address' has no initializer and is not definitely assigned in the constructor.
+memberVariableDeclarations1.ts(19,9): error TS2322: Type 'null' is not assignable to type 'Employee'.
+memberVariableDeclarations1.ts(26,6): error TS2454: Variable 'e2' is used before being assigned.
+
+
+==== memberVariableDeclarations1.ts (7 errors) ====
+    // from spec
+    
+    class Employee {
+        public name: string;
+               ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+        public address: string;
+               ~~~~~~~
+!!! error TS2564: Property 'address' has no initializer and is not definitely assigned in the constructor.
+        public retired = false;
+        public manager: Employee = null;
+               ~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Employee'.
+        public reports: Employee[] = [];
+    }
+    
+    class Employee2 {
+        public name: string;
+               ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+        public address: string;
+               ~~~~~~~
+!!! error TS2564: Property 'address' has no initializer and is not definitely assigned in the constructor.
+        public retired: boolean;
+        public manager: Employee;
+        public reports: Employee[];
+        constructor() {
+            this.retired = false;
+            this.manager = null;
+            ~~~~~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'Employee'.
+            this.reports = [];
+        }
+    }
+    
+    var e1: Employee;
+    var e2: Employee2;
+    e1 = e2;
+         ~~
+!!! error TS2454: Variable 'e2' is used before being assigned.
+    e2 = e1;

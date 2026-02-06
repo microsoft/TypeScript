@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 interface A { x }
 interface B { x; y }
 interface C { z }
@@ -16,6 +18,6 @@ var result: number = foo(x => new G(x)); // x has type D, new G(x) fails, so fir
 var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fails, so first overload is picked.
 
 var result3: string = foo(x => { // x has type D
-    var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
+    var y: G<typeof x> = new G(x); // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
     return y;
 });

@@ -23,18 +23,18 @@ interface Base {
 >   : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^      
 >x : number
 >  : ^^^^^^
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >z : number[]
 >  : ^^^^^^^^
 
     a4: (x?: number, y?: string, ...z: number[]) => number;
 >a4 : (x?: number, y?: string, ...z: number[]) => number
 >   : ^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^      
->x : number
->  : ^^^^^^
->y : string
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >z : number[]
 >  : ^^^^^^^^
 }
@@ -86,8 +86,8 @@ var a: (...args: number[]) => number; // ok, same number of required params
 >  : ^^^^    ^^        ^^^^^      
 >(x?: number) => 1 : (x?: number) => number
 >                  : ^ ^^^      ^^^^^^^^^^^
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -98,12 +98,12 @@ var a: (...args: number[]) => number; // ok, same number of required params
 >  : ^^^^    ^^        ^^^^^      
 >(x?: number, y?: number, z?: number) => 1 : (x?: number, y?: number, z?: number) => number
 >                                          : ^ ^^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^^^
->x : number
->  : ^^^^^^
->y : number
->  : ^^^^^^
->z : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -126,8 +126,8 @@ var a: (...args: number[]) => number; // ok, same number of required params
 >  : ^^^^    ^^        ^^^^^      
 >(x?: string) => 1 : (x?: string) => number
 >                  : ^ ^^^      ^^^^^^^^^^^
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -169,8 +169,8 @@ var a2: (x: number, ...z: number[]) => number;
 >   : ^ ^^      ^^^^^ ^^        ^^^^^      
 >(x?: number) => 1 : (x?: number) => number
 >                  : ^ ^^^      ^^^^^^^^^^^
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -237,8 +237,8 @@ var a2: (x: number, ...z: number[]) => number;
 >                             : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -247,8 +247,8 @@ var a3: (x: number, y?: string, ...z: number[]) => number;
 >   : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^      
 >x : number
 >  : ^^^^^^
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >z : number[]
 >  : ^^^^^^^^
 
@@ -269,8 +269,8 @@ var a3: (x: number, y?: string, ...z: number[]) => number;
 >   : ^ ^^      ^^ ^^^      ^^^^^ ^^        ^^^^^      
 >(x?: number) => 1 : (x?: number) => number
 >                  : ^ ^^^      ^^^^^^^^^^^
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -309,10 +309,10 @@ var a3: (x: number, y?: string, ...z: number[]) => number;
 >                                         : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
->z : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>z : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -339,20 +339,20 @@ var a3: (x: number, y?: string, ...z: number[]) => number;
 >                                         : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^^^
 >x : string
 >  : ^^^^^^
->y : string
->  : ^^^^^^
->z : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>z : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
 var a4: (x?: number, y?: string, ...z: number[]) => number;
 >a4 : (x?: number, y?: string, ...z: number[]) => number
 >   : ^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^      
->x : number
->  : ^^^^^^
->y : string
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >z : number[]
 >  : ^^^^^^^^
 
@@ -373,10 +373,10 @@ var a4: (x?: number, y?: string, ...z: number[]) => number;
 >   : ^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^      
 >(x?: number, y?: number) => 1 : (x?: number, y?: number) => number
 >                              : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
->x : number
->  : ^^^^^^
->y : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -401,8 +401,8 @@ var a4: (x?: number, y?: string, ...z: number[]) => number;
 >                             : ^ ^^      ^^ ^^^      ^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -413,10 +413,10 @@ var a4: (x?: number, y?: string, ...z: number[]) => number;
 >   : ^ ^^^      ^^ ^^^      ^^^^^ ^^        ^^^^^      
 >(x?: number, y?: string) => 1 : (x?: number, y?: string) => number
 >                              : ^ ^^^      ^^ ^^^      ^^^^^^^^^^^
->x : number
->  : ^^^^^^
->y : string
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 

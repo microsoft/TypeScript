@@ -10,6 +10,7 @@ function f() {
 }
 
 //// [localVariablesReturnedFromCatchBlocks.js]
+"use strict";
 function f() {
     try {
     }

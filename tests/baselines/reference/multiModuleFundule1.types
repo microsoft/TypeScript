@@ -7,7 +7,7 @@ function C(x: number) { }
 >x : number
 >  : ^^^^^^
 
-module C {
+namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 
@@ -17,7 +17,7 @@ module C {
 >1 : 1
 >  : ^
 }
-module C {
+namespace C {
 >C : typeof C
 >  : ^^^^^^^^
 

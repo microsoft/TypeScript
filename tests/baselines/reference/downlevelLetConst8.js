@@ -4,4 +4,5 @@
 let a = 1
 
 //// [downlevelLetConst8.js]
-var a = 1;
+"use strict";
+let a = 1;

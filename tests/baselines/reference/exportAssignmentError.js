@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/exportAssignmentError.ts] ////
 
 //// [exportEqualsModule_A.ts]
-module M {
+namespace M {
 	export var x;
 }
 

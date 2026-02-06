@@ -29,7 +29,7 @@ function f() { }
 >f : typeof f
 >  : ^^^^^^^^
 
-module f { export var bar = 1; }
+namespace f { export var bar = 1; }
 >f : typeof f
 >  : ^^^^^^^^
 >bar : number
@@ -43,7 +43,7 @@ class c { baz: string }
 >baz : string
 >    : ^^^^^^
 
-module c { export var bar = 1; }
+namespace c { export var bar = 1; }
 >c : typeof c
 >  : ^^^^^^^^
 >bar : number

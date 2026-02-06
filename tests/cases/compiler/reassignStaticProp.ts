@@ -1,3 +1,4 @@
+// @target: es2015
 class foo {
  
     static bar = 1;

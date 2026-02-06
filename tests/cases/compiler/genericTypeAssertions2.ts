@@ -1,3 +1,4 @@
+// @target: es2015
 class A<T> { foo(x: T) { } }
 class B<T> extends A<T> {
     bar(): T {

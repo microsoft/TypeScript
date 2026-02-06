@@ -1,10 +1,10 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @declaration: true
 
 class c {
     private p: string;
 }
-module m {
+namespace m {
     export class c {
         private q: string;
     }

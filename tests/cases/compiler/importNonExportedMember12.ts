@@ -1,5 +1,6 @@
+// @target: es2015
 // @esModuleInterop: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @module: es2015
 // @checkJs: true
 // @allowJs: true

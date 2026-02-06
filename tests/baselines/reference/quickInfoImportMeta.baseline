@@ -1,6 +1,5 @@
 // === QuickInfo ===
 === /tests/cases/fourslash/foo.ts ===
-// /// <reference no-default-lib="true"/>
 // /// <reference path='./bar.d.ts' />
 // import.meta;
 // ^^^^^^
@@ -20,14 +19,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/foo.ts",
-      "position": 77,
+      "position": 38,
       "name": "1"
     },
     "item": {
       "kind": "",
       "kindModifiers": "",
       "textSpan": {
-        "start": 75,
+        "start": 36,
         "length": 6
       },
       "displayParts": [],
@@ -37,14 +36,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/foo.ts",
-      "position": 84,
+      "position": 45,
       "name": "2"
     },
     "item": {
       "kind": "interface",
       "kindModifiers": "declare",
       "textSpan": {
-        "start": 75,
+        "start": 36,
         "length": 11
       },
       "displayParts": [],

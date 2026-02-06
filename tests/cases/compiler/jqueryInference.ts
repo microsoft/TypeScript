@@ -1,3 +1,4 @@
+// @target: es2015
 // #22362
 interface MyPromise<T, U> {
     then(cb: (t: T) => void): void;

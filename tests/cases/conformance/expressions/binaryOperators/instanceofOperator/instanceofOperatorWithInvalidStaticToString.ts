@@ -1,3 +1,4 @@
+// @target: es2015
 declare class StaticToString {
     static toString(): void;
 }

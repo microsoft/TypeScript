@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt.ts] ////
 
 === moduleSharesNameWithImportDeclarationInsideIt.ts ===
-module Z.M {
+namespace Z.M {
 >Z : typeof Z
 >  : ^^^^^^^^
 >M : typeof M
@@ -16,7 +16,7 @@ module Z.M {
 >   : ^^
     }
 }
-module A.M {
+namespace A.M {
 >A : typeof A
 >  : ^^^^^^^^
 >M : typeof A.M

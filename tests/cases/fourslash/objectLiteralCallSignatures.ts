@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////var /*1*/x: {
 ////    func1(x: number): number;         // Method signature
 ////    func2: (x: number) => number;     // Function type literal

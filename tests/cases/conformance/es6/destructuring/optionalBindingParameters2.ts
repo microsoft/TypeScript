@@ -1,4 +1,5 @@
-﻿
+﻿// @target: es2015
+
 function foo({ x, y, z }?: { x: string; y: number; z: boolean }) {
 
 }

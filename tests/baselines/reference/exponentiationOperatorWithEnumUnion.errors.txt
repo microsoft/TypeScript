@@ -1,0 +1,61 @@
+exponentiationOperatorWithEnumUnion.ts(17,10): error TS2454: Variable 'c' is used before being assigned.
+exponentiationOperatorWithEnumUnion.ts(18,10): error TS2454: Variable 'c' is used before being assigned.
+exponentiationOperatorWithEnumUnion.ts(18,15): error TS2454: Variable 'b' is used before being assigned.
+exponentiationOperatorWithEnumUnion.ts(19,10): error TS2454: Variable 'c' is used before being assigned.
+exponentiationOperatorWithEnumUnion.ts(19,15): error TS2454: Variable 'c' is used before being assigned.
+exponentiationOperatorWithEnumUnion.ts(20,15): error TS2454: Variable 'c' is used before being assigned.
+exponentiationOperatorWithEnumUnion.ts(21,10): error TS2454: Variable 'b' is used before being assigned.
+exponentiationOperatorWithEnumUnion.ts(21,15): error TS2454: Variable 'c' is used before being assigned.
+exponentiationOperatorWithEnumUnion.ts(23,17): error TS2454: Variable 'b' is used before being assigned.
+exponentiationOperatorWithEnumUnion.ts(27,11): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== exponentiationOperatorWithEnumUnion.ts (10 errors) ====
+    // operands of an enum type are treated as having the primitive type Number.
+    
+    enum E {
+        a,
+        b
+    }
+    enum F {
+        c,
+        d
+    }
+    
+    var a: any;
+    var b: number;
+    var c: E | F;
+    
+    // operator **
+    var r1 = c ** a;
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r2 = c ** b;
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var r3 = c ** c;
+             ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r4 = a ** c;
+                  ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r5 = b ** c;
+             ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    var r6 = E.a ** a;
+    var r7 = E.a ** b;
+                    ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var r8 = E.a ** E.b;
+    var r9 = E.a ** 1;
+    var r10 = a ** E.b;
+    var r11 = b ** E.b;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var r12 = 1 ** E.b;

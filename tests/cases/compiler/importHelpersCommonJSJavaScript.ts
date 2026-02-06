@@ -1,3 +1,4 @@
+// @target: es2015
 // @checkJs: true
 // @outDir: ./out
 // @module: commonjs

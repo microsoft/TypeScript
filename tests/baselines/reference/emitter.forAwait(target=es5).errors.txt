@@ -1,0 +1,53 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== file1.ts (0 errors) ====
+    async function f1() {
+        let y: any;
+        for await (const x of y) {
+        }
+    }
+==== file2.ts (0 errors) ====
+    async function f2() {
+        let x: any, y: any;
+        for await (x of y) {
+        }
+    }
+==== file3.ts (0 errors) ====
+    async function* f3() {
+        let y: any;
+        for await (const x of y) {
+        }
+    }
+==== file4.ts (0 errors) ====
+    async function* f4() {
+        let x: any, y: any;
+        for await (x of y) {
+        }
+    }
+==== file5.ts (0 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/21363
+    async function f5() {
+        let y: any;
+        outer: for await (const x of y) {
+            continue outer;
+        }
+    }
+==== file6.ts (0 errors) ====
+    // https://github.com/Microsoft/TypeScript/issues/21363
+    async function* f6() {
+        let y: any;
+        outer: for await (const x of y) {
+            continue outer;
+        }
+    }
+==== file7.ts (0 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/36166
+    async function* f7() {
+        let y: any;
+        for (;;) {
+            for await (const x of y) {
+            }
+        }
+    }

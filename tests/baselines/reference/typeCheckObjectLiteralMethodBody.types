@@ -2,12 +2,12 @@
 
 === typeCheckObjectLiteralMethodBody.ts ===
 var foo = { bar() { return undefined } };
->foo : { bar(): any; }
+>foo : { bar(): undefined; }
+>    : ^^^^^^^^^^^^^^^^^^^^^
+>{ bar() { return undefined } } : { bar(): undefined; }
+>                               : ^^^^^^^^^^^^^^^^^^^^^
+>bar : () => undefined
 >    : ^^^^^^^^^^^^^^^
->{ bar() { return undefined } } : { bar(): any; }
->                               : ^^^^^^^^^^^^^^^
->bar : () => any
->    : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

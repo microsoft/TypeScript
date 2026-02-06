@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "module": "commonjs" } }
+//// { "compilerOptions": { "module": "commonjs", "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/package.json
 //// { "dependencies": { "@jest/types": "*", "ts-jest": "*" } }
@@ -35,7 +35,7 @@ verify.completions({
   marker: "",
   includes: [{
     name: "Config",
-    source: "/home/src/workspaces/project/node_modules/@jest/types/index",
+    source: "@jest/types",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions,
   }],

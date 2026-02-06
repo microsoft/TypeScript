@@ -19,12 +19,12 @@ OOOrder.prototype.m = function () {
     this.p = 1
 >this.p = 1 : 1
 >           : ^
->this.p : number
->       : ^^^^^^
+>this.p : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->p : number
->  : ^^^^^^
+>p : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 }

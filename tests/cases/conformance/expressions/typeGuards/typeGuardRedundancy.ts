@@ -1,3 +1,4 @@
+// @target: es2015
 var x: string|number;
 
 var r1 = typeof x === "string" && typeof x === "string" ? x.substr : x.toFixed;

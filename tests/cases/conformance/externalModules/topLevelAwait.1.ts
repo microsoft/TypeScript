@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es2015,es2017
 // @module: es2022,esnext,system
 // @experimentalDecorators: true

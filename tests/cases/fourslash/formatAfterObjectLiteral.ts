@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts' />
 
-/////**/module Default{var x= ( { } ) ;}
+/////**/namespace Default{var x= ( { } ) ;}
 
 
 format.document();
 goTo.marker();
-verify.currentLineContentIs('module Default { var x = ({}); }');
+verify.currentLineContentIs('namespace Default { var x = ({}); }');

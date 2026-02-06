@@ -1,8 +1,9 @@
-module A {
+// @target: es2015
+namespace A {
     export interface X { s: string }
 }
 
-module B {
+namespace B {
     var A = 1;
     import Y = A;
 }

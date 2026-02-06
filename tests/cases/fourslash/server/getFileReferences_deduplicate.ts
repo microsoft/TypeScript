@@ -1,19 +1,21 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
+
 // @Filename: /home/src/workspaces/project/tsconfig.json
 //// { "files": [], "references": [{ "path": "tsconfig.build.json" }, { "path": "tsconfig.test.json" }] }
 
 // @Filename: /home/src/workspaces/project/tsconfig.utils.json
-//// { "compilerOptions": { "rootDir": "src", "outDir": "dist/utils", "composite": true }, "files": ["util.ts"] }
+//// { "compilerOptions": { "lib": ["es5"], "rootDir": "src", "outDir": "dist/utils", "composite": true }, "files": ["util.ts"] }
 
 // @Filename: /home/src/workspaces/project/tsconfig.build.json
-//// { "compilerOptions": { "rootDir": "src", "outDir": "dist/build", "composite": true }, "files": ["index.ts"], "references": [{ "path": "tsconfig.utils.json" }] }
+//// { "compilerOptions": { "lib": ["es5"], "rootDir": "src", "outDir": "dist/build", "composite": true }, "files": ["index.ts"], "references": [{ "path": "tsconfig.utils.json" }] }
 
 // @Filename: /home/src/workspaces/project/index.ts
 //// export * from "./util";
 
 // @Filename: /home/src/workspaces/project/tsconfig.test.json
-//// { "compilerOptions": { "rootDir": "src", "outDir": "dist/test", "composite": true }, "files": ["test.ts", "index.ts"], "references": [{ "path": "tsconfig.utils.json" }] }
+//// { "compilerOptions": { "lib": ["es5"], "rootDir": "src", "outDir": "dist/test", "composite": true }, "files": ["test.ts", "index.ts"], "references": [{ "path": "tsconfig.utils.json" }] }
 
 // @Filename: /home/src/workspaces/project/test.ts
 //// import "./util";

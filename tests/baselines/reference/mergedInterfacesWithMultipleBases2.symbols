@@ -85,11 +85,11 @@ var r = a.a;
 >a : Symbol(C.a, Decl(mergedInterfacesWithMultipleBases2.ts, 3, 9))
 
 // generic interfaces in a module
-module M {
+namespace M {
 >M : Symbol(M, Decl(mergedInterfacesWithMultipleBases2.ts, 38, 12))
 
     class C<T> {
->C : Symbol(C, Decl(mergedInterfacesWithMultipleBases2.ts, 41, 10))
+>C : Symbol(C, Decl(mergedInterfacesWithMultipleBases2.ts, 41, 13))
 >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 42, 12))
 
         a: T;
@@ -127,7 +127,7 @@ module M {
     interface A<T> extends C<T>, C3<T> {
 >A : Symbol(A, Decl(mergedInterfacesWithMultipleBases2.ts, 56, 5), Decl(mergedInterfacesWithMultipleBases2.ts, 60, 5))
 >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))
->C : Symbol(C, Decl(mergedInterfacesWithMultipleBases2.ts, 41, 10))
+>C : Symbol(C, Decl(mergedInterfacesWithMultipleBases2.ts, 41, 13))
 >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))
 >C3 : Symbol(C3, Decl(mergedInterfacesWithMultipleBases2.ts, 48, 5))
 >T : Symbol(T, Decl(mergedInterfacesWithMultipleBases2.ts, 58, 16), Decl(mergedInterfacesWithMultipleBases2.ts, 62, 16))

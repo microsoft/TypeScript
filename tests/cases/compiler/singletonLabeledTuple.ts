@@ -1,3 +1,4 @@
+// @target: es2015
 type AliasOptional = [p?: number]
 
 // literal type vs type alias

@@ -1,0 +1,109 @@
+importDecl_require.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+importDecl_require.ts(5,28): error TS2322: Type 'null' is not assignable to type 'd'.
+importDecl_require1.ts(2,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+importDecl_require1.ts(5,28): error TS2322: Type 'null' is not assignable to type 'd'.
+importDecl_require2.ts(2,5): error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+importDecl_require2.ts(5,28): error TS2322: Type 'null' is not assignable to type 'd'.
+importDecl_require3.ts(2,5): error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
+importDecl_require3.ts(5,28): error TS2322: Type 'null' is not assignable to type 'd'.
+importDecl_require4.ts(2,32): error TS2322: Type 'null' is not assignable to type 'd'.
+
+
+==== importDecl_1.ts (0 errors) ====
+    ///<reference path='importDecl_require.ts'/>
+    ///<reference path='importDecl_require1.ts'/>
+    ///<reference path='importDecl_require2.ts'/>
+    ///<reference path='importDecl_require3.ts'/>
+    ///<reference path='importDecl_require4.ts'/>
+    import m4 = require("./importDecl_require"); // Emit used
+    export var x4 = m4.x;
+    export var d4 = m4.d;
+    export var f4 = m4.foo();
+    
+    export namespace m1 {
+        export var x2 = m4.x;
+        export var d2 = m4.d;
+        export var f2 = m4.foo();
+    
+        var x3 = m4.x;
+        var d3 = m4.d;
+        var f3 = m4.foo();
+    }
+    
+    //Emit global only usage
+    import glo_m4 = require("./importDecl_require1");
+    export var useGlo_m4_d4 = glo_m4.d;
+    export var useGlo_m4_f4 = glo_m4.foo();
+    
+    //Emit even when used just in function type
+    import fncOnly_m4 = require("./importDecl_require2");
+    export var useFncOnly_m4_f4 = fncOnly_m4.foo();
+    
+    // only used privately no need to emit
+    import private_m4 = require("./importDecl_require3");
+    export namespace usePrivate_m4_m1 {
+        var x3 = private_m4.x;
+        var d3 = private_m4.d;
+        var f3 = private_m4.foo();
+    }
+    
+    // Do not emit unused import
+    import m5 = require("./importDecl_require4");
+    export var d = m5.foo2();
+    
+    // Do not emit multiple used import statements
+    import multiImport_m4 = require("./importDecl_require"); // Emit used
+    export var useMultiImport_m4_x4 = multiImport_m4.x;
+    export var useMultiImport_m4_d4 = multiImport_m4.d;
+    export var useMultiImport_m4_f4 = multiImport_m4.foo();
+    
+==== importDecl_require.ts (2 errors) ====
+    export class d {
+        foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+    }
+    export var x: d;
+    export function foo(): d { return null; }
+                               ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'd'.
+    
+==== importDecl_require1.ts (2 errors) ====
+    export class d {
+        bar: string;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    }
+    var x: d;
+    export function foo(): d { return null; }
+                               ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'd'.
+    
+==== importDecl_require2.ts (2 errors) ====
+    export class d {
+        baz: string;
+        ~~~
+!!! error TS2564: Property 'baz' has no initializer and is not definitely assigned in the constructor.
+    }
+    export var x: d;
+    export function foo(): d { return null; }
+                               ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'd'.
+    
+==== importDecl_require3.ts (2 errors) ====
+    export class d {
+        bing: string;
+        ~~~~
+!!! error TS2564: Property 'bing' has no initializer and is not definitely assigned in the constructor.
+    }
+    export var x: d;
+    export function foo(): d { return null; }
+                               ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'd'.
+    
+==== importDecl_require4.ts (1 errors) ====
+    import m4 = require("./importDecl_require");
+    export function foo2(): m4.d { return null; }
+                                   ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'd'.
+    

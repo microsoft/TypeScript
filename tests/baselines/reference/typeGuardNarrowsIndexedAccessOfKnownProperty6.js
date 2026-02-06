@@ -25,15 +25,15 @@ if (c[cIndex].x) {
 
 //// [typeGuardNarrowsIndexedAccessOfKnownProperty6.js]
 "use strict";
-var a = {};
+const a = {};
 if (a[aIndex] && a[aIndex].x) {
     a[aIndex].x; // number
 }
-var b = { key: {} };
+const b = { key: {} };
 if (b[bIndex].x) {
     b[bIndex].x; // number
 }
-var c = [];
+const c = [];
 if (c[cIndex].x) {
     c[cIndex].x; // number
 }

@@ -1,3 +1,4 @@
+// @target: es2015
 interface MyPropertyDescriptor {
     get? (): any;
     set? (v: any): void;
