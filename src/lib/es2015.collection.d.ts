@@ -1,6 +1,6 @@
 interface Map<K, V> {
     /**
-     * Removes all elements from this map
+     * Removes all elements from the Set.
      */
     clear(): void;
     /**
@@ -77,7 +77,7 @@ interface Set<T> {
      */
     add(value: T): this;
     /**
-     * Removes all elements from this set
+     * Removes all elements from the Set.
      */
     clear(): void;
     /**
