@@ -1,0 +1,66 @@
+//// [tests/cases/compiler/declarationEmitComputedPropertyName1.ts] ////
+
+=== declarationEmitComputedPropertyName1.ts ===
+// https://github.com/microsoft/TypeScript/issues/59107
+
+declare function create<T extends {}>(): T;
+>create : Symbol(create, Decl(declarationEmitComputedPropertyName1.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitComputedPropertyName1.ts, 2, 24))
+>T : Symbol(T, Decl(declarationEmitComputedPropertyName1.ts, 2, 24))
+
+export const c = create<{
+>c : Symbol(c, Decl(declarationEmitComputedPropertyName1.ts, 4, 12))
+>create : Symbol(create, Decl(declarationEmitComputedPropertyName1.ts, 0, 0))
+
+  data: {
+>data : Symbol(data, Decl(declarationEmitComputedPropertyName1.ts, 4, 25))
+
+    ["a_b_c"]: string;
+>["a_b_c"] : Symbol(["a_b_c"], Decl(declarationEmitComputedPropertyName1.ts, 5, 9))
+>"a_b_c" : Symbol(["a_b_c"], Decl(declarationEmitComputedPropertyName1.ts, 5, 9))
+
+    ["sss"]: string;
+>["sss"] : Symbol(["sss"], Decl(declarationEmitComputedPropertyName1.ts, 6, 22))
+>"sss" : Symbol(["sss"], Decl(declarationEmitComputedPropertyName1.ts, 6, 22))
+
+    s_d: string;
+>s_d : Symbol(s_d, Decl(declarationEmitComputedPropertyName1.ts, 7, 20))
+
+    queryData?: string;
+>queryData : Symbol(queryData, Decl(declarationEmitComputedPropertyName1.ts, 8, 16))
+
+    ["foo bar"]: string;
+>["foo bar"] : Symbol(["foo bar"], Decl(declarationEmitComputedPropertyName1.ts, 9, 23))
+>"foo bar" : Symbol(["foo bar"], Decl(declarationEmitComputedPropertyName1.ts, 9, 23))
+
+  };
+  ["a_b_c"]: string;
+>["a_b_c"] : Symbol(["a_b_c"], Decl(declarationEmitComputedPropertyName1.ts, 11, 4))
+>"a_b_c" : Symbol(["a_b_c"], Decl(declarationEmitComputedPropertyName1.ts, 11, 4))
+
+}>();
+
+export interface IData {
+>IData : Symbol(IData, Decl(declarationEmitComputedPropertyName1.ts, 13, 5))
+
+  ["a_b_c"]: string;
+>["a_b_c"] : Symbol(IData["a_b_c"], Decl(declarationEmitComputedPropertyName1.ts, 15, 24))
+>"a_b_c" : Symbol(IData["a_b_c"], Decl(declarationEmitComputedPropertyName1.ts, 15, 24))
+
+  nested: {
+>nested : Symbol(IData.nested, Decl(declarationEmitComputedPropertyName1.ts, 16, 20))
+
+    ["d_e_f"]: string;
+>["d_e_f"] : Symbol(["d_e_f"], Decl(declarationEmitComputedPropertyName1.ts, 17, 11))
+>"d_e_f" : Symbol(["d_e_f"], Decl(declarationEmitComputedPropertyName1.ts, 17, 11))
+
+    value: string;
+>value : Symbol(value, Decl(declarationEmitComputedPropertyName1.ts, 18, 22))
+
+    ["qwe rty"]: string;
+>["qwe rty"] : Symbol(["qwe rty"], Decl(declarationEmitComputedPropertyName1.ts, 19, 18))
+>"qwe rty" : Symbol(["qwe rty"], Decl(declarationEmitComputedPropertyName1.ts, 19, 18))
+
+  };
+}
+

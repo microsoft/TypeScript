@@ -1,0 +1,36 @@
+noInferCommonPropertyCheck1.ts(7,20): error TS2559: Type '{ x: string; }' has no properties in common with type 'NoInfer<Partial<{ a: unknown; b: unknown; }>> & { prop?: unknown; }'.
+noInferCommonPropertyCheck1.ts(15,33): error TS2559: Type '{ x: string; }' has no properties in common with type 'NoInfer<Partial<{ a: unknown; b: unknown; }>> & NoInfer<Partial<{ c: unknown; d: unknown; }>>'.
+noInferCommonPropertyCheck1.ts(23,33): error TS2559: Type '{ x: string; }' has no properties in common with type 'Partial<{ a: unknown; b: unknown; }> & Partial<{ c: unknown; d: unknown; }>'.
+
+
+==== noInferCommonPropertyCheck1.ts (3 errors) ====
+    declare const partialObj1: Partial<{ a: unknown; b: unknown }>;
+    declare const partialObj2: Partial<{ c: unknown; d: unknown }>;
+    declare const someObj1: { x: string };
+    
+    declare function test1<T>(a: T, b: NoInfer<T> & { prop?: unknown }): void;
+    
+    test1(partialObj1, someObj1);
+                       ~~~~~~~~
+!!! error TS2559: Type '{ x: string; }' has no properties in common with type 'NoInfer<Partial<{ a: unknown; b: unknown; }>> & { prop?: unknown; }'.
+    
+    declare function test2<T1, T2>(
+      a: T1,
+      b: T2,
+      c: NoInfer<T1> & NoInfer<T2>,
+    ): void;
+    
+    test2(partialObj1, partialObj2, someObj1);
+                                    ~~~~~~~~
+!!! error TS2559: Type '{ x: string; }' has no properties in common with type 'NoInfer<Partial<{ a: unknown; b: unknown; }>> & NoInfer<Partial<{ c: unknown; d: unknown; }>>'.
+    
+    declare function test3<T1, T2>(
+      a: T1,
+      b: T2,
+      c: NoInfer<T1 & T2>,
+    ): void;
+    
+    test3(partialObj1, partialObj2, someObj1);
+                                    ~~~~~~~~
+!!! error TS2559: Type '{ x: string; }' has no properties in common with type 'Partial<{ a: unknown; b: unknown; }> & Partial<{ c: unknown; d: unknown; }>'.
+    

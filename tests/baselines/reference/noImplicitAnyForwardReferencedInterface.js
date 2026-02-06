@@ -9,3 +9,4 @@ interface Entry {
 }
 
 //// [noImplicitAnyForwardReferencedInterface.js]
+"use strict";

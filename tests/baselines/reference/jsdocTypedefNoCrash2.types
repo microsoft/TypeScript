@@ -3,6 +3,7 @@
 === export.js ===
 export type foo = 5;
 >foo : 5
+>    : ^
 
 /**
  * @typedef {{
@@ -10,5 +11,7 @@ export type foo = 5;
  */
 export const foo = 5;
 >foo : 5
+>    : ^
 >5 : 5
+>  : ^
 

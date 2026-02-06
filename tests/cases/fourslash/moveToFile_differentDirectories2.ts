@@ -24,7 +24,6 @@ y;`,
 
         "/src/dir2/bar.ts":
 `import { a } from '../dir1/a';
-
 import { b } from '../dir1/other';
 
 

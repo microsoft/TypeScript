@@ -1,0 +1,13 @@
+undecorated.ts(1,23): error TS2307: Cannot find module 'decorated' or its corresponding type declarations.
+
+
+==== decorated.ts (0 errors) ====
+    function decorate(target: any) { }
+    
+    @decorate
+    export default class Decorated { }
+    
+==== undecorated.ts (1 errors) ====
+    import Decorated from 'decorated';
+                          ~~~~~~~~~~~
+!!! error TS2307: Cannot find module 'decorated' or its corresponding type declarations.

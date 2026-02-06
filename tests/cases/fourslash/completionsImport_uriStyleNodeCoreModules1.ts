@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 // @module: commonjs
 
 // @Filename: /node_modules/@types/node/index.d.ts
@@ -20,7 +21,17 @@ verify.completions({
     sortText: completion.SortText.AutoImportSuggestions
   }, {
     name: "writeFile",
+    source: "node:fs",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions
+  }, {
+    name: "writeFile",
     source: "fs/promises",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions
+  }, {
+    name: "writeFile",
+    source: "node:fs/promises",
     hasAction: true,
     sortText: completion.SortText.AutoImportSuggestions
   }]),

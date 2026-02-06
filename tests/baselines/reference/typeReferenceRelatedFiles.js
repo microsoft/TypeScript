@@ -22,14 +22,12 @@ export function f() {
 //// [main.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
+exports.f = f;
 function f() {
     return {};
 }
-exports.f = f;
 
 
 //// [main.d.ts]
-/// <reference types="node" />
 import { FSWatcher } from "fs";
 export declare function f(): FSWatcher;

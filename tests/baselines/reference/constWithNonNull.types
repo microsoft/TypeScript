@@ -4,10 +4,14 @@
 // Fixes #21848
 
 declare const x: number | undefined;
->x : number
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 x!++;
 >x!++ : number
+>     : ^^^^^^
 >x! : any
+>   : ^^^
 >x : any
+>  : ^^^
 

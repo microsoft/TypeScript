@@ -3,29 +3,39 @@
 === a.js ===
 var x = 0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 
 /// @ts-ignore
 x();
 >x() : any
+>    : ^^^
 >x : number
+>  : ^^^^^^
 
 /// @ts-ignore
 x();
 >x() : any
+>    : ^^^
 >x : number
+>  : ^^^^^^
 
 /// @ts-ignore
 x(
 >x(    2,    3) : any
+>               : ^^^
 >x : number
+>  : ^^^^^^
 
     2,
 >2 : 2
+>  : ^
 
     3);
 >3 : 3
+>  : ^
 
 
 
@@ -37,7 +47,9 @@ x(
 
 x();
 >x() : any
+>    : ^^^
 >x : number
+>  : ^^^^^^
 
 /* @ts-ignore */
 /*another comment
@@ -45,7 +57,9 @@ x();
 
 x();
 >x() : any
+>    : ^^^
 >x : number
+>  : ^^^^^^
 
 /* @ts-ignore
 continuing comment
@@ -53,12 +67,16 @@ continuing comment
 
 x();
 >x() : any
+>    : ^^^
 >x : number
+>  : ^^^^^^
 
 
 
 // @ts-ignore: no call signature
 x();
 >x() : any
+>    : ^^^
 >x : number
+>  : ^^^^^^
 

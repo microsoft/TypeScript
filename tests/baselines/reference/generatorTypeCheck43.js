@@ -10,6 +10,7 @@ function* g() {
 }
 
 //// [generatorTypeCheck43.js]
+"use strict";
 function* g() {
     let x = {
         *[yield 0]() {

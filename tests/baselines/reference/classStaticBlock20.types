@@ -3,6 +3,7 @@
 === classStaticBlock20.ts ===
 class C {
 >C : C
+>  : ^
 
     async static {
         // something

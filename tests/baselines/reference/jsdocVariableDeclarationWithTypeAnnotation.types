@@ -4,7 +4,9 @@
 /** @type {boolean} */
 var /** @type {string} */ x,
 >x : string
+>  : ^^^^^^
 
     /** @type {number} */ y;
 >y : number
+>  : ^^^^^^
 

@@ -42,7 +42,7 @@ namespace B {
 >z : Symbol(z, Decl(exportNonInitializedVariablesCommonJS.ts, 14, 20))
 }
 
-module C {
+namespace C {
 >C : Symbol(C, Decl(exportNonInitializedVariablesCommonJS.ts, 15, 1))
 
     export var a = 1, b, c = 2;

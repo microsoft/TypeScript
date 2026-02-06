@@ -2,17 +2,23 @@
 
 === b.ts ===
 ///<reference path="a.ts"/>
-declare module E {
+declare namespace E {
 >E : typeof E
+>  : ^^^^^^^^
 
     class foobar extends D.bar {
 >foobar : foobar
+>       : ^^^^^^
 >D.bar : D.bar
+>      : ^^^^^
 >D : typeof D
+>  : ^^^^^^^^
 >bar : typeof D.bar
+>    : ^^^^^^^^^^^^
 
         foo();
 >foo : () => any
+>    : ^^^^^^^^^
     }
 }
 === a.ts ===
@@ -22,18 +28,22 @@ declare module E {
 */
 
 /*! Don't keep this pinned comment */
-declare module C {
+declare namespace C {
 >C : typeof C
+>  : ^^^^^^^^
 
     function foo();
 >foo : () => any
+>    : ^^^^^^^^^
 }
 
 // Don't keep this comment.
-declare module D {
+declare namespace D {
 >D : typeof D
+>  : ^^^^^^^^
 
     class bar { }
 >bar : bar
+>    : ^^^
 }
 

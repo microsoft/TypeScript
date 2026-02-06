@@ -8,7 +8,7 @@ import {
     server,
     SortedReadonlyArray,
     TypeAcquisition,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ActionInvalidate,
     ActionPackageInstalled,
@@ -39,7 +39,7 @@ import {
     stringifyIndented,
     TypesRegistryResponse,
     TypingInstallerRequestUnion,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 /** @internal */
 export interface TypingsInstallerWorkerProcess {
@@ -104,7 +104,7 @@ export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
         return promise;
     }
 
-    attach(projectService: ProjectService) {
+    attach(projectService: ProjectService): void {
         this.projectService = projectService;
         this.installer = this.createInstallerProcess();
     }
@@ -131,7 +131,7 @@ export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
         }
     }
 
-    handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse | server.WatchTypingLocations) {
+    handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse | server.WatchTypingLocations): void {
         if (this.logger.hasLevel(LogLevel.verbose)) {
             this.logger.info(`TIAdapter:: Received response:${stringifyIndented(response)}`);
         }
@@ -234,7 +234,7 @@ export abstract class TypingsInstallerAdapter implements ITypingsInstaller {
         }
     }
 
-    scheduleRequest(request: DiscoverTypings) {
+    scheduleRequest(request: DiscoverTypings): void {
         if (this.logger.hasLevel(LogLevel.verbose)) {
             this.logger.info(`TIAdapter:: Scheduling request for: ${request.projectName}`);
         }

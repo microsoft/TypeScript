@@ -2,15 +2,18 @@
 
 === systemModule7.ts ===
 // filename: instantiatedModule.ts
-export module M {
+export namespace M {
 >M : typeof M
+>  : ^^^^^^^^
 
     var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 }
 
 // filename: nonInstantiatedModule.ts
-export module M {
+export namespace M {
     interface I {}
 }

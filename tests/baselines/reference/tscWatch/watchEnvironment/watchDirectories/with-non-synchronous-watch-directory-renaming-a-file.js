@@ -1,7 +1,19 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/user/username/projects/myproject/src/file1.ts] Inode:: 6
+import { x } from "./file2";
+
+//// [/user/username/projects/myproject/src/file2.ts] Inode:: 7
+export const x = 10;
+
+//// [/user/username/projects/myproject/tsconfig.json] Inode:: 8
+{
+  "compilerOptions": {
+    "outDir": "dist"
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 14
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -12,64 +24,53 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/user/username/projects/myproject/src/file1.ts]
-import { x } from "./file2";
-
-//// [/user/username/projects/myproject/src/file2.ts]
-export const x = 10;
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "compilerOptions": {
-    "outDir": "dist"
-  }
-}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w -p /user/username/projects/myproject/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:33 AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
 
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
 
-
-//// [/user/username/projects/myproject/dist/file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
-
-
-//// [/user/username/projects/myproject/dist/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 16
+
+//// [/user/username/projects/myproject/dist/src/file2.js] Inode:: 122
+export const x = 10;
+
+
+//// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 123
+export {};
+
+
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {"inode":16}
 /user/username/projects/myproject: *new*
-  {}
+  {"inode":4}
 /user/username/projects/myproject/dist: *new*
-  {}
+  {"inode":120}
+/user/username/projects/myproject/dist/src: *new*
+  {"inode":121}
 /user/username/projects/myproject/src: *new*
-  {}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts: *new*
-  {}
+  {"inode":6}
 /user/username/projects/myproject/src/file2.ts: *new*
-  {}
+  {"inode":7}
 /user/username/projects/myproject/tsconfig.json: *new*
-  {}
+  {"inode":8}
 
 Program root files: [
   "/user/username/projects/myproject/src/file1.ts",
@@ -78,22 +79,18 @@ Program root files: [
 Program options: {
   "outDir": "/user/username/projects/myproject/dist",
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/src/file2.ts
 /user/username/projects/myproject/src/file1.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/user/username/projects/myproject/src/file2.ts
-/user/username/projects/myproject/src/file1.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/src/file2.ts (used version)
 /user/username/projects/myproject/src/file1.ts (used version)
 
@@ -109,10 +106,38 @@ exitCode:: ExitStatus.undefined
 Change:: rename the file
 
 Input::
-//// [/user/username/projects/myproject/src/renamed.ts]
+//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 124
 export const x = 10;
 
 //// [/user/username/projects/myproject/src/file2.ts] deleted
+
+Output::
+sysLog:: /user/username/projects/myproject/src/file2.ts:: Changing watcher to MissingFileSystemEntryWatcher
+
+
+PolledWatches::
+/user/username/projects/myproject/src/file2.ts: *new*
+  {"pollingInterval":250}
+
+FsWatches::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":16}
+/user/username/projects/myproject:
+  {"inode":4}
+/user/username/projects/myproject/dist:
+  {"inode":120}
+/user/username/projects/myproject/dist/src:
+  {"inode":121}
+/user/username/projects/myproject/src:
+  {"inode":5}
+/user/username/projects/myproject/src/file1.ts:
+  {"inode":6}
+/user/username/projects/myproject/tsconfig.json:
+  {"inode":8}
+
+FsWatches *deleted*::
+/user/username/projects/myproject/src/file2.ts:
+  {"inode":7}
 
 Timeout callback:: count: 2
 1: timerToUpdateProgram *new*
@@ -126,43 +151,47 @@ Invoking Timeout callback:: timeoutId:: 1:: timerToUpdateProgram
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:37 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [91merror[0m[90m TS6053: [0mFile '/user/username/projects/myproject/src/file2.ts' not found.
   The file is in the program because:
     Matched by default include pattern '**/*'
 
-[[90m12:00:41 AM[0m] Found 1 error. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
+
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
-//// [/user/username/projects/myproject/dist/file1.js] file written with same contents
+//// [/user/username/projects/myproject/dist/src/file1.js] file written with same contents Inode:: 123
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/file2.ts: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
+/user/username/projects/myproject/src/file2.ts:
+  {"pollingInterval":500} *new*
+
+PolledWatches *deleted*::
+/user/username/projects/myproject/src/file2.ts:
+  {"pollingInterval":250}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":16}
 /user/username/projects/myproject:
-  {}
+  {"inode":4}
 /user/username/projects/myproject/dist:
-  {}
+  {"inode":120}
+/user/username/projects/myproject/dist/src:
+  {"inode":121}
 /user/username/projects/myproject/src:
-  {}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
-  {}
+  {"inode":6}
 /user/username/projects/myproject/tsconfig.json:
-  {}
-
-FsWatches *deleted*::
-/user/username/projects/myproject/src/file2.ts:
-  {}
+  {"inode":8}
 
 
 Program root files: [
@@ -172,16 +201,14 @@ Program root files: [
 Program options: {
   "outDir": "/user/username/projects/myproject/dist",
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/src/file1.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/src/file1.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/file1.ts (computed .d.ts)
@@ -205,53 +232,48 @@ Before running Timeout callback:: count: 2
 5: timerToUpdateProgram
 7: timerToInvalidateFailedLookupResolutions
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:42 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96muser/username/projects/myproject/src/file1.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module './file2' or its corresponding type declarations.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5011: [0mThe common source directory of 'tsconfig.json' is './src'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.
+  Visit https://aka.ms/ts6 for migration information.
 
-[7m1[0m import { x } from "./file2";
-[7m [0m [91m                  ~~~~~~~~~[0m
+[7m3[0m     "outDir": "dist"
+[7m [0m [91m    ~~~~~~~~[0m
 
-[[90m12:00:45 AM[0m] Found 1 error. Watching for file changes.
-
-
-
-//// [/user/username/projects/myproject/dist/renamed.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
+//// [/user/username/projects/myproject/dist/src/renamed.js] Inode:: 125
+export const x = 10;
+
+
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/src/file2.ts:
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  {"inode":16}
 /user/username/projects/myproject:
-  {}
+  {"inode":4}
 /user/username/projects/myproject/dist:
-  {}
+  {"inode":120}
+/user/username/projects/myproject/dist/src:
+  {"inode":121}
 /user/username/projects/myproject/src:
-  {}
+  {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
-  {}
+  {"inode":6}
 /user/username/projects/myproject/src/renamed.ts: *new*
-  {}
+  {"inode":124}
 /user/username/projects/myproject/tsconfig.json:
-  {}
+  {"inode":8}
 
 Timeout callback:: count: 1
 7: timerToInvalidateFailedLookupResolutions *deleted*
@@ -270,18 +292,15 @@ Program root files: [
 Program options: {
   "outDir": "/user/username/projects/myproject/dist",
   "watch": true,
-  "project": "/user/username/projects/myproject/tsconfig.json",
   "configFilePath": "/user/username/projects/myproject/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/src/file1.ts
 /user/username/projects/myproject/src/renamed.ts
 
-Semantic diagnostics in builder refreshed for::
-/user/username/projects/myproject/src/file1.ts
-/user/username/projects/myproject/src/renamed.ts
+No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /user/username/projects/myproject/src/renamed.ts (computed .d.ts)

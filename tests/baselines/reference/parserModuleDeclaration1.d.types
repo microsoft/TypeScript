@@ -3,4 +3,5 @@
 === parserModuleDeclaration1.d.ts ===
 module "Foo" {
 >"Foo" : typeof import("Foo")
+>      : ^^^^^^^^^^^^^^^^^^^^
 }

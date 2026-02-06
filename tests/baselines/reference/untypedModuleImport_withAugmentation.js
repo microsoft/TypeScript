@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/moduleResolution/untypedModuleImport_withAugmentation.ts] ////
 
 //// [index.js]
-// This tests that augmenting an untyped module is forbidden.
-
 This file is not processed.
 
 //// [a.ts]
@@ -16,5 +14,5 @@ x;
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo_1 = require("foo");
+const foo_1 = require("foo");
 foo_1.x;

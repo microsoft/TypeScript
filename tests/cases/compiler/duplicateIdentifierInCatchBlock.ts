@@ -1,3 +1,4 @@
+// @target: es2015
 var v;
 try { } catch (e) {
     function v() { }

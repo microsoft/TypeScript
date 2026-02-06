@@ -5,18 +5,23 @@
 
 class any { }
 >any : any
+>    : ^^^
 
 class number { }
 >number : number
+>       : ^^^^^^
 
 class boolean { }
 >boolean : boolean
+>        : ^^^^^^^
 
 class bool { } // not a predefined type anymore
 >bool : bool
+>     : ^^^^
 
 class string { }
 >string : string
+>       : ^^^^^^
 
 
 

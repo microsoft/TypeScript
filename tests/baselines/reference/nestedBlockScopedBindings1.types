@@ -3,20 +3,26 @@
 === nestedBlockScopedBindings1.ts ===
 function a0() {
 >a0 : () => void
+>   : ^^^^^^^^^^
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 function a1() {
 >a1 : () => void
+>   : ^^^^^^^^^^
     {
         let x;
 >x : any
@@ -24,16 +30,21 @@ function a1() {
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 
 function a2() {
 >a2 : () => void
+>   : ^^^^^^^^^^
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
     {
         let x;
@@ -43,16 +54,21 @@ function a2() {
 
 function a3() {
 >a3 : () => void
+>   : ^^^^^^^^^^
     {
         let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x;
 >x : any
@@ -64,19 +80,24 @@ function a3() {
 
 function a4() {
 >a4 : () => void
+>   : ^^^^^^^^^^
     {
         let x;
 >x : any
     }
     switch (1) {
 >1 : 1
+>  : ^
 
         case 1:
 >1 : 1
+>  : ^
 
             let x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
             break;
     }

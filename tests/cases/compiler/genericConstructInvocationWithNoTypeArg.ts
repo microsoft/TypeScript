@@ -1,3 +1,4 @@
+// @target: es2015
 interface Foo<T> {
    new (x: number): Foo<T>;
 }

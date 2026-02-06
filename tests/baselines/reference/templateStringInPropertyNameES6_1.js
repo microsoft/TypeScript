@@ -6,5 +6,6 @@ var x = {
 }
 
 //// [templateStringInPropertyNameES6_1.js]
+"use strict";
 var x = {} `a`;
 321;

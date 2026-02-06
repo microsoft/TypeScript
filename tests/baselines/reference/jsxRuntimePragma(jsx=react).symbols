@@ -1,0 +1,95 @@
+//// [tests/cases/compiler/jsxRuntimePragma.ts] ////
+
+=== one.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime classic */
+import * as React from "react";
+>React : Symbol(React, Decl(one.tsx, 2, 6))
+
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : Symbol(HelloWorld, Decl(one.tsx, 3, 12))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+
+export const frag = <><div></div></>;
+>frag : Symbol(frag, Decl(one.tsx, 4, 12))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : Symbol(selfClosing, Decl(one.tsx, 5, 12))
+>img : Symbol(JSX.IntrinsicElements.img, Decl(react16.d.ts, 2569, 114))
+>src : Symbol(src, Decl(one.tsx, 5, 31))
+
+=== two.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime automatic */
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : Symbol(HelloWorld, Decl(two.tsx, 2, 12))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+
+export const frag = <><div></div></>;
+>frag : Symbol(frag, Decl(two.tsx, 3, 12))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : Symbol(selfClosing, Decl(two.tsx, 4, 12))
+>img : Symbol(JSX.IntrinsicElements.img, Decl(react16.d.ts, 2569, 114))
+>src : Symbol(src, Decl(two.tsx, 4, 31))
+
+=== three.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime classic */
+/* @jsxRuntime automatic */
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : Symbol(HelloWorld, Decl(three.tsx, 3, 12))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+
+export const frag = <><div></div></>;
+>frag : Symbol(frag, Decl(three.tsx, 4, 12))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : Symbol(selfClosing, Decl(three.tsx, 5, 12))
+>img : Symbol(JSX.IntrinsicElements.img, Decl(react16.d.ts, 2569, 114))
+>src : Symbol(src, Decl(three.tsx, 5, 31))
+
+=== four.tsx ===
+/// <reference path="react16.d.ts" />
+/* @jsxRuntime automatic */
+/* @jsxRuntime classic */
+import * as React from "react";
+>React : Symbol(React, Decl(four.tsx, 3, 6))
+
+export const HelloWorld = () => <h1>Hello world</h1>;
+>HelloWorld : Symbol(HelloWorld, Decl(four.tsx, 4, 12))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react16.d.ts, 2556, 106))
+
+export const frag = <><div></div></>;
+>frag : Symbol(frag, Decl(four.tsx, 5, 12))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+
+export const selfClosing = <img src="./image.png" />;
+>selfClosing : Symbol(selfClosing, Decl(four.tsx, 6, 12))
+>img : Symbol(JSX.IntrinsicElements.img, Decl(react16.d.ts, 2569, 114))
+>src : Symbol(src, Decl(four.tsx, 6, 31))
+
+=== index.ts ===
+export * as one from "./one.js";
+>one : Symbol(one, Decl(index.ts, 0, 6))
+
+export * as two from "./two.js";
+>two : Symbol(two, Decl(index.ts, 1, 6))
+
+export * as three from "./three.js";
+>three : Symbol(three, Decl(index.ts, 2, 6))
+
+export * as four from "./four.js";
+>four : Symbol(four, Decl(index.ts, 3, 6))
+

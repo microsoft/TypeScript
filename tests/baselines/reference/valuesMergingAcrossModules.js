@@ -22,14 +22,13 @@ A.displayName;
 //// [a.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.A = void 0;
-function A() { }
 exports.A = A;
+function A() { }
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 Object.defineProperty(exports, "A", { enumerable: true, get: function () { return a_1.A; } });
 //// [c.js]
 "use strict";

@@ -3,9 +3,13 @@
 === parameterPropertyInitializerInInitializers.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     constructor(public x: number, public y: number = x) { }
 >x : number
+>  : ^^^^^^
 >y : number
+>  : ^^^^^^
 >x : number
+>  : ^^^^^^
 }

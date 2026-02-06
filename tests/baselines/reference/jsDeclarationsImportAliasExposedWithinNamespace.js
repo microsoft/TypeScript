@@ -67,10 +67,15 @@ export namespace myTypes {
         prop2: string;
     };
     type typeC = myTypes.typeB | Function;
-    let myTypes: {
-        [x: string]: any;
-    };
 }
+/**
+ * @namespace myTypes
+ * @global
+ * @type {Object<string,*>}
+ */
+export const myTypes: {
+    [x: string]: any;
+};
 //// [file2.d.ts]
 export namespace testFnTypes {
     type input = boolean | myTypes.typeC;

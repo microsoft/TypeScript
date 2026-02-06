@@ -7,18 +7,18 @@ classWithTwoConstructorDefinitions.ts(8,5): error TS2392: Multiple constructor i
 ==== classWithTwoConstructorDefinitions.ts (4 errors) ====
     class C {
         constructor() { } // error
-        ~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
         constructor(x) { } // error
-        ~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
     }
     
     class D<T> {
         constructor(x: T) { } // error
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
         constructor(x: T, y: T) { } // error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2392: Multiple constructor implementations are not allowed.
     }

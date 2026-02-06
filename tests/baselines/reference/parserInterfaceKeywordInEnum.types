@@ -3,8 +3,10 @@
 === parserInterfaceKeywordInEnum.ts ===
 enum Bar {
 >Bar : Bar
+>    : ^^^
 
     interface,
 >interface : Bar.interface
+>          : ^^^^^^^^^^^^^
 }
 

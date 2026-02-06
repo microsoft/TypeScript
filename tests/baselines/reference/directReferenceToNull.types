@@ -3,4 +3,5 @@
 === directReferenceToNull.ts ===
 var x: Null;
 >x : Null
+>  : ^^^^
 

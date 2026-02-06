@@ -3,15 +3,18 @@
 === a.ts ===
 class c {
 >c : c
+>  : ^
 }
 
 === b.ts ===
 /// <reference path="c.js"/>
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 === c.js ===
 function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
 }

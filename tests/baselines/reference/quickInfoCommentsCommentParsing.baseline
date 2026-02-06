@@ -206,7 +206,7 @@
 // | ----------------------------------------------------------------------
 //                                         ^
 // | ----------------------------------------------------------------------
-// | (parameter) c: number
+// | (parameter) c: number | undefined
 // | @param c
 // | ----------------------------------------------------------------------
 //                                                     ^
@@ -288,25 +288,25 @@
 // | ----------------------------------------------------------------------
 //                                         ^
 // | ----------------------------------------------------------------------
-// | (parameter) c: () => string
+// | (parameter) c: (() => string) | undefined
 // | this is optional param c
 // | @param c this is optional param c
 // | ----------------------------------------------------------------------
 //                                                           ^
 // | ----------------------------------------------------------------------
-// | (parameter) d: () => string
+// | (parameter) d: (() => string) | undefined
 // | this is optional param d
 // | @param d this is optional param d
 // | ----------------------------------------------------------------------
 //                                                                             ^
 // | ----------------------------------------------------------------------
-// | (parameter) e: () => string
+// | (parameter) e: (() => string) | undefined
 // | this is optional param e
 // | @param e this is optional param e
 // | ----------------------------------------------------------------------
 //                                                                                               ^
 // | ----------------------------------------------------------------------
-// | (parameter) f: () => string
+// | (parameter) f: (() => string) | undefined
 // | ----------------------------------------------------------------------
 // }
 // subtract(10,  20,  null,  null,  null, null);
@@ -1740,6 +1740,22 @@
         {
           "text": "number",
           "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
         }
       ],
       "documentation": [],
@@ -2655,6 +2671,10 @@
           "kind": "punctuation"
         },
         {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
           "text": ")",
           "kind": "punctuation"
         },
@@ -2672,6 +2692,26 @@
         },
         {
           "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
           "kind": "keyword"
         }
       ],
@@ -2749,6 +2789,10 @@
           "kind": "punctuation"
         },
         {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
           "text": ")",
           "kind": "punctuation"
         },
@@ -2766,6 +2810,26 @@
         },
         {
           "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
           "kind": "keyword"
         }
       ],
@@ -2843,6 +2907,10 @@
           "kind": "punctuation"
         },
         {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
           "text": ")",
           "kind": "punctuation"
         },
@@ -2860,6 +2928,26 @@
         },
         {
           "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
           "kind": "keyword"
         }
       ],
@@ -2937,6 +3025,10 @@
           "kind": "punctuation"
         },
         {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
           "text": ")",
           "kind": "punctuation"
         },
@@ -2954,6 +3046,26 @@
         },
         {
           "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
           "kind": "keyword"
         }
       ],

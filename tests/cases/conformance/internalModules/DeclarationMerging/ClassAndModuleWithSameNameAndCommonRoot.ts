@@ -1,5 +1,6 @@
+// @target: es2015
 // @filename: class.ts
-module X.Y {
+namespace X.Y {
     export class Point {
         constructor(x: number, y: number) {
             this.x = x;
@@ -11,8 +12,8 @@ module X.Y {
 }
 
 // @filename: module.ts
-module X.Y {
-    export module Point {
+namespace X.Y {
+    export namespace Point {
         export var Origin = new Point(0, 0);
     }
 }
@@ -28,7 +29,7 @@ class A {
     id: string;
 }
 
-module A {
+namespace A {
     export var Instance = new A();
 }
 

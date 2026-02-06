@@ -1,10 +1,10 @@
-import * as documents from "./_namespaces/documents";
-import * as fakes from "./_namespaces/fakes";
-import * as Harness from "./_namespaces/Harness";
-import * as ts from "./_namespaces/ts";
-import * as Utils from "./_namespaces/Utils";
-import * as vfs from "./_namespaces/vfs";
-import * as vpath from "./_namespaces/vpath";
+import * as documents from "./_namespaces/documents.js";
+import * as fakes from "./_namespaces/fakes.js";
+import * as Harness from "./_namespaces/Harness.js";
+import * as ts from "./_namespaces/ts.js";
+import * as Utils from "./_namespaces/Utils.js";
+import * as vfs from "./_namespaces/vfs.js";
+import * as vpath from "./_namespaces/vpath.js";
 
 // Test case is json of below type in tests/cases/project/
 interface ProjectRunnerTestCase {
@@ -38,7 +38,7 @@ interface BatchCompileProjectTestCaseResult extends CompileProjectFilesResult {
 }
 
 export class ProjectRunner extends Harness.RunnerBase {
-    public enumerateTestFiles() {
+    public enumerateTestFiles(): string[] {
         const all = this.enumerateFiles("tests/cases/project", /\.json$/, { recursive: true });
         if (Harness.shards === 1) {
             return all;
@@ -50,11 +50,11 @@ export class ProjectRunner extends Harness.RunnerBase {
         return "project";
     }
 
-    public initializeTests() {
+    public initializeTests(): void {
         describe("projects tests", () => {
             const tests = this.tests.length === 0 ? this.enumerateTestFiles() : this.tests;
             for (const test of tests) {
-                this.runProjectTestCase(typeof test === "string" ? test : test.file);
+                this.runProjectTestCase(test);
             }
         });
     }
@@ -202,15 +202,36 @@ class ProjectTestCase {
             throw assert(false, "Testcase: " + testCaseFileName + " does not contain valid json format: " + e.message);
         }
 
-        const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
-        fs.mountSync(vpath.resolve(Harness.IO.getWorkspaceRoot(), "tests"), vpath.combine(vfs.srcFolder, "tests"), vfs.createResolver(Harness.IO));
-        fs.mkdirpSync(vpath.combine(vfs.srcFolder, testCase.projectRoot));
-        fs.chdir(vpath.combine(vfs.srcFolder, testCase.projectRoot));
-        fs.makeReadonly();
-
+        function makeFileSystem() {
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false);
+            fs.mountSync(vpath.resolve(Harness.IO.getWorkspaceRoot(), "tests"), vpath.combine(vfs.srcFolder, "tests"), vfs.createResolver(Harness.IO));
+            fs.mkdirpSync(vpath.combine(vfs.srcFolder, testCase.projectRoot));
+            fs.chdir(vpath.combine(vfs.srcFolder, testCase.projectRoot));
+            fs.makeReadonly();
+            return fs;
+        }
+        let fs: vfs.FileSystem | undefined;
         return [
-            { name: `@module: commonjs`, payload: { testCase, moduleKind: ts.ModuleKind.CommonJS, vfs: fs } },
-            { name: `@module: amd`, payload: { testCase, moduleKind: ts.ModuleKind.AMD, vfs: fs } },
+            {
+                name: `@module: commonjs`,
+                payload: {
+                    testCase,
+                    moduleKind: ts.ModuleKind.CommonJS,
+                    get vfs() {
+                        return fs ??= makeFileSystem();
+                    },
+                },
+            },
+            {
+                name: `@module: amd`,
+                payload: {
+                    testCase,
+                    moduleKind: ts.ModuleKind.AMD,
+                    get vfs() {
+                        return fs ??= makeFileSystem();
+                    },
+                },
+            },
         ];
     }
 
@@ -261,7 +282,7 @@ class ProjectTestCase {
                     }
 
                     const content = Utils.removeTestPathPrefixes(output.text, /*retainTrailingDirectorySeparator*/ true);
-                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // TODO: GH#18217
+                    Harness.Baseline.runBaseline(this.getBaselineFolder(this.compilerResult.moduleKind) + diskRelativeName, content as string | null); // eslint-disable-line no-restricted-syntax
                 }
                 catch (e) {
                     errs.push(e);
@@ -362,7 +383,7 @@ class ProjectTestCase {
                 }
                 rootFiles.unshift(sourceFile.fileName);
             }
-            else if (!(compilerOptions.outFile || compilerOptions.out)) {
+            else if (!(compilerOptions.outFile)) {
                 let emitOutputFilePathWithoutExtension: string | undefined;
                 if (compilerOptions.outDir) {
                     let sourceFilePath = ts.getNormalizedAbsolutePath(sourceFile.fileName, compilerResult.program!.getCurrentDirectory());
@@ -381,7 +402,7 @@ class ProjectTestCase {
                 }
             }
             else {
-                const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile || compilerOptions.out!) + ts.Extension.Dts;
+                const outputDtsFileName = ts.removeFileExtension(compilerOptions.outFile) + ts.Extension.Dts;
                 const outputDtsFile = findOutputDtsFile(outputDtsFileName)!;
                 if (!ts.contains(allInputFiles, outputDtsFile)) {
                     allInputFiles.unshift(outputDtsFile);

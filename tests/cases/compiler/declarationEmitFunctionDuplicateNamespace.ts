@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 function f(a: 0): 0;
 function f(a: 1): 1;

@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @declaration: true
 
@@ -132,7 +133,7 @@ function privateFunctionWithPrivateModuleParameterTypes(param: privateModule.pub
 }
 declare function privateAmbientFunctionWithPrivateModuleParameterTypes(param: privateModule.publicClass): void;
 
-export module publicModule {
+export namespace publicModule {
     class privateClass {
     }
 
@@ -266,7 +267,7 @@ export module publicModule {
 
 }
 
-module privateModule {
+namespace privateModule {
     class privateClass {
     }
 
@@ -422,14 +423,14 @@ function publicFunctionWithPublicParmeterTypesInGlobal(param: publicClassInGloba
 }
 declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(param: publicClassInGlobal): void;
 
-module publicModuleInGlobal {
+namespace publicModuleInGlobal {
     class privateClass {
     }
 
     export class publicClass {
     }
 
-    module privateModule {
+    namespace privateModule {
         class privateClass {
         }
 

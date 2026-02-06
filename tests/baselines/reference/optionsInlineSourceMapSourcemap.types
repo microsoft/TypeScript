@@ -3,5 +3,7 @@
 === optionsInlineSourceMapSourcemap.ts ===
 var a = 10;
 >a : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 

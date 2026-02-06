@@ -59,6 +59,7 @@ import {
     isBindingPattern,
     isCallExpression,
     isClassDeclaration,
+    isClassExpression,
     isClassLike,
     isComputedPropertyName,
     isDeclaration,
@@ -84,6 +85,7 @@ import {
     isStatic,
     isStringLiteralLike,
     isStringOrNumericLiteralLike,
+    isTemplateLiteral,
     isToken,
     isVariableDeclaration,
     lastOrUndefined,
@@ -103,6 +105,7 @@ import {
     removeFileExtension,
     setTextRange,
     ShorthandPropertyAssignment,
+    skipOuterExpressions,
     SourceFile,
     SpreadAssignment,
     SyntaxKind,
@@ -110,7 +113,7 @@ import {
     TypeElement,
     unescapeLeadingUnderscores,
     VariableDeclaration,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /**
  * Matches all whitespace characters in a string. Eg:
@@ -443,8 +446,8 @@ function addChildrenRecursively(node: Node | undefined): void {
             break;
 
         case SyntaxKind.ExportAssignment: {
-            const expression = (node as ExportAssignment).expression;
-            const child = isObjectLiteralExpression(expression) || isCallExpression(expression) ? expression :
+            const expression = skipOuterExpressions((node as ExportAssignment).expression);
+            const child = isObjectLiteralExpression(expression) || isCallExpression(expression) || isClassExpression(expression) ? expression :
                 isArrowFunction(expression) || isFunctionExpression(expression) ? expression.body : undefined;
             if (child) {
                 startNode(node);
@@ -759,6 +762,7 @@ function isSynthesized(node: Node) {
 // We want to merge own children like `I` in in `module A { interface I {} } module A { interface I {} }`
 // We don't want to merge unrelated children like `m` in `const o = { a: { m() {} }, b: { m() {} } };`
 function isOwnChild(n: Node, parent: NavigationBarNode): boolean {
+    if (n.parent === undefined) return false;
     const par = isModuleBlock(n.parent) ? n.parent.parent : n.parent;
     return par === parent.node || contains(parent.additionalNodes, par);
 }
@@ -1057,7 +1061,7 @@ function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration |
                 return `${name} callback`;
             }
 
-            const args = cleanText(mapDefined(parent.arguments, a => isStringLiteralLike(a) ? a.getText(curSourceFile) : undefined).join(", "));
+            const args = cleanText(mapDefined(parent.arguments, a => isStringLiteralLike(a) || isTemplateLiteral(a) ? a.getText(curSourceFile) : undefined).join(", "));
             return `${name}(${args}) callback`;
         }
     }
@@ -1099,5 +1103,5 @@ function cleanText(text: string): string {
     // \r - Carriage Return
     // \u2028 - Line separator
     // \u2029 - Paragraph separator
-    return text.replace(/\\?(\r?\n|\r|\u2028|\u2029)/g, "");
+    return text.replace(/\\?(?:\r?\n|[\r\u2028\u2029])/g, "");
 }

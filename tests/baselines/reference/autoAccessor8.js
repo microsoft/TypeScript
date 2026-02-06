@@ -21,6 +21,7 @@ function f() {
 
 
 //// [autoAccessor8.js]
+"use strict";
 class C1 {
     accessor a;
     static accessor b;
@@ -45,7 +46,9 @@ declare class C2 {
 }
 declare function f(): {
     new (): {
-        a: any;
+        get a(): any;
+        set a(arg: any);
     };
-    b: any;
+    get b(): any;
+    set b(arg: any);
 };

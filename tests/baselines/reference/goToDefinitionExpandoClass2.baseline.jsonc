@@ -1,0 +1,35 @@
+// === goToDefinition ===
+// === /tests/cases/fourslash/index.js ===
+// const Core = {}
+// 
+// <|Core.[|{| defId: 0 |}Test|]|> = class {
+//   [|{| defId: 1 |}constructor() { }|]
+// }
+// 
+// Core.Test.prototype.foo = 10
+// 
+// new Core.Tes/*GOTO DEF*/t()
+
+  // === Details ===
+  [
+   {
+    "defId": 0,
+    "kind": "property",
+    "name": "Test",
+    "containerName": "Core",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 1,
+    "kind": "constructor",
+    "name": "__constructor",
+    "containerName": "Test",
+    "isLocal": true,
+    "isAmbient": false,
+    "unverified": false,
+    "failedAliasResolution": false
+   }
+  ]

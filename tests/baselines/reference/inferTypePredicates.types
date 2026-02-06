@@ -1,0 +1,1785 @@
+//// [tests/cases/compiler/inferTypePredicates.ts] ////
+
+=== inferTypePredicates.ts ===
+// https://github.com/microsoft/TypeScript/issues/16069
+
+const numsOrNull = [1, 2, 3, 4, null];
+>numsOrNull : (number | null)[]
+>           : ^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4, null] : (number | null)[]
+>                   : ^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
+
+const filteredNumsTruthy: number[] = numsOrNull.filter(x => !!x);  // should error
+>filteredNumsTruthy : number[]
+>                   : ^^^^^^^^
+>numsOrNull.filter(x => !!x) : (number | null)[]
+>                            : ^^^^^^^^^^^^^^^^^
+>numsOrNull.filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>                  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>numsOrNull : (number | null)[]
+>           : ^^^^^^^^^^^^^^^^^
+>filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>x => !!x : (x: number | null) => boolean
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+>!!x : boolean
+>    : ^^^^^^^
+>!x : boolean
+>   : ^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+
+const filteredNumsNonNullish: number[] = numsOrNull.filter(x => x !== null);  // should ok
+>filteredNumsNonNullish : number[]
+>                       : ^^^^^^^^
+>numsOrNull.filter(x => x !== null) : number[]
+>                                   : ^^^^^^^^
+>numsOrNull.filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>                  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>numsOrNull : (number | null)[]
+>           : ^^^^^^^^^^^^^^^^^
+>filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>x => x !== null : (x: number | null) => x is number
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+>x !== null : boolean
+>           : ^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+
+const evenSquaresInline: number[] =  // should error
+>evenSquaresInline : number[]
+>                  : ^^^^^^^^
+
+    [1, 2, 3, 4]
+>[1, 2, 3, 4]        .map(x => x % 2 === 0 ? x * x : null)        .filter(x => !!x) : (number | null)[]
+>                                                                                   : ^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4]        .map(x => x % 2 === 0 ? x * x : null)        .filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>                                                                         : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4]        .map(x => x % 2 === 0 ? x * x : null) : (number | null)[]
+>                                                          : ^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4]        .map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>                         : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>[1, 2, 3, 4] : number[]
+>             : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
+
+        .map(x => x % 2 === 0 ? x * x : null)
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>x => x % 2 === 0 ? x * x : null : (x: number) => number | null
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x % 2 === 0 ? x * x : null : number | null
+>                           : ^^^^^^^^^^^^^
+>x % 2 === 0 : boolean
+>            : ^^^^^^^
+>x % 2 : number
+>      : ^^^^^^
+>x : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>0 : 0
+>  : ^
+>x * x : number
+>      : ^^^^^^
+>x : number
+>  : ^^^^^^
+>x : number
+>  : ^^^^^^
+
+        .filter(x => !!x); // tests truthiness, not non-nullishness
+>filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>x => !!x : (x: number | null) => boolean
+>         : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+>!!x : boolean
+>    : ^^^^^^^
+>!x : boolean
+>   : ^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+
+const isTruthy = (x: number | null) => !!x;
+>isTruthy : (x: number | null) => boolean
+>         : ^ ^^             ^^^^^^^^^^^^
+>(x: number | null) => !!x : (x: number | null) => boolean
+>                          : ^ ^^             ^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+>!!x : boolean
+>    : ^^^^^^^
+>!x : boolean
+>   : ^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+
+const evenSquares: number[] =  // should error
+>evenSquares : number[]
+>            : ^^^^^^^^
+
+    [1, 2, 3, 4]
+>[1, 2, 3, 4]    .map(x => x % 2 === 0 ? x * x : null)      .filter(isTruthy) : (number | null)[]
+>                                                                             : ^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4]    .map(x => x % 2 === 0 ? x * x : null)      .filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>                                                                   : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4]    .map(x => x % 2 === 0 ? x * x : null) : (number | null)[]
+>                                                      : ^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4]    .map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>                     : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>[1, 2, 3, 4] : number[]
+>             : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
+
+    .map(x => x % 2 === 0 ? x * x : null)
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>x => x % 2 === 0 ? x * x : null : (x: number) => number | null
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x % 2 === 0 ? x * x : null : number | null
+>                           : ^^^^^^^^^^^^^
+>x % 2 === 0 : boolean
+>            : ^^^^^^^
+>x % 2 : number
+>      : ^^^^^^
+>x : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>0 : 0
+>  : ^
+>x * x : number
+>      : ^^^^^^
+>x : number
+>  : ^^^^^^
+>x : number
+>  : ^^^^^^
+
+      .filter(isTruthy);
+>filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>isTruthy : (x: number | null) => boolean
+>         : ^ ^^             ^^^^^^^^^^^^
+
+const evenSquaresNonNull: number[] =  // should ok
+>evenSquaresNonNull : number[]
+>                   : ^^^^^^^^
+
+    [1, 2, 3, 4]
+>[1, 2, 3, 4]    .map(x => x % 2 === 0 ? x * x : null)    .filter(x => x !== null) : number[]
+>                                                                                  : ^^^^^^^^
+>[1, 2, 3, 4]    .map(x => x % 2 === 0 ? x * x : null)    .filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>                                                                 : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4]    .map(x => x % 2 === 0 ? x * x : null) : (number | null)[]
+>                                                      : ^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4]    .map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>                     : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>[1, 2, 3, 4] : number[]
+>             : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
+
+    .map(x => x % 2 === 0 ? x * x : null)
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>x => x % 2 === 0 ? x * x : null : (x: number) => number | null
+>                                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x % 2 === 0 ? x * x : null : number | null
+>                           : ^^^^^^^^^^^^^
+>x % 2 === 0 : boolean
+>            : ^^^^^^^
+>x % 2 : number
+>      : ^^^^^^
+>x : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>0 : 0
+>  : ^
+>x * x : number
+>      : ^^^^^^
+>x : number
+>  : ^^^^^^
+>x : number
+>  : ^^^^^^
+
+    .filter(x => x !== null);
+>filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>x => x !== null : (x: number | null) => x is number
+>                : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+>x !== null : boolean
+>           : ^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+
+function isNonNull(x: number | null) {
+>isNonNull : (x: number | null) => x is number
+>          : ^ ^^             ^^^^^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+
+  return x !== null;
+>x !== null : boolean
+>           : ^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+}
+
+// factoring out a boolean works thanks to aliased discriminants
+function isNonNullVar(x: number | null) {
+>isNonNullVar : (x: number | null) => x is number
+>             : ^ ^^             ^^^^^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+
+  const ok = x !== null;
+>ok : boolean
+>   : ^^^^^^^
+>x !== null : boolean
+>           : ^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+
+  return ok;
+>ok : boolean
+>   : ^^^^^^^
+}
+
+function isNonNullGeneric<T>(x: T) {
+>isNonNullGeneric : <T>(x: T) => x is T & ({} | undefined)
+>                 : ^ ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : T
+>  : ^
+
+  return x !== null;
+>x !== null : boolean
+>           : ^^^^^^^
+>x : T
+>  : ^
+}
+
+// Type guards can flow between functions
+const myGuard = (o: string | undefined): o is string => !!o;
+>myGuard : (o: string | undefined) => o is string
+>        : ^ ^^                  ^^^^^           
+>(o: string | undefined): o is string => !!o : (o: string | undefined) => o is string
+>                                            : ^ ^^                  ^^^^^           
+>o : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>!!o : boolean
+>    : ^^^^^^^
+>!o : boolean
+>   : ^^^^^^^
+>o : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+const mySecondGuard = (o: string | undefined) => myGuard(o);
+>mySecondGuard : (o: string | undefined) => o is string
+>              : ^ ^^                  ^^^^^^^^^^^^^^^^
+>(o: string | undefined) => myGuard(o) : (o: string | undefined) => o is string
+>                                      : ^ ^^                  ^^^^^^^^^^^^^^^^
+>o : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>myGuard(o) : boolean
+>           : ^^^^^^^
+>myGuard : (o: string | undefined) => o is string
+>        : ^ ^^                  ^^^^^           
+>o : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+
+// https://github.com/microsoft/TypeScript/issues/16069#issuecomment-1327449914
+// This doesn't work because the false condition prevents type guard inference.
+// Breaking up the filters does work.
+type MyObj = { data?: string };
+>MyObj : MyObj
+>      : ^^^^^
+>data : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+type MyArray = { list?: MyObj[] }[];
+>MyArray : MyArray
+>        : ^^^^^^^
+>list : MyObj[] | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
+
+const myArray: MyArray = [];
+>myArray : MyArray
+>        : ^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+const result = myArray
+>result : any[][]
+>       : ^^^^^^^
+>myArray  .map((arr) => arr.list)  .filter((arr) => arr && arr.length)  .map((arr) => arr // should error    .filter((obj) => obj && obj.data)    .map(obj => JSON.parse(obj.data))  // should error  ) : any[][]
+>                                                                                                                                                                                                       : ^^^^^^^
+>myArray  .map((arr) => arr.list)  .filter((arr) => arr && arr.length)  .map : <U>(callbackfn: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => U, thisArg?: any) => U[]
+>                                                                            : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>myArray  .map((arr) => arr.list)  .filter((arr) => arr && arr.length) : (MyObj[] | undefined)[]
+>                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^
+>myArray  .map((arr) => arr.list)  .filter : { <S extends MyObj[] | undefined>(predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => unknown, thisArg?: any): (MyObj[] | undefined)[]; }
+>                                          : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>myArray  .map((arr) => arr.list) : (MyObj[] | undefined)[]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>myArray  .map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
+>              : ^ ^^          ^^^     ^^^^^^^^^^^       ^^^^^     ^^      ^^     ^^^^^^^^^^^       ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>myArray : MyArray
+>        : ^^^^^^^
+
+  .map((arr) => arr.list)
+>map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^       ^^^^^     ^^      ^^     ^^^^^^^^^^^       ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>(arr) => arr.list : (arr: { list?: MyObj[]; }) => MyObj[] | undefined
+>                  : ^   ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr : { list?: MyObj[]; }
+>    : ^^^^^^^^^       ^^^
+>arr.list : MyObj[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
+>arr : { list?: MyObj[]; }
+>    : ^^^^^^^^^       ^^^
+>list : MyObj[] | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
+
+  .filter((arr) => arr && arr.length)
+>filter : { <S extends MyObj[] | undefined>(predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => unknown, thisArg?: any): (MyObj[] | undefined)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(arr) => arr && arr.length : (arr: MyObj[] | undefined) => number | undefined
+>                           : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr : MyObj[] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
+>arr && arr.length : number | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
+>arr : MyObj[] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
+>arr.length : number
+>           : ^^^^^^
+>arr : MyObj[]
+>    : ^^^^^^^
+>length : number
+>       : ^^^^^^
+
+  .map((arr) => arr // should error
+>map : <U>(callbackfn: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>(arr) => arr // should error    .filter((obj) => obj && obj.data)    .map(obj => JSON.parse(obj.data)) : (arr: MyObj[] | undefined) => any[]
+>                                                                                                       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr : MyObj[] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
+>arr // should error    .filter((obj) => obj && obj.data)    .map(obj => JSON.parse(obj.data)) : any[]
+>                                                                                              : ^^^^^
+>arr // should error    .filter((obj) => obj && obj.data)    .map : <U>(callbackfn: (value: MyObj, index: number, array: MyObj[]) => U, thisArg?: any) => U[]
+>                                                                 : ^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>arr // should error    .filter((obj) => obj && obj.data) : MyObj[]
+>                                                         : ^^^^^^^
+>arr // should error    .filter : { <S extends MyObj>(predicate: (value: MyObj, index: number, array: MyObj[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj, index: number, array: MyObj[]) => unknown, thisArg?: any): MyObj[]; }
+>                               : ^^^ ^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^
+>arr : MyObj[] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
+
+    .filter((obj) => obj && obj.data)
+>filter : { <S extends MyObj>(predicate: (value: MyObj, index: number, array: MyObj[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj, index: number, array: MyObj[]) => unknown, thisArg?: any): MyObj[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^
+>(obj) => obj && obj.data : (obj: MyObj) => string | undefined
+>                         : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>obj : MyObj
+>    : ^^^^^
+>obj && obj.data : string | undefined
+>                : ^^^^^^^^^^^^^^^^^^
+>obj : MyObj
+>    : ^^^^^
+>obj.data : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>obj : MyObj
+>    : ^^^^^
+>data : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+    .map(obj => JSON.parse(obj.data))  // should error
+>map : <U>(callbackfn: (value: MyObj, index: number, array: MyObj[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>obj => JSON.parse(obj.data) : (obj: MyObj) => any
+>                            : ^   ^^^^^^^^^^^^^^^
+>obj : MyObj
+>    : ^^^^^
+>JSON.parse(obj.data) : any
+>                     : ^^^
+>JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+>           : ^    ^^      ^^       ^^^                                           ^^^^^   
+>JSON : JSON
+>     : ^^^^
+>parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+>      : ^    ^^      ^^       ^^^                                           ^^^^^   
+>obj.data : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>obj : MyObj
+>    : ^^^^^
+>data : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+  );
+
+const result2 = myArray
+>result2 : any[][]
+>        : ^^^^^^^
+>myArray  .map((arr) => arr.list)  .filter((arr) => !!arr)  .filter(arr => arr.length)  .map((arr) => arr  // should ok    .filter((obj) => obj)    // inferring a guard here would require https://github.com/microsoft/TypeScript/issues/42384    .filter(obj => !!obj.data)    .map(obj => JSON.parse(obj.data))  ) : any[][]
+>                                                                                                                                                                                                                                                                                                                      : ^^^^^^^
+>myArray  .map((arr) => arr.list)  .filter((arr) => !!arr)  .filter(arr => arr.length)  .map : <U>(callbackfn: (value: MyObj[], index: number, array: MyObj[][]) => U, thisArg?: any) => U[]
+>                                                                                            : ^ ^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>myArray  .map((arr) => arr.list)  .filter((arr) => !!arr)  .filter(arr => arr.length) : MyObj[][]
+>                                                                                      : ^^^^^^^^^
+>myArray  .map((arr) => arr.list)  .filter((arr) => !!arr)  .filter : { <S extends MyObj[]>(predicate: (value: MyObj[], index: number, array: MyObj[][]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj[], index: number, array: MyObj[][]) => unknown, thisArg?: any): MyObj[][]; }
+>                                                                   : ^^^ ^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^
+>myArray  .map((arr) => arr.list)  .filter((arr) => !!arr) : MyObj[][]
+>                                                          : ^^^^^^^^^
+>myArray  .map((arr) => arr.list)  .filter : { <S extends MyObj[] | undefined>(predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => unknown, thisArg?: any): (MyObj[] | undefined)[]; }
+>                                          : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>myArray  .map((arr) => arr.list) : (MyObj[] | undefined)[]
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^
+>myArray  .map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
+>              : ^ ^^          ^^^     ^^^^^^^^^^^       ^^^^^     ^^      ^^     ^^^^^^^^^^^       ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>myArray : MyArray
+>        : ^^^^^^^
+
+  .map((arr) => arr.list)
+>map : <U>(callbackfn: (value: { list?: MyObj[]; }, index: number, array: { list?: MyObj[]; }[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^       ^^^^^     ^^      ^^     ^^^^^^^^^^^       ^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>(arr) => arr.list : (arr: { list?: MyObj[]; }) => MyObj[] | undefined
+>                  : ^   ^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr : { list?: MyObj[]; }
+>    : ^^^^^^^^^       ^^^
+>arr.list : MyObj[] | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
+>arr : { list?: MyObj[]; }
+>    : ^^^^^^^^^       ^^^
+>list : MyObj[] | undefined
+>     : ^^^^^^^^^^^^^^^^^^^
+
+  .filter((arr) => !!arr)
+>filter : { <S extends MyObj[] | undefined>(predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj[] | undefined, index: number, array: (MyObj[] | undefined)[]) => unknown, thisArg?: any): (MyObj[] | undefined)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(arr) => !!arr : (arr: MyObj[] | undefined) => arr is MyObj[]
+>               : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arr : MyObj[] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
+>!!arr : boolean
+>      : ^^^^^^^
+>!arr : boolean
+>     : ^^^^^^^
+>arr : MyObj[] | undefined
+>    : ^^^^^^^^^^^^^^^^^^^
+
+  .filter(arr => arr.length)
+>filter : { <S extends MyObj[]>(predicate: (value: MyObj[], index: number, array: MyObj[][]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj[], index: number, array: MyObj[][]) => unknown, thisArg?: any): MyObj[][]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^
+>arr => arr.length : (arr: MyObj[]) => number
+>                  : ^   ^^^^^^^^^^^^^^^^^^^^
+>arr : MyObj[]
+>    : ^^^^^^^
+>arr.length : number
+>           : ^^^^^^
+>arr : MyObj[]
+>    : ^^^^^^^
+>length : number
+>       : ^^^^^^
+
+  .map((arr) => arr  // should ok
+>map : <U>(callbackfn: (value: MyObj[], index: number, array: MyObj[][]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>(arr) => arr  // should ok    .filter((obj) => obj)    // inferring a guard here would require https://github.com/microsoft/TypeScript/issues/42384    .filter(obj => !!obj.data)    .map(obj => JSON.parse(obj.data)) : (arr: MyObj[]) => any[]
+>                                                                                                                                                                                                                       : ^   ^^^^^^^^^^^^^^^^^^^
+>arr : MyObj[]
+>    : ^^^^^^^
+>arr  // should ok    .filter((obj) => obj)    // inferring a guard here would require https://github.com/microsoft/TypeScript/issues/42384    .filter(obj => !!obj.data)    .map(obj => JSON.parse(obj.data)) : any[]
+>                                                                                                                                                                                                              : ^^^^^
+>arr  // should ok    .filter((obj) => obj)    // inferring a guard here would require https://github.com/microsoft/TypeScript/issues/42384    .filter(obj => !!obj.data)    .map : <U>(callbackfn: (value: MyObj, index: number, array: MyObj[]) => U, thisArg?: any) => U[]
+>                                                                                                                                                                                 : ^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>arr  // should ok    .filter((obj) => obj)    // inferring a guard here would require https://github.com/microsoft/TypeScript/issues/42384    .filter(obj => !!obj.data) : MyObj[]
+>                                                                                                                                                                         : ^^^^^^^
+>arr  // should ok    .filter((obj) => obj)    // inferring a guard here would require https://github.com/microsoft/TypeScript/issues/42384    .filter : { <S extends MyObj>(predicate: (value: MyObj, index: number, array: MyObj[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj, index: number, array: MyObj[]) => unknown, thisArg?: any): MyObj[]; }
+>                                                                                                                                                      : ^^^ ^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^
+>arr  // should ok    .filter((obj) => obj) : MyObj[]
+>                                           : ^^^^^^^
+>arr  // should ok    .filter : { <S extends MyObj>(predicate: (value: MyObj, index: number, array: MyObj[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj, index: number, array: MyObj[]) => unknown, thisArg?: any): MyObj[]; }
+>                             : ^^^ ^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^
+>arr : MyObj[]
+>    : ^^^^^^^
+
+    .filter((obj) => obj)
+>filter : { <S extends MyObj>(predicate: (value: MyObj, index: number, array: MyObj[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj, index: number, array: MyObj[]) => unknown, thisArg?: any): MyObj[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^
+>(obj) => obj : (obj: MyObj) => MyObj
+>             : ^   ^^^^^^^^^^^^^^^^^
+>obj : MyObj
+>    : ^^^^^
+>obj : MyObj
+>    : ^^^^^
+
+    // inferring a guard here would require https://github.com/microsoft/TypeScript/issues/42384
+    .filter(obj => !!obj.data)
+>filter : { <S extends MyObj>(predicate: (value: MyObj, index: number, array: MyObj[]) => value is S, thisArg?: any): S[]; (predicate: (value: MyObj, index: number, array: MyObj[]) => unknown, thisArg?: any): MyObj[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^
+>obj => !!obj.data : (obj: MyObj) => boolean
+>                  : ^   ^^^^^^^^^^^^^^^^^^^
+>obj : MyObj
+>    : ^^^^^
+>!!obj.data : boolean
+>           : ^^^^^^^
+>!obj.data : boolean
+>          : ^^^^^^^
+>obj.data : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>obj : MyObj
+>    : ^^^^^
+>data : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+    .map(obj => JSON.parse(obj.data))
+>map : <U>(callbackfn: (value: MyObj, index: number, array: MyObj[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>obj => JSON.parse(obj.data) : (obj: MyObj) => any
+>                            : ^   ^^^^^^^^^^^^^^^
+>obj : MyObj
+>    : ^^^^^
+>JSON.parse(obj.data) : any
+>                     : ^^^
+>JSON.parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+>           : ^    ^^      ^^       ^^^                                           ^^^^^   
+>JSON : JSON
+>     : ^^^^
+>parse : (text: string, reviver?: (this: any, key: string, value: any) => any) => any
+>      : ^    ^^      ^^       ^^^                                           ^^^^^   
+>obj.data : string | undefined
+>         : ^^^^^^^^^^^^^^^^^^
+>obj : MyObj
+>    : ^^^^^
+>data : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
+
+  );
+
+// https://github.com/microsoft/TypeScript/issues/16069#issuecomment-1183547889
+type Foo = {
+>Foo : Foo
+>    : ^^^
+
+  foo: string;
+>foo : string
+>    : ^^^^^^
+}
+type Bar = Foo & {
+>Bar : Bar
+>    : ^^^
+
+  bar: string;
+>bar : string
+>    : ^^^^^^
+}
+
+const list: (Foo | Bar)[] = [];
+>list : (Foo | Bar)[]
+>     : ^^^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
+
+const resultBars: Bar[] = list.filter((value) => 'bar' in value);  // should ok
+>resultBars : Bar[]
+>           : ^^^^^
+>list.filter((value) => 'bar' in value) : Bar[]
+>                                       : ^^^^^
+>list.filter : { <S extends Foo | Bar>(predicate: (value: Foo | Bar, index: number, array: (Foo | Bar)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Foo | Bar, index: number, array: (Foo | Bar)[]) => unknown, thisArg?: any): (Foo | Bar)[]; }
+>            : ^^^ ^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^
+>list : (Foo | Bar)[]
+>     : ^^^^^^^^^^^^^
+>filter : { <S extends Foo | Bar>(predicate: (value: Foo | Bar, index: number, array: (Foo | Bar)[]) => value is S, thisArg?: any): S[]; (predicate: (value: Foo | Bar, index: number, array: (Foo | Bar)[]) => unknown, thisArg?: any): (Foo | Bar)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^
+>(value) => 'bar' in value : (value: Foo | Bar) => value is Bar
+>                          : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : Foo | Bar
+>      : ^^^^^^^^^
+>'bar' in value : boolean
+>               : ^^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
+>value : Foo | Bar
+>      : ^^^^^^^^^
+
+function isBarNonNull(x: Foo | Bar | null) {
+>isBarNonNull : (x: Foo | Bar | null) => x is Bar
+>             : ^ ^^                ^^^^^^^^^^^^^
+>x : Foo | Bar | null
+>  : ^^^^^^^^^^^^^^^^
+
+  return ('bar' in x!);
+>('bar' in x!) : boolean
+>              : ^^^^^^^
+>'bar' in x! : boolean
+>            : ^^^^^^^
+>'bar' : "bar"
+>      : ^^^^^
+>x! : Foo | Bar
+>   : ^^^^^^^^^
+>x : Foo | Bar | null
+>  : ^^^^^^^^^^^^^^^^
+}
+const fooOrBar = list[0];
+>fooOrBar : Foo | Bar
+>         : ^^^^^^^^^
+>list[0] : Foo | Bar
+>        : ^^^^^^^^^
+>list : (Foo | Bar)[]
+>     : ^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+
+if (isBarNonNull(fooOrBar)) {
+>isBarNonNull(fooOrBar) : boolean
+>                       : ^^^^^^^
+>isBarNonNull : (x: Foo | Bar | null) => x is Bar
+>             : ^ ^^                ^^^^^^^^^^^^^
+>fooOrBar : Foo | Bar
+>         : ^^^^^^^^^
+
+  const t: Bar = fooOrBar;  // should ok
+>t : Bar
+>  : ^^^
+>fooOrBar : Bar
+>         : ^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/38390#issuecomment-626019466
+// Ryan's example (currently legal):
+const a = [1, "foo", 2, "bar"].filter(x => typeof x === "string");
+>a : string[]
+>  : ^^^^^^^^
+>[1, "foo", 2, "bar"].filter(x => typeof x === "string") : string[]
+>                                                        : ^^^^^^^^
+>[1, "foo", 2, "bar"].filter : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): (string | number)[]; }
+>                            : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, "foo", 2, "bar"] : (string | number)[]
+>                     : ^^^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>"foo" : "foo"
+>      : ^^^^^
+>2 : 2
+>  : ^
+>"bar" : "bar"
+>      : ^^^^^
+>filter : { <S extends string | number>(predicate: (value: string | number, index: number, array: (string | number)[]) => value is S, thisArg?: any): S[]; (predicate: (value: string | number, index: number, array: (string | number)[]) => unknown, thisArg?: any): (string | number)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x => typeof x === "string" : (x: string | number) => x is string
+>                           : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>typeof x === "string" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+
+a.push(10);
+>a.push(10) : number
+>           : ^^^^^^
+>a.push : (...items: string[]) => number
+>       : ^^^^     ^^^^^^^^^^^^^^^      
+>a : string[]
+>  : ^^^^^^^^
+>push : (...items: string[]) => number
+>     : ^^^^     ^^^^^^^^^^^^^^^      
+>10 : 10
+>   : ^^
+
+// Defer to explicit type guards, even when they're incorrect.
+function backwardsGuard(x: number|string): x is number {
+>backwardsGuard : (x: number | string) => x is number
+>               : ^ ^^               ^^^^^           
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  return typeof x === 'string';
+>typeof x === 'string' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+}
+
+// Partition tests. The "false" case matters.
+function isString(x: string | number) {
+>isString : (x: string | number) => x is string
+>         : ^ ^^               ^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  return typeof x === 'string';
+>typeof x === 'string' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+}
+
+declare let strOrNum: string | number;
+>strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
+
+if (isString(strOrNum)) {
+>isString(strOrNum) : boolean
+>                   : ^^^^^^^
+>isString : (x: string | number) => x is string
+>         : ^ ^^               ^^^^^^^^^^^^^^^^
+>strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
+
+  let t: string = strOrNum;  // should ok
+>t : string
+>  : ^^^^^^
+>strOrNum : string
+>         : ^^^^^^
+
+} else {
+  let t: number = strOrNum;  // should ok
+>t : number
+>  : ^^^^^^
+>strOrNum : number
+>         : ^^^^^^
+}
+
+function flakyIsString(x: string | number) {
+>flakyIsString : (x: string | number) => boolean
+>              : ^ ^^               ^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  return typeof x === 'string' && Math.random() > 0.5;
+>typeof x === 'string' && Math.random() > 0.5 : boolean
+>                                             : ^^^^^^^
+>typeof x === 'string' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+}
+if (flakyIsString(strOrNum)) {
+>flakyIsString(strOrNum) : boolean
+>                        : ^^^^^^^
+>flakyIsString : (x: string | number) => boolean
+>              : ^ ^^               ^^^^^^^^^^^^
+>strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
+
+  let t: string = strOrNum;  // should error
+>t : string
+>  : ^^^^^^
+>strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
+
+} else {
+  let t: number = strOrNum;  // should error
+>t : number
+>  : ^^^^^^
+>strOrNum : string | number
+>         : ^^^^^^^^^^^^^^^
+}
+
+function isDate(x: object) {
+>isDate : (x: object) => x is Date
+>       : ^ ^^      ^^^^^^^^^^^^^^
+>x : object
+>  : ^^^^^^
+
+  return x instanceof Date;
+>x instanceof Date : boolean
+>                  : ^^^^^^^
+>x : object
+>  : ^^^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+}
+function flakyIsDate(x: object) {
+>flakyIsDate : (x: object) => boolean
+>            : ^ ^^      ^^^^^^^^^^^^
+>x : object
+>  : ^^^^^^
+
+  return x instanceof Date && Math.random() > 0.5;
+>x instanceof Date && Math.random() > 0.5 : boolean
+>                                         : ^^^^^^^
+>x instanceof Date : boolean
+>                  : ^^^^^^^
+>x : object
+>  : ^^^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>Math.random() > 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+}
+
+declare let maybeDate: object;
+>maybeDate : object
+>          : ^^^^^^
+
+if (isDate(maybeDate)) {
+>isDate(maybeDate) : boolean
+>                  : ^^^^^^^
+>isDate : (x: object) => x is Date
+>       : ^ ^^      ^^^^^^^^^^^^^^
+>maybeDate : object
+>          : ^^^^^^
+
+  let t: Date = maybeDate;  // should ok
+>t : Date
+>  : ^^^^
+>maybeDate : Date
+>          : ^^^^
+
+} else {
+  let t: object = maybeDate;  // should ok
+>t : object
+>  : ^^^^^^
+>maybeDate : object
+>          : ^^^^^^
+}
+
+if (flakyIsDate(maybeDate)) {
+>flakyIsDate(maybeDate) : boolean
+>                       : ^^^^^^^
+>flakyIsDate : (x: object) => boolean
+>            : ^ ^^      ^^^^^^^^^^^^
+>maybeDate : object
+>          : ^^^^^^
+
+  let t: Date = maybeDate;  // should error
+>t : Date
+>  : ^^^^
+>maybeDate : object
+>          : ^^^^^^
+
+} else {
+  let t: object = maybeDate;  // should ok
+>t : object
+>  : ^^^^^^
+>maybeDate : object
+>          : ^^^^^^
+}
+
+// This should not infer a type guard since the value on which we do the refinement
+// is not related to the original parameter.
+function irrelevantIsNumber(x: string | number) {
+>irrelevantIsNumber : (x: string | number) => boolean
+>                   : ^ ^^               ^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+	x = Math.random() < 0.5 ? "string" : 123;
+>x = Math.random() < 0.5 ? "string" : 123 : "string" | 123
+>                                         : ^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>Math.random() < 0.5 ? "string" : 123 : "string" | 123
+>                                     : ^^^^^^^^^^^^^^
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"string" : "string"
+>         : ^^^^^^^^
+>123 : 123
+>    : ^^^
+
+  return typeof x === 'string';
+>typeof x === 'string' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+}
+function irrelevantIsNumberDestructuring(x: string | number) {
+>irrelevantIsNumberDestructuring : (x: string | number) => boolean
+>                                : ^ ^^               ^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+	[x] = [Math.random() < 0.5 ? "string" : 123];
+>[x] = [Math.random() < 0.5 ? "string" : 123] : [string | number]
+>                                             : ^^^^^^^^^^^^^^^^^
+>[x] : [string | number]
+>    : ^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>[Math.random() < 0.5 ? "string" : 123] : [string | number]
+>                                       : ^^^^^^^^^^^^^^^^^
+>Math.random() < 0.5 ? "string" : 123 : "string" | 123
+>                                     : ^^^^^^^^^^^^^^
+>Math.random() < 0.5 : boolean
+>                    : ^^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+>0.5 : 0.5
+>    : ^^^
+>"string" : "string"
+>         : ^^^^^^^^
+>123 : 123
+>    : ^^^
+
+  return typeof x === 'string';
+>typeof x === 'string' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+}
+
+// Cannot infer a type guard for either param because of the false case.
+function areBothNums(x: string|number, y: string|number) {
+>areBothNums : (x: string | number, y: string | number) => boolean
+>            : ^ ^^               ^^ ^^               ^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>y : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  return typeof x === 'number' && typeof y === 'number';
+>typeof x === 'number' && typeof y === 'number' : boolean
+>                                               : ^^^^^^^
+>typeof x === 'number' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+>typeof y === 'number' : boolean
+>                      : ^^^^^^^
+>typeof y : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : string | number
+>  : ^^^^^^^^^^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+}
+
+// Could potentially infer a type guard here but it would require more bookkeeping.
+function doubleReturn(x: string|number) {
+>doubleReturn : (x: string | number) => boolean
+>             : ^ ^^               ^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  if (typeof x === 'string') {
+>typeof x === 'string' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+
+    return true;
+>true : true
+>     : ^^^^
+  }
+  return false;
+>false : false
+>      : ^^^^^
+}
+
+function guardsOneButNotOthers(a: string|number, b: string|number, c: string|number) {
+>guardsOneButNotOthers : (a: string | number, b: string | number, c: string | number) => b is string
+>                      : ^ ^^               ^^ ^^               ^^ ^^               ^^^^^^^^^^^^^^^^
+>a : string | number
+>  : ^^^^^^^^^^^^^^^
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
+>c : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  return typeof b === 'string';
+>typeof b === 'string' : boolean
+>                      : ^^^^^^^
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+}
+
+// Checks that there are no string escaping issues
+function dunderguard(__x: number | string) {
+>dunderguard : (__x: number | string) => __x is string
+>            : ^   ^^               ^^^^^^^^^^^^^^^^^^
+>__x : string | number
+>    : ^^^^^^^^^^^^^^^
+
+  return typeof __x  === 'string';
+>typeof __x  === 'string' : boolean
+>                         : ^^^^^^^
+>typeof __x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>__x : string | number
+>    : ^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+}
+
+// could infer a type guard here but it doesn't seem that helpful.
+const booleanIdentity = (x: boolean) => x;
+>booleanIdentity : (x: boolean) => boolean
+>                : ^ ^^       ^^^^^^^^^^^^
+>(x: boolean) => x : (x: boolean) => boolean
+>                  : ^ ^^       ^^^^^^^^^^^^
+>x : boolean
+>  : ^^^^^^^
+>x : boolean
+>  : ^^^^^^^
+
+// we infer "x is number | true" which is accurate but of debatable utility.
+const numOrBoolean = (x: number | boolean) => typeof x === 'number' || x;
+>numOrBoolean : (x: number | boolean) => x is number | true
+>             : ^ ^^                ^^^^^^^^^^^^^^^^^^^^^^^
+>(x: number | boolean) => typeof x === 'number' || x : (x: number | boolean) => x is number | true
+>                                                    : ^ ^^                ^^^^^^^^^^^^^^^^^^^^^^^
+>x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
+>typeof x === 'number' || x : boolean
+>                           : ^^^^^^^
+>typeof x === 'number' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number | boolean
+>  : ^^^^^^^^^^^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+>x : boolean
+>  : ^^^^^^^
+
+// inferred guards in methods
+interface NumberInferrer {
+  isNumber(x: number | string): x is number;
+>isNumber : (x: number | string) => x is number
+>         : ^ ^^               ^^^^^           
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+}
+class Inferrer implements NumberInferrer {
+>Inferrer : Inferrer
+>         : ^^^^^^^^
+
+  isNumber(x: number | string) {  // should ok
+>isNumber : (x: number | string) => x is number
+>         : ^ ^^               ^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+    return typeof x === 'number';
+>typeof x === 'number' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+  }
+}
+declare let numOrStr: number | string;
+>numOrStr : string | number
+>         : ^^^^^^^^^^^^^^^
+
+const inf = new Inferrer();
+>inf : Inferrer
+>    : ^^^^^^^^
+>new Inferrer() : Inferrer
+>               : ^^^^^^^^
+>Inferrer : typeof Inferrer
+>         : ^^^^^^^^^^^^^^^
+
+if (inf.isNumber(numOrStr)) {
+>inf.isNumber(numOrStr) : boolean
+>                       : ^^^^^^^
+>inf.isNumber : (x: number | string) => x is number
+>             : ^ ^^               ^^^^^^^^^^^^^^^^
+>inf : Inferrer
+>    : ^^^^^^^^
+>isNumber : (x: number | string) => x is number
+>         : ^ ^^               ^^^^^^^^^^^^^^^^
+>numOrStr : string | number
+>         : ^^^^^^^^^^^^^^^
+
+  let t: number = numOrStr;  // should ok
+>t : number
+>  : ^^^^^^
+>numOrStr : number
+>         : ^^^^^^
+
+} else {
+  let t: string = numOrStr;  // should ok
+>t : string
+>  : ^^^^^^
+>numOrStr : string
+>         : ^^^^^^
+}
+
+// Type predicates are not inferred on "this"
+class C1 {
+>C1 : C1
+>   : ^^
+
+  isC2() {
+>isC2 : () => boolean
+>     : ^^^^^^^^^^^^^
+
+    return this instanceof C2;
+>this instanceof C2 : boolean
+>                   : ^^^^^^^
+>this : this
+>     : ^^^^
+>C2 : typeof C2
+>   : ^^^^^^^^^
+  }
+}
+class C2 extends C1 {
+>C2 : C2
+>   : ^^
+>C1 : C1
+>   : ^^
+
+  z = 0;
+>z : number
+>  : ^^^^^^
+>0 : 0
+>  : ^
+}
+declare let c: C1;
+>c : C1
+>  : ^^
+
+if (c.isC2()) {
+>c.isC2() : boolean
+>         : ^^^^^^^
+>c.isC2 : () => boolean
+>       : ^^^^^^^^^^^^^
+>c : C1
+>  : ^^
+>isC2 : () => boolean
+>     : ^^^^^^^^^^^^^
+
+  let c2: C2 = c;  // should error
+>c2 : C2
+>   : ^^
+>c : C1
+>  : ^^
+}
+
+function doNotRefineDestructuredParam({x, y}: {x: number | null, y: number}) {
+>doNotRefineDestructuredParam : ({ x, y }: { x: number | null; y: number; }) => boolean
+>                             : ^        ^^                                ^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+>y : number
+>  : ^^^^^^
+
+  return typeof x === 'number';
+>typeof x === 'number' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+}
+
+// The type predicate must remain valid when the function is called with subtypes.
+function isShortString(x: unknown) {
+>isShortString : (x: unknown) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+  return typeof x === "string" && x.length < 10;
+>typeof x === "string" && x.length < 10 : boolean
+>                                       : ^^^^^^^
+>typeof x === "string" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+>x.length < 10 : boolean
+>              : ^^^^^^^
+>x.length : number
+>         : ^^^^^^
+>x : string
+>  : ^^^^^^
+>length : number
+>       : ^^^^^^
+>10 : 10
+>   : ^^
+}
+
+declare let str: string;
+>str : string
+>    : ^^^^^^
+
+if (isShortString(str)) {
+>isShortString(str) : boolean
+>                   : ^^^^^^^
+>isShortString : (x: unknown) => boolean
+>              : ^ ^^       ^^^^^^^^^^^^
+>str : string
+>    : ^^^^^^
+
+  str.charAt(0);  // should ok
+>str.charAt(0) : string
+>              : ^^^^^^
+>str.charAt : (pos: number) => string
+>           : ^   ^^      ^^^^^      
+>str : string
+>    : ^^^^^^
+>charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
+>0 : 0
+>  : ^
+
+} else {
+  str.charAt(0);  // should ok
+>str.charAt(0) : string
+>              : ^^^^^^
+>str.charAt : (pos: number) => string
+>           : ^   ^^      ^^^^^      
+>str : string
+>    : ^^^^^^
+>charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
+>0 : 0
+>  : ^
+}
+
+function isStringFromUnknown(x: unknown) {
+>isStringFromUnknown : (x: unknown) => x is string
+>                    : ^ ^^       ^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+  return typeof x === "string";
+>typeof x === "string" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+}
+if (isStringFromUnknown(str)) {
+>isStringFromUnknown(str) : boolean
+>                         : ^^^^^^^
+>isStringFromUnknown : (x: unknown) => x is string
+>                    : ^ ^^       ^^^^^^^^^^^^^^^^
+>str : string
+>    : ^^^^^^
+
+  str.charAt(0);  // should OK
+>str.charAt(0) : string
+>              : ^^^^^^
+>str.charAt : (pos: number) => string
+>           : ^   ^^      ^^^^^      
+>str : string
+>    : ^^^^^^
+>charAt : (pos: number) => string
+>       : ^   ^^      ^^^^^      
+>0 : 0
+>  : ^
+
+} else {
+  let t: never = str;  // should OK
+>t : never
+>  : ^^^^^
+>str : never
+>    : ^^^^^
+}
+
+// infer a union type
+function isNumOrStr(x: unknown) {
+>isNumOrStr : (x: unknown) => x is string | number
+>           : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+  return (typeof x === "number" || typeof x === "string");
+>(typeof x === "number" || typeof x === "string") : boolean
+>                                                 : ^^^^^^^
+>typeof x === "number" || typeof x === "string" : boolean
+>                                               : ^^^^^^^
+>typeof x === "number" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>"number" : "number"
+>         : ^^^^^^^^
+>typeof x === "string" : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>"string" : "string"
+>         : ^^^^^^^^
+}
+declare let unk: unknown;
+>unk : unknown
+>    : ^^^^^^^
+
+if (isNumOrStr(unk)) {
+>isNumOrStr(unk) : boolean
+>                : ^^^^^^^
+>isNumOrStr : (x: unknown) => x is string | number
+>           : ^ ^^       ^^^^^^^^^^^^^^^^^^^^^^^^^
+>unk : unknown
+>    : ^^^^^^^
+
+  let t: number | string = unk;  // should ok
+>t : string | number
+>  : ^^^^^^^^^^^^^^^
+>unk : string | number
+>    : ^^^^^^^^^^^^^^^
+}
+
+// A function can be a type predicate even if it throws.
+function assertAndPredicate(x: string | number | Date) {
+>assertAndPredicate : (x: string | number | Date) => x is string
+>                   : ^ ^^                      ^^^^^^^^^^^^^^^^
+>x : string | number | Date
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+  if (x instanceof Date) {
+>x instanceof Date : boolean
+>                  : ^^^^^^^
+>x : string | number | Date
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+
+    throw new Error();
+>new Error() : Error
+>            : ^^^^^
+>Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
+  }
+  return typeof x === 'string';
+>typeof x === 'string' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+}
+
+declare let snd: string | number | Date;
+>snd : string | number | Date
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+if (assertAndPredicate(snd)) {
+>assertAndPredicate(snd) : boolean
+>                        : ^^^^^^^
+>assertAndPredicate : (x: string | number | Date) => x is string
+>                   : ^ ^^                      ^^^^^^^^^^^^^^^^
+>snd : string | number | Date
+>    : ^^^^^^^^^^^^^^^^^^^^^^
+
+  let t: string = snd; // should error
+>t : string
+>  : ^^^^^^
+>snd : string
+>    : ^^^^^^
+}
+
+function isNumberWithThis(this: Date, x: number | string) {
+>isNumberWithThis : (this: Date, x: number | string) => x is number
+>                 : ^    ^^    ^^ ^^               ^^^^^^^^^^^^^^^^
+>this : Date
+>     : ^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+
+  return typeof x === 'number';
+>typeof x === 'number' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | number
+>  : ^^^^^^^^^^^^^^^
+>'number' : "number"
+>         : ^^^^^^^^
+}
+
+function narrowFromAny(x: any) {
+>narrowFromAny : (x: any) => x is number
+>              : ^ ^^   ^^^^^^^^^^^^^^^^
+>x : any
+>  : ^^^
+
+  return typeof x === 'number';
+>typeof x === 'number' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : any
+>  : ^^^
+>'number' : "number"
+>         : ^^^^^^^^
+}
+
+const noInferenceFromRest = (...f: ["a" | "b"]) => f[0] === "a";
+>noInferenceFromRest : (f_0: "a" | "b") => boolean
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(...f: ["a" | "b"]) => f[0] === "a" : (f_0: "a" | "b") => boolean
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : ["a" | "b"]
+>  : ^^^^^^^^^^^
+>f[0] === "a" : boolean
+>             : ^^^^^^^
+>f[0] : "a" | "b"
+>     : ^^^^^^^^^
+>f : ["a" | "b"]
+>  : ^^^^^^^^^^^
+>0 : 0
+>  : ^
+>"a" : "a"
+>    : ^^^
+
+const noInferenceFromImpossibleRest = (...f: []) => typeof f === "undefined";
+>noInferenceFromImpossibleRest : () => boolean
+>                              : ^^^^^^^^^^^^^
+>(...f: []) => typeof f === "undefined" : () => boolean
+>                                       : ^^^^^^^^^^^^^
+>f : []
+>  : ^^
+>typeof f === "undefined" : boolean
+>                         : ^^^^^^^
+>typeof f : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : []
+>  : ^^
+>"undefined" : "undefined"
+>            : ^^^^^^^^^^^
+
+function inferWithRest(x: string | null, ...f: ["a", "b"]) {
+>inferWithRest : (x: string | null, f_0: "a", f_1: "b") => x is string
+>              : ^ ^^             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | null
+>  : ^^^^^^^^^^^^^
+>f : ["a", "b"]
+>  : ^^^^^^^^^^
+
+  return typeof x === 'string';
+>typeof x === 'string' : boolean
+>                      : ^^^^^^^
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : string | null
+>  : ^^^^^^^^^^^^^
+>'string' : "string"
+>         : ^^^^^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/57947
+declare const foobar:
+>foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>       : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
+
+  | { type: "foo"; foo: number }
+>type : "foo"
+>     : ^^^^^
+>foo : number
+>    : ^^^^^^
+
+  | { type: "bar"; bar: string };
+>type : "bar"
+>     : ^^^^^
+>bar : string
+>    : ^^^^^^
+
+const foobarPred = (fb: typeof foobar) => fb.type === "foo";
+>foobarPred : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
+>           : ^  ^^             ^^^^^^^^^^^^^^^^^^^     ^^^^^^^      ^^^
+>(fb: typeof foobar) => fb.type === "foo" : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
+>                                         : ^  ^^             ^^^^^^^^^^^^^^^^^^^     ^^^^^^^      ^^^
+>fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>   : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
+>foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>       : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
+>fb.type === "foo" : boolean
+>                  : ^^^^^^^
+>fb.type : "bar" | "foo"
+>        : ^^^^^^^^^^^^^
+>fb : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>   : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
+>type : "bar" | "foo"
+>     : ^^^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+if (foobarPred(foobar)) {
+>foobarPred(foobar) : boolean
+>                   : ^^^^^^^
+>foobarPred : (fb: typeof foobar) => fb is { type: "foo"; foo: number; }
+>           : ^  ^^             ^^^^^^^^^^^^^^^^^^^     ^^^^^^^      ^^^
+>foobar : { type: "foo"; foo: number; } | { type: "bar"; bar: string; }
+>       : ^^^^^^^^     ^^^^^^^      ^^^^^^^^^^^^^^     ^^^^^^^      ^^^
+
+  foobar.foo;
+>foobar.foo : number
+>           : ^^^^^^
+>foobar : { type: "foo"; foo: number; }
+>       : ^^^^^^^^     ^^^^^^^      ^^^
+>foo : number
+>    : ^^^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/60778
+const arrTest: Array<number> = [1, 2, null, 3].filter(
+>arrTest : number[]
+>        : ^^^^^^^^
+>[1, 2, null, 3].filter(  (x) => (x != null) satisfies boolean,) : number[]
+>                                                                : ^^^^^^^^
+>[1, 2, null, 3].filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>                       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, null, 3] : (number | null)[]
+>                : ^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>filter : { <S extends number | null>(predicate: (value: number | null, index: number, array: (number | null)[]) => value is S, thisArg?: any): S[]; (predicate: (value: number | null, index: number, array: (number | null)[]) => unknown, thisArg?: any): (number | null)[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^
+
+  (x) => (x != null) satisfies boolean,
+>(x) => (x != null) satisfies boolean : (x: number | null) => x is number
+>                                     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+>(x != null) satisfies boolean : boolean
+>                              : ^^^^^^^
+>(x != null) : boolean
+>            : ^^^^^^^
+>x != null : boolean
+>          : ^^^^^^^
+>x : number | null
+>  : ^^^^^^^^^^^^^
+
+);
+
+function isEmptyString(x: unknown) {
+>isEmptyString : (x: unknown) => x is ""
+>              : ^ ^^       ^^^^^^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+
+  const rv = x === "";
+>rv : boolean
+>   : ^^^^^^^
+>x === "" : boolean
+>         : ^^^^^^^
+>x : unknown
+>  : ^^^^^^^
+>"" : ""
+>   : ^^
+
+  return rv satisfies boolean;
+>rv satisfies boolean : boolean
+>                     : ^^^^^^^
+>rv : boolean
+>   : ^^^^^^^
+}
+
+// https://github.com/microsoft/TypeScript/issues/58996
+type Animal = {
+>Animal : Animal
+>       : ^^^^^^
+
+  breath: true,
+>breath : true
+>       : ^^^^
+>true : true
+>     : ^^^^
+
+};
+
+type Rock = {
+>Rock : Rock
+>     : ^^^^
+
+  breath: false,
+>breath : false
+>       : ^^^^^
+>false : false
+>      : ^^^^^
+
+};
+
+type Something = Animal | Rock;
+>Something : Something
+>          : ^^^^^^^^^
+
+function isAnimal(something: Something): something is Animal {
+>isAnimal : (something: Something) => something is Animal
+>         : ^         ^^         ^^^^^                   
+>something : Something
+>          : ^^^^^^^^^
+
+  return something.breath
+>something.breath : boolean
+>                 : ^^^^^^^
+>something : Something
+>          : ^^^^^^^^^
+>breath : boolean
+>       : ^^^^^^^
+}
+
+function positive(t: Something) {
+>positive : (t: Something) => t is Animal
+>         : ^ ^^         ^^^^^^^^^^^^^^^^
+>t : Something
+>  : ^^^^^^^^^
+
+  return isAnimal(t)
+>isAnimal(t) : boolean
+>            : ^^^^^^^
+>isAnimal : (something: Something) => something is Animal
+>         : ^         ^^         ^^^^^                   
+>t : Something
+>  : ^^^^^^^^^
+}
+
+function negative(t: Something) { 
+>negative : (t: Something) => t is Rock
+>         : ^ ^^         ^^^^^^^^^^^^^^
+>t : Something
+>  : ^^^^^^^^^
+
+  return !isAnimal(t)
+>!isAnimal(t) : boolean
+>             : ^^^^^^^
+>isAnimal(t) : boolean
+>            : ^^^^^^^
+>isAnimal : (something: Something) => something is Animal
+>         : ^         ^^         ^^^^^                   
+>t : Something
+>  : ^^^^^^^^^
+}
+

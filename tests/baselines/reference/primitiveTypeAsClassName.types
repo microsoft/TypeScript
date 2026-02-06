@@ -3,4 +3,5 @@
 === primitiveTypeAsClassName.ts ===
 class any {}
 >any : any
+>    : ^^^
 

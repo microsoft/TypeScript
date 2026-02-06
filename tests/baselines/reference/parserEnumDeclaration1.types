@@ -3,11 +3,15 @@
 === parserEnumDeclaration1.ts ===
 enum E {
 >E : E
+>  : ^
 
   Foo = 1,
 >Foo : E.Foo
+>    : ^^^^^
 >1 : 1
+>  : ^
 
   Bar
 >Bar : E.Bar
+>    : ^^^^^
 }

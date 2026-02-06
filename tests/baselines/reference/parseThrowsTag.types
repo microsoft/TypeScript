@@ -4,4 +4,5 @@
 /** @throws {Error} comment */
 function f() {}
 >f : () => void
+>  : ^^^^^^^^^^
 

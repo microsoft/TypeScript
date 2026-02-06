@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-////module Test {
+////namespace Test {
 ////    class Mocked {
 ////        myProp: string;
 ////    }

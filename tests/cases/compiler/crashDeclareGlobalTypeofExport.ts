@@ -1,3 +1,4 @@
+// @target: es2015
 // @esModuleInterop: true
 
 // @Filename: bar.d.ts

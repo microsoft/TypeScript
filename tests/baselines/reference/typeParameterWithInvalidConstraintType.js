@@ -3,7 +3,7 @@
 //// [typeParameterWithInvalidConstraintType.ts]
 class A<T extends T> {
     foo() {
-        var x: T;
+        var x!: T;
         var a = x.foo();
         var b = new x(123);
         var c = x[1];
@@ -12,15 +12,13 @@ class A<T extends T> {
 }
 
 //// [typeParameterWithInvalidConstraintType.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.foo = function () {
+"use strict";
+class A {
+    foo() {
         var x;
         var a = x.foo();
         var b = new x(123);
         var c = x[1];
         var d = x();
-    };
-    return A;
-}());
+    }
+}

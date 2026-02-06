@@ -1,3 +1,4 @@
+// @target: es2015
 namespace Test1 {
     export interface Foo {
         bar: string;

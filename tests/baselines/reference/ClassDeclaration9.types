@@ -3,7 +3,9 @@
 === ClassDeclaration9.ts ===
 class C {
 >C : C
+>  : ^
 
    foo();
 >foo : () => any
+>    : ^^^^^^^^^
 }

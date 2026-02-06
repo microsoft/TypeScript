@@ -4,4 +4,5 @@
 var v = { 0() { } };
 
 //// [parserFunctionPropertyAssignment2.js]
-var v = { 0: function () { } };
+"use strict";
+var v = { 0() { } };

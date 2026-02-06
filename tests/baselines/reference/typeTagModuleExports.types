@@ -4,8 +4,13 @@
 /** @type {string} */
 module.exports = 0;
 >module.exports = 0 : string
+>                   : ^^^^^^
 >module.exports : string
+>               : ^^^^^^
 >module : { exports: string; }
+>       : ^^^^^^^^^^^^^^^^^^^^
 >exports : string
+>        : ^^^^^^
 >0 : 0
+>  : ^
 

@@ -11,18 +11,25 @@
 
 const bar = { c: 1 };
 >bar : { c: number; }
+>    : ^^^^^^^^^^^^^^
 >{ c: 1 } : { c: number; }
+>         : ^^^^^^^^^^^^^^
 >c : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 
 /** @type {Foo} */
 export default bar;
 >bar : { c: number; }
+>    : ^^^^^^^^^^^^^^
 
 === b.js ===
 import a from "./a";
 >a : import("a").Foo
+>  : ^^^^^^^^^^^^^^^
 
 a;
 >a : import("a").Foo
+>  : ^^^^^^^^^^^^^^^
 

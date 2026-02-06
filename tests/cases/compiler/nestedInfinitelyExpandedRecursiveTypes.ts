@@ -1,3 +1,4 @@
+// @target: es2015
 interface F<T> {
       t: G<F<() => T>>;
 }

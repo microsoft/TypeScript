@@ -3,14 +3,19 @@
 === enumWithoutInitializerAfterComputedMember.ts ===
 enum E {
 >E : E
+>  : ^
 
     a,
 >a : E.a
+>  : ^^^
 
     b = a,
 >b : E.a
+>  : ^^^
 >a : E.a
+>  : ^^^
 
     c
 >c : E.c
+>  : ^^^
 }

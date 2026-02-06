@@ -2,6 +2,7 @@
 
 //// [constructorDefaultValuesReferencingThis.ts]
 class C {
+    public baseProp = 1;
     constructor(x = this) { }
 }
 
@@ -13,23 +14,30 @@ class E<T> {
     constructor(public x = this) { }
 }
 
+class F extends C {
+    constructor(y = this.baseProp) {
+        super();
+    }
+}
+
+
 //// [constructorDefaultValuesReferencingThis.js]
-var C = /** @class */ (function () {
-    function C(x) {
-        if (x === void 0) { x = this; }
+"use strict";
+class C {
+    constructor(x = this) {
+        this.baseProp = 1;
     }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D(x) {
-        if (x === void 0) { x = this; }
-    }
-    return D;
-}());
-var E = /** @class */ (function () {
-    function E(x) {
-        if (x === void 0) { x = this; }
+}
+class D {
+    constructor(x = this) { }
+}
+class E {
+    constructor(x = this) {
         this.x = x;
     }
-    return E;
-}());
+}
+class F extends C {
+    constructor(y = this.baseProp) {
+        super();
+    }
+}

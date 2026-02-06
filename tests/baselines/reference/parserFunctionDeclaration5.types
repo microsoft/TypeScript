@@ -3,7 +3,9 @@
 === parserFunctionDeclaration5.ts ===
 function foo();
 >foo : () => any
+>    : ^^^^^^^^^
 
 function foo() { }
 >foo : () => any
+>    : ^^^^^^^^^
 

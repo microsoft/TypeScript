@@ -1,0 +1,130 @@
+//// [tests/cases/compiler/homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts] ////
+
+=== homomorphicMappedTypeWithNonHomomorphicInstantiationSpreadable1.ts ===
+type HandleOptions<O> = {
+>HandleOptions : HandleOptions<O>
+>              : ^^^^^^^^^^^^^^^^
+
+    [I in keyof O]: {
+        value: O[I];
+>value : O[I]
+>      : ^^^^
+
+    };
+};
+
+declare function func1<
+>func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }) => T
+>      : ^ ^^^^^^^^^                                   ^^      ^^                                                                          ^^^^^ 
+
+    T extends Record<PropertyKey, readonly any[]>,
+>(fields: {
+>fields : { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^                        ^^^^^^
+
+    [K in keyof T]: {
+        label: string;
+>label : string
+>      : ^^^^^^
+
+        options: [...HandleOptions<T[K]>];
+>options : [...HandleOptions<T[K]>]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    };
+}): T;
+
+const result = func1({
+>result : { prop: [number, string]; other: [string, boolean]; }
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>func1({    prop: {        label: "first",        options: [            {                value: 123,            },            {                value: "foo",            },        ],    },    other: {        label: "second",        options: [            {                value: "bar",            },            {                value: true,            },        ],    },}) : { prop: [number, string]; other: [string, boolean]; }
+>                                                                                                                                                                                                                                                                                                                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>func1 : <T extends Record<PropertyKey, readonly any[]>>(fields: { [K in keyof T]: { label: string; options: [...HandleOptions<T[K]>]; }; }) => T
+>      : ^ ^^^^^^^^^                                   ^^      ^^                                                                          ^^^^^ 
+>{    prop: {        label: "first",        options: [            {                value: 123,            },            {                value: "foo",            },        ],    },    other: {        label: "second",        options: [            {                value: "bar",            },            {                value: true,            },        ],    },} : { prop: { label: string; options: [{ value: number; }, { value: string; }]; }; other: { label: string; options: [{ value: string; }, { value: true; }]; }; }
+>                                                                                                                                                                                                                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    prop: {
+>prop : { label: string; options: [{ value: number; }, { value: string; }]; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        label: "first",        options: [            {                value: 123,            },            {                value: "foo",            },        ],    } : { label: string; options: [{ value: number; }, { value: string; }]; }
+>                                                                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        label: "first",
+>label : string
+>      : ^^^^^^
+>"first" : "first"
+>        : ^^^^^^^
+
+        options: [
+>options : [{ value: number; }, { value: string; }]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[            {                value: 123,            },            {                value: "foo",            },        ] : [{ value: number; }, { value: string; }]
+>                                                                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            {
+>{                value: 123,            } : { value: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^
+
+                value: 123,
+>value : number
+>      : ^^^^^^
+>123 : 123
+>    : ^^^
+
+            },
+            {
+>{                value: "foo",            } : { value: string; }
+>                                            : ^^^^^^^^^^^^^^^^^^
+
+                value: "foo",
+>value : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+            },
+        ],
+    },
+    other: {
+>other : { label: string; options: [{ value: string; }, { value: true; }]; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        label: "second",        options: [            {                value: "bar",            },            {                value: true,            },        ],    } : { label: string; options: [{ value: string; }, { value: true; }]; }
+>                                                                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        label: "second",
+>label : string
+>      : ^^^^^^
+>"second" : "second"
+>         : ^^^^^^^^
+
+        options: [
+>options : [{ value: string; }, { value: true; }]
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[            {                value: "bar",            },            {                value: true,            },        ] : [{ value: string; }, { value: true; }]
+>                                                                                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            {
+>{                value: "bar",            } : { value: string; }
+>                                            : ^^^^^^^^^^^^^^^^^^
+
+                value: "bar",
+>value : string
+>      : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+            },
+            {
+>{                value: true,            } : { value: true; }
+>                                           : ^^^^^^^^^^^^^^^^
+
+                value: true,
+>value : true
+>      : ^^^^
+>true : true
+>     : ^^^^
+
+            },
+        ],
+    },
+});
+

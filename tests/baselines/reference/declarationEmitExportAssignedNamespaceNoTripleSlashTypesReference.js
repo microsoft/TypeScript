@@ -40,16 +40,15 @@ export * from '@emotion/core';
 //// [get-comp.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getComp = void 0;
+exports.getComp = getComp;
 function getComp() {
     return {};
 }
-exports.getComp = getComp;
 //// [inferred-comp-export.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.obj = void 0;
-var get_comp_1 = require("./get-comp");
+const get_comp_1 = require("./get-comp");
 // this shouldn't need any triple-slash references - it should have a direct import to `react` and that's it
 // This issue (#35343) _only_ reproduces in the test harness when the file in question is in a subfolder
 exports.obj = {
@@ -79,7 +78,6 @@ __exportStar(require("@emotion/core"), exports);
 import { Component } from 'react';
 export declare function getComp(): Component;
 //// [inferred-comp-export.d.ts]
-/// <reference types="react" />
 export declare const obj: {
     comp: import("react").Component;
 };

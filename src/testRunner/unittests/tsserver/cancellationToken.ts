@@ -1,17 +1,14 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
+    projectInfoForSession,
     TestSession,
     TestSessionRequest,
-} from "../helpers/tsserver";
-import {
-    createServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/tsserver.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: cancellationToken", () => {
+describe("unittests:: tsserver:: cancellationToken::", () => {
     // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
     let oldPrepare: ts.AnyFunction;
     before(() => {
@@ -25,10 +22,10 @@ describe("unittests:: tsserver:: cancellationToken", () => {
 
     it("is attached to request", () => {
         const f1 = {
-            path: "/a/b/app.ts",
+            path: "/home/src/projects/myproject/app.ts",
             content: "let xyz = 1;",
         };
-        const host = createServerHost([f1]);
+        const host = TestServerHost.createServerHost([f1]);
         const session = new TestSession({ host, useCancellationToken: true });
 
         session.executeCommandSeq<ts.server.protocol.OpenRequest>({
@@ -54,17 +51,17 @@ describe("unittests:: tsserver:: cancellationToken", () => {
 
     it("Geterr is cancellable", () => {
         const f1 = {
-            path: "/a/app.ts",
+            path: "/home/src/projects/myproject/app.ts",
             content: "let x = 1",
         };
         const config = {
-            path: "/a/tsconfig.json",
+            path: "/home/src/projects/myproject/tsconfig.json",
             content: jsonToReadableText({
                 compilerOptions: {},
             }),
         };
 
-        const host = createServerHost([f1, config]);
+        const host = TestServerHost.createServerHost([f1, config]);
         const session = new TestSession({
             host,
             useCancellationToken: true,
@@ -77,7 +74,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             // send geterr for missing file
             session.executeCommandSeq<ts.server.protocol.GeterrRequest>({
                 command: ts.server.protocol.CommandTypes.Geterr,
-                arguments: { files: ["/a/missing"], delay: 0 },
+                arguments: { files: ["/home/src/projects/myproject/missing"], delay: 0 },
             });
             // Queued files
             host.runQueuedTimeoutCallbacks();
@@ -92,10 +89,7 @@ describe("unittests:: tsserver:: cancellationToken", () => {
             });
 
             // run new request
-            session.executeCommandSeq<ts.server.protocol.ProjectInfoRequest>({
-                command: ts.server.protocol.CommandTypes.ProjectInfo,
-                arguments: { file: f1.path, needFileNameList: false },
-            });
+            projectInfoForSession(session, f1);
 
             // cancel previously issued Geterr
             session.serverCancellationToken.setRequestToCancel(getErrId);
@@ -147,16 +141,16 @@ describe("unittests:: tsserver:: cancellationToken", () => {
 
     it("Lower priority tasks are cancellable", () => {
         const f1 = {
-            path: "/a/app.ts",
+            path: "/home/src/projects/myproject/app.ts",
             content: `{ let x = 1; } var foo = "foo"; var bar = "bar"; var fooBar = "fooBar";`,
         };
         const config = {
-            path: "/a/tsconfig.json",
+            path: "/home/src/projects/myproject/tsconfig.json",
             content: jsonToReadableText({
                 compilerOptions: {},
             }),
         };
-        const host = createServerHost([f1, config]);
+        const host = TestServerHost.createServerHost([f1, config]);
         const session = new TestSession({
             host,
             throttleWaitMilliseconds: 0,

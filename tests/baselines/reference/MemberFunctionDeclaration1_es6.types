@@ -3,7 +3,9 @@
 === MemberFunctionDeclaration1_es6.ts ===
 class C {
 >C : C
+>  : ^
 
    *foo() { }
 >foo : () => Generator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

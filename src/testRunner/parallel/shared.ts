@@ -1,7 +1,5 @@
-import {
-    TestRunnerKind,
-} from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
+import { TestRunnerKind } from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
 
 export interface RunnerTask {
     runner: TestRunnerKind;
@@ -77,7 +75,7 @@ export interface ParallelTimeoutChangeMessage {
 
 export type ParallelClientMessage = ParallelErrorMessage | ParallelResultMessage | ParallelBatchProgressMessage | ParallelTimeoutChangeMessage;
 
-export function shimNoopTestInterface(global: Mocha.MochaGlobals) {
+export function shimNoopTestInterface(global: Mocha.MochaGlobals): void {
     global.before = ts.noop;
     global.after = ts.noop;
     global.beforeEach = ts.noop;

@@ -3,6 +3,7 @@
 === asyncFunctionDeclaration14_es6.ts ===
 async function foo(): Promise<void> {
 >foo : () => Promise<void>
+>    : ^^^^^^             
 
   return;
 }

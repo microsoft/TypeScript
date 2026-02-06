@@ -7,6 +7,7 @@ interface foo {
 }
 
 //// [interfaceOnly.js]
+"use strict";
 
 
 //// [interfaceOnly.d.ts]

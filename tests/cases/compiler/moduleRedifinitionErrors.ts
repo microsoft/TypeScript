@@ -1,4 +1,5 @@
+// @target: es2015
 class A {
 }
-module A {
+namespace A {
 }

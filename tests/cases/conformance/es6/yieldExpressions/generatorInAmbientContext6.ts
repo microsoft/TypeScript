@@ -1,5 +1,5 @@
 //@target: ES6
 //@declaration: true
-module M {
+namespace M {
     export function *generator(): any { }
 }

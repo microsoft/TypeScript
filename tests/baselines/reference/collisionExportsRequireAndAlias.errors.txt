@@ -3,10 +3,10 @@ collisionExportsRequireAndAlias_file2.ts(2,8): error TS2441: Duplicate identifie
 
 
 ==== collisionExportsRequireAndAlias_file2.ts (2 errors) ====
-    import require = require('collisionExportsRequireAndAlias_file1'); // Error
+    import require = require('./collisionExportsRequireAndAlias_file1'); // Error
            ~~~~~~~
 !!! error TS2441: Duplicate identifier 'require'. Compiler reserves name 'require' in top level scope of a module.
-    import exports = require('collisionExportsRequireAndAlias_file3333'); // Error
+    import exports = require('./collisionExportsRequireAndAlias_file3333'); // Error
            ~~~~~~~
 !!! error TS2441: Duplicate identifier 'exports'. Compiler reserves name 'exports' in top level scope of a module.
     export function foo() {

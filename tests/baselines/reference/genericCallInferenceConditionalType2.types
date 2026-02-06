@@ -1,0 +1,98 @@
+//// [tests/cases/compiler/genericCallInferenceConditionalType2.ts] ////
+
+=== genericCallInferenceConditionalType2.ts ===
+// https://github.com/microsoft/TypeScript/issues/59490
+
+type ComponentProps<T> = T extends (props: infer P) => unknown ? P : never;
+>ComponentProps : ComponentProps<T>
+>               : ^^^^^^^^^^^^^^^^^
+>props : P
+>      : ^
+
+declare function wrapComponent<P>(
+>wrapComponent : <P>(component: (props: P) => unknown) => (props: P) => unknown
+>              : ^ ^^         ^^                     ^^^^^                     
+
+  component: (props: P) => unknown,
+>component : (props: P) => unknown
+>          : ^     ^^ ^^^^^       
+>props : P
+>      : ^
+
+): (props: P) => unknown;
+>props : P
+>      : ^
+
+const WrappedComponent = wrapComponent(
+>WrappedComponent : <T extends string = "span">(props: { as?: T | undefined; className?: string; }) => unknown
+>                 : ^ ^^^^^^^^^      ^^^^^^^^^^^     ^^^^^^^^^             ^^^^^^^^^^^^^^      ^^^^^^^^       
+>wrapComponent(  <T extends string = "span">(props: {    as?: T | undefined;    className?: string;  }) => {    return null;  },) : <T extends string = "span">(props: { as?: T | undefined; className?: string; }) => unknown
+>                                                                                                                                 : ^ ^^^^^^^^^      ^^^^^^^^^^^     ^^^^^^^^^             ^^^^^^^^^^^^^^      ^^^^^^^^       
+>wrapComponent : <P>(component: (props: P) => unknown) => (props: P) => unknown
+>              : ^ ^^         ^^                     ^^^^^                     
+
+  <T extends string = "span">(props: {
+><T extends string = "span">(props: {    as?: T | undefined;    className?: string;  }) => {    return null;  } : <T extends string = "span">(props: { as?: T | undefined; className?: string; }) => null
+>                                                                                                               : ^ ^^^^^^^^^      ^^^^^^^^^^^     ^^                                           ^^^^^^^^^
+>props : { as?: T | undefined; className?: string; }
+>      : ^^^^^^^             ^^^^^^^^^^^^^^      ^^^
+
+    as?: T | undefined;
+>as : T | undefined
+>   : ^^^^^^^^^^^^^
+
+    className?: string;
+>className : string | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+
+  }) => {
+    return null;
+  },
+);
+
+type RetrievedProps = ComponentProps<typeof WrappedComponent>;
+>RetrievedProps : { as?: string | undefined; className?: string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>WrappedComponent : <T extends string = "span">(props: { as?: T | undefined; className?: string; }) => unknown
+>                 : ^ ^^^^^^^^^      ^^^^^^^^^^^     ^^^^^^^^^             ^^^^^^^^^^^^^^      ^^^^^^^^       
+
+declare const f: <T>(f: (x: T) => unknown) => (x: T) => unknown
+>f : <T>(f: (x: T) => unknown) => (x: T) => unknown
+>  : ^ ^^ ^^                 ^^^^^                 
+>f : (x: T) => unknown
+>  : ^ ^^ ^^^^^       
+>x : T
+>  : ^
+>x : T
+>  : ^
+
+declare const g: <T extends unknown = string>(x: { foo: T }) => unknown
+>g : <T extends unknown = string>(x: { foo: T; }) => unknown
+>  : ^ ^^^^^^^^^       ^^^^^^^^^^^ ^^           ^^^^^       
+>x : { foo: T; }
+>  : ^^^^^^^ ^^^
+>foo : T
+>    : ^
+
+const h = f(g)
+>h : <T extends unknown = string>(x: { foo: T; }) => unknown
+>  : ^ ^^^^^^^^^       ^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^       
+>f(g) : <T extends unknown = string>(x: { foo: T; }) => unknown
+>     : ^ ^^^^^^^^^       ^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^       
+>f : <T>(f: (x: T) => unknown) => (x: T) => unknown
+>  : ^ ^^ ^^                 ^^^^^                 
+>g : <T extends unknown = string>(x: { foo: T; }) => unknown
+>  : ^ ^^^^^^^^^       ^^^^^^^^^^^ ^^           ^^^^^       
+
+type FirstParameter<T> = T extends (x: infer P) => unknown ? P : unknown
+>FirstParameter : FirstParameter<T>
+>               : ^^^^^^^^^^^^^^^^^
+>x : P
+>  : ^
+
+type X = FirstParameter<typeof h>['foo']
+>X : unknown
+>  : ^^^^^^^
+>h : <T extends unknown = string>(x: { foo: T; }) => unknown
+>  : ^ ^^^^^^^^^       ^^^^^^^^^^^ ^^^^^^^^^ ^^^^^^^^       
+

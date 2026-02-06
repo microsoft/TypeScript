@@ -3,20 +3,26 @@
 === objectTypeLiteralSyntax.ts ===
 var x: {
 >x : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 
     bar: string;
 >bar : string
+>    : ^^^^^^
 }
 
 var y: {
 >y : { foo: string; bar: string; }
+>  : ^^^^^^^      ^^^^^^^      ^^^
 
     foo: string;
 >foo : string
+>    : ^^^^^^
 
     bar: string
 >bar : string
+>    : ^^^^^^
 }

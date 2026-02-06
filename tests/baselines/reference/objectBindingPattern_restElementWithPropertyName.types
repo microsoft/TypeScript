@@ -3,6 +3,9 @@
 === objectBindingPattern_restElementWithPropertyName.ts ===
 const { ...a: b } = {};
 >a : any
+>  : ^^^
 >b : {}
+>  : ^^
 >{} : {}
+>   : ^^
 

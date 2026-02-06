@@ -3,4 +3,5 @@
 === globalThisCollision.js ===
 var globalThis;
 >globalThis : any
+>           : ^^^
 

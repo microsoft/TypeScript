@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @module: commonjs
+
 // @Filename: /a.ts
 ////[|type /*0*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}T|] = number;|]
 ////[|namespace /*1*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 2 |}T|] {
@@ -17,6 +19,6 @@ verify.baselineFindAllReferences('0', '1', '2', '3', '4', 'export');
 verify.baselineRename([r0, r1, r2]);
 for (const range of [r3b, r4b]) {
     goTo.rangeStart(range);
-    verify.renameInfoSucceeded(/*displayName*/ "/a.ts", /*fullDisplayName*/ "/a.ts", /*kind*/ "module", /*kindModifiers*/ "", /*fileToRename*/ "/a.ts", range);
+    verify.renameInfoSucceeded(/*displayName*/ "/a.ts", /*fullDisplayName*/ "./a", /*kind*/ "module", /*kindModifiers*/ "", /*fileToRename*/ "/a.ts", range);
     verify.renameInfoFailed("You cannot rename this element.", { allowRenameOfImportPath: false });
 }

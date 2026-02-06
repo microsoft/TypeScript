@@ -25,42 +25,24 @@ export class BuildResult<A, B, C>{
 
 
 //// [genericMemberFunction.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.BuildResult = exports.FileWithErrors = exports.BuildError = void 0;
-    var BuildError = /** @class */ (function () {
-        function BuildError() {
-        }
-        BuildError.prototype.parent = function () {
-            return undefined;
-        };
-        return BuildError;
-    }());
-    exports.BuildError = BuildError;
-    var FileWithErrors = /** @class */ (function () {
-        function FileWithErrors() {
-        }
-        FileWithErrors.prototype.errors = function () {
-            return undefined;
-        };
-        FileWithErrors.prototype.parent = function () {
-            return undefined;
-        };
-        return FileWithErrors;
-    }());
-    exports.FileWithErrors = FileWithErrors;
-    var BuildResult = /** @class */ (function () {
-        function BuildResult() {
-        }
-        BuildResult.prototype.merge = function (other) {
-            var _this = this;
-            a.b.c.d.e.f.g = 0;
-            removedFiles.forEach(function (each) {
-                _this.removeFile(each);
-            });
-        };
-        return BuildResult;
-    }());
-    exports.BuildResult = BuildResult;
-});
+export class BuildError {
+    parent() {
+        return undefined;
+    }
+}
+export class FileWithErrors {
+    errors() {
+        return undefined;
+    }
+    parent() {
+        return undefined;
+    }
+}
+export class BuildResult {
+    merge(other) {
+        a.b.c.d.e.f.g = 0;
+        removedFiles.forEach((each) => {
+            this.removeFile(each);
+        });
+    }
+}

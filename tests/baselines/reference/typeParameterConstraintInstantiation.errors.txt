@@ -1,0 +1,15 @@
+typeParameterConstraintInstantiation.ts(8,9): error TS2454: Variable 'm' is used before being assigned.
+
+
+==== typeParameterConstraintInstantiation.ts (1 errors) ====
+    // Check that type parameter constraints are properly instantiated
+    
+    interface Mapper<T> {
+        map<U extends T, V extends U[]>(f: (item: T) => U): V;
+    }
+    
+    var m: Mapper<string>;
+    var a = m.map((x: string) => x);  // string[]
+            ~
+!!! error TS2454: Variable 'm' is used before being assigned.
+    

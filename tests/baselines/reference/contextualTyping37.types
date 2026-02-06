@@ -3,11 +3,19 @@
 === contextualTyping37.ts ===
 var foo = <{ id: number; }[]>[{ foo: "s" }, {  }];
 >foo : { id: number; }[]
+>    : ^^^^^^      ^^^^^
 ><{ id: number; }[]>[{ foo: "s" }, {  }] : { id: number; }[]
+>                                        : ^^^^^^      ^^^^^
 >id : number
+>   : ^^^^^^
 >[{ foo: "s" }, {  }] : ({ foo: string; } | {})[]
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ foo: "s" } : { foo: string; }
+>             : ^^^^^^^^^^^^^^^^
 >foo : string
+>    : ^^^^^^
 >"s" : "s"
+>    : ^^^
 >{  } : {}
+>     : ^^
 

@@ -7,11 +7,8 @@ export default class C {}
 //// [multipleExportDefault5.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function bar() { }
 exports.default = bar;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+function bar() { }
+class C {
+}
 exports.default = C;

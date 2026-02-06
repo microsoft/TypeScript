@@ -1,3 +1,4 @@
+// @target: es2015
 var a: number = null;
 var b: boolean = null;
 var c: string = null;
@@ -19,7 +20,7 @@ var g: I;
 g = null; // ok
 I = null; // error
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 M = null; // error
 
 var h: { f(): void } = null;

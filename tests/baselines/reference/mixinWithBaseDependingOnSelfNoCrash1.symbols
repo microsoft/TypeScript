@@ -1,0 +1,32 @@
+//// [tests/cases/conformance/classes/mixinWithBaseDependingOnSelfNoCrash1.ts] ////
+
+=== mixinWithBaseDependingOnSelfNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/60202
+
+declare class Document<Parent> {}
+>Document : Symbol(Document, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 0, 0))
+>Parent : Symbol(Parent, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 2, 23))
+
+declare class BaseItem extends Document<typeof Item> {}
+>BaseItem : Symbol(BaseItem, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 2, 33))
+>Document : Symbol(Document, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 0, 0))
+>Item : Symbol(Item, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 8, 24))
+
+declare function ClientDocumentMixin<
+>ClientDocumentMixin : Symbol(ClientDocumentMixin, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 4, 55))
+
+  BaseClass extends new (...args: any[]) => any,
+>BaseClass : Symbol(BaseClass, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 6, 37))
+>args : Symbol(args, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 7, 25))
+
+>(Base: BaseClass): any;
+>Base : Symbol(Base, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 8, 2))
+>BaseClass : Symbol(BaseClass, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 6, 37))
+
+declare class Item extends ClientDocumentMixin(BaseItem) {}
+>Item : Symbol(Item, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 8, 24))
+>ClientDocumentMixin : Symbol(ClientDocumentMixin, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 4, 55))
+>BaseItem : Symbol(BaseItem, Decl(mixinWithBaseDependingOnSelfNoCrash1.ts, 2, 33))
+
+export {};
+

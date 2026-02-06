@@ -3,8 +3,11 @@
 === parse2.ts ===
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
  foo(
 >foo( : void
+>     : ^^^^
 >foo : () => void
+>    : ^^^^^^^^^^
 }

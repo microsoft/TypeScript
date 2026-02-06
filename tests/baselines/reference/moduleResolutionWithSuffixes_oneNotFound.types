@@ -3,8 +3,10 @@
 === /index.ts ===
 import { ios } from "./foo";
 >ios : any
+>    : ^^^
 
 === /foo.ts ===
 export function base() {}
 >base : () => void
+>     : ^^^^^^^^^^
 

@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/classFieldsBrokenConstructorEmitNoCrash1.ts] ////
+
+=== classFieldsBrokenConstructorEmitNoCrash1.ts ===
+class Test {
+>Test : Symbol(Test, Decl(classFieldsBrokenConstructorEmitNoCrash1.ts, 0, 0))
+
+  prop = 42;
+>prop : Symbol(Test.prop, Decl(classFieldsBrokenConstructorEmitNoCrash1.ts, 0, 12))
+
+  constructor
+}
+

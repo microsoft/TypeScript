@@ -2,7 +2,7 @@
 
 //// [customAsyncIterator.ts]
 // GH: https://github.com/microsoft/TypeScript/issues/33239
-class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> {
+class ConstantIterator<T> implements AsyncIterator<T, void, T | undefined> {
     constructor(private constant: T) {
     }
     async next(value?: T): Promise<IteratorResult<T>> {
@@ -14,6 +14,7 @@ class ConstantIterator<T> implements AsyncIterator<T, undefined, T | undefined> 
 }
 
 //// [customAsyncIterator.js]
+"use strict";
 // GH: https://github.com/microsoft/TypeScript/issues/33239
 class ConstantIterator {
     constructor(constant) {

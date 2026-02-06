@@ -3,4 +3,5 @@
 === parserEqualsGreaterThanAfterFunction1.ts ===
 function =>
 > : () => any
+> : ^^^^^^^^^
 

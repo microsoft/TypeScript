@@ -7,11 +7,14 @@ interface Base {}
 
 class C extends null {
 >C : C
+>  : ^
 
   constructor() {
     super();
 >super() : void
+>        : ^^^^
 >super : any
+>      : ^^^
   }
 }
 interface C extends Base {}

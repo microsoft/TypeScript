@@ -1,0 +1,253 @@
+overshifts.ts(2,1): suggestion TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+overshifts.ts(3,1): suggestion TS6807: This operation can be simplified. This shift is identical to `1 << 27`.
+overshifts.ts(4,1): suggestion TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+overshifts.ts(6,1): suggestion TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+overshifts.ts(7,1): suggestion TS6807: This operation can be simplified. This shift is identical to `1 << -27`.
+overshifts.ts(8,1): suggestion TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+overshifts.ts(11,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+overshifts.ts(12,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 27`.
+overshifts.ts(13,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+overshifts.ts(15,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+overshifts.ts(16,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> -27`.
+overshifts.ts(17,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+overshifts.ts(20,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+overshifts.ts(21,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 27`.
+overshifts.ts(22,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+overshifts.ts(24,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+overshifts.ts(25,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> -27`.
+overshifts.ts(26,1): suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+overshifts.ts(30,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= 0`.
+overshifts.ts(31,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= 27`.
+overshifts.ts(32,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= 0`.
+overshifts.ts(34,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= 0`.
+overshifts.ts(35,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= -27`.
+overshifts.ts(36,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= 0`.
+overshifts.ts(39,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= 0`.
+overshifts.ts(40,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= 27`.
+overshifts.ts(41,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= 0`.
+overshifts.ts(43,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= 0`.
+overshifts.ts(44,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= -27`.
+overshifts.ts(45,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= 0`.
+overshifts.ts(48,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= 0`.
+overshifts.ts(49,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= 27`.
+overshifts.ts(50,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= 0`.
+overshifts.ts(52,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= 0`.
+overshifts.ts(53,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= -27`.
+overshifts.ts(54,1): suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= 0`.
+overshifts.ts(58,9): error TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+overshifts.ts(59,9): error TS6807: This operation can be simplified. This shift is identical to `1 << 27`.
+overshifts.ts(60,9): error TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+overshifts.ts(62,9): error TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+overshifts.ts(63,9): error TS6807: This operation can be simplified. This shift is identical to `1 << -27`.
+overshifts.ts(64,9): error TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+overshifts.ts(69,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+overshifts.ts(70,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 27`.
+overshifts.ts(71,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+overshifts.ts(73,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+overshifts.ts(74,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> -27`.
+overshifts.ts(75,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+overshifts.ts(80,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+overshifts.ts(81,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 27`.
+overshifts.ts(82,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+overshifts.ts(84,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+overshifts.ts(85,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> -27`.
+overshifts.ts(86,9): error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+
+
+==== overshifts.ts (54 errors) ====
+    1 << 1; // ok
+    1 << 32; // overshift
+    ~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+    1 << 123;
+    ~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `1 << 27`.
+    1 << 1024;
+    ~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+    1 << -1; // OK-ish
+    1 << -32; // backwards overshift
+    ~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+    1 << -123;
+    ~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `1 << -27`.
+    1 << -1024;
+    ~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+    
+    0xFF_FF_FF_FF >> 1; // ok
+    0xFF_FF_FF_FF >> 32; // overshift
+    ~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+    0xFF_FF_FF_FF >> 123;
+    ~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 27`.
+    0xFF_FF_FF_FF >> 1024;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+    0xFF_FF_FF_FF >> -1; // OK-ish
+    0xFF_FF_FF_FF >> -32; // backwards overshift
+    ~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+    0xFF_FF_FF_FF >> -123;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> -27`.
+    0xFF_FF_FF_FF >> -1024;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+    
+    0xFF_FF_FF_FF >>> 1; // ok
+    0xFF_FF_FF_FF >>> 32; // overshift
+    ~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+    0xFF_FF_FF_FF >>> 123;
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 27`.
+    0xFF_FF_FF_FF >>> 1024;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+    0xFF_FF_FF_FF >>> -1; // OK-ish
+    0xFF_FF_FF_FF >>> -32; // backwards overshift
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+    0xFF_FF_FF_FF >>> -123;
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> -27`.
+    0xFF_FF_FF_FF >>> -1024;
+    ~~~~~~~~~~~~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+    
+    let x = 1;
+    x <<= 1; // ok
+    x <<= 32; // overshift
+    ~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= 0`.
+    x <<= 123;
+    ~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= 27`.
+    x <<= 1024;
+    ~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= 0`.
+    x <<= -1; // OK-ish
+    x <<= -32; // backwards overshift
+    ~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= 0`.
+    x <<= -123;
+    ~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= -27`.
+    x <<= -1024;
+    ~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x <<= 0`.
+    
+    x >>= 1; // ok
+    x >>= 32; // overshift
+    ~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= 0`.
+    x >>= 123;
+    ~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= 27`.
+    x >>= 1024;
+    ~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= 0`.
+    x >>= -1; // OK-ish
+    x >>= -32; // backwards overshift
+    ~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= 0`.
+    x >>= -123;
+    ~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= -27`.
+    x >>= -1024;
+    ~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>= 0`.
+    
+    x >>>= 1; // ok
+    x >>>= 32; // overshift
+    ~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= 0`.
+    x >>>= 123;
+    ~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= 27`.
+    x >>>= 1024;
+    ~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= 0`.
+    x >>>= -1; // OK-ish
+    x >>>= -32; // backwards overshift
+    ~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= 0`.
+    x >>>= -123;
+    ~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= -27`.
+    x >>>= -1024;
+    ~~~~~~~~~~~~
+!!! suggestion TS6807: This operation can be simplified. This shift is identical to `x >>>= 0`.
+    
+    enum One {
+        A = 1 << 1, // ok
+        B = 1 << 32, // overshift
+            ~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+        C = 1 << 123,
+            ~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `1 << 27`.
+        D = 1 << 1024,
+            ~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+        E = 1 << -1, // OK-ish
+        F = 1 << -32, // backwards overshift
+            ~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+        G = 1 << -123,
+            ~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `1 << -27`.
+        H = 1 << -1024,
+            ~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `1 << 0`.
+    }
+    
+    enum Two {
+        A = 0xFF_FF_FF_FF >> 1, // ok
+        B = 0xFF_FF_FF_FF >> 32, // overshift
+            ~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+        C = 0xFF_FF_FF_FF >> 123,
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 27`.
+        D = 0xFF_FF_FF_FF >> 1024,
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+        E = 0xFF_FF_FF_FF >> -1, // OK-ish
+        F = 0xFF_FF_FF_FF >> -32, // backwards overshift
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+        G = 0xFF_FF_FF_FF >> -123,
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> -27`.
+        H = 0xFF_FF_FF_FF >> -1024,
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >> 0`.
+    }
+    
+    enum Three {
+        A = 0xFF_FF_FF_FF >>> 1, // ok
+        B = 0xFF_FF_FF_FF >>> 32, // overshift
+            ~~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+        C = 0xFF_FF_FF_FF >>> 123,
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 27`.
+        D = 0xFF_FF_FF_FF >>> 1024,
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+        E = 0xFF_FF_FF_FF >>> -1, // OK-ish
+        F = 0xFF_FF_FF_FF >>> -32, // backwards overshift
+            ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+        G = 0xFF_FF_FF_FF >>> -123,
+            ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> -27`.
+        H = 0xFF_FF_FF_FF >>> -1024,
+            ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6807: This operation can be simplified. This shift is identical to `0xFF_FF_FF_FF >>> 0`.
+    }
+    

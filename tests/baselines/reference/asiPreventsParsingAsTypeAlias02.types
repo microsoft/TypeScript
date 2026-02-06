@@ -12,6 +12,7 @@ var Foo;
 
 namespace container {
 >container : typeof container
+>          : ^^^^^^^^^^^^^^^^
 
     type
 >type : any

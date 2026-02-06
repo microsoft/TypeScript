@@ -6,4 +6,5 @@ declare function ff(t: number): void;
 ff(ohno)
 
 //// [elaborationForPossiblyCallableTypeStillReferencesArgumentAtTopLevel.js]
+"use strict";
 ff(ohno);

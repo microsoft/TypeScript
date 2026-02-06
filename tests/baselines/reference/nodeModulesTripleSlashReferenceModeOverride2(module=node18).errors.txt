@@ -1,0 +1,34 @@
+/index.ts(3,1): error TS2304: Cannot find name 'bar'.
+
+
+==== /index.ts (1 errors) ====
+    /// <reference types="pkg" />
+    foo; // foo should resolve while bar should not, since index.js is esm
+    bar;
+    ~~~
+!!! error TS2304: Cannot find name 'bar'.
+    export {};
+==== /node_modules/pkg/package.json (0 errors) ====
+    {
+        "name": "pkg",
+        "version": "0.0.1",
+        "exports": {
+            "import": "./import.js",
+            "require": "./require.js"
+        }
+    }
+==== /node_modules/pkg/import.d.ts (0 errors) ====
+    export {};
+    declare global {
+        var foo: number;
+    }
+==== /node_modules/pkg/require.d.ts (0 errors) ====
+    export {};
+    declare global {
+        var bar: number;
+    }
+==== /package.json (0 errors) ====
+    {
+        "private": true,
+        "type": "module"
+    }

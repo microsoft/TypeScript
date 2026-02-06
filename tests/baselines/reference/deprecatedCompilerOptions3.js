@@ -4,5 +4,6 @@
 const a = 1;
 
 
-//// [dist.js]
-var a = 1;
+//// [a.js]
+"use strict";
+const a = 1;

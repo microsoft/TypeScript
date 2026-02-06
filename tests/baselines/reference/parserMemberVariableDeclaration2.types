@@ -3,8 +3,11 @@
 === parserMemberVariableDeclaration2.ts ===
 class C {
 >C : C
+>  : ^
 
   static static Foo;
 >static : any
+>       : ^^^
 >Foo : any
+>    : ^^^
 }

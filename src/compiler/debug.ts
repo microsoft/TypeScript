@@ -1,4 +1,4 @@
-import * as ts from "./_namespaces/ts";
+import * as ts from "./_namespaces/ts.js";
 import {
     AnyFunction,
     AssertionLevel,
@@ -10,7 +10,6 @@ import {
     FlowFlags,
     FlowLabel,
     FlowNode,
-    FlowNodeBase,
     FlowSwitchClause,
     getEffectiveModifierFlagsNoCache,
     getEmitFlags,
@@ -62,9 +61,11 @@ import {
     LiteralType,
     map,
     MatchingKeys,
+    maxBy,
     ModifierFlags,
     Node,
     NodeArray,
+    NodeCheckFlags,
     NodeFlags,
     nodeIsSynthesized,
     noop,
@@ -78,11 +79,11 @@ import {
     SignatureFlags,
     SnippetKind,
     SortedReadonlyArray,
-    stableSort,
     Symbol,
     SymbolFlags,
     symbolName,
     SyntaxKind,
+    toSorted,
     TransformFlags,
     Type,
     TypeFacts,
@@ -92,7 +93,7 @@ import {
     unescapeLeadingUnderscores,
     VarianceFlags,
     zipWith,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export enum LogLevel {
@@ -112,7 +113,7 @@ export interface LoggingHost {
 export namespace Debug {
     /* eslint-disable prefer-const */
     let currentAssertionLevel = AssertionLevel.None;
-    export let currentLogLevel = LogLevel.Warning;
+    export let currentLogLevel: LogLevel = LogLevel.Warning;
     export let isDebugging = false;
     export let loggingHost: LoggingHost | undefined;
     /* eslint-enable prefer-const */
@@ -153,11 +154,11 @@ export namespace Debug {
 
     const assertionCache: Partial<Record<AssertionKeys, { level: AssertionLevel; assertion: AnyFunction; }>> = {};
 
-    export function getAssertionLevel() {
+    export function getAssertionLevel(): AssertionLevel {
         return currentAssertionLevel;
     }
 
-    export function setAssertionLevel(level: AssertionLevel) {
+    export function setAssertionLevel(level: AssertionLevel): void {
         const prevAssertionLevel = currentAssertionLevel;
         currentAssertionLevel = level;
 
@@ -245,13 +246,13 @@ export namespace Debug {
     }
 
     export function assertIsDefined<T>(value: T, message?: string, stackCrawlMark?: AnyFunction): asserts value is NonNullable<T> {
-        // eslint-disable-next-line no-null/no-null
+        // eslint-disable-next-line no-restricted-syntax
         if (value === undefined || value === null) {
             fail(message, stackCrawlMark || assertIsDefined);
         }
     }
 
-    export function checkDefined<T>(value: T | null | undefined, message?: string, stackCrawlMark?: AnyFunction): T {
+    export function checkDefined<T>(value: T | null | undefined, message?: string, stackCrawlMark?: AnyFunction): T { // eslint-disable-line no-restricted-syntax
         assertIsDefined(value, message, stackCrawlMark || checkDefined);
         return value;
     }
@@ -364,7 +365,7 @@ export namespace Debug {
     export function type<T>(value: unknown): asserts value is T;
     export function type(_value: unknown) {}
 
-    export function getFunctionName(func: AnyFunction) {
+    export function getFunctionName(func: AnyFunction): string {
         if (typeof func !== "function") {
             return "";
         }
@@ -385,7 +386,7 @@ export namespace Debug {
     /**
      * Formats an enum value as a string for debugging and debug assertions.
      */
-    export function formatEnum(value = 0, enumObject: any, isFlags?: boolean) {
+    export function formatEnum(value = 0, enumObject: any, isFlags?: boolean): string {
         const members = getEnumMembers(enumObject);
         if (value === 0) {
             return members.length > 0 && members[0][0] === 0 ? members[0][1] : "0";
@@ -435,7 +436,7 @@ export namespace Debug {
             }
         }
 
-        const sorted = stableSort<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
+        const sorted = toSorted<[number, string]>(result, (x, y) => compareValues(x[0], y[0]));
         enumMemberCache.set(enumObject, sorted);
         return sorted;
     }
@@ -454,6 +455,10 @@ export namespace Debug {
 
     export function formatNodeFlags(flags: NodeFlags | undefined): string {
         return formatEnum(flags, (ts as any).NodeFlags, /*isFlags*/ true);
+    }
+
+    export function formatNodeCheckFlags(flags: NodeCheckFlags | undefined): string {
+        return formatEnum(flags, (ts as any).NodeCheckFlags, /*isFlags*/ true);
     }
 
     export function formatModifierFlags(flags: ModifierFlags | undefined): string {
@@ -506,14 +511,14 @@ export namespace Debug {
 
     let isDebugInfoEnabled = false;
 
-    let flowNodeProto: FlowNodeBase | undefined;
+    let flowNodeProto: FlowNode | undefined;
 
-    function attachFlowNodeDebugInfoWorker(flowNode: FlowNodeBase) {
+    function attachFlowNodeDebugInfoWorker(flowNode: FlowNode) {
         if (!("__debugFlowFlags" in flowNode)) { // eslint-disable-line local/no-in-operator
             Object.defineProperties(flowNode, {
                 // for use with vscode-js-debug's new customDescriptionGenerator in launch.json
                 __tsDebuggerDisplay: {
-                    value(this: FlowNodeBase) {
+                    value(this: FlowNode) {
                         const flowHeader = this.flags & FlowFlags.Start ? "FlowStart" :
                             this.flags & FlowFlags.BranchLabel ? "FlowBranchLabel" :
                             this.flags & FlowFlags.LoopLabel ? "FlowLoopLabel" :
@@ -531,12 +536,12 @@ export namespace Debug {
                     },
                 },
                 __debugFlowFlags: {
-                    get(this: FlowNodeBase) {
+                    get(this: FlowNode) {
                         return formatEnum(this.flags, (ts as any).FlowFlags, /*isFlags*/ true);
                     },
                 },
                 __debugToString: {
-                    value(this: FlowNodeBase) {
+                    value(this: FlowNode) {
                         return formatControlFlowGraph(this);
                     },
                 },
@@ -544,13 +549,13 @@ export namespace Debug {
         }
     }
 
-    export function attachFlowNodeDebugInfo(flowNode: FlowNodeBase) {
+    export function attachFlowNodeDebugInfo(flowNode: FlowNode): FlowNode {
         if (isDebugInfoEnabled) {
             if (typeof Object.setPrototypeOf === "function") {
                 // if we're in es2015, attach the method to a shared prototype for `FlowNode`
                 // so the method doesn't show up in the watch window.
                 if (!flowNodeProto) {
-                    flowNodeProto = Object.create(Object.prototype) as FlowNodeBase;
+                    flowNodeProto = Object.create(Object.prototype) as FlowNode;
                     attachFlowNodeDebugInfoWorker(flowNodeProto);
                 }
                 Object.setPrototypeOf(flowNode, flowNodeProto);
@@ -560,6 +565,7 @@ export namespace Debug {
                 attachFlowNodeDebugInfoWorker(flowNode);
             }
         }
+        return flowNode;
     }
 
     let nodeArrayProto: NodeArray<Node> | undefined;
@@ -575,7 +581,7 @@ export namespace Debug {
                         // This regex can trigger slow backtracking because of overlapping potential captures.
                         // We don't care, this is debug code that's only enabled with a debugger attached -
                         // we're just taking note of it for anyone checking regex performance in the future.
-                        defaultValue = String(defaultValue).replace(/(?:,[\s\w\d_]+:[^,]+)+\]$/, "]");
+                        defaultValue = String(defaultValue).replace(/(?:,[\s\w]+:[^,]+)+\]$/, "]");
                         return `NodeArray ${defaultValue}`;
                     },
                 },
@@ -583,7 +589,7 @@ export namespace Debug {
         }
     }
 
-    export function attachNodeArrayDebugInfo(array: NodeArray<Node>) {
+    export function attachNodeArrayDebugInfo(array: NodeArray<Node>): void {
         if (isDebugInfoEnabled) {
             if (typeof Object.setPrototypeOf === "function") {
                 // if we're in es2015, attach the method to a shared prototype for `NodeArray`
@@ -604,7 +610,7 @@ export namespace Debug {
     /**
      * Injects debug information into frequently used types.
      */
-    export function enableDebugInfo() {
+    export function enableDebugInfo(): void {
         if (isDebugInfoEnabled) return;
 
         // avoid recomputing
@@ -800,7 +806,7 @@ export namespace Debug {
         isDebugInfoEnabled = true;
     }
 
-    export function formatVariance(varianceFlags: VarianceFlags) {
+    export function formatVariance(varianceFlags: VarianceFlags): string {
         const variance = varianceFlags & VarianceFlags.VarianceMask;
         let result = variance === VarianceFlags.Invariant ? "in out" :
             variance === VarianceFlags.Bivariant ? "[bivariant]" :
@@ -855,11 +861,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
         return mapper;
     }
 
-    export function printControlFlowGraph(flowNode: FlowNode) {
+    export function printControlFlowGraph(flowNode: FlowNode): void {
         return console.log(formatControlFlowGraph(flowNode));
     }
 
-    export function formatControlFlowGraph(flowNode: FlowNode) {
+    export function formatControlFlowGraph(flowNode: FlowNode): string {
         let nextDebugFlowId = -1;
 
         function getDebugFlowNodeId(f: FlowNode) {
@@ -935,7 +941,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             FlowFlags.Condition |
             FlowFlags.ArrayMutation;
 
-        const links: Record<number, FlowGraphNode> = Object.create(/*o*/ null); // eslint-disable-line no-null/no-null
+        const links: Record<number, FlowGraphNode> = Object.create(/*o*/ null); // eslint-disable-line no-restricted-syntax
         const nodes: FlowGraphNode[] = [];
         const edges: FlowGraphEdge[] = [];
         const root = buildGraphNode(flowNode, new Set());
@@ -953,8 +959,8 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             return !!(f.flags & FlowFlags.SwitchClause);
         }
 
-        function hasAntecedents(f: FlowNode): f is FlowLabel & { antecedents: FlowNode[]; } {
-            return !!(f.flags & FlowFlags.Label) && !!(f as FlowLabel).antecedents;
+        function hasAntecedents(f: FlowNode): f is FlowLabel & { antecedent: FlowNode[]; } {
+            return !!(f.flags & FlowFlags.Label) && !!(f as FlowLabel).antecedent;
         }
 
         function hasAntecedent(f: FlowNode): f is Extract<FlowNode, { antecedent: FlowNode; }> {
@@ -1008,7 +1014,7 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 links[id] = graphNode = { id, flowNode, edges: [], text: "", lane: -1, endLane: -1, level: -1, circular: false };
                 nodes.push(graphNode);
                 if (hasAntecedents(flowNode)) {
-                    for (const antecedent of flowNode.antecedents) {
+                    for (const antecedent of flowNode.antecedent) {
                         buildGraphEdge(graphNode, antecedent, seen);
                     }
                 }
@@ -1097,15 +1103,11 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
             if (circular) {
                 text = `${text}#${getDebugFlowNodeId(flowNode)}`;
             }
-            if (hasNode(flowNode)) {
-                if (flowNode.node) {
-                    text += ` (${getNodeText(flowNode.node)})`;
-                }
-            }
-            else if (isFlowSwitchClause(flowNode)) {
+            if (isFlowSwitchClause(flowNode)) {
                 const clauses: string[] = [];
-                for (let i = flowNode.clauseStart; i < flowNode.clauseEnd; i++) {
-                    const clause = flowNode.switchStatement.caseBlock.clauses[i];
+                const { switchStatement, clauseStart, clauseEnd } = flowNode.node;
+                for (let i = clauseStart; i < clauseEnd; i++) {
+                    const clause = switchStatement.caseBlock.clauses[i];
                     if (isDefaultClause(clause)) {
                         clauses.push("default");
                     }
@@ -1115,12 +1117,17 @@ m2: ${(this.mapper2 as unknown as DebugTypeMapper).__debugToString().split("\n")
                 }
                 text += ` (${clauses.join(", ")})`;
             }
+            else if (hasNode(flowNode)) {
+                if (flowNode.node) {
+                    text += ` (${getNodeText(flowNode.node)})`;
+                }
+            }
             return circular === "circularity" ? `Circular(${text})` : text;
         }
 
         function renderGraph() {
             const columnCount = columnWidths.length;
-            const laneCount = nodes.reduce((x, n) => Math.max(x, n.lane), 0) + 1;
+            const laneCount = maxBy(nodes, 0, n => n.lane) + 1;
             const lanes: string[] = fill(Array(laneCount), "");
             const grid: (FlowGraphNode | undefined)[][] = columnWidths.map(() => Array(laneCount));
             const connectors: Connection[][] = columnWidths.map(() => fill(Array(laneCount), 0));

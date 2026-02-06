@@ -1,15 +1,19 @@
+import * as ts from "../../_namespaces/ts.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
-    jsonToReadableText,
-} from "../helpers";
-import {
+    baselineTsserverLogs,
     GetErrForProjectDiagnostics,
+    openFilesForSession,
+    TestSession,
     verifyGetErrScenario,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: with project references and error reporting", () => {
+describe("unittests:: tsserver:: projectReferenceErrors:: with project references and error reporting", () => {
     const dependecyLocation = `/user/username/projects/myproject/dependency`;
     const usageLocation = `/user/username/projects/myproject/usage`;
 
@@ -136,5 +140,52 @@ fnErr();
             }),
         };
         verifyUsageAndDependency("with non module", dependencyTs, dependencyConfig, usageTs, usageConfig);
+    });
+
+    it("when options for dependency project are different from usage project", () => {
+        const host = TestServerHost.createServerHost({
+            "/home/src/projects/project/a/index.ts": dedent`
+                export function f2() {
+                    return console.log()
+                }
+            `,
+            "/home/src/projects/project/a/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                    outDir: "../dist/a",
+                },
+                include: ["."],
+            }),
+            "/home/src/projects/project/b/index.ts": dedent`
+                    import { f2 } from '../a/index.js'
+                    export function f() {
+                        f2()
+                        return console.log('')
+                    }
+                `,
+            "/home/src/projects/project/b/tsconfig.json": jsonToReadableText({
+                compilerOptions: {
+                    composite: true,
+                    isolatedDeclarations: true,
+                    outDir: "../dist/b",
+                },
+                references: [{ path: "../a/" }],
+                include: ["."],
+            }),
+        });
+        const session = new TestSession(host);
+        openFilesForSession(["/home/src/projects/project/b/index.ts"], session);
+
+        session.executeCommandSeq<ts.server.protocol.GeterrForProjectRequest>({
+            command: ts.server.protocol.CommandTypes.GeterrForProject,
+            arguments: { delay: 0, file: "/home/src/projects/project/b/index.ts" },
+        });
+        host.runQueuedTimeoutCallbacks();
+        host.runQueuedImmediateCallbacks();
+        host.runQueuedImmediateCallbacks();
+        host.runQueuedTimeoutCallbacks();
+        host.runQueuedImmediateCallbacks();
+        host.runQueuedImmediateCallbacks();
+        baselineTsserverLogs("projectReferenceErrors", "when options for dependency project are different from usage project", session);
     });
 });

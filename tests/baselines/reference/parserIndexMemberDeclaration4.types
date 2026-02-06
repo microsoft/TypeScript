@@ -3,8 +3,11 @@
 === parserIndexMemberDeclaration4.ts ===
 class C {
 >C : C
+>  : ^
 
    [a: string]: number; public v: number
 >a : string
+>  : ^^^^^^
 >v : number
+>  : ^^^^^^
 }

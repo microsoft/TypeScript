@@ -3,6 +3,7 @@
 === parserClassDeclaration26.ts ===
 class C {
 >C : C
+>  : ^
 
    var
 >var : any

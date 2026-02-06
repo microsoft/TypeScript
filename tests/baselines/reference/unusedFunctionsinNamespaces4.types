@@ -3,14 +3,18 @@
 === unusedFunctionsinNamespaces4.ts ===
 namespace Validation {
 >Validation : typeof Validation
+>           : ^^^^^^^^^^^^^^^^^
 
     var function1 = function() {
 >function1 : () => void
+>          : ^^^^^^^^^^
 >function() {    } : () => void
+>                  : ^^^^^^^^^^
     }
 
     export function function2() {
 >function2 : () => void
+>          : ^^^^^^^^^^
 
     }
 }

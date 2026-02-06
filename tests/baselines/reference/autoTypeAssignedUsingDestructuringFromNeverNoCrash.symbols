@@ -1,0 +1,24 @@
+//// [tests/cases/compiler/autoTypeAssignedUsingDestructuringFromNeverNoCrash.ts] ////
+
+=== autoTypeAssignedUsingDestructuringFromNeverNoCrash.ts ===
+// https://github.com/microsoft/TypeScript/issues/57582
+
+declare const b: null;
+>b : Symbol(b, Decl(autoTypeAssignedUsingDestructuringFromNeverNoCrash.ts, 2, 13))
+
+let file;
+>file : Symbol(file, Decl(autoTypeAssignedUsingDestructuringFromNeverNoCrash.ts, 3, 3))
+
+if (b === null) {
+>b : Symbol(b, Decl(autoTypeAssignedUsingDestructuringFromNeverNoCrash.ts, 2, 13))
+
+  // empty
+} else {
+  [file] = b;
+>file : Symbol(file, Decl(autoTypeAssignedUsingDestructuringFromNeverNoCrash.ts, 3, 3))
+>b : Symbol(b, Decl(autoTypeAssignedUsingDestructuringFromNeverNoCrash.ts, 2, 13))
+}
+
+file; // request flow type here
+>file : Symbol(file, Decl(autoTypeAssignedUsingDestructuringFromNeverNoCrash.ts, 3, 3))
+

@@ -3,9 +3,11 @@
 === typeAliasExport.ts ===
 declare module "a" {
 >"a" : typeof import("a")
+>    : ^^^^^^^^^^^^^^^^^^
 
   export default undefined
 >undefined : undefined
+>          : ^^^^^^^^^
 
   export var a;
 >a : any

@@ -1,6 +1,8 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /packages/a/package.json
+// @lib: es5
+
+// @Filename: /home/src/workspaces/project/packages/a/package.json
 //// {
 ////   "name": "package-a",
 ////   "dependencies": {
@@ -8,18 +10,18 @@
 ////   }
 //// }
 
-// @Filename: /packages/a/index.js
+// @Filename: /home/src/workspaces/project/packages/a/index.js
 //// packageB/**/
 
-// @Filename: /packages/b/package.json
+// @Filename: /home/src/workspaces/project/packages/b/package.json
 //// { "name": "package-b", "main": "index.js" }
 
-// @Filename: /packages/b/index.js
+// @Filename: /home/src/workspaces/project/packages/b/index.js
 //// export const packageB = "package-b";
 
-// @link: /packages/b -> /packages/a/node_modules/package-b
+// @link: /home/src/workspaces/project/packages/b -> /home/src/workspaces/project/packages/a/node_modules/package-b
 
-config.setCompilerOptionsForInferredProjects({ module: "commonjs", allowJs: true, maxNodeModulesJsDepth: 2 });
+config.setCompilerOptionsForInferredProjects({ module: "commonjs", lib: ["es5"], allowJs: true, maxNodeModulesJsDepth: 2 });
 goTo.marker("");
 verify.completions({
   marker: "",

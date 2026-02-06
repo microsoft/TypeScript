@@ -1,13 +1,10 @@
-missingFunctionImplementation2_a.ts(3,19): error TS2384: Overload signatures must all be ambient or non-ambient.
 missingFunctionImplementation2_b.ts(1,17): error TS2391: Function implementation is missing or not immediately following the declaration.
 
 
-==== missingFunctionImplementation2_a.ts (1 errors) ====
+==== missingFunctionImplementation2_a.ts (0 errors) ====
     export {};
     declare module "./missingFunctionImplementation2_b" {
       export function f(a, b): void;
-                      ~
-!!! error TS2384: Overload signatures must all be ambient or non-ambient.
     }
     
 ==== missingFunctionImplementation2_b.ts (1 errors) ====

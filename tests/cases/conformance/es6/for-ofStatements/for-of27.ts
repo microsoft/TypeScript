@@ -1,6 +1,6 @@
 ﻿//@target: ES6
-class StringIterator {
+class MyStringIterator {
     [Symbol.iterator]: any;
 }
 
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }

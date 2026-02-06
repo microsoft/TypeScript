@@ -3,7 +3,9 @@
 === declFileClassWithIndexSignature.ts ===
 class BlockIntrinsics {
 >BlockIntrinsics : BlockIntrinsics
+>                : ^^^^^^^^^^^^^^^
 
     [s: string]: string;
 >s : string
+>  : ^^^^^^
 }

@@ -4,9 +4,11 @@
 export interface T {
     value: string
 >value : string
+>      : ^^^^^^
 }
 
 === main.ts ===
 export const a: import("./test") = null;
 >a : any
+>  : ^^^
 

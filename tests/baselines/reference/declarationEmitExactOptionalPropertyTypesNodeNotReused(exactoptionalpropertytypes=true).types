@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/declarationEmitExactOptionalPropertyTypesNodeNotReused.ts] ////
+
+=== declarationEmitExactOptionalPropertyTypesNodeNotReused.ts ===
+type InexactOptionals<A> = {
+>InexactOptionals : InexactOptionals<A>
+>                 : ^^^^^^^^^^^^^^^^^^^
+
+    [K in keyof A as undefined extends A[K] ? K : never]?: undefined extends A[K]
+    ? A[K] | undefined
+    : A[K];
+} & {
+    [K in keyof A as undefined extends A[K] ? never : K]: A[K];
+};
+
+type In = {
+>In : In
+>   : ^^
+
+    foo?: string;
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
+
+    bar: number;
+>bar : number
+>    : ^^^^^^
+
+    baz: undefined;
+>baz : undefined
+>    : ^^^^^^^^^
+}
+
+type Out = InexactOptionals<In>
+>Out : Out
+>    : ^^^
+
+const foo = <A = {}>() => (x: Out & A) => null
+>foo : <A = {}>() => (x: Out & A) => null
+>    : ^ ^^^^^^^^^^^^^          ^^^^^^^^^
+><A = {}>() => (x: Out & A) => null : <A = {}>() => (x: Out & A) => null
+>                                   : ^ ^^^^^^^^^^^^^          ^^^^^^^^^
+>(x: Out & A) => null : (x: Out & A) => null
+>                     : ^ ^^       ^^^^^^^^^
+>x : { foo?: string | undefined; baz?: undefined; } & { bar: number; } & A
+>  : ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^      ^^^^^^^
+
+export const baddts = foo()
+>baddts : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; }) => null
+>       : ^ ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>foo() : (x: { foo?: string | undefined; baz?: undefined; } & { bar: number; }) => null
+>      : ^ ^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^      ^^^^^^^^^^^^
+>foo : <A = {}>() => (x: Out & A) => null
+>    : ^ ^^^^^^^^^^^^^          ^^^^^^^^^
+

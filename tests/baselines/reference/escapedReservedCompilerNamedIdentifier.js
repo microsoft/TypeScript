@@ -33,6 +33,7 @@ var o5 = {
 var b5 = o5["_proto__"];
 
 //// [escapedReservedCompilerNamedIdentifier.js]
+"use strict";
 // double underscores
 var __proto__ = 10;
 var o = {

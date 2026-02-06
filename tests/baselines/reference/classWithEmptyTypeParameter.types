@@ -3,4 +3,5 @@
 === classWithEmptyTypeParameter.ts ===
 class C<> {
 >C : C
+>  : ^
 }

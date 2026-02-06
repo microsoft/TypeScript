@@ -4,11 +4,12 @@
     "inputFiles": [
         "test.ts"
     ],
-    "out": "bin/test.js",
+    "outFile": "bin/test.js",
     "sourceMap": true,
     "declaration": true,
     "baselineCheck": true,
     "sourceRoot": "http://typescript.codeplex.com/",
+    "strict": false,
     "resolvedInputFiles": [
         "lib.es5.d.ts",
         "lib.decorators.d.ts",

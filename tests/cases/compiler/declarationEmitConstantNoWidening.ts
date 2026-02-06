@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 export const FOO = 'FOO'; 
 export class Bar {

@@ -3,10 +3,15 @@
 === classExpressionES62.ts ===
 class D { }
 >D : D
+>  : ^
 
 var v = class C extends D {};
 >v : typeof C
+>  : ^^^^^^^^
 >class C extends D {} : typeof C
+>                     : ^^^^^^^^
 >C : typeof C
+>  : ^^^^^^^^
 >D : D
+>  : ^
 

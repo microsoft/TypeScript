@@ -1,15 +1,15 @@
 /// <reference path="fourslash.ts" />
 
-//// module Module {
+//// namespace Module {
 ////     var innerVariable = 1;
 ////     function innerFunction() { }
 ////     class innerClass { }
-////     module innerModule { }
+////     namespace innerModule { }
 ////     interface innerInterface {}
 ////     export var exportedVariable = 1;
 ////     export function exportedFunction() { }
 ////     export class exportedClass { }
-////     export module exportedModule { export var exportedInnerModuleVariable = 1; }
+////     export namespace exportedModule { export var exportedInnerModuleVariable = 1; }
 ////     export interface exportedInterface {}
 //// }
 ////

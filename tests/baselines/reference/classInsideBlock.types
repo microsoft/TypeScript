@@ -3,7 +3,9 @@
 === classInsideBlock.ts ===
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
     class C { }
 >C : C
+>  : ^
 }

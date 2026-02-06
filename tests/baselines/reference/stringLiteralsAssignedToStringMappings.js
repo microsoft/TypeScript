@@ -19,6 +19,7 @@ y = "a";
 y = "A";
 
 //// [stringLiteralsAssignedToStringMappings.js]
+"use strict";
 // good
 x = "A";
 // bad

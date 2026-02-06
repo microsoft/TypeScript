@@ -26,7 +26,9 @@ class D {
     constructor(/** @readonly */ x) {}
 }
 
+
 //// [foo.js]
+"use strict";
 class C {
     /** @readonly */
     constructor(n) {

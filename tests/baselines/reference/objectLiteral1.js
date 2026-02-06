@@ -4,4 +4,5 @@
 var v30 = {a:1, b:2};
 
 //// [objectLiteral1.js]
+"use strict";
 var v30 = { a: 1, b: 2 };

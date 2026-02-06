@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 ////interface MultiRobot {
 ////    name: string;
 ////    skills: {

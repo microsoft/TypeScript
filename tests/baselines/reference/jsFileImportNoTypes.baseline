@@ -259,6 +259,11 @@
           ],
           "documentation": []
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

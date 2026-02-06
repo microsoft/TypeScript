@@ -1,37 +1,37 @@
 //// [tests/cases/compiler/mergedDeclarations3.ts] ////
 
 //// [mergedDeclarations3.ts]
-module M {
+namespace M {
  export enum Color {
    Red, Green
  }
 }
-module M {
- export module Color {
+namespace M {
+ export namespace Color {
    export var Blue = 4;
   }
 }
 var p = M.Color.Blue; // ok
 
-module M {
+namespace M {
     export function foo() {
     }
 }
 
-module M {
-    module foo {
+namespace M {
+    namespace foo {
         export var x = 1;
     }
 }
 
-module M {
-    export module foo {
+namespace M {
+    export namespace foo {
         export var y = 2
     }
 }
 
-module M {
-    module foo {
+namespace M {
+    namespace foo {
         export var z = 1;
     }
 }
@@ -42,16 +42,17 @@ M.foo.y // ok
 M.foo.z // error
 
 //// [mergedDeclarations3.js]
+"use strict";
 var M;
 (function (M) {
-    var Color;
+    let Color;
     (function (Color) {
         Color[Color["Red"] = 0] = "Red";
         Color[Color["Green"] = 1] = "Green";
     })(Color = M.Color || (M.Color = {}));
 })(M || (M = {}));
 (function (M) {
-    var Color;
+    let Color;
     (function (Color) {
         Color.Blue = 4;
     })(Color = M.Color || (M.Color = {}));
@@ -63,19 +64,19 @@ var p = M.Color.Blue; // ok
     M.foo = foo;
 })(M || (M = {}));
 (function (M) {
-    var foo;
+    let foo;
     (function (foo) {
         foo.x = 1;
     })(foo || (foo = {}));
 })(M || (M = {}));
 (function (M) {
-    var foo;
+    let foo;
     (function (foo) {
         foo.y = 2;
     })(foo = M.foo || (M.foo = {}));
 })(M || (M = {}));
 (function (M) {
-    var foo;
+    let foo;
     (function (foo) {
         foo.z = 1;
     })(foo || (foo = {}));

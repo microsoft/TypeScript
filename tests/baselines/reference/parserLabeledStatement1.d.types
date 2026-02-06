@@ -3,8 +3,11 @@
 === parserLabeledStatement1.d.ts ===
 foo:
 >foo : any
+>    : ^^^
 
   bar();
 >bar() : any
+>      : ^^^
 >bar : any
+>    : ^^^
 

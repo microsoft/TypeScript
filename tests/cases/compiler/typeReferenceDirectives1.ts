@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @noImplicitReferences: true
 // @traceResolution: true
 // @declaration: true
@@ -8,7 +10,7 @@
 interface $ { x }
 
 // @filename: /app.ts
-/// <reference types="lib"/>
+/// <reference types="lib" preserve="true" />
 interface A {
     x: $
 }

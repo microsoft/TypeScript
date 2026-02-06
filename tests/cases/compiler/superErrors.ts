@@ -1,3 +1,4 @@
+// @target: es2015
 function foo() {
     // super in a non class context
     var x = super;

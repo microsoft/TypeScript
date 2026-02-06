@@ -1,3 +1,4 @@
+// @target: es2015
 // array type cannot use typeof.
 
 var x = 1;

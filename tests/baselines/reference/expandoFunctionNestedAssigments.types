@@ -1,0 +1,343 @@
+//// [tests/cases/compiler/expandoFunctionNestedAssigments.ts] ////
+
+=== expandoFunctionNestedAssigments.ts ===
+function Foo(): void {
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+
+}
+let d: number = (Foo.inVariableInit = 1);
+>d : number
+>  : ^^^^^^
+>(Foo.inVariableInit = 1) : 1
+>                         : ^
+>Foo.inVariableInit = 1 : 1
+>                       : ^
+>Foo.inVariableInit : number
+>                   : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>inVariableInit : number
+>               : ^^^^^^
+>1 : 1
+>  : ^
+
+
+function bar(p = (Foo.inNestedFunction = 1)) {
+>bar : (p?: number) => void
+>    : ^ ^^^^^^^^^^^^^^^^^^
+>p : number
+>  : ^^^^^^
+>(Foo.inNestedFunction = 1) : 1
+>                           : ^
+>Foo.inNestedFunction = 1 : 1
+>                         : ^
+>Foo.inNestedFunction : any
+>                     : ^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>inNestedFunction : any
+>                 : ^^^
+>1 : 1
+>  : ^
+
+}
+
+(Foo.bla = { foo: 1}).foo = (Foo.baz = 1) + (Foo.bar  = 0);
+>(Foo.bla = { foo: 1}).foo = (Foo.baz = 1) + (Foo.bar  = 0) : number
+>                                                           : ^^^^^^
+>(Foo.bla = { foo: 1}).foo : number
+>                          : ^^^^^^
+>(Foo.bla = { foo: 1}) : { foo: number; }
+>                      : ^^^^^^^^^^^^^^^^
+>Foo.bla = { foo: 1} : { foo: number; }
+>                    : ^^^^^^^^^^^^^^^^
+>Foo.bla : { foo: number; }
+>        : ^^^^^^^^^^^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>bla : { foo: number; }
+>    : ^^^^^^^^^^^^^^^^
+>{ foo: 1} : { foo: number; }
+>          : ^^^^^^^^^^^^^^^^
+>foo : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>foo : number
+>    : ^^^^^^
+>(Foo.baz = 1) + (Foo.bar  = 0) : number
+>                               : ^^^^^^
+>(Foo.baz = 1) : 1
+>              : ^
+>Foo.baz = 1 : 1
+>            : ^
+>Foo.baz : number
+>        : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>baz : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>(Foo.bar  = 0) : 0
+>               : ^
+>Foo.bar  = 0 : 0
+>             : ^
+>Foo.bar : number
+>        : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>bar : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+if(Foo.fromIf = 1) {
+>Foo.fromIf = 1 : 1
+>               : ^
+>Foo.fromIf : number
+>           : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromIf : number
+>       : ^^^^^^
+>1 : 1
+>  : ^
+
+    Foo.inIf = 1;
+>Foo.inIf = 1 : 1
+>             : ^
+>Foo.inIf : number
+>         : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>inIf : number
+>     : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+while(Foo.fromWhileCondition = 1) {
+>Foo.fromWhileCondition = 1 : 1
+>                           : ^
+>Foo.fromWhileCondition : number
+>                       : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromWhileCondition : number
+>                   : ^^^^^^
+>1 : 1
+>  : ^
+
+    Foo.fromWhileBody = 1;
+>Foo.fromWhileBody = 1 : 1
+>                      : ^
+>Foo.fromWhileBody : number
+>                  : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromWhileBody : number
+>              : ^^^^^^
+>1 : 1
+>  : ^
+    {
+        Foo.fromWhileBodyNested = 1;
+>Foo.fromWhileBodyNested = 1 : 1
+>                            : ^
+>Foo.fromWhileBodyNested : number
+>                        : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromWhileBodyNested : number
+>                    : ^^^^^^
+>1 : 1
+>  : ^
+    }
+}
+
+do {
+    Foo.fromDoBody = 1;
+>Foo.fromDoBody = 1 : 1
+>                   : ^
+>Foo.fromDoBody : number
+>               : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromDoBody : number
+>           : ^^^^^^
+>1 : 1
+>  : ^
+    {
+        Foo.fromDoBodyNested = 1;
+>Foo.fromDoBodyNested = 1 : 1
+>                         : ^
+>Foo.fromDoBodyNested : number
+>                     : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromDoBodyNested : number
+>                 : ^^^^^^
+>1 : 1
+>  : ^
+    }
+} while(Foo.fromDoCondition = 1);
+>Foo.fromDoCondition = 1 : 1
+>                        : ^
+>Foo.fromDoCondition : number
+>                    : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromDoCondition : number
+>                : ^^^^^^
+>1 : 1
+>  : ^
+
+for(Foo.forInit = 1; (Foo.forCond = 1) > 1; Foo.forIncr = 1){
+>Foo.forInit = 1 : 1
+>                : ^
+>Foo.forInit : number
+>            : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>forInit : number
+>        : ^^^^^^
+>1 : 1
+>  : ^
+>(Foo.forCond = 1) > 1 : boolean
+>                      : ^^^^^^^
+>(Foo.forCond = 1) : 1
+>                  : ^
+>Foo.forCond = 1 : 1
+>                : ^
+>Foo.forCond : number
+>            : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>forCond : number
+>        : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+>Foo.forIncr = 1 : 1
+>                : ^
+>Foo.forIncr : number
+>            : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>forIncr : number
+>        : ^^^^^^
+>1 : 1
+>  : ^
+
+    Foo.fromForBody = 1;
+>Foo.fromForBody = 1 : 1
+>                    : ^
+>Foo.fromForBody : number
+>                : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromForBody : number
+>            : ^^^^^^
+>1 : 1
+>  : ^
+    {
+        Foo.fromForBodyNested = 1;
+>Foo.fromForBodyNested = 1 : 1
+>                          : ^
+>Foo.fromForBodyNested : number
+>                      : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromForBodyNested : number
+>                  : ^^^^^^
+>1 : 1
+>  : ^
+    }
+}
+
+for(let f of (Foo.forOf = []) ){
+>f : any
+>  : ^^^
+>(Foo.forOf = []) : undefined[]
+>                 : ^^^^^^^^^^^
+>Foo.forOf = [] : undefined[]
+>               : ^^^^^^^^^^^
+>Foo.forOf : any[]
+>          : ^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>forOf : any[]
+>      : ^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+    Foo.fromForOfBody = 1;
+>Foo.fromForOfBody = 1 : 1
+>                      : ^
+>Foo.fromForOfBody : number
+>                  : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromForOfBody : number
+>              : ^^^^^^
+>1 : 1
+>  : ^
+    {
+        Foo.fromForOfBodyNested = 1;
+>Foo.fromForOfBodyNested = 1 : 1
+>                            : ^
+>Foo.fromForOfBodyNested : number
+>                        : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromForOfBodyNested : number
+>                    : ^^^^^^
+>1 : 1
+>  : ^
+    }
+}
+
+
+for(let f in (Foo.forIn = []) ){
+>f : string
+>  : ^^^^^^
+>(Foo.forIn = []) : undefined[]
+>                 : ^^^^^^^^^^^
+>Foo.forIn = [] : undefined[]
+>               : ^^^^^^^^^^^
+>Foo.forIn : any[]
+>          : ^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>forIn : any[]
+>      : ^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+    Foo.fromForInBody = 1;
+>Foo.fromForInBody = 1 : 1
+>                      : ^
+>Foo.fromForInBody : number
+>                  : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromForInBody : number
+>              : ^^^^^^
+>1 : 1
+>  : ^
+    {
+        Foo.fromForInBodyNested = 1;
+>Foo.fromForInBodyNested = 1 : 1
+>                            : ^
+>Foo.fromForInBodyNested : number
+>                        : ^^^^^^
+>Foo : typeof Foo
+>    : ^^^^^^^^^^
+>fromForInBodyNested : number
+>                    : ^^^^^^
+>1 : 1
+>  : ^
+    }
+}

@@ -1,4 +1,5 @@
-﻿type EnhancedString = string & { enhancements: any };
+﻿// @target: es2015
+type EnhancedString = string & { enhancements: any };
 
 var a = "foo" === "bar" as "baz";
 var b = "foo" !== ("bar" as "foo");

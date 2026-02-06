@@ -1,3 +1,4 @@
+// @target: es2015
 // ESM output
 // @module: es2015
 

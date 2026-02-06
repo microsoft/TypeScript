@@ -7,6 +7,7 @@ declare module "jquery";
 === reExportX.ts ===
 export {x} from "jquery";
 >x : any
+>  : ^^^
 
 === reExportAll.ts ===
 
@@ -15,13 +16,16 @@ export * from "jquery";
 === reExportUser.ts ===
 import {x} from "./reExportX";
 >x : any
+>  : ^^^
 
 import * as $ from "./reExportAll";
 >$ : typeof $
+>  : ^^^^^^^^
 
 // '$' is not callable, it is an object.
 x($);
 >x($) : any
 >x : any
 >$ : typeof $
+>  : ^^^^^^^^
 

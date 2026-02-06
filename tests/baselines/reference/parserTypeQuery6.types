@@ -3,7 +3,11 @@
 === parserTypeQuery6.ts ===
 var v: typeof A.B;
 >v : any
+>  : ^^^
 >A.B : any
+>    : ^^^
 >A : any
+>  : ^^^
 >B : any
+>  : ^^^
 

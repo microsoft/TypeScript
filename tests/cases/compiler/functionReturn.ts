@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnreachableCode: true
 
 function f0(): void { }

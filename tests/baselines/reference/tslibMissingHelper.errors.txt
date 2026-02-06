@@ -1,0 +1,36 @@
+/package1/index.ts(2,16): error TS2343: This syntax requires an imported helper named '__awaiter' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "strict": true,
+            "target": "ES2016",
+            "importHelpers": true,
+            "module": "commonjs",
+        }
+    }
+    
+==== /package1/index.ts (1 errors) ====
+    export {};
+    async function foo(): Promise<void> {}
+                   ~~~
+!!! error TS2343: This syntax requires an imported helper named '__awaiter' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+    async function bar(): Promise<void> {}
+    
+==== /package2/index.ts (0 errors) ====
+    export {};
+    async function foo(): Promise<void> {}
+    
+==== /node_modules/tslib/package.json (0 errors) ====
+    {
+        "name": "tslib",
+        "main": "tslib.js",
+        "typings": "tslib.d.ts"
+    }
+    
+==== /node_modules/tslib/tslib.d.ts (0 errors) ====
+    export const notAHelper: any;
+    
+==== /node_modules/tslib/tslib.js (0 errors) ====
+    module.exports.notAHelper = 3;

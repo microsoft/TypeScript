@@ -1,5 +1,5 @@
 // @strictNullChecks: true
-// @target: ES5
+// @target: ES5, ES2015
 
 // Repro from #8923
 

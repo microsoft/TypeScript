@@ -325,3 +325,38 @@ type Nested = {
     }    
 }
 
+function bindingPatternInParameter({ data: data1, isSuccess: isSuccess1 }: UseQueryResult<number>) {
+>bindingPatternInParameter : Symbol(bindingPatternInParameter, Decl(controlFlowAliasedDiscriminants.ts, 102, 1))
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 1, 21), Decl(controlFlowAliasedDiscriminants.ts, 4, 20))
+>data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 104, 36))
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 0, 26), Decl(controlFlowAliasedDiscriminants.ts, 3, 5))
+>isSuccess1 : Symbol(isSuccess1, Decl(controlFlowAliasedDiscriminants.ts, 104, 49))
+>UseQueryResult : Symbol(UseQueryResult, Decl(controlFlowAliasedDiscriminants.ts, 0, 0))
+
+  const { data: data2, isSuccess: isSuccess2 } = useQuery();
+>data : Symbol(data, Decl(controlFlowAliasedDiscriminants.ts, 1, 21), Decl(controlFlowAliasedDiscriminants.ts, 4, 20))
+>data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 105, 9))
+>isSuccess : Symbol(isSuccess, Decl(controlFlowAliasedDiscriminants.ts, 0, 26), Decl(controlFlowAliasedDiscriminants.ts, 3, 5))
+>isSuccess2 : Symbol(isSuccess2, Decl(controlFlowAliasedDiscriminants.ts, 105, 22))
+>useQuery : Symbol(useQuery, Decl(controlFlowAliasedDiscriminants.ts, 6, 2))
+
+  const areSuccess = isSuccess1 && isSuccess2;
+>areSuccess : Symbol(areSuccess, Decl(controlFlowAliasedDiscriminants.ts, 107, 7))
+>isSuccess1 : Symbol(isSuccess1, Decl(controlFlowAliasedDiscriminants.ts, 104, 49))
+>isSuccess2 : Symbol(isSuccess2, Decl(controlFlowAliasedDiscriminants.ts, 105, 22))
+
+  if (areSuccess) {
+>areSuccess : Symbol(areSuccess, Decl(controlFlowAliasedDiscriminants.ts, 107, 7))
+
+    data1.toExponential();
+>data1.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data1 : Symbol(data1, Decl(controlFlowAliasedDiscriminants.ts, 104, 36))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+    data2.toExponential();
+>data2.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>data2 : Symbol(data2, Decl(controlFlowAliasedDiscriminants.ts, 105, 9))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+  }
+}
+

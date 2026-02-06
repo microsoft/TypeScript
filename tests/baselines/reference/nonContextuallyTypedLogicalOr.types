@@ -7,6 +7,7 @@ interface Contextual {
 
     p?: number;
 >p : number
+>  : ^^^^^^
 }
 
 interface Ellement {
@@ -19,15 +20,22 @@ interface Ellement {
 
 var c: Contextual;
 >c : Contextual
+>  : ^^^^^^^^^^
 
 var e: Ellement;
 >e : Ellement
+>  : ^^^^^^^^
 
 (c || e).dummy;
 >(c || e).dummy : any
 >(c || e) : Contextual | Ellement
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >c || e : Contextual | Ellement
+>       : ^^^^^^^^^^^^^^^^^^^^^
 >c : Contextual
+>  : ^^^^^^^^^^
 >e : Ellement
+>  : ^^^^^^^^
 >dummy : any
+>      : ^^^
 

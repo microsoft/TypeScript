@@ -1,3 +1,4 @@
+// @target: es2015
 class LazyArray<T> {
     private objects = <{ [objectId: string]: T; }>{};
     array() {

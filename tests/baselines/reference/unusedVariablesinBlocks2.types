@@ -3,13 +3,18 @@
 === unusedVariablesinBlocks2.ts ===
 function f1 () {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     let x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
     {
         let x = 11;
 >x : number
+>  : ^^^^^^
 >11 : 11
+>   : ^^
     }
 }

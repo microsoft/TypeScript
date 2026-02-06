@@ -6,7 +6,9 @@ var a: any;
 
 var r: boolean = a instanceof a;
 >r : boolean
+>  : ^^^^^^^
 >a instanceof a : boolean
+>               : ^^^^^^^
 >a : any
 >a : any
 

@@ -5,7 +5,7 @@ import {
     Path,
     SortedReadonlyArray,
     TypeAcquisition,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 import {
     ActionInvalidate,
     ActionPackageInstalled,
@@ -15,7 +15,7 @@ import {
     EventEndInstallTypes,
     EventInitializationFailed,
     EventTypesRegistry,
-} from "./_namespaces/ts.server";
+} from "./_namespaces/ts.server.js";
 
 export interface TypingInstallerResponse {
     readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed | ActionWatchTypingLocations;

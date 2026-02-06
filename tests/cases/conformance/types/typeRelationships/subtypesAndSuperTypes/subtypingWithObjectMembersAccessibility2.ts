@@ -1,3 +1,4 @@
+// @target: es2015
 // Derived member is private, base member is not causes errors
 
 class Base {
@@ -8,7 +9,7 @@ class Derived extends Base {
     bar: string;
 }
 
-module ExplicitPublic {
+namespace ExplicitPublic {
     class A {
         private foo: Base;
     }
@@ -34,7 +35,7 @@ module ExplicitPublic {
     }
 }
 
-module ImplicitPublic {
+namespace ImplicitPublic {
     class A {
         private foo: Base;
     }

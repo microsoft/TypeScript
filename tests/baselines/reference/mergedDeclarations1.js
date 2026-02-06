@@ -8,7 +8,7 @@ interface Point {
 function point(x: number, y: number): Point {
     return { x: x, y: y };
 }
-module point {
+namespace point {
     export var origin = point(0, 0);
     export function equals(p1: Point, p2: Point) {
         return p1.x == p2.x && p1.y == p2.y;
@@ -19,6 +19,7 @@ var p2 = point.origin;
 var b = point.equals(p1, p2);
 
 //// [mergedDeclarations1.js]
+"use strict";
 function point(x, y) {
     return { x: x, y: y };
 }

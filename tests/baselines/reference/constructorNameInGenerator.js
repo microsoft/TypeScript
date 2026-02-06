@@ -7,6 +7,7 @@ class C2 {
 
 
 //// [constructorNameInGenerator.js]
+"use strict";
 class C2 {
     *constructor() { }
 }

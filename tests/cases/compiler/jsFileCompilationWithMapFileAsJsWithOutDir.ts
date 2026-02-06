@@ -1,4 +1,5 @@
-// @allowJs: true,map
+// @target: es2015
+// @allowJs: true
 // @sourcemap: true
 // @outdir: out
 

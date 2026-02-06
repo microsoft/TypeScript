@@ -4,12 +4,13 @@
     "inputFiles": [
         "test.ts"
     ],
-    "out": "bin/test.js",
+    "outFile": "bin/test.js",
     "sourceMap": true,
     "declaration": true,
     "baselineCheck": true,
     "sourceRoot": "tests/cases/projects/outputdir_module_multifolder/src",
     "resolveSourceRoot": true,
+    "strict": false,
     "resolvedInputFiles": [
         "lib.es5.d.ts",
         "lib.decorators.d.ts",

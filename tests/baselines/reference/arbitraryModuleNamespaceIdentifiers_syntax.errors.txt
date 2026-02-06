@@ -1,0 +1,107 @@
+type-clause-bad-export.ts(1,15): error TS1003: Identifier expected.
+type-clause-bad-import.ts(1,22): error TS1003: Identifier expected.
+type-clause-no-as.ts(1,15): error TS1003: Identifier expected.
+type-clause-type-as-as.ts(1,15): error TS2305: Module '"./type-clause-valid"' has no exported member 'as'.
+type-clause-type-as-as.ts(1,21): error TS1003: Identifier expected.
+type-decls-bad-export.ts(1,15): error TS1003: Identifier expected.
+type-decls-bad-import.ts(1,22): error TS1003: Identifier expected.
+type-decls-no-as.ts(1,15): error TS1003: Identifier expected.
+type-decls-type-as.ts(1,15): error TS2305: Module '"./type-decls-valid"' has no exported member 'type'.
+type-decls-type-as.ts(1,23): error TS1003: Identifier expected.
+values-bad-export.ts(1,10): error TS1003: Identifier expected.
+values-bad-import.ts(1,17): error TS1003: Identifier expected.
+values-no-as.ts(1,10): error TS1003: Identifier expected.
+values-type-as.ts(1,10): error TS2305: Module '"./values-valid"' has no exported member 'type'.
+values-type-as.ts(1,18): error TS1003: Identifier expected.
+
+
+==== values-valid.ts (0 errors) ====
+    export const foo = 123;
+    export { foo as "valid 1" };
+    import { "valid 1" as bar } from "./values-valid";
+    export { "valid 1" as "valid 2" } from "./values-valid";
+    export { foo as "valid 3" } from "./values-valid";
+    export * as "valid 4" from "./values-valid";
+    
+==== values-bad-import.ts (1 errors) ====
+    import { foo as "invalid 2" } from "./values-valid";
+                    ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== values-bad-export.ts (1 errors) ====
+    export { "invalid 3" as baz };
+             ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== values-no-as.ts (1 errors) ====
+    import { "invalid 1" } from "./values-valid";
+             ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== values-type-as.ts (2 errors) ====
+    import { type as "invalid 4" } from "./values-valid";
+             ~~~~
+!!! error TS2305: Module '"./values-valid"' has no exported member 'type'.
+                     ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+    
+==== type-decls-valid.ts (0 errors) ====
+    export type foo = 123;
+    export type { foo as "valid 1" };
+    import type { "valid 1" as bar } from "./type-decls-valid";
+    export type { "valid 1" as "valid 2" } from "./type-decls-valid";
+    export type { foo as "valid 3" } from "./type-decls-valid";
+    export type * as "valid 4" from "./type-decls-valid";
+    
+==== type-decls-bad-import.ts (1 errors) ====
+    import type { foo as "invalid 2" } from "./type-decls-valid";
+                         ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== type-decls-bad-export.ts (1 errors) ====
+    export type { "invalid 3" as baz };
+                  ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== type-decls-no-as.ts (1 errors) ====
+    import type { "invalid 1" } from "./type-decls-valid";
+                  ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== type-decls-type-as.ts (2 errors) ====
+    import type { type as "invalid 4" } from "./type-decls-valid";
+                  ~~~~
+!!! error TS2305: Module '"./type-decls-valid"' has no exported member 'type'.
+                          ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== type-clause-valid.ts (0 errors) ====
+    export type foo = 123;
+    export { type foo as "valid 1" };
+    import { type "valid 1" as bar } from "./type-clause-valid";
+    export { type "valid 1" as "valid 2" } from "./type-clause-valid";
+    export { type foo as "valid 3" } from "./type-clause-valid";
+    
+==== type-clause-bad-import.ts (1 errors) ====
+    import { type foo as "invalid 2" } from "./type-clause-valid";
+                         ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== type-clause-bad-export.ts (1 errors) ====
+    export { type "invalid 3" as baz };
+                  ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== type-clause-no-as.ts (1 errors) ====
+    import { type "invalid 1" } from "./type-clause-valid";
+                  ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    
+==== type-clause-type-as-as.ts (2 errors) ====
+    import { type as as "invalid 4" } from "./type-clause-valid";
+                  ~~
+!!! error TS2305: Module '"./type-clause-valid"' has no exported member 'as'.
+                        ~~~~~~~~~~~
+!!! error TS1003: Identifier expected.
+    

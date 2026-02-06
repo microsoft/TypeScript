@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @exactOptionalPropertyTypes: true, false
 // @lib: esnext
@@ -8,7 +9,7 @@
 type PromiseOrValue<T> = Promise<T> | T;
 
 function mapAsyncIterable<T, U, R = undefined>(
-  iterable: AsyncGenerator<T, R, void> | AsyncIterable<T>,
+  iterable: AsyncGenerator<T, R, undefined> | AsyncIterable<T, R, undefined>,
   callback: (value: T) => PromiseOrValue<U>,
 ): AsyncGenerator<U, R, void> {
   const iterator = iterable[Symbol.asyncIterator]();
@@ -36,9 +37,9 @@ function mapAsyncIterable<T, U, R = undefined>(
     async next() {
       return mapResult(await iterator.next());
     },
-    async return(): Promise<IteratorResult<U, R>> {
+    async return(value: R): Promise<IteratorResult<U, R>> {
       return typeof iterator.return === "function"
-        ? mapResult(await iterator.return())
+        ? mapResult(await iterator.return(value))
         : { value: undefined as any, done: true };
     },
     async throw(error?: unknown) {
@@ -50,6 +51,9 @@ function mapAsyncIterable<T, U, R = undefined>(
     [Symbol.asyncIterator]() {
       return this;
     },
+    async [Symbol.asyncDispose]() {
+      await this.return(undefined!);
+    }
   };
 }
 

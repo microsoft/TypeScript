@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @removeComments: false
 class C</**docComment for type parameter*/ T> {

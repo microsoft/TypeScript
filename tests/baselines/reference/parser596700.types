@@ -3,5 +3,7 @@
 === parser596700.ts ===
 var regex2 = /[a-z/]$/i;
 >regex2 : RegExp
+>       : ^^^^^^
 >/[a-z/]$/i : RegExp
+>           : ^^^^^^
 

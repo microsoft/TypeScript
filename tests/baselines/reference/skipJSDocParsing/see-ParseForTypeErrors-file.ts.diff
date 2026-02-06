@@ -1,7 +1,7 @@
 ===================================================================
 --- default
 +++ ParseForTypeErrors
-@@ -307,6 +307,6 @@
+@@ -295,6 +295,6 @@
      "typeReferenceDirectives": [],
      "libReferenceDirectives": [],
      "amdDependencies": [],

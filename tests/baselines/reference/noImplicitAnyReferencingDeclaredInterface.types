@@ -8,4 +8,5 @@ interface Entry {
 
 declare var x: Entry;
 >x : Entry
+>  : ^^^^^
 

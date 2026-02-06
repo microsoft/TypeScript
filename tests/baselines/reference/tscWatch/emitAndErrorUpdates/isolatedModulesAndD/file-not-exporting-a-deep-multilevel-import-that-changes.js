@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 export interface Point {
@@ -37,8 +37,7 @@ import "./d";
 //// [/user/username/projects/myproject/tsconfig.json]
 {}
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -49,12 +48,14 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w --isolatedModules --d
+/home/src/tslibs/TS/Lib/tsc.js --w --isolatedModules --d
 Output::
 >> Screen clear
-[[90m12:00:29 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
@@ -71,13 +72,14 @@ Output::
 [7m2[0m getPoint().c.x;
 [7m [0m [91m             ~[0m
 
-[[90m12:00:50 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/user/username/projects/myproject/a.d.ts]
@@ -92,8 +94,7 @@ export interface Coords {
 
 
 //// [/user/username/projects/myproject/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/user/username/projects/myproject/b.d.ts]
@@ -103,10 +104,7 @@ export interface PointWrapper extends Point {
 
 
 //// [/user/username/projects/myproject/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPoint = void 0;
-function getPoint() {
+export function getPoint() {
     return {
         name: "test",
         c: {
@@ -115,7 +113,6 @@ function getPoint() {
         }
     };
 }
-exports.getPoint = getPoint;
 ;
 
 
@@ -125,10 +122,8 @@ export declare function getPoint(): PointWrapper;
 
 
 //// [/user/username/projects/myproject/d.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var c_1 = require("./c");
-(0, c_1.getPoint)().c.x;
+import { getPoint } from "./c";
+getPoint().c.x;
 
 
 //// [/user/username/projects/myproject/d.d.ts]
@@ -136,9 +131,7 @@ export {};
 
 
 //// [/user/username/projects/myproject/e.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-require("./d");
+import "./d";
 
 
 //// [/user/username/projects/myproject/e.d.ts]
@@ -146,14 +139,8 @@ import "./d";
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/myproject/a.ts: *new*
   {}
@@ -187,7 +174,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
@@ -195,7 +182,7 @@ Program files::
 /user/username/projects/myproject/e.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
@@ -203,7 +190,7 @@ Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/e.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/a.ts (computed .d.ts during emit)
 /user/username/projects/myproject/b.ts (computed .d.ts during emit)
 /user/username/projects/myproject/c.ts (computed .d.ts during emit)
@@ -232,12 +219,13 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:54 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:13 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -274,7 +262,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
@@ -317,10 +305,11 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:17 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
 [96mc.ts[0m:[93m6[0m:[93m13[0m - [91merror[0m[90m TS2353: [0mObject literal may only specify known properties, and 'x' does not exist in type 'Coords'.
 
@@ -337,7 +326,7 @@ Output::
 [7m2[0m getPoint().c.x;
 [7m [0m [91m             ~[0m
 
-[[90m12:01:36 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
@@ -374,7 +363,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts
@@ -417,12 +406,13 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:01:40 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:01:59 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
@@ -459,7 +449,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/a.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/c.ts

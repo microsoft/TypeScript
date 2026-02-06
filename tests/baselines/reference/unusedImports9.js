@@ -19,20 +19,17 @@ import c = require('./file1')
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test2 = exports.test = exports.Calculator = void 0;
-var Calculator = /** @class */ (function () {
-    function Calculator() {
-    }
-    Calculator.prototype.handleChar = function () { };
-    return Calculator;
-}());
+exports.Calculator = void 0;
+exports.test = test;
+exports.test2 = test2;
+class Calculator {
+    handleChar() { }
+}
 exports.Calculator = Calculator;
 function test() {
 }
-exports.test = test;
 function test2() {
 }
-exports.test2 = test2;
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

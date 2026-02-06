@@ -1,0 +1,631 @@
+regularExpressionScanning.ts(3,10): error TS1502: The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.
+regularExpressionScanning.ts(3,11): error TS1499: Unknown regular expression flag.
+regularExpressionScanning.ts(3,12): error TS1499: Unknown regular expression flag.
+regularExpressionScanning.ts(3,13): error TS1500: Duplicate regular expression flag.
+regularExpressionScanning.ts(3,14): error TS1499: Unknown regular expression flag.
+regularExpressionScanning.ts(3,15): error TS1502: The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.
+regularExpressionScanning.ts(3,17): error TS1500: Duplicate regular expression flag.
+regularExpressionScanning.ts(3,18): error TS1499: Unknown regular expression flag.
+regularExpressionScanning.ts(3,19): error TS1499: Unknown regular expression flag.
+regularExpressionScanning.ts(3,20): error TS1499: Unknown regular expression flag.
+regularExpressionScanning.ts(3,21): error TS1500: Duplicate regular expression flag.
+regularExpressionScanning.ts(3,22): error TS1499: Unknown regular expression flag.
+regularExpressionScanning.ts(5,6): error TS1499: Unknown regular expression flag.
+regularExpressionScanning.ts(5,7): error TS1509: This regular expression flag cannot be toggled within a subpattern.
+regularExpressionScanning.ts(5,10): error TS1509: This regular expression flag cannot be toggled within a subpattern.
+regularExpressionScanning.ts(5,11): error TS1500: Duplicate regular expression flag.
+regularExpressionScanning.ts(8,4): error TS1534: This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.
+regularExpressionScanning.ts(9,4): error TS1534: This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.
+regularExpressionScanning.ts(12,9): error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+regularExpressionScanning.ts(12,24): error TS1536: Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '\x01' instead.
+regularExpressionScanning.ts(12,26): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+regularExpressionScanning.ts(12,29): error TS1536: Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '\x53' instead.
+regularExpressionScanning.ts(12,33): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+regularExpressionScanning.ts(12,36): error TS1537: Decimal escape sequences and backreferences are not allowed in a character class.
+regularExpressionScanning.ts(12,42): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x03'.
+regularExpressionScanning.ts(12,47): error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+regularExpressionScanning.ts(12,48): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+regularExpressionScanning.ts(12,53): error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+regularExpressionScanning.ts(12,54): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+regularExpressionScanning.ts(13,9): error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+regularExpressionScanning.ts(13,24): error TS1536: Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '\x01' instead.
+regularExpressionScanning.ts(13,26): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+regularExpressionScanning.ts(13,29): error TS1536: Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '\x53' instead.
+regularExpressionScanning.ts(13,33): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+regularExpressionScanning.ts(13,36): error TS1537: Decimal escape sequences and backreferences are not allowed in a character class.
+regularExpressionScanning.ts(13,42): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x03'.
+regularExpressionScanning.ts(13,47): error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+regularExpressionScanning.ts(13,48): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+regularExpressionScanning.ts(13,53): error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+regularExpressionScanning.ts(13,54): error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+regularExpressionScanning.ts(15,15): error TS1532: There is no capturing group named 'absent' in this regular expression.
+regularExpressionScanning.ts(15,59): error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+regularExpressionScanning.ts(17,31): error TS1507: There is nothing available for repetition.
+regularExpressionScanning.ts(17,32): error TS1506: Numbers out of order in quantifier.
+regularExpressionScanning.ts(17,40): error TS1507: There is nothing available for repetition.
+regularExpressionScanning.ts(19,12): error TS1517: Range out of order in character class.
+regularExpressionScanning.ts(19,15): error TS1517: Range out of order in character class.
+regularExpressionScanning.ts(19,28): error TS1517: Range out of order in character class.
+regularExpressionScanning.ts(20,3): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(20,8): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(20,16): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(20,25): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(20,28): error TS1529: Unknown Unicode property name or value.
+regularExpressionScanning.ts(20,37): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(20,42): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(20,50): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(20,59): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(20,62): error TS1529: Unknown Unicode property name or value.
+regularExpressionScanning.ts(21,28): error TS1529: Unknown Unicode property name or value.
+regularExpressionScanning.ts(21,62): error TS1529: Unknown Unicode property name or value.
+regularExpressionScanning.ts(22,28): error TS1529: Unknown Unicode property name or value.
+regularExpressionScanning.ts(22,62): error TS1529: Unknown Unicode property name or value.
+regularExpressionScanning.ts(23,3): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(23,6): error TS1524: Unknown Unicode property name.
+regularExpressionScanning.ts(23,28): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(23,31): error TS1523: Expected a Unicode property name.
+regularExpressionScanning.ts(23,32): error TS1525: Expected a Unicode property value.
+regularExpressionScanning.ts(23,33): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(23,39): error TS1525: Expected a Unicode property value.
+regularExpressionScanning.ts(23,40): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(23,43): error TS1523: Expected a Unicode property name.
+regularExpressionScanning.ts(23,49): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(23,52): error TS1527: Expected a Unicode property name or value.
+regularExpressionScanning.ts(23,59): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(23,62): error TS1527: Expected a Unicode property name or value.
+regularExpressionScanning.ts(23,63): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(23,66): error TS1527: Expected a Unicode property name or value.
+regularExpressionScanning.ts(24,6): error TS1524: Unknown Unicode property name.
+regularExpressionScanning.ts(24,31): error TS1523: Expected a Unicode property name.
+regularExpressionScanning.ts(24,32): error TS1525: Expected a Unicode property value.
+regularExpressionScanning.ts(24,39): error TS1525: Expected a Unicode property value.
+regularExpressionScanning.ts(24,43): error TS1523: Expected a Unicode property name.
+regularExpressionScanning.ts(24,52): error TS1527: Expected a Unicode property name or value.
+regularExpressionScanning.ts(24,53): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionScanning.ts(24,57): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionScanning.ts(24,62): error TS1527: Expected a Unicode property name or value.
+regularExpressionScanning.ts(24,66): error TS1527: Expected a Unicode property name or value.
+regularExpressionScanning.ts(25,6): error TS1524: Unknown Unicode property name.
+regularExpressionScanning.ts(25,31): error TS1523: Expected a Unicode property name.
+regularExpressionScanning.ts(25,32): error TS1525: Expected a Unicode property value.
+regularExpressionScanning.ts(25,39): error TS1525: Expected a Unicode property value.
+regularExpressionScanning.ts(25,43): error TS1523: Expected a Unicode property name.
+regularExpressionScanning.ts(25,52): error TS1527: Expected a Unicode property name or value.
+regularExpressionScanning.ts(25,53): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionScanning.ts(25,57): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionScanning.ts(25,62): error TS1527: Expected a Unicode property name or value.
+regularExpressionScanning.ts(25,66): error TS1527: Expected a Unicode property name or value.
+regularExpressionScanning.ts(26,3): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(26,6): error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(26,16): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(26,19): error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(26,31): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(26,34): error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(26,44): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(26,47): error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(27,6): error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(27,19): error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(27,34): error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(27,47): error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(28,19): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(28,31): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(28,47): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(31,3): error TS1512: '\c' must be followed by an ASCII letter.
+regularExpressionScanning.ts(31,6): error TS1512: '\c' must be followed by an ASCII letter.
+regularExpressionScanning.ts(31,15): error TS1512: '\c' must be followed by an ASCII letter.
+regularExpressionScanning.ts(31,17): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(31,20): error TS1512: '\c' must be followed by an ASCII letter.
+regularExpressionScanning.ts(31,23): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(33,3): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(33,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(33,10): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(33,14): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(33,17): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(33,21): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(33,24): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(33,39): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(33,41): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(33,42): error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(33,43): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(33,45): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(34,3): error TS1511: '\q' is only available inside character class.
+regularExpressionScanning.ts(34,7): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(34,10): error TS1521: '\q' must be followed by string alternatives enclosed in braces.
+regularExpressionScanning.ts(34,17): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(34,21): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(34,23): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(34,38): error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(34,39): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(34,41): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(34,42): error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(34,43): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(34,45): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(34,46): error TS1005: '}' expected.
+regularExpressionScanning.ts(36,4): error TS1517: Range out of order in character class.
+regularExpressionScanning.ts(36,8): error TS1517: Range out of order in character class.
+regularExpressionScanning.ts(36,34): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(36,42): error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+regularExpressionScanning.ts(36,63): error TS1517: Range out of order in character class.
+regularExpressionScanning.ts(37,4): error TS1517: Range out of order in character class.
+regularExpressionScanning.ts(37,8): error TS1517: Range out of order in character class.
+regularExpressionScanning.ts(37,19): error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(37,50): error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(37,51): error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(37,55): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(37,57): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(37,61): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(37,63): error TS1517: Range out of order in character class.
+regularExpressionScanning.ts(37,76): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionScanning.ts(38,8): error TS1005: '--' expected.
+regularExpressionScanning.ts(38,9): error TS1520: Expected a class set operand.
+regularExpressionScanning.ts(38,11): error TS1520: Expected a class set operand.
+regularExpressionScanning.ts(38,12): error TS1005: '--' expected.
+regularExpressionScanning.ts(38,15): error TS1522: A character class must not contain a reserved double punctuator. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(38,20): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionScanning.ts(38,28): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionScanning.ts(38,40): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionScanning.ts(38,47): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionScanning.ts(38,49): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionScanning.ts(38,50): error TS1520: Expected a class set operand.
+regularExpressionScanning.ts(38,55): error TS1511: '\q' is only available inside character class.
+regularExpressionScanning.ts(38,57): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(38,61): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(38,66): error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(38,67): error TS1005: '--' expected.
+regularExpressionScanning.ts(38,70): error TS1520: Expected a class set operand.
+regularExpressionScanning.ts(38,75): error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+regularExpressionScanning.ts(38,85): error TS1520: Expected a class set operand.
+regularExpressionScanning.ts(39,56): error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+regularExpressionScanning.ts(39,67): error TS1005: '&&' expected.
+regularExpressionScanning.ts(41,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(41,30): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(42,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(42,28): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(42,53): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(44,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(44,34): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(45,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(45,32): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(45,61): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(46,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(46,79): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(47,5): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+regularExpressionScanning.ts(47,89): error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+
+
+==== regularExpressionScanning.ts (193 errors) ====
+    const regexes: RegExp[] = [
+    	// Flags
+    	/foo/visualstudiocode,
+    	        ~
+!!! error TS1502: The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.
+    	         ~
+!!! error TS1499: Unknown regular expression flag.
+    	          ~
+!!! error TS1499: Unknown regular expression flag.
+    	           ~
+!!! error TS1500: Duplicate regular expression flag.
+    	            ~
+!!! error TS1499: Unknown regular expression flag.
+    	             ~
+!!! error TS1502: The Unicode (u) flag and the Unicode Sets (v) flag cannot be set simultaneously.
+    	               ~
+!!! error TS1500: Duplicate regular expression flag.
+    	                ~
+!!! error TS1499: Unknown regular expression flag.
+    	                 ~
+!!! error TS1499: Unknown regular expression flag.
+    	                  ~
+!!! error TS1499: Unknown regular expression flag.
+    	                   ~
+!!! error TS1500: Duplicate regular expression flag.
+    	                    ~
+!!! error TS1499: Unknown regular expression flag.
+    	// Pattern modifiers
+    	/(?med-ium:bar)/,
+    	    ~
+!!! error TS1499: Unknown regular expression flag.
+    	     ~
+!!! error TS1509: This regular expression flag cannot be toggled within a subpattern.
+    	        ~
+!!! error TS1509: This regular expression flag cannot be toggled within a subpattern.
+    	         ~
+!!! error TS1500: Duplicate regular expression flag.
+    	// Capturing groups
+    	/\0/,
+    	/\1/,
+    	  ~
+!!! error TS1534: This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.
+    	/\2/,
+    	  ~
+!!! error TS1534: This backreference refers to a group that does not exist. There are no capturing groups in this regular expression.
+    	/(hi)\1/,
+    	/(hi) (hello) \2/,
+    	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/,
+    	       ~~
+!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+    	                      ~~
+!!! error TS1536: Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '\x01' instead.
+    	                        ~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+    	                           ~~~~
+!!! error TS1536: Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '\x53' instead.
+    	                               ~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+    	                                  ~~
+!!! error TS1537: Decimal escape sequences and backreferences are not allowed in a character class.
+    	                                        ~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x03'.
+    	                                             ~
+!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+    	                                              ~~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+    	                                                   ~
+!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+    	                                                    ~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+    	/\2()(\12)(foo)\1\0[\0\1\01\123\08\8](\3\03)\5\005\9\009/u,
+    	       ~~
+!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+    	                      ~~
+!!! error TS1536: Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '\x01' instead.
+    	                        ~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x01'.
+    	                           ~~~~
+!!! error TS1536: Octal escape sequences and backreferences are not allowed in a character class. If this was intended as an escape sequence, use the syntax '\x53' instead.
+    	                               ~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+    	                                  ~~
+!!! error TS1537: Decimal escape sequences and backreferences are not allowed in a character class.
+    	                                        ~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x03'.
+    	                                             ~
+!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+    	                                              ~~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x05'.
+    	                                                   ~
+!!! error TS1533: This backreference refers to a group that does not exist. There are only 4 capturing groups in this regular expression.
+    	                                                    ~~~
+!!! error TS1487: Octal escape sequences are not allowed. Use the syntax '\x00'.
+    	/(?<foo>)((?<bar>bar)bar)(?<baz>baz)|(foo(?<foo>foo))(?<baz>)/,
+    	/(\k<bar>)\k<absent>(?<foo>foo)|(?<bar>)((?<foo>)|(bar(?<bar>bar)))/,
+    	             ~~~~~~
+!!! error TS1532: There is no capturing group named 'absent' in this regular expression.
+    	                                                         ~~~
+!!! error TS1515: Named capturing groups with the same name must be mutually exclusive to each other.
+    	// Quantifiers
+    	/{}{1,2}_{3}.{4,}?(foo){008}${32,16}\b{064,128}.+&*?\???\n{,256}{\\{,/,
+    	                             ~~~~~~~
+!!! error TS1507: There is nothing available for repetition.
+    	                              ~~~~~
+!!! error TS1506: Numbers out of order in quantifier.
+    	                                      ~~~~~~~~~
+!!! error TS1507: There is nothing available for repetition.
+    	// Character classes
+    	/[-A-Za-z-z-aZ-A\d_-\d-.-.\r-\n\w-\W]/,
+    	          ~~~
+!!! error TS1517: Range out of order in character class.
+    	             ~~~
+!!! error TS1517: Range out of order in character class.
+    	                          ~~~~~
+!!! error TS1517: Range out of order in character class.
+    	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/,
+    	 ~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	      ~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	              ~~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                       ~~~~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                          ~~~~~~~
+!!! error TS1529: Unknown Unicode property name or value.
+    	                                   ~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                        ~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                                ~~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                                         ~~~~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                                            ~~~~~~~
+!!! error TS1529: Unknown Unicode property name or value.
+    	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/u,
+    	                          ~~~~~~~
+!!! error TS1529: Unknown Unicode property name or value.
+    	                                                            ~~~~~~~
+!!! error TS1529: Unknown Unicode property name or value.
+    	/\p{L}\p{gc=L}\p{ASCII}\p{Invalid}[\p{L}\p{gc=L}\P{ASCII}\p{Invalid}]/v,
+    	                          ~~~~~~~
+!!! error TS1529: Unknown Unicode property name or value.
+    	                                                            ~~~~~~~
+!!! error TS1529: Unknown Unicode property name or value.
+    	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/,
+    	 ~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	    ~~~~~~~~~~~~~~~
+!!! error TS1524: Unknown Unicode property name.
+    	                          ~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                             
+!!! error TS1523: Expected a Unicode property name.
+    	                              
+!!! error TS1525: Expected a Unicode property value.
+    	                               ~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                     
+!!! error TS1525: Expected a Unicode property value.
+    	                                      ~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                         
+!!! error TS1523: Expected a Unicode property name.
+    	                                               ~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                                  
+!!! error TS1527: Expected a Unicode property name or value.
+    	                                                         ~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                                            
+!!! error TS1527: Expected a Unicode property name or value.
+    	                                                             ~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                                                
+!!! error TS1527: Expected a Unicode property name or value.
+    	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/u,
+    	    ~~~~~~~~~~~~~~~
+!!! error TS1524: Unknown Unicode property name.
+    	                             
+!!! error TS1523: Expected a Unicode property name.
+    	                              
+!!! error TS1525: Expected a Unicode property value.
+    	                                     
+!!! error TS1525: Expected a Unicode property value.
+    	                                         
+!!! error TS1523: Expected a Unicode property name.
+    	                                                  
+!!! error TS1527: Expected a Unicode property name or value.
+    	                                                   ~~
+!!! error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+    	                                                       ~~
+!!! error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+    	                                                            
+!!! error TS1527: Expected a Unicode property name or value.
+    	                                                                
+!!! error TS1527: Expected a Unicode property name or value.
+    	/\p{InvalidProperty=Value}\p{=}\p{sc=}\P{=foo}[\p{}\p\\\P\P{]\p{/v,
+    	    ~~~~~~~~~~~~~~~
+!!! error TS1524: Unknown Unicode property name.
+    	                             
+!!! error TS1523: Expected a Unicode property name.
+    	                              
+!!! error TS1525: Expected a Unicode property value.
+    	                                     
+!!! error TS1525: Expected a Unicode property value.
+    	                                         
+!!! error TS1523: Expected a Unicode property name.
+    	                                                  
+!!! error TS1527: Expected a Unicode property name or value.
+    	                                                   ~~
+!!! error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+    	                                                       ~~
+!!! error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+    	                                                            
+!!! error TS1527: Expected a Unicode property name or value.
+    	                                                                
+!!! error TS1527: Expected a Unicode property name or value.
+    	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/,
+    	 ~~~~~~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	    ~~~~~~~~~
+!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+    	              ~~~~~~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                 ~~~~~~~~~
+!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+    	                             ~~~~~~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                ~~~~~~~~~
+!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+    	                                          ~~~~~~~~~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                             ~~~~~~~~~
+!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+    	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/u,
+    	    ~~~~~~~~~
+!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+    	                 ~~~~~~~~~
+!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+    	                                ~~~~~~~~~
+!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+    	                                             ~~~~~~~~~
+!!! error TS1528: Any Unicode property that would possibly match more than a single character is only available when the Unicode Sets (v) flag is set.
+    	/\p{RGI_Emoji}\P{RGI_Emoji}[^\p{RGI_Emoji}\P{RGI_Emoji}]/v,
+    	                 ~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                             ~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                                             ~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	// Character escapes
+    	/\c[\c0\ca\cQ\c\C]\c1\C/,
+    	/\c[\c0\ca\cQ\c\C]\c1\C/u,
+    	 ~~
+!!! error TS1512: '\c' must be followed by an ASCII letter.
+    	    ~~
+!!! error TS1512: '\c' must be followed by an ASCII letter.
+    	             ~~
+!!! error TS1512: '\c' must be followed by an ASCII letter.
+    	               ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	                  ~~
+!!! error TS1512: '\c' must be followed by an ASCII letter.
+    	                     ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/,
+    	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/u,
+    	 ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	     ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	        ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	            ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	               ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	                   ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	                      ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	                                     ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	                                       ~
+!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+    	                                        ~
+!!! error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+    	                                         ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	                                           ~
+!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+    	/\q\\\`[\q\\\`[\Q\\\Q{\q{foo|bar|baz]\q{]\q{/v,
+    	 ~~
+!!! error TS1511: '\q' is only available inside character class.
+    	     ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	        ~~
+!!! error TS1521: '\q' must be followed by string alternatives enclosed in braces.
+    	               ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	                   ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	                     ~
+!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+    	                                    ~
+!!! error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+    	                                     ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	                                       ~
+!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+    	                                        ~
+!!! error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+    	                                         ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	                                           ~
+!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+    	                                            
+!!! error TS1005: '}' expected.
+    	// Unicode sets notation
+    	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/,
+    	  ~~~
+!!! error TS1517: Range out of order in character class.
+    	      ~~~
+!!! error TS1517: Range out of order in character class.
+    	                                ~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                        ~~~~~
+!!! error TS1530: Unicode property value expressions are only available when the Unicode (u) flag or the Unicode Sets (v) flag is set.
+    	                                                             ~~~
+!!! error TS1517: Range out of order in character class.
+    	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/u,
+    	  ~~~
+!!! error TS1517: Range out of order in character class.
+    	      ~~~
+!!! error TS1517: Range out of order in character class.
+    	                 ~
+!!! error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+    	                                                ~
+!!! error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+    	                                                 ~
+!!! error TS1508: Unexpected ']'. Did you mean to escape it with backslash?
+    	                                                     ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	                                                       ~
+!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+    	                                                           ~
+!!! error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+    	                                                             ~~~
+!!! error TS1517: Range out of order in character class.
+    	                                                                          ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+    	/[a--b[--][\d++[]]&&[[&0-9--]&&[\p{L}]--\P{L}-_-]]&&&\q{foo}[0---9][&&q&&&\q{bar}&&]/v,
+    	      
+!!! error TS1005: '--' expected.
+    	       
+!!! error TS1520: Expected a class set operand.
+    	         
+!!! error TS1520: Expected a class set operand.
+    	          
+!!! error TS1005: '--' expected.
+    	             ~~
+!!! error TS1522: A character class must not contain a reserved double punctuator. Did you mean to escape it with backslash?
+    	                  ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                          ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                                      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                                             ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                                               ~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                                                
+!!! error TS1520: Expected a class set operand.
+    	                                                     ~~
+!!! error TS1511: '\q' is only available inside character class.
+    	                                                       ~
+!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+    	                                                           ~
+!!! error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+    	                                                                ~
+!!! error TS1508: Unexpected '-'. Did you mean to escape it with backslash?
+    	                                                                 
+!!! error TS1005: '--' expected.
+    	                                                                    
+!!! error TS1520: Expected a class set operand.
+    	                                                                         ~
+!!! error TS1508: Unexpected '&'. Did you mean to escape it with backslash?
+    	                                                                                   
+!!! error TS1520: Expected a class set operand.
+    	/[[^\P{Decimal_Number}&&[0-9]]&&\p{L}&&\p{ID_Continue}--\p{ASCII}\p{CWCF}]/v,
+    	                                                      ~~
+!!! error TS1519: Operators must not be mixed within a character class. Wrap it in a nested class instead.
+    	                                                                 
+!!! error TS1005: '&&' expected.
+    	/[^\p{Emoji}\p{RGI_Emoji}][^\p{Emoji}--\p{RGI_Emoji}][^\p{Emoji}&&\p{RGI_Emoji}]/v,
+    	/[^\p{RGI_Emoji}\p{Emoji}][^\p{RGI_Emoji}--\p{Emoji}][^\p{RGI_Emoji}&&\p{Emoji}]/v,
+    	   ~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                            ~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	/[^\p{RGI_Emoji}\q{foo}][^\p{RGI_Emoji}--\q{foo}][^\p{RGI_Emoji}&&\q{foo}]/v,
+    	   ~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                          ~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                                                   ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	/[^\p{Emoji}[[\p{RGI_Emoji}]]][^\p{Emoji}--[[\p{RGI_Emoji}]]][^\p{Emoji}&&[[\p{RGI_Emoji}]]]/v,
+    	/[^[[\p{RGI_Emoji}]]\p{Emoji}][^[[\p{RGI_Emoji}]]--\p{Emoji}][^[[\p{RGI_Emoji}]]&&\p{Emoji}]/v,
+    	   ~~~~~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                                ~~~~~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	/[^[[\p{RGI_Emoji}]]\q{foo}][^[[\p{RGI_Emoji}]]--\q{foo}][^[[\p{RGI_Emoji}]]&&\q{foo}]/v,
+    	   ~~~~~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                              ~~~~~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                                                           ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	/[^\q{foo|bar|baz}--\q{foo}--\q{bar}--\q{baz}][^\p{L}--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v,
+    	   ~~~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                                                                             ~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	/[^[[\q{foo|bar|baz}]]--\q{foo}--\q{bar}--\q{baz}][^[^[^\p{L}]]--\q{foo}--[\q{bar}]--[^[\q{baz}]]]/v,
+    	   ~~~~~~~~~~~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    	                                                                                       ~~~~~~~~~
+!!! error TS1518: Anything that would possibly match more than a single character is invalid inside a negated character class.
+    ];
+    

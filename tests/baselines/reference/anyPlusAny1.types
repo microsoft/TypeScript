@@ -6,10 +6,14 @@ var x: any;
 
 x.name = "hello";
 >x.name = "hello" : "hello"
+>                 : ^^^^^^^
 >x.name : any
 >x : any
+>  : ^^^
 >name : any
+>     : ^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 var z = x + x;
 >z : any

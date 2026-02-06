@@ -1,10 +1,10 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 // @jsx: react
 // @module: esnext
 // @esModuleInterop: true
-// @moduleResolution: node
-
+// @moduleResolution: bundler
 // @Filename: /node_modules/react/index.d.ts
 ////export = React;
 ////export as namespace React;

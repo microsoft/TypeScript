@@ -34,6 +34,7 @@ import {
     makeImport,
     ModifierFlags,
     ModuleBlock,
+    ModuleExportName,
     NamespaceDeclaration,
     Node,
     NodeFlags,
@@ -50,12 +51,12 @@ import {
     TypeAliasDeclaration,
     TypeChecker,
     VariableStatement,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
     isRefactorErrorInfo,
     RefactorErrorInfo,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Convert export";
 
@@ -236,7 +237,7 @@ function changeImports(program: Program, { wasDefault, exportName, exportingModu
     });
 }
 
-function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identifier, changes: textChanges.ChangeTracker, exportName: string): void {
+function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: ModuleExportName, changes: textChanges.ChangeTracker, exportName: string): void {
     const { parent } = ref;
     switch (parent.kind) {
         case SyntaxKind.PropertyAccessExpression:
@@ -282,7 +283,7 @@ function changeDefaultToNamedImport(importingSourceFile: SourceFile, ref: Identi
     }
 }
 
-function changeNamedToDefaultImport(importingSourceFile: SourceFile, ref: Identifier, changes: textChanges.ChangeTracker): void {
+function changeNamedToDefaultImport(importingSourceFile: SourceFile, ref: ModuleExportName, changes: textChanges.ChangeTracker): void {
     const parent = ref.parent as PropertyAccessExpression | ImportSpecifier | ExportSpecifier;
     switch (parent.kind) {
         case SyntaxKind.PropertyAccessExpression:

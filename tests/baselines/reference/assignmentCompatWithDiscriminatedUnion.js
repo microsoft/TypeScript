@@ -101,7 +101,7 @@ namespace GH14865 {
     }
 
     const a: Style2 = { type: "A", data: "whatevs" };
-    let b: Style1;
+    declare let b: Style1;
     a.type; // "A" | "B"
     b.type; // "A" | "B"
     b = a; // should be assignable
@@ -203,8 +203,33 @@ namespace GH39357 {
     const a: A = b === "a" || b === "b" ? [b, 1] : ["c", ""];
 }
 
+// https://github.com/microsoft/TypeScript/issues/58603
+namespace GH58603 {
+    enum MyEnum { A = 1, B = 2 }
+
+    type TypeA = { kind: MyEnum.A, id?: number };
+    
+    type TypeB = { kind: MyEnum.B } & ({ id?: undefined } | { id: number });
+    
+    type MyType = TypeA | TypeB;
+    
+    function something(a: MyType): void {}
+    
+    function indirect(kind: MyEnum, id?: number): void {
+        something({ kind, id });
+    }
+    
+    type Foo = { kind: "a" | "b", value: number } | { kind: "a", value: undefined } | { kind: "b", value: undefined };
+    
+    function test(obj: { kind: "a" | "b", value: number | undefined }) {
+        let x1: Foo = obj;
+        let x2: Foo = { kind: obj.kind, value: obj.value };
+    }
+}
+
 
 //// [assignmentCompatWithDiscriminatedUnion.js]
+"use strict";
 // see 'typeRelatedToDiscriminatedType' in checker.ts:
 // IteratorResult
 var Example1;
@@ -245,8 +270,7 @@ var Example5;
 // https://github.com/Microsoft/TypeScript/issues/14865
 var GH14865;
 (function (GH14865) {
-    var a = { type: "A", data: "whatevs" };
-    var b;
+    const a = { type: "A", data: "whatevs" };
     a.type; // "A" | "B"
     b.type; // "A" | "B"
     b = a; // should be assignable
@@ -270,8 +294,8 @@ var GH12052;
             return "linear";
         }
     }
-    var bad = { type: getAxisType() };
-    var good = { type: undefined };
+    const bad = { type: getAxisType() };
+    const good = { type: undefined };
     good.type = getAxisType();
 })(GH12052 || (GH12052 = {}));
 // https://github.com/Microsoft/TypeScript/issues/18421
@@ -288,14 +312,14 @@ var GH15907;
 (function (GH15907) {
     function dispatchAction(action) {
     }
-    var active = true;
+    const active = true;
     dispatchAction({ type: (active ? 'disactivate' : 'activate') });
 })(GH15907 || (GH15907 = {}));
 // https://github.com/Microsoft/TypeScript/issues/20889
 var GH20889;
 (function (GH20889) {
     function foo(obj1) {
-        var obj2 = {
+        const obj2 = {
             type: obj1.type
         };
     }
@@ -303,5 +327,22 @@ var GH20889;
 // https://github.com/microsoft/TypeScript/issues/39357
 var GH39357;
 (function (GH39357) {
-    var a = b === "a" || b === "b" ? [b, 1] : ["c", ""];
+    const a = b === "a" || b === "b" ? [b, 1] : ["c", ""];
 })(GH39357 || (GH39357 = {}));
+// https://github.com/microsoft/TypeScript/issues/58603
+var GH58603;
+(function (GH58603) {
+    let MyEnum;
+    (function (MyEnum) {
+        MyEnum[MyEnum["A"] = 1] = "A";
+        MyEnum[MyEnum["B"] = 2] = "B";
+    })(MyEnum || (MyEnum = {}));
+    function something(a) { }
+    function indirect(kind, id) {
+        something({ kind, id });
+    }
+    function test(obj) {
+        let x1 = obj;
+        let x2 = { kind: obj.kind, value: obj.value };
+    }
+})(GH58603 || (GH58603 = {}));

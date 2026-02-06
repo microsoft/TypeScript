@@ -3,20 +3,26 @@
 === index.js ===
 export class A {
 >A : A
+>  : ^
 
     /** @returns {this} */
     method() {
 >method : () => this
+>       : ^^^^^^    
 
         return this;
 >this : this
+>     : ^^^^
     }
 }
 export default class Base extends A {
 >Base : Base
+>     : ^^^^
 >A : A
+>  : ^
 
     // This method is required to reproduce #35932
     verify() { }
 >verify : () => void
+>       : ^^^^^^^^^^
 }

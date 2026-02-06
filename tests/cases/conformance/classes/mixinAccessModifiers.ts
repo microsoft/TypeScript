@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 
 type Constructable = new (...args: any[]) => object;

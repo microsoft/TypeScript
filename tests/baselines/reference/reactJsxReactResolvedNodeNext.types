@@ -5,12 +5,15 @@ export const a = <div></div>;
 >a : error
 ><div></div> : error
 >div : any
+>    : ^^^
 >div : any
+>    : ^^^
 
 === node_modules/@types/react/index.d.ts ===
 declare namespace JSX {
     interface IntrinsicElements { [x: string]: any; }
 >x : string
+>  : ^^^^^^
 }
 === node_modules/@types/react/jsx-runtime.d.ts ===
 

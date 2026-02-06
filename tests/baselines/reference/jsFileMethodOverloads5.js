@@ -36,4 +36,4 @@ export function foo(a: string): void;
  * @param {number} [b]
  * @return {void}
  */
-export function foo(a: number, b?: number): void;
+export function foo(a: number, b?: number | undefined): void;

@@ -23,7 +23,7 @@ callNonGenericFunctionWithTypeArguments.ts(43,10): error TS2347: Untyped functio
                 ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
-    var f3: { (x: number): any; }
+    declare var f3: { (x: number): any; }
     var r3 = f3<string>(1);
                 ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
@@ -40,7 +40,7 @@ callNonGenericFunctionWithTypeArguments.ts(43,10): error TS2347: Untyped functio
     interface I {
         f(x: number): any;
     }
-    var i: I;
+    declare var i: I;
     var r5 = i.f<string>(1);
                  ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
@@ -57,17 +57,17 @@ callNonGenericFunctionWithTypeArguments.ts(43,10): error TS2347: Untyped functio
     interface I2 {
         f(x: number);
     }
-    var i2: I2;
+    declare var i2: I2;
     var r7 = i2.f<string>(1);
                   ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
-    var a;
+    declare var a;
     var r8 = a<number>();
              ~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.
     
-    var a2: any;
+    declare var a2: any;
     var r8 = a2<number>();
              ~~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.

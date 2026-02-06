@@ -3,12 +3,16 @@
 === assignmentCompatability44.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     constructor(x: number) {}
 >x : number
+>  : ^^^^^^
 }
 
 const foo: { new(): Foo } = Foo;
 >foo : new () => Foo
+>    : ^^^^^^^^^^   
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 

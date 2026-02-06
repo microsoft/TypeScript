@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/declarationEmitPartialReuseComputedProperty.ts] ////
+
+=== a.ts ===
+export const n = "A"
+>n : Symbol(n, Decl(a.ts, 0, 12))
+
+export const poz = 1;
+>poz : Symbol(poz, Decl(a.ts, 1, 12))
+
+export const neg = -1;
+>neg : Symbol(neg, Decl(a.ts, 2, 12))
+
+export const o = () => null! as { [n]: string, foo: string, [poz]: number, [neg]: number }
+>o : Symbol(o, Decl(a.ts, 3, 12))
+>[n] : Symbol([n], Decl(a.ts, 3, 33))
+>n : Symbol(n, Decl(a.ts, 0, 12))
+>foo : Symbol(foo, Decl(a.ts, 3, 46))
+>[poz] : Symbol([poz], Decl(a.ts, 3, 59))
+>poz : Symbol(poz, Decl(a.ts, 1, 12))
+>[neg] : Symbol([neg], Decl(a.ts, 3, 74))
+>neg : Symbol(neg, Decl(a.ts, 2, 12))
+
+=== b.ts ===
+import { o } from "./a";
+>o : Symbol(o, Decl(b.ts, 0, 8))
+
+export const g = o
+>g : Symbol(g, Decl(b.ts, 1, 12))
+>o : Symbol(o, Decl(b.ts, 0, 8))
+

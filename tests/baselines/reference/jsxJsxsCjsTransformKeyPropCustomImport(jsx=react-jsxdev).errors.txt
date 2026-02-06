@@ -1,4 +1,4 @@
-jsxJsxsCjsTransformKeyPropCustomImport.tsx(3,11): error TS2307: Cannot find module 'preact/jsx-dev-runtime' or its corresponding type declarations.
+jsxJsxsCjsTransformKeyPropCustomImport.tsx(3,11): error TS2875: This JSX tag requires the module path 'preact/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
 
 
 ==== jsxJsxsCjsTransformKeyPropCustomImport.tsx (1 errors) ====
@@ -6,7 +6,7 @@ jsxJsxsCjsTransformKeyPropCustomImport.tsx(3,11): error TS2307: Cannot find modu
     const props = { answer: 42 }
     const a = <div key="foo" {...props}>text</div>;
               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'preact/jsx-dev-runtime' or its corresponding type declarations.
+!!! error TS2875: This JSX tag requires the module path 'preact/jsx-dev-runtime' to exist, but none could be found. Make sure you have types for the appropriate package installed.
     const b = <div {...props} key="bar">text</div>;
     
     export {};

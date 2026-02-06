@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/coAndContraVariantInferences8.ts] ////
+
+=== coAndContraVariantInferences8.ts ===
+// https://github.com/microsoft/TypeScript/issues/58468
+
+declare const fn: (() => void) | ((a: number) => void);
+>fn : Symbol(fn, Decl(coAndContraVariantInferences8.ts, 2, 13))
+>a : Symbol(a, Decl(coAndContraVariantInferences8.ts, 2, 35))
+
+declare const x: number;
+>x : Symbol(x, Decl(coAndContraVariantInferences8.ts, 4, 13))
+
+declare const y: any;
+>y : Symbol(y, Decl(coAndContraVariantInferences8.ts, 5, 13))
+
+fn.call(null, x);
+>fn.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(coAndContraVariantInferences8.ts, 2, 13))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(coAndContraVariantInferences8.ts, 4, 13))
+
+fn.call(null, y);
+>fn.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>fn : Symbol(fn, Decl(coAndContraVariantInferences8.ts, 2, 13))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(coAndContraVariantInferences8.ts, 5, 13))
+
+export {};
+

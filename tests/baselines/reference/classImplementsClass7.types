@@ -3,11 +3,14 @@
 === classImplementsClass7.ts ===
 class A {
 >A : A
+>  : ^
 
     private x: number;
 >x : number
+>  : ^^^^^^
 }
 
 class B implements A {}
 >B : B
+>  : ^
 

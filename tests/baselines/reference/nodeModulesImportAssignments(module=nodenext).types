@@ -4,27 +4,35 @@
 // cjs format file
 import fs = require("fs");
 >fs : any
+>   : ^^^
 
 fs.readFile;
 >fs.readFile : any
 >fs : any
+>   : ^^^
 >readFile : any
+>         : ^^^
 
 export import fs2 = require("fs");
 >fs2 : any
+>    : ^^^
 
 === index.ts ===
 // esm format file
 import fs = require("fs");
 >fs : any
+>   : ^^^
 
 fs.readFile;
 >fs.readFile : any
 >fs : any
+>   : ^^^
 >readFile : any
+>         : ^^^
 
 export import fs2 = require("fs");
 >fs2 : any
+>    : ^^^
 
 === file.ts ===
 // esm format file
@@ -36,14 +44,18 @@ const _createRequire = null;
 
 import fs = require("fs");
 >fs : any
+>   : ^^^
 
 fs.readFile;
 >fs.readFile : any
 >fs : any
+>   : ^^^
 >readFile : any
+>         : ^^^
 
 export import fs2 = require("fs");
 >fs2 : any
+>    : ^^^
 
 === types.d.ts ===
 declare module "fs";

@@ -6,5 +6,7 @@ export {};
 // reparse variable name as await should fail
 var await = 1;
 >await : number
+>      : ^^^^^^
 >1 : 1
+>  : ^
 

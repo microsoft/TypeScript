@@ -3,10 +3,13 @@
 === privateNameStaticFieldInitializer.ts ===
 class A {
 >A : A
+>  : ^
 
     static #field = 10;
 >#field : number
+>       : ^^^^^^
 >10 : 10
+>   : ^^
 
     static #uninitialized;
 >#uninitialized : any

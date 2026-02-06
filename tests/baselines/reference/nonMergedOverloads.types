@@ -3,11 +3,15 @@
 === nonMergedOverloads.ts ===
 var f = 10;
 >f : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 
 export function f();
 >f : () => any
+>  : ^^^^^^^^^
 
 export function f() {
 >f : () => any
+>  : ^^^^^^^^^
 }

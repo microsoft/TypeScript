@@ -16,7 +16,6 @@
                 "kind": "Identifier",
                 "pos": 7,
                 "end": 12,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "param"
             },
@@ -44,7 +43,6 @@
                                 "kind": "Identifier",
                                 "pos": 35,
                                 "end": 40,
-                                "modifierFlagsCache": 0,
                                 "transformFlags": 0,
                                 "escapedText": "param"
                             },
@@ -59,7 +57,6 @@
                                     "kind": "StringKeyword",
                                     "pos": 42,
                                     "end": 48,
-                                    "modifierFlagsCache": 0,
                                     "transformFlags": 1
                                 }
                             },
@@ -73,7 +70,6 @@
                                     "kind": "Identifier",
                                     "pos": 50,
                                     "end": 51,
-                                    "modifierFlagsCache": 0,
                                     "transformFlags": 0,
                                     "escapedText": "o"
                                 },
@@ -81,7 +77,6 @@
                                     "kind": "Identifier",
                                     "pos": 52,
                                     "end": 53,
-                                    "modifierFlagsCache": 0,
                                     "transformFlags": 0,
                                     "escapedText": "f"
                                 }
@@ -102,7 +97,6 @@
                 "kind": "Identifier",
                 "pos": 22,
                 "end": 23,
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "o"
             },

@@ -3,9 +3,13 @@
 === asiPreventsParsingAsInterface05.ts ===
 "use strict"
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
-var interface: number;
+var interface: number = 123;
 >interface : number
+>          : ^^^^^^
+>123 : 123
+>    : ^^^
 
 // 'interface' is a strict mode reserved word, and so it would be permissible
 // to allow 'interface' and the name of the interface to be on separate lines;
@@ -14,8 +18,10 @@ var interface: number;
 
 interface   // This should be the identifier 'interface'
 >interface : number
+>          : ^^^^^^
 
 I           // This should be the identifier 'I'
 >I : any
+>  : ^^^
 
 { }         // This should be a block body

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 abstract
 class NonAbstractClass {
   abstract s();

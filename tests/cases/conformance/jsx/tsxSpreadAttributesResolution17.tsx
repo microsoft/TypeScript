@@ -1,9 +1,9 @@
+// @module: commonjs
+// @target: es2015
 // @strictNullChecks: true
 // @filename: file.tsx
 // @jsx: preserve
-// @noLib: true
 // @skipLibCheck: true
-// @libFiles: lib.d.ts
 
 declare global {
     namespace JSX {

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @filename:circularMultipleAssignmentDeclaration.js
 // @allowJs: true
 // @checkJs: true

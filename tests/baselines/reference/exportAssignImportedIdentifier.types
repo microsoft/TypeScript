@@ -3,30 +3,42 @@
 === foo3.ts ===
 import foo2 = require('./foo2');
 >foo2 : () => boolean
+>     : ^^^^^^^^^^^^^
 
 var x = foo2(); // should be boolean
 >x : boolean
+>  : ^^^^^^^
 >foo2() : boolean
+>       : ^^^^^^^
 >foo2 : () => boolean
+>     : ^^^^^^^^^^^^^
 
 === foo1.ts ===
 export function x(){
 >x : () => boolean
+>  : ^^^^^^^^^^^^^
 
 	return true;
 >true : true
+>     : ^^^^
 }
 
 === foo2.ts ===
 import foo1 = require('./foo1');
 >foo1 : typeof foo1
+>     : ^^^^^^^^^^^
 
 var x = foo1.x;
 >x : () => boolean
+>  : ^^^^^^^^^^^^^
 >foo1.x : () => boolean
+>       : ^^^^^^^^^^^^^
 >foo1 : typeof foo1
+>     : ^^^^^^^^^^^
 >x : () => boolean
+>  : ^^^^^^^^^^^^^
 
 export = x;
 >x : () => boolean
+>  : ^^^^^^^^^^^^^
 

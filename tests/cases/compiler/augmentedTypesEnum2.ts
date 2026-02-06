@@ -1,3 +1,4 @@
+// @target: es2015
 // enum then interface
 enum e1 { One } // error
 

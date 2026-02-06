@@ -3,6 +3,9 @@
 === emitArrowFunctionWhenUsingArguments02_ES6.ts ===
 var a = () => arguments;
 >a : () => any
+>  : ^^^^^^^^^
 >() => arguments : () => any
+>                : ^^^^^^^^^
 >arguments : any
+>          : ^^^
 

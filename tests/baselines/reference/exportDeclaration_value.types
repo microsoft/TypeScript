@@ -3,16 +3,22 @@
 === /a.ts ===
 const A = {};
 >A : {}
+>  : ^^
 >{} : {}
+>   : ^^
 
 export type { A };
 >A : any
+>  : ^^^
 
 export const AA = {};
 >AA : {}
+>   : ^^
 >{} : {}
+>   : ^^
 
 === /b.ts ===
 export type { AA } from './a';
 >AA : any
+>   : ^^^
 

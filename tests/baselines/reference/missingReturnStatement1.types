@@ -3,9 +3,11 @@
 === missingReturnStatement1.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     foo(): number {
 >foo : () => number
+>    : ^^^^^^      
 
         //return 4;
     }

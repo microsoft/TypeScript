@@ -10,7 +10,6 @@
         "pos": 1,
         "end": 2,
         "flags": "JSDoc",
-        "modifierFlagsCache": 0,
         "transformFlags": 0,
         "escapedText": "a"
     },
@@ -20,7 +19,6 @@
             "pos": 4,
             "end": 10,
             "flags": "JSDoc",
-            "modifierFlagsCache": 0,
             "transformFlags": 1
         },
         "1": {
@@ -28,7 +26,6 @@
             "pos": 11,
             "end": 17,
             "flags": "JSDoc",
-            "modifierFlagsCache": 0,
             "transformFlags": 1
         },
         "length": 2,

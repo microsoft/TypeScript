@@ -4,9 +4,10 @@
 // no error since module is not instantiated
 
 var a;
-module M { }
+namespace M { }
 import a = M;
 
 //// [duplicateVarAndImport.js]
+"use strict";
 // no error since module is not instantiated
 var a;

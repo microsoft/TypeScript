@@ -3,4 +3,5 @@
 === asyncFunctionDeclaration11_es6.ts ===
 async function await(): Promise<void> {
 >await : () => Promise<void>
+>      : ^^^^^^             
 }

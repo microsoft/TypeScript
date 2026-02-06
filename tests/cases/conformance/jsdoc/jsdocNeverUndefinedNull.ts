@@ -1,6 +1,7 @@
+// @target: es2015
 // @allowJs: true
 // @filename: in.js
-// @out: out.js
+// @outFile: out.js
 /**
  * @param {never} p1
  * @param {undefined} p2

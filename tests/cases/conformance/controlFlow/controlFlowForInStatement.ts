@@ -1,3 +1,4 @@
+// @target: es2015
 let x: string | number | boolean | RegExp | Function;
 let obj: any;
 let cond: boolean;

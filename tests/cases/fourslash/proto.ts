@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////module M {
+////namespace M {
 ////    export interface /*1*/__proto__ {}
 ////}
 ////var /*2*/__proto__: M.__proto__;

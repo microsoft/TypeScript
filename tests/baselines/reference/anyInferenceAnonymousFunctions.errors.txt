@@ -1,0 +1,35 @@
+anyInferenceAnonymousFunctions.ts(3,1): error TS2454: Variable 'paired' is used before being assigned.
+anyInferenceAnonymousFunctions.ts(9,1): error TS2454: Variable 'paired' is used before being assigned.
+anyInferenceAnonymousFunctions.ts(14,1): error TS2454: Variable 'paired' is used before being assigned.
+anyInferenceAnonymousFunctions.ts(16,1): error TS2454: Variable 'paired' is used before being assigned.
+anyInferenceAnonymousFunctions.ts(17,1): error TS2454: Variable 'paired' is used before being assigned.
+
+
+==== anyInferenceAnonymousFunctions.ts (5 errors) ====
+    var paired: any[];
+    
+    paired.reduce(function (a1, a2) {
+    ~~~~~~
+!!! error TS2454: Variable 'paired' is used before being assigned.
+    
+        return a1.concat({});
+    
+    } , []);
+    
+    paired.reduce((b1, b2) => {
+    ~~~~~~
+!!! error TS2454: Variable 'paired' is used before being assigned.
+    
+        return b1.concat({});
+    } , []);
+    
+    paired.reduce((b3, b4) => b3.concat({}), []);
+    ~~~~~~
+!!! error TS2454: Variable 'paired' is used before being assigned.
+    
+    paired.map((c1) => c1.count);
+    ~~~~~~
+!!! error TS2454: Variable 'paired' is used before being assigned.
+    paired.map(function (c2) { return c2.count; });
+    ~~~~~~
+!!! error TS2454: Variable 'paired' is used before being assigned.

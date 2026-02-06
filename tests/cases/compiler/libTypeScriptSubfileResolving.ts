@@ -1,4 +1,6 @@
+// @target: es2015
 // @traceResolution: true
+// @libReplacement: true
 
 // @Filename: /node_modules/@typescript/lib-dom/index.d.ts
 // NOOP

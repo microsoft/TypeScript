@@ -1,3 +1,6 @@
+// @target: es2015
+// @module: commonjs
+// @strict: false
 // @noImplicitReferences: true
 // @currentDirectory: /
 // @traceResolution: true

@@ -16,7 +16,6 @@ import {
     GetCanonicalFileName,
     getDirectoryPath,
     getFileMatcherPatterns,
-    getModeForUsageLocation,
     getOptionFromName,
     getRegexFromPattern,
     getRelativePathFromDirectory,
@@ -49,7 +48,7 @@ import {
     TextRange,
     tryRemoveDirectoryPrefix,
     UserPreferences,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 /** @internal */
 export function getEditsForFileRename(
@@ -246,9 +245,9 @@ function getSourceFileToImport(
         return newFileName === undefined ? { newFileName: oldFileName, updated: false } : { newFileName, updated: true };
     }
     else {
-        const mode = getModeForUsageLocation(importingSourceFile, importLiteral);
+        const mode = program.getModeForUsageLocation(importingSourceFile, importLiteral);
         const resolved = host.resolveModuleNameLiterals || !host.resolveModuleNames ?
-            program.getResolvedModule(importingSourceFile, importLiteral.text, mode) :
+            program.getResolvedModuleFromModuleSpecifier(importLiteral, importingSourceFile) :
             host.getResolvedModuleWithFailedLookupLocationsFromCache && host.getResolvedModuleWithFailedLookupLocationsFromCache(importLiteral.text, importingSourceFile.fileName, mode);
         return getSourceFileToImportFromResolved(importLiteral, resolved, oldToNew, program.getSourceFiles());
     }

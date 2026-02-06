@@ -1,0 +1,151 @@
+//// [tests/cases/conformance/es2022/arbitraryModuleNamespaceIdentifiers/arbitraryModuleNamespaceIdentifiers_module.ts] ////
+
+=== arbitraryModuleNamespaceIdentifiers_module.ts ===
+const someValue = "someValue";
+>someValue : "someValue"
+>          : ^^^^^^^^^^^
+>"someValue" : "someValue"
+>            : ^^^^^^^^^^^
+
+type someType = "someType";
+>someType : "someType"
+>         : ^^^^^^^^^^
+
+export { someValue as "<X>" };
+>someValue : "someValue"
+>          : ^^^^^^^^^^^
+>"<X>" : "someValue"
+>      : ^^^^^^^^^^^
+
+import { "<X>" as valueX } from "./arbitraryModuleNamespaceIdentifiers_module";
+>valueX : "someValue"
+>       : ^^^^^^^^^^^
+
+if (valueX !== "someValue") throw "should be someValue";
+>valueX !== "someValue" : boolean
+>                       : ^^^^^^^
+>valueX : "someValue"
+>       : ^^^^^^^^^^^
+>"someValue" : "someValue"
+>            : ^^^^^^^^^^^
+>"should be someValue" : "should be someValue"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+
+export { "<X>" as "<Y>" } from "./arbitraryModuleNamespaceIdentifiers_module";
+>"<Y>" : "someValue"
+>      : ^^^^^^^^^^^
+
+import { "<Y>" as valueY } from "./arbitraryModuleNamespaceIdentifiers_module";
+>valueY : "someValue"
+>       : ^^^^^^^^^^^
+
+if (valueY !== "someValue") throw "should be someValue";
+>valueY !== "someValue" : boolean
+>                       : ^^^^^^^
+>valueY : "someValue"
+>       : ^^^^^^^^^^^
+>"someValue" : "someValue"
+>            : ^^^^^^^^^^^
+>"should be someValue" : "should be someValue"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+
+export * as "<Z>" from "./arbitraryModuleNamespaceIdentifiers_module";
+>"<Z>" : typeof valueZ
+>      : ^^^^^^^^^^^^^
+
+import { "<Z>" as valueZ } from "./arbitraryModuleNamespaceIdentifiers_module";
+>valueZ : typeof valueZ
+>       : ^^^^^^^^^^^^^
+
+if (valueZ["<X>"] !== "someValue") throw "should be someValue";
+>valueZ["<X>"] !== "someValue" : boolean
+>                              : ^^^^^^^
+>valueZ["<X>"] : "someValue"
+>              : ^^^^^^^^^^^
+>valueZ : typeof valueZ
+>       : ^^^^^^^^^^^^^
+>"<X>" : "<X>"
+>      : ^^^^^
+>"someValue" : "someValue"
+>            : ^^^^^^^^^^^
+>"should be someValue" : "should be someValue"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+
+if (valueZ["<Y>"] !== "someValue") throw "should be someValue";
+>valueZ["<Y>"] !== "someValue" : boolean
+>                              : ^^^^^^^
+>valueZ["<Y>"] : "someValue"
+>              : ^^^^^^^^^^^
+>valueZ : typeof valueZ
+>       : ^^^^^^^^^^^^^
+>"<Y>" : "<Y>"
+>      : ^^^^^
+>"someValue" : "someValue"
+>            : ^^^^^^^^^^^
+>"should be someValue" : "should be someValue"
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+
+if (valueZ["<Z>"] !== valueZ) throw "should be export namespace";
+>valueZ["<Z>"] !== valueZ : boolean
+>                         : ^^^^^^^
+>valueZ["<Z>"] : typeof valueZ
+>              : ^^^^^^^^^^^^^
+>valueZ : typeof valueZ
+>       : ^^^^^^^^^^^^^
+>"<Z>" : "<Z>"
+>      : ^^^^^
+>valueZ : typeof valueZ
+>       : ^^^^^^^^^^^^^
+>"should be export namespace" : "should be export namespace"
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export { type someType as "<A>" };
+>someType : any
+>         : ^^^
+>"<A>" : any
+>      : ^^^
+
+import { type "<A>" as typeA } from "./arbitraryModuleNamespaceIdentifiers_module";
+>typeA : any
+>      : ^^^
+
+const importTest: typeA = "expect error about someType";
+>importTest : "someType"
+>           : ^^^^^^^^^^
+>"expect error about someType" : "expect error about someType"
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export { type "<A>" as "<B>" } from "./arbitraryModuleNamespaceIdentifiers_module";
+>"<B>" : any
+>      : ^^^
+
+import { type "<B>" as typeB } from "./arbitraryModuleNamespaceIdentifiers_module";
+>typeB : any
+>      : ^^^
+
+const reimportTest: typeB = "expect error about someType";
+>reimportTest : "someType"
+>             : ^^^^^^^^^^
+>"expect error about someType" : "expect error about someType"
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export type * as "<C>" from "./arbitraryModuleNamespaceIdentifiers_module";
+>"<C>" : typeof valueZ
+>      : ^^^^^^^^^^^^^
+
+import { type "<C>" as typeC } from "./arbitraryModuleNamespaceIdentifiers_module";
+>typeC : typeof valueZ
+>      : ^^^^^^^^^^^^^
+
+export type otherType = "otherType";
+>otherType : "otherType"
+>          : ^^^^^^^^^^^
+
+const importStarTestA: typeC.otherType = "expect error about otherType";
+>importStarTestA : "otherType"
+>                : ^^^^^^^^^^^
+>typeC : any
+>      : ^^^
+>"expect error about otherType" : "expect error about otherType"
+>                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+

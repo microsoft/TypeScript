@@ -4,6 +4,8 @@
 {
    declare var x = this;
 >x : typeof globalThis
+>  : ^^^^^^^^^^^^^^^^^
 >this : typeof globalThis
+>     : ^^^^^^^^^^^^^^^^^
 }
 

@@ -1,0 +1,20 @@
+error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+exportNonInitializedVariablesInIfThenStatementNoCrash1.ts(4,1): error TS1184: Modifiers cannot appear here.
+exportNonInitializedVariablesInIfThenStatementNoCrash1.ts(4,14): error TS1155: 'const' declarations must be initialized.
+exportNonInitializedVariablesInIfThenStatementNoCrash1.ts(4,26): error TS2304: Cannot find name 'CssExports'.
+
+
+!!! error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== exportNonInitializedVariablesInIfThenStatementNoCrash1.ts (3 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/59373
+    
+    if (true)
+    export const cssExports: CssExports;
+    ~~~~~~
+!!! error TS1184: Modifiers cannot appear here.
+                 ~~~~~~~~~~
+!!! error TS1155: 'const' declarations must be initialized.
+                             ~~~~~~~~~~
+!!! error TS2304: Cannot find name 'CssExports'.
+    export default cssExports;
+    

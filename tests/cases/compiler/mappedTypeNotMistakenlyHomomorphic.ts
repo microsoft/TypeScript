@@ -1,3 +1,4 @@
+// @target: es2015
 enum ABC { A, B }
 
 type Gen<T extends ABC> = { v: T; } & (

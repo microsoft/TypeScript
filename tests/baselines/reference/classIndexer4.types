@@ -3,9 +3,11 @@
 === classIndexer4.ts ===
 class C123 {
 >C123 : C123
+>     : ^^^^
 
     [s: string]: number;
 >s : string
+>  : ^^^^^^
 
     constructor() {
     }
@@ -14,7 +16,9 @@ class C123 {
 interface D123 extends C123 {
     x: number;
 >x : number
+>  : ^^^^^^
 
     y: string;
 >y : string
+>  : ^^^^^^
 }

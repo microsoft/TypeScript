@@ -3,11 +3,14 @@
 === main.ts ===
 declare module "M" {
 >"M" : typeof import("M")
+>    : ^^^^^^^^^^^^^^^^^^
 
     import C = require("external");
 >C : typeof C
+>  : ^^^^^^^^
 }
 === external.d.ts ===
 export default class C {}
 >C : C
+>  : ^
 

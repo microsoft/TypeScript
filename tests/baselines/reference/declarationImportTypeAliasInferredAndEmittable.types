@@ -3,44 +3,62 @@
 === foo.ts ===
 class Conn {
 >Conn : Conn
+>     : ^^^^
 
     constructor() { }
     item = 3;
 >item : number
+>     : ^^^^^^
 >3 : 3
+>  : ^
 
     method() { }
 >method : () => void
+>       : ^^^^^^^^^^
 }
 
 export = Conn;
 >Conn : Conn
+>     : ^^^^
 
 === usage.ts ===
 type Conn = import("./foo");
 >Conn : import("foo")
+>     : ^^^^^^^^^^^^^
 
 declare var x: Conn;
 >x : import("foo")
+>  : ^^^^^^^^^^^^^
 
 export class Wrap {
 >Wrap : Wrap
+>     : ^^^^
 
     connItem: number;
 >connItem : number
+>         : ^^^^^^
 
     constructor(c = x) {
 >c : import("foo")
+>  : ^^^^^^^^^^^^^
 >x : import("foo")
+>  : ^^^^^^^^^^^^^
 
         this.connItem = c.item;
 >this.connItem = c.item : number
+>                       : ^^^^^^
 >this.connItem : number
+>              : ^^^^^^
 >this : this
+>     : ^^^^
 >connItem : number
+>         : ^^^^^^
 >c.item : number
+>       : ^^^^^^
 >c : import("foo")
+>  : ^^^^^^^^^^^^^
 >item : number
+>     : ^^^^^^
     }
 }
 

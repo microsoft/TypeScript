@@ -1,0 +1,11 @@
+//// [tests/cases/compiler/declarationEmitVarInElidedBlock.ts] ////
+
+=== declarationEmitVarInElidedBlock.ts ===
+{
+    var a = "";
+>a : Symbol(a, Decl(declarationEmitVarInElidedBlock.ts, 1, 7))
+}
+export let b: typeof a;
+>b : Symbol(b, Decl(declarationEmitVarInElidedBlock.ts, 3, 10))
+>a : Symbol(a, Decl(declarationEmitVarInElidedBlock.ts, 1, 7))
+

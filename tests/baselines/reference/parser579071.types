@@ -3,5 +3,7 @@
 === parser579071.ts ===
 var x = /fo(o/;
 >x : RegExp
+>  : ^^^^^^
 >/fo(o/ : RegExp
+>       : ^^^^^^
 

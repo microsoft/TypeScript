@@ -1,6 +1,6 @@
 /* Generated file to emulate the ts.server namespace. */
 
-export * from "../../jsTyping/_namespaces/ts.server";
-export * from "../../server/_namespaces/ts.server";
-export * from "../../typingsInstallerCore/_namespaces/ts.server";
-export * from "../client";
+export * from "../../jsTyping/_namespaces/ts.server.js";
+export * from "../../server/_namespaces/ts.server.js";
+export * from "../../typingsInstallerCore/_namespaces/ts.server.js";
+export * from "../client.js";

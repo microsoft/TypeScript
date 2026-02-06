@@ -74,7 +74,7 @@ function foo10(x: number) {
 }
 var r10 = foo10(1);
 
-module M {
+namespace M {
     export var x = 1;
     export class C { foo: string }
 }
@@ -97,7 +97,7 @@ function foo12() {
 var r12 = foo12();
 
 function m1() { return 1; }
-module m1 { export var y = 2; }
+namespace m1 { export var y = 2; }
 function foo13() {
     return m1;
 }
@@ -107,7 +107,7 @@ class c1 {
     foo: string;
     constructor(x) { }
 }
-module c1 {
+namespace c1 {
     export var x = 1;
 }
 function foo14() {
@@ -116,13 +116,14 @@ function foo14() {
 var r14 = foo14();
 
 enum e1 { A }
-module e1 { export var y = 1; }
+namespace e1 { export var y = 1; }
 function foo15() {
     return e1;
 }
 var r15 = foo15();
 
 //// [callSignatureWithoutReturnTypeAnnotationInference.js]
+"use strict";
 // Call signatures without a return type should infer one from the function body (if present)
 // Simple types
 function foo(x) {
@@ -175,11 +176,8 @@ function foo9(x) {
     return i;
 }
 var r9 = foo9(1);
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 function foo10(x) {
     var c;
     return c;
@@ -188,11 +186,8 @@ var r10 = foo10(1);
 var M;
 (function (M) {
     M.x = 1;
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     M.C = C;
 })(M || (M = {}));
 function foo11() {
@@ -212,11 +207,9 @@ function foo13() {
     return m1;
 }
 var r13 = foo13();
-var c1 = /** @class */ (function () {
-    function c1(x) {
-    }
-    return c1;
-}());
+class c1 {
+    constructor(x) { }
+}
 (function (c1) {
     c1.x = 1;
 })(c1 || (c1 = {}));

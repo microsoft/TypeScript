@@ -3,13 +3,19 @@
 === unaryOperators1.ts ===
 +foo;
 >+foo : number
+>     : ^^^^^^
 >foo : any
+>    : ^^^
 
 -bar;
 >-bar : number
+>     : ^^^^^^
 >bar : any
+>    : ^^^
 
 ~quux;
 >~quux : number
+>      : ^^^^^^
 >quux : any
+>     : ^^^
 

@@ -1,3 +1,4 @@
+// @target: es2015
 function f<T>(arr: T[], elemnt: T): T {
     return null;
 }

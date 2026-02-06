@@ -4,4 +4,5 @@
 yield * [];
 
 //// [YieldStarExpression1_es6.js]
+"use strict";
 yield * [];

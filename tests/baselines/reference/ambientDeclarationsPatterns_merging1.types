@@ -3,26 +3,34 @@
 === types.ts ===
 declare module "*.foo" {
 >"*.foo" : typeof import("*.foo")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
   let everywhere: string;
 >everywhere : string
+>           : ^^^^^^
 }
 
 
 === testA.ts ===
 import { everywhere, onlyInA } from "a.foo";
 >everywhere : string
+>           : ^^^^^^
 >onlyInA : number
+>        : ^^^^^^
 
 declare module "a.foo" {
 >"a.foo" : typeof import("a.foo")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
   let onlyInA: number;
 >onlyInA : number
+>        : ^^^^^^
 }
 
 === testB.ts ===
 import { everywhere, onlyInA } from "b.foo"; // Error
 >everywhere : string
+>           : ^^^^^^
 >onlyInA : any
+>        : ^^^
 

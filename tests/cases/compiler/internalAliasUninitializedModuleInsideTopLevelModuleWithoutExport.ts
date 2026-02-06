@@ -1,7 +1,9 @@
+// @target: es2015
+// @strict: false
 //@module: commonjs
 // @declaration: true
-export module a {
-    export module b {
+export namespace a {
+    export namespace b {
         export interface I {
             foo();
         }

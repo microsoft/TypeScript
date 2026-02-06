@@ -15,6 +15,7 @@ for(let l12 = 0; l12 < 9; l12++) { }
 
 
 //// [letDeclarations.js]
+"use strict";
 let l1;
 let l2;
 let l3, l4, l5, l6;
@@ -31,4 +32,4 @@ declare let l2: number;
 declare let l3: any, l4: any, l5: string, l6: any;
 declare let l7: boolean;
 declare let l8: number;
-declare let l9: number, l10: string, l11: any;
+declare let l9: number, l10: string, l11: null;

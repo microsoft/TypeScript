@@ -1,6 +1,7 @@
+// @target: es2015
 //@module: amd
 //@filename: collisionExportsRequireAndModule_externalmodule.ts
-export module require {
+export namespace require {
     export interface I {
     }
     export class C {
@@ -9,7 +10,7 @@ export module require {
 export function foo(): require.I {
     return null;
 }
-export module exports {
+export namespace exports {
     export interface I {
     }
     export class C {
@@ -18,28 +19,28 @@ export module exports {
 export function foo2(): exports.I {
     return null;
 }
-module m1 {
-    module require {
+namespace m1 {
+    namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    module exports {
+    namespace exports {
         export interface I {
         }
         export class C {
         }
     }
 }
-module m2 {
-    export module require {
+namespace m2 {
+    export namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    export module exports {
+    export namespace exports {
         export interface I {
         }
         export class C {
@@ -48,40 +49,40 @@ module m2 {
 }
 
 //@filename: collisionExportsRequireAndModule_globalFile.ts
-module require {
+namespace require {
     export interface I {
     }
     export class C {
     }
 }
-module exports {
+namespace exports {
     export interface I {
     }
     export class C {
     }
 }
-module m3 {
-    module require {
+namespace m3 {
+    namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    module exports {
+    namespace exports {
         export interface I {
         }
         export class C {
         }
     }
 }
-module m4 {
-    export module require {
+namespace m4 {
+    export namespace require {
         export interface I {
         }
         export class C {
         }
     }
-    export module exports {
+    export namespace exports {
         export interface I {
         }
         export class C {

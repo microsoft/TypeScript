@@ -6,6 +6,8 @@ c;
 //// [file2.ts]
 const c = 0;
 
+
 //// [out.js]
+"use strict";
 c;
 const c = 0;

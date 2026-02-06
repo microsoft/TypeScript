@@ -1,23 +1,36 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
 
-//// [/a/b/app.js]
-
-
-//// [/a/b/jquery.js]
+//// [/home/src/projects/project/app.js]
 
 
-//// [/a/b/chroma.min.js]
+//// [/home/src/projects/project/jquery.js]
 
+
+//// [/home/src/projects/project/chroma.min.js]
+
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 ts.JsTyping.discoverTypings::
     {
       "fileNames": [
-        "/a/b/app.js",
-        "/a/b/jquery.js",
-        "/a/b/chroma.min.js"
+        "/home/src/projects/project/app.js",
+        "/home/src/projects/project/jquery.js",
+        "/home/src/projects/project/chroma.min.js"
       ],
-      "projectRootPath": "/a/b",
+      "projectRootPath": "/home/src/projects/project",
       "safeList": {
         "jquery": "jquery",
         "chroma": "chroma-js"
@@ -28,7 +41,11 @@ ts.JsTyping.discoverTypings::
       },
       "unresolvedImports": [],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Inferred typings from file names: ["jquery","chroma-js"]
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
@@ -40,7 +57,7 @@ TI:: [hh:mm:ss:mss] Finished typings discovery:
         "chroma-js"
       ],
       "filesToWatch": [
-        "/a/b/bower_components",
-        "/a/b/node_modules"
+        "/home/src/projects/project/bower_components",
+        "/home/src/projects/project/node_modules"
       ]
     }

@@ -1,4 +1,5 @@
-// @out: output.js
+// @target: es2015
+// @outFile: output.js
 // @allowJs: true
 // @checkJs: true
 // @noImplicitAny: true

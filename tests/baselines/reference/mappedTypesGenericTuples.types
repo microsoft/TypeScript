@@ -1,0 +1,119 @@
+//// [tests/cases/conformance/types/mapped/mappedTypesGenericTuples.ts] ////
+
+=== mappedTypesGenericTuples.ts ===
+// Property keys are `number` following the fixed part of a tuple
+
+type K<T> = { [P in keyof T]: P };
+>K : K<T>
+>  : ^^^^
+
+type M<T> = { [P in keyof T]: T[P] };
+>M : M<T>
+>  : ^^^^
+
+type KA = K<[string, string, boolean]>;  // ["0", "1", "2"]
+>KA : ["0", "1", "2"]
+>   : ^^^^^^^^^^^^^^^
+
+type KB = K<[string, string, ...string[], string]>;  // ["0", "1", ...number[], number]
+>KB : ["0", "1", ...number[], number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type KC = K<[...string[]]>;  // number[]
+>KC : number[]
+>   : ^^^^^^^^
+
+type KD = K<string[]>;  // number[]
+>KD : number[]
+>   : ^^^^^^^^
+
+type A = { a: string };
+>A : A
+>  : ^
+>a : string
+>  : ^^^^^^
+
+type B = { b: string };
+>B : B
+>  : ^
+>b : string
+>  : ^^^^^^
+
+type C = { c: string };
+>C : C
+>  : ^
+>c : string
+>  : ^^^^^^
+
+type D = { d: string };
+>D : D
+>  : ^
+>d : string
+>  : ^^^^^^
+
+type V0<T extends unknown[]> = [A, B?, ...T, ...C[]]
+>V0 : [A, (B | undefined)?, ...T, ...C[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type V1<T extends unknown[]> = [A, ...T, B, ...C[], D]
+>V1 : [A, ...T, B, ...C[], D]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
+
+type K0<T extends unknown[]> = K<V0<T>>;  // ["0", "1"?, ...K<T>, ...number[]]
+>K0 : ["0", ("1" | undefined)?, ...K<T>, ...number[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type K1<T extends unknown[]> = K<V1<T>>;  // ["0", ...K<T>, number, ...number[], number]
+>K1 : ["0", ...K<T>, number, ...number[], number]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type M0<T extends unknown[]> = M<V0<T>>;  // [A, B?, ...M<T>, ...C[]]
+>M0 : [A, (B | undefined)?, ...M<T>, ...C[]]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+type M1<T extends unknown[]> = M<V1<T>>;  // [A, ...M<T>, B, ...C[], D]
+>M1 : [A, ...M<T>, B, ...C[], D]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Repro from #48856
+
+type Keys<O extends unknown[]> = { [K in keyof O]: K };
+>Keys : Keys<O>
+>     : ^^^^^^^
+
+type Keys1 = Keys<[string, ...string[]]>;
+>Keys1 : ["0", ...number[]]
+>      : ^^^^^^^^^^^^^^^^^^
+
+type Keys2 = Keys<[string, ...string[], number]>;
+>Keys2 : ["0", ...number[], number]
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+// Repro from #56888
+
+type T1 = ['a', 'b', 'c'] extends readonly [infer H, ...unknown[]] ? H : never;  // "a"
+>T1 : "a"
+>   : ^^^
+
+type T2 = ['a', 'b', 'c'] extends Readonly<[infer H, ...unknown[]]> ? H : never;  // "a"
+>T2 : "a"
+>   : ^^^
+
+type T3 = ['a', 'b', 'c'] extends readonly [...unknown[], infer L] ? L : never;  // "c"
+>T3 : "c"
+>   : ^^^
+
+type T4 = ['a', 'b', 'c'] extends Readonly<[...unknown[], infer L]> ? L : never;  // "c"
+>T4 : "c"
+>   : ^^^
+
+// Repro from #56888
+
+type R1<T> = readonly [...unknown[], T];  // readonly [...unknown[], T]
+>R1 : R1<T>
+>   : ^^^^^
+
+type R2<T> = Readonly<[...unknown[], T]>;  // readonly [...unknown[], T]
+>R2 : readonly [...unknown[], T]
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+

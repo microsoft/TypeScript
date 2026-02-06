@@ -1,0 +1,11 @@
+commentInMethodCall.ts(3,1): error TS2454: Variable 's' is used before being assigned.
+
+
+==== commentInMethodCall.ts (1 errors) ====
+    //commment here
+    var s: string[];
+    s.map(// do something
+    ~
+!!! error TS2454: Variable 's' is used before being assigned.
+        function () { });
+    

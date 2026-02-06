@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es2018
 // @lib: es6,es2018
 
 let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;

@@ -3,5 +3,6 @@
 === parserErrorRecovery_VariableList1.ts ===
 var a,
 >a : any
+>  : ^^^
 
 return;

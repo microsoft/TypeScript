@@ -3,16 +3,22 @@
 === invokingNonGenericMethodWithTypeArguments2.ts ===
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     private foo: any;
 >foo : any
+>    : ^^^
 
     constructor() {
         this.foo<string>();
 >this.foo<string>() : any
+>                   : ^^^
 >this.foo : any
+>         : ^^^
 >this : this
+>     : ^^^^
 >foo : any
+>    : ^^^
     }
 }
 

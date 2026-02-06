@@ -11,6 +11,7 @@ var y: string[][]; // Expect no error here
 
 
 //// [arrayAugment.js]
+"use strict";
 var x = [''];
 var y = x.split(4);
 var y; // Expect no error here

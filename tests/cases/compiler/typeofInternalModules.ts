@@ -1,8 +1,9 @@
-module Outer {
-    export module instantiated {
+// @target: es2015
+namespace Outer {
+    export namespace instantiated {
         export class C { }
     }
-    export module uninstantiated {
+    export namespace uninstantiated {
         export interface P { }
     }
 }

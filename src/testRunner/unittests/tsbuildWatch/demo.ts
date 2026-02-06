@@ -1,15 +1,11 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
+import { dedent } from "../../_namespaces/Utils.js";
 import {
     getFsContentsForDemoProjectReferencesCoreConfig,
     getSysForDemoProjectReferences,
-} from "../helpers/demoProjectReferences";
-import {
-    verifyTscWatch,
-} from "../helpers/tscWatch";
+} from "../helpers/demoProjectReferences.js";
+import { verifyTscWatch } from "../helpers/tscWatch.js";
 
-describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
+describe("unittests:: tsbuildWatch:: watchMode:: with demo:: project", () => {
     verifyTscWatch({
         scenario: "demo",
         subScenario: "updates with circular reference",

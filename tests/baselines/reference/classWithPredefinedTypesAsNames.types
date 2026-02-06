@@ -5,13 +5,17 @@
 
 class any { }
 >any : any
+>    : ^^^
 
 class number { }
 >number : number
+>       : ^^^^^^
 
 class boolean { }
 >boolean : boolean
+>        : ^^^^^^^
 
 class string { }
 >string : string
+>       : ^^^^^^
 

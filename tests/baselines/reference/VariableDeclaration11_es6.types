@@ -3,7 +3,9 @@
 === VariableDeclaration11_es6.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 let
 >let : any
+>    : ^^^
 

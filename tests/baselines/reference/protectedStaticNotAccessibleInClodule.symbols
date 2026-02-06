@@ -13,7 +13,7 @@ class C {
 >bar : Symbol(C.bar, Decl(protectedStaticNotAccessibleInClodule.ts, 3, 30))
 }
 
-module C {
+namespace C {
 >C : Symbol(C, Decl(protectedStaticNotAccessibleInClodule.ts, 0, 0), Decl(protectedStaticNotAccessibleInClodule.ts, 5, 1))
 
     export var f = C.foo; // OK

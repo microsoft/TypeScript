@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 type AObjOrBObj = { name: "A" } | { name: "B" };
 type AOrBObj = { name: "A" | "B" };

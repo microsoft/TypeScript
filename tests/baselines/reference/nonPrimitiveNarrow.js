@@ -2,10 +2,10 @@
 
 //// [nonPrimitiveNarrow.ts]
 class Narrow {
-    narrowed: boolean
+    narrowed!: boolean
 }
 
-var a: object
+declare var a: object;
 
 if (a instanceof Narrow) {
     a.narrowed; // ok
@@ -16,7 +16,7 @@ if (typeof a === 'number') {
     a.toFixed(); // error, never
 }
 
-var b: object | null
+declare var b: object | null;
 
 if (typeof b === 'object') {
    b.toString(); // ok, object | null
@@ -26,12 +26,9 @@ if (typeof b === 'object') {
 
 
 //// [nonPrimitiveNarrow.js]
-var Narrow = /** @class */ (function () {
-    function Narrow() {
-    }
-    return Narrow;
-}());
-var a;
+"use strict";
+class Narrow {
+}
 if (a instanceof Narrow) {
     a.narrowed; // ok
     a = 123; // error
@@ -39,7 +36,6 @@ if (a instanceof Narrow) {
 if (typeof a === 'number') {
     a.toFixed(); // error, never
 }
-var b;
 if (typeof b === 'object') {
     b.toString(); // ok, object | null
 }

@@ -1,3 +1,4 @@
+// @target: es2015
 declare function func<T extends string>(arg: { keys: T[] }): { readonly keys: T[]; readonly firstKey: T; };
 
 function func1() {

@@ -1,3 +1,4 @@
+// @target: es2015
 
 var strOrNum: string | number;
 var numOrBool: number | boolean;

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 function foo(x: number, y?:boolean=false, z?=0) {}
 
 class CCC {

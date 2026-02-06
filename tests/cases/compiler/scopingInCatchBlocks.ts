@@ -1,3 +1,4 @@
+// @target: es2015
 try { } catch(ex1) { 
 	throw ex1;
 }

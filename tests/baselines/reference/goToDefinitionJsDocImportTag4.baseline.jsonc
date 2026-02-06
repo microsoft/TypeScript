@@ -1,0 +1,20 @@
+// === goToDefinition ===
+// === /b.ts ===
+// <|export interface [|A|] { }|>
+
+// === /a.js ===
+// /**
+//  * @import { [|A|]/*GOTO DEF*/ } from "./b";
+//  */
+
+  // === Details ===
+  [
+   {
+    "kind": "interface",
+    "name": "A",
+    "containerName": "\"/b\"",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]

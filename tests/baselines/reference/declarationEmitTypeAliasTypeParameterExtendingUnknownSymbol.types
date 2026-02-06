@@ -3,4 +3,5 @@
 === declarationEmitTypeAliasTypeParameterExtendingUnknownSymbol.ts ===
 type A<T extends Unknown> = {}
 >A : A<T>
+>  : ^^^^
 

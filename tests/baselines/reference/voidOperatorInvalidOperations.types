@@ -6,13 +6,20 @@
 // operand before void
 var ANY = ANY void ;    //expect error
 >ANY : any
+>    : ^^^
 >ANY : any
+>    : ^^^
 >void : undefined
+>     : ^^^^^^^^^
 > : any
+> : ^^^
 
 // miss an operand
 var ANY1 = void ;
 >ANY1 : any
+>     : ^^^
 >void : undefined
+>     : ^^^^^^^^^
 > : any
+> : ^^^
 

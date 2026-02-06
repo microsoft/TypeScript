@@ -1,3 +1,4 @@
+// @target: es2015
 // regression test from https://github.com/Microsoft/TypeScript/issues/29692
 interface DeepObject {
   [k1: string]: {

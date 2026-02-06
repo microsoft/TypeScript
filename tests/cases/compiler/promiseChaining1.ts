@@ -1,3 +1,4 @@
+// @target: es2015
 // same example but with constraints on each type parameter
 class Chain2<T extends { length: number }> {
     constructor(public value: T) { }

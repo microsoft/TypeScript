@@ -3,9 +3,11 @@
 === parserModifierOnStatementInBlock3.ts ===
 export function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
    export function bar() {
 >bar : () => void
+>    : ^^^^^^^^^^
    }
 }
 

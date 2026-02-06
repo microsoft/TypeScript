@@ -1,6 +1,6 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/b/file.ts]
+//// [/user/username/workspace/solution/projects/project/file.ts]
 function one() {}
 function two() {
     return function three() {
@@ -8,8 +8,7 @@ function two() {
     }
 }
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -20,18 +19,23 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w /a/b/file.ts --noUnusedLocals
+/home/src/tslibs/TS/Lib/tsc.js -w /user/username/workspace/solution/projects/project/file.ts --noUnusedLocals
 Output::
 >> Screen clear
-[[90m12:00:13 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:16 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/a/b/file.js]
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
+//// [/user/username/workspace/solution/projects/project/file.js]
+"use strict";
 function one() { }
 function two() {
     return function three() {
@@ -42,13 +46,13 @@ function two() {
 
 
 FsWatches::
-/a/b/file.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/workspace/solution/projects/project/file.ts: *new*
   {}
 
 Program root files: [
-  "/a/b/file.ts"
+  "/user/username/workspace/solution/projects/project/file.ts"
 ]
 Program options: {
   "watch": true,
@@ -56,23 +60,23 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/a/b/file.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/file.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/file.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/file.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/file.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
+/user/username/workspace/solution/projects/project/file.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: Change file to module
 
 Input::
-//// [/a/b/file.ts]
+//// [/user/username/workspace/solution/projects/project/file.ts]
 function one() {}
 export function two() {
     return function three() {
@@ -87,32 +91,29 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:20 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/a/b/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.two = void 0;
+//// [/user/username/workspace/solution/projects/project/file.js]
 function one() { }
-function two() {
+export function two() {
     return function three() {
         one();
     };
 }
-exports.two = two;
 
 
 
 
 Program root files: [
-  "/a/b/file.ts"
+  "/user/username/workspace/solution/projects/project/file.ts"
 ]
 Program options: {
   "watch": true,
@@ -120,13 +121,13 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
-/a/b/file.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/file.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/b/file.ts
+/user/username/workspace/solution/projects/project/file.ts
 
 Shape signatures in builder refreshed for::
-/a/b/file.ts (computed .d.ts)
+/user/username/workspace/solution/projects/project/file.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

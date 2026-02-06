@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 //// class Food {
 ////     private amount: number;
 ////     constructor(public name: string) {

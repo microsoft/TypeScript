@@ -6,8 +6,11 @@ interface f {
 
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     <f>f;
 ><f>f : f
+>     : ^
 >f : () => void
+>  : ^^^^^^^^^^
 }

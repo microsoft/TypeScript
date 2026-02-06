@@ -33,7 +33,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -57,9 +57,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -73,12 +73,12 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int16Array
-// | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
-// | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -129,19 +129,20 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
-// | interface Uint8Array
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -180,7 +181,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -204,9 +205,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -220,12 +221,12 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int16Array
-// | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
-// | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -276,19 +277,20 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
-// | interface Uint8Array
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -326,7 +328,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -350,9 +352,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -366,12 +368,12 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int16Array
-// | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
-// | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -422,19 +424,20 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
-// | interface Uint8Array
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -473,7 +476,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -497,9 +500,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -513,12 +516,12 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int16Array
-// | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
-// | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -569,19 +572,20 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
-// | interface Uint8Array
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -620,7 +624,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -644,9 +648,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -660,12 +664,12 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int16Array
-// | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
-// | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -716,19 +720,20 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
-// | interface Uint8Array
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -766,7 +771,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -790,9 +795,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -806,12 +811,12 @@
 // | infer
 // | var Infinity: number
 // | instanceof
-// | interface Int16Array
-// | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
-// | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int32Array: Int32ArrayConstructor
 // | interface
 // | namespace Intl
 // | function isFinite(number: number): boolean
@@ -862,19 +867,20 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
-// | interface Uint8Array
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | unique
 // | unknown
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -906,7 +912,7 @@
 // | class
 // | const
 // | continue
-// | interface DataView
+// | interface DataView<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var DataView: DataViewConstructor
 // | interface Date
 // | var Date: DateConstructor
@@ -928,9 +934,9 @@
 // | extends
 // | false
 // | finally
-// | interface Float32Array
+// | interface Float32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float32Array: Float32ArrayConstructor
-// | interface Float64Array
+// | interface Float64Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Float64Array: Float64ArrayConstructor
 // | for
 // | function
@@ -942,12 +948,12 @@
 // | in
 // | var Infinity: number
 // | instanceof
-// | interface Int16Array
-// | var Int16Array: Int16ArrayConstructor
-// | interface Int32Array
-// | var Int32Array: Int32ArrayConstructor
-// | interface Int8Array
+// | interface Int8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Int8Array: Int8ArrayConstructor
+// | interface Int16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int16Array: Int16ArrayConstructor
+// | interface Int32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Int32Array: Int32ArrayConstructor
 // | namespace Intl
 // | function isFinite(number: number): boolean
 // | function isNaN(number: number): boolean
@@ -987,17 +993,18 @@
 // | interface TypeError
 // | var TypeError: TypeErrorConstructor
 // | typeof
-// | interface Uint16Array
-// | var Uint16Array: Uint16ArrayConstructor
-// | interface Uint32Array
-// | var Uint32Array: Uint32ArrayConstructor
-// | interface Uint8Array
+// | interface Uint8Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8Array: Uint8ArrayConstructor
-// | interface Uint8ClampedArray
+// | interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
 // | var Uint8ClampedArray: Uint8ClampedArrayConstructor
+// | interface Uint16Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint16Array: Uint16ArrayConstructor
+// | interface Uint32Array<TArrayBuffer extends ArrayBufferLike = ArrayBuffer>
+// | var Uint32Array: Uint32ArrayConstructor
 // | var undefined
 // | interface URIError
 // | var URIError: URIErrorConstructor
+// | using
 // | var
 // | void
 // | while
@@ -1515,6 +1522,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -2285,6 +2336,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -2337,6 +2432,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -2579,6 +2718,104 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -2595,6 +2832,50 @@
             {
               "text": "Int16Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -2651,6 +2932,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -2682,60 +3007,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -3967,114 +4238,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -4091,6 +4254,50 @@
             {
               "text": "Uint8Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -4147,6 +4354,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -4178,6 +4429,202 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -4275,6 +4722,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",
@@ -4516,6 +4975,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -5026,6 +5490,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -5796,6 +6304,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -5848,6 +6400,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -6090,6 +6686,104 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -6106,6 +6800,50 @@
             {
               "text": "Int16Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -6162,6 +6900,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -6193,60 +6975,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -7478,114 +8206,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -7602,6 +8222,50 @@
             {
               "text": "Uint8Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -7658,6 +8322,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -7689,6 +8397,202 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -7786,6 +8690,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",
@@ -8027,6 +8943,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -8525,6 +9446,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -9295,6 +10260,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -9347,6 +10356,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -9589,6 +10642,104 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -9605,6 +10756,50 @@
             {
               "text": "Int16Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -9661,6 +10856,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -9692,60 +10931,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -10977,114 +12162,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -11101,6 +12178,50 @@
             {
               "text": "Uint8Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -11157,6 +12278,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -11188,6 +12353,202 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -11285,6 +12646,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",
@@ -11526,6 +12899,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -12040,6 +13418,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -12810,6 +14232,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -12862,6 +14328,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -13104,6 +14614,104 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -13120,6 +14728,50 @@
             {
               "text": "Int16Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -13176,6 +14828,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -13207,60 +14903,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -14492,114 +16134,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -14616,6 +16150,50 @@
             {
               "text": "Uint8Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -14672,6 +16250,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -14703,6 +16325,202 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -14800,6 +16618,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",
@@ -15041,6 +16871,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -15539,6 +17374,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -16309,6 +18188,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -16361,6 +18284,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -16603,6 +18570,104 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -16619,6 +18684,50 @@
             {
               "text": "Int16Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -16675,6 +18784,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -16706,60 +18859,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -17991,114 +20090,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -18115,6 +20106,50 @@
             {
               "text": "Uint8Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -18171,6 +20206,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -18202,6 +20281,202 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -18299,6 +20574,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",
@@ -18540,6 +20827,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -19038,6 +21330,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -19808,6 +22144,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -19860,6 +22240,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -20102,6 +22526,104 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -20118,6 +22640,50 @@
             {
               "text": "Int16Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -20174,6 +22740,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -20205,60 +22815,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -21490,114 +24046,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -21614,6 +24062,50 @@
             {
               "text": "Uint8Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -21670,6 +24162,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -21701,6 +24237,202 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -21798,6 +24530,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",
@@ -22039,6 +24783,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   },
@@ -22388,6 +25137,50 @@
             {
               "text": "DataView",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -23136,6 +25929,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -23188,6 +26025,50 @@
             {
               "text": "Float64Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -23406,6 +26287,104 @@
           ]
         },
         {
+          "name": "Int8Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Int8ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
           "name": "Int16Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -23422,6 +26401,50 @@
             {
               "text": "Int16Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -23478,6 +26501,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -23509,60 +26576,6 @@
           "documentation": [
             {
               "text": "A typed array of 32-bit signed integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Int8Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Int8ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 8-bit integer values. The contents are initialized to 0. If the requested\nnumber of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -24662,114 +27675,6 @@
           ]
         },
         {
-          "name": "Uint16Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint16ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
-          "name": "Uint32Array",
-          "kind": "var",
-          "kindModifiers": "declare",
-          "sortText": "15",
-          "displayParts": [
-            {
-              "text": "interface",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": "\n",
-              "kind": "lineBreak"
-            },
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32Array",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Uint32ArrayConstructor",
-              "kind": "interfaceName"
-            }
-          ],
-          "documentation": [
-            {
-              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
-              "kind": "text"
-            }
-          ]
-        },
-        {
           "name": "Uint8Array",
           "kind": "var",
           "kindModifiers": "declare",
@@ -24786,6 +27691,50 @@
             {
               "text": "Uint8Array",
               "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
             },
             {
               "text": "\n",
@@ -24842,6 +27791,50 @@
               "kind": "localName"
             },
             {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
               "text": "\n",
               "kind": "lineBreak"
             },
@@ -24873,6 +27866,202 @@
           "documentation": [
             {
               "text": "A typed array of 8-bit unsigned integer (clamped) values. The contents are initialized to 0.\nIf the requested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint16Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint16ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 16-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
+              "kind": "text"
+            }
+          ]
+        },
+        {
+          "name": "Uint32Array",
+          "kind": "var",
+          "kindModifiers": "declare",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "interface",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": "<",
+              "kind": "punctuation"
+            },
+            {
+              "text": "TArrayBuffer",
+              "kind": "typeParameterName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "extends",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBufferLike",
+              "kind": "aliasName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "=",
+              "kind": "operator"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ArrayBuffer",
+              "kind": "localName"
+            },
+            {
+              "text": ">",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\n",
+              "kind": "lineBreak"
+            },
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32Array",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Uint32ArrayConstructor",
+              "kind": "interfaceName"
+            }
+          ],
+          "documentation": [
+            {
+              "text": "A typed array of 32-bit unsigned integer values. The contents are initialized to 0. If the\nrequested number of bytes could not be allocated an exception is raised.",
               "kind": "text"
             }
           ]
@@ -24946,6 +28135,18 @@
             }
           ],
           "documentation": []
+        },
+        {
+          "name": "using",
+          "kind": "keyword",
+          "kindModifiers": "",
+          "sortText": "15",
+          "displayParts": [
+            {
+              "text": "using",
+              "kind": "keyword"
+            }
+          ]
         },
         {
           "name": "var",
@@ -25187,6 +28388,11 @@
             }
           ]
         }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
       ]
     }
   }

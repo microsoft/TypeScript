@@ -1,11 +1,12 @@
-module _provider {
+// @target: es2015
+namespace _provider {
                 export class UsefulClass {
                                 public foo() {
                                 }
                 }
 }
 
-module consumer {
+namespace consumer {
                 import provider = _provider;
                 
                 var g:provider.UsefulClass= null;

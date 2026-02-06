@@ -6,10 +6,13 @@ var a: any;
 
 var x: string;
 >x : string
+>  : ^^^^^^
 
 [x] = a;
 >[x] = a : any
 >[x] : [string]
+>    : ^^^^^^^^
 >x : string
+>  : ^^^^^^
 >a : any
 

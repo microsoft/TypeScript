@@ -1,6 +1,6 @@
 // === getDefinitionAtPosition ===
 // === /tests/cases/fourslash/goToDefinitionShadowVariableInsideModule.ts ===
-// module shdModule {
+// namespace shdModule {
 //     <|var [|shdVar|];|>
 //     /*GOTO DEF POS*/shdVar = 1;
 // }

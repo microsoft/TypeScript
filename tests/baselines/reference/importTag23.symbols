@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/jsdoc/importTag23.ts] ////
+
+=== /a.ts ===
+export interface I {
+>I : Symbol(I, Decl(a.ts, 0, 0))
+
+    foo(): void;
+>foo : Symbol(I.foo, Decl(a.ts, 0, 20))
+}
+
+=== /b.js ===
+/**
+ * @import * as NS from './a'
+ */
+
+/** @implements {NS.I} */
+export class C {}
+>C : Symbol(C, Decl(b.js, 0, 0))
+

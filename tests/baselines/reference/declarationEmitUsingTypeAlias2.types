@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/declarationEmitUsingTypeAlias2.ts] ////
+
+=== node_modules/some-dep/dist/inner.d.ts ===
+export declare type Other = { other: string };
+>Other : Other
+>      : ^^^^^
+>other : string
+>      : ^^^^^^
+
+export declare type SomeType = { arg: Other };
+>SomeType : SomeType
+>         : ^^^^^^^^
+>arg : Other
+>    : ^^^^^
+
+=== node_modules/some-dep/dist/other.d.ts ===
+export declare const shouldLookupName: unique symbol;
+>shouldLookupName : unique symbol
+>                 : ^^^^^^^^^^^^^
+
+export declare const shouldReuseLocalName: unique symbol;
+>shouldReuseLocalName : unique symbol
+>                     : ^^^^^^^^^^^^^
+
+export declare const reuseDepName: unique symbol;
+>reuseDepName : unique symbol
+>             : ^^^^^^^^^^^^^
+
+export declare const shouldBeElided: unique symbol;
+>shouldBeElided : unique symbol
+>               : ^^^^^^^^^^^^^
+
+export declare const isNotAccessibleShouldError: unique symbol;
+>isNotAccessibleShouldError : unique symbol
+>                           : ^^^^^^^^^^^^^
+
+=== node_modules/some-dep/dist/index.d.ts ===
+import { Other } from './inner'
+>Other : any
+>      : ^^^
+
+import { shouldLookupName, reuseDepName, shouldReuseLocalName, shouldBeElided } from './other'
+>shouldLookupName : unique symbol
+>                 : ^^^^^^^^^^^^^
+>reuseDepName : unique symbol
+>             : ^^^^^^^^^^^^^
+>shouldReuseLocalName : unique symbol
+>                     : ^^^^^^^^^^^^^
+>shouldBeElided : unique symbol
+>               : ^^^^^^^^^^^^^
+
+export declare const goodDeclaration: <T>() => () => { 
+>goodDeclaration : <T>() => () => { shouldPrintResult: T extends Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? Other : "N"; shouldLookupName: typeof import("./other").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof reuseDepName; }
+>                : ^ ^^^^^^^                                                                                                                                                                                                                                                                               
+
+  /** Other Can't be named in index.ts, but the whole conditional type can be resolved  */
+  shouldPrintResult: T extends Other? "O": "N",
+>shouldPrintResult : T extends Other ? "O" : "N"
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  /** Symbol shouldBeElided should not be present in index.d.ts, it might be since it's tracked before Other is seen and an error reported */ 
+  shouldPrintResult2: T extends typeof shouldBeElided? Other: "N", 
+>shouldPrintResult2 : T extends unique symbol ? Other : "N"
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>shouldBeElided : unique symbol
+>               : ^^^^^^^^^^^^^
+
+  /** Specifier should come from module, local path should not be reused */ 
+  shouldLookupName: typeof import('./other').shouldLookupName,
+>shouldLookupName : unique symbol
+>                 : ^^^^^^^^^^^^^
+>shouldLookupName : error
+
+  /** This is imported in index so local name should be reused */ 
+  shouldReuseLocalName: typeof shouldReuseLocalName
+>shouldReuseLocalName : unique symbol
+>                     : ^^^^^^^^^^^^^
+>shouldReuseLocalName : unique symbol
+>                     : ^^^^^^^^^^^^^
+
+  /** This is NOT imported in index so import should be created */ 
+  reuseDepName: typeof reuseDepName,
+>reuseDepName : unique symbol
+>             : ^^^^^^^^^^^^^
+>reuseDepName : unique symbol
+>             : ^^^^^^^^^^^^^
+}
+export { shouldLookupName, shouldReuseLocalName, reuseDepName, shouldBeElided };
+>shouldLookupName : unique symbol
+>                 : ^^^^^^^^^^^^^
+>shouldReuseLocalName : unique symbol
+>                     : ^^^^^^^^^^^^^
+>reuseDepName : unique symbol
+>             : ^^^^^^^^^^^^^
+>shouldBeElided : unique symbol
+>               : ^^^^^^^^^^^^^
+
+=== src/index.ts ===
+import { goodDeclaration, shouldReuseLocalName, shouldBeElided } from "some-dep";
+>goodDeclaration : <T>() => () => { shouldPrintResult: T extends import("node_modules/some-dep/dist/inner").Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? import("node_modules/some-dep/dist/inner").Other : "N"; shouldLookupName: typeof import("node_modules/some-dep/dist/other").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof import("node_modules/some-dep/dist/other").reuseDepName; }
+>                : ^ ^^^^^^^                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^                                                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^   
+>shouldReuseLocalName : unique symbol
+>                     : ^^^^^^^^^^^^^
+>shouldBeElided : unique symbol
+>               : ^^^^^^^^^^^^^
+
+export const bar = goodDeclaration<{}>;
+>bar : () => () => { shouldPrintResult: "N"; shouldPrintResult2: "N"; shouldLookupName: typeof import("node_modules/some-dep/dist/other").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof import("node_modules/some-dep/dist/other").reuseDepName; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+>goodDeclaration<{}> : () => () => { shouldPrintResult: "N"; shouldPrintResult2: "N"; shouldLookupName: typeof import("node_modules/some-dep/dist/other").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof import("node_modules/some-dep/dist/other").reuseDepName; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                                                  ^^^^^^^^^^^^^^^^^^^^^^^^                           ^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^
+>goodDeclaration : <T>() => () => { shouldPrintResult: T extends import("node_modules/some-dep/dist/inner").Other ? "O" : "N"; shouldPrintResult2: T extends typeof shouldBeElided ? import("node_modules/some-dep/dist/inner").Other : "N"; shouldLookupName: typeof import("node_modules/some-dep/dist/other").shouldLookupName; shouldReuseLocalName: typeof shouldReuseLocalName; reuseDepName: typeof import("node_modules/some-dep/dist/other").reuseDepName; }
+>                : ^ ^^^^^^^                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^                                                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^                                                                                                                                                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^   
+
+

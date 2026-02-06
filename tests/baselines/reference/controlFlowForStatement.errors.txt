@@ -1,0 +1,63 @@
+controlFlowForStatement.ts(29,14): error TS2873: This kind of expression is always falsy.
+controlFlowForStatement.ts(29,50): error TS2873: This kind of expression is always falsy.
+controlFlowForStatement.ts(35,19): error TS2454: Variable 'x' is used before being assigned.
+controlFlowForStatement.ts(36,9): error TS2454: Variable 'x' is used before being assigned.
+controlFlowForStatement.ts(37,20): error TS2454: Variable 'x' is used before being assigned.
+controlFlowForStatement.ts(38,9): error TS2322: Type 'undefined' is not assignable to type 'string | number | boolean'.
+
+
+==== controlFlowForStatement.ts (6 errors) ====
+    declare let cond: boolean;
+    function a() {
+        let x: string | number | boolean;
+        for (x = ""; cond; x = 5) {
+            x; // string | number
+        }
+    }
+    function b() {
+        let x: string | number | boolean;
+        for (x = 5; cond; x = x.length) {
+            x; // number
+            x = "";
+        }
+    }
+    function c() {
+        let x: string | number | boolean;
+        for (x = 5; x = x.toExponential(); x = 5) {
+            x; // string
+        }
+    }
+    function d() {
+        let x: string | number | boolean;
+        for (x = ""; typeof x === "string"; x = 5) {
+            x; // string
+        }
+    }
+    function e() {
+        let x: string | number | boolean | RegExp;
+        for (x = "" || 0; typeof x !== "string"; x = "" || true) {
+                 ~~
+!!! error TS2873: This kind of expression is always falsy.
+                                                     ~~
+!!! error TS2873: This kind of expression is always falsy.
+            x; // number | boolean
+        }
+    }
+    function f() {
+        let x: string | number | boolean;
+        for (; typeof x !== "string";) {
+                      ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+            x; // number | boolean
+            ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+            if (typeof x === "number") break;
+                       ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+            x = undefined;
+            ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string | number | boolean'.
+        }
+        x; // string | number
+    }
+    

@@ -1,0 +1,242 @@
+//// [tests/cases/compiler/contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts] ////
+
+=== contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts ===
+declare function test1(
+>test1 : (arg: { a: (arg: number) => void; } & { [k: string]: (arg: any) => void; }) => unknown
+>      : ^   ^^                                                                    ^^^^^       
+
+  arg: { a: (arg: number) => void } & { [k: string]: (arg: any) => void },
+>arg : { a: (arg: number) => void; } & { [k: string]: (arg: any) => void; }
+>    : ^^^^^                     ^^^^^^^^^^^^^^^^^^^^^^   ^^   ^^^^^    ^^^
+>a : (arg: number) => void
+>  : ^   ^^      ^^^^^    
+>arg : number
+>    : ^^^^^^
+>k : string
+>  : ^^^^^^
+>arg : any
+>    : ^^^
+
+): unknown;
+
+test1({
+>test1({  a: (arg) => {},  b: (arg) => {},}) : unknown
+>                                            : ^^^^^^^
+>test1 : (arg: { a: (arg: number) => void; } & { [k: string]: (arg: any) => void; }) => unknown
+>      : ^   ^^                                                                    ^^^^^       
+>{  a: (arg) => {},  b: (arg) => {},} : { a: (arg: number) => void; b: (arg: any) => void; }
+>                                     : ^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^
+
+  a: (arg) => {},
+>a : (arg: number) => void
+>  : ^   ^^^^^^^^^^^^^^^^^
+>(arg) => {} : (arg: number) => void
+>            : ^   ^^^^^^^^^^^^^^^^^
+>arg : number
+>    : ^^^^^^
+
+  b: (arg) => {},
+>b : (arg: any) => void
+>  : ^   ^^^^^^^^^^^^^^
+>(arg) => {} : (arg: any) => void
+>            : ^   ^^^^^^^^^^^^^^
+>arg : any
+>    : ^^^
+
+});
+
+declare function test2(
+>test2 : (arg: { a: (arg: { foo: string; }) => void; } & { [k: string]: (arg: { foo: any; }) => void; }) => unknown
+>      : ^   ^^                                                                                        ^^^^^       
+
+  arg: { a: (arg: { foo: string }) => void } & {
+>arg : { a: (arg: { foo: string; }) => void; } & { [k: string]: (arg: { foo: any; }) => void; }
+>    : ^^^^^                               ^^^^^^^^^^^^^^^^^^^^^^   ^^             ^^^^^    ^^^
+>a : (arg: { foo: string; }) => void
+>  : ^   ^^                ^^^^^    
+>arg : { foo: string; }
+>    : ^^^^^^^      ^^^
+>foo : string
+>    : ^^^^^^
+
+    [k: string]: (arg: { foo: any }) => void;
+>k : string
+>  : ^^^^^^
+>arg : { foo: any; }
+>    : ^^^^^^^   ^^^
+>foo : any
+>    : ^^^
+
+  },
+): unknown;
+
+test2({
+>test2({  a: (arg) => {},  b: (arg) => {},}) : unknown
+>                                            : ^^^^^^^
+>test2 : (arg: { a: (arg: { foo: string; }) => void; } & { [k: string]: (arg: { foo: any; }) => void; }) => unknown
+>      : ^   ^^                                                                                        ^^^^^       
+>{  a: (arg) => {},  b: (arg) => {},} : { a: (arg: { foo: string; }) => void; b: (arg: { foo: any; }) => void; }
+>                                     : ^^^^^^   ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^   ^^^^^^^^^   ^^^^^^^^^^^^^^^
+
+  a: (arg) => {},
+>a : (arg: { foo: string; }) => void
+>  : ^   ^^^^^^^^^      ^^^^^^^^^^^^
+>(arg) => {} : (arg: { foo: string; }) => void
+>            : ^   ^^^^^^^^^      ^^^^^^^^^^^^
+>arg : { foo: string; }
+>    : ^^^^^^^      ^^^
+
+  b: (arg) => {},
+>b : (arg: { foo: any; }) => void
+>  : ^   ^^^^^^^^^   ^^^^^^^^^^^^
+>(arg) => {} : (arg: { foo: any; }) => void
+>            : ^   ^^^^^^^^^   ^^^^^^^^^^^^
+>arg : { foo: any; }
+>    : ^^^^^^^   ^^^
+
+});
+
+declare function test3(
+>test3 : (arg: { a: () => "foo"; } & { [k: string]: () => any; }) => unknown
+>      : ^   ^^                                                 ^^^^^       
+
+  arg: { a: () => "foo" } & {
+>arg : { a: () => "foo"; } & { [k: string]: () => any; }
+>    : ^^^^^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^
+>a : () => "foo"
+>  : ^^^^^^     
+
+    [k: string]: () => any;
+>k : string
+>  : ^^^^^^
+
+  },
+): unknown;
+
+test3({
+>test3({  a: () => "foo",  b: () => "bar",}) : unknown
+>                                            : ^^^^^^^
+>test3 : (arg: { a: () => "foo"; } & { [k: string]: () => any; }) => unknown
+>      : ^   ^^                                                 ^^^^^       
+>{  a: () => "foo",  b: () => "bar",} : { a: () => "foo"; b: () => string; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: () => "foo",
+>a : () => "foo"
+>  : ^^^^^^^^^^^
+>() => "foo" : () => "foo"
+>            : ^^^^^^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+  b: () => "bar",
+>b : () => string
+>  : ^^^^^^^^^^^^
+>() => "bar" : () => string
+>            : ^^^^^^^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+});
+
+test3({
+>test3({  a: () => "bar",}) : unknown
+>                           : ^^^^^^^
+>test3 : (arg: { a: () => "foo"; } & { [k: string]: () => any; }) => unknown
+>      : ^   ^^                                                 ^^^^^       
+>{  a: () => "bar",} : { a: () => "bar"; }
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+  a: () => "bar",
+>a : () => "bar"
+>  : ^^^^^^^^^^^
+>() => "bar" : () => "bar"
+>            : ^^^^^^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+});
+
+declare function test4(
+>test4 : (arg: { a: () => { prop: "foo"; }; } & { [k: string]: () => { prop: any; }; }) => unknown
+>      : ^   ^^                                                                       ^^^^^       
+
+  arg: { a: () => { prop: "foo" } } & {
+>arg : { a: () => { prop: "foo"; }; } & { [k: string]: () => { prop: any; }; }
+>    : ^^^^^                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^
+>a : () => { prop: "foo"; }
+>  : ^^^^^^                
+>prop : "foo"
+>     : ^^^^^
+
+    [k: string]: () => { prop: any };
+>k : string
+>  : ^^^^^^
+>prop : any
+>     : ^^^
+
+  },
+): unknown;
+
+test4({
+>test4({  a: () => ({ prop: "foo" }),  b: () => ({ prop: "bar" }),}) : unknown
+>                                                                    : ^^^^^^^
+>test4 : (arg: { a: () => { prop: "foo"; }; } & { [k: string]: () => { prop: any; }; }) => unknown
+>      : ^   ^^                                                                       ^^^^^       
+>{  a: () => ({ prop: "foo" }),  b: () => ({ prop: "bar" }),} : { a: () => { prop: "foo"; }; b: () => { prop: string; }; }
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: () => ({ prop: "foo" }),
+>a : () => { prop: "foo"; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>() => ({ prop: "foo" }) : () => { prop: "foo"; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^
+>({ prop: "foo" }) : { prop: "foo"; }
+>                  : ^^^^^^^^^^^^^^^^
+>{ prop: "foo" } : { prop: "foo"; }
+>                : ^^^^^^^^^^^^^^^^
+>prop : "foo"
+>     : ^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+  b: () => ({ prop: "bar" }),
+>b : () => { prop: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+>() => ({ prop: "bar" }) : () => { prop: string; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^
+>({ prop: "bar" }) : { prop: string; }
+>                  : ^^^^^^^^^^^^^^^^^
+>{ prop: "bar" } : { prop: string; }
+>                : ^^^^^^^^^^^^^^^^^
+>prop : string
+>     : ^^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+});
+
+test4({
+>test4({  a: () => ({ prop: "bar" }),}) : unknown
+>                                       : ^^^^^^^
+>test4 : (arg: { a: () => { prop: "foo"; }; } & { [k: string]: () => { prop: any; }; }) => unknown
+>      : ^   ^^                                                                       ^^^^^       
+>{  a: () => ({ prop: "bar" }),} : { a: () => { prop: "bar"; }; }
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  a: () => ({ prop: "bar" }),
+>a : () => { prop: "bar"; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+>() => ({ prop: "bar" }) : () => { prop: "bar"; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^
+>({ prop: "bar" }) : { prop: "bar"; }
+>                  : ^^^^^^^^^^^^^^^^
+>{ prop: "bar" } : { prop: "bar"; }
+>                : ^^^^^^^^^^^^^^^^
+>prop : "bar"
+>     : ^^^^^
+>"bar" : "bar"
+>      : ^^^^^
+
+});
+

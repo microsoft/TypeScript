@@ -5,12 +5,17 @@
 
 type PromisedTuple<L extends any[], U = (...args: L) => void> =
 >PromisedTuple : PromisedTuple<L, U>
+>              : ^^^^^^^^^^^^^^^^^^^
 >args : L
+>     : ^
 
     U extends (h: infer H, ...args: infer R) => [Promise<H>, ...PromisedTuple<R>] ? [] : []
 >h : H
+>  : ^
 >args : R
+>     : ^
 
 type Promised = PromisedTuple<[1, 2, 3]> 
 >Promised : []
+>         : ^^
 

@@ -1,0 +1,16 @@
+index.ts(3,14): error TS4023: Exported variable 'foo' has or is using name 'Foo' from external module "type" but cannot be named.
+
+
+==== type.ts (0 errors) ====
+    export namespace Foo {
+      export const sym = Symbol();
+    }
+    export type Type = { x?: { [Foo.sym]: 0 } };
+    
+==== index.ts (1 errors) ====
+    import { type Type } from "./type";
+    
+    export const foo = { ...({} as Type) };
+                 ~~~
+!!! error TS4023: Exported variable 'foo' has or is using name 'Foo' from external module "type" but cannot be named.
+    

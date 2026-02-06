@@ -44,7 +44,7 @@ var a: { Foo?: Base; };
 var b = { Foo: <Derived>null };
 var r = true ? a : b;
 
-module TwoLevels {
+namespace TwoLevels {
     interface T {
         Foo?: Base;
     }
@@ -76,6 +76,7 @@ module TwoLevels {
 }
 
 //// [subtypingWithObjectMembersOptionality.js]
+"use strict";
 // Derived member is not optional but base member is, should be ok
 // object literal case
 var a;

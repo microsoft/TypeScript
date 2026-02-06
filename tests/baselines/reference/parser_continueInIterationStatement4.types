@@ -3,7 +3,9 @@
 === parser_continueInIterationStatement4.ts ===
 for (var i in something) {
 >i : string
+>  : ^^^^^^
 >something : any
+>          : ^^^
 
   continue;
 }

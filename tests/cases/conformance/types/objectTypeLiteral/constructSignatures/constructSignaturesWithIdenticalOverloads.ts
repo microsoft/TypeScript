@@ -1,3 +1,4 @@
+// @target: es2015
 // Duplicate overloads of construct signatures should generate errors
 
 class C {

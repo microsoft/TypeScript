@@ -3,5 +3,7 @@
 === parservoidInQualifiedName2.ts ===
 var v : x.void;
 >v : x.void
+>  : ^^^^^^
 >x : any
+>  : ^^^
 

@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/decoratorMetadataElidedImportOnDeclare.ts] ////
+
+=== observable.d.ts ===
+export declare class Observable<T> {}
+>Observable : Observable<T>
+>           : ^^^^^^^^^^^^^
+
+=== index.ts ===
+import { Observable } from './observable';
+>Observable : typeof Observable
+>           : ^^^^^^^^^^^^^^^^^
+
+function whatever(a: any, b: any) {}
+>whatever : (a: any, b: any) => void
+>         : ^ ^^   ^^ ^^   ^^^^^^^^^
+>a : any
+>b : any
+
+class Test {
+>Test : Test
+>     : ^^^^
+
+    @whatever
+>whatever : (a: any, b: any) => void
+>         : ^ ^^   ^^ ^^   ^^^^^^^^^
+
+    declare prop: Observable<string>;
+>prop : Observable<string>
+>     : ^^^^^^^^^^^^^^^^^^
+}
+

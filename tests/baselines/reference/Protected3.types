@@ -3,6 +3,7 @@
 === Protected3.ts ===
 class C {
 >C : C
+>  : ^
 
   protected constructor() { }
 }

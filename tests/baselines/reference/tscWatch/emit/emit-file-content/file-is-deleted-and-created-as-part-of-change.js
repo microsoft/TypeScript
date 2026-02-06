@@ -1,17 +1,16 @@
-currentDirectory:: /home/username/project useCaseSensitiveFileNames: true
+currentDirectory:: /home/username/projects/project useCaseSensitiveFileNames:: true
 Input::
-//// [/home/username/project/app/file.ts]
+//// [/home/username/projects/project/app/file.ts]
 var a = 10;
 
-//// [/home/username/project/tsconfig.json]
+//// [/home/username/projects/project/tsconfig.json]
 {
   "include": [
     "app/**/*.ts"
   ]
 }
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -22,64 +21,65 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:21 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:24 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/home/username/project/app/file.js]
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
+//// [/home/username/projects/project/app/file.js]
+"use strict";
 var a = 10;
 
 
 
-PolledWatches::
-/home/username/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
-/home/username/project/app/file.ts: *new*
+/home/username/projects/project/app/file.ts: *new*
   {}
-/home/username/project/tsconfig.json: *new*
+/home/username/projects/project/tsconfig.json: *new*
   {}
 
 FsWatchesRecursive::
-/home/username/project/app: *new*
+/home/username/projects/project/app: *new*
   {}
 
 Program root files: [
-  "/home/username/project/app/file.ts"
+  "/home/username/projects/project/app/file.ts"
 ]
 Program options: {
   "watch": true,
-  "configFilePath": "/home/username/project/tsconfig.json"
+  "configFilePath": "/home/username/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/home/username/project/app/file.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/home/username/projects/project/app/file.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/home/username/project/app/file.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/home/username/projects/project/app/file.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/home/username/project/app/file.ts (used version)
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts (used version)
+/home/username/projects/project/app/file.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
 Change:: file is deleted and then created to modify content
 
 Input::
-//// [/home/username/project/app/file.ts]
+//// [/home/username/projects/project/app/file.ts]
 var a = 10;
 var b = 10;
 
@@ -90,16 +90,18 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:28 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/home/username/project/app/file.js]
+//// [/home/username/projects/project/app/file.js]
+"use strict";
 var a = 10;
 var b = 10;
 
@@ -107,22 +109,23 @@ var b = 10;
 
 
 Program root files: [
-  "/home/username/project/app/file.ts"
+  "/home/username/projects/project/app/file.ts"
 ]
 Program options: {
   "watch": true,
-  "configFilePath": "/home/username/project/tsconfig.json"
+  "configFilePath": "/home/username/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
-/home/username/project/app/file.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/home/username/projects/project/app/file.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/home/username/project/app/file.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/home/username/projects/project/app/file.ts
 
 Shape signatures in builder refreshed for::
-/home/username/project/app/file.ts (computed .d.ts)
+/home/username/projects/project/app/file.ts (computed .d.ts)
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts (used version)
 
 exitCode:: ExitStatus.undefined

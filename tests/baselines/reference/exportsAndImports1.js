@@ -13,10 +13,10 @@ enum E {
 const enum D {
     A, B, C
 }
-module M {
+namespace M {
     export var x;
 }
-module N {
+namespace N {
     export interface I {
     }
 }
@@ -36,16 +36,13 @@ export { v, f, C, I, E, D, M, N, T, a };
 //// [t1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
+exports.a = exports.M = exports.E = exports.C = exports.v = void 0;
+exports.f = f;
 var v = 1;
 exports.v = v;
 function f() { }
-exports.f = f;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 exports.C = C;
 var E;
 (function (E) {
@@ -73,7 +70,7 @@ Object.defineProperty(exports, "a", { enumerable: true, get: function () { retur
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = exports.M = exports.E = exports.C = exports.f = exports.v = void 0;
-var t1_1 = require("./t1");
+const t1_1 = require("./t1");
 Object.defineProperty(exports, "v", { enumerable: true, get: function () { return t1_1.v; } });
 Object.defineProperty(exports, "f", { enumerable: true, get: function () { return t1_1.f; } });
 Object.defineProperty(exports, "C", { enumerable: true, get: function () { return t1_1.C; } });

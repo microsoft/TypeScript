@@ -1,0 +1,6 @@
+//// [tests/cases/compiler/sideEffectImports4.ts] ////
+
+=== index.ts ===
+
+import "server-only";
+

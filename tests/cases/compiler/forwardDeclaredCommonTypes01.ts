@@ -1,5 +1,5 @@
 // @lib: es5
-// @target: es5
+// @target: es5, es2015
 
 interface Promise<T> {}
 interface Symbol {}

@@ -3,18 +3,25 @@
 === aliasWithInterfaceExportAssignmentUsedInVarInitializer_1.ts ===
 import moduleA = require("./aliasWithInterfaceExportAssignmentUsedInVarInitializer_0");
 >moduleA : any
+>        : ^^^
 
 var d = b.q3;
 >d : any
+>  : ^^^
 >b.q3 : any
+>     : ^^^
 >b : any
+>  : ^^^
 >q3 : any
+>   : ^^^
 
 === aliasWithInterfaceExportAssignmentUsedInVarInitializer_0.ts ===
 interface c {
     q3: number;
 >q3 : number
+>   : ^^^^^^
 }
 export = c;
 >c : c
+>  : ^
 

@@ -6,9 +6,6 @@
     }
 
 //// [parserEnum4.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SignatureFlags = void 0;
-var SignatureFlags;
+export var SignatureFlags;
 (function (SignatureFlags) {
-})(SignatureFlags || (exports.SignatureFlags = SignatureFlags = {}));
+})(SignatureFlags || (SignatureFlags = {}));

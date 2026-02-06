@@ -3,7 +3,9 @@
 === /src/index.ts ===
 class Src implements NS.Dep { }
 >Src : Src
+>    : ^^^
 >NS : any
+>   : ^^^
 
 === /deps/dep/dep.d.ts ===
 

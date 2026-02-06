@@ -1,3 +1,4 @@
+// @target: es2015
 // #41422, based on prettier's exports
 // @noEmit: true
 // @checkJS: true

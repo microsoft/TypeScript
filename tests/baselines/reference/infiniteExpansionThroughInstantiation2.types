@@ -8,6 +8,7 @@ interface AA<T extends AA<T>> // now an error due to referencing type parameter 
 {
     x: T
 >x : T
+>  : ^
 }
 
 interface BB extends AA<AA<BB>>

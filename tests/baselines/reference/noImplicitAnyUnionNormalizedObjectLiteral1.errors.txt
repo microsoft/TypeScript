@@ -1,0 +1,32 @@
+noImplicitAnyUnionNormalizedObjectLiteral1.ts(16,3): error TS7018: Object literal's property 'p' implicitly has an 'any' type.
+noImplicitAnyUnionNormalizedObjectLiteral1.ts(17,3): error TS7018: Object literal's property 's' implicitly has an 'any' type.
+
+
+==== noImplicitAnyUnionNormalizedObjectLiteral1.ts (2 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/58150
+    
+    function doSthWithParams(params: unknown) {
+      if (typeof params !== "object") {
+        return {};
+      }
+    
+      return {
+        c: "foo",
+        p: "bar",
+        s: "baz",
+      };
+    }
+    
+    const bar = {
+      p: null,
+      ~~~~~~~
+!!! error TS7018: Object literal's property 'p' implicitly has an 'any' type.
+      s: null,
+      ~~~~~~~
+!!! error TS7018: Object literal's property 's' implicitly has an 'any' type.
+      ...doSthWithParams({
+        p: "hello",
+        s: "world",
+      }),
+    };
+    

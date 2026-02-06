@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: first.ts
 declare class P<R> {
     constructor(callback: (resolve: (value: R) => void) => void);

@@ -1,0 +1,389 @@
+//// [tests/cases/compiler/isolatedDeclarationErrorsObjects.ts] ////
+
+=== isolatedDeclarationErrorsObjects.ts ===
+export let o = {
+>o : { a: number; b: string; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    a: 1,    b: ""} : { a: number; b: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: 1,
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    b: ""
+>b : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+}
+
+export let oBad = {
+>oBad : { a: number; }
+>     : ^^^^^^^^^^^^^^
+>{    a: Math.random(),} : { a: number; }
+>                        : ^^^^^^^^^^^^^^
+
+    a: Math.random(),
+>a : number
+>  : ^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+}
+export const V = 1;
+>V : 1
+>  : ^
+>1 : 1
+>  : ^
+
+export let oBad2 = {
+>oBad2 : { a: { b: number; }; c: { d: number; e: number; }; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    a: {        b: Math.random(),    },    c: {        d: 1,        e: V,    }} : { a: { b: number; }; c: { d: number; e: number; }; }
+>                                                                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    a: {
+>a : { b: number; }
+>  : ^^^^^^^^^^^^^^
+>{        b: Math.random(),    } : { b: number; }
+>                                : ^^^^^^^^^^^^^^
+
+        b: Math.random(),
+>b : number
+>  : ^^^^^^
+>Math.random() : number
+>              : ^^^^^^
+>Math.random : () => number
+>            : ^^^^^^      
+>Math : Math
+>     : ^^^^
+>random : () => number
+>       : ^^^^^^      
+
+    },
+    c: {
+>c : { d: number; e: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{        d: 1,        e: V,    } : { d: number; e: number; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        d: 1,
+>d : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+        e: V,
+>e : number
+>  : ^^^^^^
+>V : 1
+>  : ^
+    }
+}
+
+export let oWithMethods = {
+>oWithMethods : { method(): void; okMethod(): void; a: number; bad(): void; e: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    method() { },    okMethod(): void { },    a: 1,    bad() { },    e: V,} : { method(): void; okMethod(): void; a: number; bad(): void; e: number; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    method() { },
+>method : () => void
+>       : ^^^^^^^^^^
+
+    okMethod(): void { },
+>okMethod : () => void
+>         : ^^^^^^    
+
+    a: 1,
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    bad() { },
+>bad : () => void
+>    : ^^^^^^^^^^
+
+    e: V,
+>e : number
+>  : ^^^^^^
+>V : 1
+>  : ^
+}
+export let oWithMethodsNested = {
+>oWithMethodsNested : { foo: { method(): void; a: number; okMethod(): void; bad(): void; }; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^
+>{    foo: {        method() { },        a: 1,        okMethod(): void { },        bad() { }    }} : { foo: { method(): void; a: number; okMethod(): void; bad(): void; }; }
+>                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^
+
+    foo: {
+>foo : { method(): void; a: number; okMethod(): void; bad(): void; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
+>{        method() { },        a: 1,        okMethod(): void { },        bad() { }    } : { method(): void; a: number; okMethod(): void; bad(): void; }
+>                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^
+
+        method() { },
+>method : () => void
+>       : ^^^^^^^^^^
+
+        a: 1,
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+        okMethod(): void { },
+>okMethod : () => void
+>         : ^^^^^^    
+
+        bad() { }
+>bad : () => void
+>    : ^^^^^^^^^^
+    }
+}
+
+
+
+export let oWithAccessor = {
+>oWithAccessor : { readonly singleGetterBad: number; singleSetterBad: any; getSetBad: number; getSetOk: number; getSetOk2: number; getSetOk3: number; }
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^
+>{    get singleGetterBad() { return 0 },    set singleSetterBad(value) { },    get getSetBad() { return 0 },    set getSetBad(value) { },    get getSetOk(): number { return 0 },    set getSetOk(value) { },    get getSetOk2() { return 0 },    set getSetOk2(value: number) { },        get getSetOk3(): number { return 0 },    set getSetOk3(value: number) { },} : { readonly singleGetterBad: number; singleSetterBad: any; getSetBad: number; getSetOk: number; getSetOk2: number; getSetOk3: number; }
+>                                                                                                                                                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^
+
+    get singleGetterBad() { return 0 },
+>singleGetterBad : number
+>                : ^^^^^^
+>0 : 0
+>  : ^
+
+    set singleSetterBad(value) { },
+>singleSetterBad : any
+>                : ^^^
+>value : any
+>      : ^^^
+
+    get getSetBad() { return 0 },
+>getSetBad : number
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+    set getSetBad(value) { },
+>getSetBad : number
+>          : ^^^^^^
+>value : number
+>      : ^^^^^^
+
+    get getSetOk(): number { return 0 },
+>getSetOk : number
+>         : ^^^^^^
+>0 : 0
+>  : ^
+
+    set getSetOk(value) { },
+>getSetOk : number
+>         : ^^^^^^
+>value : number
+>      : ^^^^^^
+
+    get getSetOk2() { return 0 },
+>getSetOk2 : number
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+    set getSetOk2(value: number) { },
+>getSetOk2 : number
+>          : ^^^^^^
+>value : number
+>      : ^^^^^^
+    
+    get getSetOk3(): number { return 0 },
+>getSetOk3 : number
+>          : ^^^^^^
+>0 : 0
+>  : ^
+
+    set getSetOk3(value: number) { },
+>getSetOk3 : number
+>          : ^^^^^^
+>value : number
+>      : ^^^^^^
+}
+
+function prop<T>(v: T): T { return v }
+>prop : <T>(v: T) => T
+>     : ^ ^^ ^^ ^^^^^ 
+>v : T
+>  : ^
+>v : T
+>  : ^
+
+const s: unique symbol = Symbol();
+>s : unique symbol
+>  : ^^^^^^^^^^^^^
+>Symbol() : unique symbol
+>         : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+
+const str: string = "";
+>str : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+enum E {
+>E : E
+>  : ^
+
+    V = 10,
+>V : E.V
+>  : ^^^
+>10 : 10
+>   : ^^
+}
+export const oWithComputedProperties = {
+>oWithComputedProperties : { [x: string]: number; [x: number]: number; 1: number; 2: number; [s]: number; 10: number; }
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    [1]: 1,    [1 + 3]: 1,    [prop(2)]: 2,    [s]: 1,    [E.V]: 1,    [str]: 0,} : { [x: string]: number; [x: number]: number; 1: number; 2: number; [s]: number; 10: number; }
+>                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [1]: 1,
+>[1] : number
+>    : ^^^^^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+
+    [1 + 3]: 1,
+>[1 + 3] : number
+>        : ^^^^^^
+>1 + 3 : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>3 : 3
+>  : ^
+>1 : 1
+>  : ^
+
+    [prop(2)]: 2,
+>[prop(2)] : number
+>          : ^^^^^^
+>prop(2) : 2
+>        : ^
+>prop : <T>(v: T) => T
+>     : ^ ^^ ^^ ^^^^^ 
+>2 : 2
+>  : ^
+>2 : 2
+>  : ^
+
+    [s]: 1,
+>[s] : number
+>    : ^^^^^^
+>s : unique symbol
+>  : ^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+    [E.V]: 1,
+>[E.V] : number
+>      : ^^^^^^
+>E.V : E
+>    : ^
+>E : typeof E
+>  : ^^^^^^^^
+>V : E
+>  : ^
+>1 : 1
+>  : ^
+
+    [str]: 0,
+>[str] : number
+>      : ^^^^^^
+>str : string
+>    : ^^^^^^
+>0 : 0
+>  : ^
+}
+
+const part = { a: 1 };
+>part : { a: number; }
+>     : ^^^^^^^^^^^^^^
+>{ a: 1 } : { a: number; }
+>         : ^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+export const oWithSpread = {
+>oWithSpread : { c: number; part: { a: number; }; a: number; b: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    b: 1,    ...part,    c: 1,    part,} : { c: number; part: { a: number; }; a: number; b: number; }
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    b: 1,
+>b : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    ...part,
+>part : { a: number; }
+>     : ^^^^^^^^^^^^^^
+
+    c: 1,
+>c : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    part,
+>part : { a: number; }
+>     : ^^^^^^^^^^^^^^
+}
+
+
+export const oWithSpread2 = {
+>oWithSpread2 : { b: number; nested: { a: number; }; c: number; }
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{    b: 1,    nested: {        ...part,    },    c: 1,} : { b: number; nested: { a: number; }; c: number; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    b: 1,
+>b : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+    nested: {
+>nested : { a: number; }
+>       : ^^^^^^^^^^^^^^
+>{        ...part,    } : { a: number; }
+>                       : ^^^^^^^^^^^^^^
+
+        ...part,
+>part : { a: number; }
+>     : ^^^^^^^^^^^^^^
+
+    },
+    c: 1,
+>c : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+

@@ -1,5 +1,6 @@
+// @target: es2022
 // @noImplicitReferences: true
-// @module: node16,nodenext
+// @module: node16,node18,node20,nodenext
 // @declaration: true
 // @outDir: out
 // @filename: /node_modules/pkg/package.json
@@ -27,5 +28,5 @@ declare global {
     "type": "module"
 }
 // @filename: /index.ts
-/// <reference types="pkg" resolution-mode="require"/>
+/// <reference types="pkg" resolution-mode="require" preserve="true" />
 export interface LocalInterface extends RequireInterface {}

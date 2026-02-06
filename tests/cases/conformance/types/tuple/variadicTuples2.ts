@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @declaration: true
 
@@ -10,6 +11,11 @@ type V03 = [number, ...string[], number];
 type V10 = [number, ...string[], ...boolean[]];  // Error
 type V11 = [number, ...string[], boolean?];  // Error
 type V12 = [number, string?, boolean];  // Error
+
+type V15 = [...string[], ...number[]];  // Error
+type V16 = [...string[], ...Array<number>];  // Error
+type V17 = [...Array<string>, ...number[]];  // Error
+type V18 = [...Array<string>, ...Array<number>];  // Error
 
 // Normalization
 

@@ -3,13 +3,17 @@
 === staticClassProps.ts ===
 class C
 >C : C
+>  : ^
 {
     public foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
         static z = 1;
 >z : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
     }
 }
 

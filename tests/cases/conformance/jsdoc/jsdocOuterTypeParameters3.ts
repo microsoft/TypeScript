@@ -1,3 +1,4 @@
+// @target: es2015
 // @checkjs: true
 // @filename: jsdocOuterTypeParameters3.js
 

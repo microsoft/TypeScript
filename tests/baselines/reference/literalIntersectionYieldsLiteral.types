@@ -3,9 +3,15 @@
 === literalIntersectionYieldsLiteral.ts ===
 const x: { type: string } & { type: "string" } = { type: "string" };
 >x : { type: string; } & { type: "string"; }
+>  : ^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 >type : string
+>     : ^^^^^^
 >type : "string"
+>     : ^^^^^^^^
 >{ type: "string" } : { type: "string"; }
+>                   : ^^^^^^^^^^^^^^^^^^^
 >type : "string"
+>     : ^^^^^^^^
 >"string" : "string"
+>         : ^^^^^^^^
 

@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     Debug,
     Diagnostics,
     EmitFlags,
@@ -27,7 +32,6 @@ import {
     last,
     map,
     Node,
-    nullTransformationContext,
     ParameterDeclaration,
     PropertyDeclaration,
     PropertySignature,
@@ -41,12 +45,7 @@ import {
     visitEachChild,
     visitNode,
     visitNodes,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "annotateWithTypeFromJSDoc";
 const errorCodes = [Diagnostics.JSDoc_types_may_be_moved_to_TypeScript_types.code];
@@ -144,7 +143,7 @@ function transformJSDocType(node: Node): Node {
         case SyntaxKind.JSDocTypeLiteral:
             return transformJSDocTypeLiteral(node as JSDocTypeLiteral);
         default:
-            const visited = visitEachChild(node, transformJSDocType, nullTransformationContext);
+            const visited = visitEachChild(node, transformJSDocType, /*context*/ undefined);
             setEmitFlags(visited, EmitFlags.SingleLine);
             return visited;
     }

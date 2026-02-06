@@ -1,27 +1,51 @@
+ModuleWithExportedAndNonExportedClasses.ts(3,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ModuleWithExportedAndNonExportedClasses.ts(4,9): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+ModuleWithExportedAndNonExportedClasses.ts(8,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ModuleWithExportedAndNonExportedClasses.ts(9,9): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+ModuleWithExportedAndNonExportedClasses.ts(13,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ModuleWithExportedAndNonExportedClasses.ts(14,9): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
+ModuleWithExportedAndNonExportedClasses.ts(18,9): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+ModuleWithExportedAndNonExportedClasses.ts(19,9): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
 ModuleWithExportedAndNonExportedClasses.ts(30,16): error TS2339: Property 'A2' does not exist on type 'typeof A'.
 ModuleWithExportedAndNonExportedClasses.ts(31,17): error TS2339: Property 'A2' does not exist on type 'typeof A'.
 
 
-==== ModuleWithExportedAndNonExportedClasses.ts (2 errors) ====
-    module A {
+==== ModuleWithExportedAndNonExportedClasses.ts (10 errors) ====
+    namespace A {
         export class A {
             id: number;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
             name: string;
+            ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
         }
     
         export class AG<T, U>{
             id: T;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
             name: U;
+            ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
         }
     
         class A2 {
             id: number;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
             name: string;
+            ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
         }
     
         class AG2<T, U>{
             id: T;
+            ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
             name: U;
+            ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
         }
     }
     

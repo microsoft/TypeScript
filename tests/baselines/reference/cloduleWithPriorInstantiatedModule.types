@@ -2,27 +2,34 @@
 
 === cloduleWithPriorInstantiatedModule.ts ===
 // Non-ambient & instantiated module.
-module Moclodule {
+namespace Moclodule {
 >Moclodule : typeof Moclodule
+>          : ^^^^^^^^^^^^^^^^
 
     export interface Someinterface {
         foo(): void;
 >foo : () => void
+>    : ^^^^^^    
     }
     var x = 10;
 >x : number
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 }
 
 class Moclodule {
 >Moclodule : Moclodule
+>          : ^^^^^^^^^
 }
 
 // Instantiated module.
-module Moclodule {
+namespace Moclodule {
 >Moclodule : typeof Moclodule
+>          : ^^^^^^^^^^^^^^^^
 
     export class Manager {
 >Manager : Manager
+>        : ^^^^^^^
     }
 }

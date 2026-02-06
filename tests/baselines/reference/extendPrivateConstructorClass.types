@@ -3,9 +3,11 @@
 === extendPrivateConstructorClass.ts ===
 declare namespace abc {
 >abc : typeof abc
+>    : ^^^^^^^^^^
 
     class XYZ {
 >XYZ : XYZ
+>    : ^^^
 
         private constructor();
     }
@@ -13,8 +15,12 @@ declare namespace abc {
 
 class C extends abc.XYZ {
 >C : C
+>  : ^
 >abc.XYZ : abc.XYZ
+>        : ^^^^^^^
 >abc : typeof abc
+>    : ^^^^^^^^^^
 >XYZ : typeof abc.XYZ
+>    : ^^^^^^^^^^^^^^
 }
 

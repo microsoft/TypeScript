@@ -3,14 +3,23 @@
 === sourceMapValidationDestructuringVariableStatementArrayBindingPattern5.ts ===
 var [x] = [1, 2];
 >x : number
+>  : ^^^^^^
 >[1, 2] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 
 var [y, z] = [1, 2];
 >y : number
+>  : ^^^^^^
 >z : number
+>  : ^^^^^^
 >[1, 2] : [number, number]
+>       : ^^^^^^^^^^^^^^^^
 >1 : 1
+>  : ^
 >2 : 2
+>  : ^
 

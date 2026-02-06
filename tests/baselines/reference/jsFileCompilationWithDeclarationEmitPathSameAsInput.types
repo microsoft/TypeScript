@@ -3,9 +3,11 @@
 === a.ts ===
 class c {
 >c : c
+>  : ^
 }
 
 === a.d.ts ===
 declare function isC(): boolean;
 >isC : () => boolean
+>    : ^^^^^^       
 

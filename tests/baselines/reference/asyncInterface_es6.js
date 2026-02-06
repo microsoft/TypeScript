@@ -5,3 +5,4 @@ async interface I {
 }
 
 //// [asyncInterface_es6.js]
+"use strict";

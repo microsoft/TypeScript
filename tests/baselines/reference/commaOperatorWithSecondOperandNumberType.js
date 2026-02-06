@@ -38,6 +38,7 @@ var resultIsNumber11 = (STRING.trim(), NUMBER = 1);
 
 
 //// [commaOperatorWithSecondOperandNumberType.js]
+"use strict";
 var ANY;
 var BOOLEAN;
 var NUMBER;

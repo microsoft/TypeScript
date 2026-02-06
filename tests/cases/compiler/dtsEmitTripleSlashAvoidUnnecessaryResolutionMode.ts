@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /tsconfig.json
 {
   "compilerOptions": {
@@ -24,6 +25,6 @@ declare namespace NodeJS {
 /// <reference path="globals.d.ts" />
 
 // @Filename: /app.mts
-/// <reference types="node" />
+/// <reference types="node" preserve="true" />
 export async function drainStream(stream: NodeJS.ReadableStream): Promise<void> {
 }

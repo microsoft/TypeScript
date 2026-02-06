@@ -28,12 +28,10 @@ function _setBarAndText(): void {
 }
 
 //// [dottedSymbolResolution1.js]
-var Base = /** @class */ (function () {
-    function Base() {
-    }
-    Base.prototype.foo = function () { };
-    return Base;
-}());
+"use strict";
+class Base {
+    foo() { }
+}
 function each(collection, callback) {
     return null;
 }

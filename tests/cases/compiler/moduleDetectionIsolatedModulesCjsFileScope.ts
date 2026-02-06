@@ -1,7 +1,7 @@
 // @target: esnext
 // @module: esnext
 // @declaration: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @isolatedModules: true
 // @filename: filename.cts
 const a = 2;

@@ -3,10 +3,13 @@
 === privateNameInObjectLiteral-2.ts ===
 const obj = {
 >obj : {}
+>    : ^^
 >{    #foo() {    }} : {}
+>                    : ^^
 
     #foo() {
 >#foo : () => void
+>     : ^^^^^^^^^^
 
     }
 };

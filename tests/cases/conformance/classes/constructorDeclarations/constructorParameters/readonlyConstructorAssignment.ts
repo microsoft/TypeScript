@@ -1,3 +1,4 @@
+// @target: es2015
 // Tests that readonly parameter properties behave like regular readonly properties
 
 class A {

@@ -1,4 +1,5 @@
-﻿// The type T associated with a destructuring variable declaration is determined as follows:
+﻿// @target: es2015
+// The type T associated with a destructuring variable declaration is determined as follows:
 //      If the declaration includes a type annotation, T is that type.
 var {a1, a2}: { a1: number, a2: string } = { a1: true, a2: 1 }               // Error
 var [a3, [[a4]], a5]: [number, [[string]], boolean] = [1, [[false]], true];  // Error

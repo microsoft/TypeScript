@@ -3,16 +3,21 @@
 === staticAndNonStaticPropertiesSameName.ts ===
 class C {
 >C : C
+>  : ^
 
     x: number;
 >x : number
+>  : ^^^^^^
 
     static x: number;
 >x : number
+>  : ^^^^^^
 
     f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 
     static f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 }

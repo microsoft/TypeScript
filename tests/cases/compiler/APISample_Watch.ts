@@ -1,7 +1,9 @@
-﻿// @module: commonjs
+﻿// @target: es2015
+// @module: commonjs
 // @skipLibCheck: true
 // @noImplicitAny:true
 // @strictNullChecks:true
+// @noTypesAndSymbols: true
 
 // @filename: node_modules/typescript/package.json
 {
@@ -54,7 +56,7 @@ function watchMain() {
     // You can technically override any given hook on the host, though you probably don't need to.
     // Note that we're assuming `origCreateProgram` and `origPostProgramCreate` doesn't use `this` at all.
     const origCreateProgram = host.createProgram;
-    host.createProgram = (rootNames: ReadonlyArray<string>, options, host, oldProgram) => {
+    host.createProgram = (rootNames: ReadonlyArray<string> | undefined, options, host, oldProgram) => {
         console.log("** We're about to create the program! **");
         return origCreateProgram(rootNames, options, host, oldProgram);
     }

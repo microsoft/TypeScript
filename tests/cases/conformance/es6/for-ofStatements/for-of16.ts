@@ -1,11 +1,11 @@
 ﻿//@target: ES6
-class StringIterator {
+class MyStringIterator {
     [Symbol.iterator]() {
         return this;
     }
 }
 
 var v: string;
-for (v of new StringIterator) { } // Should fail
+for (v of new MyStringIterator) { } // Should fail
 
-for (v of new StringIterator) { } // Should still fail (related errors should still be shown even though type is cached).
+for (v of new MyStringIterator) { } // Should still fail (related errors should still be shown even though type is cached).

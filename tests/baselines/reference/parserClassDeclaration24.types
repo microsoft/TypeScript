@@ -3,4 +3,5 @@
 === parserClassDeclaration24.ts ===
 class any {
 >any : any
+>    : ^^^
 }

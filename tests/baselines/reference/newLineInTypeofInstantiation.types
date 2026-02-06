@@ -4,7 +4,9 @@
 interface Example {
     (a: number): typeof a
 >a : number
+>  : ^^^^^^
 >a : number
+>  : ^^^^^^
   
     <T>(): void
 }

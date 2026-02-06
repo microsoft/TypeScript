@@ -6,7 +6,7 @@
 
 ///<reference path='typescript.ts' />
 
-module TypeScript {
+namespace TypeScript {
     export class TypeCollectionContext {
         public script: Script = null;
 
@@ -224,22 +224,22 @@ module TypeScript {
 }
 
 //// [parserRealSource6.js]
+"use strict";
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var TypeCollectionContext = /** @class */ (function () {
-        function TypeCollectionContext(scopeChain, checker) {
+    class TypeCollectionContext {
+        constructor(scopeChain, checker) {
             this.scopeChain = scopeChain;
             this.checker = checker;
             this.script = null;
         }
-        return TypeCollectionContext;
-    }());
+    }
     TypeScript.TypeCollectionContext = TypeCollectionContext;
-    var MemberScopeContext = /** @class */ (function () {
-        function MemberScopeContext(flow, pos, matchFlag) {
+    class MemberScopeContext {
+        constructor(flow, pos, matchFlag) {
             this.flow = flow;
             this.pos = pos;
             this.matchFlag = matchFlag;
@@ -247,11 +247,10 @@ var TypeScript;
             this.ast = null;
             this.options = new AstWalkOptions();
         }
-        return MemberScopeContext;
-    }());
+    }
     TypeScript.MemberScopeContext = MemberScopeContext;
-    var EnclosingScopeContext = /** @class */ (function () {
-        function EnclosingScopeContext(logger, script, text, pos, isMemberCompletion) {
+    class EnclosingScopeContext {
+        constructor(logger, script, text, pos, isMemberCompletion) {
             this.logger = logger;
             this.script = script;
             this.text = text;
@@ -267,25 +266,25 @@ var TypeScript;
             this.publicsOnly = true;
             this.useFullAst = false;
         }
-        EnclosingScopeContext.prototype.getScope = function () {
+        getScope() {
             return this.scopeGetter();
-        };
-        EnclosingScopeContext.prototype.getObjectLiteralScope = function () {
+        }
+        getObjectLiteralScope() {
             return this.objectLiteralScopeGetter();
-        };
-        EnclosingScopeContext.prototype.getScopeAST = function () {
+        }
+        getScopeAST() {
             return this.scopeStartAST;
-        };
-        EnclosingScopeContext.prototype.getScopePosition = function () {
+        }
+        getScopePosition() {
             return this.scopeStartAST.minChar;
-        };
-        EnclosingScopeContext.prototype.getScriptFragmentStartAST = function () {
+        }
+        getScriptFragmentStartAST() {
             return this.scopeStartAST;
-        };
-        EnclosingScopeContext.prototype.getScriptFragmentPosition = function () {
+        }
+        getScriptFragmentPosition() {
             return this.getScriptFragmentStartAST().minChar;
-        };
-        EnclosingScopeContext.prototype.getScriptFragment = function () {
+        }
+        getScriptFragment() {
             if (this.scriptFragment == null) {
                 var ast = this.getScriptFragmentStartAST();
                 var minChar = ast.minChar;
@@ -293,9 +292,8 @@ var TypeScript;
                 this.scriptFragment = TypeScript.quickParse(this.logger, ast, this.text, minChar, limChar, null /*errorCapture*/).Script;
             }
             return this.scriptFragment;
-        };
-        return EnclosingScopeContext;
-    }());
+        }
+    }
     TypeScript.EnclosingScopeContext = EnclosingScopeContext;
     function preFindMemberScope(ast, parent, walker) {
         var memScope = walker.state;

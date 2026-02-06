@@ -4,7 +4,9 @@
 {
     function foo();
 >foo : () => any
+>    : ^^^^^^^^^
 
     function bar() { }
 >bar : () => void
+>    : ^^^^^^^^^^
 }

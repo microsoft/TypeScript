@@ -22,3 +22,4 @@ type Inferred = InferFromMapped<MappedLiteralType>;
 type Test1 = Inferred extends Record<any, string> ? true : false;
 
 //// [reverseMappedTypeAssignableToIndex.js]
+"use strict";

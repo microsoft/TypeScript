@@ -1,0 +1,10 @@
+noUnusedLocals_potentialPredicateUnusedParam.ts(1,40): error TS6133: 'a' is declared but its value is never read.
+
+
+==== noUnusedLocals_potentialPredicateUnusedParam.ts (1 errors) ====
+    function potentialPredicateUnusedParam(a: unknown) {
+                                           ~
+!!! error TS6133: 'a' is declared but its value is never read.
+      return !!Math.random();
+    }
+    

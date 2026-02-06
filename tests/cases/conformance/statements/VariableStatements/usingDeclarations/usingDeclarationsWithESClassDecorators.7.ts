@@ -1,3 +1,4 @@
+// @strict: false
 // @target: esnext,es2015,es5
 // @module: commonjs,system,esnext
 // @lib: esnext

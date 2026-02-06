@@ -3,8 +3,13 @@
 === parserAmbiguity1.ts ===
 f(g<A, B>(7));
 >f(g<A, B>(7)) : any
+>              : ^^^
 >f : any
+>  : ^^^
 >g<A, B>(7) : any
+>           : ^^^
 >g : any
+>  : ^^^
 >7 : 7
+>  : ^
 

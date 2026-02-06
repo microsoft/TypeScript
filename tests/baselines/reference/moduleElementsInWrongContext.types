@@ -2,7 +2,7 @@
 
 === moduleElementsInWrongContext.ts ===
 {
-    module M { }
+    namespace M { }
     export namespace N {
         export interface I { }
     }
@@ -11,50 +11,66 @@
 
     declare module "ambient" {
 >"ambient" : typeof Foo
+>          : ^^^^^^^^^^
 
     }
 
     export = M;
 >M : any
+>  : ^^^
 
     var v;
 >v : any
+>  : ^^^
 
     function foo() { }
 >foo : () => void
+>    : ^^^^^^^^^^
 
     export * from "ambient";
     export { foo };
 >foo : () => void
+>    : ^^^^^^^^^^
 
     export { baz as b } from "ambient";
 >baz : any
+>    : ^^^
 >b : any
+>  : ^^^
 
     export default v;
 >v : any
+>  : ^^^
 
     export default class C { }
 >C : C
+>  : ^
 
     export function bee() { }
 >bee : () => void
+>    : ^^^^^^^^^^
 
     import I = M;
 >I : any
+>  : ^^^
 >M : any
+>  : ^^^
 
     import I2 = require("foo");
 >I2 : any
+>   : ^^^
 
     import * as Foo from "ambient";
 >Foo : typeof Foo
+>    : ^^^^^^^^^^
 
     import bar from "ambient";
->bar : any
+>bar : typeof Foo
+>    : ^^^^^^^^^^
 
     import { baz } from "ambient";
 >baz : any
+>    : ^^^
 
     import "ambient";
 }

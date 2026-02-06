@@ -3,4 +3,5 @@
 === FunctionDeclaration1_es6.ts ===
 function * foo() {
 >foo : () => Generator<never, void, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }

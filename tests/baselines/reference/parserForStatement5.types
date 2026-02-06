@@ -3,5 +3,7 @@
 === parserForStatement5.ts ===
 for ({} in b) {
 >{} : {}
+>   : ^^
 >b : any
+>  : ^^^
 }

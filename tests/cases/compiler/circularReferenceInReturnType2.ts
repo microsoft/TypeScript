@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @noEmit: true
 
@@ -38,6 +39,7 @@ declare const field: <Source, Type extends ObjectType<any>, Key extends string>(
 
 type Something = { foo: number };
 
+// inference fails here, but ideally should not
 const A = object<Something>()({
   name: "A",
   fields: () => ({

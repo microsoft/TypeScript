@@ -1,18 +1,5 @@
-currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames: false
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-
 //// [/users/username/projects/project/file1.ts]
 const x = 10;
 
@@ -27,76 +14,86 @@ const y = 20;
   }
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-/a/lib/tsc.js -i
+
+/home/src/tslibs/TS/Lib/tsc.js -i
 Output::
+[96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
+[7m4[0m     "outFile": "out.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:4[0m
+
+
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/users/username/projects/project/out.js]
-var x = 10;
-var y = 20;
+"use strict";
+const x = 10;
+const y = 20;
 
 
 //// [/users/username/projects/project/out.tsbuildinfo]
-{"bundle":{"commonSourceDirectory":"./","sourceFiles":["./file1.ts","./file2.ts"],"js":{"sections":[{"pos":0,"end":24,"kind":"text"}],"hash":"-5596233073-var x = 10;\nvar y = 20;\n"}},"program":{"fileNames":["../../../../a/lib/lib.d.ts","./file1.ts","./file2.ts"],"fileInfos":["-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","5029505981-const x = 10;","2026007743-const y = 20;"],"root":[2,3],"options":{"outFile":"./out.js"}},"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts","./file1.ts","./file2.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5029505981-const x = 10;","2026007743-const y = 20;"],"root":[2,3],"options":{"outFile":"./out.js"},"semanticDiagnosticsPerFile":[1,2,3],"version":"FakeTSVersion"}
 
 //// [/users/username/projects/project/out.tsbuildinfo.readable.baseline.txt]
 {
-  "bundle": {
-    "commonSourceDirectory": "./",
-    "sourceFiles": [
-      "./file1.ts",
-      "./file2.ts"
-    ],
-    "js": {
-      "sections": [
-        {
-          "pos": 0,
-          "end": 24,
-          "kind": "text"
-        }
-      ],
-      "hash": "-5596233073-var x = 10;\nvar y = 20;\n"
-    }
+  "fileNames": [
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
+    "./file1.ts",
+    "./file2.ts"
+  ],
+  "fileInfos": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "./file1.ts": "5029505981-const x = 10;",
+    "./file2.ts": "2026007743-const y = 20;"
   },
-  "program": {
-    "fileNames": [
-      "../../../../a/lib/lib.d.ts",
-      "./file1.ts",
+  "root": [
+    [
+      2,
+      "./file1.ts"
+    ],
+    [
+      3,
       "./file2.ts"
-    ],
-    "fileInfos": {
-      "../../../../a/lib/lib.d.ts": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "./file1.ts": "5029505981-const x = 10;",
-      "./file2.ts": "2026007743-const y = 20;"
-    },
-    "root": [
-      [
-        2,
-        "./file1.ts"
-      ],
-      [
-        3,
-        "./file2.ts"
-      ]
-    ],
-    "options": {
-      "outFile": "./out.js"
-    }
+    ]
+  ],
+  "options": {
+    "outFile": "./out.js"
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file1.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./file2.ts",
+      "not cached or not changed"
+    ]
+  ],
   "version": "FakeTSVersion",
-  "size": 766
+  "size": 677
 }
-
-//// [/users/username/projects/project/out.tsbuildinfo.baseline.txt]
-======================================================================
-File:: /users/username/projects/project/out.js
-----------------------------------------------------------------------
-text: (0-24)
-var x = 10;
-var y = 20;
-
-======================================================================
 
 
 Program root files: [
@@ -110,7 +107,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /users/username/projects/project/file1.ts
 /users/username/projects/project/file2.ts
 
@@ -118,4 +115,4 @@ No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsGenerated

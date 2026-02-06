@@ -3,8 +3,10 @@
 === a.ts ===
 import y = require("b");
 >y : typeof y
+>  : ^^^^^^^^
 
 === node_modules/b/index.d.ts ===
 export var x: number;
 >x : number
+>  : ^^^^^^
 

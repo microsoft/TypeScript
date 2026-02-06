@@ -1,3 +1,4 @@
+// @target: es2015
 type StringTree = string | StringTreeCollection;
 class StringTreeCollectionBase {
     [n: number]: StringTree;

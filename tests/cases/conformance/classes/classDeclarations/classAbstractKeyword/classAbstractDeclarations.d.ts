@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare abstract class A {
     abstract constructor() {}
 }

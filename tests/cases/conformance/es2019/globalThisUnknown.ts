@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare let win: Window & typeof globalThis;
 
 // this access should be an error

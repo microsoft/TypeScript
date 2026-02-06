@@ -1,0 +1,84 @@
+arbitraryModuleNamespaceIdentifiers_module.ts(4,23): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(5,10): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(8,10): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(8,19): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(9,10): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(12,13): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(13,10): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(18,27): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(19,15): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(20,7): error TS2322: Type '"expect error about someType"' is not assignable to type '"someType"'.
+arbitraryModuleNamespaceIdentifiers_module.ts(22,15): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(22,24): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(23,15): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(24,7): error TS2322: Type '"expect error about someType"' is not assignable to type '"someType"'.
+arbitraryModuleNamespaceIdentifiers_module.ts(26,18): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(27,15): error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+arbitraryModuleNamespaceIdentifiers_module.ts(29,7): error TS2322: Type '"expect error about otherType"' is not assignable to type '"otherType"'.
+
+
+==== arbitraryModuleNamespaceIdentifiers_module.ts (17 errors) ====
+    const someValue = "someValue";
+    type someType = "someType";
+    
+    export { someValue as "<X>" };
+                          ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    import { "<X>" as valueX } from "./arbitraryModuleNamespaceIdentifiers_module";
+             ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    if (valueX !== "someValue") throw "should be someValue";
+    
+    export { "<X>" as "<Y>" } from "./arbitraryModuleNamespaceIdentifiers_module";
+             ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+                      ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    import { "<Y>" as valueY } from "./arbitraryModuleNamespaceIdentifiers_module";
+             ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    if (valueY !== "someValue") throw "should be someValue";
+    
+    export * as "<Z>" from "./arbitraryModuleNamespaceIdentifiers_module";
+                ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    import { "<Z>" as valueZ } from "./arbitraryModuleNamespaceIdentifiers_module";
+             ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    if (valueZ["<X>"] !== "someValue") throw "should be someValue";
+    if (valueZ["<Y>"] !== "someValue") throw "should be someValue";
+    if (valueZ["<Z>"] !== valueZ) throw "should be export namespace";
+    
+    export { type someType as "<A>" };
+                              ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    import { type "<A>" as typeA } from "./arbitraryModuleNamespaceIdentifiers_module";
+                  ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    const importTest: typeA = "expect error about someType";
+          ~~~~~~~~~~
+!!! error TS2322: Type '"expect error about someType"' is not assignable to type '"someType"'.
+    
+    export { type "<A>" as "<B>" } from "./arbitraryModuleNamespaceIdentifiers_module";
+                  ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+                           ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    import { type "<B>" as typeB } from "./arbitraryModuleNamespaceIdentifiers_module";
+                  ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    const reimportTest: typeB = "expect error about someType";
+          ~~~~~~~~~~~~
+!!! error TS2322: Type '"expect error about someType"' is not assignable to type '"someType"'.
+    
+    export type * as "<C>" from "./arbitraryModuleNamespaceIdentifiers_module";
+                     ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    import { type "<C>" as typeC } from "./arbitraryModuleNamespaceIdentifiers_module";
+                  ~~~~~
+!!! error TS18057: String literal import and export names are not supported when the '--module' flag is set to 'es2015' or 'es2020'.
+    export type otherType = "otherType";
+    const importStarTestA: typeC.otherType = "expect error about otherType";
+          ~~~~~~~~~~~~~~~
+!!! error TS2322: Type '"expect error about otherType"' is not assignable to type '"otherType"'.
+    

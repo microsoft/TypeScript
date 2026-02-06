@@ -3,6 +3,9 @@
 === objectLiteralMemberWithModifiers2.ts ===
 var v = { public get foo() { } }
 >v : { readonly foo: void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ public get foo() { } } : { readonly foo: void; }
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : void
+>    : ^^^^
 

@@ -3,9 +3,13 @@
 === parserEnum6.ts ===
 enum E {
 >E : E
+>  : ^
 
   "A", "B", "C"
 >"A" : E.A
+>    : ^^^
 >"B" : E.B
+>    : ^^^
 >"C" : E.C
+>    : ^^^
 }

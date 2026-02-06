@@ -1,3 +1,4 @@
+// @target: es2015
 var obj:any = {};
 
 obj.if = 1;

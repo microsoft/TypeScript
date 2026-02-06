@@ -3,63 +3,95 @@
 === refs.d.ts ===
 declare module "path";
 >"path" : any
+>       : ^^^
 
 === file.ts ===
 import path from "path";
 >path : any
+>     : ^^^
 
 path.resolve("", "../");
 >path.resolve("", "../") : any
+>                        : ^^^
 >path.resolve : any
+>             : ^^^
 >path : any
+>     : ^^^
 >resolve : any
+>        : ^^^
 >"" : ""
+>   : ^^
 >"../" : "../"
+>      : ^^^^^
 
 export class Foo { }
 >Foo : Foo
+>    : ^^^
 
 === file2.ts ===
 import * as path from "path";
 >path : any
+>     : ^^^
 
 path.resolve("", "../");
 >path.resolve("", "../") : any
+>                        : ^^^
 >path.resolve : any
+>             : ^^^
 >path : any
+>     : ^^^
 >resolve : any
+>        : ^^^
 >"" : ""
+>   : ^^
 >"../" : "../"
+>      : ^^^^^
 
 export class Foo2 { }
 >Foo2 : Foo2
+>     : ^^^^
 
 === file3.ts ===
 import {default as resolve} from "path";
 >default : any
+>        : ^^^
 >resolve : any
+>        : ^^^
 
 resolve("", "../");
 >resolve("", "../") : any
+>                   : ^^^
 >resolve : any
+>        : ^^^
 >"" : ""
+>   : ^^
 >"../" : "../"
+>      : ^^^^^
 
 export class Foo3 { }
 >Foo3 : Foo3
+>     : ^^^^
 
 === file4.ts ===
 import {Bar, default as resolve} from "path";
 >Bar : any
+>    : ^^^
 >default : any
+>        : ^^^
 >resolve : any
+>        : ^^^
 
 resolve("", "../");
 >resolve("", "../") : any
+>                   : ^^^
 >resolve : any
+>        : ^^^
 >"" : ""
+>   : ^^
 >"../" : "../"
+>      : ^^^^^
 
 export { Bar }
 >Bar : any
+>    : ^^^
 

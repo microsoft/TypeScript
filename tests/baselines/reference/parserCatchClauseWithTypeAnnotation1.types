@@ -4,5 +4,6 @@
 try {
 } catch (e: Error) {
 >e : any
+>  : ^^^
 }
 

@@ -24,6 +24,7 @@ a = b;
 
 
 //// [cyclicGenericTypeInstantiation.js]
+"use strict";
 function foo() {
     var z = foo();
     var y;

@@ -1,3 +1,4 @@
+// @target: es2015
 //@filename: ambientExternalModuleMerging_use.ts
 //@module: amd
 import M = require("M");

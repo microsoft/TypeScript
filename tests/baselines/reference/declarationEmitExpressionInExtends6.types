@@ -7,15 +7,20 @@ declare const require: any;
 === /a.ts ===
 export class Foo {}
 >Foo : Foo
+>    : ^^^
 
 === /b.ts ===
 import * as A from "./a";
 >A : typeof A
+>  : ^^^^^^^^
 
 const { Foo } = A;
 >Foo : typeof A.Foo
+>    : ^^^^^^^^^^^^
 >A : typeof A
+>  : ^^^^^^^^
 
 export default class extends Foo {}
 >Foo : A.Foo
+>    : ^^^^^
 

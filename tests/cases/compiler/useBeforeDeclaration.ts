@@ -1,3 +1,4 @@
+// @target: es2015
 // @outFile: test.js
 
 // @fileName: A.ts

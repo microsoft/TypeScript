@@ -8,15 +8,19 @@ export * from "./c";
 === b.ts ===
 export {Animals} from "./c";
 >Animals : typeof import("c").Animals
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 === c.ts ===
 export enum Animals {
 >Animals : Animals
+>        : ^^^^^^^
 
 	Cat,
 >Cat : Animals.Cat
+>    : ^^^^^^^^^^^
 
 	Dog
 >Dog : Animals.Dog
+>    : ^^^^^^^^^^^
 
 };

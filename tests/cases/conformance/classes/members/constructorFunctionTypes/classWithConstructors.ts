@@ -1,4 +1,5 @@
-module NonGeneric {
+// @target: es2015
+namespace NonGeneric {
     class C {
         constructor(x: string) { }
     }
@@ -23,7 +24,7 @@ module NonGeneric {
     var d3 = new D(''); // ok
 }
 
-module Generics {
+namespace Generics {
     class C<T> {
         constructor(x: T) { }
     }

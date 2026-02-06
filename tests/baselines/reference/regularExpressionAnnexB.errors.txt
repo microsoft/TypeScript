@@ -1,0 +1,269 @@
+regularExpressionAnnexB.ts(2,8): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(2,22): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(2,28): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(3,9): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(3,23): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(3,29): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(7,4): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAnnexB.ts(7,8): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(7,10): error TS1512: '\c' must be followed by an ASCII letter.
+regularExpressionAnnexB.ts(7,12): error TS1510: '\k' must be followed by a capturing group name enclosed in angle brackets.
+regularExpressionAnnexB.ts(7,14): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAnnexB.ts(7,18): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAnnexB.ts(7,22): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(7,24): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAnnexB.ts(7,28): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(7,30): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionAnnexB.ts(8,5): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAnnexB.ts(8,9): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(8,11): error TS1512: '\c' must be followed by an ASCII letter.
+regularExpressionAnnexB.ts(8,13): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAnnexB.ts(8,15): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAnnexB.ts(8,19): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAnnexB.ts(8,23): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(8,25): error TS1535: This character cannot be escaped in a regular expression.
+regularExpressionAnnexB.ts(8,29): error TS1125: Hexadecimal digit expected.
+regularExpressionAnnexB.ts(8,31): error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionAnnexB.ts(9,4): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionAnnexB.ts(9,7): error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+regularExpressionAnnexB.ts(9,9): error TS1516: A character class range must not be bounded by another character class.
+regularExpressionAnnexB.ts(23,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(23,8): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(24,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(24,9): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(25,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(25,10): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(26,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(26,5): error TS1506: Numbers out of order in quantifier.
+regularExpressionAnnexB.ts(26,10): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(29,4): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+regularExpressionAnnexB.ts(30,4): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+regularExpressionAnnexB.ts(31,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(31,5): error TS1505: Incomplete quantifier. Digit expected.
+regularExpressionAnnexB.ts(31,7): error TS1005: '}' expected.
+regularExpressionAnnexB.ts(31,8): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(32,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(32,6): error TS1005: '}' expected.
+regularExpressionAnnexB.ts(32,7): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(33,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(33,7): error TS1005: '}' expected.
+regularExpressionAnnexB.ts(33,8): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(34,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(34,8): error TS1005: '}' expected.
+regularExpressionAnnexB.ts(34,9): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(35,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(35,5): error TS1506: Numbers out of order in quantifier.
+regularExpressionAnnexB.ts(35,8): error TS1005: '}' expected.
+regularExpressionAnnexB.ts(35,9): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(36,4): error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+regularExpressionAnnexB.ts(36,5): error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+regularExpressionAnnexB.ts(37,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(37,5): error TS1505: Incomplete quantifier. Digit expected.
+regularExpressionAnnexB.ts(37,8): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(38,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(38,5): error TS1505: Incomplete quantifier. Digit expected.
+regularExpressionAnnexB.ts(38,9): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(39,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(39,8): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(40,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(40,9): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(41,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(41,10): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(42,4): error TS1507: There is nothing available for repetition.
+regularExpressionAnnexB.ts(42,5): error TS1506: Numbers out of order in quantifier.
+regularExpressionAnnexB.ts(42,10): error TS1507: There is nothing available for repetition.
+
+
+==== regularExpressionAnnexB.ts (74 errors) ====
+    const regexes: RegExp[] = [
+      /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/,
+           
+!!! error TS1125: Hexadecimal digit expected.
+                         
+!!! error TS1125: Hexadecimal digit expected.
+                               
+!!! error TS1125: Hexadecimal digit expected.
+      /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/,
+            
+!!! error TS1125: Hexadecimal digit expected.
+                          
+!!! error TS1125: Hexadecimal digit expected.
+                                
+!!! error TS1125: Hexadecimal digit expected.
+      /\P[\P\w-_]/,
+    
+      // Compare to
+      /\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s/u,
+       ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+           
+!!! error TS1125: Hexadecimal digit expected.
+             ~~
+!!! error TS1512: '\c' must be followed by an ASCII letter.
+               ~~
+!!! error TS1510: '\k' must be followed by a capturing group name enclosed in angle brackets.
+                 ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+                     ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+                         
+!!! error TS1125: Hexadecimal digit expected.
+                           ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+                               
+!!! error TS1125: Hexadecimal digit expected.
+                                 ~~
+!!! error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+      /[\q\u\i\c\k\_\f\o\x\-\j\u\m\p\s]/u,
+        ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+            
+!!! error TS1125: Hexadecimal digit expected.
+              ~~
+!!! error TS1512: '\c' must be followed by an ASCII letter.
+                ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+                  ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+                      ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+                          
+!!! error TS1125: Hexadecimal digit expected.
+                            ~~
+!!! error TS1535: This character cannot be escaped in a regular expression.
+                                
+!!! error TS1125: Hexadecimal digit expected.
+                                  ~~
+!!! error TS1531: '\p' must be followed by a Unicode property value expression enclosed in braces.
+      /\P[\P\w-_]/u,
+       ~~
+!!! error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+          ~~
+!!! error TS1531: '\P' must be followed by a Unicode property value expression enclosed in braces.
+            ~~
+!!! error TS1516: A character class range must not be bounded by another character class.
+    ];
+    
+    const regexesWithBraces: RegExp[] = [
+      /{??/,
+      /{,??/,
+      /{,1??/,
+      /{1??/,
+      /{1,??/,
+      /{1,2??/,
+      /{2,1??/,
+      /{}??/,
+      /{,}??/,
+      /{,1}??/,
+      /{1}??/,
+       ~~~~
+!!! error TS1507: There is nothing available for repetition.
+           ~
+!!! error TS1507: There is nothing available for repetition.
+      /{1,}??/,
+       ~~~~~
+!!! error TS1507: There is nothing available for repetition.
+            ~
+!!! error TS1507: There is nothing available for repetition.
+      /{1,2}??/,
+       ~~~~~~
+!!! error TS1507: There is nothing available for repetition.
+             ~
+!!! error TS1507: There is nothing available for repetition.
+      /{2,1}??/,
+       ~~~~~~
+!!! error TS1507: There is nothing available for repetition.
+        ~~~
+!!! error TS1506: Numbers out of order in quantifier.
+             ~
+!!! error TS1507: There is nothing available for repetition.
+    
+      // Compare to
+      /{??/u,
+       ~
+!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+      /{,??/u,
+       ~
+!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+      /{,1??/u,
+       ~~~~
+!!! error TS1507: There is nothing available for repetition.
+        
+!!! error TS1505: Incomplete quantifier. Digit expected.
+          
+!!! error TS1005: '}' expected.
+           ~
+!!! error TS1507: There is nothing available for repetition.
+      /{1??/u,
+       ~~~
+!!! error TS1507: There is nothing available for repetition.
+         
+!!! error TS1005: '}' expected.
+          ~
+!!! error TS1507: There is nothing available for repetition.
+      /{1,??/u,
+       ~~~~
+!!! error TS1507: There is nothing available for repetition.
+          
+!!! error TS1005: '}' expected.
+           ~
+!!! error TS1507: There is nothing available for repetition.
+      /{1,2??/u,
+       ~~~~~
+!!! error TS1507: There is nothing available for repetition.
+           
+!!! error TS1005: '}' expected.
+            ~
+!!! error TS1507: There is nothing available for repetition.
+      /{2,1??/u,
+       ~~~~~
+!!! error TS1507: There is nothing available for repetition.
+        ~~~
+!!! error TS1506: Numbers out of order in quantifier.
+           
+!!! error TS1005: '}' expected.
+            ~
+!!! error TS1507: There is nothing available for repetition.
+      /{}??/u,
+       ~
+!!! error TS1508: Unexpected '{'. Did you mean to escape it with backslash?
+        ~
+!!! error TS1508: Unexpected '}'. Did you mean to escape it with backslash?
+      /{,}??/u,
+       ~~~~
+!!! error TS1507: There is nothing available for repetition.
+        
+!!! error TS1505: Incomplete quantifier. Digit expected.
+           ~
+!!! error TS1507: There is nothing available for repetition.
+      /{,1}??/u,
+       ~~~~~
+!!! error TS1507: There is nothing available for repetition.
+        
+!!! error TS1505: Incomplete quantifier. Digit expected.
+            ~
+!!! error TS1507: There is nothing available for repetition.
+      /{1}??/u,
+       ~~~~
+!!! error TS1507: There is nothing available for repetition.
+           ~
+!!! error TS1507: There is nothing available for repetition.
+      /{1,}??/u,
+       ~~~~~
+!!! error TS1507: There is nothing available for repetition.
+            ~
+!!! error TS1507: There is nothing available for repetition.
+      /{1,2}??/u,
+       ~~~~~~
+!!! error TS1507: There is nothing available for repetition.
+             ~
+!!! error TS1507: There is nothing available for repetition.
+      /{2,1}??/u,
+       ~~~~~~
+!!! error TS1507: There is nothing available for repetition.
+        ~~~
+!!! error TS1506: Numbers out of order in quantifier.
+             ~
+!!! error TS1507: There is nothing available for repetition.
+    ];
+    

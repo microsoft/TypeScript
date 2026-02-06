@@ -4,8 +4,9 @@
     "inputFiles": [
         "test.ts"
     ],
-    "out": "bin/test.js",
+    "outFile": "bin/test.js",
     "sourceMap": true,
     "declaration": true,
-    "baselineCheck": true
+    "baselineCheck": true,
+    "strict": false
 }

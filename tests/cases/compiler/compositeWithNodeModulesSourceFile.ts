@@ -1,6 +1,8 @@
+// @module: commonjs
+// @target: es2015
 // @filename: /foo/tsconfig.json
 {
-    "compilerOptions": { "composite": true }
+    "compilerOptions": { "composite": true, "target": "es2015", "module": "commonjs" }
 }
 
 // @filename: /foo/node_modules/myModule/index.ts

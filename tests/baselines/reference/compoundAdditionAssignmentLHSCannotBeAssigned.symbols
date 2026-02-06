@@ -8,35 +8,35 @@ enum E { a, b, c }
 >b : Symbol(E.b, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 1, 11))
 >c : Symbol(E.c, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 1, 14))
 
-var x1: boolean;
->x1 : Symbol(x1, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 3, 3))
+declare var x1: boolean;
+>x1 : Symbol(x1, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 3, 11))
 
 x1 += '';
->x1 : Symbol(x1, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 3, 3))
+>x1 : Symbol(x1, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 3, 11))
 
-var x2: number;
->x2 : Symbol(x2, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 6, 3))
+declare var x2: number;
+>x2 : Symbol(x2, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 6, 11))
 
 x2 += '';
->x2 : Symbol(x2, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 6, 3))
+>x2 : Symbol(x2, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 6, 11))
 
-var x3: E;
->x3 : Symbol(x3, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 9, 3))
+declare var x3: E;
+>x3 : Symbol(x3, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 9, 11))
 >E : Symbol(E, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 0, 0))
 
 x3 += '';
->x3 : Symbol(x3, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 9, 3))
+>x3 : Symbol(x3, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 9, 11))
 
-var x4: {a: string};
->x4 : Symbol(x4, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 12, 3))
->a : Symbol(a, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 12, 9))
+declare var x4: {a: string};
+>x4 : Symbol(x4, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 12, 11))
+>a : Symbol(a, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 12, 17))
 
 x4 += '';
->x4 : Symbol(x4, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 12, 3))
+>x4 : Symbol(x4, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 12, 11))
 
-var x5: void;
->x5 : Symbol(x5, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 15, 3))
+declare var x5: void;
+>x5 : Symbol(x5, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 15, 11))
 
 x5 += '';
->x5 : Symbol(x5, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 15, 3))
+>x5 : Symbol(x5, Decl(compoundAdditionAssignmentLHSCannotBeAssigned.ts, 15, 11))
 

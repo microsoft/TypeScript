@@ -1,9 +1,11 @@
+// @target: es2015
+// @strict: false
 // @noImplicitReferences: true
 // @declaration: true
 // @typeRoots: /types
 // @traceResolution: true
 // @types: lib
-// @out: output.js
+// @outFile: output.js
 
 // @currentDirectory: /
 

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 var x = 5;
 var r = /yo/;
 r.source;
@@ -6,7 +8,7 @@ x.toBAZ();
 x.toString();
 
 var n = 0;
-var N: Number;
+declare var N: Number;
 
 n = N;  // should not work, as 'number' has a different brand
 N = n; // should work

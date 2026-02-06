@@ -3,4 +3,5 @@
 === FunctionDeclaration4_es6.ts ===
 function yield() {
 >yield : () => void
+>      : ^^^^^^^^^^
 }

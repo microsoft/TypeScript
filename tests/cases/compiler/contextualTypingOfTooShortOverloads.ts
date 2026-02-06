@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @lib: es5
 // small repro from #11875
 var use: Overload;

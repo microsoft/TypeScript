@@ -1,4 +1,5 @@
-// @out: testfiles/fooResult.js
+// @target: es2015
+// @outFile: testfiles/fooResult.js
 // @sourcemap: true
 // @useCaseSensitiveFileNames: false
 // @Filename: testFiles/app.ts

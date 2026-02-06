@@ -2,9 +2,7 @@ import fs from "fs";
 import path from "path";
 import url from "url";
 
-import {
-    findUpRoot,
-} from "./build/findUpDir.mjs";
+import { findUpRoot } from "./build/findUpDir.mjs";
 
 const __filename = url.fileURLToPath(new URL(import.meta.url));
 const __dirname = path.dirname(__filename);

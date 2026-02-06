@@ -1,0 +1,107 @@
+//// [tests/cases/compiler/coAndContraVariantInferences7.ts] ////
+
+=== coAndContraVariantInferences7.ts ===
+type Request<TSchema extends Schema> = {
+>Request : Request<TSchema>
+>        : ^^^^^^^^^^^^^^^^
+
+  query: TSchema["query"];
+>query : TSchema["query"]
+>      : ^^^^^^^^^^^^^^^^
+
+};
+
+type Schema = { query?: unknown; body?: unknown };
+>Schema : Schema
+>       : ^^^^^^
+>query : unknown
+>      : ^^^^^^^
+>body : unknown
+>     : ^^^^^^^
+
+declare function route<TSchema extends Schema>(obj: {
+>route : <TSchema extends Schema>(obj: { pre: (a: TSchema) => void; schema: TSchema; handle: (req: Request<TSchema>) => void; }) => void
+>      : ^       ^^^^^^^^^      ^^   ^^                                                                                        ^^^^^    
+>obj : { pre: (a: TSchema) => void; schema: TSchema; handle: (req: Request<TSchema>) => void; }
+>    : ^^^^^^^                    ^^^^^^^^^^       ^^^^^^^^^^                               ^^^
+
+  pre: (a: TSchema) => void;
+>pre : (a: TSchema) => void
+>    : ^ ^^       ^^^^^    
+>a : TSchema
+>  : ^^^^^^^
+
+  schema: TSchema;
+>schema : TSchema
+>       : ^^^^^^^
+
+  handle: (req: Request<TSchema>) => void;
+>handle : (req: Request<TSchema>) => void
+>       : ^   ^^                ^^^^^    
+>req : Request<TSchema>
+>    : ^^^^^^^^^^^^^^^^
+
+}): void;
+
+const validate = (_: { query?: unknown; body?: unknown }) => {};
+>validate : (_: { query?: unknown; body?: unknown; }) => void
+>         : ^ ^^                                    ^^^^^^^^^
+>(_: { query?: unknown; body?: unknown }) => {} : (_: { query?: unknown; body?: unknown; }) => void
+>                                               : ^ ^^                                    ^^^^^^^^^
+>_ : { query?: unknown; body?: unknown; }
+>  : ^^^^^^^^^^       ^^^^^^^^^       ^^^
+>query : unknown
+>      : ^^^^^^^
+>body : unknown
+>     : ^^^^^^^
+
+route({
+>route({  pre: validate,  schema: {    query: "",  },  handle: (req) => {    const test: string = req.query;  },}) : void
+>                                                                                                                  : ^^^^
+>route : <TSchema extends Schema>(obj: { pre: (a: TSchema) => void; schema: TSchema; handle: (req: Request<TSchema>) => void; }) => void
+>      : ^       ^^^^^^^^^      ^^   ^^                                                                                        ^^^^^    
+>{  pre: validate,  schema: {    query: "",  },  handle: (req) => {    const test: string = req.query;  },} : { pre: (_: { query?: unknown; body?: unknown; }) => void; schema: { query: string; }; handle: (req: Request<{ query: string; }>) => void; }
+>                                                                                                           : ^^^^^^^^ ^^                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  pre: validate,
+>pre : (_: { query?: unknown; body?: unknown; }) => void
+>    : ^ ^^                                    ^^^^^^^^^
+>validate : (_: { query?: unknown; body?: unknown; }) => void
+>         : ^ ^^                                    ^^^^^^^^^
+
+  schema: {
+>schema : { query: string; }
+>       : ^^^^^^^^^^^^^^^^^^
+>{    query: "",  } : { query: string; }
+>                   : ^^^^^^^^^^^^^^^^^^
+
+    query: "",
+>query : string
+>      : ^^^^^^
+>"" : ""
+>   : ^^
+
+  },
+  handle: (req) => {
+>handle : (req: Request<{ query: string; }>) => void
+>       : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(req) => {    const test: string = req.query;  } : (req: Request<{ query: string; }>) => void
+>                                                 : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>req : Request<{ query: string; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    const test: string = req.query;
+>test : string
+>     : ^^^^^^
+>req.query : string
+>          : ^^^^^^
+>req : Request<{ query: string; }>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>query : string
+>      : ^^^^^^
+
+  },
+});
+
+export {};
+

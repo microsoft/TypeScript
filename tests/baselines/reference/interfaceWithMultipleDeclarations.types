@@ -34,6 +34,7 @@ interface I3<T> { // length mismatch
 
 class Foo<T> {
 >Foo : Foo<T>
+>    : ^^^^^^
 }
 interface I4<T extends Foo<T>> {
 }

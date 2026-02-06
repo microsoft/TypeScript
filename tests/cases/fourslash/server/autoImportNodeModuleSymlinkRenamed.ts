@@ -1,21 +1,22 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/solution/package.json
 //// {
 ////     "name": "monorepo",
 ////     "workspaces": ["packages/*"]
 //// }
 
-// @Filename: /packages/utils/package.json
+// @Filename: /home/src/workspaces/solution/packages/utils/package.json
 //// {
 ////     "name": "utils",
 ////     "version": "1.0.0",
 ////     "exports": "./dist/index.js"
 //// }
 
-// @Filename: /packages/utils/tsconfig.json
+// @Filename: /home/src/workspaces/solution/packages/utils/tsconfig.json
 //// {
 ////     "compilerOptions": {
+////         "lib": ["es5"],
 ////         "composite": true,
 ////         "module": "nodenext",
 ////         "rootDir": "src",
@@ -24,10 +25,10 @@
 ////     "include": ["src"]
 //// }
 
-// @Filename: /packages/utils/src/index.ts
+// @Filename: /home/src/workspaces/solution/packages/utils/src/index.ts
 //// export function gainUtility() { return 0; }
 
-// @Filename: /packages/web/package.json
+// @Filename: /home/src/workspaces/solution/packages/web/package.json
 //// {
 ////     "name": "web",
 ////     "version": "1.0.0",
@@ -36,9 +37,10 @@
 ////     }
 //// }
 
-// @Filename: /packages/web/tsconfig.json
+// @Filename: /home/src/workspaces/solution/packages/web/tsconfig.json
 //// {
 ////     "compilerOptions": {
+////         "lib": ["es5"],
 ////         "composite": true,
 ////         "module": "esnext",
 ////         "moduleResolution": "bundler",
@@ -52,12 +54,12 @@
 ////     ]
 //// }
 
-// @Filename: /packages/web/src/index.ts
+// @Filename: /home/src/workspaces/solution/packages/web/src/index.ts
 //// gainUtility/**/
 
-// @link: /packages/utils -> /node_modules/utils
-// @link: /packages/utils -> /node_modules/@monorepo/utils
-// @link: /packages/web -> /node_modules/web
+// @link: /home/src/workspaces/solution/packages/utils -> /home/src/workspaces/solution/node_modules/utils
+// @link: /home/src/workspaces/solution/packages/utils -> /home/src/workspaces/solution/node_modules/@monorepo/utils
+// @link: /home/src/workspaces/solution/packages/web -> /home/src/workspaces/solution/node_modules/web
 
 goTo.marker("");
 verify.importFixModuleSpecifiers("", ["@monorepo/utils"]);

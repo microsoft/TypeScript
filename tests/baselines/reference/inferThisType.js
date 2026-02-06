@@ -14,4 +14,5 @@ type r2 = This<(this: number) => void>; // should be number
 
 
 //// [inferThisType.js]
+"use strict";
 f(h);

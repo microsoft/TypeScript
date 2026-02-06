@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/evalOrArgumentsInDeclarationFunctions.ts] ////
+
+=== /a.d.ts ===
+declare global {
+>global : typeof global
+>       : ^^^^^^^^^^^^^
+
+    export namespace ns {
+>ns : typeof ns
+>   : ^^^^^^^^^
+
+        export function eval(): void;
+>eval : () => void
+>     : ^^^^^^    
+
+        export function arguments(): void;
+>arguments : () => void
+>          : ^^^^^^    
+    }
+}
+
+declare function eval(): void;
+>eval : () => void
+>     : ^^^^^^    
+
+declare function arguments(): void;
+>arguments : () => void
+>          : ^^^^^^    
+
+export {}
+

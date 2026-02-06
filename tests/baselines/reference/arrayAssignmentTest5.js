@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arrayAssignmentTest5.ts] ////
 
 //// [arrayAssignmentTest5.ts]
-module Test {
+namespace Test {
     interface IState {
     }
     interface IToken {
@@ -36,22 +36,20 @@ module Test {
 
 
 //// [arrayAssignmentTest5.js]
+"use strict";
 var Test;
 (function (Test) {
-    var Bug = /** @class */ (function () {
-        function Bug() {
-        }
-        Bug.prototype.onEnter = function (line, state, offset) {
+    class Bug {
+        onEnter(line, state, offset) {
             var lineTokens = this.tokenize(line, state, true);
             var tokens = lineTokens.tokens;
             if (tokens.length === 0) {
                 return this.onEnter(line, tokens, offset); // <== this should produce an error since onEnter can not be called with (string, IStateToken[], offset)
             }
-        };
-        Bug.prototype.tokenize = function (line, state, includeStates) {
+        }
+        tokenize(line, state, includeStates) {
             return null;
-        };
-        return Bug;
-    }());
+        }
+    }
     Test.Bug = Bug;
 })(Test || (Test = {}));

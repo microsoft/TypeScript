@@ -1,3 +1,4 @@
+// @target: es2015
 // This test case is a condensed version of Angular 2's ListWrapper. Prior to #7448
 // this would cause the compiler to run out of memory.
 

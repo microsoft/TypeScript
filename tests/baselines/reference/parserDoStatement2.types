@@ -3,5 +3,7 @@
 === parserDoStatement2.ts ===
 do{;}while(false)false
 >false : false
+>      : ^^^^^
 >false : false
+>      : ^^^^^
 

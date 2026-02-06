@@ -3,12 +3,15 @@
 === /index.ts ===
 import { ios } from "./foo";
 >ios : () => void
+>    : ^^^^^^^^^^
 
 === /foo/index.ios.ts ===
 export function ios() {}
 >ios : () => void
+>    : ^^^^^^^^^^
 
 === /foo/index.ts ===
 export function base() {}
 >base : () => void
+>     : ^^^^^^^^^^
 

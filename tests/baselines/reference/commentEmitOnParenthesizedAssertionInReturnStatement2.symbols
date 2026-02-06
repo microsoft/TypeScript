@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/commentEmitOnParenthesizedAssertionInReturnStatement2.ts] ////
+
+=== commentEmitOnParenthesizedAssertionInReturnStatement2.ts ===
+export class Foo {
+>Foo : Symbol(Foo, Decl(commentEmitOnParenthesizedAssertionInReturnStatement2.ts, 0, 0))
+
+    client = {
+>client : Symbol(Foo.client, Decl(commentEmitOnParenthesizedAssertionInReturnStatement2.ts, 0, 18))
+
+      getThing: () => Promise.resolve('')
+>getThing : Symbol(getThing, Decl(commentEmitOnParenthesizedAssertionInReturnStatement2.ts, 1, 14))
+>Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+    }
+  
+    foo() {
+>foo : Symbol(Foo.foo, Decl(commentEmitOnParenthesizedAssertionInReturnStatement2.ts, 3, 5))
+
+      return (
+        /* TODO: please refactor */ this.client
+>this.client          .getThing : Symbol(getThing, Decl(commentEmitOnParenthesizedAssertionInReturnStatement2.ts, 1, 14))
+>this.client : Symbol(Foo.client, Decl(commentEmitOnParenthesizedAssertionInReturnStatement2.ts, 0, 18))
+>this : Symbol(Foo, Decl(commentEmitOnParenthesizedAssertionInReturnStatement2.ts, 0, 0))
+>client : Symbol(Foo.client, Decl(commentEmitOnParenthesizedAssertionInReturnStatement2.ts, 0, 18))
+
+          .getThing() satisfies Promise<string>);
+>getThing : Symbol(getThing, Decl(commentEmitOnParenthesizedAssertionInReturnStatement2.ts, 1, 14))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+    }
+  }

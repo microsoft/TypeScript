@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/constructorOverloads9.ts] ////
+
+=== constructorOverloads9.ts ===
+export class C {
+>C : Symbol(C, Decl(constructorOverloads9.ts, 0, 0))
+
+    a;
+>a : Symbol(C.a, Decl(constructorOverloads9.ts, 0, 16))
+
+    constructor();
+    constructor(x = '') {
+>x : Symbol(x, Decl(constructorOverloads9.ts, 3, 16))
+
+        this.a = x;
+>this.a : Symbol(C.a, Decl(constructorOverloads9.ts, 0, 16))
+>this : Symbol(C, Decl(constructorOverloads9.ts, 0, 0))
+>a : Symbol(C.a, Decl(constructorOverloads9.ts, 0, 16))
+>x : Symbol(x, Decl(constructorOverloads9.ts, 3, 16))
+    }
+}
+

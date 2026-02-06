@@ -4,6 +4,7 @@
 ///<reference path="a.ts"/>
 declare enum E {
 >E : E
+>  : ^
 }
 === a.ts ===
 /*!=========
@@ -14,19 +15,24 @@ declare enum E {
 /*! Don't keep this pinned comment */
 declare enum C {
 >C : C
+>  : ^
 
     a,
 >a : C.a
+>  : ^^^
 
     b,
 >b : C.b
+>  : ^^^
 
     c
 >c : C.c
+>  : ^^^
 }
 
 // Don't keep this comment.
 declare enum D {
 >D : D
+>  : ^
 }
 

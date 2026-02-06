@@ -8,7 +8,7 @@
 ////    type T = number;
 ////    interface I {}
 ////    const enum E {}
-////    enum EE {}
+////    [|enum EE {}|]
 ////    namespace N { export type T = number; }
 ////    [|namespace N { export const x: T = 0; }|]
 ////    var x: I;
@@ -33,7 +33,6 @@ verify.codeFixAll({
     type T = number;
     interface I {}
     const enum E {}
-    enum EE {}
     namespace N { export type T = number; }
     var x: I;
 }`,

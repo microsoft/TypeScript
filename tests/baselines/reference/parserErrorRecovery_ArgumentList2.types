@@ -3,8 +3,11 @@
 === parserErrorRecovery_ArgumentList2.ts ===
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
    bar(;
 >bar( : any
+>     : ^^^
 >bar : any
+>    : ^^^
 }

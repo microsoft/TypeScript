@@ -4,10 +4,12 @@
 interface I {
     <T>(x: T): string;
 >x : T
+>  : ^
 }
 
 interface I2 extends I { 
     <T>(x: T): void;
 >x : T
+>  : ^
 }
 

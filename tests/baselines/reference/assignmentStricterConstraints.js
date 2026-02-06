@@ -12,6 +12,7 @@ g(1, "")
 
 
 //// [assignmentStricterConstraints.js]
+"use strict";
 var f = function (x, y) {
     x = y;
 };

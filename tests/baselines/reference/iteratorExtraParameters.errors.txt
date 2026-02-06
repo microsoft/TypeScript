@@ -1,0 +1,50 @@
+iteratorExtraParameters.ts(11,21): error TS2488: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+iteratorExtraParameters.ts(13,12): error TS2488: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+iteratorExtraParameters.ts(15,9): error TS2488: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+iteratorExtraParameters.ts(17,10): error TS2488: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+
+
+==== iteratorExtraParameters.ts (4 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/57130
+    const iter = {
+        *[Symbol.iterator](_: number) {
+            yield 0;
+        }
+    };
+    
+    declare function g(...args: any): any;
+    
+    function* f() {
+        for (const _ of iter);
+                        ~~~~
+!!! error TS2488: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+!!! related TS2322 iteratorExtraParameters.ts:11:21: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' is not assignable to type 'Iterable<T, TReturn, TNext>'.
+  Types of property '[Symbol.iterator]' are incompatible.
+    Type '(_: number) => Generator<number, void, unknown>' is not assignable to type '() => Iterator<T, TReturn, TNext>'.
+      Target signature provides too few arguments. Expected 1 or more, but got 0.
+    
+        yield* iter;
+               ~~~~
+!!! error TS2488: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+!!! related TS2322 iteratorExtraParameters.ts:13:12: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' is not assignable to type 'Iterable<T, TReturn, TNext>'.
+  Types of property '[Symbol.iterator]' are incompatible.
+    Type '(_: number) => Generator<number, void, unknown>' is not assignable to type '() => Iterator<T, TReturn, TNext>'.
+      Target signature provides too few arguments. Expected 1 or more, but got 0.
+    
+        [...iter]
+            ~~~~
+!!! error TS2488: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+!!! related TS2322 iteratorExtraParameters.ts:15:9: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' is not assignable to type 'Iterable<T, TReturn, TNext>'.
+  Types of property '[Symbol.iterator]' are incompatible.
+    Type '(_: number) => Generator<number, void, unknown>' is not assignable to type '() => Iterator<T, TReturn, TNext>'.
+      Target signature provides too few arguments. Expected 1 or more, but got 0.
+    
+        g(...iter);
+             ~~~~
+!!! error TS2488: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+!!! related TS2322 iteratorExtraParameters.ts:17:10: Type '{ [Symbol.iterator](_: number): Generator<number, void, unknown>; }' is not assignable to type 'Iterable<T, TReturn, TNext>'.
+  Types of property '[Symbol.iterator]' are incompatible.
+    Type '(_: number) => Generator<number, void, unknown>' is not assignable to type '() => Iterator<T, TReturn, TNext>'.
+      Target signature provides too few arguments. Expected 1 or more, but got 0.
+    }
+    

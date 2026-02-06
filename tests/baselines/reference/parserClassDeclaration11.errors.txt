@@ -4,7 +4,7 @@ parserClassDeclaration11.ts(2,4): error TS2390: Constructor implementation is mi
 ==== parserClassDeclaration11.ts (1 errors) ====
     class C {
        constructor();
-       ~~~~~~~~~~~~~~
+       ~~~~~~~~~~~
 !!! error TS2390: Constructor implementation is missing.
        foo() { }
     }

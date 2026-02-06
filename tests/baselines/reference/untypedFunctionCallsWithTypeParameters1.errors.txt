@@ -2,7 +2,7 @@ untypedFunctionCallsWithTypeParameters1.ts(3,12): error TS2558: Expected 0 type 
 untypedFunctionCallsWithTypeParameters1.ts(5,10): error TS2347: Untyped function calls may not accept type arguments.
 untypedFunctionCallsWithTypeParameters1.ts(8,10): error TS2347: Untyped function calls may not accept type arguments.
 untypedFunctionCallsWithTypeParameters1.ts(10,7): error TS2420: Class 'C' incorrectly implements interface 'Function'.
-  Type 'C' is missing the following properties from type 'Function': apply, call, bind
+  Type 'C' is missing the following properties from type 'Function': apply, call, bind, name, [Symbol.hasInstance]
 untypedFunctionCallsWithTypeParameters1.ts(18,10): error TS2349: This expression is not callable.
   Type 'C' has no call signatures.
 untypedFunctionCallsWithTypeParameters1.ts(22,10): error TS2347: Untyped function calls may not accept type arguments.
@@ -22,7 +22,7 @@ untypedFunctionCallsWithTypeParameters1.ts(41,4): error TS2558: Expected 0 type 
              ~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.
     
-    var c: Function;
+    declare var c: Function;
     var r3 = c<number>(); // should be an error
              ~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.
@@ -30,21 +30,21 @@ untypedFunctionCallsWithTypeParameters1.ts(41,4): error TS2558: Expected 0 type 
     class C implements Function {
           ~
 !!! error TS2420: Class 'C' incorrectly implements interface 'Function'.
-!!! error TS2420:   Type 'C' is missing the following properties from type 'Function': apply, call, bind
+!!! error TS2420:   Type 'C' is missing the following properties from type 'Function': apply, call, bind, name, [Symbol.hasInstance]
         prototype = null;
         length = 1;
         arguments = null;
         caller = () => { };
     }
     
-    var c2: C;
+    declare var c2: C;
     var r4 = c2<number>(); // should be an error
              ~~
 !!! error TS2349: This expression is not callable.
 !!! error TS2349:   Type 'C' has no call signatures.
     
     class C2 extends Function { } // error
-    var c3: C2;
+    declare var c3: C2;
     var r5 = c3<number>(); // error
              ~~~~~~~~~~~~
 !!! error TS2347: Untyped function calls may not accept type arguments.
@@ -52,7 +52,7 @@ untypedFunctionCallsWithTypeParameters1.ts(41,4): error TS2558: Expected 0 type 
     interface I {
         (number): number;
     }
-    var z: I;
+    declare var z: I;
     var r6 = z<string>(1); // error
                ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
@@ -61,7 +61,7 @@ untypedFunctionCallsWithTypeParameters1.ts(41,4): error TS2558: Expected 0 type 
         (a: T): T;
     }
     
-    var c4: callable2<number>;
+    declare var c4: callable2<number>;
     c4<number>(1);
        ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
@@ -69,7 +69,7 @@ untypedFunctionCallsWithTypeParameters1.ts(41,4): error TS2558: Expected 0 type 
         (a: T): T;
     }
     
-    var c5: callable3<number>;
+    declare var c5: callable3<number>;
     c5<string>(1); // error
        ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.

@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 export var x = 1;
 export var r1: typeof x;
 export var y = { foo: '' };
@@ -20,7 +22,7 @@ var i2: I;
 export var r5: typeof i;
 export var r5: typeof i2;
 
-export module M {
+export namespace M {
     export var foo = '';
     export class C {
         foo: string;
@@ -42,7 +44,7 @@ export var r11: typeof E.A;
 export var r12: typeof r12;
 
 export function foo() { }
-export module foo {
+export namespace foo {
     export var y = 1;
     export class C {
         foo: string;

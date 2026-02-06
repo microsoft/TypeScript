@@ -1,0 +1,137 @@
+//// [tests/cases/conformance/expressions/typeSatisfaction/typeSatisfaction_errorLocations1.ts] ////
+
+=== typeSatisfaction_errorLocations1.ts ===
+const obj1 = { a: 1 };
+>obj1 : Symbol(obj1, Decl(typeSatisfaction_errorLocations1.ts, 0, 5))
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 0, 14))
+
+const fn1 = (s: { a: true }) => {};
+>fn1 : Symbol(fn1, Decl(typeSatisfaction_errorLocations1.ts, 2, 5))
+>s : Symbol(s, Decl(typeSatisfaction_errorLocations1.ts, 2, 13))
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 2, 17))
+
+fn1({} satisfies unknown);
+>fn1 : Symbol(fn1, Decl(typeSatisfaction_errorLocations1.ts, 2, 5))
+
+fn1({ a: 1 } satisfies unknown);
+>fn1 : Symbol(fn1, Decl(typeSatisfaction_errorLocations1.ts, 2, 5))
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 4, 5))
+
+fn1(obj1 satisfies unknown);
+>fn1 : Symbol(fn1, Decl(typeSatisfaction_errorLocations1.ts, 2, 5))
+>obj1 : Symbol(obj1, Decl(typeSatisfaction_errorLocations1.ts, 0, 5))
+
+class Cls1 {
+>Cls1 : Symbol(Cls1, Decl(typeSatisfaction_errorLocations1.ts, 5, 28))
+
+  constructor(p: { a: true }) {}
+>p : Symbol(p, Decl(typeSatisfaction_errorLocations1.ts, 8, 14))
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 8, 18))
+}
+new Cls1({} satisfies unknown);
+>Cls1 : Symbol(Cls1, Decl(typeSatisfaction_errorLocations1.ts, 5, 28))
+
+new Cls1({ a: 1 } satisfies unknown);
+>Cls1 : Symbol(Cls1, Decl(typeSatisfaction_errorLocations1.ts, 5, 28))
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 11, 10))
+
+new Cls1(obj1 satisfies unknown);
+>Cls1 : Symbol(Cls1, Decl(typeSatisfaction_errorLocations1.ts, 5, 28))
+>obj1 : Symbol(obj1, Decl(typeSatisfaction_errorLocations1.ts, 0, 5))
+
+function fn2<T extends { a: true }[]>(f: (...args: T) => void) {
+>fn2 : Symbol(fn2, Decl(typeSatisfaction_errorLocations1.ts, 12, 33))
+>T : Symbol(T, Decl(typeSatisfaction_errorLocations1.ts, 14, 13))
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 14, 24))
+>f : Symbol(f, Decl(typeSatisfaction_errorLocations1.ts, 14, 38))
+>args : Symbol(args, Decl(typeSatisfaction_errorLocations1.ts, 14, 42))
+>T : Symbol(T, Decl(typeSatisfaction_errorLocations1.ts, 14, 13))
+
+  f({ a: true } satisfies unknown);
+>f : Symbol(f, Decl(typeSatisfaction_errorLocations1.ts, 14, 38))
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 15, 5))
+
+  const o = { a: true as const };
+>o : Symbol(o, Decl(typeSatisfaction_errorLocations1.ts, 16, 7))
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 16, 13))
+>const : Symbol(const)
+
+  f(o satisfies unknown);
+>f : Symbol(f, Decl(typeSatisfaction_errorLocations1.ts, 14, 38))
+>o : Symbol(o, Decl(typeSatisfaction_errorLocations1.ts, 16, 7))
+}
+
+const tuple1: [boolean, boolean] = [true, 100 satisfies unknown];
+>tuple1 : Symbol(tuple1, Decl(typeSatisfaction_errorLocations1.ts, 20, 5))
+
+const obj2 = { a: 10, b: true } satisfies Record<string, number>;
+>obj2 : Symbol(obj2, Decl(typeSatisfaction_errorLocations1.ts, 22, 5))
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 22, 14))
+>b : Symbol(b, Decl(typeSatisfaction_errorLocations1.ts, 22, 21))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+const literal1 = 1 satisfies boolean;
+>literal1 : Symbol(literal1, Decl(typeSatisfaction_errorLocations1.ts, 24, 5))
+
+const literal2: true = 1 satisfies number;
+>literal2 : Symbol(literal2, Decl(typeSatisfaction_errorLocations1.ts, 25, 5))
+
+declare function fn3(...args: unknown[]): void;
+>fn3 : Symbol(fn3, Decl(typeSatisfaction_errorLocations1.ts, 25, 42))
+>args : Symbol(args, Decl(typeSatisfaction_errorLocations1.ts, 27, 21))
+
+fn3(10, ...([10, "20"] satisfies number[]));
+>fn3 : Symbol(fn3, Decl(typeSatisfaction_errorLocations1.ts, 25, 42))
+
+const tuple2 = [10, "20"] as const;
+>tuple2 : Symbol(tuple2, Decl(typeSatisfaction_errorLocations1.ts, 29, 5))
+>const : Symbol(const)
+
+fn3(10, ...(tuple2 satisfies number[]));
+>fn3 : Symbol(fn3, Decl(typeSatisfaction_errorLocations1.ts, 25, 42))
+>tuple2 : Symbol(tuple2, Decl(typeSatisfaction_errorLocations1.ts, 29, 5))
+
+declare function fn4(...args: number[]): void;
+>fn4 : Symbol(fn4, Decl(typeSatisfaction_errorLocations1.ts, 30, 40))
+>args : Symbol(args, Decl(typeSatisfaction_errorLocations1.ts, 32, 21))
+
+fn4(10, ...(["10", "20"] satisfies readonly string[]));
+>fn4 : Symbol(fn4, Decl(typeSatisfaction_errorLocations1.ts, 30, 40))
+
+const tuple3 = ["10", "20"] as const;
+>tuple3 : Symbol(tuple3, Decl(typeSatisfaction_errorLocations1.ts, 34, 5))
+>const : Symbol(const)
+
+fn4(10, ...(tuple3 satisfies readonly string[]));
+>fn4 : Symbol(fn4, Decl(typeSatisfaction_errorLocations1.ts, 30, 40))
+>tuple3 : Symbol(tuple3, Decl(typeSatisfaction_errorLocations1.ts, 34, 5))
+
+function fn5(): number {
+>fn5 : Symbol(fn5, Decl(typeSatisfaction_errorLocations1.ts, 35, 49))
+
+  return "foo" satisfies unknown;
+}
+
+function fn6(): number {
+>fn6 : Symbol(fn6, Decl(typeSatisfaction_errorLocations1.ts, 39, 1))
+
+  return "foo" satisfies number;
+}
+
+((): { a: true } => ({}) satisfies unknown)();
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 45, 6))
+
+((): { a: true } => ({ a: 1 }) satisfies unknown)();
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 46, 6))
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 46, 22))
+
+((): { a: true } => obj1 satisfies unknown)();
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 47, 6))
+>obj1 : Symbol(obj1, Decl(typeSatisfaction_errorLocations1.ts, 0, 5))
+
+((): { a: true } => (({}) satisfies unknown) satisfies unknown)();
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 49, 6))
+
+((): { a: true } => ((({}) satisfies unknown)) satisfies unknown)();
+>a : Symbol(a, Decl(typeSatisfaction_errorLocations1.ts, 50, 6))
+

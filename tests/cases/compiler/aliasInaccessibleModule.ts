@@ -1,6 +1,7 @@
+// @target: es2015
 // @declaration: true
-module M {
-    module N {
+namespace M {
+    namespace N {
     }
     export import X = N;
 }

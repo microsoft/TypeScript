@@ -3,4 +3,5 @@
 === TupleType4.ts ===
 var v: [
 >v : []
+>  : ^^
 

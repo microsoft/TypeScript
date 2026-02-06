@@ -6,11 +6,14 @@
  */
 var foo = { };
 >foo : {}
+>    : ^^
 >{ } : {}
+>    : ^^
 
 /**
  * @type {foo}
  */
 var s;
 >s : number
+>  : ^^^^^^
 

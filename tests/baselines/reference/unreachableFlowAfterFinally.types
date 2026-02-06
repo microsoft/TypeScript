@@ -3,21 +3,27 @@
 === unreachableFlowAfterFinally.ts ===
 function f() {
 >f : () => number
+>  : ^^^^^^^^^^^^
 
     let x = 100;
 >x : number
+>  : ^^^^^^
 >100 : 100
+>    : ^^^
 
     try {
         throw "WAT"
 >"WAT" : "WAT"
+>      : ^^^^^
     }
     catch (e) {
->e : any
+>e : unknown
+>  : ^^^^^^^
 
     }
     finally {
         return x;
 >x : number
+>  : ^^^^^^
     }
 }

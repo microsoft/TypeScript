@@ -3,4 +3,5 @@
 === parserGenericClass2.ts ===
 class C<K,V> {
 >C : C<K, V>
+>  : ^^^^^^^
 }

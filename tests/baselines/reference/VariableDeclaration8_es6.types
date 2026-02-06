@@ -3,5 +3,7 @@
 === VariableDeclaration8_es6.ts ===
 let a = 1
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

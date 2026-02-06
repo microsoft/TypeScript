@@ -3,4 +3,5 @@
 === a.js ===
 export = b;
 >b : any
+>  : ^^^
 

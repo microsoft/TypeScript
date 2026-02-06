@@ -1,24 +1,13 @@
-import {
-    dedent,
-} from "../../_namespaces/Utils";
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    FsContents,
-} from "./contents";
-import {
-    loadProjectFromFiles,
-} from "./vfs";
-import {
-    createServerHost,
-    createWatchedSystem,
-    libFile,
-} from "./virtualFileSystemWithWatch";
+import { dedent } from "../../_namespaces/Utils.js";
+import { jsonToReadableText } from "../helpers.js";
+import { getProjectConfigWithNodeNext } from "./contents.js";
+import { solutionBuildWithBaseline } from "./solutionBuilder.js";
+import { TestServerHost } from "./virtualFileSystemWithWatch.js";
 
-export function getFsContentsForSampleProjectReferencesLogicConfig() {
+export function getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext?: boolean): string {
     return jsonToReadableText({
         compilerOptions: {
+            ...getProjectConfigWithNodeNext(withNodeNext),
             composite: true,
             declaration: true,
             sourceMap: true,
@@ -30,11 +19,16 @@ export function getFsContentsForSampleProjectReferencesLogicConfig() {
         ],
     });
 }
-export function getFsContentsForSampleProjectReferences(): FsContents {
-    return {
-        [libFile.path]: libFile.content,
+
+export function getSysForSampleProjectReferences(
+    withNodeNext?: boolean,
+    skipReferenceCoreFromTest?: boolean,
+    forTsserver?: boolean,
+): TestServerHost {
+    return TestServerHost.getCreateWatchedSystem(forTsserver)({
         "/user/username/projects/sample1/core/tsconfig.json": jsonToReadableText({
             compilerOptions: {
+                ...getProjectConfigWithNodeNext(withNodeNext),
                 composite: true,
                 declaration: true,
                 declarationMap: true,
@@ -48,7 +42,7 @@ export function getFsContentsForSampleProjectReferences(): FsContents {
         `,
         "/user/username/projects/sample1/core/some_decl.d.ts": `declare const dts: any;`,
         "/user/username/projects/sample1/core/anotherModule.ts": `export const World = "hello";`,
-        "/user/username/projects/sample1/logic/tsconfig.json": getFsContentsForSampleProjectReferencesLogicConfig(),
+        "/user/username/projects/sample1/logic/tsconfig.json": getFsContentsForSampleProjectReferencesLogicConfig(withNodeNext),
         "/user/username/projects/sample1/logic/index.ts": dedent`
             import * as c from '../core/index';
             export function getSecondsInDay() {
@@ -58,12 +52,17 @@ export function getFsContentsForSampleProjectReferences(): FsContents {
             export const m = mod;
         `,
         "/user/username/projects/sample1/tests/tsconfig.json": jsonToReadableText({
-            references: [
-                { path: "../core" },
-                { path: "../logic" },
-            ],
+            references: !skipReferenceCoreFromTest ?
+                [
+                    { path: "../core" },
+                    { path: "../logic" },
+                ] :
+                [
+                    { path: "../logic" },
+                ],
             files: ["index.ts"],
             compilerOptions: {
+                ...getProjectConfigWithNodeNext(withNodeNext),
                 composite: true,
                 declaration: true,
                 forceConsistentCasingInFileNames: true,
@@ -80,33 +79,12 @@ export function getFsContentsForSampleProjectReferences(): FsContents {
             import * as mod from '../core/anotherModule';
             export const m = mod;
         `,
-    };
+    }, { currentDirectory: "/user/username/projects/sample1" });
 }
 
-export function getFsForSampleProjectReferences() {
-    return loadProjectFromFiles(
-        getFsContentsForSampleProjectReferences(),
-        {
-            cwd: "/user/username/projects/sample1",
-            executingFilePath: libFile.path,
-        },
-    );
-}
-
-export function getSysForSampleProjectReferences() {
-    return createWatchedSystem(
-        getFsContentsForSampleProjectReferences(),
-        {
-            currentDirectory: "/user/username/projects/sample1",
-        },
-    );
-}
-
-export function getServerHostForSampleProjectReferences() {
-    return createServerHost(
-        getFsContentsForSampleProjectReferences(),
-        {
-            currentDirectory: "/user/username/projects/sample1",
-        },
+export function getSysForSampleProjectReferencesBuilt(withNodeNext?: boolean): TestServerHost {
+    return solutionBuildWithBaseline(
+        getSysForSampleProjectReferences(withNodeNext),
+        ["tests"],
     );
 }

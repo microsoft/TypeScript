@@ -3,9 +3,12 @@
 === parserModifierOnStatementInBlock1.ts ===
 export function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 
    export var x = this;
 >x : any
+>  : ^^^
 >this : any
+>     : ^^^
 }
 

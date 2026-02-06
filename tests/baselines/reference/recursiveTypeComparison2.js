@@ -3,7 +3,7 @@
 //// [recursiveTypeComparison2.ts]
 // Before fix this would cause compiler to hang (#1170)
 
-declare module Bacon {
+declare namespace Bacon {
     interface Event<T> {
     }
     interface Error<T> extends Event<T> {
@@ -33,5 +33,6 @@ declare module Bacon {
 var stuck: Bacon.Bus<number> = new Bacon.Bus();
 
 //// [recursiveTypeComparison2.js]
+"use strict";
 // Before fix this would cause compiler to hang (#1170)
 var stuck = new Bacon.Bus();

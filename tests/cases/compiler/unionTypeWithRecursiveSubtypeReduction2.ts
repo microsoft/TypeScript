@@ -1,3 +1,4 @@
+// @target: es2015
 class Module {
     public members: Class[];
 }
@@ -14,7 +15,7 @@ class Property {
     public parent: Module | Class;
 }
 
-var c: Class;
-var p: Property;
+declare var c: Class;
+declare var p: Property;
 c = p;
 p = c;

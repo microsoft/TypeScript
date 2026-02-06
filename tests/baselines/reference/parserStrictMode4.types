@@ -3,9 +3,13 @@
 === parserStrictMode4.ts ===
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 arguments = 1;
 >arguments = 1 : 1
+>              : ^
 >arguments : any
+>          : ^^^
 >1 : 1
+>  : ^
 

@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/modulePreserveTopLevelAwait1.ts] ////
+
+=== modulePreserveTopLevelAwait1.ts ===
+for await (const x of []) {}
+>x : any
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+
+await Promise.resolve();
+>await Promise.resolve() : void
+>                        : ^^^^
+>Promise.resolve() : Promise<void>
+>                  : ^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+
+export {};
+

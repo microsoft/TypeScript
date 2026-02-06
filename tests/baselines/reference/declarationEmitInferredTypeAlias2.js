@@ -18,23 +18,23 @@ export { v, bar }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 {
-    var obj = true;
+    let obj = true;
 }
 //// [1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = exports.v = void 0;
-var v = "str" || true;
+exports.v = void 0;
+exports.bar = bar;
+let v = "str" || true;
 exports.v = v;
 function bar() {
     return v;
 }
-exports.bar = bar;
 
 
 //// [0.d.ts]
 export {};
 //// [1.d.ts]
-declare let v: string | boolean;
-declare function bar(): string | boolean;
+declare let v: string;
+declare function bar(): string;
 export { v, bar };

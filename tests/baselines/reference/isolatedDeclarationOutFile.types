@@ -1,0 +1,67 @@
+//// [tests/cases/compiler/isolatedDeclarationOutFile.ts] ////
+
+=== a.ts ===
+export class A {
+>A : A
+>  : ^
+
+    toUpper(msg: string): string {
+>toUpper : (msg: string) => string
+>        : ^   ^^      ^^^^^      
+>msg : string
+>    : ^^^^^^
+
+        return msg.toUpperCase();
+>msg.toUpperCase() : string
+>                  : ^^^^^^
+>msg.toUpperCase : () => string
+>                : ^^^^^^      
+>msg : string
+>    : ^^^^^^
+>toUpperCase : () => string
+>            : ^^^^^^      
+    }
+}
+
+=== b.ts ===
+import { A } from "./a";
+>A : typeof A
+>  : ^^^^^^^^
+
+export class B extends A {
+>B : B
+>  : ^
+>A : A
+>  : ^
+
+    toFixed(n: number): string {
+>toFixed : (n: number) => string
+>        : ^ ^^      ^^^^^      
+>n : number
+>  : ^^^^^^
+
+        return n.toFixed(6);
+>n.toFixed(6) : string
+>             : ^^^^^^
+>n.toFixed : (fractionDigits?: number) => string
+>          : ^              ^^^      ^^^^^      
+>n : number
+>  : ^^^^^^
+>toFixed : (fractionDigits?: number) => string
+>        : ^              ^^^      ^^^^^      
+>6 : 6
+>  : ^
+    }
+}
+
+export function makeB(): A {
+>makeB : () => A
+>      : ^^^^^^ 
+
+    return new B();
+>new B() : B
+>        : ^
+>B : typeof B
+>  : ^^^^^^^^
+}
+

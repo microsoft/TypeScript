@@ -1,0 +1,29 @@
+/root/tsconfig.json(3,9): error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+  Visit https://aka.ms/ts6 for migration information.
+
+
+==== /root/tsconfig.json (1 errors) ====
+    {
+        "compilerOptions": {
+            "baseUrl": ".",
+            ~~~~~~~~~
+!!! error TS5101: Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+!!! error TS5101:   Visit https://aka.ms/ts6 for migration information.
+            "paths": {
+                "/*": ["./src/*"]
+            },
+            "allowJs": true,
+            "outDir": "bin"
+        }
+    }
+    
+==== /root/src/foo.ts (0 errors) ====
+    export function foo() {}
+    
+==== /root/src/bar.js (0 errors) ====
+    export function bar() {}
+    
+==== /root/a.ts (0 errors) ====
+    import { foo } from "/foo";
+    import { bar } from "/bar";
+    

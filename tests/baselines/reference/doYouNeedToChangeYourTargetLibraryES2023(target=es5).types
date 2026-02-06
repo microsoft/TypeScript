@@ -1,0 +1,236 @@
+//// [tests/cases/compiler/doYouNeedToChangeYourTargetLibraryES2023.ts] ////
+
+=== doYouNeedToChangeYourTargetLibraryES2023.ts ===
+export let array = [0, 2, 3, 4];
+>array : number[]
+>      : ^^^^^^^^
+>[0, 2, 3, 4] : number[]
+>             : ^^^^^^^^
+>0 : 0
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
+
+function somePredicate(x: any): boolean {
+>somePredicate : (x: any) => boolean
+>              : ^ ^^   ^^^^^       
+>x : any
+>  : ^^^
+
+    return x === 4;
+>x === 4 : boolean
+>        : ^^^^^^^
+>x : any
+>  : ^^^
+>4 : 4
+>  : ^
+}
+
+export let lastIndex1 = array.findLastIndex(v => v === 4);
+>lastIndex1 : any
+>           : ^^^
+>array.findLastIndex(v => v === 4) : any
+>                                  : ^^^
+>array.findLastIndex : any
+>                    : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>findLastIndex : any
+>              : ^^^
+>v => v === 4 : (v: any) => boolean
+>             : ^ ^^^^^^^^^^^^^^^^^
+>v : any
+>  : ^^^
+>v === 4 : boolean
+>        : ^^^^^^^
+>v : any
+>  : ^^^
+>4 : 4
+>  : ^
+
+export let lastIndex2 = array.findLastIndex(somePredicate);
+>lastIndex2 : any
+>           : ^^^
+>array.findLastIndex(somePredicate) : any
+>                                   : ^^^
+>array.findLastIndex : any
+>                    : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>findLastIndex : any
+>              : ^^^
+>somePredicate : (x: any) => boolean
+>              : ^ ^^   ^^^^^       
+
+export let last1 = array.findLast(somePredicate);
+>last1 : any
+>      : ^^^
+>array.findLast(somePredicate) : any
+>                              : ^^^
+>array.findLast : any
+>               : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>findLast : any
+>         : ^^^
+>somePredicate : (x: any) => boolean
+>              : ^ ^^   ^^^^^       
+
+export let last2 = array.findLast(somePredicate);
+>last2 : any
+>      : ^^^
+>array.findLast(somePredicate) : any
+>                              : ^^^
+>array.findLast : any
+>               : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>findLast : any
+>         : ^^^
+>somePredicate : (x: any) => boolean
+>              : ^ ^^   ^^^^^       
+
+export let sorted = array.toSorted();
+>sorted : any
+>       : ^^^
+>array.toSorted() : any
+>                 : ^^^
+>array.toSorted : any
+>               : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>toSorted : any
+>         : ^^^
+
+export let spliced1 = array.toSpliced(2);
+>spliced1 : any
+>         : ^^^
+>array.toSpliced(2) : any
+>                   : ^^^
+>array.toSpliced : any
+>                : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>toSpliced : any
+>          : ^^^
+>2 : 2
+>  : ^
+
+export let spliced2 = array.toSpliced(2, 1);
+>spliced2 : any
+>         : ^^^
+>array.toSpliced(2, 1) : any
+>                      : ^^^
+>array.toSpliced : any
+>                : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>toSpliced : any
+>          : ^^^
+>2 : 2
+>  : ^
+>1 : 1
+>  : ^
+
+export let spliced3 = array.toSpliced(2, 1, 4, 5, 6, 7);
+>spliced3 : any
+>         : ^^^
+>array.toSpliced(2, 1, 4, 5, 6, 7) : any
+>                                  : ^^^
+>array.toSpliced : any
+>                : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>toSpliced : any
+>          : ^^^
+>2 : 2
+>  : ^
+>1 : 1
+>  : ^
+>4 : 4
+>  : ^
+>5 : 5
+>  : ^
+>6 : 6
+>  : ^
+>7 : 7
+>  : ^
+
+export let spliced4 = array.toSpliced(2, undefined);
+>spliced4 : any
+>         : ^^^
+>array.toSpliced(2, undefined) : any
+>                              : ^^^
+>array.toSpliced : any
+>                : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>toSpliced : any
+>          : ^^^
+>2 : 2
+>  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+
+export let spliced5 = array.toSpliced(2, undefined, 4, 5, 6, 7);
+>spliced5 : any
+>         : ^^^
+>array.toSpliced(2, undefined, 4, 5, 6, 7) : any
+>                                          : ^^^
+>array.toSpliced : any
+>                : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>toSpliced : any
+>          : ^^^
+>2 : 2
+>  : ^
+>undefined : undefined
+>          : ^^^^^^^^^
+>4 : 4
+>  : ^
+>5 : 5
+>  : ^
+>6 : 6
+>  : ^
+>7 : 7
+>  : ^
+
+export let startsWithOne = array.with(0, 1);
+>startsWithOne : any
+>              : ^^^
+>array.with(0, 1) : any
+>                 : ^^^
+>array.with : any
+>           : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>with : any
+>     : ^^^
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+
+export let inTheEnd = array.with(-1, 1);
+>inTheEnd : any
+>         : ^^^
+>array.with(-1, 1) : any
+>                  : ^^^
+>array.with : any
+>           : ^^^
+>array : number[]
+>      : ^^^^^^^^
+>with : any
+>     : ^^^
+>-1 : -1
+>   : ^^
+>1 : 1
+>  : ^
+>1 : 1
+>  : ^
+

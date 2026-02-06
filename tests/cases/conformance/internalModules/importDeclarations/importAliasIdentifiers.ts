@@ -1,4 +1,5 @@
-module moduleA {
+// @target: es2015
+namespace moduleA {
     export class Point {
         constructor(public x: number, public y: number) { }
     }
@@ -14,7 +15,7 @@ class clodule {
     name: string;
 }
 
-module clodule {
+namespace clodule {
     export interface Point {
         x: number; y: number;
     }
@@ -32,7 +33,7 @@ function fundule() {
     return { x: 0, y: 0 };
 }
 
-module fundule {
+namespace fundule {
     export interface Point {
         x: number; y: number;
     }

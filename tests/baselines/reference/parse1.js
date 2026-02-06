@@ -8,6 +8,7 @@ function foo() {
 
 
 //// [parse1.js]
+"use strict";
 var bar = 42;
 function foo() {
     bar.

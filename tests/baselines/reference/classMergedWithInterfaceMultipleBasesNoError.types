@@ -7,17 +7,25 @@ interface Q { }
 interface Foo extends Bar, Baz { }
 class Foo { }
 >Foo : Foo
+>    : ^^^
 
 export default class extends Foo {
 >Foo : Foo
+>    : ^^^
 
     readonly observer = this.handleIntersection;
 >observer : () => void
+>         : ^^^^^^^^^^
 >this.handleIntersection : () => void
+>                        : ^^^^^^^^^^
 >this : this
+>     : ^^^^
 >handleIntersection : () => void
+>                   : ^^^^^^^^^^
 
     readonly handleIntersection = () => { }
 >handleIntersection : () => void
+>                   : ^^^^^^^^^^
 >() => { } : () => void
+>          : ^^^^^^^^^^
 }

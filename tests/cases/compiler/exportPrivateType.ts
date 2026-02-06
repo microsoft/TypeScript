@@ -1,4 +1,5 @@
-module foo {
+// @target: es2015
+namespace foo {
     class C1 {
         x: string;
         y: C1;

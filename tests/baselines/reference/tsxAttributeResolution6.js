@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/jsx/tsxAttributeResolution6.tsx] ////
 
 //// [file.tsx]
-declare module JSX {
+declare namespace JSX {
 	interface Element { }
 	interface IntrinsicElements {
 		test1: { n?: boolean; s?: string};
@@ -21,6 +21,7 @@ declare module JSX {
 
 
 //// [file.jsx]
+"use strict";
 // Error
 <test1 s/>;
 <test1 n='true'/>;

@@ -17,7 +17,7 @@ configFileName:: tsconfig.json
 CompilerOptions::
 {
   "target": 99,
-  "configFilePath": "tsconfig.json"
+  "configFilePath": "/apath/tsconfig.json"
 }
 Errors::
 [96mtsconfig.json[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1136: [0mProperty assignment expected.

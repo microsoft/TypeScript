@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/regularExpressionExtendedUnicodeEscapes.ts] ////
+
+=== regularExpressionExtendedUnicodeEscapes.ts ===
+const regexes: RegExp[] = [
+>regexes : Symbol(regexes, Decl(regularExpressionExtendedUnicodeEscapes.ts, 0, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 3 more)
+
+	/\u{10000}[\u{10000}]/,
+	/\u{10000}[\u{10000}]/u,
+	/\u{10000}[\u{10000}]/v,
+];
+

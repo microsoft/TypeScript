@@ -1,3 +1,4 @@
+// @target: es2015
 // merged interfaces behave as if all extends clauses from each declaration are merged together
 // no errors expected
 
@@ -28,7 +29,7 @@ var a: A;
 var r = a.a;
 
 // generic interfaces in a module
-module M {
+namespace M {
     class C<T> {
         a: T;
     }

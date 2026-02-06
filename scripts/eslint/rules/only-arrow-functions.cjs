@@ -1,5 +1,11 @@
-const { AST_NODE_TYPES, TSESTree } = require("@typescript-eslint/utils");
+const { AST_NODE_TYPES } = require("@typescript-eslint/utils");
 const { createRule } = require("./utils.cjs");
+
+/**
+ * @import { TSESTree } from "@typescript-eslint/utils"
+ * @typedef {TSESTree.FunctionDeclaration | TSESTree.FunctionExpression} FunctionDeclarationOrExpression
+ */
+void 0;
 
 module.exports = createRule({
     name: "only-arrow-functions",
@@ -27,7 +33,7 @@ module.exports = createRule({
     }],
 
     create(context, [{ allowNamedFunctions, allowDeclarations }]) {
-        /** @type {(node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => boolean} */
+        /** @type {(node: FunctionDeclarationOrExpression) => boolean} */
         const isThisParameter = node => !!node.params.length && !!node.params.find(param => param.type === AST_NODE_TYPES.Identifier && param.name === "this");
 
         /** @type {(node: TSESTree.Node) => boolean} */
@@ -57,7 +63,7 @@ module.exports = createRule({
             }
         };
 
-        /** @type {(node: TSESTree.FunctionDeclaration | TSESTree.FunctionExpression) => void} */
+        /** @type {(node: FunctionDeclarationOrExpression) => void} */
         const exitFunction = node => {
             const methodUsesThis = stack.pop();
 
@@ -65,7 +71,7 @@ module.exports = createRule({
                 return;
             }
 
-            if ((allowNamedFunctions && node.id !== null) || isMethodType(node)) { // eslint-disable-line no-null/no-null
+            if ((allowNamedFunctions && node.id !== null) || isMethodType(node)) { // eslint-disable-line no-restricted-syntax
                 return;
             }
 

@@ -3,6 +3,7 @@
 === classAbstractConstructor.ts ===
 abstract class A {
 >A : A
+>  : ^
 
     abstract constructor() {}
 }

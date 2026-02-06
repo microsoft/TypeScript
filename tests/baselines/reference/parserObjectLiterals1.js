@@ -4,4 +4,5 @@
 var v = { a: 1, b: 2 };
 
 //// [parserObjectLiterals1.js]
+"use strict";
 var v = { a: 1, b: 2 };

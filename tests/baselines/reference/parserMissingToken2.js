@@ -4,4 +4,5 @@
 / b;
 
 //// [parserMissingToken2.js]
-/ b;;
+"use strict";
+/ b;

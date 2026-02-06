@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/duplicateAnonymousInners1.ts] ////
 
 //// [duplicateAnonymousInners1.ts]
-module Foo {
+namespace Foo {
 
     class Helper {
 
@@ -14,7 +14,7 @@ module Foo {
 }
 
 
-module Foo {
+namespace Foo {
     
     // Should not be an error
     class Helper {
@@ -28,28 +28,20 @@ module Foo {
 
 
 //// [duplicateAnonymousInners1.js]
+"use strict";
 var Foo;
 (function (Foo) {
-    var Helper = /** @class */ (function () {
-        function Helper() {
-        }
-        return Helper;
-    }());
-    var Inner = /** @class */ (function () {
-        function Inner() {
-        }
-        return Inner;
-    }());
+    class Helper {
+    }
+    class Inner {
+    }
     // Inner should show up in intellisense
     Foo.Outer = 0;
 })(Foo || (Foo = {}));
 (function (Foo) {
     // Should not be an error
-    var Helper = /** @class */ (function () {
-        function Helper() {
-        }
-        return Helper;
-    }());
+    class Helper {
+    }
     // Inner should not show up in intellisense
     // Outer should show up in intellisense
 })(Foo || (Foo = {}));

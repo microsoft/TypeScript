@@ -16,14 +16,19 @@
 
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 "use strict";
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 throw NotEarlyError;
 >NotEarlyError : any
+>              : ^^^
 
 var public = 1;
 >public : number
+>       : ^^^^^^
 >1 : 1
+>  : ^
 

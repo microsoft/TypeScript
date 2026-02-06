@@ -1,0 +1,44 @@
+a.ts(1,16): error TS9037: Default exports can't be inferred with --isolatedDeclarations.
+b.ts(1,23): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+c.ts(1,16): error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+d.ts(1,24): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+e.ts(1,24): error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+
+
+==== a.ts (1 errors) ====
+    export default 1 + 1;
+                   ~~~~~
+!!! error TS9037: Default exports can't be inferred with --isolatedDeclarations.
+!!! related TS9036 a.ts:1:1: Move the expression in default export to a variable and add a type annotation to it.
+    
+    
+==== b.ts (1 errors) ====
+    export default { foo: 1 + 1 };
+                          ~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9036 b.ts:1:1: Move the expression in default export to a variable and add a type annotation to it.
+!!! related TS9035 b.ts:1:23: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    
+==== c.ts (1 errors) ====
+    export default [{ foo: 1 + 1 }];
+                   ~~~~~~~~~~~~~~~~
+!!! error TS9017: Only const arrays can be inferred with --isolatedDeclarations.
+!!! related TS9036 c.ts:1:1: Move the expression in default export to a variable and add a type annotation to it.
+    
+==== d.ts (1 errors) ====
+    export default [{ foo: 1 + 1 }] as const;
+                           ~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9036 d.ts:1:1: Move the expression in default export to a variable and add a type annotation to it.
+!!! related TS9035 d.ts:1:24: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    
+==== e.ts (1 errors) ====
+    export default [{ foo: 1 + 1 }] as const;
+                           ~~~~~
+!!! error TS9013: Expression type can't be inferred with --isolatedDeclarations.
+!!! related TS9036 e.ts:1:1: Move the expression in default export to a variable and add a type annotation to it.
+!!! related TS9035 e.ts:1:24: Add satisfies and a type assertion to this expression (satisfies T as T) to make the type explicit.
+    
+==== f.ts (0 errors) ====
+    const a = { foo: 1 };
+    export default a;

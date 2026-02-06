@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "outDir": "./outDir",
+        "typeRoots": [
+            "./root1",
+            "./root2",
+            "./root3"
+        ],
+        "paths": {
+            "@myscope/*": [
+                "/Show TSConfig with configDir template template/types/*"
+            ],
+            "other/*": [
+                "other/*"
+            ]
+        }
+    },
+    "files": [
+        "./main.ts"
+    ],
+    "include": [
+        "/Show TSConfig with configDir template template/src/**/*"
+    ],
+    "exclude": [
+        "/Show TSConfig with configDir template template/outDir"
+    ]
+}

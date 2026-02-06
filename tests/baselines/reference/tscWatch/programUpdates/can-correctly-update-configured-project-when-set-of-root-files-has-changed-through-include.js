@@ -1,10 +1,17 @@
-currentDirectory:: /user/username/projects/myproject/Project useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject/Project useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/Project/file1.ts]
 export const x = 10;
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/user/username/projects/myproject/Project/tsconfig.json]
+{
+  "include": [
+    ".",
+    "./**/*.json"
+  ]
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -15,43 +22,28 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/user/username/projects/myproject/Project/tsconfig.json]
-{
-  "include": [
-    ".",
-    "./**/*.json"
-  ]
-}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p .
+/home/src/tslibs/TS/Lib/tsc.js -w -p .
 Output::
 >> Screen clear
-[[90m12:00:23 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:26 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/Project/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
 
-
-PolledWatches::
-/user/username/projects/myproject/Project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/myproject/Project/file1.ts: *new*
   {}
@@ -63,7 +55,8 @@ FsWatchesRecursive::
   {}
 
 Program root files: [
-  "/user/username/projects/myproject/Project/file1.ts"
+  "/user/username/projects/myproject/Project/file1.ts",
+  "/user/username/projects/myproject/Project/tsconfig.json"
 ]
 Program options: {
   "watch": true,
@@ -72,16 +65,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/Project/file1.ts
+/user/username/projects/myproject/Project/tsconfig.json
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/Project/file1.ts
+/user/username/projects/myproject/Project/tsconfig.json
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/project/file1.ts (used version)
+/user/username/projects/myproject/project/tsconfig.json (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -98,33 +94,23 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:29 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:32 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
 //// [/user/username/projects/myproject/Project/file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
+export const y = 10;
 
 
-
-PolledWatches::
-/user/username/projects/myproject/Project/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/myproject/Project/file1.ts:
   {}
@@ -140,7 +126,8 @@ FsWatchesRecursive::
 
 Program root files: [
   "/user/username/projects/myproject/Project/file1.ts",
-  "/user/username/projects/myproject/Project/file2.ts"
+  "/user/username/projects/myproject/Project/file2.ts",
+  "/user/username/projects/myproject/Project/tsconfig.json"
 ]
 Program options: {
   "watch": true,
@@ -149,9 +136,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/Project/file1.ts
 /user/username/projects/myproject/Project/file2.ts
+/user/username/projects/myproject/Project/tsconfig.json
 
 Semantic diagnostics in builder refreshed for::
 /user/username/projects/myproject/Project/file2.ts

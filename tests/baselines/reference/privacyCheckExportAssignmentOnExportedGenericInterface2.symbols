@@ -21,7 +21,7 @@ function Foo<T>(array: T[]): Foo<T> {
 >undefined : Symbol(undefined)
 }
 
-module Foo {
+namespace Foo {
 >Foo : Symbol(Foo, Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 3, 1), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 0, 13), Decl(privacyCheckExportAssignmentOnExportedGenericInterface2.ts, 7, 1))
 
     export var x = "hello";

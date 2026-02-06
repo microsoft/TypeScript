@@ -1,0 +1,12 @@
+classDoesNotDependOnPrivateMember.ts(4,17): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== classDoesNotDependOnPrivateMember.ts (1 errors) ====
+    namespace M {
+        interface I { }
+        export class C {
+            private x: I;
+                    ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+        }
+    }

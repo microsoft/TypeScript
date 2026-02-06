@@ -1,23 +1,22 @@
-import {
-    jsonToReadableText,
-} from "../helpers";
-import {
-    getFsContentsForSampleProjectReferences,
-} from "../helpers/sampleProjectReferences";
+import { jsonToReadableText } from "../helpers.js";
+import { getSysForSampleProjectReferences } from "../helpers/sampleProjectReferences.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: projects with references: invoking when references are already built", () => {
+describe("unittests:: tsserver:: projectsWithReferences:: invoking when references are already built", () => {
     it("on sample project", () => {
-        const host = createServerHost(getFsContentsForSampleProjectReferences());
+        const host = getSysForSampleProjectReferences(
+            /*withNodeNext*/ undefined,
+            /*skipReferenceCoreFromTest*/ undefined,
+            /*forTsserver*/ true,
+        );
         const session = new TestSession(host);
         openFilesForSession(["/user/username/projects/sample1/tests/index.ts"], session);
 
@@ -87,7 +86,7 @@ X;`,
                 content: `export class X {}
 export class A {}`,
             };
-            const host = createServerHost([libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
+            const host = TestServerHost.createServerHost([aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
             const session = new TestSession(host);
             openFilesForSession([cTs], session);
             return { host, session, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs };
@@ -202,7 +201,7 @@ X;`,
                 content: `export class X {}
 export class A {}`,
             };
-            const host = createServerHost([libFile, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
+            const host = TestServerHost.createServerHost([aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs]);
             const session = new TestSession(host);
             openFilesForSession([cTs], session);
             return { host, session, aConfig, bConfig, cConfig, aTs, bTs, cTs, refsTs };

@@ -20,16 +20,16 @@ declare global {
     interface RequireInterface {}
 }
 //// [index.ts]
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export interface LocalInterface extends RequireInterface {}
 
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 
 
 //// [index.d.ts]
-/// <reference types="pkg" />
+/// <reference types="pkg" preserve="true" />
 export interface LocalInterface extends RequireInterface {
 }

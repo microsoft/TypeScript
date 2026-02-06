@@ -1,0 +1,38 @@
+//// [tests/cases/compiler/duplicateErrorAssignability.ts] ////
+
+=== duplicateErrorAssignability.ts ===
+interface A {
+>A : Symbol(A, Decl(duplicateErrorAssignability.ts, 0, 0))
+
+    x: number;
+>x : Symbol(A.x, Decl(duplicateErrorAssignability.ts, 0, 13))
+}
+interface B {
+>B : Symbol(B, Decl(duplicateErrorAssignability.ts, 2, 1))
+
+    y: string;
+>y : Symbol(B.y, Decl(duplicateErrorAssignability.ts, 3, 13))
+}
+
+declare let b: B;
+>b : Symbol(b, Decl(duplicateErrorAssignability.ts, 7, 11))
+>B : Symbol(B, Decl(duplicateErrorAssignability.ts, 2, 1))
+
+declare let a: A;
+>a : Symbol(a, Decl(duplicateErrorAssignability.ts, 8, 11))
+>A : Symbol(A, Decl(duplicateErrorAssignability.ts, 0, 0))
+
+const x = a = b;
+>x : Symbol(x, Decl(duplicateErrorAssignability.ts, 9, 5))
+>a : Symbol(a, Decl(duplicateErrorAssignability.ts, 8, 11))
+>b : Symbol(b, Decl(duplicateErrorAssignability.ts, 7, 11))
+
+let obj: { 3: string } = { 3: "three" };
+>obj : Symbol(obj, Decl(duplicateErrorAssignability.ts, 10, 3))
+>3 : Symbol(3, Decl(duplicateErrorAssignability.ts, 10, 10))
+>3 : Symbol(3, Decl(duplicateErrorAssignability.ts, 10, 26))
+
+obj[x];
+>obj : Symbol(obj, Decl(duplicateErrorAssignability.ts, 10, 3))
+>x : Symbol(x, Decl(duplicateErrorAssignability.ts, 9, 5))
+

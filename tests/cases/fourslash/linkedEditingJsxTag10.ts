@@ -48,4 +48,5 @@
 // @Filename: /jsx15.tsx
 ////const jsx = </*15*/div> </*15a*/> <//*15b*/div> <//*15c*/>;
 
+// as of #57132 none of these cases should have linked editing because the tags are mismatched or missing either < or >
 verify.baselineLinkedEditing();

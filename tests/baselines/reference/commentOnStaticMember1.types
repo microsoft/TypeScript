@@ -3,9 +3,11 @@
 === commentOnStaticMember1.ts ===
 class Greeter {
 >Greeter : Greeter
+>        : ^^^^^^^
 
     //Hello World
     static foo(){
 >foo : () => void
+>    : ^^^^^^^^^^
     }
 }

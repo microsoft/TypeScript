@@ -1,0 +1,64 @@
+//// [tests/cases/compiler/importAliasInModuleAugmentation.ts] ////
+
+=== importAliasInModuleAugmentation.ts ===
+export { }
+
+namespace A {
+>A : typeof A
+>  : ^^^^^^^^
+
+    export const y = 34;
+>y : 34
+>  : ^^
+>34 : 34
+>   : ^^
+
+    export interface y { s: string }
+>s : string
+>  : ^^^^^^
+}
+
+declare global {
+>global : typeof global
+>       : ^^^^^^^^^^^^^
+
+    export import x = A.y;
+>x : 34
+>  : ^^
+>A : typeof A
+>  : ^^^^^^^^
+>y : x
+>  : ^
+
+    // Should still error
+    import f = require("fs");
+>f : any
+>  : ^^^
+}
+
+const m: number = x;
+>m : number
+>  : ^^^^^^
+>x : 34
+>  : ^^
+
+let s: x = { s: "" };
+>s : x
+>  : ^
+>{ s: "" } : { s: string; }
+>          : ^^^^^^^^^^^^^^
+>s : string
+>  : ^^^^^^
+>"" : ""
+>   : ^^
+
+void s.s;
+>void s.s : undefined
+>         : ^^^^^^^^^
+>s.s : string
+>    : ^^^^^^
+>s : x
+>  : ^
+>s : string
+>  : ^^^^^^
+

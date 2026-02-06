@@ -6,7 +6,7 @@ staticsNotInScopeInClodule.ts(6,13): error TS2304: Cannot find name 'x'.
         static x = 10;
     }
     
-    module Clod {
+    namespace Clod {
         var p = x; // x isn't in scope here
                 ~
 !!! error TS2304: Cannot find name 'x'.

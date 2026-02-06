@@ -3,6 +3,9 @@
 === misspelledNewMetaProperty.ts ===
 function foo(){new.targ}
 >foo : () => void
+>    : ^^^^^^^^^^
 >new.targ : () => void
+>         : ^^^^^^^^^^
 >targ : () => void
+>     : ^^^^^^^^^^
 

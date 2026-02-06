@@ -60,13 +60,11 @@ numberVsBigIntOperations.ts(57,17): error TS2363: The right-hand side of an arit
 numberVsBigIntOperations.ts(60,1): error TS2365: Operator '+' cannot be applied to types 'number | bigint' and 'number | bigint'.
 numberVsBigIntOperations.ts(61,1): error TS2365: Operator '<<' cannot be applied to types 'number | bigint' and 'number | bigint'.
 numberVsBigIntOperations.ts(70,2): error TS2736: Operator '+' cannot be applied to type 'number | bigint'.
-numberVsBigIntOperations.ts(86,7): error TS1155: 'const' declarations must be initialized.
-numberVsBigIntOperations.ts(93,7): error TS1155: 'const' declarations must be initialized.
 numberVsBigIntOperations.ts(98,6): error TS2736: Operator '+' cannot be applied to type 'S'.
 numberVsBigIntOperations.ts(99,5): error TS2365: Operator '+' cannot be applied to types 'number' and 'S'.
 
 
-==== numberVsBigIntOperations.ts (66 errors) ====
+==== numberVsBigIntOperations.ts (64 errors) ====
     // Cannot mix bigints and numbers
     let bigInt = 1n, num = 2;
     bigInt = 1n; bigInt = 2; num = 1n; num = 2;
@@ -243,7 +241,7 @@ numberVsBigIntOperations.ts(99,5): error TS2365: Operator '+' cannot be applied 
                     ~~~~~
 !!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     num = ~"3"; num = -false; // should infer number
-    let bigIntOrNumber: bigint | number;
+    declare let bigIntOrNumber: bigint | number;
     bigIntOrNumber + bigIntOrNumber; // should error, result in any
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types 'number | bigint' and 'number | bigint'.
@@ -276,18 +274,14 @@ numberVsBigIntOperations.ts(99,5): error TS2365: Operator '+' cannot be applied 
     // Distinguishing numbers from bigints with typeof
     const isBigInt: (x: 0n | 1n) => bigint = (x: 0n | 1n) => x;
     const isNumber: (x: 0 | 1) => number = (x: 0 | 1) => x;
-    const zeroOrBigOne: 0 | 1n;
-          ~~~~~~~~~~~~
-!!! error TS1155: 'const' declarations must be initialized.
+    declare const zeroOrBigOne: 0 | 1n;
     if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
     else isNumber(zeroOrBigOne);
     
     // Distinguishing truthy from falsy
     const isOne = (x: 1 | 1n) => x;
     if (zeroOrBigOne) isOne(zeroOrBigOne);
-    const bigZeroOrOne: 0n | 1;
-          ~~~~~~~~~~~~
-!!! error TS1155: 'const' declarations must be initialized.
+    declare const bigZeroOrOne: 0n | 1;
     if (bigZeroOrOne) isOne(bigZeroOrOne);
     
     type NumberOrBigint = number | bigint;

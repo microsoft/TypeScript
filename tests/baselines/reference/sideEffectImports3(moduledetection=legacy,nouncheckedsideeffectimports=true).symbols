@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/sideEffectImports3.ts] ////
+
+=== index.ts ===
+
+import "./not-a-module";
+
+=== not-a-module.ts ===
+console.log("Hello, world!");
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+

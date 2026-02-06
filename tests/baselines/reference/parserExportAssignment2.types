@@ -3,4 +3,5 @@
 === parserExportAssignment2.ts ===
 export = foo;
 >foo : any
+>    : ^^^
 

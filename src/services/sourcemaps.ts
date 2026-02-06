@@ -18,7 +18,6 @@ import {
     isString,
     LineAndCharacter,
     LineInfo,
-    outFile,
     Program,
     removeFileExtension,
     SourceFileLike,
@@ -26,9 +25,9 @@ import {
     toPath as ts_toPath,
     tryGetSourceMappingURL,
     tryParseRawSourceMap,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
-const base64UrlRegExp = /^data:(?:application\/json(?:;charset=[uU][tT][fF]-8);base64,([A-Za-z0-9+/=]+)$)?/;
+const base64UrlRegExp = /^data:(?:application\/json;charset=[uU][tT][fF]-8;base64,([A-Za-z0-9+/=]+)$)?/;
 
 /** @internal */
 export interface SourceMapper {
@@ -36,6 +35,7 @@ export interface SourceMapper {
     tryGetSourcePosition(info: DocumentPosition): DocumentPosition | undefined;
     tryGetGeneratedPosition(info: DocumentPosition): DocumentPosition | undefined;
     clearCache(): void;
+    documentPositionMappers: Map<string, DocumentPositionMapper>;
 }
 
 /** @internal */
@@ -56,7 +56,13 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
     const currentDirectory = host.getCurrentDirectory();
     const sourceFileLike = new Map<string, SourceFileLike | false>();
     const documentPositionMappers = new Map<string, DocumentPositionMapper>();
-    return { tryGetSourcePosition, tryGetGeneratedPosition, toLineColumnOffset, clearCache };
+    return {
+        tryGetSourcePosition,
+        tryGetGeneratedPosition,
+        toLineColumnOffset,
+        clearCache,
+        documentPositionMappers,
+    };
 
     function toPath(fileName: string) {
         return ts_toPath(fileName, currentDirectory, getCanonicalFileName);
@@ -107,11 +113,11 @@ export function getSourceMapper(host: SourceMapperHost): SourceMapper {
         }
 
         const options = program.getCompilerOptions();
-        const outPath = outFile(options);
+        const outPath = options.outFile;
 
         const declarationPath = outPath ?
             removeFileExtension(outPath) + Extension.Dts :
-            getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
+            getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), program);
         if (declarationPath === undefined) return undefined;
 
         const newLoc = getDocumentPositionMapper(declarationPath, info.fileName).getGeneratedPosition(info);
@@ -177,7 +183,7 @@ export function getDocumentPositionMapper(
     generatedFileName: string,
     generatedFileLineInfo: LineInfo,
     readMapFile: ReadMapFile,
-) {
+): DocumentPositionMapper | undefined {
     let mapFileName = tryGetSourceMappingURL(generatedFileLineInfo);
     if (mapFileName) {
         const match = base64UrlRegExp.exec(mapFileName);

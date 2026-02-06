@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @outFile: out.js
 
 // @Filename: a.ts

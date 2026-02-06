@@ -3,4 +3,5 @@
 === parserUnicodeWhitespaceCharacter1.ts ===
 function foo(){　}
 >foo : () => void
+>    : ^^^^^^^^^^
 

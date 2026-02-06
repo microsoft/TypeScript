@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class C {
     private x: string;
     private get y() { return null; }
@@ -10,7 +12,7 @@ class C {
     private static foo() { }
 }
 
-var c: C;
+declare var c: C;
 // all errors
 c.x;
 c.y;

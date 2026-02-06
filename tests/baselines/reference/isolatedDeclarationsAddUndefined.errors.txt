@@ -1,0 +1,24 @@
+file2.ts(4,38): error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
+
+
+==== file1.ts (0 errors) ====
+    type N = 1;
+    export class Bar {
+        c? = [2 as N] as const;
+        c3? = 1 as N;
+        readonly r = 1;
+        f = 2;
+    }
+    
+==== file2.ts (1 errors) ====
+    export function foo(p = (ip = 10, v: number): void => {}): void{
+    }
+    type T = number
+    export function foo2(p = (ip = 10 as T, v: number): void => {}): void{}
+                                         ~
+!!! error TS9011: Parameter must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9028 file2.ts:4:27: Add a type annotation to the parameter ip.
+    export class Bar2 {
+        readonly r = 1;
+        f = 2;
+    }

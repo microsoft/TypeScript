@@ -4,9 +4,9 @@
 class foo { public bar:(a:number)=>number = function(a){return a}; }
 
 //// [contextualTyping14.js]
-var foo = /** @class */ (function () {
-    function foo() {
+"use strict";
+class foo {
+    constructor() {
         this.bar = function (a) { return a; };
     }
-    return foo;
-}());
+}

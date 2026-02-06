@@ -1,0 +1,32 @@
+a.d.ts(3,8): error TS2300: Duplicate identifier 'Row2'.
+index.d.ts(1,14): error TS2300: Duplicate identifier 'Row2'.
+main.ts(2,7): error TS2741: Property 'a' is missing in type '{}' but required in type 'Row2'.
+
+
+==== main.ts (1 errors) ====
+    import {Row2, C} from '.'
+    const x : Row2 = { }
+          ~
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type 'Row2'.
+!!! related TS2728 a.d.ts:3:17: 'a' is declared here.
+    const y : C = { s: '' }
+    
+     
+==== ./a.d.ts (1 errors) ====
+    import '.'
+    declare module '.' {
+      type Row2 = { a: string }
+           ~~~~
+!!! error TS2300: Duplicate identifier 'Row2'.
+!!! related TS6203 index.d.ts:1:14: 'Row2' was also declared here.
+      type C = { s : string }
+    }
+     
+==== ./index.d.ts (1 errors) ====
+    export type {Row2} from './common';
+                 ~~~~
+!!! error TS2300: Duplicate identifier 'Row2'.
+!!! related TS6203 a.d.ts:3:8: 'Row2' was also declared here.
+     
+==== ./common.d.ts (0 errors) ====
+    export interface Row2 { b: string }

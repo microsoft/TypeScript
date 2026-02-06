@@ -1,5 +1,6 @@
+// @target: es2022
 // @moduleResolution: nodenext
-// @module: nodenext
+// @module: node18,node20,nodenext
 // @jsx: react
 
 // @filename: /src/foo.tsx

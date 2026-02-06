@@ -3,10 +3,13 @@
 === exportDefaultTypeAndClass.ts ===
 export default class Foo {}
 >Foo : Foo
+>    : ^^^
 
 type Bar = {}
->Bar : {}
+>Bar : Bar
+>    : ^^^
 
 export default Bar
 >Bar : Bar
+>    : ^^^
 

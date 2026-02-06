@@ -12,10 +12,13 @@
 ////
 ////export const p = 0;
 ////export const b = 1;
-////[|const y = p + b;|]
+////[|export const y = p + b;
+////export const z = 1;|]
 
 // @Filename: /other.ts
+////import { z, y } from './a';
 ////export const t = 2;
+////const u = z + t + y;
 
 
 verify.moveToFile({
@@ -34,8 +37,14 @@ export const b = 1;
 `import { p, b } from './a';
 
 const q = 0;
-const y = p + b;
+export const y = p + b;
+export const z = 1;
 `,
+
+"/other.ts":
+`import { z, y } from './bar';
+export const t = 2;
+const u = z + t + y;`
     },
     interactiveRefactorArguments: { targetFile: "/bar.ts" },
 

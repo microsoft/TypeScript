@@ -1,3 +1,4 @@
+// @target: es2015
 
 var declare: boolean, interface: number, I: string;
 

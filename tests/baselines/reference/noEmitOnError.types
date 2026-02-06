@@ -3,5 +3,7 @@
 === noEmitOnError.ts ===
 var x: number = "";
 >x : number
+>  : ^^^^^^
 >"" : ""
+>   : ^^
 

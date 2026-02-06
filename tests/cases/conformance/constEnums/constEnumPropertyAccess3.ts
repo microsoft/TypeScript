@@ -1,3 +1,4 @@
+// @target: es2015
 const enum E {
     A = ~1,
     B = -1,

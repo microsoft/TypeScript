@@ -8,4 +8,5 @@
  */
 type LoadCallback = void;
 >LoadCallback : void
+>             : ^^^^
 

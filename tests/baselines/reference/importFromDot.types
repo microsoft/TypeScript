@@ -3,15 +3,21 @@
 === a.ts ===
 export const rootA = 0;
 >rootA : 0
+>      : ^
 >0 : 0
+>  : ^
 
 === a/index.ts ===
 export const indexInA = 0;
 >indexInA : 0
+>         : ^
 >0 : 0
+>  : ^
 
 === a/b.ts ===
 import { indexInA, rootA } from ".";
 >indexInA : 0
+>         : ^
 >rootA : any
+>      : ^^^
 

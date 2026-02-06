@@ -1,24 +1,24 @@
 //// [tests/cases/compiler/moduleSharesNameWithImportDeclarationInsideIt6.ts] ////
 
 === moduleSharesNameWithImportDeclarationInsideIt6.ts ===
-module Z.M {
+namespace Z.M {
 >Z : Symbol(Z, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 0))
->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 9))
+>M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 12))
 
     export function bar() {
->bar : Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 12))
+>bar : Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 15))
 
         return "";
     }
 }
-module A.M {
+namespace A.M {
 >A : Symbol(A, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 4, 1))
->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 5, 9))
+>M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 5, 12))
 
     import M = Z.M;
->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 5, 12))
+>M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 5, 15))
 >Z : Symbol(Z, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 0))
->M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 9))
+>M : Symbol(M, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 0, 12))
 
     export function bar() {
 >bar : Symbol(bar, Decl(moduleSharesNameWithImportDeclarationInsideIt6.ts, 6, 19))

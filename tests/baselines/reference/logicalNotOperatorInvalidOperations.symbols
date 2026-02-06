@@ -2,19 +2,19 @@
 
 === logicalNotOperatorInvalidOperations.ts ===
 // Unary operator !
-var b: number;
->b : Symbol(b, Decl(logicalNotOperatorInvalidOperations.ts, 1, 3))
+declare var b: number;
+>b : Symbol(b, Decl(logicalNotOperatorInvalidOperations.ts, 1, 11))
 
 // operand before !
 var BOOLEAN1 = b!;  //expect error
 >BOOLEAN1 : Symbol(BOOLEAN1, Decl(logicalNotOperatorInvalidOperations.ts, 4, 3))
->b : Symbol(b, Decl(logicalNotOperatorInvalidOperations.ts, 1, 3))
+>b : Symbol(b, Decl(logicalNotOperatorInvalidOperations.ts, 1, 11))
 
 // miss parentheses
 var BOOLEAN2 = !b + b;
 >BOOLEAN2 : Symbol(BOOLEAN2, Decl(logicalNotOperatorInvalidOperations.ts, 7, 3))
->b : Symbol(b, Decl(logicalNotOperatorInvalidOperations.ts, 1, 3))
->b : Symbol(b, Decl(logicalNotOperatorInvalidOperations.ts, 1, 3))
+>b : Symbol(b, Decl(logicalNotOperatorInvalidOperations.ts, 1, 11))
+>b : Symbol(b, Decl(logicalNotOperatorInvalidOperations.ts, 1, 11))
 
 // miss an operand
 var BOOLEAN3 =!;

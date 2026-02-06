@@ -8,3 +8,4 @@ declare class C2 {
 }
 
 //// [parserParameterList8.js]
+"use strict";

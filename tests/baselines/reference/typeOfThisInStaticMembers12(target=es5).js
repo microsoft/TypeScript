@@ -11,6 +11,7 @@ class C {
 
 
 //// [typeOfThisInStaticMembers12.js]
+"use strict";
 var C = /** @class */ (function () {
     function C() {
     }

@@ -4,4 +4,5 @@
 continue;
 
 //// [continueNotInIterationStatement1.js]
+"use strict";
 continue;

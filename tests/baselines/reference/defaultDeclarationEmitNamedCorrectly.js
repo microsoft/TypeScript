@@ -20,17 +20,13 @@ export default class MyComponent {
 //// [defaultDeclarationEmitNamedCorrectly.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.make = void 0;
+exports.make = make;
 function make(x) {
     return null;
 }
-exports.make = make;
-var MyComponent = /** @class */ (function () {
-    function MyComponent() {
-    }
-    MyComponent.create = make(MyComponent);
-    return MyComponent;
-}());
+class MyComponent {
+}
+MyComponent.create = make(MyComponent);
 exports.default = MyComponent;
 
 

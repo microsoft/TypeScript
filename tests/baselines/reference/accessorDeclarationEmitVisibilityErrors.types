@@ -3,8 +3,11 @@
 === accessorDeclarationEmitVisibilityErrors.ts ===
 export class Q {
 >Q : Q
+>  : ^
 
     set bet(arg: DoesNotExist) {}
 >bet : DoesNotExist
+>    : ^^^^^^^^^^^^
 >arg : DoesNotExist
+>    : ^^^^^^^^^^^^
 }

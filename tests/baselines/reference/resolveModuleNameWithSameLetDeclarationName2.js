@@ -11,3 +11,4 @@ declare module "punycode" {
 }
 
 //// [resolveModuleNameWithSameLetDeclarationName2.js]
+"use strict";

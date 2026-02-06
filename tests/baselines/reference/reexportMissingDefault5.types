@@ -3,15 +3,20 @@
 === b.d.ts ===
 declare var b: number;
 >b : number
+>  : ^^^^^^
 
 export { b };
 >b : number
+>  : ^^^^^^
 
 === a.ts ===
 export { b } from "./b";
 >b : number
+>  : ^^^^^^
 
 export { default as Foo } from "./b";
 >default : typeof import("b")
+>        : ^^^^^^^^^^^^^^^^^^
 >Foo : typeof import("b")
+>    : ^^^^^^^^^^^^^^^^^^
 

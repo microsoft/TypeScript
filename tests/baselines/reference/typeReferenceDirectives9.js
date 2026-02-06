@@ -35,23 +35,20 @@ export const bar = Cls.bar();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Cls = void 0;
-var Cls = /** @class */ (function () {
-    function Cls() {
-    }
-    return Cls;
-}());
+class Cls {
+}
 exports.Cls = Cls;
 //// [mod1.js]
 "use strict";
 /// <reference types="lib" />
 Object.defineProperty(exports, "__esModule", { value: true });
-var main_1 = require("./main");
+const main_1 = require("./main");
 main_1.Cls.prototype.foo = function () { return undefined; };
 //// [mod2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bar = exports.foo = exports.cls = void 0;
-var main_1 = require("./main");
+const main_1 = require("./main");
 require("./mod1");
 exports.cls = main_1.Cls;
 exports.foo = new main_1.Cls().foo();
@@ -63,7 +60,6 @@ export declare class Cls {
     x: any;
 }
 //// [mod1.d.ts]
-/// <reference types="lib" />
 declare module "./main" {
     interface Cls {
         foo(): Lib;
@@ -74,7 +70,6 @@ declare module "./main" {
 }
 export {};
 //// [mod2.d.ts]
-/// <reference types="lib" />
 import { Cls } from "./main";
 import "./mod1";
 export declare const cls: typeof Cls;

@@ -6,6 +6,7 @@
  */
 class A {
 >A : A
+>  : ^
 
     constructor() {}
 }

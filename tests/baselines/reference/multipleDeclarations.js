@@ -38,39 +38,38 @@ y.mistake();
 
 
 //// [output.js]
+"use strict";
 function C() {
     this.m = null;
 }
 C.prototype.m = function () {
     this.nothing();
 };
-var X = /** @class */ (function () {
-    function X() {
+class X {
+    constructor() {
         this.m = this.m.bind(this);
         this.mistake = 'frankly, complete nonsense';
     }
-    X.prototype.m = function () {
-    };
-    X.prototype.mistake = function () {
-    };
-    return X;
-}());
-var x = new X();
+    m() {
+    }
+    mistake() {
+    }
+}
+let x = new X();
 X.prototype.mistake = false;
 x.m();
 x.mistake;
-var Y = /** @class */ (function () {
-    function Y() {
+class Y {
+    mistake() {
+    }
+    m() {
+    }
+    constructor() {
         this.m = this.m.bind(this);
         this.mistake = 'even more nonsense';
     }
-    Y.prototype.mistake = function () {
-    };
-    Y.prototype.m = function () {
-    };
-    return Y;
-}());
+}
 Y.prototype.mistake = true;
-var y = new Y();
+let y = new Y();
 y.m();
 y.mistake();

@@ -3,12 +3,15 @@
 === /index.ts ===
 import { native } from "./foo";
 >native : () => void
+>       : ^^^^^^^^^^
 
 === /foo__native.ts ===
 export function native() {}
 >native : () => void
+>       : ^^^^^^^^^^
 
 === /foo.ts ===
 export function base() {}
 >base : () => void
+>     : ^^^^^^^^^^
 

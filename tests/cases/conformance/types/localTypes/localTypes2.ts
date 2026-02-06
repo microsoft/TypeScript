@@ -1,3 +1,4 @@
+// @target: es2015
 function f1() {
     function f() {
         class C {

@@ -1,0 +1,23 @@
+error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== A.ts (0 errors) ====
+    namespace ts {
+        export function printVersion():void {
+            log("Version: " + sys.version);  // the call of sys.version is deferred, should not report an error.
+        }
+    
+        export function log(info:string):void {
+    
+        }
+    }
+    
+==== B.ts (0 errors) ====
+    namespace ts {
+    
+        export let sys:{version:string} = {version: "2.0.5"};
+    
+    }
+    
+    

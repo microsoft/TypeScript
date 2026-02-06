@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = fun;
 //// [a.js]
 "use strict";
-var mod = require("./mod");
+const mod = require("./mod");
 module.exports = mod;
 //// [b.js]
 "use strict";
@@ -62,22 +62,32 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.def = exports.default = void 0;
-var a_1 = __importDefault(require("./a"));
-var a_2 = __importDefault(require("./a"));
-var a_3 = __importDefault(require("./a"));
-var self = __importStar(require("./b"));
+const a_1 = __importDefault(require("./a"));
+const a_2 = __importDefault(require("./a"));
+const a_3 = __importDefault(require("./a"));
+const self = __importStar(require("./b"));
 var a_4 = require("./a");
 Object.defineProperty(exports, "default", { enumerable: true, get: function () { return __importDefault(a_4).default; } });
 var a_5 = require("./a");

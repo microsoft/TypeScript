@@ -5,11 +5,11 @@ import {
     noop,
     Version,
     version,
-} from "./_namespaces/ts";
+} from "./_namespaces/ts.js";
 
 export let enableDeprecationWarnings = true;
 
-export function setEnableDeprecationWarnings(value: boolean) {
+export function setEnableDeprecationWarnings(value: boolean): void {
     enableDeprecationWarnings = value;
 }
 

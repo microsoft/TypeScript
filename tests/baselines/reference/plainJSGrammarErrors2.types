@@ -12,5 +12,7 @@ export default 1;
  */
 export { default as A } from "./a";
 >default : 1
+>        : ^
 >A : 1
+>  : ^
 

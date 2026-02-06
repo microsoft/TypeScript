@@ -3,5 +3,7 @@
 === undeclaredVarEmit.ts ===
 f: number;
 >f : any
+>  : ^^^
 >number : any
+>       : ^^^
 

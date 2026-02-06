@@ -28,12 +28,12 @@ export const x: () => Thing = null as any;
 }
 
 //// [other.js]
-export var x = null;
+export const x = null;
 //// [index.js]
 // esm format file
 export { x } from "./other.js";
 //// [index.js]
-export var a = (await import("inner")).x();
+export const a = (await import("inner")).x();
 
 
 //// [other.d.ts]

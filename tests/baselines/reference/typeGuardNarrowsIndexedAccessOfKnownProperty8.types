@@ -3,30 +3,45 @@
 === ./a.ts ===
 export const key = "a";
 >key : "a"
+>    : ^^^
 >"a" : "a"
+>    : ^^^
 
 === ./b.ts ===
 import * as a from "./a";
 >a : typeof a
+>  : ^^^^^^^^
 
 export class C {
 >C : C
+>  : ^
 
     [a.key]: string;
 >[a.key] : string
+>        : ^^^^^^
 >a.key : "a"
+>      : ^^^
 >a : typeof a
+>  : ^^^^^^^^
 >key : "a"
+>    : ^^^
 
     constructor() {
         this[a.key] = "foo";
 >this[a.key] = "foo" : "foo"
+>                    : ^^^^^
 >this[a.key] : string
+>            : ^^^^^^
 >this : this
+>     : ^^^^
 >a.key : "a"
+>      : ^^^
 >a : typeof a
+>  : ^^^^^^^^
 >key : "a"
+>    : ^^^
 >"foo" : "foo"
+>      : ^^^^^
     }
 }
 

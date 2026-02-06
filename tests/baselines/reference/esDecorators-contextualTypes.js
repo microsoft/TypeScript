@@ -65,6 +65,7 @@ class C {
 }
 
 //// [esDecorators-contextualTypes.js]
+"use strict";
 @((t, c) => { })
 class C {
     @((t, c) => { })

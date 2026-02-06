@@ -1,0 +1,83 @@
+//// [tests/cases/compiler/contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts] ////
+
+=== contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts ===
+type IntrinsicElements = {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 0, 0))
+
+  a: {
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 0, 26))
+
+    href?: string;
+>href : Symbol(href, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 1, 6))
+
+  };
+  div: {
+>div : Symbol(div, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 3, 4))
+
+    dir?: string;
+>dir : Symbol(dir, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 4, 8))
+
+  };
+};
+
+type Component<Props> = (props: Props) => unknown;
+>Component : Symbol(Component, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 7, 2))
+>Props : Symbol(Props, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 9, 15))
+>props : Symbol(props, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 9, 25))
+>Props : Symbol(Props, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 9, 15))
+
+interface NestedMDXComponents {
+>NestedMDXComponents : Symbol(NestedMDXComponents, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 9, 50))
+
+  [key: string]: Component<any>;
+>key : Symbol(key, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 12, 3))
+>Component : Symbol(Component, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 7, 2))
+}
+
+type MDXComponents = NestedMDXComponents & {
+>MDXComponents : Symbol(MDXComponents, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 13, 1))
+>NestedMDXComponents : Symbol(NestedMDXComponents, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 9, 50))
+
+  [Key in keyof IntrinsicElements]?: Component<IntrinsicElements[Key]>;
+>Key : Symbol(Key, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 16, 3))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 0, 0))
+>Component : Symbol(Component, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 7, 2))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 0, 0))
+>Key : Symbol(Key, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 16, 3))
+
+};
+
+export interface MDXProps {
+>MDXProps : Symbol(MDXProps, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 17, 2))
+
+  components?: MDXComponents;
+>components : Symbol(MDXProps.components, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 19, 27))
+>MDXComponents : Symbol(MDXComponents, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 13, 1))
+}
+
+declare function MyMDXComponent(props: MDXProps): null;
+>MyMDXComponent : Symbol(MyMDXComponent, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 21, 1))
+>props : Symbol(props, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 23, 32))
+>MDXProps : Symbol(MDXProps, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 17, 2))
+
+MyMDXComponent({
+>MyMDXComponent : Symbol(MyMDXComponent, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 21, 1))
+
+  components: {
+>components : Symbol(components, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 25, 16))
+
+    a(props) {
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 26, 15))
+>props : Symbol(props, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 27, 6))
+
+      return null;
+    },
+    div(props) {
+>div : Symbol(div, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 29, 6))
+>props : Symbol(props, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix2.ts, 30, 8))
+
+      return null;
+    },
+  },
+});
+

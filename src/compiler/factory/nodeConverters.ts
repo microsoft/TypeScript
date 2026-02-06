@@ -35,7 +35,7 @@ import {
     setStartsOnNewLine,
     setTextRange,
     SyntaxKind,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function createNodeConverters(factory: NodeFactory): NodeConverters {

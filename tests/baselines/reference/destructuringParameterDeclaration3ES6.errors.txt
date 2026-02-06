@@ -1,3 +1,11 @@
+destructuringParameterDeclaration3ES6.ts(12,13): error TS7019: Rest parameter 'a' implicitly has an 'any[]' type.
+destructuringParameterDeclaration3ES6.ts(16,14): error TS7031: Binding element 'a' implicitly has an 'any' type.
+destructuringParameterDeclaration3ES6.ts(16,17): error TS7031: Binding element 'b' implicitly has an 'any' type.
+destructuringParameterDeclaration3ES6.ts(16,22): error TS7031: Binding element 'c' implicitly has an 'any' type.
+destructuringParameterDeclaration3ES6.ts(17,15): error TS7031: Binding element 'a' implicitly has an 'any' type.
+destructuringParameterDeclaration3ES6.ts(17,18): error TS7031: Binding element 'b' implicitly has an 'any' type.
+destructuringParameterDeclaration3ES6.ts(17,23): error TS7031: Binding element 'c' implicitly has an 'any' type.
+destructuringParameterDeclaration3ES6.ts(17,31): error TS7031: Binding element 'x' implicitly has an 'any' type.
 destructuringParameterDeclaration3ES6.ts(26,4): error TS2345: Argument of type '[number, number, [[string]], boolean, boolean]' is not assignable to parameter of type '[any, any, [[any]]]'.
   Source has 5 element(s) but target allows only 3.
 destructuringParameterDeclaration3ES6.ts(29,12): error TS2322: Type 'number' is not assignable to type '[[any]]'.
@@ -5,7 +13,7 @@ destructuringParameterDeclaration3ES6.ts(30,5): error TS2345: Argument of type '
   Source has 2 element(s) but target requires 3.
 
 
-==== destructuringParameterDeclaration3ES6.ts (3 errors) ====
+==== destructuringParameterDeclaration3ES6.ts (11 errors) ====
     // If the parameter is a rest parameter, the parameter type is any[]
     // A type annotation for a rest parameter must denote an array type.
     
@@ -18,11 +26,27 @@ destructuringParameterDeclaration3ES6.ts(30,5): error TS2345: Argument of type '
     
     function a1(...x: (number|string)[]) { }
     function a2(...a) { }
+                ~~~~
+!!! error TS7019: Rest parameter 'a' implicitly has an 'any[]' type.
     function a3(...a: Array<String>) { }
     function a4(...a: arrayString) { }
     function a5(...a: stringOrNumArray) { }
     function a9([a, b, [[c]]]) { }
+                 ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                    ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                         ~
+!!! error TS7031: Binding element 'c' implicitly has an 'any' type.
     function a10([a, b, [[c]], ...x]) { }
+                  ~
+!!! error TS7031: Binding element 'a' implicitly has an 'any' type.
+                     ~
+!!! error TS7031: Binding element 'b' implicitly has an 'any' type.
+                          ~
+!!! error TS7031: Binding element 'c' implicitly has an 'any' type.
+                                  ~
+!!! error TS7031: Binding element 'x' implicitly has an 'any' type.
     function a11([a, b, c, ...x]: number[]) { }
     
     

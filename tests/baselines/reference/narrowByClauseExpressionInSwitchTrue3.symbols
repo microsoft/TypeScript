@@ -25,7 +25,7 @@ function wat(shape: Shape) {
 
             return Math.PI * shape.radius ** 2;
 >Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >shape.radius : Symbol(radius, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 1, 23))
 >shape : Symbol(shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 4, 13))
@@ -44,7 +44,7 @@ function wat(shape: Shape) {
 
         return Math.PI * shape.radius ** 2;
 >Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >shape : Symbol(shape, Decl(narrowByClauseExpressionInSwitchTrue3.ts, 4, 13))
     }

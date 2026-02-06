@@ -3,20 +3,20 @@ innerAliases.ts(21,11): error TS2339: Property 'inner' does not exist on type 't
 
 
 ==== innerAliases.ts (2 errors) ====
-    module A {
-        export module B {
-            export module C {
+    namespace A {
+        export namespace B {
+            export namespace C {
                 export class Class1 {}
             }
         }
     }
     
-    module D {
+    namespace D {
         import inner = A.B.C; 
        
         var c1 = new inner.Class1(); 
     
-        export module E { 
+        export namespace E { 
             export class Class2 {}
         }
     }

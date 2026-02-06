@@ -1,5 +1,5 @@
 //@module: commonjs
-//@target: ES3
+//@target: ES5, ES2015
 
 // @filename: m1.ts
 declare var console: any;

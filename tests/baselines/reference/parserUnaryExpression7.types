@@ -3,6 +3,9 @@
 === parserUnaryExpression7.ts ===
 ++ new Foo();
 >++ new Foo() : number
+>             : ^^^^^^
 >new Foo() : any
+>          : ^^^
 >Foo : any
+>    : ^^^
 

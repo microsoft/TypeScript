@@ -1,4 +1,4 @@
-import * as ts from "../_namespaces/ts";
+import * as ts from "../_namespaces/ts.js";
 import {
     NamedSourceText,
     newProgram,
@@ -6,7 +6,7 @@ import {
     SourceText,
     updateProgram,
     updateProgramText,
-} from "./helpers";
+} from "./helpers.js";
 
 describe("unittests:: builder", () => {
     it("emits dependent files", () => {

@@ -106,8 +106,8 @@ thisTypeInFunctions.ts(120,36): error TS2339: Property 'n' does not exist on typ
     let specifiedLambdaToSpecified: (this: {y: number}, x: number) => number = specifiedLambda;
     
     
-    let explicitCFunction: (this: C, m: number) => number;
-    let explicitPropertyFunction: (this: {n: number}, m: number) => number;
+    declare let explicitCFunction: (this: C, m: number) => number;
+    declare let explicitPropertyFunction: (this: {n: number}, m: number) => number;
     c.explicitC = explicitCFunction;
     c.explicitC = function(this: C, m: number) { return this.n + m };
     c.explicitProperty = explicitPropertyFunction;

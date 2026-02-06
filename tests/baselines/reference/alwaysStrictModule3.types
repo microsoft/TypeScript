@@ -4,5 +4,7 @@
 // module ES2015
 export const a = 1;
 >a : 1
+>  : ^
 >1 : 1
+>  : ^
 

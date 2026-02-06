@@ -6,5 +6,6 @@ var expr: any;
 
 for (var a in expr) {
 >a : string
+>  : ^^^^^^
 >expr : any
 }

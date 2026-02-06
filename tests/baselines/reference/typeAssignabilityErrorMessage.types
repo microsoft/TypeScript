@@ -1,0 +1,124 @@
+//// [tests/cases/compiler/typeAssignabilityErrorMessage.ts] ////
+
+=== typeAssignabilityErrorMessage.ts ===
+// Example: different error code altogether
+
+interface ThroughStream {
+    a: string;
+>a : string
+>  : ^^^^^^
+}
+interface ReadStream {
+    f: string;
+>f : string
+>  : ^^^^^^
+
+    g: number;
+>g : number
+>  : ^^^^^^
+
+    h: boolean;
+>h : boolean
+>  : ^^^^^^^
+
+    i: BigInt;
+>i : BigInt
+>  : ^^^^^^
+
+    j: symbol;
+>j : symbol
+>  : ^^^^^^
+}
+function foo(): ReadStream {
+>foo : () => ReadStream
+>    : ^^^^^^          
+
+    return undefined as any as ThroughStream;
+>undefined as any as ThroughStream : ThroughStream
+>                                  : ^^^^^^^^^^^^^
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+function bar(): ReadStream {
+>bar : () => ReadStream
+>    : ^^^^^^          
+
+    return undefined as any as ThroughStream;
+>undefined as any as ThroughStream : ThroughStream
+>                                  : ^^^^^^^^^^^^^
+>undefined as any : any
+>                 : ^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+// Example: different elaboration
+
+type Wrap = {
+>Wrap : Wrap
+>     : ^^^^
+
+    someProp: Bar<number>;
+>someProp : Bar<number>
+>         : ^^^^^^^^^^^
+}
+type OtherWrap = {
+>OtherWrap : OtherWrap
+>          : ^^^^^^^^^
+
+    someProp: Foo<string>;
+>someProp : Foo<string>
+>         : ^^^^^^^^^^^
+}
+type Foo<T> = {
+>Foo : Foo<T>
+>    : ^^^^^^
+
+    foo: { what: T };
+>foo : { what: T; }
+>    : ^^^^^^^^ ^^^
+>what : T
+>     : ^
+}
+type Bar<T> = {
+>Bar : Bar<T>
+>    : ^^^^^^
+
+    foo: { what: T };
+>foo : { what: T; }
+>    : ^^^^^^^^ ^^^
+>what : T
+>     : ^
+
+} | boolean;
+
+function fun(param: Wrap): void {}
+>fun : (param: Wrap) => void
+>    : ^     ^^    ^^^^^    
+>param : Wrap
+>      : ^^^^
+
+declare let fooStr: Foo<string>;
+>fooStr : Foo<string>
+>       : ^^^^^^^^^^^
+
+declare let otherWrap: OtherWrap;
+>otherWrap : OtherWrap
+>          : ^^^^^^^^^
+
+let a: Bar<number> = fooStr;
+>a : Bar<number>
+>  : ^^^^^^^^^^^
+>fooStr : Foo<string>
+>       : ^^^^^^^^^^^
+
+fun(otherWrap);
+>fun(otherWrap) : void
+>               : ^^^^
+>fun : (param: Wrap) => void
+>    : ^     ^^    ^^^^^    
+>otherWrap : OtherWrap
+>          : ^^^^^^^^^
+

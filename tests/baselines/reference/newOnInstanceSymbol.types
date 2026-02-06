@@ -3,13 +3,19 @@
 === newOnInstanceSymbol.ts ===
 class C {}
 >C : C
+>  : ^
 
 var x = new C(); // should be ok
 >x : C
+>  : ^
 >new C() : C
+>        : ^
 >C : typeof C
+>  : ^^^^^^^^
 
 new x(); // should error
 >new x() : any
+>        : ^^^
 >x : C
+>  : ^
 

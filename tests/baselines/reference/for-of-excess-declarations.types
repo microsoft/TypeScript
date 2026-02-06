@@ -3,9 +3,14 @@
 === for-of-excess-declarations.ts ===
 for (const a, { [b]: c} of [1]) {
 >a : number
+>  : ^^^^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >[1] : number[]
+>    : ^^^^^^^^
 >1 : 1
+>  : ^
 
 }

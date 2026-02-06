@@ -7,11 +7,8 @@ function foo(...rest: number) { // error
 }
 
 //// [nonArrayRestArgs.js]
-function foo() {
-    var rest = [];
-    for (var _i = 0; _i < arguments.length; _i++) {
-        rest[_i] = arguments[_i];
-    }
+"use strict";
+function foo(...rest) {
     var x = rest[0];
     return x;
 }

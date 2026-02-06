@@ -1,4 +1,12 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    createImportAdder,
+    ImportAdder,
+    registerCodeFix,
+    tryGetAutoImportableReferenceFromTypeNode,
+} from "../_namespaces/ts.codefix.js";
+import {
     __String,
     AnonymousType,
     BinaryExpression,
@@ -101,15 +109,7 @@ import {
     UnionReduction,
     UserPreferences,
     VariableDeclaration,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    createImportAdder,
-    ImportAdder,
-    registerCodeFix,
-    tryGetAutoImportableReferenceFromTypeNode,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "inferFromUsage";
 const errorCodes = [

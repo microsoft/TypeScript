@@ -1,3 +1,4 @@
+// @target: es2015
 //@filename: /other.d.ts
 export as namespace SomeInterface;
 export type Action = "PUSH" | "POP" | "REPLACE";

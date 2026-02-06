@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: thisTypeOfConstructorFunctions.js
 // @allowJs: true
 // @checkJs: true

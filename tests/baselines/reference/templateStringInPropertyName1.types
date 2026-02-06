@@ -3,10 +3,15 @@
 === templateStringInPropertyName1.ts ===
 var x = {
 >x : any
+>  : ^^^
 >{    `a` : any
+>         : ^^^
 >{ : {}
+>  : ^^
 
     `a`: 321
 >`a` : "a"
+>    : ^^^
 >321 : 321
+>    : ^^^
 }

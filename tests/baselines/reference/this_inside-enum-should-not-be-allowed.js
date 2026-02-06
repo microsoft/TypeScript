@@ -5,20 +5,21 @@ enum TopLevelEnum {
     ThisWasAllowedButShouldNotBe = this // Should not be allowed
 }
 
-module ModuleEnum {
+namespace ModuleEnum {
     enum EnumInModule {
         WasADifferentError = this // this was handled as if this was in a module
     }
 }
 
 //// [this_inside-enum-should-not-be-allowed.js]
+"use strict";
 var TopLevelEnum;
 (function (TopLevelEnum) {
     TopLevelEnum[TopLevelEnum["ThisWasAllowedButShouldNotBe"] = this] = "ThisWasAllowedButShouldNotBe"; // Should not be allowed
 })(TopLevelEnum || (TopLevelEnum = {}));
 var ModuleEnum;
 (function (ModuleEnum) {
-    var EnumInModule;
+    let EnumInModule;
     (function (EnumInModule) {
         EnumInModule[EnumInModule["WasADifferentError"] = this] = "WasADifferentError"; // this was handled as if this was in a module
     })(EnumInModule || (EnumInModule = {}));

@@ -10,7 +10,7 @@
 ////    one: string;
 ////}
 ////
-////export module Inner {
+////export namespace Inner {
 ////    export interface I3 {
 ////        three: boolean
 ////    }

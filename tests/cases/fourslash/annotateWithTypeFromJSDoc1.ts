@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @Filename: test123.ts
 /////** @type {number} */
 ////var [|x|];

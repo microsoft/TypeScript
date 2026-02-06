@@ -61,47 +61,55 @@ class C9 extends B9 {
 
 
 //// [C1.js]
+"use strict";
 class C1 {
     async *f() {
     }
 }
 //// [C2.js]
+"use strict";
 class C2 {
     async *f() {
         const x = yield;
     }
 }
 //// [C3.js]
+"use strict";
 class C3 {
     async *f() {
         const x = yield 1;
     }
 }
 //// [C4.js]
+"use strict";
 class C4 {
     async *f() {
         const x = yield* [1];
     }
 }
 //// [C5.js]
+"use strict";
 class C5 {
     async *f() {
         const x = yield* (async function* () { yield 1; })();
     }
 }
 //// [C6.js]
+"use strict";
 class C6 {
     async *f() {
         const x = await 1;
     }
 }
 //// [C7.js]
+"use strict";
 class C7 {
     async *f() {
         return 1;
     }
 }
 //// [C8.js]
+"use strict";
 class C8 {
     g() {
     }
@@ -110,6 +118,7 @@ class C8 {
     }
 }
 //// [C9.js]
+"use strict";
 class B9 {
     g() { }
 }

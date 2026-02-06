@@ -9,7 +9,6 @@
     },
     "references": [
         { "path": "../compiler" },
-        { "path": "../executeCommandLine" },
         { "path": "../services" },
         { "path": "../jsTyping" },
         { "path": "../server" },

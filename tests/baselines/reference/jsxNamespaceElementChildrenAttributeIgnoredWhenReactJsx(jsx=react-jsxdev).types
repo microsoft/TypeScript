@@ -1,0 +1,91 @@
+//// [tests/cases/compiler/jsxNamespaceElementChildrenAttributeIgnoredWhenReactJsx.tsx] ////
+
+=== /jsx.d.ts ===
+declare namespace JSX {
+  interface IntrinsicElements {
+    h1: { children: string }
+>h1 : { children: string; }
+>   : ^^^^^^^^^^^^      ^^^
+>children : string
+>         : ^^^^^^
+  }
+
+  type Element = string;
+>Element : string
+>        : ^^^^^^
+
+  interface ElementChildrenAttribute {
+    offspring: any;
+>offspring : any
+>          : ^^^
+  }
+}
+
+=== /test.tsx ===
+const Title = (props: { children: string }) => <h1>{props.children}</h1>;
+>Title : (props: { children: string; }) => string
+>      : ^     ^^                     ^^^^^^^^^^^
+>(props: { children: string }) => <h1>{props.children}</h1> : (props: { children: string; }) => string
+>                                                           : ^     ^^                     ^^^^^^^^^^^
+>props : { children: string; }
+>      : ^^^^^^^^^^^^      ^^^
+>children : string
+>         : ^^^^^^
+><h1>{props.children}</h1> : string
+>                          : ^^^^^^
+>h1 : any
+>   : ^^^
+>props.children : string
+>               : ^^^^^^
+>props : { children: string; }
+>      : ^^^^^^^^^^^^      ^^^
+>children : string
+>         : ^^^^^^
+>h1 : any
+>   : ^^^
+
+<Title>Hello, world!</Title>;
+><Title>Hello, world!</Title> : string
+>                             : ^^^^^^
+>Title : (props: { children: string; }) => string
+>      : ^     ^^                     ^^^^^^^^^^^
+>Title : (props: { children: string; }) => string
+>      : ^     ^^                     ^^^^^^^^^^^
+
+const Wrong = (props: { offspring: string }) => <h1>{props.offspring}</h1>;
+>Wrong : (props: { offspring: string; }) => string
+>      : ^     ^^                      ^^^^^^^^^^^
+>(props: { offspring: string }) => <h1>{props.offspring}</h1> : (props: { offspring: string; }) => string
+>                                                             : ^     ^^                      ^^^^^^^^^^^
+>props : { offspring: string; }
+>      : ^^^^^^^^^^^^^      ^^^
+>offspring : string
+>          : ^^^^^^
+><h1>{props.offspring}</h1> : string
+>                           : ^^^^^^
+>h1 : any
+>   : ^^^
+>props.offspring : string
+>                : ^^^^^^
+>props : { offspring: string; }
+>      : ^^^^^^^^^^^^^      ^^^
+>offspring : string
+>          : ^^^^^^
+>h1 : any
+>   : ^^^
+
+<Wrong>Byebye, world!</Wrong>
+><Wrong>Byebye, world!</Wrong> : string
+>                              : ^^^^^^
+>Wrong : (props: { offspring: string; }) => string
+>      : ^     ^^                      ^^^^^^^^^^^
+>Wrong : (props: { offspring: string; }) => string
+>      : ^     ^^                      ^^^^^^^^^^^
+
+=== /jsx/jsx-runtime.ts ===
+
+export {};
+=== /jsx/jsx-dev-runtime.ts ===
+
+export {};
+

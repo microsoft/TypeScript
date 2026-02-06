@@ -6,5 +6,6 @@ new WeakMap<object>();
 
 
 //// [newMap.js]
+"use strict";
 new Map();
 new WeakMap();

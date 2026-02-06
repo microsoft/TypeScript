@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 var x: (a: number) => void = true ? (a) => a.toExponential() : (b) => b.toFixed();
 
 class A {

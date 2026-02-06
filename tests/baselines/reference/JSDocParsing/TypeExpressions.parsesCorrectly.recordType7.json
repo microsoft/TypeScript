@@ -18,7 +18,6 @@
                 "pos": 2,
                 "end": 5,
                 "flags": "JSDoc",
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "foo"
             },
@@ -27,7 +26,6 @@
                 "pos": 6,
                 "end": 13,
                 "flags": "JSDoc",
-                "modifierFlagsCache": 0,
                 "transformFlags": 1
             }
         },
@@ -43,7 +41,6 @@
                 "pos": 14,
                 "end": 18,
                 "flags": "JSDoc",
-                "modifierFlagsCache": 0,
                 "transformFlags": 0,
                 "escapedText": "bar"
             },
@@ -52,7 +49,6 @@
                 "pos": 19,
                 "end": 26,
                 "flags": "JSDoc",
-                "modifierFlagsCache": 0,
                 "transformFlags": 1
             }
         },

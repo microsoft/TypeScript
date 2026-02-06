@@ -1,3 +1,4 @@
+// @target: es2015
 // Generic call with no parameters
 function noParams<T extends {}>() { }
 noParams();

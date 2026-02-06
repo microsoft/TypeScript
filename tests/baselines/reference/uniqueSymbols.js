@@ -270,6 +270,7 @@ function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 
 
 //// [uniqueSymbols.js]
+"use strict";
 // declarations with call initializer
 const constCall = Symbol();
 let letCall = Symbol();

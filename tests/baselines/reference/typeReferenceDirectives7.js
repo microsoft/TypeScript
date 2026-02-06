@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/typeReferenceDirectives7.ts] ////
 
 //// [index.d.ts]
-// local value shadows global - no need to add type reference directive 
-   
 declare let $: { x: number }
 
 
@@ -20,7 +18,7 @@ export let y = () => x
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.y = exports.x = exports.$ = void 0;
 exports.$ = 1;
-var y = function () { return exports.x; };
+let y = () => exports.x;
 exports.y = y;
 
 

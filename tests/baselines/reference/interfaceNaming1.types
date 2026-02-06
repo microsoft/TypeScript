@@ -3,10 +3,14 @@
 === interfaceNaming1.ts ===
 interface { }
 >interface : any
+>          : ^^^
 
 interface interface{ }
 interface & { }
 >interface & { } : number
+>                : ^^^^^^
 >interface : any
+>          : ^^^
 >{ } : {}
+>    : ^^
 

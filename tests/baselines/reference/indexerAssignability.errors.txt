@@ -1,0 +1,22 @@
+indexerAssignability.ts(5,5): error TS2454: Variable 'b' is used before being assigned.
+indexerAssignability.ts(6,5): error TS2454: Variable 'c' is used before being assigned.
+indexerAssignability.ts(8,5): error TS2454: Variable 'c' is used before being assigned.
+
+
+==== indexerAssignability.ts (3 errors) ====
+    var a: { [s: string]: string; };
+    var b: { [n: number]: string; };
+    var c: {};
+    
+    a = b;
+        ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    a = c;
+        ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    b = a;
+    b = c;
+        ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    c = a;
+    c = b;

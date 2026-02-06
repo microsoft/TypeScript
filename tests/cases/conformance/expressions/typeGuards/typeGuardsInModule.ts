@@ -1,3 +1,4 @@
+// @target: es2015
 // Note that type guards affect types of variables and parameters only and 
 // have no effect on members of objects such as properties. 
 
@@ -6,7 +7,7 @@ var num: number;
 var strOrNum: string | number;
 var var1: string | number;
 // Inside module
-module m1 {
+namespace m1 {
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string
 
@@ -29,10 +30,10 @@ module m1 {
     }
 }
 // local module
-module m2 {
+namespace m2 {
     var var2: string | number;
     export var var3: string | number;
-    module m3 {
+    namespace m3 {
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
 
@@ -62,7 +63,7 @@ module m2 {
     }
 }
 // Dotted module
-module m3.m4 {
+namespace m3.m4 {
     // global vars in function declaration
     num = typeof var1 === "string" && var1.length; // string
 

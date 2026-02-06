@@ -1,3 +1,4 @@
+// @target: es2015
 class A {
     private a = x;
     private b = { p: x };

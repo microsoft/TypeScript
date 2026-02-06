@@ -8,13 +8,13 @@
 
 verify.completions(
     { marker: "1", exact: [
-        { name: "Option 1", replacementSpan: test.ranges()[0] },
-        { name: "Option 2", replacementSpan: test.ranges()[0] },
-        { name: "Option 3", replacementSpan: test.ranges()[0] }
+        { name: "Option 1", replacementSpan: test.ranges()[0], commitCharacters: [] },
+        { name: "Option 2", replacementSpan: test.ranges()[0], commitCharacters: [] },
+        { name: "Option 3", replacementSpan: test.ranges()[0], commitCharacters: [] }
     ] },
     { marker: "2", exact: [
-        { name: "Option 1", replacementSpan: test.ranges()[1] },
-        { name: "Option 2", replacementSpan: test.ranges()[1] },
-        { name: "Option 3", replacementSpan: test.ranges()[1] }
+        { name: "Option 1", replacementSpan: test.ranges()[1], commitCharacters: [] },
+        { name: "Option 2", replacementSpan: test.ranges()[1], commitCharacters: [] },
+        { name: "Option 3", replacementSpan: test.ranges()[1], commitCharacters: [] }
     ] }
 );

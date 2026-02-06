@@ -5,6 +5,7 @@
 ///<reference path="declarations1.d.ts" />
 import foo from "foo";
 >foo : any
+>    : ^^^
 
 === declarations1.d.ts ===
 declare module "foo";

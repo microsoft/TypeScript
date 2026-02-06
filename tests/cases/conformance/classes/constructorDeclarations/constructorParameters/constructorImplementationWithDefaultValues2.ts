@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 class C {
     constructor(x);
     constructor(public x: string = 1) { // error

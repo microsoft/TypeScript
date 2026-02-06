@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 // Repro from #14091
@@ -80,4 +81,12 @@ function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
     if (obj) {
         obj[key];
     }
+}
+
+// https://github.com/microsoft/TypeScript/issues/57381
+
+function f6<T extends string | (new () => {})>(a: T) {
+  if (typeof a !== "string") {
+    new a();
+  }
 }

@@ -3,19 +3,26 @@
 === assignment.ts ===
 export default {
 >{    foo: 12} : { foo: number; }
+>              : ^^^^^^^^^^^^^^^^
 
     foo: 12
 >foo : number
+>    : ^^^^^^
 >12 : 12
+>   : ^^
 
 };
 
 === user.ts ===
 import Obj from "./assignment";
 >Obj : { foo: number; }
+>    : ^^^^^^^^^^^^^^^^
 
 export const Obj = void Obj;
 >Obj : any
+>    : ^^^
 >void Obj : undefined
+>         : ^^^^^^^^^
 >Obj : any
+>    : ^^^
 

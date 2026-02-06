@@ -3,5 +3,6 @@
 === defaultKeywordWithoutExport2.ts ===
 default function () {
 > : () => void
+> : ^^^^^^^^^^
 
 }

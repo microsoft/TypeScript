@@ -126,31 +126,32 @@ type Something = { foo: number };
 >Something : Symbol(Something, Decl(circularReferenceInReturnType2.ts, 33, 24))
 >foo : Symbol(foo, Decl(circularReferenceInReturnType2.ts, 35, 18))
 
+// inference fails here, but ideally should not
 const A = object<Something>()({
->A : Symbol(A, Decl(circularReferenceInReturnType2.ts, 37, 5))
+>A : Symbol(A, Decl(circularReferenceInReturnType2.ts, 38, 5))
 >object : Symbol(object, Decl(circularReferenceInReturnType2.ts, 10, 13))
 >Something : Symbol(Something, Decl(circularReferenceInReturnType2.ts, 33, 24))
 
   name: "A",
->name : Symbol(name, Decl(circularReferenceInReturnType2.ts, 37, 31))
+>name : Symbol(name, Decl(circularReferenceInReturnType2.ts, 38, 31))
 
   fields: () => ({
->fields : Symbol(fields, Decl(circularReferenceInReturnType2.ts, 38, 12))
+>fields : Symbol(fields, Decl(circularReferenceInReturnType2.ts, 39, 12))
 
     a: field({
->a : Symbol(a, Decl(circularReferenceInReturnType2.ts, 39, 18))
+>a : Symbol(a, Decl(circularReferenceInReturnType2.ts, 40, 18))
 >field : Symbol(field, Decl(circularReferenceInReturnType2.ts, 31, 13))
 
       type: A,
->type : Symbol(type, Decl(circularReferenceInReturnType2.ts, 40, 14))
->A : Symbol(A, Decl(circularReferenceInReturnType2.ts, 37, 5))
+>type : Symbol(type, Decl(circularReferenceInReturnType2.ts, 41, 14))
+>A : Symbol(A, Decl(circularReferenceInReturnType2.ts, 38, 5))
 
       resolve() {
->resolve : Symbol(resolve, Decl(circularReferenceInReturnType2.ts, 41, 14))
+>resolve : Symbol(resolve, Decl(circularReferenceInReturnType2.ts, 42, 14))
 
         return {
           foo: 100,
->foo : Symbol(foo, Decl(circularReferenceInReturnType2.ts, 43, 16))
+>foo : Symbol(foo, Decl(circularReferenceInReturnType2.ts, 44, 16))
 
         };
       },

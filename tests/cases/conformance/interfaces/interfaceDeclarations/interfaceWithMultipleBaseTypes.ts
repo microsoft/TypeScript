@@ -1,3 +1,4 @@
+// @target: es2015
 // an interface may have multiple bases with properties of the same name as long as the interface's implementation satisfies all base type versions
 
 interface Base1 {
@@ -24,7 +25,7 @@ interface Derived2 extends Base1, Base2 { // error
     }
 }
 
-module Generic {
+namespace Generic {
     interface Base1<T> {
         x: {
             a: T;

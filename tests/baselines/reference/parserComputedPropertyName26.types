@@ -3,16 +3,24 @@
 === parserComputedPropertyName26.ts ===
 enum E {
 >E : E
+>  : ^
 
     // No ASI
     [e] = 0
 >[e] : E
+>    : ^
 >e : any
+>  : ^^^
 >0    [e2] = 1 : 1
+>              : ^
 >0    [e2] : any
+>          : ^^^
 >0 : 0
+>  : ^
 
     [e2] = 1
 >e2 : any
+>   : ^^^
 >1 : 1
+>  : ^
 }

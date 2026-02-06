@@ -3,5 +3,7 @@
 === scannerUnicodeEscapeInKeyword1.ts ===
 \u0076ar x = "hello";
 >x : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 

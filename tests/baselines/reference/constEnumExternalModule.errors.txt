@@ -1,0 +1,13 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== m2.ts (0 errors) ====
+    import A = require('m1')
+    var v = A.V;
+==== m1.ts (0 errors) ====
+    const enum E {
+        V = 100
+    }
+    
+    export = E

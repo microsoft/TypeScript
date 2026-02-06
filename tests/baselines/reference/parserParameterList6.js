@@ -7,8 +7,8 @@ class C {
 }
 
 //// [parserParameterList6.js]
-var C = /** @class */ (function () {
-    function C(C) {
+"use strict";
+class C {
+    constructor(C) {
     }
-    return C;
-}());
+}

@@ -1,6 +1,7 @@
+// @target: es2015
 //@module: commonjs
 // @declaration: true
-export module a {
+export namespace a {
     export var x = 10;
 }
 

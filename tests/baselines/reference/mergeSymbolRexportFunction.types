@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/mergeSymbolRexportFunction.ts] ////
+
+=== main.ts ===
+import {Row} from '.'
+>Row : () => void
+>    : ^^^^^^    
+
+Row();
+>Row() : void
+>      : ^^^^
+>Row : () => void
+>    : ^^^^^^    
+
+=== ./a.d.ts ===
+import '.'
+declare module '.' {
+>'.' : typeof import("index")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const Row: () => void;
+>Row : () => void
+>    : ^^^^^^    
+}
+
+=== ./index.d.ts ===
+export type {Row} from './common';
+>Row : any
+>    : ^^^
+
+=== ./common.d.ts ===
+export declare function Row(): void; 
+>Row : () => void
+>    : ^^^^^^    
+

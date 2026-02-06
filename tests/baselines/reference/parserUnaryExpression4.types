@@ -3,5 +3,7 @@
 === parserUnaryExpression4.ts ===
 ++{};
 >++{} : number
+>     : ^^^^^^
 >{} : {}
+>   : ^^
 

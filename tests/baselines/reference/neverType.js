@@ -93,6 +93,7 @@ test(errorCallback);
 
 
 //// [neverType.js]
+"use strict";
 function error(message) {
     throw new Error(message);
 }
@@ -133,23 +134,20 @@ function move2(direction) {
 function check(x) {
     return x || error("Undefined value");
 }
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    void1() {
+        throw new Error();
     }
-    C.prototype.void1 = function () {
-        throw new Error();
-    };
-    C.prototype.void2 = function () {
+    void2() {
         while (true) { }
-    };
-    C.prototype.never1 = function () {
+    }
+    never1() {
         throw new Error();
-    };
-    C.prototype.never2 = function () {
+    }
+    never2() {
         while (true) { }
-    };
-    return C;
-}());
+    }
+}
 function f1(x) {
     if (typeof x === "boolean") {
         x; // never
@@ -163,13 +161,13 @@ function f2(x) {
     }
 }
 function test(cb) {
-    var s = cb();
+    let s = cb();
     return s;
 }
-var errorCallback = function () { return error("Error callback"); };
-test(function () { return "hello"; });
-test(function () { return fail(); });
-test(function () { throw new Error(); });
+let errorCallback = () => error("Error callback");
+test(() => "hello");
+test(() => fail());
+test(() => { throw new Error(); });
 test(errorCallback);
 
 

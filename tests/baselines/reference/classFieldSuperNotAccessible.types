@@ -3,30 +3,45 @@
 === classFieldSuperNotAccessible.ts ===
 class T {
 >T : T
+>  : ^
 
     field = () => {}
 >field : () => void
+>      : ^^^^^^^^^^
 >() => {} : () => void
+>         : ^^^^^^^^^^
 }
 class T2 extends T {
 >T2 : T2
+>   : ^^
 >T : T
+>  : ^
 
     f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
         super.field() // error
 >super.field() : void
+>              : ^^^^
 >super.field : () => void
+>            : ^^^^^^^^^^
 >super : T
+>      : ^
 >field : () => void
+>      : ^^^^^^^^^^
     }
 }
 
 new T2().f()
 >new T2().f() : void
+>             : ^^^^
 >new T2().f : () => void
+>           : ^^^^^^^^^^
 >new T2() : T2
+>         : ^^
 >T2 : typeof T2
+>   : ^^^^^^^^^
 >f : () => void
+>  : ^^^^^^^^^^
 

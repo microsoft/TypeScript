@@ -1,0 +1,56 @@
+//// [tests/cases/compiler/jsxNamespaceNoElementChildrenAttributeReactJsx.tsx] ////
+
+=== /jsx.d.ts ===
+declare namespace JSX {
+  interface IntrinsicElements {
+    h1: { children: string }
+>h1 : { children: string; }
+>   : ^^^^^^^^^^^^      ^^^
+>children : string
+>         : ^^^^^^
+  }
+
+  type Element = string;
+>Element : string
+>        : ^^^^^^
+}
+
+=== /test.tsx ===
+const Title = (props: { children: string }) => <h1>{props.children}</h1>;
+>Title : (props: { children: string; }) => string
+>      : ^     ^^                     ^^^^^^^^^^^
+>(props: { children: string }) => <h1>{props.children}</h1> : (props: { children: string; }) => string
+>                                                           : ^     ^^                     ^^^^^^^^^^^
+>props : { children: string; }
+>      : ^^^^^^^^^^^^      ^^^
+>children : string
+>         : ^^^^^^
+><h1>{props.children}</h1> : string
+>                          : ^^^^^^
+>h1 : any
+>   : ^^^
+>props.children : string
+>               : ^^^^^^
+>props : { children: string; }
+>      : ^^^^^^^^^^^^      ^^^
+>children : string
+>         : ^^^^^^
+>h1 : any
+>   : ^^^
+
+const element = <Title>Hello, world!</Title>;
+>element : string
+>        : ^^^^^^
+><Title>Hello, world!</Title> : string
+>                             : ^^^^^^
+>Title : (props: { children: string; }) => string
+>      : ^     ^^                     ^^^^^^^^^^^
+>Title : (props: { children: string; }) => string
+>      : ^     ^^                     ^^^^^^^^^^^
+
+=== /jsx/jsx-runtime.ts ===
+
+export {};
+=== /jsx/jsx-dev-runtime.ts ===
+
+export {};

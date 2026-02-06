@@ -3,5 +3,7 @@
 === parserStrictMode6-negative.ts ===
 eval++;
 >eval++ : number
+>       : ^^^^^^
 >eval : any
+>     : ^^^
 

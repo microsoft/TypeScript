@@ -3,10 +3,14 @@
 === b.js ===
 var x = "hello";
 >x : string
+>  : ^^^^^^
 >"hello" : "hello"
+>        : ^^^^^^^
 
 === a.ts ===
 var x = 10; // Error reported
 >x : string
+>  : ^^^^^^
 >10 : 10
+>   : ^^
 

@@ -1,0 +1,7 @@
+parser579071.ts(1,14): error TS1005: ')' expected.
+
+
+==== parser579071.ts (1 errors) ====
+    var x = /fo(o/;
+                 
+!!! error TS1005: ')' expected.

@@ -1,3 +1,4 @@
+// @target: es2015
 class Z {
     public func(): void { }
 }

@@ -3,6 +3,9 @@
 === parserFunctionPropertyAssignment2.ts ===
 var v = { 0() { } };
 >v : { 0(): void; }
+>  : ^^^^^^^^^^^^^^
 >{ 0() { } } : { 0(): void; }
+>            : ^^^^^^^^^^^^^^
 >0 : () => void
+>  : ^^^^^^^^^^
 

@@ -1,3 +1,4 @@
+// @target: es2015
 type Q<T> = number extends T ? (n: number) => void : never;
 function fn<T>(arg: Q<T>) {
   // Expected: OK

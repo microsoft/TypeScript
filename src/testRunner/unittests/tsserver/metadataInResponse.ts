@@ -1,29 +1,27 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: with metadataInResponse::", () => {
     const metadata = "Extra Info";
-    const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
+    const aTs: File = { path: "/home/src/projects/project/a.ts", content: `class c { prop = "hello"; foo() { return this.prop; } }` };
     const tsconfig: File = {
-        path: "/tsconfig.json",
+        path: "/home/src/projects/project/tsconfig.json",
         content: jsonToReadableText({
             compilerOptions: { plugins: [{ name: "myplugin" }] },
         }),
     };
     function createHostWithPlugin(files: readonly File[]) {
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         host.require = (_initialPath, moduleName) => {
             assert.equal(moduleName, "myplugin");
             return {
@@ -76,7 +74,7 @@ describe("unittests:: tsserver:: with metadataInResponse::", () => {
         });
 
         it("returns undefined correctly", () => {
-            const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { const x = 0; } }` };
+            const aTs: File = { path: "/home/src/projects/project/a.ts", content: `class c { prop = "hello"; foo() { const x = 0; } }` };
             const host = createHostWithPlugin([aTs, tsconfig]);
             const session = new TestSession(host);
             openFilesForSession([aTs], session);

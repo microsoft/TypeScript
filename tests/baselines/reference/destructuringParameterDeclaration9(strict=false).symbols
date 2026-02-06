@@ -1,0 +1,74 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration9.ts] ////
+
+=== index.js ===
+/**
+ * @param {Object} [config]
+ * @param {Partial<Record<'json' | 'jsonc' | 'json5', string[]>>} [config.additionalFiles]
+ */
+export function prepareConfig({
+>prepareConfig : Symbol(prepareConfig, Decl(index.js, 0, 0))
+
+    additionalFiles: {
+>additionalFiles : Symbol(additionalFiles, Decl(index.js, 2, 3))
+
+        json = []
+>json : Symbol(json, Decl(index.js, 5, 22))
+
+    } = {}
+} = {}) {
+    json // string[]
+>json : Symbol(json, Decl(index.js, 5, 22))
+}
+
+export function prepareConfigWithoutAnnotation({
+>prepareConfigWithoutAnnotation : Symbol(prepareConfigWithoutAnnotation, Decl(index.js, 10, 1))
+
+    additionalFiles: {
+>additionalFiles : Symbol(additionalFiles)
+
+        json = []
+>json : Symbol(json, Decl(index.js, 13, 22))
+
+    } = {}
+} = {}) {
+    json
+>json : Symbol(json, Decl(index.js, 13, 22))
+}
+
+/** @type {(param: {
+  additionalFiles?: Partial<Record<"json" | "jsonc" | "json5", string[]>>;
+}) => void} */
+export const prepareConfigWithContextualSignature = ({
+>prepareConfigWithContextualSignature : Symbol(prepareConfigWithContextualSignature, Decl(index.js, 23, 12))
+
+    additionalFiles: {
+>additionalFiles : Symbol(additionalFiles, Decl(index.js, 20, 20))
+
+        json = []
+>json : Symbol(json, Decl(index.js, 24, 22))
+
+    } = {}
+} = {})=>  {
+    json // string[]
+>json : Symbol(json, Decl(index.js, 24, 22))
+}
+
+// Additional repros from https://github.com/microsoft/TypeScript/issues/59936
+
+/**
+ * @param {{ a?: { json?: string[] }}} [config]
+ */
+function f1({ a: { json = [] } = {} } = {}) { return json }
+>f1 : Symbol(f1, Decl(index.js, 29, 1))
+>a : Symbol(a, Decl(index.js, 34, 12))
+>json : Symbol(json, Decl(index.js, 36, 18))
+>json : Symbol(json, Decl(index.js, 36, 18))
+
+/**
+ * @param {[[string[]?]?]} [x]
+ */
+function f2([[json = []] = []] = []) { return json }
+>f2 : Symbol(f2, Decl(index.js, 36, 59))
+>json : Symbol(json, Decl(index.js, 41, 14))
+>json : Symbol(json, Decl(index.js, 41, 14))
+

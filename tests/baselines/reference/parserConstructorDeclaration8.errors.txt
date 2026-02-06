@@ -6,7 +6,7 @@ parserConstructorDeclaration8.ts(3,21): error TS1005: '(' expected.
     class C {
       // Not a constructor
       public constructor;
-      ~~~~~~~~~~~~~~~~~~~
+      ~~~~~~~~~~~~~~~~~~
 !!! error TS2390: Constructor implementation is missing.
                         ~
 !!! error TS1005: '(' expected.

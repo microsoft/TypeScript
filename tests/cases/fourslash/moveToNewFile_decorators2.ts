@@ -12,10 +12,12 @@ verify.noErrors();
 verify.moveToNewFile({
     newFileContents: {
         "/a.ts":
-`const decorator1: any = () => {};
+`export const decorator1: any = () => {};
 `,
         "/Foo.ts":
-`@decorator1 class Foo {
+`import { decorator1 } from "./a";
+
+@decorator1 class Foo {
 }
 `
     }

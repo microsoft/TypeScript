@@ -1,3 +1,4 @@
+// @target: es2015
 type Test<T extends string = T> = { value: T };  // Error
 
 let zz: Test = { foo: "abc" };  // should error on comparison with Test<string>

@@ -1,3 +1,4 @@
+// @target: es2015
 function foo(bar:{a:number;}[]):string;
 function foo(bar:{a:boolean;}[]):number;
 function foo(bar:{a:any;}[]):any{ return bar }

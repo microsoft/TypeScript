@@ -26,6 +26,7 @@ var v2 = map(xs, singleton);    // Error if not number[][]
 
 
 //// [contextualSignatureInstantiation3.js]
+"use strict";
 function map(items, f) {
     return items.map(f);
 }

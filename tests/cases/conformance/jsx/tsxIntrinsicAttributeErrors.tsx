@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: preserve
 
 declare namespace JSX {
@@ -27,5 +28,5 @@ interface I {
         render(): void
     }
 }
-var E: I;
+declare var E: I;
 <E x={10} />

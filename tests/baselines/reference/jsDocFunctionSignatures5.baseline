@@ -14,7 +14,7 @@
 // pathFilter('foo', 'bar', 'baz', {});
 //            ^
 // | ----------------------------------------------------------------------
-// | pathFilter(**basePath: string**, pattern: string, type: string, options: any): any[]
+// | pathFilter(**basePath: string**, pattern: string, type: string, options: Object): any[]
 // | Filters a path based on a regexp or glob pattern.
 // | @param basePath The base path where the search will be performed.
 // | @param pattern A string defining a regexp of a glob pattern.
@@ -190,8 +190,8 @@
                   "kind": "space"
                 },
                 {
-                  "text": "any",
-                  "kind": "keyword"
+                  "text": "Object",
+                  "kind": "localName"
                 }
               ],
               "isOptional": false,

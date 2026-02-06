@@ -3,20 +3,27 @@
 === inheritanceGrandParentPrivateMemberCollisionWithPublicMember.ts ===
 class A {
 >A : A
+>  : ^
 
     private myMethod() { }
 >myMethod : () => void
+>         : ^^^^^^^^^^
 }
 
 class B extends A { }
 >B : B
+>  : ^
 >A : A
+>  : ^
 
 class C extends B {
 >C : C
+>  : ^
 >B : B
+>  : ^
 
     public myMethod() { }
 >myMethod : () => void
+>         : ^^^^^^^^^^
 }
 

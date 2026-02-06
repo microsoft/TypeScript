@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/declarationEmitNoInvalidCommentReuse3.ts] ////
+
+=== a.ts ===
+import { object } from "./obj";
+>object : Symbol(object, Decl(a.ts, 0, 8))
+
+import { id } from "./id";
+>id : Symbol(id, Decl(a.ts, 1, 8))
+
+export const _ = object;
+>_ : Symbol(_, Decl(a.ts, 2, 12))
+>object : Symbol(object, Decl(a.ts, 0, 8))
+
+/**
+*/
+=== obj.d.ts ===
+import { id } from "./id";
+>id : Symbol(id, Decl(obj.d.ts, 0, 8))
+
+// ----
+export declare const object: id.A<{
+>object : Symbol(object, Decl(obj.d.ts, 2, 20))
+>id : Symbol(id, Decl(obj.d.ts, 0, 8))
+>A : Symbol(id.A, Decl(id.d.ts, 0, 29))
+
+    foo: id.A<1>
+>foo : Symbol(foo, Decl(obj.d.ts, 2, 35))
+>id : Symbol(id, Decl(obj.d.ts, 0, 8))
+>A : Symbol(id.A, Decl(id.d.ts, 0, 29))
+
+}>;
+
+=== id.d.ts ===
+export declare namespace id {
+>id : Symbol(id, Decl(id.d.ts, 0, 0))
+
+    type A<T> = T;
+>A : Symbol(A, Decl(id.d.ts, 0, 29))
+>T : Symbol(T, Decl(id.d.ts, 1, 11))
+>T : Symbol(T, Decl(id.d.ts, 1, 11))
+}

@@ -1,0 +1,404 @@
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
+Input::
+//// [/home/src/projects/project/a.ts]
+const a = class { private p = 10; };
+
+//// [/home/src/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "outFile": "../outFile.js",
+    "noEmit": true
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+
+/home/src/tslibs/TS/Lib/tsc.js -w
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
+
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
+
+FsWatches::
+/home/src/projects/project/a.ts: *new*
+  {}
+/home/src/projects/project/tsconfig.json: *new*
+  {}
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
+  {}
+
+FsWatchesRecursive::
+/home/src/projects/project: *new*
+  {}
+
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "noEmit": true,
+  "watch": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Not
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/home/src/projects/project/a.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: Fix error
+
+Input::
+//// [/home/src/projects/project/a.ts]
+const a = "hello";
+
+
+Timeout callback:: count: 1
+1: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+1: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+
+
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "noEmit": true,
+  "watch": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/home/src/projects/project/a.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: Emit after fixing error
+
+Input::
+//// [/home/src/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "outFile": "../outFile.js"
+  }
+}
+
+
+Timeout callback:: count: 1
+2: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+2: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/home/src/projects/outFile.js]
+"use strict";
+const a = "hello";
+
+
+
+
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "watch": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/home/src/projects/project/a.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: no Emit run after fixing error
+
+Input::
+//// [/home/src/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "outFile": "../outFile.js",
+    "noEmit": true
+  }
+}
+
+
+Timeout callback:: count: 1
+3: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+3: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+
+
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "noEmit": true,
+  "watch": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/home/src/projects/project/a.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: Introduce error
+
+Input::
+//// [/home/src/projects/project/a.ts]
+const a = class { private p = 10; };
+
+
+Timeout callback:: count: 1
+4: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+4: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+
+
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "noEmit": true,
+  "watch": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/home/src/projects/project/a.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: Emit when error
+
+Input::
+//// [/home/src/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "outFile": "../outFile.js"
+  }
+}
+
+
+Timeout callback:: count: 1
+5: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+5: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+//// [/home/src/projects/outFile.js]
+"use strict";
+const a = class {
+    p = 10;
+};
+
+
+
+
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "watch": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/home/src/projects/project/a.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined
+
+Change:: no Emit run when error
+
+Input::
+//// [/home/src/projects/project/tsconfig.json]
+{
+  "compilerOptions": {
+    "outFile": "../outFile.js",
+    "noEmit": true
+  }
+}
+
+
+Timeout callback:: count: 1
+6: timerToUpdateProgram *new*
+
+Before running Timeout callback:: count: 1
+6: timerToUpdateProgram
+
+Host is moving to new time
+After running Timeout callback:: count: 0
+Output::
+>> Screen clear
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+
+
+
+
+
+Program root files: [
+  "/home/src/projects/project/a.ts"
+]
+Program options: {
+  "outFile": "/home/src/projects/outFile.js",
+  "noEmit": true,
+  "watch": true,
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+}
+Program structureReused: Completely
+Program files::
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/home/src/projects/project/a.ts
+
+No cached semantic diagnostics in the builder::
+
+No shapes updated in the builder::
+
+exitCode:: ExitStatus.undefined

@@ -3,5 +3,7 @@
 === unknownTypeErrors.ts ===
 var foo: Unknown = 0;
 >foo : Unknown
+>    : ^^^^^^^
 >0 : 0
+>  : ^
 

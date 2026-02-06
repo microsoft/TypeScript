@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true
 function getNumber(): number {
     return 1;

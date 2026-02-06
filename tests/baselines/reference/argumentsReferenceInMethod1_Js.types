@@ -3,24 +3,33 @@
 === /a.js ===
 class A {
 >A : A
+>  : ^
 
 	/**
 	 * @param {object} [foo={}]
 	 */
 	m(foo = {}) {
 >m : (foo?: object) => void
->foo : any
+>  : ^   ^^^      ^^^^^^^^^
+>foo : object | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >{} : {}
+>   : ^^
 
 		/**
 		 * @type object
 		 */
 		this.arguments = foo;
->this.arguments = foo : any
->this.arguments : any
+>this.arguments = foo : object
+>                     : ^^^^^^
+>this.arguments : object | undefined
+>               : ^^^^^^^^^^^^^^^^^^
 >this : this
->arguments : any
->foo : any
+>     : ^^^^
+>arguments : object | undefined
+>          : ^^^^^^^^^^^^^^^^^^
+>foo : object
+>    : ^^^^^^
 	}
 }
 

@@ -1,0 +1,22 @@
+//// [tests/cases/compiler/arrowExpressionJs.ts] ////
+
+=== mytest.js ===
+/**
+ * @template T
+ * @param {T|undefined} value value or not
+ * @returns {T} result value
+ */
+const cloneObjectGood = value => /** @type {T} */({ ...value });
+>cloneObjectGood : <T>(value: T | undefined) => T
+>                : ^ ^^     ^^             ^^^^^ 
+>value => /** @type {T} */({ ...value }) : <T>(value: T | undefined) => T
+>                                        : ^ ^^     ^^             ^^^^^ 
+>value : T | undefined
+>      : ^^^^^^^^^^^^^
+>({ ...value }) : T
+>               : ^
+>{ ...value } : {}
+>             : ^^
+>value : T | undefined
+>      : ^^^^^^^^^^^^^
+

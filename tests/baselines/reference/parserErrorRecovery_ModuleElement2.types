@@ -3,10 +3,12 @@
 === parserErrorRecovery_ModuleElement2.ts ===
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 function foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
 }
 
 )

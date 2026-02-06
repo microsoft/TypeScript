@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare function f1(a: number);
 declare function f1(a: number, b: number, c: number);
 f1();

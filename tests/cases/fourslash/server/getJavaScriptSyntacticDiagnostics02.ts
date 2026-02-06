@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
 // @allowJs: true
 // @Filename: b.js
 ////var a = "a";

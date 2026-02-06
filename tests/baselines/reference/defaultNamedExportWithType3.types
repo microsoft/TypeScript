@@ -4,8 +4,11 @@
 interface Foo {}
 export const Foo = {};
 >Foo : {}
+>    : ^^
 >{} : {}
+>   : ^^
 
 export default Foo;
 >Foo : Foo
+>    : ^^^
 

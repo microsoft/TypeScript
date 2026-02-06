@@ -7,11 +7,11 @@ function f<T, K extends keyof T>() {
 >K : Symbol(K, Decl(computedPropertyNames51_ES5.ts, 0, 13))
 >T : Symbol(T, Decl(computedPropertyNames51_ES5.ts, 0, 11))
 
-    var t: T;
+    var t!: T;
 >t : Symbol(t, Decl(computedPropertyNames51_ES5.ts, 1, 7))
 >T : Symbol(T, Decl(computedPropertyNames51_ES5.ts, 0, 11))
 
-    var k: K;
+    var k!: K;
 >k : Symbol(k, Decl(computedPropertyNames51_ES5.ts, 2, 7))
 >K : Symbol(K, Decl(computedPropertyNames51_ES5.ts, 0, 13))
 

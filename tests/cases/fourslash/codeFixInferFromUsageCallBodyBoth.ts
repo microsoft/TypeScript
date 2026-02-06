@@ -13,4 +13,4 @@
 ////f(new C())
 
 
-verify.rangeAfterCodeFix("x: number | C, y: undefined",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);
+verify.rangeAfterCodeFix("x: number | C, y: undefined",/*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 1);

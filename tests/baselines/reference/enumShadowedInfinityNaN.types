@@ -6,28 +6,38 @@
 {
   let Infinity = {};
 >Infinity : {}
+>         : ^^
 >{} : {}
+>   : ^^
 
   enum En {
 >En : En
+>   : ^^
 
     X = Infinity
 >X : En.X
+>  : ^^^^
 >Infinity : {}
+>         : ^^
   }
 }
 
 {
   let NaN = {};
 >NaN : {}
+>    : ^^
 >{} : {}
+>   : ^^
 
   enum En {
 >En : En
+>   : ^^
 
     X = NaN
 >X : En.X
+>  : ^^^^
 >NaN : {}
+>    : ^^
   }
 }
 

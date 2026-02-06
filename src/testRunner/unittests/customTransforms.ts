@@ -1,5 +1,5 @@
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
 
 describe("unittests:: customTransforms", () => {
     function emitsCorrectly(name: string, sources: { file: string; text: string; }[], customTransformers: ts.CustomTransformers, options: ts.CompilerOptions = {}) {
@@ -159,9 +159,54 @@ describe("unittests:: customTransforms", () => {
                     }, ts.isSourceFile);
                 return {
                     transformSourceFile,
-                    transformBundle: node => ts.factory.createBundle(ts.map(node.sourceFiles, transformSourceFile), node.prepends),
+                    transformBundle: node => ts.factory.createBundle(ts.map(node.sourceFiles, transformSourceFile)),
                 };
             },
         ],
     }, { sourceMap: true, outFile: "source.js" });
+
+    emitsCorrectly("importDeclarationBeforeTransformElision", [
+        {
+            file: "a.ts",
+            text: "export type A = string;",
+        },
+        {
+            file: "index.ts",
+            text: "import { A } from './a.js';\nexport { A } from './a.js';",
+        },
+    ], {
+        before: [
+            context => {
+                const { factory } = context;
+                return (s: ts.SourceFile) => ts.visitEachChild(s, visitor, context);
+
+                function visitor(node: ts.Node): ts.Node {
+                    if (ts.isImportDeclaration(node) && ts.isStringLiteral(node.moduleSpecifier)) {
+                        return factory.updateImportDeclaration(
+                            node,
+                            node.modifiers,
+                            node.importClause,
+                            factory.createStringLiteral(node.moduleSpecifier.text),
+                            node.attributes,
+                        );
+                    }
+
+                    if (ts.isExportDeclaration(node) && node.moduleSpecifier && ts.isStringLiteral(node.moduleSpecifier)) {
+                        return factory.updateExportDeclaration(
+                            node,
+                            node.modifiers,
+                            node.isTypeOnly,
+                            node.exportClause,
+                            factory.createStringLiteral(node.moduleSpecifier.text),
+                            node.attributes,
+                        );
+                    }
+                    return node;
+                }
+            },
+        ],
+    }, {
+        target: ts.ScriptTarget.ESNext,
+        module: ts.ModuleKind.ESNext,
+    });
 });

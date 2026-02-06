@@ -4,16 +4,21 @@
 ///<reference path='importDeclarationUsedAsTypeQuery_require.ts'/>
 import a = require('./importDeclarationUsedAsTypeQuery_require');
 >a : typeof a
+>  : ^^^^^^^^
 
 export var x: typeof a;
 >x : typeof a
+>  : ^^^^^^^^
 >a : typeof a
+>  : ^^^^^^^^
 
 === importDeclarationUsedAsTypeQuery_require.ts ===
 export class B {
 >B : B
+>  : ^
 
     id: number;
 >id : number
+>   : ^^^^^^
 }
 

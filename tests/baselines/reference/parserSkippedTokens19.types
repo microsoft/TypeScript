@@ -3,4 +3,5 @@
 === parserSkippedTokens19.ts ===
 \ declare var v;
 >v : any
+>  : ^^^
 

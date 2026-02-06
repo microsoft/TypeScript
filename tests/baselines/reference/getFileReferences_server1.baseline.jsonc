@@ -1,12 +1,12 @@
 // === getFileReferences ===
-// fileName: /project/a.ts
+// fileName: /home/src/workspaces/project/a.ts
 
-// === /project/b.ts ===
+// === /home/src/workspaces/project/b.ts ===
 // import "[|./a|]";
 
-// === /project/c.ts ===
+// === /home/src/workspaces/project/c.ts ===
 // import {} from "[|./a|]";
 
-// === /project/d.ts ===
-// import { a } from "[|/project/a|]";
+// === /home/src/workspaces/project/d.ts ===
+// import { a } from "/project/a";
 // type T = typeof import("[|./a|]").a;

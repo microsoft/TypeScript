@@ -1,0 +1,26 @@
+//// [tests/cases/compiler/importHelpersVerbatimModuleSyntax.ts] ////
+
+=== /node_modules/tslib/tslib.d.ts ===
+export declare var __rest: any;
+>__rest : Symbol(__rest, Decl(tslib.d.ts, --, --))
+
+=== /node_modules/tslib/modules/index.d.ts ===
+
+export {};
+
+=== /main.cts ===
+function foo(args: any) {
+>foo : Symbol(foo, Decl(main.cts, 0, 0))
+>args : Symbol(args, Decl(main.cts, 0, 13))
+
+  const { bar, ...extraArgs } = args;
+>bar : Symbol(bar, Decl(main.cts, 1, 9))
+>extraArgs : Symbol(extraArgs, Decl(main.cts, 1, 14))
+>args : Symbol(args, Decl(main.cts, 0, 13))
+
+  return extraArgs;
+>extraArgs : Symbol(extraArgs, Decl(main.cts, 1, 14))
+}
+export = foo;
+>foo : Symbol(foo, Decl(main.cts, 0, 0))
+

@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/narrowingTypeofParenthesized1.ts] ////
+
+=== narrowingTypeofParenthesized1.ts ===
+// https://github.com/microsoft/TypeScript/issues/42203
+
+declare const foo: string;
+>foo : Symbol(foo, Decl(narrowingTypeofParenthesized1.ts, 2, 13))
+
+if ((typeof foo) === "string") {
+>foo : Symbol(foo, Decl(narrowingTypeofParenthesized1.ts, 2, 13))
+
+  foo;
+>foo : Symbol(foo, Decl(narrowingTypeofParenthesized1.ts, 2, 13))
+
+} else {
+  foo;
+>foo : Symbol(foo, Decl(narrowingTypeofParenthesized1.ts, 2, 13))
+}
+
+if (typeof foo === ("string")) {
+>foo : Symbol(foo, Decl(narrowingTypeofParenthesized1.ts, 2, 13))
+
+  foo;
+>foo : Symbol(foo, Decl(narrowingTypeofParenthesized1.ts, 2, 13))
+
+} else {
+  foo;
+>foo : Symbol(foo, Decl(narrowingTypeofParenthesized1.ts, 2, 13))
+}
+

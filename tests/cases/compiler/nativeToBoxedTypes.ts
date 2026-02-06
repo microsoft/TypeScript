@@ -1,3 +1,4 @@
+// @target: es2015
 var N = new Number();
 var n = 100;
 n = N;

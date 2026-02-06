@@ -3,6 +3,9 @@
 === propertyAccess4.ts ===
 null.toBAZ();
 >null.toBAZ() : any
+>             : ^^^
 >null.toBAZ : any
+>           : ^^^
 >toBAZ : any
+>      : ^^^
 

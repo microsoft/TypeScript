@@ -4,13 +4,21 @@
 interface I {
     [Symbol.unscopables]: number;
 >[Symbol.unscopables] : number
+>                     : ^^^^^^
 >Symbol.unscopables : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >unscopables : unique symbol
+>            : ^^^^^^^^^^^^^
 
     [Symbol.toPrimitive]();
 >[Symbol.toPrimitive] : () => any
+>                     : ^^^^^^^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 }

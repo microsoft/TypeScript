@@ -7,6 +7,7 @@ import {
     createExpressionForJsxFragment,
     createExpressionFromEntityName,
     createJsxFactoryExpression,
+    createRange,
     Debug,
     emptyArray,
     Expression,
@@ -70,6 +71,7 @@ import {
     setParentRecursive,
     setTextRange,
     singleOrUndefined,
+    skipTrivia,
     SourceFile,
     spanMap,
     startOnNewLine,
@@ -84,7 +86,7 @@ import {
     visitEachChild,
     visitNode,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformJsx(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
@@ -172,7 +174,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
             for (const [importSource, importSpecifiersMap] of arrayFrom(currentFileState.utilizedImplicitRuntimeImports.entries())) {
                 if (isExternalModule(node)) {
                     // Add `import` statement
-                    const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*isTypeOnly*/ false, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*attributes*/ undefined);
+                    const importStatement = factory.createImportDeclaration(/*modifiers*/ undefined, factory.createImportClause(/*phaseModifier*/ undefined, /*name*/ undefined, factory.createNamedImports(arrayFrom(importSpecifiersMap.values()))), factory.createStringLiteral(importSource), /*attributes*/ undefined);
                     setParentRecursive(importStatement, /*incremental*/ false);
                     statements = insertStatementAfterCustomPrologue(statements.slice(), importStatement);
                 }
@@ -283,17 +285,17 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
 
     function visitJsxElement(node: JsxElement, isChild: boolean) {
         const tagTransform = shouldUseCreateElement(node.openingElement) ? visitJsxOpeningLikeElementCreateElement : visitJsxOpeningLikeElementJSX;
-        return tagTransform(node.openingElement, node.children, isChild, /*location*/ node);
+        return tagTransform(node.openingElement, node.children, isChild, /*location*/ createRange(skipTrivia(currentSourceFile.text, node.pos), node.end));
     }
 
     function visitJsxSelfClosingElement(node: JsxSelfClosingElement, isChild: boolean) {
         const tagTransform = shouldUseCreateElement(node) ? visitJsxOpeningLikeElementCreateElement : visitJsxOpeningLikeElementJSX;
-        return tagTransform(node, /*children*/ undefined, isChild, /*location*/ node);
+        return tagTransform(node, /*children*/ undefined, isChild, /*location*/ createRange(skipTrivia(currentSourceFile.text, node.pos), node.end));
     }
 
     function visitJsxFragment(node: JsxFragment, isChild: boolean) {
         const tagTransform = currentFileState.importSpecifier === undefined ? visitJsxOpeningFragmentCreateElement : visitJsxOpeningFragmentJSX;
-        return tagTransform(node.openingFragment, node.children, isChild, /*location*/ node);
+        return tagTransform(node.openingFragment, node.children, isChild, /*location*/ createRange(skipTrivia(currentSourceFile.text, node.pos), node.end));
     }
 
     function convertJsxChildrenToChildrenPropObject(children: readonly JsxChild[]) {
@@ -667,7 +669,7 @@ export function transformJsx(context: TransformationContext): (x: SourceFile | B
         const name = node.name;
         if (isIdentifier(name)) {
             const text = idText(name);
-            return (/^[A-Za-z_]\w*$/.test(text)) ? name : factory.createStringLiteral(text);
+            return (/^[A-Z_]\w*$/i.test(text)) ? name : factory.createStringLiteral(text);
         }
         return factory.createStringLiteral(idText(name.namespace) + ":" + idText(name.name));
     }

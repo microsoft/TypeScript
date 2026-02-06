@@ -1,4 +1,9 @@
 import {
+    codeFixAll,
+    createCodeFixAction,
+    registerCodeFix,
+} from "../_namespaces/ts.codefix.js";
+import {
     ArrowFunction,
     AwaitExpression,
     BindingName,
@@ -77,12 +82,7 @@ import {
     TypeNode,
     TypeReference,
     UnionReduction,
-} from "../_namespaces/ts";
-import {
-    codeFixAll,
-    createCodeFixAction,
-    registerCodeFix,
-} from "../_namespaces/ts.codefix";
+} from "../_namespaces/ts.js";
 
 const fixId = "convertToAsyncFunction";
 const errorCodes = [Diagnostics.This_may_be_converted_to_an_async_function.code];

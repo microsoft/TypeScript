@@ -1,26 +1,33 @@
 //// [tests/cases/compiler/decoratorReferenceOnOtherProperty.ts] ////
 
 === yoha.ts ===
-// https://github.com/Microsoft/TypeScript/issues/19799
 export class Yoha {}
 >Yoha : Yoha
+>     : ^^^^
 
 === index.ts ===
 import {Yoha} from './yoha';
 >Yoha : typeof Yoha
+>     : ^^^^^^^^^^^
 
 function foo(...args: any[]) {}
 >foo : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 class Bar {
 >Bar : Bar
+>    : ^^^
 
   yoha(@foo yoha, bar: Yoha) {}
 >yoha : (yoha: any, bar: Yoha) => void
+>     : ^    ^^^^^^^   ^^    ^^^^^^^^^
 >foo : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
 >yoha : any
 >bar : Yoha
+>    : ^^^^
 
   //                   ^^^^
 }
@@ -28,19 +35,26 @@ class Bar {
 === index2.ts ===
 import {Yoha} from './yoha';
 >Yoha : typeof Yoha
+>     : ^^^^^^^^^^^
 
 function foo(...args: any[]) {}
 >foo : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
 >args : any[]
+>     : ^^^^^
 
 class Bar {
 >Bar : Bar
+>    : ^^^
 
   yoha(@foo yoha, ...bar: Yoha[]) {}
 >yoha : (yoha: any, ...bar: Yoha[]) => void
+>     : ^    ^^^^^^^^^^   ^^      ^^^^^^^^^
 >foo : (...args: any[]) => void
+>    : ^^^^    ^^     ^^^^^^^^^
 >yoha : any
 >bar : Yoha[]
+>    : ^^^^^^
 
   //                      ^^^^
 }

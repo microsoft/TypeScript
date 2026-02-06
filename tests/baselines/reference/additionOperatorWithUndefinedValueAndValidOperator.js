@@ -5,10 +5,10 @@
 
 enum E { a, b, c }
 
-var a: any;
-var b: number;
-var c: E;
-var d: string;
+declare var a: any;
+declare var b: number;
+declare var c: E;
+declare var d: string;
 
 // undefined + any
 var r1: any = undefined + a;
@@ -33,6 +33,7 @@ var r15 = d + undefined;
 var r16 = '' + undefined;
 
 //// [additionOperatorWithUndefinedValueAndValidOperator.js]
+"use strict";
 // If one operand is the null or undefined value, it is treated as having the type of the other operand.
 var E;
 (function (E) {
@@ -40,10 +41,6 @@ var E;
     E[E["b"] = 1] = "b";
     E[E["c"] = 2] = "c";
 })(E || (E = {}));
-var a;
-var b;
-var c;
-var d;
 // undefined + any
 var r1 = undefined + a;
 var r2 = a + undefined;

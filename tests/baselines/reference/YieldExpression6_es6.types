@@ -3,8 +3,11 @@
 === YieldExpression6_es6.ts ===
 function* foo() {
 >foo : () => any
+>    : ^^^^^^^^^
 
   yield*foo
 >yield*foo : any
+>          : ^^^
 >foo : () => any
+>    : ^^^^^^^^^
 }

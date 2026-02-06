@@ -3,7 +3,9 @@
 === Protected7.ts ===
 class C {
 >C : C
+>  : ^
 
   protected private m() { }
 >m : () => void
+>  : ^^^^^^^^^^
 }

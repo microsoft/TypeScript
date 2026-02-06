@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowJS: true
 // @suppressOutputPathCheck: true
 // @strictNullChecks: true

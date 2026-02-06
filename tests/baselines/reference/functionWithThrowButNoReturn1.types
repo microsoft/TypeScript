@@ -3,11 +3,15 @@
 === functionWithThrowButNoReturn1.ts ===
 function fn(): number {
 >fn : () => number
+>   : ^^^^^^      
 
   throw new Error('NYI');
 >new Error('NYI') : Error
+>                 : ^^^^^
 >Error : ErrorConstructor
+>      : ^^^^^^^^^^^^^^^^
 >'NYI' : "NYI"
+>      : ^^^^^
 
   var t;
 >t : any

@@ -17,7 +17,7 @@ configFileName:: tsconfig.json
 CompilerOptions::
 {
   "target": 99,
-  "configFilePath": "tsconfig.json"
+  "configFilePath": "/apath/tsconfig.json"
 }
 Errors::
 [96mtsconfig.json[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS5092: [0mThe root value of a 'tsconfig.json' file must be an object.

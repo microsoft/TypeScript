@@ -21,8 +21,8 @@ export const p = 0;
 a; y;`,
 
         "/y.ts":
-`import { b } from './other';
-import { p } from './a';
+`import { p } from './a';
+import { b } from './other';
 
 export const y: Date = p + b;
 `,

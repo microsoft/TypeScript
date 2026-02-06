@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: aliasUsedAsNameValue_0.ts
 export var id: number;

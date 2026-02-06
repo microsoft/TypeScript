@@ -1,0 +1,42 @@
+baseTypeOrderChecking.ts(25,23): error TS2564: Property 'memberVariable' has no initializer and is not definitely assigned in the constructor.
+
+
+==== baseTypeOrderChecking.ts (1 errors) ====
+    var someVariable: Class4<Class2>;
+    
+     
+    
+    class Class1
+    
+    {
+    
+    }
+    
+     
+    
+    class Class2 extends Class1
+    
+    {
+    
+    }
+    
+     
+    
+    class Class3<T>
+    
+    {
+    
+                   public memberVariable: Class2;
+                          ~~~~~~~~~~~~~~
+!!! error TS2564: Property 'memberVariable' has no initializer and is not definitely assigned in the constructor.
+    
+    }
+    
+     
+    
+    class Class4<T> extends Class3<T>
+    
+    {
+    
+    }
+    

@@ -1,5 +1,6 @@
+// @target: es2015
 {
-    module M { }
+    namespace M { }
     export namespace N {
         export interface I { }
     }

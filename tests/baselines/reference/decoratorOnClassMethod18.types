@@ -6,6 +6,7 @@ declare var decorator: any;
 
 class Foo {
 >Foo : Foo
+>    : ^^^
 
     p1
 >p1 : any

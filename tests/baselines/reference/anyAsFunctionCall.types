@@ -17,6 +17,7 @@ var b = x('hello');
 >x('hello') : any
 >x : any
 >'hello' : "hello"
+>        : ^^^^^^^
 
 var c = x(x);
 >c : any

@@ -3,5 +3,7 @@
 === logicalNotExpression1.ts ===
 !foo;
 >!foo : boolean
+>     : ^^^^^^^
 >foo : any
+>    : ^^^
 

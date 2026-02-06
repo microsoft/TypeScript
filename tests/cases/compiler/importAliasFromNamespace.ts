@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 // @filename: internal.ts
 namespace My.Internal {
@@ -8,7 +9,7 @@ namespace My.Internal {
 }
 
 // @filename: usage.ts
-/// <reference path="./internal.ts" />
+/// <reference path="./internal.ts" preserve="true" />
 namespace SomeOther.Thing {
     import Internal = My.Internal;
     export class Foo {

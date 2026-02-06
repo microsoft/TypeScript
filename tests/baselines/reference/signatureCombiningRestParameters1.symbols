@@ -1,0 +1,62 @@
+//// [tests/cases/compiler/signatureCombiningRestParameters1.ts] ////
+
+=== signatureCombiningRestParameters1.ts ===
+// https://github.com/microsoft/TypeScript/issues/58371
+
+type T1 = "A" | "B";
+>T1 : Symbol(T1, Decl(signatureCombiningRestParameters1.ts, 0, 0))
+
+type T2 = {
+>T2 : Symbol(T2, Decl(signatureCombiningRestParameters1.ts, 2, 20))
+
+  C: [string];
+>C : Symbol(C, Decl(signatureCombiningRestParameters1.ts, 4, 11))
+
+  D: [number];
+>D : Symbol(D, Decl(signatureCombiningRestParameters1.ts, 5, 14))
+
+};
+
+declare const map: {
+>map : Symbol(map, Decl(signatureCombiningRestParameters1.ts, 9, 13))
+
+  [K in T1 | keyof T2]: (...args: K extends keyof T2 ? T2[K] : []) => unknown;
+>K : Symbol(K, Decl(signatureCombiningRestParameters1.ts, 10, 3))
+>T1 : Symbol(T1, Decl(signatureCombiningRestParameters1.ts, 0, 0))
+>T2 : Symbol(T2, Decl(signatureCombiningRestParameters1.ts, 2, 20))
+>args : Symbol(args, Decl(signatureCombiningRestParameters1.ts, 10, 25))
+>K : Symbol(K, Decl(signatureCombiningRestParameters1.ts, 10, 3))
+>T2 : Symbol(T2, Decl(signatureCombiningRestParameters1.ts, 2, 20))
+>T2 : Symbol(T2, Decl(signatureCombiningRestParameters1.ts, 2, 20))
+>K : Symbol(K, Decl(signatureCombiningRestParameters1.ts, 10, 3))
+
+};
+
+declare const args: any;
+>args : Symbol(args, Decl(signatureCombiningRestParameters1.ts, 13, 13))
+
+for (const [key, fn] of Object.entries(map)) {
+>key : Symbol(key, Decl(signatureCombiningRestParameters1.ts, 15, 12))
+>fn : Symbol(fn, Decl(signatureCombiningRestParameters1.ts, 15, 16))
+>Object.entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>entries : Symbol(ObjectConstructor.entries, Decl(lib.es2017.object.d.ts, --, --), Decl(lib.es2017.object.d.ts, --, --))
+>map : Symbol(map, Decl(signatureCombiningRestParameters1.ts, 9, 13))
+
+  fn(...args);
+>fn : Symbol(fn, Decl(signatureCombiningRestParameters1.ts, 15, 16))
+>args : Symbol(args, Decl(signatureCombiningRestParameters1.ts, 13, 13))
+}
+
+const test2: ((a: number, ...args: []) => void) &
+>test2 : Symbol(test2, Decl(signatureCombiningRestParameters1.ts, 19, 5))
+>a : Symbol(a, Decl(signatureCombiningRestParameters1.ts, 19, 15))
+>args : Symbol(args, Decl(signatureCombiningRestParameters1.ts, 19, 25))
+
+  ((b: string) => void) &
+>b : Symbol(b, Decl(signatureCombiningRestParameters1.ts, 20, 4))
+
+  ((c: boolean) => void) = (arg) => {};
+>c : Symbol(c, Decl(signatureCombiningRestParameters1.ts, 21, 4))
+>arg : Symbol(arg, Decl(signatureCombiningRestParameters1.ts, 21, 28))
+

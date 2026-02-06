@@ -1,4 +1,5 @@
-// @target: ES5
+// @strict: false
+// @target: ES5, ES2015
 // @module: commonjs
 // @declaration: true
 
@@ -6,28 +7,28 @@ interface Window {
     someMethod();
 }
 
-module M {
+namespace M {
     type W = Window | string;
-    export module N {
+    export namespace N {
         export class Window { }
         export var p: W; // Should report error that W is private
     }
 }
 
-module M1 {
+namespace M1 {
     export type W = Window | string;
-    export module N {
+    export namespace N {
         export class Window { }
         export var p: W; // No error
     }
 }
 
-module M2 {
+namespace M2 {
     class private1 {
     }
     class public1 {
     }
-    module m3 {
+    namespace m3 {
         export class public1 {
         }
     }

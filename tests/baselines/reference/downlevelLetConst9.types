@@ -3,4 +3,5 @@
 === downlevelLetConst9.ts ===
 let a: number
 >a : number
+>  : ^^^^^^
 

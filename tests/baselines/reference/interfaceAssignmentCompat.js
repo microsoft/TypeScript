@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/interfaceAssignmentCompat.ts] ////
 
 //// [interfaceAssignmentCompat.ts]
-module M {
+namespace M {
     export enum Color {
         Green,
         Blue,
@@ -55,9 +55,10 @@ M.test();
 
 
 //// [interfaceAssignmentCompat.js]
+"use strict";
 var M;
 (function (M) {
-    var Color;
+    let Color;
     (function (Color) {
         Color[Color["Green"] = 0] = "Green";
         Color[Color["Blue"] = 1] = "Blue";

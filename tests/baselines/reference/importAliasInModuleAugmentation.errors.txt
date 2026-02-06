@@ -1,0 +1,26 @@
+importAliasInModuleAugmentation.ts(12,5): error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+importAliasInModuleAugmentation.ts(12,24): error TS2591: Cannot find name 'fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+
+
+==== importAliasInModuleAugmentation.ts (2 errors) ====
+    export { }
+    
+    namespace A {
+        export const y = 34;
+        export interface y { s: string }
+    }
+    
+    declare global {
+        export import x = A.y;
+    
+        // Should still error
+        import f = require("fs");
+        ~~~~~~
+!!! error TS2667: Imports are not permitted in module augmentations. Consider moving them to the enclosing external module.
+                           ~~~~
+!!! error TS2591: Cannot find name 'fs'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
+    }
+    
+    const m: number = x;
+    let s: x = { s: "" };
+    void s.s;

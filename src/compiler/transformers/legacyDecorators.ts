@@ -82,7 +82,7 @@ import {
     visitNode,
     visitNodes,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export function transformLegacyDecorators(context: TransformationContext): (x: SourceFile | Bundle) => SourceFile | Bundle {
@@ -641,15 +641,13 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
         const prefix = getClassMemberPrefix(node, member);
         const memberName = getExpressionForPropertyName(member, /*generateNameForComputedPropertyName*/ !hasSyntacticModifier(member, ModifierFlags.Ambient));
-        const descriptor = languageVersion > ScriptTarget.ES3
-            ? isPropertyDeclaration(member) && !hasAccessorModifier(member)
-                // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
-                // should not invoke `Object.getOwnPropertyDescriptor`.
-                ? factory.createVoidZero()
-                // We emit `null` here to indicate to `__decorate` that it can invoke `Object.getOwnPropertyDescriptor` directly.
-                // We have this extra argument here so that we can inject an explicit property descriptor at a later date.
-                : factory.createNull()
-            : undefined;
+        const descriptor = isPropertyDeclaration(member) && !hasAccessorModifier(member)
+            // We emit `void 0` here to indicate to `__decorate` that it can invoke `Object.defineProperty` directly, but that it
+            // should not invoke `Object.getOwnPropertyDescriptor`.
+            ? factory.createVoidZero()
+            // We emit `null` here to indicate to `__decorate` that it can invoke `Object.getOwnPropertyDescriptor` directly.
+            // We have this extra argument here so that we can inject an explicit property descriptor at a later date.
+            : factory.createNull();
 
         const helper = emitHelpers().createDecorateHelper(
             decoratorExpressions,
@@ -681,7 +679,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      * @param node The class node.
      */
     function generateConstructorDecorationExpression(node: ClassExpression | ClassDeclaration) {
-        const allDecorators = getAllDecoratorsOfClass(node);
+        const allDecorators = getAllDecoratorsOfClass(node, /*useLegacyDecorators*/ true);
         const decoratorExpressions = transformAllDecoratorsOfDeclaration(allDecorators);
         if (!decoratorExpressions) {
             return undefined;
@@ -775,7 +773,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      * double-binding semantics for the class name.
      */
     function getClassAliasIfNeeded(node: ClassDeclaration) {
-        if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsConstructorReference) {
+        if (resolver.hasNodeCheckFlag(node, NodeCheckFlags.ContainsConstructorReference)) {
             enableSubstitutionForClassAliases();
             const classAlias = factory.createUniqueName(node.name && !isGeneratedIdentifier(node.name) ? idText(node.name) : "default");
             classAliases[getOriginalNodeId(node)] = classAlias;
@@ -824,7 +822,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
 
     function trySubstituteClassAlias(node: Identifier): Expression | undefined {
         if (classAliases) {
-            if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ConstructorReference) {
+            if (resolver.hasNodeCheckFlag(node, NodeCheckFlags.ConstructorReference)) {
                 // Due to the emit for class decorators, any reference to the class from inside of the class body
                 // must instead be rewritten to point to a temporary variable to avoid issues with the double-bind
                 // behavior of class names in ES6.

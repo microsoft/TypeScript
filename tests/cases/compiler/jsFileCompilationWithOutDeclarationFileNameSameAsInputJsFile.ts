@@ -1,5 +1,6 @@
+// @target: es2015
 // @declaration: true
-// @out: /b.js
+// @outFile: /b.js
 // @filename: /a.ts
 class c {
 }

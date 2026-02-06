@@ -67,7 +67,7 @@ declare function foo14(x: any): any;
 var r3 = foo3(a); // any
 
 function f() { }
-module f {
+namespace f {
     export var bar = 1;
 }
 declare function foo15(x: typeof f): typeof f;
@@ -75,7 +75,7 @@ declare function foo15(x: any): any;
 var r3 = foo3(a); // any
 
 class CC { baz: string }
-module CC {
+namespace CC {
     export var bar = 1;
 }
 declare function foo16(x: CC): CC;
@@ -91,6 +91,7 @@ declare function foo18(x: any): any;
 var r3 = foo3(a); // any
 
 //// [anyAssignabilityInInheritance.js]
+"use strict";
 // any is not a subtype of any other types, errors expected on all the below derived classes unless otherwise noted
 var a;
 var r3 = foo2(a); // any, not a subtype of number so it skips that overload, is a subtype of itself so it picks second (if truly ambiguous it would pick first overload)
@@ -101,17 +102,11 @@ var r3 = foo3(a); // any
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 var r3 = foo3(a); // any
-var A2 = /** @class */ (function () {
-    function A2() {
-    }
-    return A2;
-}());
+class A2 {
+}
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
@@ -125,11 +120,8 @@ function f() { }
     f.bar = 1;
 })(f || (f = {}));
 var r3 = foo3(a); // any
-var CC = /** @class */ (function () {
-    function CC() {
-    }
-    return CC;
-}());
+class CC {
+}
 (function (CC) {
     CC.bar = 1;
 })(CC || (CC = {}));

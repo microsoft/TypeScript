@@ -3,6 +3,7 @@
 === invalidThrowStatement.ts ===
 throw; 
 > : any
+> : ^^^
 
 export throw null;
 

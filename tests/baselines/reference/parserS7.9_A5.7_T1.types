@@ -15,24 +15,34 @@
 
 var x=0, y=0;
 >x : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 >y : number
+>  : ^^^^^^
 >0 : 0
+>  : ^
 
 var z=
 >z : number
+>  : ^^^^^^
 
 x
 >x : number
+>  : ^^^^^^
 
 ++
 >++ : number
+>   : ^^^^^^
 
 ++
 > : any
+> : ^^^
 >++y : number
+>    : ^^^^^^
 
 y
 >y : number
+>  : ^^^^^^
 
 

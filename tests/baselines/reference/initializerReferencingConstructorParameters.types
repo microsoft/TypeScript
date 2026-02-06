@@ -5,66 +5,96 @@
 
 class C {
 >C : C
+>  : ^
 
     a = x; // error
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     b: typeof x; // error
 >b : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     constructor(x) { }
 >x : any
+>  : ^^^
 }
 
 class D {
 >D : D
+>  : ^
 
     a = x; // error
 >a : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     b: typeof x; // error
 >b : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     constructor(public x) { }
 >x : any
+>  : ^^^
 }
 
 class E {
 >E : E
+>  : ^
 
     a = this.x; // ok
 >a : any
+>  : ^^^
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 
     b: typeof this.x; // ok
 >b : any
+>  : ^^^
 >this.x : any
+>       : ^^^
 >this : this
+>     : ^^^^
 >x : any
+>  : ^^^
 
     constructor(public x) { }
 >x : any
+>  : ^^^
 }
 
 class F<T> {
 >F : F<T>
+>  : ^^^^
 
     a = this.x; // ok
 >a : T
+>  : ^
 >this.x : T
+>       : ^
 >this : this
+>     : ^^^^
 >x : T
+>  : ^
 
     b = x; // error
 >b : any
+>  : ^^^
 >x : any
+>  : ^^^
 
     constructor(public x: T) { }
 >x : T
+>  : ^
 }

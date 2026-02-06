@@ -3,8 +3,10 @@
 === parser509668.ts ===
 class Foo3 {
 >Foo3 : Foo3
+>     : ^^^^
 
   // Doesn't work, but should
   constructor (public ...args: string[]) { }
 >args : string[]
+>     : ^^^^^^^^
 }

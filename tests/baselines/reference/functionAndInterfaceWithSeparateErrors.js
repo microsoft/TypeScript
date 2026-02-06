@@ -10,4 +10,5 @@ interface Foo {
 }
 
 //// [functionAndInterfaceWithSeparateErrors.js]
+"use strict";
 function Foo(n) { }

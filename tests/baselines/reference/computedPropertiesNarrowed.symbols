@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/computedPropertiesNarrowed.ts] ////
+
+=== computedPropertiesNarrowed.ts ===
+const x: 0 | 1 = Math.random()? 0: 1;
+>x : Symbol(x, Decl(computedPropertiesNarrowed.ts, 0, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+declare function assert(n: number): asserts n is 1;
+>assert : Symbol(assert, Decl(computedPropertiesNarrowed.ts, 0, 37))
+>n : Symbol(n, Decl(computedPropertiesNarrowed.ts, 1, 24))
+>n : Symbol(n, Decl(computedPropertiesNarrowed.ts, 1, 24))
+
+assert(x);
+>assert : Symbol(assert, Decl(computedPropertiesNarrowed.ts, 0, 37))
+>x : Symbol(x, Decl(computedPropertiesNarrowed.ts, 0, 5))
+
+export let o = {
+>o : Symbol(o, Decl(computedPropertiesNarrowed.ts, 3, 10))
+
+    [x]: 1 // error narrow type !== declared type
+>[x] : Symbol([x], Decl(computedPropertiesNarrowed.ts, 3, 16))
+>x : Symbol(x, Decl(computedPropertiesNarrowed.ts, 0, 5))
+}
+
+
+const y: 0 = 0
+>y : Symbol(y, Decl(computedPropertiesNarrowed.ts, 8, 5))
+
+export let o2 = {
+>o2 : Symbol(o2, Decl(computedPropertiesNarrowed.ts, 9, 10))
+
+    [y]: 1 // ok literal computed type 
+>[y] : Symbol([y], Decl(computedPropertiesNarrowed.ts, 9, 17))
+>y : Symbol(y, Decl(computedPropertiesNarrowed.ts, 8, 5))
+}
+
+// literals are ok
+export let o3 = { [1]: 1 }
+>o3 : Symbol(o3, Decl(computedPropertiesNarrowed.ts, 14, 10))
+>[1] : Symbol([1], Decl(computedPropertiesNarrowed.ts, 14, 17))
+>1 : Symbol([1], Decl(computedPropertiesNarrowed.ts, 14, 17))
+
+export let o31 = { [-1]: 1 }
+>o31 : Symbol(o31, Decl(computedPropertiesNarrowed.ts, 15, 10))
+>[-1] : Symbol([-1], Decl(computedPropertiesNarrowed.ts, 15, 18))
+
+export let o32 = { [1-1]: 1 } // error number 
+>o32 : Symbol(o32, Decl(computedPropertiesNarrowed.ts, 17, 10))
+>[1-1] : Symbol([1-1], Decl(computedPropertiesNarrowed.ts, 17, 18))
+
+let u = Symbol();
+>u : Symbol(u, Decl(computedPropertiesNarrowed.ts, 19, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export let o4 = {
+>o4 : Symbol(o4, Decl(computedPropertiesNarrowed.ts, 20, 10))
+
+    [u]: 1 // Should error, nut a unique symbol
+>[u] : Symbol([u], Decl(computedPropertiesNarrowed.ts, 20, 17))
+>u : Symbol(u, Decl(computedPropertiesNarrowed.ts, 19, 3))
+}
+
+export let o5  ={
+>o5 : Symbol(o5, Decl(computedPropertiesNarrowed.ts, 24, 10))
+
+    [Symbol()]: 1 // Should error
+>[Symbol()] : Symbol([Symbol()], Decl(computedPropertiesNarrowed.ts, 24, 17))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}
+
+const uu: unique symbol = Symbol();
+>uu : Symbol(uu, Decl(computedPropertiesNarrowed.ts, 28, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+export let o6  = {
+>o6 : Symbol(o6, Decl(computedPropertiesNarrowed.ts, 29, 10))
+
+    [uu]: 1 // Should be ok
+>[uu] : Symbol([uu], Decl(computedPropertiesNarrowed.ts, 29, 18))
+>uu : Symbol(uu, Decl(computedPropertiesNarrowed.ts, 28, 5))
+}
+
+
+function foo (): 1 { return 1; }
+>foo : Symbol(foo, Decl(computedPropertiesNarrowed.ts, 31, 1))
+
+export let o7 = {
+>o7 : Symbol(o7, Decl(computedPropertiesNarrowed.ts, 35, 10))
+
+    [foo()]: 1 // Should error
+>[foo()] : Symbol([foo()], Decl(computedPropertiesNarrowed.ts, 35, 17))
+>foo : Symbol(foo, Decl(computedPropertiesNarrowed.ts, 31, 1))
+
+};
+
+let E = { A: 1 } as const
+>E : Symbol(E, Decl(computedPropertiesNarrowed.ts, 39, 3))
+>A : Symbol(A, Decl(computedPropertiesNarrowed.ts, 39, 9))
+>const : Symbol(const)
+
+export const o8 = {
+>o8 : Symbol(o8, Decl(computedPropertiesNarrowed.ts, 40, 12))
+
+    [E.A]: 1 // Fresh 
+>[E.A] : Symbol([E.A], Decl(computedPropertiesNarrowed.ts, 40, 19))
+>E.A : Symbol(A, Decl(computedPropertiesNarrowed.ts, 39, 9))
+>E : Symbol(E, Decl(computedPropertiesNarrowed.ts, 39, 3))
+>A : Symbol(A, Decl(computedPropertiesNarrowed.ts, 39, 9))
+}
+
+function ns() { return { v: 0 } as const }
+>ns : Symbol(ns, Decl(computedPropertiesNarrowed.ts, 42, 1))
+>v : Symbol(v, Decl(computedPropertiesNarrowed.ts, 44, 24))
+>const : Symbol(const)
+
+export const o9 = {
+>o9 : Symbol(o9, Decl(computedPropertiesNarrowed.ts, 45, 12))
+
+    [ns().v]: 1
+>[ns().v] : Symbol([ns().v], Decl(computedPropertiesNarrowed.ts, 45, 19))
+>ns().v : Symbol(v, Decl(computedPropertiesNarrowed.ts, 44, 24))
+>ns : Symbol(ns, Decl(computedPropertiesNarrowed.ts, 42, 1))
+>v : Symbol(v, Decl(computedPropertiesNarrowed.ts, 44, 24))
+}
+

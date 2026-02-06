@@ -8,6 +8,7 @@ function*bar() {
 }
 
 //// [FunctionDeclaration7_es6.js]
+"use strict";
 function* bar() {
     // 'yield' here is an identifier, and not a yield expression.
     function* foo(a = yield) {

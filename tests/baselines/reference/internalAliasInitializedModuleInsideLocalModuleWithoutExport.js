@@ -1,14 +1,14 @@
 //// [tests/cases/compiler/internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts] ////
 
 //// [internalAliasInitializedModuleInsideLocalModuleWithoutExport.ts]
-export module a {
-    export module b {
+export namespace a {
+    export namespace b {
         export class c {
         }
     }
 }
 
-export module c {
+export namespace c {
     import b = a.b;
     export var x: b.c = new b.c();
 }
@@ -19,13 +19,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.c = exports.a = void 0;
 var a;
 (function (a) {
-    var b;
+    let b;
     (function (b) {
-        var c = /** @class */ (function () {
-            function c() {
-            }
-            return c;
-        }());
+        class c {
+        }
         b.c = c;
     })(b = a.b || (a.b = {}));
 })(a || (exports.a = a = {}));

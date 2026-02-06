@@ -5,4 +5,5 @@
 
 import foo = require('./foo');
 >foo : any
+>    : ^^^
 

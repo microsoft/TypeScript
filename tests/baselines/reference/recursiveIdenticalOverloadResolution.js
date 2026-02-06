@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/recursiveIdenticalOverloadResolution.ts] ////
 
 //// [recursiveIdenticalOverloadResolution.ts]
-module M {
+namespace M {
 
    interface I { (i: I): I; }
 
@@ -19,6 +19,7 @@ module M {
 
 
 //// [recursiveIdenticalOverloadResolution.js]
+"use strict";
 var M;
 (function (M) {
     function f(p) { return f; }

@@ -3,9 +3,12 @@
 === chainer.ts ===
 export const x: import(import("./a").LookAt).Value = "yes"; // expect outter import to fail, since b.d.ts isn't in the build
 >x : any
+>  : ^^^
 >"yes" : "yes"
+>      : ^^^^^
 
 === a.d.ts ===
 export type LookAt = "./b";
 >LookAt : "./b"
+>       : ^^^^^
 

@@ -1,6 +1,6 @@
 // @allowJs: true
 // @checkJs: true
-// @target: es5
+// @target: es5, es2015
 // @resolveJsonModule: true
 // @outDir: ./out
 // @declaration: true

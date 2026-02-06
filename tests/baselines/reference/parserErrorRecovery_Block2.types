@@ -3,6 +3,7 @@
 === parserErrorRecovery_Block2.ts ===
 function f() {
 >f : () => void
+>  : ^^^^^^^^^^
 
     ¬
     return;

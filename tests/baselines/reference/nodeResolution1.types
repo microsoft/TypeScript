@@ -3,9 +3,12 @@
 === b.ts ===
 import y = require("./a");
 >y : typeof y
+>  : ^^^^^^^^
 
 === a.ts ===
 export var x = 1;
 >x : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

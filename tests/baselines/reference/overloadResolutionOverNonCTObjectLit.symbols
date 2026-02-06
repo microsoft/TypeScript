@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/overloadResolutionOverNonCTObjectLit.ts] ////
 
 === overloadResolutionOverNonCTObjectLit.ts ===
-module Bugs {
+namespace Bugs {
 >Bugs : Symbol(Bugs, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 0))
 
                 export interface IToken {
->IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 13))
+>IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 16))
 
                                 startIndex:number;
 >startIndex : Symbol(IToken.startIndex, Decl(overloadResolutionOverNonCTObjectLit.ts, 1, 41))
@@ -23,7 +23,7 @@ module Bugs {
 
                 export interface IStateToken extends IToken {
 >IStateToken : Symbol(IStateToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 8, 17))
->IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 13))
+>IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 16))
 
                                 state: IState;
 >state : Symbol(IStateToken.state, Decl(overloadResolutionOverNonCTObjectLit.ts, 10, 61))
@@ -38,7 +38,7 @@ module Bugs {
 
                                 var tokens:IToken[]= [];
 >tokens : Symbol(tokens, Decl(overloadResolutionOverNonCTObjectLit.ts, 16, 35))
->IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 13))
+>IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 16))
 
                                 tokens.push({ startIndex: 1, type: '', bracket: 3 });
 >tokens.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
@@ -52,7 +52,7 @@ module Bugs {
 >tokens.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >tokens : Symbol(tokens, Decl(overloadResolutionOverNonCTObjectLit.ts, 16, 35))
 >push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
->IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 13))
+>IToken : Symbol(IToken, Decl(overloadResolutionOverNonCTObjectLit.ts, 0, 16))
 >startIndex : Symbol(startIndex, Decl(overloadResolutionOverNonCTObjectLit.ts, 18, 54))
 >type : Symbol(type, Decl(overloadResolutionOverNonCTObjectLit.ts, 18, 69))
 >bracket : Symbol(bracket, Decl(overloadResolutionOverNonCTObjectLit.ts, 18, 79))

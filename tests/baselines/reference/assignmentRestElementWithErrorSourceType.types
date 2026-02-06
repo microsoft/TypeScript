@@ -3,11 +3,17 @@
 === assignmentRestElementWithErrorSourceType.ts ===
 var tuple: [string, number];
 >tuple : [string, number]
+>      : ^^^^^^^^^^^^^^^^
 
 [...c] = tupel; // intentionally misspelled
 >[...c] = tupel : any
+>               : ^^^
 >[...c] : any[]
+>       : ^^^^^
 >...c : any
+>     : ^^^
 >c : any
+>  : ^^^
 >tupel : any
+>      : ^^^
 

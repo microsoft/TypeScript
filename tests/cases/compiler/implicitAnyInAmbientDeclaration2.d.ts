@@ -1,3 +1,4 @@
+// @target: es2015
 //@noimplicitany: true
 declare function foo(x);  // this should be an error
 declare var bar;  // this should be be an erro

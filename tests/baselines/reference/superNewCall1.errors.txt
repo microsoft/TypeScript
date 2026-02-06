@@ -13,15 +13,13 @@ superNewCall1.ts(9,13): error TS17011: 'super' must be called before accessing a
     
     class B extends A<number, string> {
         constructor() {
-        ~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
+!!! error TS2377: Constructors for derived classes must contain a 'super' call.
             new super(value => String(value));
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 ~~~~~
 !!! error TS2351: This expression is not constructable.
 !!! error TS2351:   Type 'A<number, string>' has no construct signatures.
                 ~~~~~
 !!! error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
         }
-    ~~~~~
-!!! error TS2377: Constructors for derived classes must contain a 'super' call.
     }

@@ -1,3 +1,4 @@
+// @target: es2015
 class clodule<T> {
     id: string;
     value: T;
@@ -5,7 +6,7 @@ class clodule<T> {
     private static sfn(id: string) { return 42; }
 }
 
-module clodule {
+namespace clodule {
     // error: duplicate identifier expected
     export function fn<T>(x: T, y: T): number {
         return clodule.sfn('a');

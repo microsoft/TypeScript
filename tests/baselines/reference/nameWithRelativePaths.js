@@ -9,7 +9,7 @@ export function f(){
 }
 
 //// [foo_2.ts]
-export module M2 {
+export namespace M2 {
 	export var x = true;
 }
 
@@ -31,11 +31,10 @@ exports.foo = 42;
 //// [foo_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.f = void 0;
+exports.f = f;
 function f() {
     return 42;
 }
-exports.f = f;
 //// [foo_2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -47,9 +46,9 @@ var M2;
 //// [foo_3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo0 = require("../foo_0");
-var foo1 = require("./test/foo_1");
-var foo2 = require("./.././test/foo_2");
+const foo0 = require("../foo_0");
+const foo1 = require("./test/foo_1");
+const foo2 = require("./.././test/foo_2");
 if (foo2.M2.x) {
     var x = foo0.foo + foo1.f();
 }

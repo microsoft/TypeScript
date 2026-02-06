@@ -3,14 +3,18 @@
 === staticPrototypeProperty.ts ===
 class C {
 >C : C
+>  : ^
 
    static prototype() { }
 >prototype : () => void
+>          : ^^^^^^^^^^
 }
  
 class C2 {
 >C2 : C2
+>   : ^^
 
    static prototype;
 >prototype : C2
+>          : ^^
 }

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasClassInsideTopLevelModuleWithoutExport.ts] ////
 
 //// [internalAliasClassInsideTopLevelModuleWithoutExport.ts]
-export module x {
+export namespace x {
     export class c {
         foo(a: number) {
             return a;
@@ -19,14 +19,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.cProp = exports.x = void 0;
 var x;
 (function (x) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        c.prototype.foo = function (a) {
+    class c {
+        foo(a) {
             return a;
-        };
-        return c;
-    }());
+        }
+    }
     x.c = c;
 })(x || (exports.x = x = {}));
 var xc = x.c;

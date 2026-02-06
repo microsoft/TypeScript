@@ -1,16 +1,15 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/workspace/solution/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/b/c/app.ts]
+//// [/user/username/workspace/solution/projects/project/c/app.ts]
 
                 import {f} from "./module"
                 console.log(f)
                 
 
-//// [/a/b/c/module.d.ts]
+//// [/user/username/workspace/solution/projects/project/c/module.d.ts]
 export let x: number
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -21,67 +20,64 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w /a/b/c/app.ts
+/home/src/tslibs/TS/Lib/tsc.js -w /user/username/workspace/solution/projects/project/c/app.ts
 Output::
 >> Screen clear
-[[90m12:00:17 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[96ma/b/c/app.ts[0m:[93m2[0m:[93m25[0m - [91merror[0m[90m TS2305: [0mModule '"./module"' has no exported member 'f'.
+[96mc/app.ts[0m:[93m2[0m:[93m25[0m - [91merror[0m[90m TS2305: [0mModule '"./module"' has no exported member 'f'.
 
 [7m2[0m                 import {f} from "./module"
 [7m [0m [91m                        ~[0m
 
-[96ma/b/c/app.ts[0m:[93m3[0m:[93m17[0m - [91merror[0m[90m TS2584: [0mCannot find name 'console'. Do you need to change your target library? Try changing the 'lib' compiler option to include 'dom'.
-
-[7m3[0m                 console.log(f)
-[7m [0m [91m                ~~~~~~~[0m
-
-[[90m12:00:20 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/a/b/c/app.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var module_1 = require("./module");
-console.log(module_1.f);
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
+//// [/user/username/workspace/solution/projects/project/c/app.js]
+import { f } from "./module";
+console.log(f);
 
 
 
 FsWatches::
-/a/b/c/app.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
-/a/b/c/module.d.ts: *new*
+/user/username/workspace/solution/projects/project/c/app.ts: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/user/username/workspace/solution/projects/project/c/module.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/a/b/c: *new*
+/user/username/workspace/solution/projects/project/c: *new*
   {}
 
 Program root files: [
-  "/a/b/c/app.ts"
+  "/user/username/workspace/solution/projects/project/c/app.ts"
 ]
 Program options: {
   "watch": true
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/a/b/c/module.d.ts
-/a/b/c/app.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/c/module.d.ts
+/user/username/workspace/solution/projects/project/c/app.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/c/module.d.ts
-/a/b/c/app.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/workspace/solution/projects/project/c/module.d.ts
+/user/username/workspace/solution/projects/project/c/app.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/c/module.d.ts (used version)
-/a/b/c/app.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
+/user/username/workspace/solution/projects/project/c/module.d.ts (used version)
+/user/username/workspace/solution/projects/project/c/app.ts (used version)
 
 exitCode:: ExitStatus.undefined

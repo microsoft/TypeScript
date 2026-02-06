@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: esnext,es2017
 // @noTypesAndSymbols: true
 
 abstract class C1 {

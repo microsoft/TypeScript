@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 
-////module TestModule {
+////namespace TestModule {
 ////    var localVariable = "";
 ////    export var exportedVariable = 0;
 ////
@@ -13,10 +13,10 @@
 ////    interface localInterface {}
 ////    export interface exportedInterface {}
 ////
-////    module localModule {
+////    namespace localModule {
 ////        export var x = 0;
 ////    }
-////    export module exportedModule {
+////    export namespace exportedModule {
 ////        export var x = 0;
 ////    }
 ////
@@ -25,7 +25,7 @@
 ////}
 ////
 ////// Add some new items to the module
-////module TestModule {
+////namespace TestModule {
 ////    var localVariable2 = "";
 ////    export var exportedVariable2 = 0;
 ////
@@ -38,10 +38,10 @@
 ////    interface localInterface2 {}
 ////    export interface exportedInterface2 {}
 ////
-////    module localModule2 {
+////    namespace localModule2 {
 ////        export var x = 0;
 ////    }
-////    export module exportedModule2 {
+////    export namespace exportedModule2 {
 ////        export var x = 0;
 ////    }
 ////}

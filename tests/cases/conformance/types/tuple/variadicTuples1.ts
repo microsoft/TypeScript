@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @declaration: true
 
@@ -421,3 +422,5 @@ type U3 = [...[string, number], boolean];
 
 type ToStringLength1<T extends any[]> = `${T['length']}`;
 type ToStringLength2<T extends any[]> = `${[...T]['length']}`;
+
+type AnyArr = [...any];

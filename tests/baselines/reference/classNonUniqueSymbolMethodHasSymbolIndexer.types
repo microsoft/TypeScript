@@ -1,0 +1,63 @@
+//// [tests/cases/compiler/classNonUniqueSymbolMethodHasSymbolIndexer.ts] ////
+
+=== classNonUniqueSymbolMethodHasSymbolIndexer.ts ===
+declare const a: symbol;
+>a : symbol
+>  : ^^^^^^
+
+export class A {
+>A : A
+>  : ^
+
+    [a]() { return 1 };
+>[a] : () => number
+>    : ^^^^^^^^^^^^
+>a : symbol
+>  : ^^^^^^
+>1 : 1
+>  : ^
+}
+declare const e1: A[typeof a]; // no error, `A` has `symbol` index
+>e1 : () => number
+>   : ^^^^^^^^^^^^
+>a : symbol
+>  : ^^^^^^
+
+type Constructor = new (...args: any[]) => {};
+>Constructor : Constructor
+>            : ^^^^^^^^^^^
+>args : any[]
+>     : ^^^^^
+
+declare function Mix<T extends Constructor>(classish: T): T & (new (...args: any[]) => {mixed: true});
+>Mix : <T extends Constructor>(classish: T) => T & (new (...args: any[]) => { mixed: true; })
+>    : ^ ^^^^^^^^^           ^^        ^^ ^^^^^                                              
+>classish : T
+>         : ^
+>args : any[]
+>     : ^^^^^
+>mixed : true
+>      : ^^^^
+>true : true
+>     : ^^^^
+
+export const Mixer = Mix(class {
+>Mixer : typeof (Anonymous class) & (new (...args: any[]) => { mixed: true; })
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^                ^
+>Mix(class {    [a]() { return 1 };}) : typeof (Anonymous class) & (new (...args: any[]) => { mixed: true; })
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^    ^^     ^^^^^                ^
+>Mix : <T extends Constructor>(classish: T) => T & (new (...args: any[]) => { mixed: true; })
+>    : ^ ^^^^^^^^^           ^^        ^^ ^^^^^                                              
+>class {    [a]() { return 1 };} : typeof (Anonymous class)
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    [a]() { return 1 };
+>[a] : () => number
+>    : ^^^^^^^^^^^^
+>a : symbol
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+});
+

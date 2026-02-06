@@ -4,5 +4,6 @@
 export default class {
     method() { }
 >method : () => void
+>       : ^^^^^^^^^^
 }
 

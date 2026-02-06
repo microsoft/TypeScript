@@ -51,3 +51,4 @@ class D {
     constructor(/** @readonly */ x) {}
 >x : Symbol(x, Decl(jsdocReadonlyDeclarations.js, 22, 16))
 }
+

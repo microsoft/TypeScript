@@ -1,4 +1,5 @@
-declare module M {
+// @target: es2015
+declare namespace M {
     interface iBar { t: any; }
     interface iFoo extends iBar {
         s: any;
@@ -14,7 +15,7 @@ declare module M {
 interface myInt {
     voidFn(): void;
 }
-var myVar: myInt;
+declare var myVar: myInt;
 var strArray: string[] = [myVar.voidFn()];
 
 

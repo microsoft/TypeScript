@@ -1,3 +1,4 @@
+// @target: es2015
 interface I1 {
     get foo(): number,
     set foo(value: number),

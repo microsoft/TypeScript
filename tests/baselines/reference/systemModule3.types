@@ -7,10 +7,12 @@ export default function() {}
 === file2.ts ===
 export default function f() {}
 >f : () => void
+>  : ^^^^^^^^^^
 
 === file3.ts ===
 export default class C {}
 >C : C
+>  : ^
 
 === file4.ts ===
 

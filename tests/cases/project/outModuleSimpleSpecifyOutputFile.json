@@ -4,7 +4,8 @@
     "inputFiles": [
         "test.ts"
     ],
-    "out": "bin/test.js",
+    "outFile": "bin/test.js",
     "declaration": true,
-    "baselineCheck": true
+    "baselineCheck": true,
+    "strict": false
 }

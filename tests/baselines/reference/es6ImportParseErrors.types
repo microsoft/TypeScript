@@ -3,4 +3,5 @@
 === es6ImportParseErrors.ts ===
 import 10;
 >10 : 10
+>   : ^^
 

@@ -3,12 +3,18 @@
 === /src/index.ts ===
 import { x } from "../node_modules/foo";
 >x : 0
+>  : ^
 
 === /node_modules/foo/index.js ===
 exports.x = 0;
 >exports.x = 0 : 0
+>              : ^
 >exports.x : 0
+>          : ^
 >exports : typeof import("/node_modules/foo/index")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : 0
+>  : ^
 >0 : 0
+>  : ^
 

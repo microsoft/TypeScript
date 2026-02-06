@@ -11,6 +11,7 @@ fill(32);
 
 
 //// [typeOfOnTypeArg.js]
+"use strict";
 var A = { '': 3 };
 function fill(f) {
 }

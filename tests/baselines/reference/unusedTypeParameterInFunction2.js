@@ -2,11 +2,12 @@
 
 //// [unusedTypeParameterInFunction2.ts]
 function f1<X, Y>() {
-    var a: X;
+    var a!: X;
     a;
 }
 
 //// [unusedTypeParameterInFunction2.js]
+"use strict";
 function f1() {
     var a;
     a;

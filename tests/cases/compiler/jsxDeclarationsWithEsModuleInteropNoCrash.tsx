@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowJs: true
 // @checkJs: true
 // @emitDeclarationOnly: true
@@ -7,7 +8,7 @@
 // @jsx: react
 // @noImplicitAny: false
 // @filename: jsxDeclarationsWithEsModuleInteropNoCrash.jsx
-/// <reference path="/.lib/react16.d.ts" />
+/// <reference path="/.lib/react16.d.ts" preserve="true" />
 import PropTypes from 'prop-types';
 import React from 'react';
 

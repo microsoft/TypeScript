@@ -1,16 +1,15 @@
-import * as ts from "../../_namespaces/ts";
+import * as ts from "../../_namespaces/ts.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
+} from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch";
+    TestServerHost,
+} from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: syntax operations", () => {
+describe("unittests:: tsserver:: syntaxOperations::", () => {
     it("works when file is removed and added with different content", () => {
         const app: File = {
             path: `/user/username/projects/myproject/app.ts`,
@@ -35,8 +34,8 @@ describe("Test Suite 1", () => {
             path: `/user/username/projects/myproject/tsconfig.json`,
             content: "{}",
         };
-        const files = [app, libFile, tsconfig];
-        const host = createServerHost(files);
+        const files = [app, tsconfig];
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         openFilesForSession([{ file: app.path, content: app.content }], session);
 

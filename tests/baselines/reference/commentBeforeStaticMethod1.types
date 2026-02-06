@@ -3,14 +3,17 @@
 === commentBeforeStaticMethod1.ts ===
 class C {
 >C : C
+>  : ^
 
   /**
    * Returns bar
    */
   public static foo(): string {
 >foo : () => string
+>    : ^^^^^^      
 
     return "bar";
 >"bar" : "bar"
+>      : ^^^^^
   }
 }

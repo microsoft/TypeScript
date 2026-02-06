@@ -8,3 +8,4 @@ interface C {
 
 
 //// [parser643728.js]
+"use strict";

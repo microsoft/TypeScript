@@ -1,3 +1,4 @@
+// @target: es2015
 interface Query<T> {
     // ...
     groupBy<K>(keySelector: (item: T) => K): Query<Grouping<K, T>>;

@@ -1,3 +1,4 @@
+// @target: es2015
 interface I1 {
     x: this;
     f(x: this): this;

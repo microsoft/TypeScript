@@ -3,4 +3,5 @@
 === asiAmbientFunctionDeclaration.ts ===
 declare function foo()
 >foo : () => any
+>    : ^^^^^^^^^
 

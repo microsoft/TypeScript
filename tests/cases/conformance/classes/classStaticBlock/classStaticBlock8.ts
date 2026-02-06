@@ -1,3 +1,4 @@
+// @target: es2015
 function foo (v: number) {
     label: while (v) {
         class C {

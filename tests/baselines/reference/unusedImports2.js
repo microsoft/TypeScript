@@ -19,20 +19,17 @@ x.handleChar();
 //// [file1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.Calculator = void 0;
-var Calculator = /** @class */ (function () {
-    function Calculator() {
-    }
-    Calculator.prototype.handleChar = function () { };
-    return Calculator;
-}());
+exports.Calculator = void 0;
+exports.test = test;
+class Calculator {
+    handleChar() { }
+}
 exports.Calculator = Calculator;
 function test() {
 }
-exports.test = test;
 //// [file2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var file1_1 = require("./file1");
+const file1_1 = require("./file1");
 var x = new file1_1.Calculator();
 x.handleChar();

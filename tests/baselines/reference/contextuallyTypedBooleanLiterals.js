@@ -32,11 +32,11 @@ const x: Observable<boolean> = observable(false);
 //// [contextuallyTypedBooleanLiterals.js]
 "use strict";
 // Repro from #48363
-var bn1 = box(0); // Box<number>
-var bn2 = box(0); // Ok
-var bb1 = box(false); // Box<boolean>
-var bb2 = box(false); // Error, box<false> not assignable to Box<boolean>
-var x = observable(false);
+const bn1 = box(0); // Box<number>
+const bn2 = box(0); // Ok
+const bb1 = box(false); // Box<boolean>
+const bb2 = box(false); // Error, box<false> not assignable to Box<boolean>
+const x = observable(false);
 
 
 //// [contextuallyTypedBooleanLiterals.d.ts]

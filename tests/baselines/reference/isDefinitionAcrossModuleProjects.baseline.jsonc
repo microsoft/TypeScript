@@ -1,5 +1,5 @@
 // === findAllReferences ===
-// === /a/index.ts ===
+// === /home/src/workspaces/project/a/index.ts ===
 // import { NS } from "../b";
 // import { I } from "../c";
 // 
@@ -20,7 +20,7 @@
 // };
 
   // === Definitions ===
-  // === /a/index.ts ===
+  // === /home/src/workspaces/project/a/index.ts ===
   // import { NS } from "../b";
   // import { I } from "../c";
   // 
@@ -87,7 +87,7 @@
 
 
 // === findAllReferences ===
-// === /c/index.ts ===
+// === /home/src/workspaces/project/c/index.ts ===
 // export namespace NS {
 //     export function FC() {}
 // }
@@ -98,7 +98,7 @@
 // 
 // const ic: [|{| defId: 0 |}I|] = { FC() {} };
 
-// === /a/index.ts ===
+// === /home/src/workspaces/project/a/index.ts ===
 // import { NS } from "../b";
 // <|import { [|{| defId: 1, isWriteAccess: true |}I|] } from "../c";|>
 // 
@@ -119,7 +119,7 @@
 //     FC() { },
 // };
 
-// === /a2/index.ts ===
+// === /home/src/workspaces/project/a2/index.ts ===
 // import { NS } from "../b";
 // <|import { [|{| defId: 2, isWriteAccess: true |}I|] } from "../c";|>
 // 
@@ -141,7 +141,7 @@
 // };
 
   // === Definitions ===
-  // === /c/index.ts ===
+  // === /home/src/workspaces/project/c/index.ts ===
   // export namespace NS {
   //     export function FC() {}
   // }
@@ -152,7 +152,7 @@
   // 
   // const ic: I = { FC() {} };
 
-  // === /a/index.ts ===
+  // === /home/src/workspaces/project/a/index.ts ===
   // import { NS } from "../b";
   // <|import { [|{| defId: 1 |}I|] } from "../c";|>
   // 
@@ -169,7 +169,7 @@
   // }
   // --- (line: 15) skipped ---
 
-  // === /a2/index.ts ===
+  // === /home/src/workspaces/project/a2/index.ts ===
   // import { NS } from "../b";
   // <|import { [|{| defId: 2 |}I|] } from "../c";|>
   // 
@@ -311,7 +311,7 @@
 
 
 // === findAllReferences ===
-// === /a/index.ts ===
+// === /home/src/workspaces/project/a/index.ts ===
 // --- (line: 8) skipped ---
 // 
 // declare module "../c" {
@@ -326,7 +326,7 @@
 // };
 
   // === Definitions ===
-  // === /a/index.ts ===
+  // === /home/src/workspaces/project/a/index.ts ===
   // --- (line: 8) skipped ---
   // 
   // declare module "../c" {
@@ -400,7 +400,7 @@
 
 
 // === findAllReferences ===
-// === /a2/index.ts ===
+// === /home/src/workspaces/project/a2/index.ts ===
 // import { NS } from "../b";
 // import { I } from "../c";
 // 
@@ -421,7 +421,7 @@
 // };
 
   // === Definitions ===
-  // === /a2/index.ts ===
+  // === /home/src/workspaces/project/a2/index.ts ===
   // import { NS } from "../b";
   // import { I } from "../c";
   // 
@@ -488,7 +488,7 @@
 
 
 // === findAllReferences ===
-// === /c/index.ts ===
+// === /home/src/workspaces/project/c/index.ts ===
 // export namespace NS {
 //     export function FC() {}
 // }
@@ -499,7 +499,7 @@
 // 
 // const ic: [|{| defId: 0 |}I|] = { FC() {} };
 
-// === /a2/index.ts ===
+// === /home/src/workspaces/project/a2/index.ts ===
 // import { NS } from "../b";
 // <|import { [|{| defId: 1, isWriteAccess: true |}I|] } from "../c";|>
 // 
@@ -520,7 +520,7 @@
 //     FC() { },
 // };
 
-// === /a/index.ts ===
+// === /home/src/workspaces/project/a/index.ts ===
 // import { NS } from "../b";
 // <|import { [|{| defId: 2, isWriteAccess: true |}I|] } from "../c";|>
 // 
@@ -542,7 +542,7 @@
 // };
 
   // === Definitions ===
-  // === /c/index.ts ===
+  // === /home/src/workspaces/project/c/index.ts ===
   // export namespace NS {
   //     export function FC() {}
   // }
@@ -553,7 +553,7 @@
   // 
   // const ic: I = { FC() {} };
 
-  // === /a2/index.ts ===
+  // === /home/src/workspaces/project/a2/index.ts ===
   // import { NS } from "../b";
   // <|import { [|{| defId: 1 |}I|] } from "../c";|>
   // 
@@ -570,7 +570,7 @@
   // }
   // --- (line: 15) skipped ---
 
-  // === /a/index.ts ===
+  // === /home/src/workspaces/project/a/index.ts ===
   // import { NS } from "../b";
   // <|import { [|{| defId: 2 |}I|] } from "../c";|>
   // 
@@ -712,7 +712,7 @@
 
 
 // === findAllReferences ===
-// === /a2/index.ts ===
+// === /home/src/workspaces/project/a2/index.ts ===
 // --- (line: 8) skipped ---
 // 
 // declare module "../c" {
@@ -727,7 +727,7 @@
 // };
 
   // === Definitions ===
-  // === /a2/index.ts ===
+  // === /home/src/workspaces/project/a2/index.ts ===
   // --- (line: 8) skipped ---
   // 
   // declare module "../c" {
@@ -801,7 +801,7 @@
 
 
 // === findAllReferences ===
-// === /b/index.ts ===
+// === /home/src/workspaces/project/b/index.ts ===
 // export namespace NS {
 //     <|export function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}FB|]() {}|>
 // }
@@ -810,7 +810,7 @@
 // --- (line: 6) skipped ---
 
   // === Definitions ===
-  // === /b/index.ts ===
+  // === /home/src/workspaces/project/b/index.ts ===
   // export namespace NS {
   //     <|export function /*FIND ALL REFS*/[|FB|]() {}|>
   // }
@@ -873,7 +873,7 @@
 
 
 // === findAllReferences ===
-// === /b/index.ts ===
+// === /home/src/workspaces/project/b/index.ts ===
 // export namespace NS {
 //     export function FB() {}
 // }
@@ -885,7 +885,7 @@
 // const ib: [|I|] = { FB() {} };
 
   // === Definitions ===
-  // === /b/index.ts ===
+  // === /home/src/workspaces/project/b/index.ts ===
   // export namespace NS {
   //     export function FB() {}
   // }
@@ -923,7 +923,7 @@
 
 
 // === findAllReferences ===
-// === /b/index.ts ===
+// === /home/src/workspaces/project/b/index.ts ===
 // export namespace NS {
 //     export function FB() {}
 // }
@@ -935,7 +935,7 @@
 // const ib: I = { <|[|{| isWriteAccess: true |}FB|]() {}|> };
 
   // === Definitions ===
-  // === /b/index.ts ===
+  // === /home/src/workspaces/project/b/index.ts ===
   // export namespace NS {
   //     export function FB() {}
   // }
@@ -1009,7 +1009,7 @@
 
 
 // === findAllReferences ===
-// === /c/index.ts ===
+// === /home/src/workspaces/project/c/index.ts ===
 // export namespace NS {
 //     <|export function /*FIND ALL REFS*/[|{| isWriteAccess: true, isDefinition: true |}FC|]() {}|>
 // }
@@ -1018,7 +1018,7 @@
 // --- (line: 6) skipped ---
 
   // === Definitions ===
-  // === /c/index.ts ===
+  // === /home/src/workspaces/project/c/index.ts ===
   // export namespace NS {
   //     <|export function /*FIND ALL REFS*/[|FC|]() {}|>
   // }
@@ -1081,7 +1081,7 @@
 
 
 // === findAllReferences ===
-// === /c/index.ts ===
+// === /home/src/workspaces/project/c/index.ts ===
 // export namespace NS {
 //     export function FC() {}
 // }
@@ -1092,7 +1092,7 @@
 // 
 // const ic: [|{| defId: 0 |}I|] = { FC() {} };
 
-// === /a/index.ts ===
+// === /home/src/workspaces/project/a/index.ts ===
 // import { NS } from "../b";
 // <|import { [|{| defId: 1, isWriteAccess: true |}I|] } from "../c";|>
 // 
@@ -1113,7 +1113,7 @@
 //     FC() { },
 // };
 
-// === /a2/index.ts ===
+// === /home/src/workspaces/project/a2/index.ts ===
 // import { NS } from "../b";
 // <|import { [|{| defId: 2, isWriteAccess: true |}I|] } from "../c";|>
 // 
@@ -1135,7 +1135,7 @@
 // };
 
   // === Definitions ===
-  // === /c/index.ts ===
+  // === /home/src/workspaces/project/c/index.ts ===
   // export namespace NS {
   //     export function FC() {}
   // }
@@ -1146,7 +1146,7 @@
   // 
   // const ic: I = { FC() {} };
 
-  // === /a/index.ts ===
+  // === /home/src/workspaces/project/a/index.ts ===
   // import { NS } from "../b";
   // <|import { [|{| defId: 1 |}I|] } from "../c";|>
   // 
@@ -1154,7 +1154,7 @@
   //     export namespace NS {
   // --- (line: 6) skipped ---
 
-  // === /a2/index.ts ===
+  // === /home/src/workspaces/project/a2/index.ts ===
   // import { NS } from "../b";
   // <|import { [|{| defId: 2 |}I|] } from "../c";|>
   // 
@@ -1296,7 +1296,7 @@
 
 
 // === findAllReferences ===
-// === /c/index.ts ===
+// === /home/src/workspaces/project/c/index.ts ===
 // export namespace NS {
 //     export function FC() {}
 // }
@@ -1307,7 +1307,7 @@
 // 
 // const ic: I = { <|[|{| isWriteAccess: true |}FC|]() {}|> };
 
-// === /a/index.ts ===
+// === /home/src/workspaces/project/a/index.ts ===
 // --- (line: 14) skipped ---
 // 
 // const ia: I = {
@@ -1315,7 +1315,7 @@
 //     <|[|{| isWriteAccess: true |}FC|]() { }|>,
 // };
 
-// === /a2/index.ts ===
+// === /home/src/workspaces/project/a2/index.ts ===
 // --- (line: 14) skipped ---
 // 
 // const ia: I = {
@@ -1324,7 +1324,7 @@
 // };
 
   // === Definitions ===
-  // === /c/index.ts ===
+  // === /home/src/workspaces/project/c/index.ts ===
   // export namespace NS {
   //     export function FC() {}
   // }

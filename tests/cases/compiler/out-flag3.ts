@@ -1,9 +1,9 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @sourcemap: true
 // @declaration: true
 // @module: commonjs
 // @outFile: c.js
-// @out: d.js
+// @outFile: d.js
 
 // --out and --outFile error
 

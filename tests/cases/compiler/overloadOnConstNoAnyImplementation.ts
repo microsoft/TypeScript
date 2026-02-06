@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 function x1(a: number, cb: (x: 'hi') => number);
 function x1(a: number, cb: (x: 'bye') => number);
 function x1(a: number, cb: (x: string) => number) {

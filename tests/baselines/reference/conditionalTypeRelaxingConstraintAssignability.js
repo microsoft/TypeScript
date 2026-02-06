@@ -40,16 +40,11 @@ function g(p1: I, p2: Partial<I>): I {
 
 
 //// [conditionalTypeRelaxingConstraintAssignability.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Elem = void 0;
-var Elem = /** @class */ (function () {
-    function Elem(children_) {
+export class Elem {
+    constructor(children_) {
         this.children_ = children_;
     }
-    return Elem;
-}());
-exports.Elem = Elem;
+}
 new Elem(undefined);
 new Elem('');
 new Elem(''); // error

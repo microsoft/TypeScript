@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/declarationEmitScopeConsistency.ts] ////
+
+=== a.ts ===
+export interface A { a: number }
+>a : number
+>  : ^^^^^^
+
+export const f = (x: A) => x as A;
+>f : (x: A) => A
+>  : ^ ^^ ^^^^^ 
+>(x: A) => x as A : (x: A) => A
+>                 : ^ ^^ ^^^^^ 
+>x : A
+>  : ^
+>x as A : A
+>       : ^
+>x : A
+>  : ^
+
+=== b.ts ===
+import { f } from "./a";
+>f : (x: import("a").A) => import("a").A
+>  : ^ ^^       ^^^  ^^^^^^       ^^^  ^
+
+export interface A { other: number }
+>other : number
+>      : ^^^^^^
+
+export const g = f;
+>g : (x: import("a").A) => import("a").A
+>  : ^ ^^       ^^^  ^^^^^^       ^^^  ^
+>f : (x: import("a").A) => import("a").A
+>  : ^ ^^       ^^^  ^^^^^^       ^^^  ^
+

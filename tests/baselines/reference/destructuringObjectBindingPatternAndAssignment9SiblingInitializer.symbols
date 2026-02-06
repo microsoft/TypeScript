@@ -1,0 +1,73 @@
+//// [tests/cases/conformance/es6/destructuring/destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts] ////
+
+=== destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts ===
+// To be inferred as `number`
+function f1() {
+>f1 : Symbol(f1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 0, 0))
+
+    const { a1, b1 = a1 } = { a1: 1 };
+>a1 : Symbol(a1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 2, 11))
+>b1 : Symbol(b1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 2, 15))
+>a1 : Symbol(a1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 2, 11))
+>a1 : Symbol(a1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 2, 29))
+
+    const { a2, b2 = 1 + a2 } = { a2: 1 };
+>a2 : Symbol(a2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 3, 11))
+>b2 : Symbol(b2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 3, 15))
+>a2 : Symbol(a2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 3, 11))
+>a2 : Symbol(a2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 3, 33))
+}
+
+// To be inferred as `string`
+function f2() {
+>f2 : Symbol(f2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 4, 1))
+
+    const { a1, b1 = a1 } = { a1: 'hi' };
+>a1 : Symbol(a1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 8, 11))
+>b1 : Symbol(b1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 8, 15))
+>a1 : Symbol(a1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 8, 11))
+>a1 : Symbol(a1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 8, 29))
+
+    const { a2, b2 = a2 + '!' } = { a2: 'hi' };
+>a2 : Symbol(a2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 9, 11))
+>b2 : Symbol(b2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 9, 15))
+>a2 : Symbol(a2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 9, 11))
+>a2 : Symbol(a2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 9, 35))
+}
+
+// To be inferred as `string | number`
+function f3() {
+>f3 : Symbol(f3, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 10, 1))
+
+    const { a1, b1 = a1 } = { a1: 'hi', b1: 1 };
+>a1 : Symbol(a1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 14, 11))
+>b1 : Symbol(b1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 14, 15))
+>a1 : Symbol(a1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 14, 11))
+>a1 : Symbol(a1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 14, 29))
+>b1 : Symbol(b1, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 14, 39))
+
+    const { a2, b2 = a2 + '!' } = { a2: 'hi', b2: 1 };
+>a2 : Symbol(a2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 15, 11))
+>b2 : Symbol(b2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 15, 15))
+>a2 : Symbol(a2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 15, 11))
+>a2 : Symbol(a2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 15, 35))
+>b2 : Symbol(b2, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 15, 45))
+}
+
+// Based on comment:
+//   - https://github.com/microsoft/TypeScript/issues/49989#issuecomment-1852694486
+declare const yadda: { a?: number, b?: number } | undefined
+>yadda : Symbol(yadda, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 20, 13))
+>a : Symbol(a, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 20, 22))
+>b : Symbol(b, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 20, 34))
+
+function f4() {
+>f4 : Symbol(f4, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 20, 59))
+
+    const { a, b = a } = yadda ?? {};
+>a : Symbol(a, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 22, 11))
+>b : Symbol(b, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 22, 14))
+>a : Symbol(a, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 22, 11))
+>yadda : Symbol(yadda, Decl(destructuringObjectBindingPatternAndAssignment9SiblingInitializer.ts, 20, 13))
+}
+

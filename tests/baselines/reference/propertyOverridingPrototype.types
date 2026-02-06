@@ -3,18 +3,23 @@
 === propertyOverridingPrototype.ts ===
 class Base {
 >Base : Base
+>     : ^^^^
 
     foo() {
 >foo : () => void
+>    : ^^^^^^^^^^
     }
 }
 
 class Derived extends Base {
 >Derived : Derived
+>        : ^^^^^^^
 >Base : Base
+>     : ^^^^
 
     foo: () => { };
 >foo : () => {}
+>    : ^^^^^^  
 }
 
 

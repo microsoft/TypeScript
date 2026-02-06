@@ -27,6 +27,7 @@ const test = (base) => {
 
 
 //// [base.js]
+"use strict";
 class Base {
     constructor() { }
 }
@@ -36,6 +37,7 @@ const BaseFactory = () => {
 BaseFactory.Base = Base;
 module.exports = BaseFactory;
 //// [file.js]
+"use strict";
 /** @typedef {typeof import('./base')} BaseFactory */
 /**
  *
@@ -63,4 +65,4 @@ declare class Base {
  * @returns {InstanceType<BaseFactory["Base"]>}
  */
 declare function test(base: InstanceType<BaseFactory["Base"]>): InstanceType<BaseFactory["Base"]>;
-type BaseFactory = typeof import('./base');
+type BaseFactory = typeof import("./base");

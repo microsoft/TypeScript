@@ -6,7 +6,6 @@ import {
     assertType,
     BindingElement,
     Block,
-    BlockLike,
     BreakStatement,
     CancellationToken,
     canHaveModifiers,
@@ -48,6 +47,7 @@ import {
     getEffectiveTypeParameterDeclarations,
     getEmitScriptTarget,
     getEnclosingBlockScopeContainer,
+    getLineAndCharacterOfPosition,
     getLocaleSpecificMessage,
     getModifiers,
     getNodeId,
@@ -61,12 +61,13 @@ import {
     hasEffectiveModifier,
     hasSyntacticModifier,
     Identifier,
-    identifierToKeywordKind,
+    InternalNodeBuilderFlags,
     isArray,
     isArrowFunction,
     isAssignmentExpression,
     isBinaryExpression,
     isBlock,
+    isBlockLike,
     isBlockScope,
     isCaseClause,
     isClassLike,
@@ -91,7 +92,6 @@ import {
     isModuleBlock,
     isParenthesizedTypeNode,
     isPartOfTypeNode,
-    isPrivateIdentifier,
     isPropertyAccessExpression,
     isPropertyDeclaration,
     isQualifiedName,
@@ -120,7 +120,6 @@ import {
     Node,
     NodeBuilderFlags,
     NodeFlags,
-    nullTransformationContext,
     ObjectLiteralElementLike,
     ParameterDeclaration,
     positionIsSynthesized,
@@ -159,11 +158,12 @@ import {
     visitNode,
     visitNodes,
     VisitResult,
-} from "../_namespaces/ts";
+} from "../_namespaces/ts.js";
 import {
+    getIdentifierForNode,
     refactorKindBeginsWith,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Extract Symbol";
 
@@ -220,7 +220,7 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
         return errors;
     }
 
-    const extractions = getPossibleExtractions(targetRange, context);
+    const { affectedTextRange, extractions } = getPossibleExtractions(targetRange, context);
     if (extractions === undefined) {
         // No extractions possible
         return emptyArray;
@@ -248,6 +248,10 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                         description,
                         name: `function_scope_${i}`,
                         kind: extractFunctionAction.kind,
+                        range: {
+                            start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character },
+                            end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character },
+                        },
                     });
                 }
             }
@@ -273,6 +277,10 @@ export function getRefactorActionsToExtractSymbol(context: RefactorContext): rea
                         description,
                         name: `constant_scope_${i}`,
                         kind: extractConstantAction.kind,
+                        range: {
+                            start: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.pos).character },
+                            end: { line: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).line, offset: getLineAndCharacterOfPosition(context.file, affectedTextRange.end).character },
+                        },
                     });
                 }
             }
@@ -379,17 +387,17 @@ export namespace Messages {
     export const cannotExtractRangeContainingConditionalReturnStatement: DiagnosticMessage = createMessage("Cannot extract range containing conditional return statement.");
     export const cannotExtractRangeContainingLabeledBreakOrContinueStatementWithTargetOutsideOfTheRange: DiagnosticMessage = createMessage("Cannot extract range containing labeled break or continue with target outside of the range.");
     export const cannotExtractRangeThatContainsWritesToReferencesLocatedOutsideOfTheTargetRangeInGenerators: DiagnosticMessage = createMessage("Cannot extract range containing writes to references located outside of the target range in generators.");
-    export const typeWillNotBeVisibleInTheNewScope = createMessage("Type will not visible in the new scope.");
-    export const functionWillNotBeVisibleInTheNewScope = createMessage("Function will not visible in the new scope.");
-    export const cannotExtractIdentifier = createMessage("Select more than a single identifier.");
-    export const cannotExtractExportedEntity = createMessage("Cannot extract exported declaration");
-    export const cannotWriteInExpression = createMessage("Cannot write back side-effects when extracting an expression");
-    export const cannotExtractReadonlyPropertyInitializerOutsideConstructor = createMessage("Cannot move initialization of read-only class property outside of the constructor");
-    export const cannotExtractAmbientBlock = createMessage("Cannot extract code from ambient contexts");
-    export const cannotAccessVariablesFromNestedScopes = createMessage("Cannot access variables from nested scopes");
-    export const cannotExtractToJSClass = createMessage("Cannot extract constant to a class scope in JS");
-    export const cannotExtractToExpressionArrowFunction = createMessage("Cannot extract constant to an arrow function without a block");
-    export const cannotExtractFunctionsContainingThisToMethod = createMessage("Cannot extract functions containing this to method");
+    export const typeWillNotBeVisibleInTheNewScope: DiagnosticMessage = createMessage("Type will not visible in the new scope.");
+    export const functionWillNotBeVisibleInTheNewScope: DiagnosticMessage = createMessage("Function will not visible in the new scope.");
+    export const cannotExtractIdentifier: DiagnosticMessage = createMessage("Select more than a single identifier.");
+    export const cannotExtractExportedEntity: DiagnosticMessage = createMessage("Cannot extract exported declaration");
+    export const cannotWriteInExpression: DiagnosticMessage = createMessage("Cannot write back side-effects when extracting an expression");
+    export const cannotExtractReadonlyPropertyInitializerOutsideConstructor: DiagnosticMessage = createMessage("Cannot move initialization of read-only class property outside of the constructor");
+    export const cannotExtractAmbientBlock: DiagnosticMessage = createMessage("Cannot extract code from ambient contexts");
+    export const cannotAccessVariablesFromNestedScopes: DiagnosticMessage = createMessage("Cannot access variables from nested scopes");
+    export const cannotExtractToJSClass: DiagnosticMessage = createMessage("Cannot extract constant to a class scope in JS");
+    export const cannotExtractToExpressionArrowFunction: DiagnosticMessage = createMessage("Cannot extract constant to an arrow function without a block");
+    export const cannotExtractFunctionsContainingThisToMethod: DiagnosticMessage = createMessage("Cannot extract functions containing this to method");
 }
 
 /** @internal */
@@ -910,8 +918,8 @@ interface ScopeExtractions {
  * Each returned ExtractResultForScope corresponds to a possible target scope and is either a set of changes
  * or an error explaining why we can't extract into that scope.
  */
-function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): readonly ScopeExtractions[] | undefined {
-    const { scopes, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
+function getPossibleExtractions(targetRange: TargetRange, context: RefactorContext): { readonly affectedTextRange: TextRange; readonly extractions: ScopeExtractions[] | undefined; } {
+    const { scopes, affectedTextRange, readsAndWrites: { functionErrorsPerScope, constantErrorsPerScope } } = getPossibleExtractionsWorker(targetRange, context);
     // Need the inner type annotation to avoid https://github.com/Microsoft/TypeScript/issues/7547
     const extractions = scopes.map((scope, i): ScopeExtractions => {
         const functionDescriptionPart = getDescriptionForFunctionInScope(scope);
@@ -954,10 +962,10 @@ function getPossibleExtractions(targetRange: TargetRange, context: RefactorConte
             },
         };
     });
-    return extractions;
+    return { affectedTextRange, extractions };
 }
 
-function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[]; readonly readsAndWrites: ReadsAndWrites; } {
+function getPossibleExtractionsWorker(targetRange: TargetRange, context: RefactorContext): { readonly scopes: Scope[]; readonly affectedTextRange: TextRange; readonly readsAndWrites: ReadsAndWrites; } {
     const { file: sourceFile } = context;
 
     const scopes = collectEnclosingScopes(targetRange);
@@ -970,7 +978,7 @@ function getPossibleExtractionsWorker(targetRange: TargetRange, context: Refacto
         context.program.getTypeChecker(),
         context.cancellationToken!,
     );
-    return { scopes, readsAndWrites };
+    return { scopes, affectedTextRange: enclosingTextRange, readsAndWrites };
 }
 
 function getDescriptionForFunctionInScope(scope: Scope): string {
@@ -1055,7 +1063,7 @@ function extractFunctionInScope(
             let type = checker.getTypeOfSymbolAtLocation(usage.symbol, usage.node);
             // Widen the type so we don't emit nonsense annotations like "function fn(x: 3) {"
             type = checker.getBaseTypeOfLiteralType(type);
-            typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, NodeBuilderFlags.NoTruncation);
+            typeNode = codefix.typeToAutoImportableTypeNode(checker, importAdder, type, scope, scriptTarget, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames);
         }
 
         const paramDecl = factory.createParameterDeclaration(
@@ -1073,11 +1081,11 @@ function extractFunctionInScope(
     });
 
     const typeParametersAndDeclarations = arrayFrom(typeParameterUsages.values(), type => ({ type, declaration: getFirstDeclarationBeforePosition(type, context.startPosition) }));
-    const sortedTypeParametersAndDeclarations = typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
+    typeParametersAndDeclarations.sort(compareTypesByDeclarationOrder);
 
-    const typeParameters: readonly TypeParameterDeclaration[] | undefined = sortedTypeParametersAndDeclarations.length === 0
+    const typeParameters: readonly TypeParameterDeclaration[] | undefined = typeParametersAndDeclarations.length === 0
         ? undefined
-        : mapDefined(sortedTypeParametersAndDeclarations, ({ declaration }) => declaration as TypeParameterDeclaration);
+        : mapDefined(typeParametersAndDeclarations, ({ declaration }) => declaration as TypeParameterDeclaration);
 
     // Strictly speaking, we should check whether each name actually binds to the appropriate type
     // parameter.  In cases of shadowing, they may not.
@@ -1089,7 +1097,7 @@ function extractFunctionInScope(
     // to avoid problems when there are literal types present
     if (isExpression(node) && !isJS) {
         const contextualType = checker.getContextualType(node);
-        returnType = checker.typeToTypeNode(contextualType!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
+        returnType = checker.typeToTypeNode(contextualType!, scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames); // TODO: GH#18217
     }
 
     const { body, returnValueProperty } = transformFunctionBody(node, exposedVariableDeclarations, writes, substitutions, !!(range.facts & RangeFacts.HasReturn));
@@ -1131,6 +1139,7 @@ function extractFunctionInScope(
                         checker.getTypeAtLocation(range.thisNode!),
                         scope,
                         NodeBuilderFlags.NoTruncation,
+                        InternalNodeBuilderFlags.AllowUnresolvedNames,
                     ),
                     /*initializer*/ undefined,
                 ),
@@ -1221,6 +1230,7 @@ function extractFunctionInScope(
                     checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(variableDeclaration)),
                     scope,
                     NodeBuilderFlags.NoTruncation,
+                    InternalNodeBuilderFlags.AllowUnresolvedNames,
                 );
 
                 typeElements.push(factory.createPropertySignature(
@@ -1366,14 +1376,12 @@ function extractConstantInScope(
 
     // Make a unique name for the extracted variable
     const file = scope.getSourceFile();
-    const localNameText = isPropertyAccessExpression(node) && !isClassLike(scope) && !checker.resolveName(node.name.text, node, SymbolFlags.Value, /*excludeGlobals*/ false) && !isPrivateIdentifier(node.name) && !identifierToKeywordKind(node.name)
-        ? node.name.text
-        : getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
+    const localNameText = getIdentifierForNode(node, scope, checker, file);
     const isJS = isInJSFile(scope);
 
     let variableType = isJS || !checker.isContextSensitive(node)
         ? undefined
-        : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation); // TODO: GH#18217
+        : checker.typeToTypeNode(checker.getContextualType(node)!, scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames); // TODO: GH#18217
 
     let initializer = transformConstantInitializer(skipParentheses(node), substitutions);
 
@@ -1507,7 +1515,7 @@ function extractConstantInScope(
                 const paramType = checker.getTypeAtLocation(p);
                 if (paramType === checker.getAnyType()) hasAny = true;
 
-                parameters.push(factory.updateParameterDeclaration(p, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation), p.initializer));
+                parameters.push(factory.updateParameterDeclaration(p, p.modifiers, p.dotDotDotToken, p.name, p.questionToken, p.type || checker.typeToTypeNode(paramType, scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames), p.initializer));
             }
         }
         // If a parameter was inferred as any we skip adding function parameters at all.
@@ -1516,7 +1524,7 @@ function extractConstantInScope(
         if (hasAny) return { variableType, initializer };
         variableType = undefined;
         if (isArrowFunction(initializer)) {
-            initializer = factory.updateArrowFunction(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.typeParameters, parameters, initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation), initializer.equalsGreaterThanToken, initializer.body);
+            initializer = factory.updateArrowFunction(initializer, canHaveModifiers(node) ? getModifiers(node) : undefined, initializer.typeParameters, parameters, initializer.type || checker.typeToTypeNode(functionSignature.getReturnType(), scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames), initializer.equalsGreaterThanToken, initializer.body);
         }
         else {
             if (functionSignature && !!functionSignature.thisParameter) {
@@ -1533,7 +1541,7 @@ function extractConstantInScope(
                             /*dotDotDotToken*/ undefined,
                             "this",
                             /*questionToken*/ undefined,
-                            checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation),
+                            checker.typeToTypeNode(thisType, scope, NodeBuilderFlags.NoTruncation, InternalNodeBuilderFlags.AllowUnresolvedNames),
                         ),
                     );
                 }
@@ -1648,7 +1656,7 @@ function transformFunctionBody(body: Node, exposedVariableDeclarations: readonly
             const oldIgnoreReturns = ignoreReturns;
             ignoreReturns = ignoreReturns || isFunctionLikeDeclaration(node) || isClassLike(node);
             const substitution = substitutions.get(getNodeId(node).toString());
-            const result = substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, nullTransformationContext);
+            const result = substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, /*context*/ undefined);
             ignoreReturns = oldIgnoreReturns;
             return result;
         }
@@ -1662,7 +1670,7 @@ function transformConstantInitializer(initializer: Expression, substitutions: Re
 
     function visitor(node: Node): VisitResult<Node> {
         const substitution = substitutions.get(getNodeId(node).toString());
-        return substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, nullTransformationContext);
+        return substitution ? getSynthesizedDeepClone(substitution) : visitEachChild(node, visitor, /*context*/ undefined);
     }
 }
 
@@ -2220,18 +2228,6 @@ function isExtractableExpression(node: Node): boolean {
                 parent.kind !== SyntaxKind.ExportSpecifier;
     }
     return true;
-}
-
-function isBlockLike(node: Node): node is BlockLike {
-    switch (node.kind) {
-        case SyntaxKind.Block:
-        case SyntaxKind.SourceFile:
-        case SyntaxKind.ModuleBlock:
-        case SyntaxKind.CaseClause:
-            return true;
-        default:
-            return false;
-    }
 }
 
 function isInJSXContent(node: Node) {

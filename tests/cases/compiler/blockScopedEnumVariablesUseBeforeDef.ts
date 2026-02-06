@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 function foo1() {
     return E.A
     enum E { A }
@@ -7,4 +7,12 @@ function foo1() {
 function foo2() {
     return E.A
     const enum E { A }
+}
+
+const config = {
+    a: AfterObject.A,
+};
+
+const enum AfterObject {
+    A = 2,
 }

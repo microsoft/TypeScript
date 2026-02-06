@@ -1,3 +1,4 @@
+// @target: es2015
 class C<T, U extends T> { }
 class C2<T extends U, U> { }
 class C3<T extends Date, U extends T> { }

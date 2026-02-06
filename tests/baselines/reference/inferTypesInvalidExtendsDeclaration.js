@@ -5,3 +5,8 @@ type Test<T> = T extends infer A extends B ? number : string;
 
 
 //// [inferTypesInvalidExtendsDeclaration.js]
+"use strict";
+
+
+//// [inferTypesInvalidExtendsDeclaration.d.ts]
+type Test<T> = T extends infer A extends B ? number : string;

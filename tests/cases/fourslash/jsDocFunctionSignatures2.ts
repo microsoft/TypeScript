@@ -8,4 +8,4 @@
 ////
 //// f6('', /**/false)
 
-verify.signatureHelp({ marker: "", text: "f6(arg0: string, arg1?: boolean): number" });
+verify.signatureHelp({ marker: "", text: "f6(arg0: string, arg1?: boolean | undefined): number" });

@@ -6,6 +6,6 @@ hugeDeclarationOutputGetsTruncatedWithError.ts(5,14): error TS7056: The inferred
     
     type manyprops = `${props}${props}`;
     
-    export const c = null as any as {[K in manyprops]: {[K2 in manyprops]: `${K}.${K2}`}};
+    export const c = [null as any as {[K in manyprops]: {[K2 in manyprops]: `${K}.${K2}`}}][0];
                  ~
 !!! error TS7056: The inferred type of this node exceeds the maximum length the compiler will serialize. An explicit type annotation is needed.

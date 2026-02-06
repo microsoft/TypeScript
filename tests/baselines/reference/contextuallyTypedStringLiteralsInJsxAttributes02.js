@@ -1,7 +1,11 @@
 //// [tests/cases/conformance/types/contextualTypes/jsxAttributes/contextuallyTypedStringLiteralsInJsxAttributes02.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react')
+
+declare function log(...args: any[]): void;
 
 export interface ClickableProps {
     children?: string;
@@ -27,39 +31,38 @@ export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
     return this._buildMainButton(props);
 }
 
-const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"
-const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
+const b0 = <MainButton {...{onClick: (k) => {log(k)}}} extra />;  // k has type "left" | "right"
+const b2 = <MainButton onClick={(k)=>{log(k)}} extra />;  // k has type "left" | "right"
 const b3 = <MainButton {...{goTo:"home"}} extra />;  // goTo has type"home" | "contact"
 const b4 = <MainButton goTo="home" extra />;  // goTo has type "home" | "contact"
 
 export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undefined }
-const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
+const c1 = <NoOverload  {...{onClick: (k) => {log(k)}}} extra />;  // k has type any
 
 export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefined }
 const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" | "contact"
 
 
 //// [file.jsx]
-define(["require", "exports", "react"], function (require, exports, React) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.NoOverload1 = exports.NoOverload = exports.MainButton = void 0;
-    function MainButton(props) {
-        var linkProps = props;
-        if (linkProps.goTo) {
-            return this._buildMainLink(props);
-        }
-        return this._buildMainButton(props);
+"use strict";
+/// <reference path="/.lib/react.d.ts" />
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.MainButton = MainButton;
+exports.NoOverload = NoOverload;
+exports.NoOverload1 = NoOverload1;
+const React = require("react");
+function MainButton(props) {
+    const linkProps = props;
+    if (linkProps.goTo) {
+        return this._buildMainLink(props);
     }
-    exports.MainButton = MainButton;
-    var b0 = <MainButton {...{ onClick: function (k) { console.log(k); } }} extra/>; // k has type "left" | "right"
-    var b2 = <MainButton onClick={function (k) { console.log(k); }} extra/>; // k has type "left" | "right"
-    var b3 = <MainButton {...{ goTo: "home" }} extra/>; // goTo has type"home" | "contact"
-    var b4 = <MainButton goTo="home" extra/>; // goTo has type "home" | "contact"
-    function NoOverload(buttonProps) { return undefined; }
-    exports.NoOverload = NoOverload;
-    var c1 = <NoOverload {...{ onClick: function (k) { console.log(k); } }} extra/>; // k has type any
-    function NoOverload1(linkProps) { return undefined; }
-    exports.NoOverload1 = NoOverload1;
-    var d1 = <NoOverload1 {...{ goTo: "home" }} extra/>; // goTo has type "home" | "contact"
-});
+    return this._buildMainButton(props);
+}
+const b0 = <MainButton {...{ onClick: (k) => { log(k); } }} extra/>; // k has type "left" | "right"
+const b2 = <MainButton onClick={(k) => { log(k); }} extra/>; // k has type "left" | "right"
+const b3 = <MainButton {...{ goTo: "home" }} extra/>; // goTo has type"home" | "contact"
+const b4 = <MainButton goTo="home" extra/>; // goTo has type "home" | "contact"
+function NoOverload(buttonProps) { return undefined; }
+const c1 = <NoOverload {...{ onClick: (k) => { log(k); } }} extra/>; // k has type any
+function NoOverload1(linkProps) { return undefined; }
+const d1 = <NoOverload1 {...{ goTo: "home" }} extra/>; // goTo has type "home" | "contact"

@@ -1,5 +1,9 @@
+// @target: es2015
+// @ignoreDeprecations: 6.0
+// @strict: false
+// @alwaysStrict: true, false
 
-module Inner {
+namespace Inner {
     var;
     let;
     const;
@@ -17,7 +21,7 @@ module Inner {
         export let x, y, z;
     }
     
-    module C {
+    namespace C {
         export var a = 1, b, c = 2;
         export var x, y, z;
     }

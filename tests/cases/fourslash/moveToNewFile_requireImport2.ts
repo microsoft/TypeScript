@@ -23,7 +23,7 @@ verify.moveToNewFile({
 `,
 
         "/f.js":
-`var b = require("./a");
+`const b = require("./a");
 
 function f() {
     b;

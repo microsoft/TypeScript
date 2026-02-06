@@ -3,7 +3,9 @@
 === unusedParameterInCatchClause.ts ===
 function f1() {
 >f1 : () => void
+>   : ^^^^^^^^^^
 
     try {} catch(ex){}
->ex : any
+>ex : unknown
+>   : ^^^^^^^
 }

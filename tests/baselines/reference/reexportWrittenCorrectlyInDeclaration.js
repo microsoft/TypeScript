@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/reexportWrittenCorrectlyInDeclaration.ts] ////
 
 //// [ThingA.ts]
-// https://github.com/Microsoft/TypeScript/issues/8612
 export class ThingA { } 
 
 //// [ThingB.ts]
@@ -22,22 +21,15 @@ export class Test {
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThingA = void 0;
-// https://github.com/Microsoft/TypeScript/issues/8612
-var ThingA = /** @class */ (function () {
-    function ThingA() {
-    }
-    return ThingA;
-}());
+class ThingA {
+}
 exports.ThingA = ThingA;
 //// [ThingB.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ThingB = void 0;
-var ThingB = /** @class */ (function () {
-    function ThingB() {
-    }
-    return ThingB;
-}());
+class ThingB {
+}
 exports.ThingB = ThingB;
 //// [Things.js]
 "use strict";
@@ -51,12 +43,11 @@ Object.defineProperty(exports, "ThingB", { enumerable: true, get: function () { 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = void 0;
-var Test = /** @class */ (function () {
-    function Test() {
-        this.method = function (input) { };
+class Test {
+    constructor() {
+        this.method = (input) => { };
     }
-    return Test;
-}());
+}
 exports.Test = Test;
 
 

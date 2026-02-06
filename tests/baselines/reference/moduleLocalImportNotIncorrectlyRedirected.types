@@ -3,10 +3,12 @@
 === index.ts ===
 import { ISpinButton } from "troublesome-lib";
 >ISpinButton : any
+>            : ^^^
 
 === node_modules/troublesome-lib/lib/index.d.ts ===
 import { Position } from './utilities/positioning';
 >Position : typeof Position
+>         : ^^^^^^^^^^^^^^^
 
 export interface ISpinButton {}
 === node_modules/troublesome-lib/lib/utilities/positioning.d.ts ===
@@ -15,7 +17,9 @@ export * from './positioning/index';
 === node_modules/troublesome-lib/lib/utilities/positioning/index.d.ts ===
 export declare enum Position {
 >Position : Position
+>         : ^^^^^^^^
 
     top,
 >top : Position.top
+>    : ^^^^^^^^^^^^
 }

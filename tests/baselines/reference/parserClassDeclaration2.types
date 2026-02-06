@@ -3,4 +3,5 @@
 === parserClassDeclaration2.ts ===
 class C implements A implements B {
 >C : C
+>  : ^
 }

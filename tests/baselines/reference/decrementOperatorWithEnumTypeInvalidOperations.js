@@ -25,6 +25,7 @@ ENUM--;
 ENUM1--;
 
 //// [decrementOperatorWithEnumTypeInvalidOperations.js]
+"use strict";
 // -- operator on enum type
 var ENUM;
 (function (ENUM) {

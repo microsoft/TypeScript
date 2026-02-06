@@ -5,8 +5,11 @@
 // Report an error if IterableIterator cannot be found.
 function* f() {
 >f : () => {}
+>  : ^^^^^^^^
 
     yield 1;
 >yield 1 : any
+>        : ^^^
 >1 : 1
+>  : ^
 }

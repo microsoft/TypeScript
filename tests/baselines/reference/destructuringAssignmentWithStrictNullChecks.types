@@ -3,11 +3,17 @@
 === destructuringAssignmentWithStrictNullChecks.ts ===
 let bar: {};
 >bar : {}
+>    : ^^
 
 ({ ...bar } = {});
 >({ ...bar } = {}) : {}
+>                  : ^^
 >{ ...bar } = {} : {}
+>                : ^^
 >{ ...bar } : {}
+>           : ^^
 >bar : {}
+>    : ^^
 >{} : {}
+>   : ^^
 

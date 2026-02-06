@@ -23,6 +23,10 @@ import {
     isNumericLiteral,
     isObjectLiteralExpression,
     isPropertyAccessExpression,
+    isShorthandPropertyAssignment,
+    isStringLiteral,
+    isTaggedTemplateExpression,
+    isTemplateSpan,
     isTypeQueryNode,
     isVariableDeclarationInVariableStatement,
     isVariableStatement,
@@ -32,16 +36,19 @@ import {
     refactor,
     some,
     SourceFile,
+    StringLiteral,
     SymbolFlags,
+    TemplateSpan,
     textChanges,
     textRangeContainsPositionInclusive,
     TypeChecker,
     VariableDeclaration,
-} from "../_namespaces/ts";
+    walkUpParenthesizedExpressions,
+} from "../_namespaces/ts.js";
 import {
     RefactorErrorInfo,
     registerRefactor,
-} from "../_namespaces/ts.refactor";
+} from "../_namespaces/ts.refactor.js";
 
 const refactorName = "Inline variable";
 const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_variable);
@@ -102,7 +109,6 @@ registerRefactor(refactorName, {
 
     getEditsForAction(context, actionName) {
         Debug.assert(actionName === refactorName, "Unexpected refactor invoked");
-
         const { file, program, startPosition } = context;
 
         // tryWithReferenceToken is true below since here we're already performing the refactor.
@@ -115,7 +121,13 @@ registerRefactor(refactorName, {
         const { references, declaration, replacement } = info;
         const edits = textChanges.ChangeTracker.with(context, tracker => {
             for (const node of references) {
-                tracker.replaceNode(file, node, getReplacementExpression(node, replacement));
+                const closestStringIdentifierParent = isStringLiteral(replacement) && isIdentifier(node) && walkUpParenthesizedExpressions(node.parent);
+                if (closestStringIdentifierParent && isTemplateSpan(closestStringIdentifierParent) && !isTaggedTemplateExpression(closestStringIdentifierParent.parent.parent)) {
+                    replaceTemplateStringVariableWithLiteral(tracker, file, closestStringIdentifierParent, replacement);
+                }
+                else {
+                    tracker.replaceNode(file, node, getReplacementExpression(node, replacement));
+                }
             }
             tracker.delete(file, declaration);
         });
@@ -189,9 +201,10 @@ function isDeclarationExported(declaration: InitializedVariableDeclaration): boo
 function getReferenceNodes(declaration: InitializedVariableDeclaration, checker: TypeChecker, file: SourceFile): Identifier[] | undefined {
     const references: Identifier[] = [];
     const cannotInline = FindAllReferences.Core.eachSymbolReferenceInFile(declaration.name as Identifier, checker, file, ref => {
-        // Only inline if all references are reads. Else we might end up with an invalid scenario like:
-        // const y = x++ + 1 -> const y = 2++ + 1
-        if (FindAllReferences.isWriteAccessForReference(ref)) {
+        // Only inline if all references are reads, or if it includes a shorthand property assignment.
+        // Else we might end up with an invalid scenario like:
+        // const y = x++ + 1 -> const y = 2++ + 1,
+        if (FindAllReferences.isWriteAccessForReference(ref) && !isShorthandPropertyAssignment(ref.parent)) {
             return true;
         }
 
@@ -216,7 +229,7 @@ function getReferenceNodes(declaration: InitializedVariableDeclaration, checker:
     return references.length === 0 || cannotInline ? undefined : references;
 }
 
-function getReplacementExpression(reference: Node, replacement: Expression): Expression {
+function getReplacementExpression(reference: Node, replacement: Expression) {
     // Make sure each reference site gets its own copy of the replacement node.
     replacement = getSynthesizedDeepClone(replacement);
     const { parent } = reference;
@@ -244,5 +257,27 @@ function getReplacementExpression(reference: Node, replacement: Expression): Exp
         return factory.createParenthesizedExpression(replacement);
     }
 
+    // Inline shorthand property assignment
+    // E.g.:
+    // const x = 1;
+    // const y = { x }; -> const y = { x: 1 };
+    if (isIdentifier(reference) && isShorthandPropertyAssignment(parent)) {
+        return factory.createPropertyAssignment(reference, replacement);
+    }
+
     return replacement;
+}
+
+function replaceTemplateStringVariableWithLiteral(tracker: textChanges.ChangeTracker, sourceFile: SourceFile, reference: TemplateSpan, replacement: StringLiteral) {
+    const templateExpression = reference.parent;
+    const index = templateExpression.templateSpans.indexOf(reference);
+    const prevNode = index === 0 ? templateExpression.head : templateExpression.templateSpans[index - 1];
+    tracker.replaceRangeWithText(
+        sourceFile,
+        {
+            pos: prevNode.getEnd() - 2,
+            end: reference.literal.getStart() + 1,
+        },
+        replacement.text.replace(/\\/g, "\\\\").replace(/`/g, "\\`"),
+    );
 }

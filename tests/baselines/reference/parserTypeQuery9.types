@@ -3,5 +3,7 @@
 === parserTypeQuery9.ts ===
 var s: typeof A[];
 >s : any[]
+>  : ^^^^^
 >A : any
+>  : ^^^
 

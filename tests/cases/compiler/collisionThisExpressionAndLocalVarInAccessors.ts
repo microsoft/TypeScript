@@ -1,4 +1,5 @@
-// @target: es5
+// @strict: false
+// @target: es5, es2015
 class class1 {
     get a(): number {
         var x2 = {

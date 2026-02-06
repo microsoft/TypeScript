@@ -23,7 +23,9 @@ function f2() {
     return 5 || "hello";
 }
 
+
 //// [dummy.js]
+"use strict";
 // @ts-check
 /**
  * @returns {string} This comment is not currently exposed

@@ -3,18 +3,23 @@
 === file1.d.ts ===
 declare module "file1" {
 >"file1" : typeof import("file1")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 
     class foo {}
 >foo : import("file1.d.ts")
+>    : ^^^^^^^^^^^^^^^^^^^^
 
     namespace foo {
 >foo : typeof import("file1.d.ts")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
         class A {}
 >A : A
+>  : ^
     }
     export = foo;
 >foo : import("file1.d.ts")
+>    : ^^^^^^^^^^^^^^^^^^^^
 }
 
 
@@ -22,27 +27,37 @@ declare module "file1" {
 /// <reference path="file1.d.ts"/>
 import x = require("file1"); 
 >x : typeof x
+>  : ^^^^^^^^
 
 // OK - './file1' is a namespace
 declare module "file1" {
 >"file1" : typeof x
+>        : ^^^^^^^^
 
     interface A { a: number }
 >a : number
+>  : ^^^^^^
 }
 
 === file3.ts ===
 import * as x from "file1";
 >x : typeof x
+>  : ^^^^^^^^
 
 import "file2";
 let a: x.A;
 >a : x.A
+>  : ^^^
 >x : any
+>  : ^^^
 
 let b = a.a;
 >b : number
+>  : ^^^^^^
 >a.a : number
+>    : ^^^^^^
 >a : x.A
+>  : ^^^
 >a : number
+>  : ^^^^^^
 

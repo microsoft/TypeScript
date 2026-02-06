@@ -4,18 +4,22 @@
 interface Entity<T extends Entity<T>> {
    X: T;
 >X : T
+>  : ^
 
    Y: T;
 >Y : T
+>  : ^
 }
 
 interface Person<U extends Person<U>> extends Entity<U> {
 	n: number;
 >n : number
+>  : ^^^^^^
 }
 
 interface Customer extends Person<Customer> {
 	s: string;
 >s : string
+>  : ^^^^^^
 }
 

@@ -1,8 +1,6 @@
-import * as Harness from "../../_namespaces/Harness";
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as Harness from "../../_namespaces/Harness.js";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 
 describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
     function assertParseResult(subScenario: string, commandLine: string[], workerDiagnostic?: () => ts.ParseCommandLineWorkerDiagnostics) {
@@ -28,7 +26,7 @@ describe("unittests:: config:: commandLineParsing:: parseCommandLine", () => {
 
     // --lib es6 0.ts
     assertParseResult("Parse single option of library flag", ["--lib", "es6", "0.ts"]);
-    assertParseResult("Handles may only be used with --build flags", ["--clean", "--dry", "--force", "--verbose"]);
+    assertParseResult("Handles may only be used with --build flags", ["--build", "--clean", "--dry", "--force", "--verbose"]);
     // --declarations --allowTS
     assertParseResult("Handles did you mean for misspelt flags", ["--declarations", "--allowTS"]);
     // --lib es5,es2015.symbol.wellknown 0.ts

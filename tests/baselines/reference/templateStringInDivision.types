@@ -3,8 +3,13 @@
 === templateStringInDivision.ts ===
 var x = `abc${ 1 }def` / 1;
 >x : number
+>  : ^^^^^^
 >`abc${ 1 }def` / 1 : number
+>                   : ^^^^^^
 >`abc${ 1 }def` : "abc1def"
+>               : ^^^^^^^^^
 >1 : 1
+>  : ^
 >1 : 1
+>  : ^
 

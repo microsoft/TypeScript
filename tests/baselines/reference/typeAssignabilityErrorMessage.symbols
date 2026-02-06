@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/typeAssignabilityErrorMessage.ts] ////
+
+=== typeAssignabilityErrorMessage.ts ===
+// Example: different error code altogether
+
+interface ThroughStream {
+>ThroughStream : Symbol(ThroughStream, Decl(typeAssignabilityErrorMessage.ts, 0, 0))
+
+    a: string;
+>a : Symbol(ThroughStream.a, Decl(typeAssignabilityErrorMessage.ts, 2, 25))
+}
+interface ReadStream {
+>ReadStream : Symbol(ReadStream, Decl(typeAssignabilityErrorMessage.ts, 4, 1))
+
+    f: string;
+>f : Symbol(ReadStream.f, Decl(typeAssignabilityErrorMessage.ts, 5, 22))
+
+    g: number;
+>g : Symbol(ReadStream.g, Decl(typeAssignabilityErrorMessage.ts, 6, 14))
+
+    h: boolean;
+>h : Symbol(ReadStream.h, Decl(typeAssignabilityErrorMessage.ts, 7, 14))
+
+    i: BigInt;
+>i : Symbol(ReadStream.i, Decl(typeAssignabilityErrorMessage.ts, 8, 15))
+>BigInt : Symbol(BigInt, Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --))
+
+    j: symbol;
+>j : Symbol(ReadStream.j, Decl(typeAssignabilityErrorMessage.ts, 9, 14))
+}
+function foo(): ReadStream {
+>foo : Symbol(foo, Decl(typeAssignabilityErrorMessage.ts, 11, 1))
+>ReadStream : Symbol(ReadStream, Decl(typeAssignabilityErrorMessage.ts, 4, 1))
+
+    return undefined as any as ThroughStream;
+>undefined : Symbol(undefined)
+>ThroughStream : Symbol(ThroughStream, Decl(typeAssignabilityErrorMessage.ts, 0, 0))
+}
+function bar(): ReadStream {
+>bar : Symbol(bar, Decl(typeAssignabilityErrorMessage.ts, 14, 1))
+>ReadStream : Symbol(ReadStream, Decl(typeAssignabilityErrorMessage.ts, 4, 1))
+
+    return undefined as any as ThroughStream;
+>undefined : Symbol(undefined)
+>ThroughStream : Symbol(ThroughStream, Decl(typeAssignabilityErrorMessage.ts, 0, 0))
+}
+
+// Example: different elaboration
+
+type Wrap = {
+>Wrap : Symbol(Wrap, Decl(typeAssignabilityErrorMessage.ts, 17, 1))
+
+    someProp: Bar<number>;
+>someProp : Symbol(someProp, Decl(typeAssignabilityErrorMessage.ts, 21, 13))
+>Bar : Symbol(Bar, Decl(typeAssignabilityErrorMessage.ts, 29, 1))
+}
+type OtherWrap = {
+>OtherWrap : Symbol(OtherWrap, Decl(typeAssignabilityErrorMessage.ts, 23, 1))
+
+    someProp: Foo<string>;
+>someProp : Symbol(someProp, Decl(typeAssignabilityErrorMessage.ts, 24, 18))
+>Foo : Symbol(Foo, Decl(typeAssignabilityErrorMessage.ts, 26, 1))
+}
+type Foo<T> = {
+>Foo : Symbol(Foo, Decl(typeAssignabilityErrorMessage.ts, 26, 1))
+>T : Symbol(T, Decl(typeAssignabilityErrorMessage.ts, 27, 9))
+
+    foo: { what: T };
+>foo : Symbol(foo, Decl(typeAssignabilityErrorMessage.ts, 27, 15))
+>what : Symbol(what, Decl(typeAssignabilityErrorMessage.ts, 28, 10))
+>T : Symbol(T, Decl(typeAssignabilityErrorMessage.ts, 27, 9))
+}
+type Bar<T> = {
+>Bar : Symbol(Bar, Decl(typeAssignabilityErrorMessage.ts, 29, 1))
+>T : Symbol(T, Decl(typeAssignabilityErrorMessage.ts, 30, 9))
+
+    foo: { what: T };
+>foo : Symbol(foo, Decl(typeAssignabilityErrorMessage.ts, 30, 15))
+>what : Symbol(what, Decl(typeAssignabilityErrorMessage.ts, 31, 10))
+>T : Symbol(T, Decl(typeAssignabilityErrorMessage.ts, 30, 9))
+
+} | boolean;
+
+function fun(param: Wrap): void {}
+>fun : Symbol(fun, Decl(typeAssignabilityErrorMessage.ts, 32, 12))
+>param : Symbol(param, Decl(typeAssignabilityErrorMessage.ts, 34, 13))
+>Wrap : Symbol(Wrap, Decl(typeAssignabilityErrorMessage.ts, 17, 1))
+
+declare let fooStr: Foo<string>;
+>fooStr : Symbol(fooStr, Decl(typeAssignabilityErrorMessage.ts, 36, 11))
+>Foo : Symbol(Foo, Decl(typeAssignabilityErrorMessage.ts, 26, 1))
+
+declare let otherWrap: OtherWrap;
+>otherWrap : Symbol(otherWrap, Decl(typeAssignabilityErrorMessage.ts, 37, 11))
+>OtherWrap : Symbol(OtherWrap, Decl(typeAssignabilityErrorMessage.ts, 23, 1))
+
+let a: Bar<number> = fooStr;
+>a : Symbol(a, Decl(typeAssignabilityErrorMessage.ts, 39, 3))
+>Bar : Symbol(Bar, Decl(typeAssignabilityErrorMessage.ts, 29, 1))
+>fooStr : Symbol(fooStr, Decl(typeAssignabilityErrorMessage.ts, 36, 11))
+
+fun(otherWrap);
+>fun : Symbol(fun, Decl(typeAssignabilityErrorMessage.ts, 32, 12))
+>otherWrap : Symbol(otherWrap, Decl(typeAssignabilityErrorMessage.ts, 37, 11))
+

@@ -3,6 +3,9 @@
 === parserImportDeclaration1.ts ===
 import TypeScript = TypeScriptServices.TypeScript;
 >TypeScript : any
+>           : ^^^
 >TypeScriptServices : any
+>                   : ^^^
 >TypeScript : any
+>           : ^^^
 

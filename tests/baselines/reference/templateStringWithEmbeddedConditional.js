@@ -4,4 +4,5 @@
 var x = `abc${ true ? false : " " }def`;
 
 //// [templateStringWithEmbeddedConditional.js]
-var x = "abc".concat(true ? false : " ", "def");
+"use strict";
+var x = `abc${true ? false : " "}def`;

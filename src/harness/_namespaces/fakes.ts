@@ -1,3 +1,3 @@
 /* Generated file to emulate the fakes namespace. */
 
-export * from "../fakesHosts";
+export * from "../fakesHosts.js";

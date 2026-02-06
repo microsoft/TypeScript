@@ -3,15 +3,19 @@
 === modules.d.ts ===
 declare module "a" {
 >"a" : typeof import("a")
+>    : ^^^^^^^^^^^^^^^^^^
 
     var a: number;
 >a : number
+>  : ^^^^^^
 
     export = a;  // OK, in ambient context
 >a : number
+>  : ^^^^^^
 }
 
 === b.ts ===
 import * as a from "a";
 >a : number
+>  : ^^^^^^
 

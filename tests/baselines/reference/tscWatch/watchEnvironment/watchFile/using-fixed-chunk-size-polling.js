@@ -1,7 +1,19 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/project useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/user/username/projects/project/commonFile1.ts]
+let x = 1
+
+//// [/user/username/projects/project/commonFile2.ts]
+let y = 1
+
+//// [/user/username/projects/project/tsconfig.json]
+{
+  "watchOptions": {
+    "watchFile": "FixedChunkSizePolling"
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -12,70 +24,62 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/a/b/commonFile1.ts]
-let x = 1
-
-//// [/a/b/commonFile2.ts]
-let y = 1
-
-//// [/a/b/tsconfig.json]
-{
-  "watchOptions": {
-    "watchFile": "FixedChunkSizePolling"
-  }
-}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w -p /a/b/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
-[[90m12:00:17 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
-[[90m12:00:22 AM[0m] Found 0 errors. Watching for file changes.
-
-
-
-//// [/a/b/commonFile1.js]
-var x = 1;
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
-//// [/a/b/commonFile2.js]
-var y = 1;
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
+//// [/user/username/projects/project/commonFile1.js]
+"use strict";
+let x = 1;
+
+
+//// [/user/username/projects/project/commonFile2.js]
+"use strict";
+let y = 1;
 
 
 
 FsWatchesRecursive::
-/a/b: *new*
+/user/username/projects/project: *new*
   {}
 
 Timeout callback:: count: 1
 1: pollQueue *new*
 
 Program root files: [
-  "/a/b/commonFile1.ts",
-  "/a/b/commonFile2.ts"
+  "/user/username/projects/project/commonFile1.ts",
+  "/user/username/projects/project/commonFile2.ts"
 ]
 Program options: {
   "watch": true,
-  "project": "/a/b/tsconfig.json",
-  "configFilePath": "/a/b/tsconfig.json"
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/projects/project/commonFile1.ts
+/user/username/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/projects/project/commonFile1.ts
+/user/username/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
-/a/b/commonfile1.ts (used version)
-/a/b/commonfile2.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
+/user/username/projects/project/commonfile1.ts (used version)
+/user/username/projects/project/commonfile2.ts (used version)
 
 exitCode:: ExitStatus.undefined
 
@@ -94,6 +98,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 2: pollQueue
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -102,6 +107,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 3: pollQueue
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -110,6 +116,7 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 4: pollQueue
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1
@@ -121,7 +128,7 @@ exitCode:: ExitStatus.undefined
 Change:: Make change to file but should detect as changed and schedule program update
 
 Input::
-//// [/a/b/commonFile1.ts]
+//// [/user/username/projects/project/commonFile1.ts]
 var zz30 = 100;
 
 
@@ -145,48 +152,50 @@ Before running Timeout callback:: count: 2
 6: timerToUpdateProgram
 7: pollQueue
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 >> Screen clear
-[[90m12:00:32 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90m12:00:39 AM[0m] Found 0 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/a/b/commonFile1.js]
+//// [/user/username/projects/project/commonFile1.js]
+"use strict";
 var zz30 = 100;
 
 
-//// [/a/b/commonFile2.js] file written with same contents
+//// [/user/username/projects/project/commonFile2.js] file written with same contents
 
 Timeout callback:: count: 1
 8: pollQueue *new*
 
 
 Program root files: [
-  "/a/b/commonFile1.ts",
-  "/a/b/commonFile2.ts"
+  "/user/username/projects/project/commonFile1.ts",
+  "/user/username/projects/project/commonFile2.ts"
 ]
 Program options: {
   "watch": true,
-  "project": "/a/b/tsconfig.json",
-  "configFilePath": "/a/b/tsconfig.json"
+  "configFilePath": "/user/username/projects/project/tsconfig.json"
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/projects/project/commonFile1.ts
+/user/username/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/a/b/commonFile1.ts
-/a/b/commonFile2.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+/user/username/projects/project/commonFile1.ts
+/user/username/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/a/b/commonfile1.ts (computed .d.ts)
-/a/b/commonfile2.ts (computed .d.ts)
+/user/username/projects/project/commonfile1.ts (computed .d.ts)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
+/user/username/projects/project/commonfile2.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
 
@@ -197,6 +206,7 @@ Input::
 Before running Timeout callback:: count: 1
 8: pollQueue
 
+Host is moving to new time
 After running Timeout callback:: count: 1
 
 Timeout callback:: count: 1

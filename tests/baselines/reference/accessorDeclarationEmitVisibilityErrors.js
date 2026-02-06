@@ -9,3 +9,9 @@ export class Q {
 export class Q {
     set bet(arg) { }
 }
+
+
+//// [accessorDeclarationEmitVisibilityErrors.d.ts]
+export declare class Q {
+    set bet(arg: DoesNotExist);
+}

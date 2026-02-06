@@ -1,14 +1,18 @@
 //// [tests/cases/compiler/declFileModuleWithPropertyOfTypeModule.ts] ////
 
 === declFileModuleWithPropertyOfTypeModule.ts ===
-module m {
+namespace m {
 >m : typeof m
+>  : ^^^^^^^^
 
     export class c {
 >c : c
+>  : ^
     }
 
     export var a = m;
 >a : typeof m
+>  : ^^^^^^^^
 >m : typeof m
+>  : ^^^^^^^^
 }

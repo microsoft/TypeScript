@@ -1,4 +1,5 @@
-declare module m {
+// @target: es2015
+declare namespace m {
     // type alias declaration here shouldnt make the module declaration instantiated
     type Selector = string| string[] |Function;
 

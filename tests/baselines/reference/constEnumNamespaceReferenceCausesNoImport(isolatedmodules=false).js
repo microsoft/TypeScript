@@ -20,10 +20,9 @@ function check(x: Foo.ConstFooEnum): void {
 //// [foo.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fooFunc = void 0;
+exports.fooFunc = fooFunc;
 ;
 function fooFunc() { }
-exports.fooFunc = fooFunc;
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });

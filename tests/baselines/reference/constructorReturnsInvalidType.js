@@ -12,11 +12,11 @@ var x = new X();
 
 
 //// [constructorReturnsInvalidType.js]
-var X = /** @class */ (function () {
-    function X() {
+"use strict";
+class X {
+    constructor() {
         return 1;
     }
-    X.prototype.foo = function () { };
-    return X;
-}());
+    foo() { }
+}
 var x = new X();

@@ -1,4 +1,4 @@
-// @target: ES5
+// @target: ES5, ES2015
 "use strict";
 if (true) {
     function foo() { } // Error to declare function in block scope

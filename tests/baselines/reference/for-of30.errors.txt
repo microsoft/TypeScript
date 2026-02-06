@@ -2,7 +2,7 @@ for-of30.ts(16,15): error TS2767: The 'return' property of an iterator must be a
 
 
 ==== for-of30.ts (1 errors) ====
-    class StringIterator {
+    class MyStringIterator {
         next() {
             return {
                 done: false,
@@ -17,6 +17,6 @@ for-of30.ts(16,15): error TS2767: The 'return' property of an iterator must be a
         }
     }
     
-    for (var v of new StringIterator) { }
-                  ~~~~~~~~~~~~~~~~~~
+    for (var v of new MyStringIterator) { }
+                  ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2767: The 'return' property of an iterator must be a method.

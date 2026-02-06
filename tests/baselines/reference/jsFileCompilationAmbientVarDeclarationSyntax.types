@@ -3,4 +3,5 @@
 === a.js ===
 declare var v;
 >v : any
+>  : ^^^
 

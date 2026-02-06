@@ -1,0 +1,13 @@
+type.ts(1,29): error TS2304: Cannot find name 'Enum'.
+
+
+==== type.ts (1 errors) ====
+    export type Type = { x?: { [Enum.A]: 0 } };
+                                ~~~~
+!!! error TS2304: Cannot find name 'Enum'.
+    
+==== index.ts (0 errors) ====
+    import { type Type } from "./type";
+    
+    export const foo = { ...({} as Type) };
+    

@@ -10,5 +10,6 @@ var v2: {
 }
 
 //// [collisionRestParameterInType.js]
+"use strict";
 var v1; // no error - no code gen
 var v2;

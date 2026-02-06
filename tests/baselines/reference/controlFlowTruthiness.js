@@ -98,8 +98,9 @@ function f9<T extends object>(x: T) {
 }
 
 //// [controlFlowTruthiness.js]
+"use strict";
 function f1() {
-    var x = foo();
+    let x = foo();
     if (x) {
         x; // string
     }
@@ -108,7 +109,7 @@ function f1() {
     }
 }
 function f2() {
-    var x;
+    let x;
     x = foo();
     if (x) {
         x; // string
@@ -118,7 +119,7 @@ function f2() {
     }
 }
 function f3() {
-    var x;
+    let x;
     if (x = foo()) {
         x; // string
     }
@@ -127,7 +128,7 @@ function f3() {
     }
 }
 function f4() {
-    var x;
+    let x;
     if (!(x = foo())) {
         x; // string | undefined
     }
@@ -136,8 +137,8 @@ function f4() {
     }
 }
 function f5() {
-    var x;
-    var y;
+    let x;
+    let y;
     if (x = y = foo()) {
         x; // string
         y; // string | undefined
@@ -148,8 +149,8 @@ function f5() {
     }
 }
 function f6() {
-    var x;
-    var y;
+    let x;
+    let y;
     if (x = foo(), y = foo()) {
         x; // string | undefined
         y; // string

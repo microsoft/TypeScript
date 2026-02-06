@@ -1,3 +1,4 @@
+// @target: es2015
 interface Foo {
     (x: 'a'): number;
     (x: string): any;

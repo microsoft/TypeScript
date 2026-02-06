@@ -1,0 +1,19 @@
+asyncFunctionDeclarationCapturesArguments_es5.ts(5,30): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+asyncFunctionDeclarationCapturesArguments_es5.ts(5,36): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[]'.
+
+
+==== asyncFunctionDeclarationCapturesArguments_es5.ts (2 errors) ====
+    class C {
+       method() {
+          function other() {}
+          async function fn () {
+               await other.apply(this, arguments);
+                                 ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 asyncFunctionDeclarationCapturesArguments_es5.ts:4:22: An outer value of 'this' is shadowed by this container.
+                                       ~~~~~~~~~
+!!! error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[]'.
+          }
+       }
+    }
+    

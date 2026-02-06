@@ -47,9 +47,6 @@ uncheckedInternally("zero", "one")
 
 
 //// [overloadTag1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.uncheckedInternally = exports.overloaded = void 0;
 /**
  * @overload
  * @param {number} a
@@ -65,7 +62,7 @@ exports.uncheckedInternally = exports.overloaded = void 0;
  * @param {string | number} b
  * @returns {string | number}
  */
-function overloaded(a, b) {
+export function overloaded(a, b) {
     if (typeof a === "string" && typeof b === "string") {
         return a + b;
     }
@@ -74,7 +71,6 @@ function overloaded(a, b) {
     }
     throw new Error("Invalid arguments");
 }
-exports.overloaded = overloaded;
 var o1 = overloaded(1, 2);
 var o2 = overloaded("zero", "one");
 var o3 = overloaded("a", false);
@@ -89,10 +85,9 @@ var o3 = overloaded("a", false);
  * @param {boolean} b
  * @returns {string}
  */
-function uncheckedInternally(a, b) {
+export function uncheckedInternally(a, b) {
     return a + b;
 }
-exports.uncheckedInternally = uncheckedInternally;
 uncheckedInternally(1, 2);
 uncheckedInternally("zero", "one");
 

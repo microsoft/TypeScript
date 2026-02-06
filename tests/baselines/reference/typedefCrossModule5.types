@@ -4,12 +4,16 @@
 /** @typedef {number} Foo */
 class Bar {}
 >Bar : Bar
+>    : ^^^
 
 === mod2.js ===
 class Foo { } // should error
 >Foo : Foo
+>    : ^^^
 
 const Bar = 3;
 >Bar : 3
+>    : ^
 >3 : 3
+>  : ^
 

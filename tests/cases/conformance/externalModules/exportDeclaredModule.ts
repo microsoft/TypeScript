@@ -1,6 +1,8 @@
+// @target: es2015
+// @module: commonjs
 // @Filename: foo1.ts
 
-declare module M1 {
+declare namespace M1 {
 	export var a: string; 
 	export function b(): number;
 }

@@ -1,3 +1,4 @@
+// @target: es2015
 interface I<T> {
    v: A<T>;
    f1<T>(): T;

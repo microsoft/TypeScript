@@ -3,7 +3,9 @@
 === interfaceDeclaration5.ts ===
 export interface I1 { item:string; }
 >item : string
+>     : ^^^^^^
 
 export class C1 { }
 >C1 : C1
+>   : ^^
 

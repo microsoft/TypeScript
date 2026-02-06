@@ -1,3 +1,4 @@
+// @target: es2015
 function foo<T>(o: Take<T>, i: Make<T>) { }
 interface Make<T> {
     (): T;

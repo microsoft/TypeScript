@@ -1,20 +1,25 @@
 //// [tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithoutExport.ts] ////
 
 === internalAliasInterfaceInsideLocalModuleWithoutExport.ts ===
-export module a {
+export namespace a {
     export interface I {
     }
 }
 
-export module c {
+export namespace c {
 >c : typeof c
+>  : ^^^^^^^^
 
     import b = a.I;
 >b : any
+>  : ^^^
 >a : any
+>  : ^^^
 >I : b
+>  : ^
 
     export var x: b;
 >x : b
+>  : ^
 }
 

@@ -38,7 +38,7 @@ verify.codeFix({
 class C implements N.I {
     a: N.E.a;
     b: N.E;
-    foo<X>(a: X): string {
+    foo<X /** closing angle prefix */>(a: X /** close paren prefix */): string /** semicolon prefix */ {
         throw new Error("Method not implemented.");
     }
 }`,

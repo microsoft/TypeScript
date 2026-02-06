@@ -10,7 +10,7 @@
 //     public k = new [|foo|]();
 // }
 // 
-// module mod {
+// namespace mod {
 //     var k: [|foo|] = null;
 // }
 
@@ -66,7 +66,7 @@
 //     public k = new [|foo|]();
 // }
 // 
-// module mod {
+// namespace mod {
 //     var k: [|foo|] = null;
 // }
 
@@ -122,7 +122,7 @@
 //     public k = new [|foo|]();
 // }
 // 
-// module mod {
+// namespace mod {
 //     var k: [|foo|] = null;
 // }
 
@@ -181,7 +181,7 @@
 //     public k = new /*FIND ALL REFS*/[|foo|]();
 // }
 // 
-// module mod {
+// namespace mod {
 //     var k: [|foo|] = null;
 // }
 
@@ -200,7 +200,7 @@
   //     public k = new /*FIND ALL REFS*/foo();
   // }
   // 
-  // module mod {
+  // namespace mod {
   //     var k: foo = null;
   // }
 
@@ -242,7 +242,7 @@
 //     public k = new [|foo|]();
 // }
 // 
-// module mod {
+// namespace mod {
 //     var k: /*FIND ALL REFS*/[|foo|] = null;
 // }
 
@@ -261,7 +261,7 @@
   //     public k = new foo();
   // }
   // 
-  // module mod {
+  // namespace mod {
   //     var k: /*FIND ALL REFS*/foo = null;
   // }
 
@@ -303,7 +303,7 @@
 //     public k = new [|foo|]();
 // }
 // 
-// module mod {
+// namespace mod {
 //     var k: [|foo|] = null;
 // }
 

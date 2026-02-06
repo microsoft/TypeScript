@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/implicitAnyInAmbientDeclaration.ts] ////
 
 === implicitAnyInAmbientDeclaration.ts ===
-module Test {
+namespace Test {
 >Test : Symbol(Test, Decl(implicitAnyInAmbientDeclaration.ts, 0, 0))
 
     declare class C {
->C : Symbol(C, Decl(implicitAnyInAmbientDeclaration.ts, 0, 13))
+>C : Symbol(C, Decl(implicitAnyInAmbientDeclaration.ts, 0, 16))
 
         public publicMember;  // this should be an error
 >publicMember : Symbol(C.publicMember, Decl(implicitAnyInAmbientDeclaration.ts, 1, 21))

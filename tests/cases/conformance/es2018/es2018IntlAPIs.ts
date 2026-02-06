@@ -5,3 +5,6 @@
 const locales = ['ban', 'id-u-co-pinyin', 'de-ID'];
 const options = { localeMatcher: 'lookup' } as const;
 console.log(Intl.PluralRules.supportedLocalesOf(locales, options).join(', '));
+
+const [ part ] = new Intl.NumberFormat().formatToParts();
+console.log(part.type, part.value);

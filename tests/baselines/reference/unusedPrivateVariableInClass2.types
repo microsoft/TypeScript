@@ -3,10 +3,13 @@
 === unusedPrivateVariableInClass2.ts ===
 class greeter {
 >greeter : greeter
+>        : ^^^^^^^
 
     private x: string;
 >x : string
+>  : ^^^^^^
 
     private y: string;
 >y : string
+>  : ^^^^^^
 }

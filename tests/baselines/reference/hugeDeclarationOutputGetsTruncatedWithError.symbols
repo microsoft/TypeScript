@@ -9,12 +9,12 @@ type manyprops = `${props}${props}`;
 >props : Symbol(props, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 0, 0))
 >props : Symbol(props, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 0, 0))
 
-export const c = null as any as {[K in manyprops]: {[K2 in manyprops]: `${K}.${K2}`}};
+export const c = [null as any as {[K in manyprops]: {[K2 in manyprops]: `${K}.${K2}`}}][0];
 >c : Symbol(c, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 12))
->K : Symbol(K, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 34))
+>K : Symbol(K, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 35))
 >manyprops : Symbol(manyprops, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 0, 167))
->K2 : Symbol(K2, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 53))
+>K2 : Symbol(K2, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 54))
 >manyprops : Symbol(manyprops, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 0, 167))
->K : Symbol(K, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 34))
->K2 : Symbol(K2, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 53))
+>K : Symbol(K, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 35))
+>K2 : Symbol(K2, Decl(hugeDeclarationOutputGetsTruncatedWithError.ts, 4, 54))
 

@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/allowJsCrossMonorepoPackage.ts] ////
+
+=== /packages/main/index.ts ===
+import { x } from "shared";
+>x : "pkg"
+>  : ^^^^^
+
+=== /node_modules/pkg/index.d.ts ===
+export declare function pkg(): "pkg";
+>pkg : () => "pkg"
+>    : ^^^^^^     
+
+=== /packages/shared/utils.js ===
+export { pkg } from "pkg";
+>pkg : () => "pkg"
+>    : ^^^^^^     
+
+=== /packages/shared/index.js ===
+import { pkg } from "./utils.js";
+>pkg : () => "pkg"
+>    : ^^^^^^     
+
+export const x = pkg();
+>x : "pkg"
+>  : ^^^^^
+>pkg() : "pkg"
+>      : ^^^^^
+>pkg : () => "pkg"
+>    : ^^^^^^     
+

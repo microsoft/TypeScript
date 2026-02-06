@@ -1,3 +1,4 @@
+// @target: es2015
 type Constructor<T> = new(...args: any[]) => T;
 
 class Base {

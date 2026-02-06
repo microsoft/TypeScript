@@ -1,0 +1,29 @@
+//// [tests/cases/compiler/parenthesizedSatisfiesExpressionWithComments.ts] ////
+
+=== parenthesizedSatisfiesExpressionWithComments.ts ===
+"use strict";
+>"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
+
+const a = (/*comm*/ 10 satisfies number);
+>a : 10
+>  : ^^
+>(/*comm*/ 10 satisfies number) : 10
+>                               : ^^
+>10 satisfies number : 10
+>                    : ^^
+>10 : 10
+>   : ^^
+
+const b = ((/*comm*/ 10 satisfies number));
+>b : 10
+>  : ^^
+>((/*comm*/ 10 satisfies number)) : 10
+>                                 : ^^
+>(/*comm*/ 10 satisfies number) : 10
+>                               : ^^
+>10 satisfies number : 10
+>                    : ^^
+>10 : 10
+>   : ^^
+

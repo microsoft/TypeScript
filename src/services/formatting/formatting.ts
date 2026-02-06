@@ -1,4 +1,15 @@
 import {
+    FormattingContext,
+    FormattingRequestKind,
+    FormattingScanner,
+    getFormattingScanner,
+    Rule,
+    RuleAction,
+    RuleFlags,
+    RulesMap,
+    SmartIndenter,
+} from "../_namespaces/ts.formatting.js";
+import {
     Block,
     CallExpression,
     canHaveModifiers,
@@ -65,18 +76,7 @@ import {
     TextRange,
     TriviaSyntaxKind,
     TypeReferenceNode,
-} from "../_namespaces/ts";
-import {
-    FormattingContext,
-    FormattingRequestKind,
-    FormattingScanner,
-    getFormattingScanner,
-    Rule,
-    RuleAction,
-    RuleFlags,
-    RulesMap,
-    SmartIndenter,
-} from "../_namespaces/ts.formatting";
+} from "../_namespaces/ts.js";
 
 /** @internal */
 export interface FormatContext {
@@ -1376,8 +1376,8 @@ const enum LineAction {
 export function getRangeOfEnclosingComment(
     sourceFile: SourceFile,
     position: number,
-    precedingToken?: Node | null,
-    tokenAtPosition = getTokenAtPosition(sourceFile, position),
+    precedingToken?: Node | null, // eslint-disable-line no-restricted-syntax
+    tokenAtPosition: Node = getTokenAtPosition(sourceFile, position),
 ): CommentRange | undefined {
     const jsdoc = findAncestor(tokenAtPosition, isJSDoc);
     if (jsdoc) tokenAtPosition = jsdoc.parent;
@@ -1386,7 +1386,7 @@ export function getRangeOfEnclosingComment(
         return undefined;
     }
 
-    // eslint-disable-next-line no-null/no-null
+    // eslint-disable-next-line no-restricted-syntax
     precedingToken = precedingToken === null ? undefined : precedingToken === undefined ? findPrecedingToken(position, sourceFile) : precedingToken;
 
     // Between two consecutive tokens, all comments are either trailing on the former

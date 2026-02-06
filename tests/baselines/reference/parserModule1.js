@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModule1.ts] ////
 
 //// [parserModule1.ts]
-    export module CompilerDiagnostics {
+    export namespace CompilerDiagnostics {
         export var debug = false;
         export interface IDiagnosticWriter {
             Alert(output: string): void;
@@ -34,10 +34,7 @@
     }
 
 //// [parserModule1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CompilerDiagnostics = void 0;
-var CompilerDiagnostics;
+export var CompilerDiagnostics;
 (function (CompilerDiagnostics) {
     CompilerDiagnostics.debug = false;
     CompilerDiagnostics.diagnosticWriter = null;
@@ -62,4 +59,4 @@ var CompilerDiagnostics;
         }
     }
     CompilerDiagnostics.assert = assert;
-})(CompilerDiagnostics || (exports.CompilerDiagnostics = CompilerDiagnostics = {}));
+})(CompilerDiagnostics || (CompilerDiagnostics = {}));

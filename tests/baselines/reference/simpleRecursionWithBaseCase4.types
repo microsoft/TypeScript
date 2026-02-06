@@ -1,0 +1,74 @@
+//// [tests/cases/compiler/simpleRecursionWithBaseCase4.ts] ////
+
+=== simpleRecursionWithBaseCase4.ts ===
+var fn2 = function(name) {
+>fn2 : (name: any) => any
+>    : ^    ^^^^^^^^^^^^^
+>function(name) {  fn2 = compose(this, 0, 1)  return fn2(name)  function compose(child, level, find) {    if (child === find) {      return level    }    return compose(child, level + 1, find)  }} : (name: any) => any
+>                                                                                                                                                                                                    : ^    ^^^^^^^^^^^^^
+>name : any
+
+  fn2 = compose(this, 0, 1)
+>fn2 = compose(this, 0, 1) : any
+>fn2 : (name: any) => any
+>    : ^    ^^^^^^^^^^^^^
+>compose(this, 0, 1) : any
+>compose : (child: any, level: any, find: any) => any
+>        : ^     ^^^^^^^     ^^^^^^^    ^^^^^^^^^^^^^
+>this : any
+>0 : 0
+>  : ^
+>1 : 1
+>  : ^
+
+  return fn2(name)
+>fn2(name) : any
+>fn2 : (name: any) => any
+>    : ^    ^^^^^^^^^^^^^
+>name : any
+
+  function compose(child, level, find) {
+>compose : (child: any, level: any, find: any) => any
+>        : ^     ^^^^^^^     ^^^^^^^    ^^^^^^^^^^^^^
+>child : any
+>level : any
+>find : any
+
+    if (child === find) {
+>child === find : boolean
+>               : ^^^^^^^
+>child : any
+>find : any
+
+      return level
+>level : any
+    }
+    return compose(child, level + 1, find)
+>compose(child, level + 1, find) : any
+>compose : (child: any, level: any, find: any) => any
+>        : ^     ^^^^^^^     ^^^^^^^    ^^^^^^^^^^^^^
+>child : any
+>level + 1 : any
+>level : any
+>1 : 1
+>  : ^
+>find : any
+  }
+}
+
+var d = fn2(1); // d: any
+>d : any
+>fn2(1) : any
+>fn2 : (name: any) => any
+>    : ^    ^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+
+d.redefined();
+>d.redefined() : any
+>d.redefined : any
+>d : any
+>  : ^^^
+>redefined : any
+>          : ^^^
+

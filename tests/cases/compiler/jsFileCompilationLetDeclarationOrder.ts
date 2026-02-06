@@ -1,5 +1,6 @@
+// @target: es2015
 // @allowJs: true
-// @out: out.js
+// @outFile: out.js
 // @declaration: true
 // @filename: b.js
 let a = 10;

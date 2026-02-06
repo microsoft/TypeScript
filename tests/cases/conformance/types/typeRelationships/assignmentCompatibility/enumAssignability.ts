@@ -1,3 +1,4 @@
+// @target: es2015
 // enums assignable to number, any, Object, errors unless otherwise noted
 
 enum E { A }
@@ -13,7 +14,7 @@ f = 1; // ok
 var x: number = e; // ok
 x = f; // ok
 
-module Others {
+namespace Others {
     var a: any = e; // ok
 
     class C {

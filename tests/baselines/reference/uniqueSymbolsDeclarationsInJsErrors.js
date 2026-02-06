@@ -17,7 +17,9 @@ class C {
     static readwriteType;
 }
 
+
 //// [uniqueSymbolsDeclarationsInJsErrors-out.js]
+"use strict";
 class C {
 }
 

@@ -1,3 +1,4 @@
+// @strict: false
 // @target: esnext
 // https://github.com/Microsoft/TypeScript/issues/26586
 

@@ -3,8 +3,13 @@
 === FunctionPropertyAssignments5_es6.ts ===
 var v = { *[foo()]() { } }
 >v : { [x: number]: () => Generator<never, void, unknown>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ *[foo()]() { } } : { [x: number]: () => Generator<never, void, unknown>; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >[foo()] : () => Generator<never, void, unknown>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo() : any
+>      : ^^^
 >foo : any
+>    : ^^^
 

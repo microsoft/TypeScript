@@ -1,9 +1,10 @@
+// @target: es2015
 // @declaration: true
 
 namespace N {
     function S() {}
 }
-module M {
+namespace M {
     function F() {}
 }
 

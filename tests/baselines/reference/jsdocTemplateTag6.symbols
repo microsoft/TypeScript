@@ -1,0 +1,192 @@
+//// [tests/cases/conformance/jsdoc/jsdocTemplateTag6.ts] ////
+
+=== a.js ===
+/**
+ * @template const T
+ * @param {T} x
+ * @returns {T}
+ */
+function f1(x) {
+>f1 : Symbol(f1, Decl(a.js, 0, 0))
+>x : Symbol(x, Decl(a.js, 5, 12))
+
+    return x;
+>x : Symbol(x, Decl(a.js, 5, 12))
+}
+const t1 = f1("a");
+>t1 : Symbol(t1, Decl(a.js, 8, 5))
+>f1 : Symbol(f1, Decl(a.js, 0, 0))
+
+const t2 = f1(["a", ["b", "c"]]);
+>t2 : Symbol(t2, Decl(a.js, 9, 5))
+>f1 : Symbol(f1, Decl(a.js, 0, 0))
+
+const t3 = f1({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
+>t3 : Symbol(t3, Decl(a.js, 10, 5))
+>f1 : Symbol(f1, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 10, 15))
+>b : Symbol(b, Decl(a.js, 10, 21))
+>d : Symbol(d, Decl(a.js, 10, 29))
+>f : Symbol(f, Decl(a.js, 10, 49))
+
+/**
+ * @template const T, U
+ * @param {T} x
+ * @returns {T}
+ */
+function f2(x) {
+>f2 : Symbol(f2, Decl(a.js, 10, 63))
+>x : Symbol(x, Decl(a.js, 17, 12))
+
+    return x;
+>x : Symbol(x, Decl(a.js, 17, 12))
+
+};
+const t4 = f2('a');
+>t4 : Symbol(t4, Decl(a.js, 20, 5))
+>f2 : Symbol(f2, Decl(a.js, 10, 63))
+
+const t5 = f2(['a', ['b', 'c']]);
+>t5 : Symbol(t5, Decl(a.js, 21, 5))
+>f2 : Symbol(f2, Decl(a.js, 10, 63))
+
+const t6 = f2({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
+>t6 : Symbol(t6, Decl(a.js, 22, 5))
+>f2 : Symbol(f2, Decl(a.js, 10, 63))
+>a : Symbol(a, Decl(a.js, 22, 15))
+>b : Symbol(b, Decl(a.js, 22, 21))
+>d : Symbol(d, Decl(a.js, 22, 29))
+>f : Symbol(f, Decl(a.js, 22, 49))
+
+/**
+ * @template const T
+ * @param {T} x
+ * @returns {T[]}
+ */
+function f3(x) {
+>f3 : Symbol(f3, Decl(a.js, 22, 63))
+>x : Symbol(x, Decl(a.js, 29, 12))
+
+    return [x];
+>x : Symbol(x, Decl(a.js, 29, 12))
+}
+const t7 = f3("hello");
+>t7 : Symbol(t7, Decl(a.js, 32, 5))
+>f3 : Symbol(f3, Decl(a.js, 22, 63))
+
+const t8 = f3("hello");
+>t8 : Symbol(t8, Decl(a.js, 33, 5))
+>f3 : Symbol(f3, Decl(a.js, 22, 63))
+
+/**
+ * @template const T
+ * @param {[T, T]} x
+ * @returns {T}
+ */
+function f4(x) {
+>f4 : Symbol(f4, Decl(a.js, 33, 23))
+>x : Symbol(x, Decl(a.js, 40, 12))
+
+    return x[0];
+>x : Symbol(x, Decl(a.js, 40, 12))
+>0 : Symbol(0)
+}
+const t9 = f4([[1, "x"], [2, "y"]]);
+>t9 : Symbol(t9, Decl(a.js, 43, 5))
+>f4 : Symbol(f4, Decl(a.js, 33, 23))
+
+const t10 = f4([{ a: 1, b: "x" }, { a: 2, b: "y" }]);
+>t10 : Symbol(t10, Decl(a.js, 44, 5))
+>f4 : Symbol(f4, Decl(a.js, 33, 23))
+>a : Symbol(a, Decl(a.js, 44, 17))
+>b : Symbol(b, Decl(a.js, 44, 23))
+>a : Symbol(a, Decl(a.js, 44, 35))
+>b : Symbol(b, Decl(a.js, 44, 41))
+
+/**
+ * @template const T
+ * @param {{ x: T, y: T}} obj
+ * @returns {T}
+ */
+function f5(obj) {
+>f5 : Symbol(f5, Decl(a.js, 44, 53))
+>obj : Symbol(obj, Decl(a.js, 51, 12))
+
+    return obj.x;
+>obj.x : Symbol(x, Decl(a.js, 48, 12))
+>obj : Symbol(obj, Decl(a.js, 51, 12))
+>x : Symbol(x, Decl(a.js, 48, 12))
+}
+const t11 = f5({ x: [1, "x"], y: [2, "y"] });
+>t11 : Symbol(t11, Decl(a.js, 54, 5))
+>f5 : Symbol(f5, Decl(a.js, 44, 53))
+>x : Symbol(x, Decl(a.js, 54, 16))
+>y : Symbol(y, Decl(a.js, 54, 29))
+
+const t12 = f5({ x: { a: 1, b: "x" }, y: { a: 2, b: "y" } });
+>t12 : Symbol(t12, Decl(a.js, 55, 5))
+>f5 : Symbol(f5, Decl(a.js, 44, 53))
+>x : Symbol(x, Decl(a.js, 55, 16))
+>a : Symbol(a, Decl(a.js, 55, 21))
+>b : Symbol(b, Decl(a.js, 55, 27))
+>y : Symbol(y, Decl(a.js, 55, 37))
+>a : Symbol(a, Decl(a.js, 55, 42))
+>b : Symbol(b, Decl(a.js, 55, 48))
+
+/**
+ * @template const T
+ */
+class C {
+>C : Symbol(C, Decl(a.js, 55, 61))
+
+    /**
+     * @param {T} x
+     */
+    constructor(x) {}
+>x : Symbol(x, Decl(a.js, 64, 16))
+
+    /**
+     * @template const U
+     * @param {U} x
+     */
+    foo(x) {
+>foo : Symbol(C.foo, Decl(a.js, 64, 21))
+>x : Symbol(x, Decl(a.js, 70, 8))
+
+        return x;
+>x : Symbol(x, Decl(a.js, 70, 8))
+    }
+}
+
+const t13 = new C({ a: 1, b: "c", d: ["e", 2, true, { f: "g" }] });
+>t13 : Symbol(t13, Decl(a.js, 75, 5))
+>C : Symbol(C, Decl(a.js, 55, 61))
+>a : Symbol(a, Decl(a.js, 75, 19))
+>b : Symbol(b, Decl(a.js, 75, 25))
+>d : Symbol(d, Decl(a.js, 75, 33))
+>f : Symbol(f, Decl(a.js, 75, 53))
+
+const t14 = t13.foo(["a", ["b", "c"]]);
+>t14 : Symbol(t14, Decl(a.js, 76, 5))
+>t13.foo : Symbol(C.foo, Decl(a.js, 64, 21))
+>t13 : Symbol(t13, Decl(a.js, 75, 5))
+>foo : Symbol(C.foo, Decl(a.js, 64, 21))
+
+/**
+ * @template {readonly unknown[]} const T
+ * @param {T} args
+ * @returns {T}
+ */
+function f6(...args) {
+>f6 : Symbol(f6, Decl(a.js, 76, 39))
+>args : Symbol(args, Decl(a.js, 83, 12))
+
+    return args;
+>args : Symbol(args, Decl(a.js, 83, 12))
+}
+const t15 = f6(1, 'b', { a: 1, b: 'x' });
+>t15 : Symbol(t15, Decl(a.js, 86, 5))
+>f6 : Symbol(f6, Decl(a.js, 76, 39))
+>a : Symbol(a, Decl(a.js, 86, 24))
+>b : Symbol(b, Decl(a.js, 86, 30))
+

@@ -18,26 +18,26 @@
 //// console.log(a, B, b, c, C, d, D);
 //// console.log(e, f, F, g, G, H, h);
 
-// verify.organizeImports(
-// `import {
-//     a,
-//     b,
-//     b as B,
-//     c,
-//     c as C,
-//     d, d as D,
-//     e,
-//     f,
-//     f as F,
-//     g,
-//     g as G,
-//     h, h as H
-// } from './foo';
+verify.organizeImports(
+`import {
+    a,
+    b,
+    b as B,
+    c,
+    c as C,
+    d, d as D,
+    e,
+    f,
+    f as F,
+    g,
+    g as G,
+    h, h as H
+} from './foo';
 
-// console.log(a, B, b, c, C, d, D);
-// console.log(e, f, F, g, G, H, h);`,
-// /*mode*/ undefined,
-// { organizeImportsIgnoreCase: true });
+console.log(a, B, b, c, C, d, D);
+console.log(e, f, F, g, G, H, h);`,
+/*mode*/ undefined,
+{ organizeImportsIgnoreCase: true });
 
 verify.organizeImports(
 `import {

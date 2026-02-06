@@ -1,3 +1,4 @@
+// @target: es2015
 var x: StringTree;
 if (typeof x !== "string") {
     x.push("");

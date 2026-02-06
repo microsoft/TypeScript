@@ -1,6 +1,7 @@
+// @target: es2015
 // @declaration: true
 
-// @out: /out.js
+// @outFile: /out.js
 
 // @Filename: /out.d.ts
 declare class c {

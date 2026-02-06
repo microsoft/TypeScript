@@ -3,5 +3,7 @@
 === parserErrorRecovery_ArgumentList6.ts ===
 Foo(,
 >Foo(, : any
+>      : ^^^
 >Foo : any
+>    : ^^^
 

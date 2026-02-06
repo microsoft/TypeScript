@@ -14,7 +14,7 @@ verify.completions({
     marker: "",
     includes: {
         name: "foo",
-        source: "/a",
+        source: "./a",
         sourceDisplay: "./a",
         text: "function foo(): void",
         kind: "function",
@@ -26,7 +26,7 @@ verify.completions({
 });
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
-    source: "/a",
+    source: "./a",
     description: `Update import from "./a"`,
     newFileContent: `import { __String, foo, HasBar, hasBar } from "./a";
 f;`,

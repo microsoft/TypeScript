@@ -3,6 +3,7 @@
 === f1.ts ===
 declare global {
 >global : any
+>       : ^^^
 
     interface Something {x}
 >x : any
@@ -11,6 +12,7 @@ export {};
 === f2.ts ===
 declare global {
 >global : any
+>       : ^^^
 
     interface Something {y}
 >y : any

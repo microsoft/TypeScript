@@ -1,3 +1,4 @@
+// @target: es2015
 declare module "b:block" { // <-- no error anymore
     
 }

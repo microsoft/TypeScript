@@ -3,18 +3,23 @@
 === a.ts ===
 var decorator: ClassDecorator;
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 @decorator
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 export default class Foo {}
 >Foo : Foo
+>    : ^^^
 
 === b.ts ===
 var decorator: ClassDecorator;
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 @decorator
 >decorator : ClassDecorator
+>          : ^^^^^^^^^^^^^^
 
 export default class {}

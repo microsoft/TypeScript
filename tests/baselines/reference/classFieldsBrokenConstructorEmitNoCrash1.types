@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/classFieldsBrokenConstructorEmitNoCrash1.ts] ////
+
+=== classFieldsBrokenConstructorEmitNoCrash1.ts ===
+class Test {
+>Test : Test
+>     : ^^^^
+
+  prop = 42;
+>prop : number
+>     : ^^^^^^
+>42 : 42
+>   : ^^
+
+  constructor
+}
+

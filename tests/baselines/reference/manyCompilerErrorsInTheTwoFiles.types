@@ -3,41 +3,64 @@
 === a.ts ===
 const a =!@#!@$
 >a : boolean
+>  : ^^^^^^^
 >!@ : boolean
+>   : ^^^^^^^
 > : any
+> : ^^^
 >!@$ : boolean
+>    : ^^^^^^^
 >$ : any
+>  : ^^^
 
 const b = !@#!@#!@#!
 >b : boolean
+>  : ^^^^^^^
 >!@ : boolean
+>   : ^^^^^^^
 > : any
+> : ^^^
 >!@ : boolean
+>   : ^^^^^^^
 > : any
+> : ^^^
 >!@ : boolean
+>   : ^^^^^^^
 > : any
+> : ^^^
 >!OK! : boolean
+>     : ^^^^^^^
 
 OK!
 >OK! : any
+>    : ^^^
 >OK : any
+>   : ^^^
 
 HERE's A shouty thing
 >HERE : any
+>     : ^^^
 >'s A shouty thing : "s A shouty thing"
+>                  : ^^^^^^^^^^^^^^^^^^
 
 GOTTA GO FAST
 >GOTTA : any
+>      : ^^^
 >GO : any
+>   : ^^^
 >FAST : any
+>     : ^^^
 
 === b.ts ===
 fhqwhgads
 >fhqwhgads : any
+>          : ^^^
 
 to
 >to : any
+>   : ^^^
 
 limit
 >limit : any
+>      : ^^^
 

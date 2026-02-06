@@ -3,9 +3,15 @@
 === templateStringWithEmbeddedConditionalES6.ts ===
 var x = `abc${ true ? false : " " }def`;
 >x : string
+>  : ^^^^^^
 >`abc${ true ? false : " " }def` : string
+>                                : ^^^^^^
 >true ? false : " " : false | " "
+>                   : ^^^^^^^^^^^
 >true : true
+>     : ^^^^
 >false : false
+>      : ^^^^^
 >" " : " "
+>    : ^^^
 

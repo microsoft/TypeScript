@@ -25,11 +25,8 @@ class Component {
 //// [commentsOnJSXExpressionsArePreserved.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Component = /** @class */ (function () {
-    function Component() {
-    }
-    Component.prototype.render = function () {
+class Component {
+    render() {
         return React.createElement("div", null, null /* preserved */);
-    };
-    return Component;
-}());
+    }
+}

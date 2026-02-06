@@ -1,0 +1,78 @@
+//// [tests/cases/compiler/declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts] ////
+
+=== declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts ===
+type Wrapper<T> = {
+>Wrapper : Symbol(Wrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 0, 0))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 0, 13))
+
+  _type: T;
+>_type : Symbol(_type, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 0, 19))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 0, 13))
+
+};
+
+declare function stringWrapper(): Wrapper<string>;
+>stringWrapper : Symbol(stringWrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 2, 2))
+>Wrapper : Symbol(Wrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 0, 0))
+
+declare function objWrapper<T extends Record<string, Wrapper<any>>>(
+>objWrapper : Symbol(objWrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 4, 50))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 6, 28))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Wrapper : Symbol(Wrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 0, 0))
+
+  obj: T,
+>obj : Symbol(obj, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 6, 68))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 6, 28))
+
+): Wrapper<T>;
+>Wrapper : Symbol(Wrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 0, 0))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 6, 28))
+
+const value = objWrapper({
+>value : Symbol(value, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 10, 5))
+>objWrapper : Symbol(objWrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 4, 50))
+
+  prop1: stringWrapper() as Wrapper<"hello">,
+>prop1 : Symbol(prop1, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 10, 26))
+>stringWrapper : Symbol(stringWrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 2, 2))
+>Wrapper : Symbol(Wrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 0, 0))
+
+});
+
+type Unwrap<T> = T extends Wrapper<any>
+>Unwrap : Symbol(Unwrap, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 12, 3))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 14, 12))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 14, 12))
+>Wrapper : Symbol(Wrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 0, 0))
+
+  ? T["_type"] extends Record<string, Wrapper<any>>
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 14, 12))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>Wrapper : Symbol(Wrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 0, 0))
+
+    ? { [Key in keyof T["_type"]]: Unwrap<T["_type"][Key]> }
+>Key : Symbol(Key, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 16, 9))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 14, 12))
+>Unwrap : Symbol(Unwrap, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 12, 3))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 14, 12))
+>Key : Symbol(Key, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 16, 9))
+
+    : T["_type"]
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 14, 12))
+
+  : never;
+
+declare function unwrap<T>(wrapper: T): Unwrap<T>;
+>unwrap : Symbol(unwrap, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 18, 10))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 20, 24))
+>wrapper : Symbol(wrapper, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 20, 27))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 20, 24))
+>Unwrap : Symbol(Unwrap, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 12, 3))
+>T : Symbol(T, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 20, 24))
+
+export const unwrapped = unwrap(value);
+>unwrapped : Symbol(unwrapped, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 22, 12))
+>unwrap : Symbol(unwrap, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 18, 10))
+>value : Symbol(value, Decl(declarationAssertionNodeNotReusedWhenTypeNotEquivalent1.ts, 10, 5))
+

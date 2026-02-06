@@ -18,7 +18,7 @@ declare function f(x: C): C;
 
 declare class D extends C {}
 
-declare module M {
+declare namespace M {
     export class E<T> { foo: T }
 }
 
@@ -29,5 +29,6 @@ declare function h<T extends C>(x: T);
 declare function i<T extends M.E>(x: T);
 
 //// [genericTypeReferenceWithoutTypeArgument3.js]
+"use strict";
 // it is an error to use a generic type without type arguments
 // all of these are errors 

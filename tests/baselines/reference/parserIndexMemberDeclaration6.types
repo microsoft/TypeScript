@@ -3,7 +3,9 @@
 === parserIndexMemberDeclaration6.ts ===
 class C {
 >C : C
+>  : ^
 
    static [x: string]: string;
 >x : string
+>  : ^^^^^^
 }

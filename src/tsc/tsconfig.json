@@ -3,8 +3,7 @@
     "compilerOptions": {
     },
     "references": [
-        { "path": "../compiler" },
-        { "path": "../executeCommandLine" }
+        { "path": "../compiler" }
     ],
     "include": ["**/*"]
 }

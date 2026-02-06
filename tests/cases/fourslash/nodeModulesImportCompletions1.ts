@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts" />
 // @allowJs: true
-// @module: nodenext
+// @module: node18
 // @Filename: /src/module.mts
 //// export {}
 // @Filename: /src/module.cts

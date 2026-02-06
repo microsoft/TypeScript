@@ -13,3 +13,4 @@ declare module "OuterModule" {
 }
 
 //// [ambientExternalModuleWithRelativeExternalImportDeclaration.js]
+"use strict";

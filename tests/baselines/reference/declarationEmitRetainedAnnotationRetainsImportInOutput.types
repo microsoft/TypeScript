@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/declarationEmitRetainedAnnotationRetainsImportInOutput.ts] ////
+
+=== node_modules/whatever/index.d.ts ===
+export type Whatever<T> = {x: T};
+>Whatever : Whatever<T>
+>         : ^^^^^^^^^^^
+>x : T
+>  : ^
+
+export declare function something<T>(cb: () => Whatever<T>): Whatever<T>;
+>something : <T>(cb: () => Whatever<T>) => Whatever<T>
+>          : ^ ^^  ^^                 ^^^^^           
+>cb : () => Whatever<T>
+>   : ^^^^^^           
+
+=== index.ts ===
+import * as E from 'whatever';
+>E : typeof E
+>  : ^^^^^^^^
+
+export const run = <E>(i: () => E.Whatever<E>): E.Whatever<E> => E.something(i);
+>run : <E>(i: () => E.Whatever<E>) => E.Whatever<E>
+>    : ^ ^^ ^^                   ^^^^^             
+><E>(i: () => E.Whatever<E>): E.Whatever<E> => E.something(i) : <E>(i: () => E.Whatever<E>) => E.Whatever<E>
+>                                                             : ^ ^^ ^^                   ^^^^^             
+>i : () => E.Whatever<E>
+>  : ^^^^^^             
+>E : any
+>  : ^^^
+>E : any
+>  : ^^^
+>E.something(i) : E.Whatever<E>
+>               : ^^^^^^^^^^^^^
+>E.something : <T>(cb: () => E.Whatever<T>) => E.Whatever<T>
+>            : ^ ^^  ^^      ^^^^^^^^^^   ^^^^^^^^^^^^^^^   
+>E : typeof E
+>  : ^^^^^^^^
+>something : <T>(cb: () => E.Whatever<T>) => E.Whatever<T>
+>          : ^ ^^  ^^      ^^^^^^^^^^   ^^^^^^^^^^^^^^^   
+>i : () => E.Whatever<E>
+>  : ^^^^^^             
+

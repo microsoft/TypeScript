@@ -1,0 +1,60 @@
+//// [tests/cases/compiler/declarationEmitUsingTypeAlias1.ts] ////
+
+=== node_modules/some-dep/dist/inner.d.ts ===
+export declare type Other = { other: string };
+>Other : Other
+>      : ^^^^^
+>other : string
+>      : ^^^^^^
+
+export declare type SomeType = { arg: Other };
+>SomeType : SomeType
+>         : ^^^^^^^^
+>arg : Other
+>    : ^^^^^
+
+=== node_modules/some-dep/dist/index.d.ts ===
+export type OtherType = import('./inner').Other;
+>OtherType : import("node_modules/some-dep/dist/inner").Other
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+export type SomeType = import('./inner').SomeType;
+>SomeType : import("node_modules/some-dep/dist/inner").SomeType
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+=== src/index.ts ===
+import { SomeType } from "some-dep";
+>SomeType : any
+>         : ^^^
+
+export const foo = (thing: SomeType) => {
+>foo : (thing: SomeType) => import("node_modules/some-dep/dist/inner").SomeType
+>    : ^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(thing: SomeType) => {  return thing;} : (thing: SomeType) => import("node_modules/some-dep/dist/inner").SomeType
+>                                       : ^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>thing : import("node_modules/some-dep/dist/inner").SomeType
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  return thing;
+>thing : import("node_modules/some-dep/dist/inner").SomeType
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+export const bar = (thing: SomeType) => {
+>bar : (thing: SomeType) => import("node_modules/some-dep/dist/inner").Other
+>    : ^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(thing: SomeType) => {  return thing.arg;} : (thing: SomeType) => import("node_modules/some-dep/dist/inner").Other
+>                                           : ^     ^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>thing : import("node_modules/some-dep/dist/inner").SomeType
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  return thing.arg;
+>thing.arg : import("node_modules/some-dep/dist/inner").Other
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>thing : import("node_modules/some-dep/dist/inner").SomeType
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arg : import("node_modules/some-dep/dist/inner").Other
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+};

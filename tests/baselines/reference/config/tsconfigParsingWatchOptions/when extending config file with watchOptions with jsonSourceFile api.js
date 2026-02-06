@@ -54,3 +54,32 @@ Result: WatchOptions::
 }
 Errors::
 
+
+Fs::
+//// [/a.ts]
+
+
+//// [/base/tsconfig.json]
+{
+  "watchOptions": {
+    "excludeFiles": [
+      "${configDir}/temp/*.ts"
+    ]
+  }
+}
+
+//// [/tsconfig.json]
+{
+  "extends": "./base/tsconfig.json"
+}
+
+
+configFileName:: tsconfig.json
+Result: WatchOptions::
+{
+  "excludeFiles": [
+    "/temp/*.ts"
+  ]
+}
+Errors::
+

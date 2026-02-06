@@ -12,24 +12,24 @@ var { b: { '0': n, '1': oooo }, ...justA } = o;
 let o2 = { c: 'terrible idea?', d: 'yes' };
 var { d: renamed, ...d } = o2;
 
-let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
+declare let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
 var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
 
-let complex: { x: { ka, ki }, y: number };
+declare let complex: { x: { ka, ki }, y: number };
 var { x: { ka, ...nested }, y: other, ...rest } = complex;
 ({x: { ka, ...nested }, y: other, ...rest} = complex);
 var { x, ...fresh } = { x: 1, y: 2 };
 ({ x, ...fresh } = { x: 1, y: 2 });
 
 class Removable {
-    private x: number;
-    protected y: number;
+    private x!: number;
+    protected y!: number;
     set z(value: number) { }
     get both(): number { return 12 }
     set both(value: number) { }
     m() { }
-    removed: string;
-    remainder: string;
+    removed!: string;
+    remainder!: string;
 }
 interface I {
     m(): void;
@@ -50,6 +50,7 @@ var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmp
 
 
 //// [objectRest.js]
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -71,9 +72,7 @@ var { 'b': renamed } = o, justA = __rest(o, ['b']);
 var { b: { '0': n, '1': oooo } } = o, justA = __rest(o, ["b"]);
 let o2 = { c: 'terrible idea?', d: 'yes' };
 var { d: renamed } = o2, d = __rest(o2, ["d"]);
-let nestedrest;
 var { x } = nestedrest, _f = nestedrest.n1, { y } = _f, _g = _f.n2, { z } = _g, nr = __rest(_g.n3, []), restrest = __rest(nestedrest, ["x", "n1"]);
-let complex;
 var _h = complex.x, { ka } = _h, nested = __rest(_h, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]);
 (_a = complex.x, { ka } = _a, nested = __rest(_a, ["ka"]), { y: other } = complex, rest = __rest(complex, ["x", "y"]));
 var _j = { x: 1, y: 2 }, { x } = _j, fresh = __rest(_j, ["x"]);

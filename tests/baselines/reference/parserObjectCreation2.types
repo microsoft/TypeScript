@@ -3,6 +3,9 @@
 === parserObjectCreation2.ts ===
 new new Foo()()
 >new new Foo()() : any
+>                : ^^^
 >new Foo() : any
+>          : ^^^
 >Foo : any
+>    : ^^^
 

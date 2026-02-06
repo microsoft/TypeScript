@@ -1,0 +1,604 @@
+//// [tests/cases/compiler/declarationEmitUsingAlternativeContainingModules2.ts] ////
+
+=== node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh.d.ts ===
+type QueryKey = ReadonlyArray<unknown>;
+>QueryKey : QueryKey
+>         : ^^^^^^^^
+
+interface Register {}
+
+type DefaultError = Register extends {
+>DefaultError : Error
+>             : ^^^^^
+
+  defaultError: infer TError;
+>defaultError : TError
+>             : ^^^^^^
+}
+  ? TError
+  : Error;
+
+type ShouldRetryFunction<TError = DefaultError> = (
+>ShouldRetryFunction : ShouldRetryFunction<TError>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  failureCount: number,
+>failureCount : number
+>             : ^^^^^^
+
+  error: TError,
+>error : TError
+>      : ^^^^^^
+
+) => boolean;
+type RetryValue<TError> = boolean | number | ShouldRetryFunction<TError>;
+>RetryValue : RetryValue<TError>
+>           : ^^^^^^^^^^^^^^^^^^
+
+type QueryFunctionContext<
+>QueryFunctionContext : QueryFunctionContext<TQueryKey, TPageParam>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TQueryKey extends QueryKey = QueryKey,
+  TPageParam = never,
+> = [TPageParam] extends [never]
+  ? {
+      queryKey: TQueryKey;
+>queryKey : TQueryKey
+>         : ^^^^^^^^^
+    }
+  : {
+      queryKey: TQueryKey;
+>queryKey : TQueryKey
+>         : ^^^^^^^^^
+
+      pageParam: TPageParam;
+>pageParam : TPageParam
+>          : ^^^^^^^^^^
+
+    };
+
+type QueryFunction<
+>QueryFunction : QueryFunction<T, TQueryKey, TPageParam>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  T = unknown,
+  TQueryKey extends QueryKey = QueryKey,
+  TPageParam = never,
+> = (context: QueryFunctionContext<TQueryKey, TPageParam>) => T | Promise<T>;
+>context : QueryFunctionContext<TQueryKey, TPageParam>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+interface QueryOptions<
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+  TPageParam = never,
+> {
+  retry?: RetryValue<TError>;
+>retry : RetryValue<TError> | undefined
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  queryFn?: QueryFunction<TQueryFnData, TQueryKey, TPageParam>;
+>queryFn : QueryFunction<TQueryFnData, TQueryKey, TPageParam> | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  queryKey?: TQueryKey;
+>queryKey : TQueryKey | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^
+
+  initialData?: TData;
+>initialData : TData | undefined
+>            : ^^^^^^^^^^^^^^^^^
+
+  initialDataUpdatedAt?: number | (() => number | undefined);
+>initialDataUpdatedAt : number | (() => number | undefined) | undefined
+>                     : ^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^
+}
+
+interface QueryObserverOptions<
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = TQueryFnData,
+  TQueryData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+  TPageParam = never,
+> extends QueryOptions<
+    TQueryFnData,
+    TError,
+    TQueryData,
+    TQueryKey,
+    TPageParam
+  > {
+  enabled?: boolean;
+>enabled : boolean | undefined
+>        : ^^^^^^^^^^^^^^^^^^^
+
+  refetchInterval?: number;
+>refetchInterval : number | undefined
+>                : ^^^^^^^^^^^^^^^^^^
+
+  select?: (data: TQueryData) => TData;
+>select : ((data: TQueryData) => TData) | undefined
+>       : ^^    ^^          ^^^^^     ^^^^^^^^^^^^^
+>data : TQueryData
+>     : ^^^^^^^^^^
+}
+
+type UseQueryOptions<
+>UseQueryOptions : UseQueryOptions<TQueryFnData, TError, TData, TQueryData, TQueryKey>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = TQueryFnData,
+  TQueryData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+> = {
+  [Property in keyof QueryObserverOptions<
+    TQueryFnData,
+    TError,
+    TData,
+    TQueryData,
+    TQueryKey
+  >]: QueryObserverOptions<
+    TQueryFnData,
+    TError,
+    TData,
+    TQueryData,
+    TQueryKey
+  >[Property];
+};
+
+type UndefinedInitialQueryOptions<
+>UndefinedInitialQueryOptions : UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+> = UseQueryOptions<TQueryFnData, TError, TData, TQueryFnData, TQueryKey> & {
+  initialData?: undefined;
+>initialData : undefined
+>            : ^^^^^^^^^
+
+};
+
+interface QueryObserverBaseResult<TData = unknown, TError = DefaultError> {
+  data: TData | undefined;
+>data : TData | undefined
+>     : ^^^^^^^^^^^^^^^^^
+
+  dataUpdatedAt: number;
+>dataUpdatedAt : number
+>              : ^^^^^^
+
+  error: TError | null;
+>error : TError | null
+>      : ^^^^^^^^^^^^^
+
+  errorUpdatedAt: number;
+>errorUpdatedAt : number
+>               : ^^^^^^
+
+  failureCount: number;
+>failureCount : number
+>             : ^^^^^^
+
+  failureReason: TError | null;
+>failureReason : TError | null
+>              : ^^^^^^^^^^^^^
+
+  errorUpdateCount: number;
+>errorUpdateCount : number
+>                 : ^^^^^^
+
+  isError: boolean;
+>isError : boolean
+>        : ^^^^^^^
+
+  isFetched: boolean;
+>isFetched : boolean
+>          : ^^^^^^^
+
+  isFetchedAfterMount: boolean;
+>isFetchedAfterMount : boolean
+>                    : ^^^^^^^
+
+  isFetching: boolean;
+>isFetching : boolean
+>           : ^^^^^^^
+
+  isLoading: boolean;
+>isLoading : boolean
+>          : ^^^^^^^
+
+  isPending: boolean;
+>isPending : boolean
+>          : ^^^^^^^
+
+  isLoadingError: boolean;
+>isLoadingError : boolean
+>               : ^^^^^^^
+
+  isInitialLoading: boolean;
+>isInitialLoading : boolean
+>                 : ^^^^^^^
+
+  isPaused: boolean;
+>isPaused : boolean
+>         : ^^^^^^^
+
+  isPlaceholderData: boolean;
+>isPlaceholderData : boolean
+>                  : ^^^^^^^
+
+  isRefetchError: boolean;
+>isRefetchError : boolean
+>               : ^^^^^^^
+
+  isRefetching: boolean;
+>isRefetching : boolean
+>             : ^^^^^^^
+
+  isStale: boolean;
+>isStale : boolean
+>        : ^^^^^^^
+
+  isSuccess: boolean;
+>isSuccess : boolean
+>          : ^^^^^^^
+}
+
+interface QueryObserverSuccessResult<TData = unknown, TError = DefaultError>
+  extends QueryObserverBaseResult<TData, TError> {
+  data: TData;
+>data : TData
+>     : ^^^^^
+
+  error: null;
+>error : null
+>      : ^^^^
+
+  isError: false;
+>isError : false
+>        : ^^^^^
+>false : false
+>      : ^^^^^
+
+  isPending: false;
+>isPending : false
+>          : ^^^^^
+>false : false
+>      : ^^^^^
+
+  isLoadingError: false;
+>isLoadingError : false
+>               : ^^^^^
+>false : false
+>      : ^^^^^
+
+  isRefetchError: false;
+>isRefetchError : false
+>               : ^^^^^
+>false : false
+>      : ^^^^^
+
+  isSuccess: true;
+>isSuccess : true
+>          : ^^^^
+>true : true
+>     : ^^^^
+
+  status: "success";
+>status : "success"
+>       : ^^^^^^^^^
+}
+
+type DefinedQueryObserverResult<
+>DefinedQueryObserverResult : DefinedQueryObserverResult<TData, TError>
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TData = unknown,
+  TError = DefaultError,
+> = QueryObserverSuccessResult<TData, TError>;
+type QueryObserverResult<
+>QueryObserverResult : QueryObserverResult<TData, TError>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TData = unknown,
+  TError = DefaultError,
+> = DefinedQueryObserverResult<TData, TError>;
+
+type ToRef<T> = {
+>ToRef : ToRef<T>
+>      : ^^^^^^^^
+
+  value: T;
+>value : T
+>      : ^
+
+};
+
+type UseBaseQueryReturnType<
+>UseBaseQueryReturnType : UseBaseQueryReturnType<TData, TError, Result>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  TData,
+  TError,
+  Result = QueryObserverResult<TData, TError>,
+> = {
+  [K in keyof Result]: K extends
+    | "fetchNextPage"
+    | "fetchPreviousPage"
+    | "refetch"
+    ? Result[K]
+    : ToRef<Readonly<Result>[K]>;
+} & {
+  suspense: () => Promise<Result>;
+>suspense : () => Promise<Result>
+>         : ^^^^^^               
+
+};
+
+type UseQueryReturnType<TData, TError> = UseBaseQueryReturnType<TData, TError>;
+>UseQueryReturnType : UseQueryReturnType<TData, TError>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare function useQuery<
+>useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^        ^^^^^^^^^^^^^       ^^                                                                    ^^^^^                                 
+
+  TQueryFnData = unknown,
+  TError = DefaultError,
+  TData = TQueryFnData,
+  TQueryKey extends QueryKey = QueryKey,
+>(
+  options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>,
+>options : UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+): UseQueryReturnType<TData, TError>;
+
+export { type UseQueryReturnType as b, useQuery as u };
+>UseQueryReturnType : any
+>                   : ^^^
+>b : any
+>  : ^^^
+>useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^        ^^^^^^^^^^^^^       ^^                                                                    ^^^^^                                 
+>u : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(options: UndefinedInitialQueryOptions<TQueryFnData, TError, TData, TQueryKey>) => UseQueryReturnType<TData, TError>
+>  : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^        ^^^^^^^^^^^^^       ^^                                                                    ^^^^^                                 
+
+=== node_modules/@tanstack/vue-query/build/modern/index.d.ts ===
+export { b as UseQueryReturnType, u as useQuery } from './useQuery-CPqkvEsh.js';
+>b : any
+>  : ^^^
+>UseQueryReturnType : any
+>                   : ^^^
+>u : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; } & { initialData?: undefined; }) => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<TData, TError>
+>  : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^               
+>useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; } & { initialData?: undefined; }) => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<TData, TError>
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^               
+
+=== src/index.mts ===
+import { useQuery } from '@tanstack/vue-query'
+>useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; } & { initialData?: undefined; }) => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<TData, TError>
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^               
+
+const baseUrl = 'https://api.publicapis.org/'
+>baseUrl : "https://api.publicapis.org/"
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'https://api.publicapis.org/' : "https://api.publicapis.org/"
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+interface IEntry {
+  API: string
+>API : string
+>    : ^^^^^^
+
+  Description: string
+>Description : string
+>            : ^^^^^^
+
+  Auth: string
+>Auth : string
+>     : ^^^^^^
+
+  HTTPS: boolean
+>HTTPS : boolean
+>      : ^^^^^^^
+
+  Cors: string
+>Cors : string
+>     : ^^^^^^
+
+  Link: string
+>Link : string
+>     : ^^^^^^
+
+  Category: string
+>Category : string
+>         : ^^^^^^
+}
+
+const testApi = {
+>testApi : { getEntries: () => Promise<IEntry[]>; }
+>        : ^^^^^^^^^^^^^^^^^^^^                 ^^^
+>{  getEntries: (): Promise<IEntry[]> => {    return fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err))  }} : { getEntries: () => Promise<IEntry[]>; }
+>                                                                                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^                 ^^^
+
+  getEntries: (): Promise<IEntry[]> => {
+>getEntries : () => Promise<IEntry[]>
+>           : ^^^^^^                 
+>(): Promise<IEntry[]> => {    return fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err))  } : () => Promise<IEntry[]>
+>                                                                                                                                                                             : ^^^^^^                 
+
+    return fetch(baseUrl + 'entries')
+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch((err) => console.log(err)) : Promise<any>
+>                                                                                                                                     : ^^^^^^^^^^^^
+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries)      .catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<any>
+>                                                                                                          : ^       ^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then((data) => data.entries) : Promise<any>
+>                                                                                              : ^^^^^^^^^^^^
+>fetch(baseUrl + 'entries')      .then((res) => res.json())      .then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>                                                                      : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fetch(baseUrl + 'entries')      .then((res) => res.json()) : Promise<any>
+>                                                           : ^^^^^^^^^^^^
+>fetch(baseUrl + 'entries')      .then : <TResult1 = Response, TResult2 = never>(onfulfilled?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>                                      : ^        ^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fetch(baseUrl + 'entries') : Promise<Response>
+>                           : ^^^^^^^^^^^^^^^^^
+>fetch : (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
+>      : ^     ^^                 ^^    ^^^           ^^^^^                 
+>baseUrl + 'entries' : string
+>                    : ^^^^^^
+>baseUrl : "https://api.publicapis.org/"
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'entries' : "entries"
+>          : ^^^^^^^^^
+
+      .then((res) => res.json())
+>then : <TResult1 = Response, TResult2 = never>(onfulfilled?: ((value: Response) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(res) => res.json() : (res: Response) => Promise<any>
+>                    : ^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>res : Response
+>    : ^^^^^^^^
+>res.json() : Promise<any>
+>           : ^^^^^^^^^^^^
+>res.json : () => Promise<any>
+>         : ^^^^^^            
+>res : Response
+>    : ^^^^^^^^
+>json : () => Promise<any>
+>     : ^^^^^^            
+
+      .then((data) => data.entries)
+>then : <TResult1 = any, TResult2 = never>(onfulfilled?: ((value: any) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(data) => data.entries : (data: any) => any
+>                       : ^    ^^^^^^^^^^^^^
+>data : any
+>data.entries : any
+>data : any
+>     : ^^^
+>entries : any
+>        : ^^^
+
+      .catch((err) => console.log(err))
+>catch : <TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | null | undefined) => Promise<any>
+>      : ^       ^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(err) => console.log(err) : (err: any) => void
+>                          : ^   ^^^^^^^^^^^^^^
+>err : any
+>console.log(err) : void
+>                 : ^^^^
+>console.log : (...data: any[]) => void
+>            : ^^^^    ^^     ^^^^^    
+>console : Console
+>        : ^^^^^^^
+>log : (...data: any[]) => void
+>    : ^^^^    ^^     ^^^^^    
+>err : any
+  }
+}
+
+const entryKeys = {
+>entryKeys : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  all: ['entries'] as const,  list: () => [...entryKeys.all, 'list'] as const} : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  all: ['entries'] as const,
+>all : readonly ["entries"]
+>    : ^^^^^^^^^^^^^^^^^^^^
+>['entries'] as const : readonly ["entries"]
+>                     : ^^^^^^^^^^^^^^^^^^^^
+>['entries'] : readonly ["entries"]
+>            : ^^^^^^^^^^^^^^^^^^^^
+>'entries' : "entries"
+>          : ^^^^^^^^^
+
+  list: () => [...entryKeys.all, 'list'] as const
+>list : () => readonly ["entries", "list"]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => [...entryKeys.all, 'list'] as const : () => readonly ["entries", "list"]
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[...entryKeys.all, 'list'] as const : readonly ["entries", "list"]
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[...entryKeys.all, 'list'] : readonly ["entries", "list"]
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>...entryKeys.all : "entries"
+>                 : ^^^^^^^^^
+>entryKeys.all : readonly ["entries"]
+>              : ^^^^^^^^^^^^^^^^^^^^
+>entryKeys : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>all : readonly ["entries"]
+>    : ^^^^^^^^^^^^^^^^^^^^
+>'list' : "list"
+>       : ^^^^^^
+}
+
+export const useEntries = () => {
+>useEntries : () => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<IEntry[], Error>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>() => {  return useQuery({    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  })} : () => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<IEntry[], Error>
+>                                                                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  return useQuery({
+>useQuery({    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  }) : import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<IEntry[], Error>
+>                                                                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>useQuery : <TQueryFnData = unknown, TError = Error, TData = TQueryFnData, TQueryKey extends readonly unknown[] = readonly unknown[]>(options: { enabled?: boolean | undefined; refetchInterval?: number | undefined; select?: ((data: TQueryFnData) => TData) | undefined; retry?: (number | boolean | ((failureCount: number, error: TError) => boolean)) | undefined; queryFn?: ((context: { queryKey: TQueryKey; }) => TQueryFnData | Promise<TQueryFnData>) | undefined; queryKey?: TQueryKey | undefined; initialData?: TQueryFnData | undefined; initialDataUpdatedAt?: number | (() => number | undefined) | undefined; } & { initialData?: undefined; }) => import("node_modules/@tanstack/vue-query/build/modern/useQuery-CPqkvEsh").b<TData, TError>
+>         : ^            ^^^^^^^^^^^^      ^^^^^^^^^^     ^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^            ^^      ^^     ^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^               
+>{    queryKey: entryKeys.list(),    queryFn: testApi.getEntries,    select: (data) => data.slice(0, 10)  } : { queryKey: readonly ["entries", "list"]; queryFn: () => Promise<IEntry[]>; select: (data: IEntry[]) => IEntry[]; }
+>                                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                 ^^^^^^^^^^^    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    queryKey: entryKeys.list(),
+>queryKey : readonly ["entries", "list"]
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>entryKeys.list() : readonly ["entries", "list"]
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>entryKeys.list : () => readonly ["entries", "list"]
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>entryKeys : { all: readonly ["entries"]; list: () => readonly ["entries", "list"]; }
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>list : () => readonly ["entries", "list"]
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    queryFn: testApi.getEntries,
+>queryFn : () => Promise<IEntry[]>
+>        : ^^^^^^                 
+>testApi.getEntries : () => Promise<IEntry[]>
+>                   : ^^^^^^                 
+>testApi : { getEntries: () => Promise<IEntry[]>; }
+>        : ^^^^^^^^^^^^^^^^^^^^                 ^^^
+>getEntries : () => Promise<IEntry[]>
+>           : ^^^^^^                 
+
+    select: (data) => data.slice(0, 10)
+>select : (data: IEntry[]) => IEntry[]
+>       : ^    ^^^^^^^^^^^^^^^^^^^^^^^
+>(data) => data.slice(0, 10) : (data: IEntry[]) => IEntry[]
+>                            : ^    ^^^^^^^^^^^^^^^^^^^^^^^
+>data : IEntry[]
+>     : ^^^^^^^^
+>data.slice(0, 10) : IEntry[]
+>                  : ^^^^^^^^
+>data.slice : (start?: number, end?: number) => IEntry[]
+>           : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
+>data : IEntry[]
+>     : ^^^^^^^^
+>slice : (start?: number, end?: number) => IEntry[]
+>      : ^     ^^^      ^^   ^^^      ^^^^^^^^^^^^^
+>0 : 0
+>  : ^
+>10 : 10
+>   : ^^
+
+  })
+}
+

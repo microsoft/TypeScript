@@ -1,3 +1,4 @@
+// @target: es2015
 // @outdir: out/
 // @checkJs: true
 // @filename: seeTag3.js

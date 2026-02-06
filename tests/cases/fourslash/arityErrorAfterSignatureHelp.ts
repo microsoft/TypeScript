@@ -18,5 +18,5 @@ verify.signatureHelp({
         kind: "retrigger"
     }
 })
-verify.not.codeFixAvailable() // trigger typecheck
+verify.not.codeFixAvailable(); // trigger typecheck
 verify.errorExistsBetweenMarkers("1", "2");

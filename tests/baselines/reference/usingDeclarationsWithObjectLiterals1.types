@@ -1,0 +1,169 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsWithObjectLiterals1.ts] ////
+
+=== usingDeclarationsWithObjectLiterals1.ts ===
+interface MyDisposable {
+  value: number;
+>value : number
+>      : ^^^^^^
+
+  [Symbol.dispose](): void;
+>[Symbol.dispose] : () => void
+>                 : ^^^^^^    
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+}
+
+{
+  using _ = { [Symbol.dispose]() {} };
+>_ : { [Symbol.dispose](): void; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [Symbol.dispose]() {} } : { [Symbol.dispose](): void; }
+>                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.dispose] : () => void
+>                 : ^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+}
+
+{
+  using _ = { [Symbol.dispose]() {}, value: 1 };
+>_ : { [Symbol.dispose](): void; value: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [Symbol.dispose]() {}, value: 1 } : { [Symbol.dispose](): void; value: number; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.dispose] : () => void
+>                 : ^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+}
+
+{
+  using _: MyDisposable = { [Symbol.dispose]() {}, value: 1, extra: "foo" };
+>_ : MyDisposable
+>  : ^^^^^^^^^^^^
+>{ [Symbol.dispose]() {}, value: 1, extra: "foo" } : { [Symbol.dispose](): void; value: number; extra: string; }
+>                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.dispose] : () => void
+>                 : ^^^^^^^^^^
+>Symbol.dispose : unique symbol
+>               : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>dispose : unique symbol
+>        : ^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+>extra : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+}
+
+interface MyAsyncDisposable {
+  value: number;
+>value : number
+>      : ^^^^^^
+
+  [Symbol.asyncDispose](): Promise<void>;
+>[Symbol.asyncDispose] : () => Promise<void>
+>                      : ^^^^^^             
+>Symbol.asyncDispose : unique symbol
+>                    : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>asyncDispose : unique symbol
+>             : ^^^^^^^^^^^^^
+}
+
+async function f() {
+>f : () => Promise<void>
+>  : ^^^^^^^^^^^^^^^^^^^
+  {
+    await using _ = { async [Symbol.asyncDispose]() {} };
+>_ : { [Symbol.asyncDispose](): Promise<void>; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ async [Symbol.asyncDispose]() {} } : { [Symbol.asyncDispose](): Promise<void>; }
+>                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.asyncDispose] : () => Promise<void>
+>                      : ^^^^^^^^^^^^^^^^^^^
+>Symbol.asyncDispose : unique symbol
+>                    : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>asyncDispose : unique symbol
+>             : ^^^^^^^^^^^^^
+  }
+
+  {
+    await using _ = { async [Symbol.asyncDispose]() {}, value: 1 };
+>_ : { [Symbol.asyncDispose](): Promise<void>; value: number; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ async [Symbol.asyncDispose]() {}, value: 1 } : { [Symbol.asyncDispose](): Promise<void>; value: number; }
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[Symbol.asyncDispose] : () => Promise<void>
+>                      : ^^^^^^^^^^^^^^^^^^^
+>Symbol.asyncDispose : unique symbol
+>                    : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>asyncDispose : unique symbol
+>             : ^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+  }
+
+  {
+    await using _: MyAsyncDisposable = {
+>_ : MyAsyncDisposable
+>  : ^^^^^^^^^^^^^^^^^
+>{      async [Symbol.asyncDispose]() {},      value: 1,      extra: "foo",    } : { [Symbol.asyncDispose](): Promise<void>; value: number; extra: string; }
+>                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+      async [Symbol.asyncDispose]() {},
+>[Symbol.asyncDispose] : () => Promise<void>
+>                      : ^^^^^^^^^^^^^^^^^^^
+>Symbol.asyncDispose : unique symbol
+>                    : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>asyncDispose : unique symbol
+>             : ^^^^^^^^^^^^^
+
+      value: 1,
+>value : number
+>      : ^^^^^^
+>1 : 1
+>  : ^
+
+      extra: "foo",
+>extra : string
+>      : ^^^^^^
+>"foo" : "foo"
+>      : ^^^^^
+
+    };
+  }
+}
+
+export {};
+

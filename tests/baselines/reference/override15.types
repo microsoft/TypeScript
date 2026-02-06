@@ -3,16 +3,21 @@
 === override15.ts ===
 class A {
 >A : A
+>  : ^
 
     doSomething() {}
 >doSomething : () => void
+>            : ^^^^^^^^^^
 }
 
 class B extends A {
 >B : B
+>  : ^
 >A : A
+>  : ^
 
     override doSomethang() {}
 >doSomethang : () => void
+>            : ^^^^^^^^^^
 }
 

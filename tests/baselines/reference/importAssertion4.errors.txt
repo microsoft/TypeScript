@@ -3,7 +3,7 @@ importAssertion4.ts(2,1): error TS1005: '{' expected.
 
 
 ==== importAssertion4.ts (2 errors) ====
-    import * as f from "./first" assert
+    import * as f from "./first" with
                        ~~~~~~~~~
 !!! error TS2307: Cannot find module './first' or its corresponding type declarations.
     

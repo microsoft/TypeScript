@@ -1,0 +1,45 @@
+//// [tests/cases/compiler/spreadObjectNoCircular1.ts] ////
+
+=== spreadObjectNoCircular1.ts ===
+type Box = {
+>Box : Box
+>    : ^^^
+
+  content?: Foo | Box;
+>content : Foo | Box | undefined
+>        : ^^^^^^^^^^^^^^^^^^^^^
+
+};
+
+declare const b: Box;
+>b : Box
+>  : ^^^
+
+class Foo {
+>Foo : Foo
+>    : ^^^
+
+  get foo() {
+>foo : { content: Foo | Box; }
+>    : ^^^^^^^^^^^         ^^^
+
+    return {
+>{      content: this as Foo | Box,      ...b,    } : { content: Foo | Box; }
+>                                                   : ^^^^^^^^^^^         ^^^
+
+      content: this as Foo | Box,
+>content : Foo | Box
+>        : ^^^^^^^^^
+>this as Foo | Box : Foo | Box
+>                  : ^^^^^^^^^
+>this : this
+>     : ^^^^
+
+      ...b,
+>b : Box
+>  : ^^^
+
+    };
+  }
+}
+

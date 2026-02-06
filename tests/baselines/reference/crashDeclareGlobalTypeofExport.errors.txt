@@ -1,0 +1,33 @@
+bar.d.ts(2,21): error TS2451: Cannot redeclare block-scoped variable 'foo'.
+bar.d.ts(6,11): error TS2451: Cannot redeclare block-scoped variable 'foo'.
+bar.d.ts(6,11): error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+
+
+==== bar.d.ts (3 errors) ====
+    import * as foo from './foo'
+    export as namespace foo
+                        ~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'foo'.
+!!! related TS6203 bar.d.ts:6:11: 'foo' was also declared here.
+    export = foo;
+    
+    declare global {
+        const foo: typeof foo;
+              ~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'foo'.
+!!! related TS6203 bar.d.ts:2:21: 'foo' was also declared here.
+              ~~~
+!!! error TS2502: 'foo' is referenced directly or indirectly in its own type annotation.
+    }
+    
+==== foo.d.ts (0 errors) ====
+    interface Root {
+        /**
+         * A .default property for ES6 default import compatibility
+         */
+        default: Root;
+    }
+    
+    declare const root: Root;
+    export = root;
+    

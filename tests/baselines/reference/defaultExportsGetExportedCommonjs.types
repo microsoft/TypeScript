@@ -3,8 +3,10 @@
 === a.ts ===
 export default class Foo {}
 >Foo : Foo
+>    : ^^^
 
 === b.ts ===
 export default function foo() {}
 >foo : () => void
+>    : ^^^^^^^^^^
 

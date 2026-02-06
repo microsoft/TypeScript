@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 ///<amd-dependency path='aliasedModule5' name='n1'/>
 ///<amd-dependency path='unaliasedModule3'/>

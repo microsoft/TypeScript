@@ -8,4 +8,5 @@ verify.completions({
     marker: "1",
     exact: completion.typeKeywords,
     isNewIdentifierLocation: true,
+    defaultCommitCharacters: [],
 });

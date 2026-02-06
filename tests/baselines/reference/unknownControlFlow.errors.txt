@@ -1,6 +1,6 @@
 unknownControlFlow.ts(18,9): error TS2322: Type 'unknown' is not assignable to type '{}'.
 unknownControlFlow.ts(283,5): error TS2536: Type 'keyof (T & {})' cannot be used to index type 'T'.
-unknownControlFlow.ts(290,11): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+unknownControlFlow.ts(290,11): error TS2345: Argument of type '"foo"' is not assignable to parameter of type 'never'.
 unknownControlFlow.ts(291,5): error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
 unknownControlFlow.ts(293,5): error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.
 unknownControlFlow.ts(323,9): error TS2367: This comparison appears to be unintentional because the types 'T' and 'number' have no overlap.
@@ -303,7 +303,7 @@ unknownControlFlow.ts(341,9): error TS2367: This comparison appears to be uninte
     
     ff1(null, 'foo');  // Error
               ~~~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type '"foo"' is not assignable to parameter of type 'never'.
     ff2(null, 'foo');  // Error
         ~~~~
 !!! error TS2345: Argument of type 'null' is not assignable to parameter of type 'never'.

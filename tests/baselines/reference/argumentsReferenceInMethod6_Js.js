@@ -19,5 +19,5 @@ declare class A {
     /**
      * @type object
      */
-    foo: object;
+    foo: object | undefined;
 }

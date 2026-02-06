@@ -28,7 +28,7 @@ export const x: T={
 `,
 
         "/bar.ts":
-`import { x } from "./a";
+`import { x } from './a';
 import { b } from './other';
 const t = b;
 const b = x.a;

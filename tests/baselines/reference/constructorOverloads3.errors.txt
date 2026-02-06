@@ -14,7 +14,7 @@ constructorOverloads3.ts(12,5): error TS2377: Constructors for derived classes m
         constructor(n: number);
         constructor(a: any);
         constructor(x: any, y?: any) { }
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~~~~~~~
 !!! error TS2377: Constructors for derived classes must contain a 'super' call.
         bar1() { /*WScript.Echo("Yo");*/}
     }

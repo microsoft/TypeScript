@@ -1,0 +1,356 @@
+// === Completions ===
+=== /tests/cases/fourslash/./b.ts ===
+// declare global {
+//     interface ImportAttributes {
+//         type: "json",
+//         "resolution-mode": "import"
+//     }
+// }
+// const str = "hello";
+// 
+// import * as t1 from "./a" with {  };
+//                                  ^
+// | ----------------------------------------------------------------------
+// | (property) ImportAttributes["resolution-mode"]: "import"
+// | (property) ImportAttributes.type: "json"
+// | ----------------------------------------------------------------------
+// import * as t2 from "./a" with { type: "" };
+//                                         ^
+// | ----------------------------------------------------------------------
+// | json
+// | ----------------------------------------------------------------------
+// import * as t3 from "./a" with { type: "json",  };
+//                                                ^
+// | ----------------------------------------------------------------------
+// | (property) ImportAttributes["resolution-mode"]: "import"
+// | ----------------------------------------------------------------------
+// import * as t4 from "./a" with { type:  };
+//                                        ^
+// | ----------------------------------------------------------------------
+// | "json"
+// | (property) ImportAttributes["resolution-mode"]: "import"
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/./b.ts",
+      "position": 171,
+      "name": "1"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "resolution-mode",
+          "kind": "property",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportAttributes",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\"resolution-mode\"",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"import\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        },
+        {
+          "name": "type",
+          "kind": "property",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportAttributes",
+              "kind": "interfaceName"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "type",
+              "kind": "propertyName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"json\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/./b.ts",
+      "position": 215,
+      "name": "2"
+    },
+    "item": {
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "optionalReplacementSpan": {
+        "start": 215,
+        "length": 0
+      },
+      "entries": [
+        {
+          "name": "json",
+          "kindModifiers": "",
+          "kind": "string",
+          "sortText": "11",
+          "replacementSpan": {
+            "start": 215,
+            "length": 0
+          },
+          "commitCharacters": [],
+          "displayParts": [
+            {
+              "text": "json",
+              "kind": "text"
+            }
+          ]
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/./b.ts",
+      "position": 267,
+      "name": "3"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "resolution-mode",
+          "kind": "property",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportAttributes",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\"resolution-mode\"",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"import\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/./b.ts",
+      "position": 310,
+      "name": "4"
+    },
+    "item": {
+      "flags": 0,
+      "isGlobalCompletion": false,
+      "isMemberCompletion": false,
+      "isNewIdentifierLocation": false,
+      "entries": [
+        {
+          "name": "\"json\"",
+          "kind": "string",
+          "kindModifiers": "",
+          "sortText": "11",
+          "commitCharacters": [],
+          "displayParts": [
+            {
+              "text": "\"json\"",
+              "kind": "stringLiteral"
+            }
+          ]
+        },
+        {
+          "name": "resolution-mode",
+          "kind": "property",
+          "kindModifiers": "declare",
+          "sortText": "11",
+          "displayParts": [
+            {
+              "text": "(",
+              "kind": "punctuation"
+            },
+            {
+              "text": "property",
+              "kind": "text"
+            },
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "ImportAttributes",
+              "kind": "interfaceName"
+            },
+            {
+              "text": "[",
+              "kind": "punctuation"
+            },
+            {
+              "text": "\"resolution-mode\"",
+              "kind": "stringLiteral"
+            },
+            {
+              "text": "]",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "\"import\"",
+              "kind": "stringLiteral"
+            }
+          ],
+          "documentation": []
+        }
+      ],
+      "defaultCommitCharacters": [
+        ".",
+        ",",
+        ";"
+      ]
+    }
+  }
+]

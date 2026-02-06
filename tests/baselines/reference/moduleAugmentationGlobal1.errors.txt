@@ -1,0 +1,21 @@
+f1.ts(1,17): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== f1.ts (1 errors) ====
+    export class A {x: number;}
+                    ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    
+==== f2.ts (0 errors) ====
+    import {A} from "./f1";
+    
+    // change the shape of Array<T>
+    declare global {
+        interface Array<T> {
+            getA(): A;
+        }
+    }
+    
+    let x = [1];
+    let y = x.getA().x;
+    

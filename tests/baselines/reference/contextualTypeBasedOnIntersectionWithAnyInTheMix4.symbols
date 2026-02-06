@@ -1,0 +1,127 @@
+//// [tests/cases/compiler/contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts] ////
+
+=== contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts ===
+declare function test1(
+>test1 : Symbol(test1, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 0, 0))
+
+  arg: { a: (arg: number) => void } & { [k: string]: (arg: any) => void },
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 0, 23))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 1, 8))
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 1, 13))
+>k : Symbol(k, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 1, 41))
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 1, 54))
+
+): unknown;
+
+test1({
+>test1 : Symbol(test1, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 0, 0))
+
+  a: (arg) => {},
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 4, 7))
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 5, 6))
+
+  b: (arg) => {},
+>b : Symbol(b, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 5, 17))
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 6, 6))
+
+});
+
+declare function test2(
+>test2 : Symbol(test2, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 7, 3))
+
+  arg: { a: (arg: { foo: string }) => void } & {
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 9, 23))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 10, 8))
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 10, 13))
+>foo : Symbol(foo, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 10, 19))
+
+    [k: string]: (arg: { foo: any }) => void;
+>k : Symbol(k, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 11, 5))
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 11, 18))
+>foo : Symbol(foo, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 11, 24))
+
+  },
+): unknown;
+
+test2({
+>test2 : Symbol(test2, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 7, 3))
+
+  a: (arg) => {},
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 15, 7))
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 16, 6))
+
+  b: (arg) => {},
+>b : Symbol(b, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 16, 17))
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 17, 6))
+
+});
+
+declare function test3(
+>test3 : Symbol(test3, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 18, 3))
+
+  arg: { a: () => "foo" } & {
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 20, 23))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 21, 8))
+
+    [k: string]: () => any;
+>k : Symbol(k, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 22, 5))
+
+  },
+): unknown;
+
+test3({
+>test3 : Symbol(test3, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 18, 3))
+
+  a: () => "foo",
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 26, 7))
+
+  b: () => "bar",
+>b : Symbol(b, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 27, 17))
+
+});
+
+test3({
+>test3 : Symbol(test3, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 18, 3))
+
+  a: () => "bar",
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 31, 7))
+
+});
+
+declare function test4(
+>test4 : Symbol(test4, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 33, 3))
+
+  arg: { a: () => { prop: "foo" } } & {
+>arg : Symbol(arg, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 35, 23))
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 36, 8))
+>prop : Symbol(prop, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 36, 19))
+
+    [k: string]: () => { prop: any };
+>k : Symbol(k, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 37, 5))
+>prop : Symbol(prop, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 37, 24))
+
+  },
+): unknown;
+
+test4({
+>test4 : Symbol(test4, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 33, 3))
+
+  a: () => ({ prop: "foo" }),
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 41, 7))
+>prop : Symbol(prop, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 42, 13))
+
+  b: () => ({ prop: "bar" }),
+>b : Symbol(b, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 42, 29))
+>prop : Symbol(prop, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 43, 13))
+
+});
+
+test4({
+>test4 : Symbol(test4, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 33, 3))
+
+  a: () => ({ prop: "bar" }),
+>a : Symbol(a, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 46, 7))
+>prop : Symbol(prop, Decl(contextualTypeBasedOnIntersectionWithAnyInTheMix4.ts, 47, 13))
+
+});
+

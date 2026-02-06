@@ -3,7 +3,8 @@
 === moduleRedifinitionErrors.ts ===
 class A {
 >A : A
+>  : ^
 }
-module A {
+namespace A {
 }
 

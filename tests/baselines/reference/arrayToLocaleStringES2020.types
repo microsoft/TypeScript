@@ -1,0 +1,1039 @@
+//// [tests/cases/compiler/arrayToLocaleStringES2020.ts] ////
+
+=== arrayToLocaleStringES2020.ts ===
+let str: string;
+>str : string
+>    : ^^^^^^
+
+const arr = [1, 2, 3];
+>arr : number[]
+>    : ^^^^^^^^
+>[1, 2, 3] : number[]
+>          : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+
+str = arr.toLocaleString(); // OK
+>str = arr.toLocaleString() : string
+>                           : ^^^^^^
+>str : string
+>    : ^^^^^^
+>arr.toLocaleString() : string
+>                     : ^^^^^^
+>arr.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                   : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>arr : number[]
+>    : ^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+
+str = arr.toLocaleString('en-US'); // OK
+>str = arr.toLocaleString('en-US') : string
+>                                  : ^^^^^^
+>str : string
+>    : ^^^^^^
+>arr.toLocaleString('en-US') : string
+>                            : ^^^^^^
+>arr.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                   : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>arr : number[]
+>    : ^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                          : ^^^^^^
+>str : string
+>    : ^^^^^^
+>arr.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                    : ^^^^^^
+>arr.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                   : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>arr : number[]
+>    : ^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const dates: readonly Date[] = [new Date(), new Date()];
+>dates : readonly Date[]
+>      : ^^^^^^^^^^^^^^^
+>[new Date(), new Date()] : Date[]
+>                         : ^^^^^^
+>new Date() : Date
+>           : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>new Date() : Date
+>           : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+
+str = dates.toLocaleString(); // OK
+>str = dates.toLocaleString() : string
+>                             : ^^^^^^
+>str : string
+>    : ^^^^^^
+>dates.toLocaleString() : string
+>                       : ^^^^^^
+>dates.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                     : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>dates : readonly Date[]
+>      : ^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+
+str = dates.toLocaleString('fr'); // OK
+>str = dates.toLocaleString('fr') : string
+>                                 : ^^^^^^
+>str : string
+>    : ^^^^^^
+>dates.toLocaleString('fr') : string
+>                           : ^^^^^^
+>dates.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                     : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>dates : readonly Date[]
+>      : ^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>'fr' : "fr"
+>     : ^^^^
+
+str = dates.toLocaleString('fr', { timeZone: 'UTC' }); // OK
+>str = dates.toLocaleString('fr', { timeZone: 'UTC' }) : string
+>                                                      : ^^^^^^
+>str : string
+>    : ^^^^^^
+>dates.toLocaleString('fr', { timeZone: 'UTC' }) : string
+>                                                : ^^^^^^
+>dates.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                     : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>dates : readonly Date[]
+>      : ^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>'fr' : "fr"
+>     : ^^^^
+>{ timeZone: 'UTC' } : { timeZone: string; }
+>                    : ^^^^^^^^^^^^^^^^^^^^^
+>timeZone : string
+>         : ^^^^^^
+>'UTC' : "UTC"
+>      : ^^^^^
+
+const mixed = [1, new Date(), 59782, new Date()];
+>mixed : (number | Date)[]
+>      : ^^^^^^^^^^^^^^^^^
+>[1, new Date(), 59782, new Date()] : (number | Date)[]
+>                                   : ^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>new Date() : Date
+>           : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+>59782 : 59782
+>      : ^^^^^
+>new Date() : Date
+>           : ^^^^
+>Date : DateConstructor
+>     : ^^^^^^^^^^^^^^^
+
+str = mixed.toLocaleString(); // OK
+>str = mixed.toLocaleString() : string
+>                             : ^^^^^^
+>str : string
+>    : ^^^^^^
+>mixed.toLocaleString() : string
+>                       : ^^^^^^
+>mixed.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                     : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>mixed : (number | Date)[]
+>      : ^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+
+str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }); // OK
+>str = mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }) : string
+>                                                                         : ^^^^^^
+>str : string
+>    : ^^^^^^
+>mixed.toLocaleString('de', { style: 'currency', currency: 'EUR' }) : string
+>                                                                   : ^^^^^^
+>mixed.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                     : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>mixed : (number | Date)[]
+>      : ^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>'de' : "de"
+>     : ^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+str = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }); // OK
+>str = (mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }) : string
+>                                                                                                                            : ^^^^^^
+>str : string
+>    : ^^^^^^
+>(mixed as ReadonlyArray<number | Date>).toLocaleString('de', { currency: 'EUR', style: 'currency', timeZone: 'UTC' }) : string
+>                                                                                                                      : ^^^^^^
+>(mixed as ReadonlyArray<number | Date>).toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                                                       : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>(mixed as ReadonlyArray<number | Date>) : readonly (number | Date)[]
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed as ReadonlyArray<number | Date> : readonly (number | Date)[]
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mixed : (number | Date)[]
+>      : ^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>'de' : "de"
+>     : ^^^^
+>{ currency: 'EUR', style: 'currency', timeZone: 'UTC' } : { currency: string; style: "currency"; timeZone: string; }
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>timeZone : string
+>         : ^^^^^^
+>'UTC' : "UTC"
+>      : ^^^^^
+
+const bigInts = [BigInt(1), BigInt(2), BigInt(3)];
+>bigInts : bigint[]
+>        : ^^^^^^^^
+>[BigInt(1), BigInt(2), BigInt(3)] : bigint[]
+>                                  : ^^^^^^^^
+>BigInt(1) : bigint
+>          : ^^^^^^
+>BigInt : BigIntConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>BigInt(2) : bigint
+>          : ^^^^^^
+>BigInt : BigIntConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>2 : 2
+>  : ^
+>BigInt(3) : bigint
+>          : ^^^^^^
+>BigInt : BigIntConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = bigInts.toLocaleString(); // OK
+>str = bigInts.toLocaleString() : string
+>                               : ^^^^^^
+>str : string
+>    : ^^^^^^
+>bigInts.toLocaleString() : string
+>                         : ^^^^^^
+>bigInts.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                       : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>bigInts : bigint[]
+>        : ^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+
+str = bigInts.toLocaleString('en-US'); // OK
+>str = bigInts.toLocaleString('en-US') : string
+>                                      : ^^^^^^
+>str : string
+>    : ^^^^^^
+>bigInts.toLocaleString('en-US') : string
+>                                : ^^^^^^
+>bigInts.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                       : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>bigInts : bigint[]
+>        : ^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = bigInts.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = bigInts.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                              : ^^^^^^
+>str : string
+>    : ^^^^^^
+>bigInts.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                        : ^^^^^^
+>bigInts.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>                       : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>bigInts : bigint[]
+>        : ^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions & Intl.DateTimeFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                                                     ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const int8Array = new Int8Array(3);
+>int8Array : Int8Array<ArrayBuffer>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>new Int8Array(3) : Int8Array<ArrayBuffer>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^
+>Int8Array : Int8ArrayConstructor
+>          : ^^^^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = int8Array.toLocaleString(); // OK
+>str = int8Array.toLocaleString() : string
+>                                 : ^^^^^^
+>str : string
+>    : ^^^^^^
+>int8Array.toLocaleString() : string
+>                           : ^^^^^^
+>int8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                         : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>int8Array : Int8Array<ArrayBuffer>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+
+str = int8Array.toLocaleString('en-US'); // OK
+>str = int8Array.toLocaleString('en-US') : string
+>                                        : ^^^^^^
+>str : string
+>    : ^^^^^^
+>int8Array.toLocaleString('en-US') : string
+>                                  : ^^^^^^
+>int8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                         : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>int8Array : Int8Array<ArrayBuffer>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                : ^^^^^^
+>str : string
+>    : ^^^^^^
+>int8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                          : ^^^^^^
+>int8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                         : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>int8Array : Int8Array<ArrayBuffer>
+>          : ^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const uint8Array = new Uint8Array(3);
+>uint8Array : Uint8Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint8Array(3) : Uint8Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>Uint8Array : Uint8ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = uint8Array.toLocaleString(); // OK
+>str = uint8Array.toLocaleString() : string
+>                                  : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint8Array.toLocaleString() : string
+>                            : ^^^^^^
+>uint8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint8Array : Uint8Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+
+str = uint8Array.toLocaleString('en-US'); // OK
+>str = uint8Array.toLocaleString('en-US') : string
+>                                         : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint8Array.toLocaleString('en-US') : string
+>                                   : ^^^^^^
+>uint8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint8Array : Uint8Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                 : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint8Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                           : ^^^^^^
+>uint8Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint8Array : Uint8Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const uint8ClampedArray = new Uint8ClampedArray(3);
+>uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint8ClampedArray(3) : Uint8ClampedArray<ArrayBuffer>
+>                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Uint8ClampedArray : Uint8ClampedArrayConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = uint8ClampedArray.toLocaleString(); // OK
+>str = uint8ClampedArray.toLocaleString() : string
+>                                         : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint8ClampedArray.toLocaleString() : string
+>                                   : ^^^^^^
+>uint8ClampedArray.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                                 : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+
+str = uint8ClampedArray.toLocaleString('en-US'); // OK
+>str = uint8ClampedArray.toLocaleString('en-US') : string
+>                                                : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint8ClampedArray.toLocaleString('en-US') : string
+>                                          : ^^^^^^
+>uint8ClampedArray.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                                 : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                        : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint8ClampedArray.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                  : ^^^^^^
+>uint8ClampedArray.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                                 : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint8ClampedArray : Uint8ClampedArray<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const int16Array = new Int16Array(3);
+>int16Array : Int16Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Int16Array(3) : Int16Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>Int16Array : Int16ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = int16Array.toLocaleString(); // OK
+>str = int16Array.toLocaleString() : string
+>                                  : ^^^^^^
+>str : string
+>    : ^^^^^^
+>int16Array.toLocaleString() : string
+>                            : ^^^^^^
+>int16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>int16Array : Int16Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+
+str = int16Array.toLocaleString('en-US'); // OK
+>str = int16Array.toLocaleString('en-US') : string
+>                                         : ^^^^^^
+>str : string
+>    : ^^^^^^
+>int16Array.toLocaleString('en-US') : string
+>                                   : ^^^^^^
+>int16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>int16Array : Int16Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                 : ^^^^^^
+>str : string
+>    : ^^^^^^
+>int16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                           : ^^^^^^
+>int16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>int16Array : Int16Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const uint16Array = new Uint16Array(3);
+>uint16Array : Uint16Array<ArrayBuffer>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint16Array(3) : Uint16Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Uint16Array : Uint16ArrayConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = uint16Array.toLocaleString(); // OK
+>str = uint16Array.toLocaleString() : string
+>                                   : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint16Array.toLocaleString() : string
+>                             : ^^^^^^
+>uint16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint16Array : Uint16Array<ArrayBuffer>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+
+str = uint16Array.toLocaleString('en-US'); // OK
+>str = uint16Array.toLocaleString('en-US') : string
+>                                          : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint16Array.toLocaleString('en-US') : string
+>                                    : ^^^^^^
+>uint16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint16Array : Uint16Array<ArrayBuffer>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                  : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint16Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                            : ^^^^^^
+>uint16Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint16Array : Uint16Array<ArrayBuffer>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const int32Array = new Int32Array(3);
+>int32Array : Int32Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Int32Array(3) : Int32Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
+>Int32Array : Int32ArrayConstructor
+>           : ^^^^^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = int32Array.toLocaleString(); // OK
+>str = int32Array.toLocaleString() : string
+>                                  : ^^^^^^
+>str : string
+>    : ^^^^^^
+>int32Array.toLocaleString() : string
+>                            : ^^^^^^
+>int32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>int32Array : Int32Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+
+str = int32Array.toLocaleString('en-US'); // OK
+>str = int32Array.toLocaleString('en-US') : string
+>                                         : ^^^^^^
+>str : string
+>    : ^^^^^^
+>int32Array.toLocaleString('en-US') : string
+>                                   : ^^^^^^
+>int32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>int32Array : Int32Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                 : ^^^^^^
+>str : string
+>    : ^^^^^^
+>int32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                           : ^^^^^^
+>int32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                          : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>int32Array : Int32Array<ArrayBuffer>
+>           : ^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const uint32Array = new Uint32Array(3);
+>uint32Array : Uint32Array<ArrayBuffer>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint32Array(3) : Uint32Array<ArrayBuffer>
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^
+>Uint32Array : Uint32ArrayConstructor
+>            : ^^^^^^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = uint32Array.toLocaleString(); // OK
+>str = uint32Array.toLocaleString() : string
+>                                   : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint32Array.toLocaleString() : string
+>                             : ^^^^^^
+>uint32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint32Array : Uint32Array<ArrayBuffer>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+
+str = uint32Array.toLocaleString('en-US'); // OK
+>str = uint32Array.toLocaleString('en-US') : string
+>                                          : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint32Array.toLocaleString('en-US') : string
+>                                    : ^^^^^^
+>uint32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint32Array : Uint32Array<ArrayBuffer>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                  : ^^^^^^
+>str : string
+>    : ^^^^^^
+>uint32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                            : ^^^^^^
+>uint32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                           : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>uint32Array : Uint32Array<ArrayBuffer>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const float32Array = new Float32Array(3);
+>float32Array : Float32Array<ArrayBuffer>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Float32Array(3) : Float32Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Float32Array : Float32ArrayConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = float32Array.toLocaleString(); // OK
+>str = float32Array.toLocaleString() : string
+>                                    : ^^^^^^
+>str : string
+>    : ^^^^^^
+>float32Array.toLocaleString() : string
+>                              : ^^^^^^
+>float32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>float32Array : Float32Array<ArrayBuffer>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+
+str = float32Array.toLocaleString('en-US'); // OK
+>str = float32Array.toLocaleString('en-US') : string
+>                                           : ^^^^^^
+>str : string
+>    : ^^^^^^
+>float32Array.toLocaleString('en-US') : string
+>                                     : ^^^^^^
+>float32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>float32Array : Float32Array<ArrayBuffer>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                   : ^^^^^^
+>str : string
+>    : ^^^^^^
+>float32Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                             : ^^^^^^
+>float32Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>float32Array : Float32Array<ArrayBuffer>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const float64Array = new Float64Array(3);
+>float64Array : Float64Array<ArrayBuffer>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Float64Array(3) : Float64Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Float64Array : Float64ArrayConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = float64Array.toLocaleString(); // OK
+>str = float64Array.toLocaleString() : string
+>                                    : ^^^^^^
+>str : string
+>    : ^^^^^^
+>float64Array.toLocaleString() : string
+>                              : ^^^^^^
+>float64Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>float64Array : Float64Array<ArrayBuffer>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+
+str = float64Array.toLocaleString('en-US'); // OK
+>str = float64Array.toLocaleString('en-US') : string
+>                                           : ^^^^^^
+>str : string
+>    : ^^^^^^
+>float64Array.toLocaleString('en-US') : string
+>                                     : ^^^^^^
+>float64Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>float64Array : Float64Array<ArrayBuffer>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                   : ^^^^^^
+>str : string
+>    : ^^^^^^
+>float64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                             : ^^^^^^
+>float64Array.toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>                            : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>float64Array : Float64Array<ArrayBuffer>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : { (): string; (locales: string | string[], options?: Intl.NumberFormatOptions): string; }
+>               : ^^^^^^      ^^^       ^^                 ^^       ^^^                        ^^^      ^^^
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const bigInt64Array = new BigInt64Array(3);
+>bigInt64Array : BigInt64Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigInt64Array(3) : BigInt64Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BigInt64Array : BigInt64ArrayConstructor
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = bigInt64Array.toLocaleString(); // OK
+>str = bigInt64Array.toLocaleString() : string
+>                                     : ^^^^^^
+>str : string
+>    : ^^^^^^
+>bigInt64Array.toLocaleString() : string
+>                               : ^^^^^^
+>bigInt64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>                             : ^       ^^^                 ^^       ^^^                        ^^^^^      
+>bigInt64Array : BigInt64Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>               : ^       ^^^                 ^^       ^^^                        ^^^^^      
+
+str = bigInt64Array.toLocaleString('en-US'); // OK
+>str = bigInt64Array.toLocaleString('en-US') : string
+>                                            : ^^^^^^
+>str : string
+>    : ^^^^^^
+>bigInt64Array.toLocaleString('en-US') : string
+>                                      : ^^^^^^
+>bigInt64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>                             : ^       ^^^                 ^^       ^^^                        ^^^^^      
+>bigInt64Array : BigInt64Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>               : ^       ^^^                 ^^       ^^^                        ^^^^^      
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                    : ^^^^^^
+>str : string
+>    : ^^^^^^
+>bigInt64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                              : ^^^^^^
+>bigInt64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>                             : ^       ^^^                 ^^       ^^^                        ^^^^^      
+>bigInt64Array : BigInt64Array<ArrayBuffer>
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>               : ^       ^^^                 ^^       ^^^                        ^^^^^      
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+
+const bigIntUint64Array = new BigUint64Array(3);
+>bigIntUint64Array : BigUint64Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigUint64Array(3) : BigUint64Array<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>BigUint64Array : BigUint64ArrayConstructor
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>3 : 3
+>  : ^
+
+str = bigIntUint64Array.toLocaleString(); // OK
+>str = bigIntUint64Array.toLocaleString() : string
+>                                         : ^^^^^^
+>str : string
+>    : ^^^^^^
+>bigIntUint64Array.toLocaleString() : string
+>                                   : ^^^^^^
+>bigIntUint64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>                                 : ^       ^^^                 ^^       ^^^                        ^^^^^      
+>bigIntUint64Array : BigUint64Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>               : ^       ^^^                 ^^       ^^^                        ^^^^^      
+
+str = bigIntUint64Array.toLocaleString('en-US'); // OK
+>str = bigIntUint64Array.toLocaleString('en-US') : string
+>                                                : ^^^^^^
+>str : string
+>    : ^^^^^^
+>bigIntUint64Array.toLocaleString('en-US') : string
+>                                          : ^^^^^^
+>bigIntUint64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>                                 : ^       ^^^                 ^^       ^^^                        ^^^^^      
+>bigIntUint64Array : BigUint64Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>               : ^       ^^^                 ^^       ^^^                        ^^^^^      
+>'en-US' : "en-US"
+>        : ^^^^^^^
+
+str = bigIntUint64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }); // OK
+>str = bigIntUint64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                        : ^^^^^^
+>str : string
+>    : ^^^^^^
+>bigIntUint64Array.toLocaleString('en-US', { style: 'currency', currency: 'EUR' }) : string
+>                                                                                  : ^^^^^^
+>bigIntUint64Array.toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>                                 : ^       ^^^                 ^^       ^^^                        ^^^^^      
+>bigIntUint64Array : BigUint64Array<ArrayBuffer>
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>toLocaleString : (locales?: string | string[], options?: Intl.NumberFormatOptions) => string
+>               : ^       ^^^                 ^^       ^^^                        ^^^^^      
+>'en-US' : "en-US"
+>        : ^^^^^^^
+>{ style: 'currency', currency: 'EUR' } : { style: "currency"; currency: string; }
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>style : "currency"
+>      : ^^^^^^^^^^
+>'currency' : "currency"
+>           : ^^^^^^^^^^
+>currency : string
+>         : ^^^^^^
+>'EUR' : "EUR"
+>      : ^^^^^
+

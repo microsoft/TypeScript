@@ -1,0 +1,15 @@
+regExpWithOpenBracketInCharClass.ts(4,7): error TS1005: ']' expected.
+regExpWithOpenBracketInCharClass.ts(4,8): error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
+
+
+==== regExpWithOpenBracketInCharClass.ts (2 errors) ====
+    const regexes: RegExp[] = [
+      /[[]/,  // Valid
+      /[[]/u, // Valid
+      /[[]/v, // Well-terminated regex with an incomplete character class
+          
+!!! error TS1005: ']' expected.
+           ~
+!!! error TS1501: This regular expression flag is only available when targeting 'es2024' or later.
+    ];
+    

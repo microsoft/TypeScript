@@ -3,23 +3,28 @@
 === uniqueSymbolsDeclarationsInJsErrors.js ===
 class C {
 >C : C
+>  : ^
 
     /**
      * @type {unique symbol}
      */
     static readwriteStaticType;
 >readwriteStaticType : symbol
+>                    : ^^^^^^
 
     /**
      * @type {unique symbol}
      * @readonly
      */
     static readonlyType;
->readonlyType : symbol
+>readonlyType : unique symbol
+>             : ^^^^^^^^^^^^^
 
     /**
      * @type {unique symbol}
      */
     static readwriteType;
 >readwriteType : symbol
+>              : ^^^^^^
 }
+

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 interface Bar {  bar: number; foo: object | null;  }
 

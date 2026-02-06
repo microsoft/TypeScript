@@ -1,0 +1,69 @@
+index.ts(5,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+index.ts(6,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+index.ts(7,14): error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+
+
+==== node_modules/@trpc/server/internals/config.d.ts (0 errors) ====
+    export interface RootConfig<T> {
+        prop: T;
+    }
+==== node_modules/@trpc/server/internals/utils.d.ts (0 errors) ====
+    export interface ErrorFormatterShape<T={}> {
+        prop: T;
+    }
+    export type PickFirstDefined<TType, TPick> = undefined extends TType
+      ? undefined extends TPick
+        ? never
+        : TPick
+      : TType;
+    export interface ErrorFormatter<T={},U={}> {
+        prop: [T, U];
+    }
+    export interface DefaultErrorShape<T={}> {
+        prop: T;
+    }
+==== node_modules/@trpc/server/middleware.d.ts (0 errors) ====
+    export interface MiddlewareFunction<T={},U={}> {
+        prop: [T, U];
+    }
+    export interface MiddlewareBuilder<T={},U={}> {
+        prop: [T, U];
+    }
+==== node_modules/@trpc/server/index.d.ts (0 errors) ====
+    import { RootConfig } from './internals/config';
+    import { ErrorFormatterShape, PickFirstDefined, ErrorFormatter, DefaultErrorShape } from './internals/utils';
+    declare class TRPCBuilder<TParams> {
+        create<TOptions extends Record<string, any>>(): {
+            procedure: {};
+            middleware: <TNewParams extends Record<string, any>>(fn: import("./middleware").MiddlewareFunction<{
+                _config: RootConfig<{
+                    errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>;
+                }>;
+            }, TNewParams>) => import("./middleware").MiddlewareBuilder<{
+                _config: RootConfig<{
+                    errorShape: ErrorFormatterShape<PickFirstDefined<TOptions["errorFormatter"], ErrorFormatter<TParams["ctx"] extends object ? TParams["ctx"] : object, DefaultErrorShape>>>;
+                }>;
+            }, TNewParams>;
+            router: {};
+        };
+    } 
+    
+    export declare const initTRPC: TRPCBuilder<object>;
+    export {};
+==== index.ts (3 errors) ====
+    import { initTRPC } from "@trpc/server";
+    
+    const trpc = initTRPC.create();
+    
+    export const middleware = trpc.middleware;
+                 ~~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 index.ts:5:14: Add a type annotation to the variable middleware.
+    export const router = trpc.router;
+                 ~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 index.ts:6:14: Add a type annotation to the variable router.
+    export const publicProcedure = trpc.procedure;
+                 ~~~~~~~~~~~~~~~
+!!! error TS9010: Variable must have an explicit type annotation with --isolatedDeclarations.
+!!! related TS9027 index.ts:7:14: Add a type annotation to the variable publicProcedure.

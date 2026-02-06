@@ -3,16 +3,23 @@
 === unionTypeWithIndexedLiteralType.ts ===
 interface I { x: number; }
 >x : number
+>  : ^^^^^^
 
 interface Idx { [index: string]: U; }
 >index : string
+>      : ^^^^^^
 
 type U = Idx | I | "lit";
->U : I | Idx | "lit"
+>U : U
+>  : ^
 
 const u: U = { x: "lit" };
 >u : U
+>  : ^
 >{ x: "lit" } : { x: "lit"; }
+>             : ^^^^^^^^^^^^^
 >x : "lit"
+>  : ^^^^^
 >"lit" : "lit"
+>      : ^^^^^
 

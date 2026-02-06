@@ -1,3 +1,4 @@
+// @target: es2015
 interface Collection<T, U> {
     length: number;
     add(x: T, y: U): void;

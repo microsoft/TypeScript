@@ -1,8 +1,8 @@
-// @target: ES5
+// @target: ES5, ES2015
 // @declaration: true
 // @removeComments: false
 
-module m {
+namespace m {
     /** this is first line - aligned to class declaration
 * this is 4 spaces left aligned
  * this is 3 spaces left aligned

@@ -12,6 +12,7 @@ class C {
 }
 
 //// [computedPropertyNames17_ES6.js]
+"use strict";
 var b;
 class C {
     get [b]() { return 0; }

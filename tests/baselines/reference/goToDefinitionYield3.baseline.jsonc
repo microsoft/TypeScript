@@ -1,12 +1,26 @@
 // === goToDefinition ===
 // === /tests/cases/fourslash/goToDefinitionYield3.ts ===
 // class C {
-//     notAGenerator() {
+//     <|[|notAGenerator|]() {
 //       /*GOTO DEF*/yield 0;
-//     }
+//     }|>
 // 
 //     foo*() {
-// --- (line: 7) skipped ---
+//       yield 0;
+//     }
+// }
+
+  // === Details ===
+  [
+   {
+    "kind": "method",
+    "name": "notAGenerator",
+    "containerName": "C",
+    "isLocal": false,
+    "isAmbient": false,
+    "unverified": false
+   }
+  ]
 
 
 

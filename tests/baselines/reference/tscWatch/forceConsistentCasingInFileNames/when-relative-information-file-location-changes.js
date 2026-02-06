@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/moduleA.ts]
 import a = require("./ModuleC")
@@ -9,8 +9,14 @@ import a = require("./moduleC")
 //// [/user/username/projects/myproject/moduleC.ts]
 export const x = 10;
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "forceConsistentCasingInFileNames": true
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -21,19 +27,19 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "compilerOptions": {
-    "forceConsistentCasingInFileNames": true
-  }
-}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w --p . --explainFiles
+/home/src/tslibs/TS/Lib/tsc.js --w --p . --explainFiles
 Output::
 >> Screen clear
-[[90m12:00:25 AM[0m] Starting compilation in watch mode...
+[[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
+
+[96mmoduleA.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1202: [0mImport assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+[7m1[0m import a = require("./ModuleC")
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [96mmoduleA.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/ModuleC.ts' differs from file name '/user/username/projects/myproject/moduleC.ts' only in casing.
   The file is in the program because:
@@ -49,6 +55,11 @@ Output::
     [7m [0m [96m                   ~~~~~~~~~~~[0m
     File is included via import here.
 
+[96mmoduleB.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1202: [0mImport assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+[7m1[0m import a = require("./moduleC")
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
 [96mmoduleB.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/moduleC.ts' differs from already included file name '/user/username/projects/myproject/ModuleC.ts' only in casing.
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
@@ -63,8 +74,8 @@ Output::
     [7m [0m [96m                   ~~~~~~~~~~~[0m
     File is included via import here.
 
-../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
@@ -73,36 +84,27 @@ moduleA.ts
   Matched by default include pattern '**/*'
 moduleB.ts
   Matched by default include pattern '**/*'
-[[90m12:00:32 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 4 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/ModuleC.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = 10;
+export const x = 10;
 
 
 //// [/user/username/projects/myproject/moduleA.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/user/username/projects/myproject/moduleB.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/myproject/ModuleC.ts: *new*
   {}
@@ -131,19 +133,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/ModuleC.ts
 /user/username/projects/myproject/moduleA.ts
 /user/username/projects/myproject/moduleB.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/ModuleC.ts
 /user/username/projects/myproject/moduleA.ts
 /user/username/projects/myproject/moduleB.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/modulec.ts (used version)
 /user/username/projects/myproject/modulea.ts (used version)
 /user/username/projects/myproject/moduleb.ts (used version)
@@ -164,10 +166,16 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: timerToUpdateProgram
 
+Host is moving to new time
 After running Timeout callback:: count: 0
 Output::
 >> Screen clear
-[[90m12:00:35 AM[0m] File change detected. Starting incremental compilation...
+[[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
+
+[96mmoduleA.ts[0m:[93m2[0m:[93m21[0m - [91merror[0m[90m TS1202: [0mImport assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+[7m2[0m                     import a = require("./ModuleC")
+[7m [0m [91m                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [96mmoduleA.ts[0m:[93m2[0m:[93m40[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/ModuleC.ts' differs from file name '/user/username/projects/myproject/moduleC.ts' only in casing.
   The file is in the program because:
@@ -183,6 +191,11 @@ Output::
     [7m [0m [96m                   ~~~~~~~~~~~[0m
     File is included via import here.
 
+[96mmoduleB.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS1202: [0mImport assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+
+[7m1[0m import a = require("./moduleC")
+[7m [0m [91m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
 [96mmoduleB.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS1149: [0mFile name '/user/username/projects/myproject/moduleC.ts' differs from already included file name '/user/username/projects/myproject/ModuleC.ts' only in casing.
   The file is in the program because:
     Imported via "./ModuleC" from file '/user/username/projects/myproject/moduleA.ts'
@@ -197,8 +210,8 @@ Output::
     [7m [0m [96m                                       ~~~~~~~~~~~[0m
     File is included via import here.
 
-../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 ModuleC.ts
   Imported via "./ModuleC" from file 'moduleA.ts'
   Imported via "./moduleC" from file 'moduleB.ts'
@@ -207,7 +220,7 @@ moduleA.ts
   Matched by default include pattern '**/*'
 moduleB.ts
   Matched by default include pattern '**/*'
-[[90m12:00:39 AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 4 errors. Watching for file changes.
 
 
 
@@ -228,7 +241,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/ModuleC.ts
 /user/username/projects/myproject/moduleA.ts
 /user/username/projects/myproject/moduleB.ts

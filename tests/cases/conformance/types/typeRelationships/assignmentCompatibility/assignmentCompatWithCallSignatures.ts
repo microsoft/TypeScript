@@ -1,10 +1,11 @@
+// @target: es2015
 // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
 
 interface T {
     (x: number): void;
 }
-var t: T;
-var a: { (x: number): void };
+declare var t: T;
+declare var a: { (x: number): void };
 
 t = a;
 a = t;
@@ -12,8 +13,8 @@ a = t;
 interface S {
     (x: number): string;
 }
-var s: S;
-var a2: { (x: number): string };
+declare var s: S;
+declare var a2: { (x: number): string };
 t = s;
 t = a2;
 a = s;
@@ -29,8 +30,8 @@ a = function (x: number) { return ''; }
 interface S2 {
     (x: string): void;
 }
-var s2: S2;
-var a3: { (x: string): void };
+declare var s2: S2;
+declare var a3: { (x: string): void };
 // these are errors
 t = s2;
 t = a3;

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/es6/for-ofStatements/for-of30.ts] ////
 
 //// [for-of30.ts]
-class StringIterator {
+class MyStringIterator {
     next() {
         return {
             done: false,
@@ -16,10 +16,11 @@ class StringIterator {
     }
 }
 
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }
 
 //// [for-of30.js]
-class StringIterator {
+"use strict";
+class MyStringIterator {
     constructor() {
         this.return = 0;
     }
@@ -33,4 +34,4 @@ class StringIterator {
         return this;
     }
 }
-for (var v of new StringIterator) { }
+for (var v of new MyStringIterator) { }

@@ -3,5 +3,7 @@
 === downlevelLetConst10.ts ===
 let a: number = 1
 >a : number
+>  : ^^^^^^
 >1 : 1
+>  : ^
 

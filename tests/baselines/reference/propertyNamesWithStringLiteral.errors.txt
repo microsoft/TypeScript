@@ -1,0 +1,31 @@
+propertyNamesWithStringLiteral.ts(2,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+propertyNamesWithStringLiteral.ts(2,16): error TS2564: Property 'r' has no initializer and is not definitely assigned in the constructor.
+propertyNamesWithStringLiteral.ts(2,27): error TS2564: Property 'g' has no initializer and is not definitely assigned in the constructor.
+propertyNamesWithStringLiteral.ts(2,38): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+
+
+==== propertyNamesWithStringLiteral.ts (4 errors) ====
+    class _Color {
+        a: number; r: number; g: number; b: number;
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+                   ~
+!!! error TS2564: Property 'r' has no initializer and is not definitely assigned in the constructor.
+                              ~
+!!! error TS2564: Property 'g' has no initializer and is not definitely assigned in the constructor.
+                                         ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    interface NamedColors {
+        azure: _Color;
+        "blue": _Color;
+        "pale blue": _Color;
+    }
+    namespace Color {
+        export var namedColors: NamedColors;
+    }
+    var a = Color.namedColors["azure"];
+    var a = Color.namedColors.blue; // Should not error
+    var a = Color.namedColors["pale blue"]; // should not error
+    

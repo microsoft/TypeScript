@@ -3,6 +3,7 @@
 === parserAccessibilityAfterStatic2.ts ===
 class Outer
 >Outer : Outer
+>      : ^^^^^
 {
 static public;
 >public : any

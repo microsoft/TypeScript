@@ -36,51 +36,44 @@ C.B = B;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+class Foo {
+}
 exports.Foo = Foo;
 //// [index1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo_1 = require("./foo");
-function Example() { }
 exports.default = Example;
+const foo_1 = require("./foo");
+function Example() { }
 Example.Foo = foo_1.Foo;
 //// [index2.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Foo = void 0;
-var foo_1 = require("./foo");
+exports.default = Example;
+const foo_1 = require("./foo");
 Object.defineProperty(exports, "Foo", { enumerable: true, get: function () { return foo_1.Foo; } });
 function Example() { }
-exports.default = Example;
 Example.Foo = foo_1.Foo;
 //// [index3.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Bar = void 0;
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
+exports.default = Example;
+class Bar {
+}
 exports.Bar = Bar;
 function Example() { }
-exports.default = Example;
 Example.Bar = Bar;
 //// [index4.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
+exports.C = C;
 function A() { }
 function B() { }
 function C() {
     return null;
 }
-exports.C = C;
 C.A = A;
 C.B = B;
 

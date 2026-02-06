@@ -1,0 +1,52 @@
+//// [tests/cases/compiler/instantiationExpressionErrorNoCrash.ts] ////
+
+=== instantiationExpressionErrorNoCrash.ts ===
+const createCacheReducer = <N extends string, QR>(
+>createCacheReducer : Symbol(createCacheReducer, Decl(instantiationExpressionErrorNoCrash.ts, 0, 5))
+>N : Symbol(N, Decl(instantiationExpressionErrorNoCrash.ts, 0, 28))
+>QR : Symbol(QR, Decl(instantiationExpressionErrorNoCrash.ts, 0, 45))
+
+    queries: Cache<N, QR>["queries"],
+>queries : Symbol(queries, Decl(instantiationExpressionErrorNoCrash.ts, 0, 50))
+>Cache : Symbol(Cache, Decl(instantiationExpressionErrorNoCrash.ts, 10, 2))
+>N : Symbol(N, Decl(instantiationExpressionErrorNoCrash.ts, 0, 28))
+>QR : Symbol(QR, Decl(instantiationExpressionErrorNoCrash.ts, 0, 45))
+
+) => {
+    const queriesMap = {} as QR;
+>queriesMap : Symbol(queriesMap, Decl(instantiationExpressionErrorNoCrash.ts, 3, 9))
+>QR : Symbol(QR, Decl(instantiationExpressionErrorNoCrash.ts, 0, 45))
+
+    const initialState = {
+>initialState : Symbol(initialState, Decl(instantiationExpressionErrorNoCrash.ts, 5, 9))
+
+        queries: queriesMap,
+>queries : Symbol(queries, Decl(instantiationExpressionErrorNoCrash.ts, 5, 26))
+>queriesMap : Symbol(queriesMap, Decl(instantiationExpressionErrorNoCrash.ts, 3, 9))
+
+    };
+
+    return (state = initialState) => state;
+>state : Symbol(state, Decl(instantiationExpressionErrorNoCrash.ts, 9, 12))
+>initialState : Symbol(initialState, Decl(instantiationExpressionErrorNoCrash.ts, 5, 9))
+>state : Symbol(state, Decl(instantiationExpressionErrorNoCrash.ts, 9, 12))
+
+};
+
+export type Cache<N extends string, QR> = {
+>Cache : Symbol(Cache, Decl(instantiationExpressionErrorNoCrash.ts, 10, 2))
+>N : Symbol(N, Decl(instantiationExpressionErrorNoCrash.ts, 12, 18))
+>QR : Symbol(QR, Decl(instantiationExpressionErrorNoCrash.ts, 12, 35))
+
+    queries: {
+>queries : Symbol(queries, Decl(instantiationExpressionErrorNoCrash.ts, 12, 43))
+
+        [QK in keyof QR]: ReturnType<typeof createCacheReducer<QR>>;
+>QK : Symbol(QK, Decl(instantiationExpressionErrorNoCrash.ts, 14, 9))
+>QR : Symbol(QR, Decl(instantiationExpressionErrorNoCrash.ts, 12, 35))
+>ReturnType : Symbol(ReturnType, Decl(lib.es5.d.ts, --, --))
+>createCacheReducer : Symbol(createCacheReducer, Decl(instantiationExpressionErrorNoCrash.ts, 0, 5))
+>QR : Symbol(QR, Decl(instantiationExpressionErrorNoCrash.ts, 12, 35))
+
+    };
+};

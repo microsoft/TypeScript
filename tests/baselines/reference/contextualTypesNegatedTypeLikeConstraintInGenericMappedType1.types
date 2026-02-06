@@ -1,0 +1,131 @@
+//// [tests/cases/compiler/contextualTypesNegatedTypeLikeConstraintInGenericMappedType1.ts] ////
+
+=== contextualTypesNegatedTypeLikeConstraintInGenericMappedType1.ts ===
+type IntrinsicElements = {
+>IntrinsicElements : IntrinsicElements
+>                  : ^^^^^^^^^^^^^^^^^
+
+  div: {
+>div : { onChange: (ev: Event) => void; }
+>    : ^^^^^^^^^^^^                   ^^^
+
+    onChange: (ev: Event) => void;
+>onChange : (ev: Event) => void
+>         : ^  ^^     ^^^^^    
+>ev : Event
+>   : ^^^^^
+
+  };
+  span: {
+>span : { onChange: (ev: Event) => void; }
+>     : ^^^^^^^^^^^^                   ^^^
+
+    onChange: (ev: Event) => void;
+>onChange : (ev: Event) => void
+>         : ^  ^^     ^^^^^    
+>ev : Event
+>   : ^^^^^
+
+  };
+};
+
+type ElementType = keyof IntrinsicElements;
+>ElementType : keyof IntrinsicElements
+>            : ^^^^^^^^^^^^^^^^^^^^^^^
+
+let DEFAULT_TABS_TAG = "div" as const;
+>DEFAULT_TABS_TAG : "div"
+>                 : ^^^^^
+>"div" as const : "div"
+>               : ^^^^^
+>"div" : "div"
+>      : ^^^^^
+
+type Props<TTag extends ElementType, Overrides = {}> = Omit<
+>Props : Props<TTag, Overrides>
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+
+  IntrinsicElements[TTag],
+  keyof Overrides
+> &
+  Overrides;
+
+type TabGroupProps<TTag extends ElementType = typeof DEFAULT_TABS_TAG> = Props<
+>TabGroupProps : TabGroupProps<TTag>
+>              : ^^^^^^^^^^^^^^^^^^^
+>DEFAULT_TABS_TAG : "div"
+>                 : ^^^^^
+
+  TTag,
+  {
+    defaultIndex?: number;
+>defaultIndex : number | undefined
+>             : ^^^^^^^^^^^^^^^^^^
+
+    onChange?: (index: number) => void;
+>onChange : ((index: number) => void) | undefined
+>         : ^^     ^^      ^^^^^    ^^^^^^^^^^^^^
+>index : number
+>      : ^^^^^^
+
+    selectedIndex?: number;
+>selectedIndex : number | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+
+    vertical?: boolean;
+>vertical : boolean | undefined
+>         : ^^^^^^^^^^^^^^^^^^^
+
+    manual?: boolean;
+>manual : boolean | undefined
+>       : ^^^^^^^^^^^^^^^^^^^
+  }
+>;
+
+interface _internal_ComponentTabGroup {
+  <TTag extends ElementType = typeof DEFAULT_TABS_TAG>(
+>DEFAULT_TABS_TAG : "div"
+>                 : ^^^^^
+
+    props: TabGroupProps<TTag>,
+>props : TabGroupProps<TTag>
+>      : ^^^^^^^^^^^^^^^^^^^
+
+  ): null;
+}
+
+declare let TabGroup: _internal_ComponentTabGroup;
+>TabGroup : _internal_ComponentTabGroup
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+TabGroup({
+>TabGroup({  defaultIndex: 0,  onChange: (index) => {    const i: number = index;  },}) : null
+>                                                                                       : ^^^^
+>TabGroup : _internal_ComponentTabGroup
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{  defaultIndex: 0,  onChange: (index) => {    const i: number = index;  },} : { defaultIndex: number; onChange: (index: number) => void; }
+>                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^
+
+  defaultIndex: 0,
+>defaultIndex : number
+>             : ^^^^^^
+>0 : 0
+>  : ^
+
+  onChange: (index) => {
+>onChange : (index: number) => void
+>         : ^     ^^^^^^^^^^^^^^^^^
+>(index) => {    const i: number = index;  } : (index: number) => void
+>                                            : ^     ^^^^^^^^^^^^^^^^^
+>index : number
+>      : ^^^^^^
+
+    const i: number = index;
+>i : number
+>  : ^^^^^^
+>index : number
+>      : ^^^^^^
+
+  },
+});
+

@@ -3,10 +3,15 @@
 === parserSymbolProperty4.ts ===
 declare class C {
 >C : C
+>  : ^
 
     [Symbol.toPrimitive]: string;
 >[Symbol.toPrimitive] : string
+>                     : ^^^^^^
 >Symbol.toPrimitive : unique symbol
+>                   : ^^^^^^^^^^^^^
 >Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
 >toPrimitive : unique symbol
+>            : ^^^^^^^^^^^^^
 }

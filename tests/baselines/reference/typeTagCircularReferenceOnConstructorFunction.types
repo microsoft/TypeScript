@@ -6,11 +6,17 @@
  */
 function MyClass() { }
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 
 MyClass.prototype = {};
 >MyClass.prototype = {} : {}
+>                       : ^^
 >MyClass.prototype : {}
+>                  : ^^
 >MyClass : typeof MyClass
+>        : ^^^^^^^^^^^^^^
 >prototype : {}
+>          : ^^
 >{} : {}
+>   : ^^
 

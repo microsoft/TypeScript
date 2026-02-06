@@ -5,8 +5,11 @@
 
 import { thing } from "non-existent-module";
 >thing : any
+>      : ^^^
 
 thing()
 >thing() : any
+>        : ^^^
 >thing : any
+>      : ^^^
 

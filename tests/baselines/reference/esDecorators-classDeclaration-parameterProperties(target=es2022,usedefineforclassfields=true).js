@@ -12,6 +12,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-parameterProperties.js]
+"use strict";
 let C = (() => {
     let _instanceExtraInitializers = [];
     let _speak_decorators;
@@ -22,7 +23,7 @@ let C = (() => {
             __esDecorate(this, null, _speak_decorators, { kind: "method", name: "speak", static: false, private: false, access: { has: obj => "speak" in obj, get: obj => obj.speak }, metadata: _metadata }, null, _instanceExtraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
-        message = (__runInitializers(this, _instanceExtraInitializers), void 0);
+        message = __runInitializers(this, _instanceExtraInitializers);
         constructor(message) {
             this.message = message;
         }

@@ -3,7 +3,9 @@
 === strictModeReservedWordInImportEqualDeclaration.ts ===
 "use strict"
 >"use strict" : "use strict"
+>             : ^^^^^^^^^^^^
 
 import public = require("1");
 >public : any
+>       : ^^^
 

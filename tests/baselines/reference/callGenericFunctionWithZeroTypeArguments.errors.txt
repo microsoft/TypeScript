@@ -1,0 +1,68 @@
+callGenericFunctionWithZeroTypeArguments.ts(3,26): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+callGenericFunctionWithZeroTypeArguments.ts(6,28): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+callGenericFunctionWithZeroTypeArguments.ts(10,10): error TS2454: Variable 'f3' is used before being assigned.
+callGenericFunctionWithZeroTypeArguments.ts(14,9): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+callGenericFunctionWithZeroTypeArguments.ts(23,10): error TS2454: Variable 'i' is used before being assigned.
+callGenericFunctionWithZeroTypeArguments.ts(27,9): error TS2322: Type 'null' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+callGenericFunctionWithZeroTypeArguments.ts(36,10): error TS2454: Variable 'i2' is used before being assigned.
+
+
+==== callGenericFunctionWithZeroTypeArguments.ts (7 errors) ====
+    // valid invocations of generic functions with no explicit type arguments provided 
+    
+    function f<T>(x: T): T { return null; }
+                             ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+    var r = f(1);
+    
+    var f2 = <T>(x: T): T => { return null; }
+                               ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+    var r2 = f2(1);
+    
+    var f3: { <T>(x: T): T; }
+    var r3 = f3(1);
+             ~~
+!!! error TS2454: Variable 'f3' is used before being assigned.
+    
+    class C {
+        f<T>(x: T): T {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+        }
+    }
+    var r4 = (new C()).f(1);
+    
+    interface I {
+        f<T>(x: T): T;
+    }
+    var i: I;
+    var r5 = i.f(1);
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    
+    class C2<T> {
+        f(x: T): T {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'null'.
+        }
+    }
+    var r6 = (new C2()).f(1);
+    
+    interface I2<T> {
+        f(x: T): T;
+    }
+    var i2: I2<number>;
+    var r7 = i2.f(1);
+             ~~
+!!! error TS2454: Variable 'i2' is used before being assigned.

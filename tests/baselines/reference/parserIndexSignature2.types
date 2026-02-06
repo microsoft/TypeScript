@@ -4,4 +4,5 @@
 interface I {
   [public a]
 >a : any
+>  : ^^^
 }

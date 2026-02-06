@@ -1,4 +1,5 @@
-module Editor {
+// @target: es2015
+namespace Editor {
 
     export class Buffer {
     	lines: List<Line> = ListMakeHead<Line>();

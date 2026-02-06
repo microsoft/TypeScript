@@ -1,23 +1,19 @@
-import * as ts from "../../_namespaces/ts";
-import {
-    jsonToReadableText,
-} from "../helpers";
+import * as ts from "../../_namespaces/ts.js";
+import { jsonToReadableText } from "../helpers.js";
 import {
     baselineTsserverLogs,
     openFilesForSession,
     TestSession,
-} from "../helpers/tsserver";
-import {
-    createServerHost,
-} from "../helpers/virtualFileSystemWithWatch";
+} from "../helpers/tsserver.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: formatSettings", () => {
+describe("unittests:: tsserver:: formatSettings::", () => {
     it("can be set globally", () => {
         const f1 = {
-            path: "/a/b/app.ts",
+            path: "/home/src/projects/project/a/b/app.ts",
             content: "let x;",
         };
-        const host = createServerHost([f1]);
+        const host = TestServerHost.createServerHost([f1]);
         const session = new TestSession(host);
         openFilesForSession([f1], session);
 

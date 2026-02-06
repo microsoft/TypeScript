@@ -1,6 +1,7 @@
+// @target: es2015
 // @module: amd
 // @declaration: true
-// @out: outputfile.js
+// @outFile: outputfile.js
 
 // @filename: c:/test.ts
 export {};

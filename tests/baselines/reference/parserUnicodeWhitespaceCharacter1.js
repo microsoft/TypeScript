@@ -5,4 +5,5 @@ function foo(){　}
 
 
 //// [parserUnicodeWhitespaceCharacter1.js]
+"use strict";
 function foo() { }

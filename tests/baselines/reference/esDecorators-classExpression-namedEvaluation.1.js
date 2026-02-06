@@ -31,6 +31,7 @@ x ??= class { @dec y: any; };
 
 
 //// [esDecorators-classExpression-namedEvaluation.1.js]
+"use strict";
 let x;
 // 13.15.2 RS: Evaluation
 //  AssignmentExpression : LeftHandSideExpression `=` AssignmentExpression
@@ -53,18 +54,21 @@ x = (() => {
     return class_1 = _classThis;
 })();
 x = (() => {
-    let _instanceExtraInitializers = [];
     let _y_decorators;
     let _y_initializers = [];
+    let _y_extraInitializers = [];
     return class {
         static { __setFunctionName(this, "x"); }
         static {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
             _y_decorators = [dec];
-            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: _metadata }, _y_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: _metadata }, _y_initializers, _y_extraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
-        y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, void 0));
+        y = __runInitializers(this, _y_initializers, void 0);
+        constructor() {
+            __runInitializers(this, _y_extraInitializers);
+        }
     };
 })();
 // 13.15.2 RS: Evaluation
@@ -88,18 +92,21 @@ x &&= (() => {
     return class_2 = _classThis;
 })();
 x &&= (() => {
-    let _instanceExtraInitializers = [];
     let _y_decorators;
     let _y_initializers = [];
+    let _y_extraInitializers = [];
     return class {
         static { __setFunctionName(this, "x"); }
         static {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
             _y_decorators = [dec];
-            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: _metadata }, _y_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: _metadata }, _y_initializers, _y_extraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
-        y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, void 0));
+        y = __runInitializers(this, _y_initializers, void 0);
+        constructor() {
+            __runInitializers(this, _y_extraInitializers);
+        }
     };
 })();
 // 13.15.2 RS: Evaluation
@@ -123,18 +130,21 @@ x ||= (() => {
     return class_3 = _classThis;
 })();
 x ||= (() => {
-    let _instanceExtraInitializers = [];
     let _y_decorators;
     let _y_initializers = [];
+    let _y_extraInitializers = [];
     return class {
         static { __setFunctionName(this, "x"); }
         static {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
             _y_decorators = [dec];
-            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: _metadata }, _y_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: _metadata }, _y_initializers, _y_extraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
-        y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, void 0));
+        y = __runInitializers(this, _y_initializers, void 0);
+        constructor() {
+            __runInitializers(this, _y_extraInitializers);
+        }
     };
 })();
 // 13.15.2 RS: Evaluation
@@ -158,17 +168,20 @@ x ??= (() => {
     return class_4 = _classThis;
 })();
 x ??= (() => {
-    let _instanceExtraInitializers = [];
     let _y_decorators;
     let _y_initializers = [];
+    let _y_extraInitializers = [];
     return class {
         static { __setFunctionName(this, "x"); }
         static {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
             _y_decorators = [dec];
-            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: _metadata }, _y_initializers, _instanceExtraInitializers);
+            __esDecorate(null, null, _y_decorators, { kind: "field", name: "y", static: false, private: false, access: { has: obj => "y" in obj, get: obj => obj.y, set: (obj, value) => { obj.y = value; } }, metadata: _metadata }, _y_initializers, _y_extraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
-        y = (__runInitializers(this, _instanceExtraInitializers), __runInitializers(this, _y_initializers, void 0));
+        y = __runInitializers(this, _y_initializers, void 0);
+        constructor() {
+            __runInitializers(this, _y_extraInitializers);
+        }
     };
 })();

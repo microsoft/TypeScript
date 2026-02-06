@@ -1,0 +1,6882 @@
+// === SignatureHelp ===
+=== /tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts ===
+// interface AppleInfo {
+//   color: "green" | "red";
+// }
+// 
+// interface BananaInfo {
+//   curvature: number;
+// }
+// 
+// type FruitAndInfo1 = ["apple", AppleInfo] | ["banana", BananaInfo];
+// 
+// function logFruitTuple1(...[fruit, info]: FruitAndInfo1) {}
+// logFruitTuple1();
+//                ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple1(**fruit: "apple"**, info: AppleInfo): void
+// | ----------------------------------------------------------------------
+// 
+// function logFruitTuple2(...[, info]: FruitAndInfo1) {}
+// logFruitTuple2();
+//                ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple2(**arg_0: "apple"**, info: AppleInfo): void
+// | ----------------------------------------------------------------------
+// logFruitTuple2("apple", );
+//                         ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple2(arg_0: "apple", **info: AppleInfo**): void
+// | ----------------------------------------------------------------------
+// 
+// function logFruitTuple3(...[fruit, ...rest]: FruitAndInfo1) {}
+// logFruitTuple3();
+//                ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple3(**fruit: "apple"**, rest_0: AppleInfo): void
+// | ----------------------------------------------------------------------
+// logFruitTuple3("apple", );
+//                         ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple3(fruit: "apple", **rest_0: AppleInfo**): void
+// | ----------------------------------------------------------------------
+// function logFruitTuple4(...[fruit, ...[info]]: FruitAndInfo1) {}
+// logFruitTuple4();
+//                ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple4(**fruit: "apple"**, info: AppleInfo): void
+// | ----------------------------------------------------------------------
+// logFruitTuple4("apple", );
+//                         ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple4(fruit: "apple", **info: AppleInfo**): void
+// | ----------------------------------------------------------------------
+// 
+// type FruitAndInfo2 = ["apple", ...AppleInfo[]] | ["banana", ...BananaInfo[]];
+// 
+// function logFruitTuple5(...[fruit, firstInfo]: FruitAndInfo2) {}
+// logFruitTuple5();
+//                ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple5(**fruit: "apple"**, ...firstInfo_n: AppleInfo[]): void
+// | ----------------------------------------------------------------------
+// logFruitTuple5("apple", );
+//                         ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple5(fruit: "apple", **...firstInfo_n: AppleInfo[]**): void
+// | ----------------------------------------------------------------------
+// 
+// function logFruitTuple6(...[fruit, ...fruitInfo]: FruitAndInfo2) {}
+// logFruitTuple6();
+//                ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple6(**fruit: "apple"**, ...fruitInfo: AppleInfo[]): void
+// | ----------------------------------------------------------------------
+// logFruitTuple6("apple", );
+//                         ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple6(fruit: "apple", **...fruitInfo: AppleInfo[]**): void
+// | ----------------------------------------------------------------------
+// 
+// type FruitAndInfo3 = ["apple", ...AppleInfo[], number] | ["banana", ...BananaInfo[], number];
+// 
+// function logFruitTuple7(...[fruit, fruitInfoOrNumber, secondFruitInfoOrNumber]: FruitAndInfo3) {}
+// logFruitTuple7();
+//                ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple7(**fruit: "apple"**, ...fruitInfoOrNumber_n: AppleInfo[], secondFruitInfoOrNumber: number): void
+// | ----------------------------------------------------------------------
+// logFruitTuple7("apple", );
+//                         ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple7(fruit: "apple", **...fruitInfoOrNumber_n: AppleInfo[]**, secondFruitInfoOrNumber: number): void
+// | ----------------------------------------------------------------------
+// logFruitTuple7("apple", { color: "red" }, );
+//                                           ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple7(fruit: "apple", ...fruitInfoOrNumber_n: AppleInfo[], **secondFruitInfoOrNumber: number**): void
+// | ----------------------------------------------------------------------
+// 
+// function logFruitTuple8(...[fruit, , secondFruitInfoOrNumber]: FruitAndInfo3) {}
+// logFruitTuple8();
+//                ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple8(**fruit: "apple"**, ...arg_1: AppleInfo[], secondFruitInfoOrNumber: number): void
+// | ----------------------------------------------------------------------
+// logFruitTuple8("apple", );
+//                         ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple8(fruit: "apple", **...arg_1: AppleInfo[]**, secondFruitInfoOrNumber: number): void
+// | ----------------------------------------------------------------------
+// logFruitTuple8("apple", { color: "red" }, );
+//                                           ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple8(fruit: "apple", ...arg_1: AppleInfo[], **secondFruitInfoOrNumber: number**): void
+// | ----------------------------------------------------------------------
+// 
+// function logFruitTuple9(...[...[fruit, fruitInfoOrNumber, secondFruitInfoOrNumber]]: FruitAndInfo3) {}
+// logFruitTuple9();
+//                ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple9(**fruit: "apple"**, ...fruitInfoOrNumber_n: AppleInfo[], secondFruitInfoOrNumber: number): void
+// | ----------------------------------------------------------------------
+// logFruitTuple9("apple", );
+//                         ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple9(fruit: "apple", **...fruitInfoOrNumber_n: AppleInfo[]**, secondFruitInfoOrNumber: number): void
+// | ----------------------------------------------------------------------
+// logFruitTuple9("apple", { color: "red" }, );
+//                                           ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple9(fruit: "apple", ...fruitInfoOrNumber_n: AppleInfo[], **secondFruitInfoOrNumber: number**): void
+// | ----------------------------------------------------------------------
+// 
+// function logFruitTuple10(...[fruit, {}, secondFruitInfoOrNumber]: FruitAndInfo3) {}
+// logFruitTuple10();
+//                 ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple10(**fruit: "apple"**, ...arg_1: AppleInfo[], secondFruitInfoOrNumber: number): void
+// | ----------------------------------------------------------------------
+// logFruitTuple10("apple", );
+//                          ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple10(fruit: "apple", **...arg_1: AppleInfo[]**, secondFruitInfoOrNumber: number): void
+// | ----------------------------------------------------------------------
+// logFruitTuple10("apple", { color: "red" }, );
+//                                            ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple10(fruit: "apple", ...arg_1: AppleInfo[], **secondFruitInfoOrNumber: number**): void
+// | ----------------------------------------------------------------------
+// 
+// function logFruitTuple11(...{}: FruitAndInfo3) {}
+// logFruitTuple11();
+//                 ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple11(**arg_0: "apple"**, ...arg_1: AppleInfo[], arg_2: number): void
+// | ----------------------------------------------------------------------
+// logFruitTuple11("apple", );
+//                          ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple11(arg_0: "apple", **...arg_1: AppleInfo[]**, arg_2: number): void
+// | ----------------------------------------------------------------------
+// logFruitTuple11("apple", { color: "red" }, );
+//                                            ^
+// | ----------------------------------------------------------------------
+// | logFruitTuple11(arg_0: "apple", ...arg_1: AppleInfo[], **arg_2: number**): void
+// | ----------------------------------------------------------------------
+// function withPair(...[first, second]: [number, named: string]) {}
+// withPair();
+//          ^
+// | ----------------------------------------------------------------------
+// | withPair(**first: number**, named: string): void
+// | ----------------------------------------------------------------------
+// withPair(101, );
+//               ^
+// | ----------------------------------------------------------------------
+// | withPair(first: number, **named: string**): void
+// | ----------------------------------------------------------------------
+
+[
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 242,
+      "name": "1"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple1",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "info",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "info",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple1",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "info",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "info",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 242,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 316,
+      "name": "2"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple2",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "arg_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "info",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "info",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple2",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "arg_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "info",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "info",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 316,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 343,
+      "name": "3"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple2",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "arg_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "info",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "info",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple2",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "arg_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "info",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "info",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 334,
+        "length": 9
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 425,
+      "name": "4"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple3",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "rest_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "rest_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple3",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "rest_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "rest_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 425,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 452,
+      "name": "5"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple3",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "rest_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "rest_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple3",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "rest_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "rest_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 443,
+        "length": 9
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 535,
+      "name": "6"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple4",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "info",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "info",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple4",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "info",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "info",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 535,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 562,
+      "name": "7"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple4",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "info",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "info",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple4",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "info",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "info",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 553,
+        "length": 9
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 725,
+      "name": "8"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": true,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple5",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "firstInfo_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "firstInfo_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": true,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple5",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "firstInfo_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "firstInfo_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 725,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 752,
+      "name": "9"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": true,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple5",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "firstInfo_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "firstInfo_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": true,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple5",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "firstInfo_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "firstInfo_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 743,
+        "length": 9
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 839,
+      "name": "10"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": true,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple6",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfo",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfo",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": true,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple6",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfo",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfo",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 839,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 866,
+      "name": "11"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": true,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple6",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfo",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfo",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": true,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple6",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfo",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfo",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 857,
+        "length": 9
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1078,
+      "name": "12"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple7",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple7",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1078,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1105,
+      "name": "13"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple7",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple7",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1096,
+        "length": 9
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1150,
+      "name": "14"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple7",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple7",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1123,
+        "length": 27
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1250,
+      "name": "15"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple8",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple8",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1250,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1277,
+      "name": "16"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple8",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple8",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1268,
+        "length": 9
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1322,
+      "name": "17"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple8",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple8",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1295,
+        "length": 27
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1444,
+      "name": "18"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple9",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple9",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1444,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1471,
+      "name": "19"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple9",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple9",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1462,
+        "length": 9
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1516,
+      "name": "20"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple9",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple9",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "fruitInfoOrNumber_n",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "fruitInfoOrNumber_n",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1489,
+        "length": 27
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1620,
+      "name": "21"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple10",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple10",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1620,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1648,
+      "name": "22"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple10",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple10",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1639,
+        "length": 9
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1694,
+      "name": "23"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple10",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple10",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "fruit",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "fruit",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "secondFruitInfoOrNumber",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "secondFruitInfoOrNumber",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1667,
+        "length": 27
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1764,
+      "name": "24"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple11",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "arg_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "arg_2",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple11",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "arg_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "arg_2",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1764,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1792,
+      "name": "25"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple11",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "arg_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "arg_2",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple11",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "arg_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "arg_2",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1783,
+        "length": 9
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1838,
+      "name": "26"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple11",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "arg_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"apple\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "AppleInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "arg_2",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        },
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "logFruitTuple11",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "arg_0",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_0",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "\"banana\"",
+                  "kind": "stringLiteral"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "arg_1",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "...",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "arg_1",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "BananaInfo",
+                  "kind": "interfaceName"
+                },
+                {
+                  "text": "[",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": "]",
+                  "kind": "punctuation"
+                }
+              ],
+              "isOptional": false,
+              "isRest": true
+            },
+            {
+              "name": "arg_2",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "arg_2",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1811,
+        "length": 27
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 2,
+      "argumentCount": 3
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1916,
+      "name": "27"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "withPair",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "first",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "first",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "named",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "named",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1916,
+        "length": 0
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 0,
+      "argumentCount": 0
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/signatureHelpExpandedRestTuplesLocalLabels1.ts",
+      "position": 1933,
+      "name": "28"
+    },
+    "item": {
+      "items": [
+        {
+          "isVariadic": false,
+          "prefixDisplayParts": [
+            {
+              "text": "withPair",
+              "kind": "functionName"
+            },
+            {
+              "text": "(",
+              "kind": "punctuation"
+            }
+          ],
+          "suffixDisplayParts": [
+            {
+              "text": ")",
+              "kind": "punctuation"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "void",
+              "kind": "keyword"
+            }
+          ],
+          "separatorDisplayParts": [
+            {
+              "text": ",",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "first",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "first",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "number",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            },
+            {
+              "name": "named",
+              "documentation": [],
+              "displayParts": [
+                {
+                  "text": "named",
+                  "kind": "parameterName"
+                },
+                {
+                  "text": ":",
+                  "kind": "punctuation"
+                },
+                {
+                  "text": " ",
+                  "kind": "space"
+                },
+                {
+                  "text": "string",
+                  "kind": "keyword"
+                }
+              ],
+              "isOptional": false,
+              "isRest": false
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ],
+      "applicableSpan": {
+        "start": 1928,
+        "length": 5
+      },
+      "selectedItemIndex": 0,
+      "argumentIndex": 1,
+      "argumentCount": 2
+    }
+  }
+]

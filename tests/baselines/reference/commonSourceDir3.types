@@ -3,8 +3,10 @@
 === A:/foo/bar.ts ===
 var x: number;
 >x : number
+>  : ^^^^^^
 
 === a:/foo/baz.ts ===
 var y: number;
 >y : number
+>  : ^^^^^^
 

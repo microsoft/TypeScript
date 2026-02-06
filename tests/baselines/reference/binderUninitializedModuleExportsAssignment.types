@@ -13,6 +13,8 @@ module.exports = loop2;
 >module.exports = loop2 : any
 >module.exports : any
 >module : { exports: any; }
+>       : ^^^^^^^^^^^^^^^^^
 >exports : any
+>        : ^^^
 >loop2 : any
 

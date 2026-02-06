@@ -1,4 +1,5 @@
-module M
+// @target: es2015
+namespace M
 
 {
 
@@ -18,7 +19,7 @@ module M
 
     }
 
-    module X {
+    namespace X {
 
         var inner = outer;   // Error: outer not visible
 

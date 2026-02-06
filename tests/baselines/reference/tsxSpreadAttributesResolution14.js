@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxSpreadAttributesResolution14.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 interface ComponentProps {
@@ -27,15 +29,15 @@ function AnotherComponent({ property1 }: AnotherComponentProps) {
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
+exports.default = Component;
+const React = require("react");
 function Component(props) {
     return (
     // Error extra property
     <AnotherComponent {...props} Property1/>);
 }
-exports.default = Component;
-function AnotherComponent(_a) {
-    var property1 = _a.property1;
+function AnotherComponent({ property1 }) {
     return (<span>{property1}</span>);
 }

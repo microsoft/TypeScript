@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // private indexers not allowed
 
 var x = {

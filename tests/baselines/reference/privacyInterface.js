@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/privacyInterface.ts] ////
 
 //// [privacyInterface.ts]
-export module m1 {
+export namespace m1 {
     export class C1_public {
         private f1() {
         }
@@ -67,7 +67,7 @@ export module m1 {
 }
 
 
-module m2 {
+namespace m2 {
     export class C1_public {
         private f1() {
         }
@@ -195,7 +195,7 @@ interface C8_private {
 
 }
 
-export module m3 {
+export namespace m3 {
     export interface m3_i_public {
         f1(): number;
     }
@@ -220,7 +220,7 @@ export module m3 {
 }
 
 
-module m4 {
+namespace m4 {
     export interface m4_i_public {
         f1(): number;
     }
@@ -272,46 +272,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.C5_public = exports.m1 = void 0;
 var m1;
 (function (m1) {
-    var C1_public = /** @class */ (function () {
-        function C1_public() {
+    class C1_public {
+        f1() {
         }
-        C1_public.prototype.f1 = function () {
-        };
-        return C1_public;
-    }());
+    }
     m1.C1_public = C1_public;
-    var C2_private = /** @class */ (function () {
-        function C2_private() {
-        }
-        return C2_private;
-    }());
+    class C2_private {
+    }
 })(m1 || (exports.m1 = m1 = {}));
 var m2;
 (function (m2) {
-    var C1_public = /** @class */ (function () {
-        function C1_public() {
+    class C1_public {
+        f1() {
         }
-        C1_public.prototype.f1 = function () {
-        };
-        return C1_public;
-    }());
+    }
     m2.C1_public = C1_public;
-    var C2_private = /** @class */ (function () {
-        function C2_private() {
-        }
-        return C2_private;
-    }());
+    class C2_private {
+    }
 })(m2 || (m2 = {}));
-var C5_public = /** @class */ (function () {
-    function C5_public() {
+class C5_public {
+    f1() {
     }
-    C5_public.prototype.f1 = function () {
-    };
-    return C5_public;
-}());
+}
 exports.C5_public = C5_public;
-var C6_private = /** @class */ (function () {
-    function C6_private() {
-    }
-    return C6_private;
-}());
+class C6_private {
+}

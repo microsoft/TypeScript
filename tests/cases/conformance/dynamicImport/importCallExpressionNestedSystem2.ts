@@ -1,5 +1,5 @@
 // @module: system
-// @target: es5
+// @target: es5, es2015
 // @skipLibCheck: true
 // @lib: es6
 // @filename: foo.ts

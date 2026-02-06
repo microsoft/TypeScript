@@ -1,0 +1,62 @@
+/package1/index.ts(2,16): error TS2343: This syntax requires an imported helper named '__awaiter' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+/package1/other.ts(3,32): error TS2343: This syntax requires an imported helper named '__rest' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+/package2/index.ts(2,16): error TS2343: This syntax requires an imported helper named '__awaiter' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+
+
+==== /tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "strict": true,
+            "target": "ES2016",
+            "importHelpers": true,
+            "module": "commonjs",
+        }
+    }
+    
+==== /package1/index.ts (1 errors) ====
+    export {};
+    async function foo(): Promise<void> {}
+                   ~~~
+!!! error TS2343: This syntax requires an imported helper named '__awaiter' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+    async function bar(): Promise<void> {}
+    
+==== /package1/other.ts (1 errors) ====
+    export {};
+    export async function noop(): Promise<void> {}
+    export function spread({ a, ...rest }: { a: number, b: number}) {
+                                   ~~~~
+!!! error TS2343: This syntax requires an imported helper named '__rest' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+        return { c: "c", ...rest };
+    }
+    
+==== /package2/index.ts (1 errors) ====
+    export {};
+    async function foo(): Promise<void> {}
+                   ~~~
+!!! error TS2343: This syntax requires an imported helper named '__awaiter' which does not exist in 'tslib'. Consider upgrading your version of 'tslib'.
+    
+==== /package1/node_modules/tslib/package.json (0 errors) ====
+    {
+        "name": "tslib",
+        "main": "tslib.js",
+        "typings": "tslib.d.ts"
+    }
+    
+==== /package1/node_modules/tslib/tslib.d.ts (0 errors) ====
+    export const notAHelper: any;
+    
+==== /package1/node_modules/tslib/tslib.js (0 errors) ====
+    module.exports.notAHelper = 3;
+    
+==== /package2/node_modules/tslib/package.json (0 errors) ====
+    {
+        "name": "tslib",
+        "main": "tslib.js",
+        "typings": "tslib.d.ts"
+    }
+    
+==== /package2/node_modules/tslib/tslib.d.ts (0 errors) ====
+    export const notAHelper: any;
+    
+==== /package2/node_modules/tslib/tslib.js (0 errors) ====
+    module.exports.notAHelper = 3;

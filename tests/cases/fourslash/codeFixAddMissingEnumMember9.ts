@@ -18,7 +18,7 @@ verify.codeFix({
     c = "123"
 }
 enum A {
-    a = E.a,
+    a = E.a,    
     b
 }
 A.b`

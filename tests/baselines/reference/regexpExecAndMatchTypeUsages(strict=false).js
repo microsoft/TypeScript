@@ -26,10 +26,7 @@ export function foo(matchResult: RegExpMatchArray, execResult: RegExpExecArray) 
 
 
 //// [regexpExecAndMatchTypeUsages.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.foo = void 0;
-function foo(matchResult, execResult) {
+export function foo(matchResult, execResult) {
     matchResult[0].length;
     matchResult[999].length;
     matchResult.index + 0;
@@ -49,4 +46,3 @@ function foo(matchResult, execResult) {
         execResult = matchResult;
     }
 }
-exports.foo = foo;

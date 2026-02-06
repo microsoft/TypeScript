@@ -5,9 +5,13 @@
 
 function Test() { }
 >Test : () => void
+>     : ^^^^^^^^^^
 
 var test = new Test();
 >test : any
+>     : ^^^
 >new Test() : any
+>           : ^^^
 >Test : () => void
+>     : ^^^^^^^^^^
 

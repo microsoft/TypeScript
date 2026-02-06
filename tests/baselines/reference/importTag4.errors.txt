@@ -1,0 +1,27 @@
+/foo.js(2,14): error TS2300: Duplicate identifier 'Foo'.
+/foo.js(6,14): error TS2300: Duplicate identifier 'Foo'.
+
+
+==== /types.ts (0 errors) ====
+    export interface Foo {
+        a: number;
+    }
+    
+==== /foo.js (2 errors) ====
+    /**
+     * @import { Foo } from "./types"
+                 ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
+     */
+    
+    /**
+     * @import { Foo } from "./types"
+                 ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
+     */
+    
+    /**
+     * @param { Foo } foo
+     */
+    function f(foo) {}
+    

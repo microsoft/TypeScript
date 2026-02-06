@@ -2,6 +2,8 @@
 
 === tsxNoJsx.tsx ===
 <nope />;
-><nope /> : error
+><nope /> : any
+>         : ^^^
 >nope : any
+>     : ^^^
 

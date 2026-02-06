@@ -1,3 +1,4 @@
+// @target: es2015
 class Different {
     a: number;
     b: string;

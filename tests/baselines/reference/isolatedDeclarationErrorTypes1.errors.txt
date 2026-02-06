@@ -1,0 +1,14 @@
+isolatedDeclarationErrorTypes1.ts(3,28): error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+
+
+==== isolatedDeclarationErrorTypes1.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/60192
+    
+    import { Unresolved } from "foo";
+                               ~~~~~
+!!! error TS2307: Cannot find module 'foo' or its corresponding type declarations.
+    
+    export const foo1 = (type?: Unresolved): void => {};
+    export const foo2 = (type?: Unresolved | undefined): void => {};
+    export const foo3 = (type: Unresolved): void => {};
+    

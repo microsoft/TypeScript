@@ -1,5 +1,6 @@
+// @target: es2015
 // @allowJs: true
-// @out: dummy.js
+// @outFile: dummy.js
 
 // @filename: returns.js
 // @ts-check

@@ -3,4 +3,5 @@
 === importAttributes5.ts ===
 import * as f from "./first" with {
 >f : any
+>  : ^^^
 

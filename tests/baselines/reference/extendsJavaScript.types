@@ -6,6 +6,7 @@
  */
 class MyClass {
 >MyClass : MyClass
+>        : ^^^^^^^
 
 }
 

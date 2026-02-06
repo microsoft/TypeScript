@@ -1,14 +1,11 @@
 //// [tests/cases/compiler/systemModule11.ts] ////
 
 === file1.ts ===
-// set of tests cases that checks generation of local storage for exported names
-
-
 export var x;
->x : Symbol(x, Decl(file1.ts, 3, 10))
+>x : Symbol(x, Decl(file1.ts, 0, 10))
 
 export function foo() {}
->foo : Symbol(foo, Decl(file1.ts, 3, 13))
+>foo : Symbol(foo, Decl(file1.ts, 0, 13))
 
 export * from 'bar';
 

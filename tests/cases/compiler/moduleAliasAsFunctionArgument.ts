@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 // @Filename: moduleAliasAsFunctionArgument_0.ts
 export var x: number;

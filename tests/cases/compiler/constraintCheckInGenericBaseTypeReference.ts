@@ -1,3 +1,4 @@
+// @target: es2015
 // No errors
 class Constraint {
     public method() { }

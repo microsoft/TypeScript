@@ -1,5 +1,5 @@
-import * as Harness from "../_namespaces/Harness";
-import * as ts from "../_namespaces/ts";
+import * as Harness from "../_namespaces/Harness.js";
+import * as ts from "../_namespaces/ts.js";
 
 describe("unittests:: jsonParserRecovery", () => {
     function parsesToValidSourceFileWithErrors(name: string, text: string) {
@@ -7,7 +7,7 @@ describe("unittests:: jsonParserRecovery", () => {
             const file = ts.parseJsonText(name, text);
             assert(file.parseDiagnostics.length, "Should have parse errors");
             Harness.Baseline.runBaseline(
-                `jsonParserRecovery/${name.replace(/[^a-z0-9_-]/ig, "_")}.errors.txt`,
+                `jsonParserRecovery/${name.replace(/[^\w-]/g, "_")}.errors.txt`,
                 Harness.Compiler.getErrorBaseline([{
                     content: text,
                     unitName: name,

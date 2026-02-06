@@ -4,10 +4,13 @@
 {
    declare function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 
    export function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 
    declare export function f() { }
 >f : () => void
+>  : ^^^^^^^^^^
 }

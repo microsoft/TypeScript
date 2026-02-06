@@ -3,7 +3,9 @@
 === moduleAugmentationGlobal6_1.ts ===
 global {
 >global : typeof global
+>       : ^^^^^^^^^^^^^
 
     interface Array<T> { x }
 >x : any
+>  : ^^^
 }

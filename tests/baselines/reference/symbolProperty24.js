@@ -12,6 +12,7 @@ class C implements I {
 }
 
 //// [symbolProperty24.js]
+"use strict";
 class C {
     [Symbol.toPrimitive]() {
         return "";

@@ -1,7 +1,9 @@
-file.tsx(13,19): error TS2322: Type 'true' is not assignable to type 'false'.
+file.tsx(15,19): error TS2322: Type 'true' is not assignable to type 'false'.
 
 
 ==== file.tsx (1 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react');
     
     interface Prop {
@@ -17,4 +19,4 @@ file.tsx(13,19): error TS2322: Type 'true' is not assignable to type 'false'.
     let p = <Poisoned x/>;
                       ~
 !!! error TS2322: Type 'true' is not assignable to type 'false'.
-!!! related TS6500 file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & Prop & { children?: ReactNode; }'
+!!! related TS6500 file.tsx:6:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & Prop & { children?: ReactNode | undefined; }'
