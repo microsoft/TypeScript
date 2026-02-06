@@ -5,11 +5,11 @@ import * as ts from "./_namespaces/ts.js";
 // this will work in the browser via browserify
 declare global {
     // Module transform: converted from ambient declaration
-    var assert: typeof chai.assert;
+    var assert: typeof chai.assert; // eslint-disable-line no-var
 }
 declare global {
     // Module transform: converted from ambient declaration
-    var expect: typeof chai.expect;
+    var expect: typeof chai.expect; // eslint-disable-line no-var
 }
 globalThis.assert = chai.assert;
 {
