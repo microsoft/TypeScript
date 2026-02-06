@@ -108,7 +108,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/user/projects/myprojec
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 25
 
-//// [/home/user/projects/myproject/src/file.js] Inode:: 128
+//// [/home/user/projects/myproject/src/file.js] Inode:: 129
 export {};
 
 
@@ -324,7 +324,7 @@ FileWatcher:: Close:: WatchInfo: /home/user/projects/package.json 2000 {"synchro
 
 
 
-//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 128
+//// [/home/user/projects/myproject/src/file.js] file written with same contents Inode:: 129
 
 PolledWatches::
 /home/user/projects/node_modules: *new*

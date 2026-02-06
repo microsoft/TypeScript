@@ -245,12 +245,12 @@ const libEntries: [string, string][] = [
     ["esnext.object", "lib.es2024.object.d.ts"],
     ["esnext.regexp", "lib.es2024.regexp.d.ts"],
     ["esnext.string", "lib.es2024.string.d.ts"],
-    ["esnext.collection", "lib.es2025.collection.d.ts"],
     ["esnext.float16", "lib.es2025.float16.d.ts"],
     ["esnext.iterator", "lib.es2025.iterator.d.ts"],
     ["esnext.promise", "lib.es2025.promise.d.ts"],
     // ESNext By-feature options
     ["esnext.array", "lib.esnext.array.d.ts"],
+    ["esnext.collection", "lib.esnext.collection.d.ts"],
     ["esnext.decorators", "lib.esnext.decorators.d.ts"],
     ["esnext.disposable", "lib.esnext.disposable.d.ts"],
     ["esnext.error", "lib.esnext.error.d.ts"],

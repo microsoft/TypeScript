@@ -250,7 +250,7 @@ Before running Timeout callback:: count: 3
 1: /a/username/workspace/project/tsconfig.json
 2: *ensureProjectForOpenFiles*
 3: /a/username/workspace/project/tsconfig.jsonFailedLookupInvalidation
-//// [/a/username/workspace/project/src/file2.ts] Inode:: 122
+//// [/a/username/workspace/project/src/file2.ts] Inode:: 123
 
 
 
@@ -328,7 +328,7 @@ FsWatches::
 /a/username/workspace/project/src/file1.ts:
   {"inode":7}
 /a/username/workspace/project/src/file2.ts: *new*
-  {"inode":122}
+  {"inode":123}
 /a/username/workspace/project/tsconfig.json:
   {"inode":8}
 /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:

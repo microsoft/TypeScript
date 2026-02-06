@@ -76,7 +76,7 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/mypr
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 22
 
-//// [/user/username/projects/myproject/src/main.js] Inode:: 125
+//// [/user/username/projects/myproject/src/main.js] Inode:: 126
 import { foo } from "bar";
 foo();
 
@@ -172,7 +172,7 @@ exitCode:: ExitStatus.undefined
 Change:: add new folder to temp
 
 Input::
-//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 127
+//// [/user/username/projects/myproject/node_modules/bar/temp/fooBar/index.d.ts] Inode:: 128
 export function temp(): string;
 
 

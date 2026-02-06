@@ -1,5 +1,6 @@
 /// <reference lib="es2025" />
 /// <reference lib="esnext.intl" />
+/// <reference lib="esnext.collection" />
 /// <reference lib="esnext.decorators" />
 /// <reference lib="esnext.disposable" />
 /// <reference lib="esnext.array" />

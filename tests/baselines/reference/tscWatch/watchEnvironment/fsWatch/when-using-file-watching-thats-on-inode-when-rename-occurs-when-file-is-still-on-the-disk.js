@@ -51,11 +51,11 @@ FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 25
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 15
 
-//// [/user/username/projects/myproject/foo.js] Inode:: 118
+//// [/user/username/projects/myproject/foo.js] Inode:: 119
 export {};
 
 
-//// [/user/username/projects/myproject/main.js] Inode:: 119
+//// [/user/username/projects/myproject/main.js] Inode:: 120
 import { foo } from "./foo";
 foo();
 
@@ -101,7 +101,7 @@ exitCode:: ExitStatus.undefined
 Change:: Introduce error such that when callback happens file is already appeared
 
 Input::
-//// [/user/username/projects/myproject/foo.ts] Inode:: 120
+//// [/user/username/projects/myproject/foo.ts] Inode:: 121
 export declare function foo2(): string;
 
 
@@ -155,8 +155,8 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 118
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 119
+//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 119
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 120
 
 
 Program root files: [
@@ -187,7 +187,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that fixes error
 
 Input::
-//// [/user/username/projects/myproject/foo.ts] Inode:: 121
+//// [/user/username/projects/myproject/foo.ts] Inode:: 122
 export declare function foo(): string;
 
 
@@ -210,7 +210,7 @@ FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":15}
 /user/username/projects/myproject/foo.ts:
-  {"inode":121} *new*
+  {"inode":122} *new*
 /user/username/projects/myproject/main.ts:
   {"inode":5}
 /user/username/projects/myproject/tsconfig.json:
@@ -239,8 +239,8 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 118
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 119
+//// [/user/username/projects/myproject/foo.js] file written with same contents Inode:: 119
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 120
 
 
 Program root files: [

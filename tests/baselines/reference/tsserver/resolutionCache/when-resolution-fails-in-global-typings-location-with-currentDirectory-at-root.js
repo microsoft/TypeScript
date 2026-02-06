@@ -118,10 +118,10 @@ TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 114
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 115
 { "private": true }
 
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 117
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 118
 {
   "entries": {}
 }

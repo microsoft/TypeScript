@@ -43,7 +43,7 @@ FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 25
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 14
 
-//// [/user/username/projects/myproject/main.js] Inode:: 117
+//// [/user/username/projects/myproject/main.js] Inode:: 118
 export const x = 10;
 
 
@@ -122,7 +122,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js] Inode:: 117
+//// [/user/username/projects/myproject/main.js] Inode:: 118
 export const x = 10;
 export const y = 10;
 

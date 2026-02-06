@@ -626,7 +626,7 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Triggered with /workspaces/somerepo/
 Info seq  [hh:mm:ss:mss] Scheduled: /workspaces/somerepo/src/tsconfig.jsonFailedLookupInvalidation, Cancelled earlier one
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Triggered with /workspaces/somerepo/node_modules :: WatchInfo: /workspaces/somerepo 0 undefined Project: /workspaces/somerepo/src/tsconfig.json WatchType: Failed Lookup Locations
 Before request
-//// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 126
+//// [/workspaces/somerepo/node_modules/@types/random-seed/index.d.ts] Inode:: 127
 export function randomSeed(): string;
 
 
@@ -644,7 +644,7 @@ FsWatches::
 /workspaces/somerepo:
   {"inode":2}
 /workspaces/somerepo/node_modules: *new*
-  {"inode":123}
+  {"inode":124}
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
@@ -732,7 +732,7 @@ FsWatches::
 /workspaces/somerepo:
   {"inode":2}
 /workspaces/somerepo/node_modules:
-  {"inode":123}
+  {"inode":124}
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:
@@ -881,11 +881,11 @@ FsWatches::
 /workspaces/somerepo:
   {"inode":2}
 /workspaces/somerepo/node_modules:
-  {"inode":123}
-/workspaces/somerepo/node_modules/@types: *new*
   {"inode":124}
-/workspaces/somerepo/node_modules/@types/random-seed: *new*
+/workspaces/somerepo/node_modules/@types: *new*
   {"inode":125}
+/workspaces/somerepo/node_modules/@types/random-seed: *new*
+  {"inode":126}
 /workspaces/somerepo/src:
   {"inode":3}
 /workspaces/somerepo/src/tsconfig.json:

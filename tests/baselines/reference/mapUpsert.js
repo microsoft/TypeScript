@@ -33,26 +33,27 @@ mapR.getOrInsertComputed("key", () => 123);
 
 
 //// [mapUpsert.js]
+"use strict";
 // OK
 map.getOrInsert("key", 123);
-map.getOrInsertComputed("key", function () { return 123; });
-map.getOrInsertComputed("key", function (key) { return 123; });
+map.getOrInsertComputed("key", () => 123);
+map.getOrInsertComputed("key", (key) => 123);
 mapW.getOrInsert({}, 123);
-mapW.getOrInsertComputed({}, function () { return 123; });
-mapW.getOrInsertComputed({}, function (key) { return 123; });
+mapW.getOrInsertComputed({}, () => 123);
+mapW.getOrInsertComputed({}, (key) => 123);
 // Errors
 map.getOrInsert("key");
 map.getOrInsert("key", "value");
-map.getOrInsert("key", function () { return 123; });
+map.getOrInsert("key", () => 123);
 map.getOrInsertComputed("key");
 map.getOrInsertComputed("key", 123);
-map.getOrInsertComputed("key", function () { return "value"; });
+map.getOrInsertComputed("key", () => "value");
 mapW.getOrInsert({});
 mapW.getOrInsert({}, "value");
-mapW.getOrInsert({}, function () { return 123; });
+mapW.getOrInsert({}, () => 123);
 mapW.getOrInsertComputed({});
 mapW.getOrInsertComputed({}, 123);
-mapW.getOrInsertComputed({}, function () { return "value"; });
+mapW.getOrInsertComputed({}, () => "value");
 // Not present on readonly interface
 mapR.getOrInsert("key", 123);
-mapR.getOrInsertComputed("key", function () { return 123; });
+mapR.getOrInsertComputed("key", () => 123);

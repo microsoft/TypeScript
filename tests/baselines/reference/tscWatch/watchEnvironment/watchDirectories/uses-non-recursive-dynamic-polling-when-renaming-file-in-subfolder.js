@@ -36,7 +36,7 @@ Output::
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 15
 
-//// [/a/username/projects/project/src/file1.js] Inode:: 118
+//// [/a/username/projects/project/src/file1.js] Inode:: 119
 "use strict";
 
 
@@ -77,7 +77,7 @@ exitCode:: ExitStatus.undefined
 Change:: Rename file1 to file2
 
 Input::
-//// [/a/username/projects/project/src/file2.ts] Inode:: 119
+//// [/a/username/projects/project/src/file2.ts] Inode:: 120
 
 
 //// [/a/username/projects/project/src/file1.ts] deleted
@@ -131,7 +131,7 @@ Output::
 
 
 
-//// [/a/username/projects/project/src/file2.js] Inode:: 120
+//// [/a/username/projects/project/src/file2.js] Inode:: 121
 "use strict";
 
 
@@ -142,7 +142,7 @@ PolledWatches *deleted*::
 
 FsWatches::
 /a/username/projects/project/src/file2.ts: *new*
-  {"inode":119}
+  {"inode":120}
 /a/username/projects/project/tsconfig.json:
   {"inode":7}
 /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
