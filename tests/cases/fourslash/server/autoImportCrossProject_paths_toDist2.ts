@@ -1,8 +1,9 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /common/tsconfig.json
+// @Filename: /home/src/workspaces/project/common/tsconfig.json
 //// {
 ////   "compilerOptions": {
+////     "lib": ["es5"],
 ////     "module": "commonjs",
 ////     "outDir": "dist",
 ////     "composite": true
@@ -10,14 +11,15 @@
 ////   "include": ["src"]
 //// }
 
-// @Filename: /common/src/MyModule.ts
+// @Filename: /home/src/workspaces/project/common/src/MyModule.ts
 //// export function square(n: number) {
 ////   return n * 2;
 //// }
 
-// @Filename: /web/tsconfig.json
+// @Filename: /home/src/workspaces/project/web/tsconfig.json
 //// {
 ////   "compilerOptions": {
+////     "lib": ["es5"],
 ////     "module": "esnext",
 ////     "moduleResolution": "node",
 ////     "noEmit": true,
@@ -29,15 +31,15 @@
 ////   "references": [{ "path": "../common" }]
 //// }
 
-// @Filename: /web/src/MyApp.ts
+// @Filename: /home/src/workspaces/project/web/src/MyApp.ts
 //// import { square } from "@common/MyModule";
 
-// @Filename: /web/src/Helper.ts
+// @Filename: /home/src/workspaces/project/web/src/Helper.ts
 //// export function saveMe() {
 ////   square/**/(2);
 //// }
 
-goTo.file("/web/src/Helper.ts");
+goTo.file("/home/src/workspaces/project/web/src/Helper.ts");
 verify.importFixModuleSpecifiers("", ["@common/MyModule"], {
   importModuleSpecifierPreference: "non-relative"
 });

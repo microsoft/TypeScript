@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
+// @strict: false
 ////class Foo {
 ////    public x: number;
 ////}

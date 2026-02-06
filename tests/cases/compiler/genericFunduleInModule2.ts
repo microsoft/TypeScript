@@ -1,9 +1,10 @@
-module A {
+// @target: es2015
+namespace A {
     export function B<T>(x: T) { return x; }
 }
 
-module A {
-    export module B {
+namespace A {
+    export namespace B {
         export var x = 1;
     }
 }

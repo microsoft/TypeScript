@@ -1,3 +1,6 @@
+// @strict: false
+// @ignoreDeprecations: 6.0
+// @alwaysStrict: true, false
 // @target: ES6
 
 // global
@@ -101,7 +104,7 @@ var F3 = function () {
 };
 
 // modules
-module m {
+namespace m {
     const c = 0;
     n = c;
 

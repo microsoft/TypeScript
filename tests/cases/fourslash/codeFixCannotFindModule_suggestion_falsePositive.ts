@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-// @moduleResolution: node
+// @moduleResolution: bundler
+// @module: commonjs
 // @resolveJsonModule: true
 // @strict: true
 

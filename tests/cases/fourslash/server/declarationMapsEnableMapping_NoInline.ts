@@ -1,18 +1,22 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 ////{
 ////    "compilerOptions": {
+////        "module": "commonjs",
+////        "target": "es2015",
+////        "lib": ["es5"],
+////        "strict": false,
 ////        "outDir": "./dist",
 ////        "inlineSourceMap": true,
 ////        "declaration": true,
 ////        "declarationMap": true,
 ////        "newLine": "lf",
 ////    },
-////    "files": ["/index.ts"],
+////    "files": ["/home/src/workspaces/project/index.ts"],
 ////}
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 // @emitThisFile: true
 ////export class Foo {
 ////    member: string;
@@ -29,34 +33,31 @@
 ////    member: number;
 ////}
 
-// @Filename: /mymodule.ts
-////import * as mod from "/dist/index";
+// @Filename: /home/src/workspaces/project/mymodule.ts
+////import * as mod from "/home/src/workspaces/project/dist/index";
 ////const instance = new mod.Foo();
 ////instance.[|/*1*/methodName|]({member: 12});
 
-// @Filename: /dist/index.js
+// @Filename: /home/src/workspaces/project/dist/index.js
 ////"use strict";
 ////Object.defineProperty(exports, "__esModule", { value: true });
 ////exports.Foo = void 0;
-////var Foo = /** @class */ (function () {
-////    function Foo() {
-////    }
-////    Foo.prototype.methodName = function (propName) { return propName; };
-////    Foo.prototype.otherMethod = function () {
+////class Foo {
+////    methodName(propName) { return propName; }
+////    otherMethod() {
 ////        if (Math.random() > 0.5) {
 ////            return { x: 42 };
 ////        }
 ////        return { y: "yes" };
-////    };
-////    return Foo;
-////}());
+////    }
+////}
 ////exports.Foo = Foo;
-//////# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQTtJQUFBO0lBU0EsQ0FBQztJQVBHLHdCQUFVLEdBQVYsVUFBVyxRQUFrQixJQUFjLE9BQU8sUUFBUSxDQUFDLENBQUMsQ0FBQztJQUM3RCx5QkFBVyxHQUFYO1FBQ0ksSUFBSSxJQUFJLENBQUMsTUFBTSxFQUFFLEdBQUcsR0FBRyxFQUFFLENBQUM7WUFDdEIsT0FBTyxFQUFDLENBQUMsRUFBRSxFQUFFLEVBQUMsQ0FBQztRQUNuQixDQUFDO1FBQ0QsT0FBTyxFQUFDLENBQUMsRUFBRSxLQUFLLEVBQUMsQ0FBQztJQUN0QixDQUFDO0lBQ0wsVUFBQztBQUFELENBQUMsQUFURCxJQVNDO0FBVFksa0JBQUcifQ==
+//////# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9pbmRleC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7QUFBQSxNQUFhLEdBQUc7SUFFWixVQUFVLENBQUMsUUFBa0IsSUFBYyxPQUFPLFFBQVEsQ0FBQyxDQUFDLENBQUM7SUFDN0QsV0FBVztRQUNQLElBQUksSUFBSSxDQUFDLE1BQU0sRUFBRSxHQUFHLEdBQUcsRUFBRSxDQUFDO1lBQ3RCLE9BQU8sRUFBQyxDQUFDLEVBQUUsRUFBRSxFQUFDLENBQUM7UUFDbkIsQ0FBQztRQUNELE9BQU8sRUFBQyxDQUFDLEVBQUUsS0FBSyxFQUFDLENBQUM7SUFDdEIsQ0FBQztDQUNKO0FBVEQsa0JBU0MifQ==
 
-// @Filename: /dist/index.d.ts.map
+// @Filename: /home/src/workspaces/project/dist/index.d.ts.map
 ////{"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../index.ts"],"names":[],"mappings":"AAAA,qBAAa,GAAG;IACZ,MAAM,EAAE,MAAM,CAAC;IACf,UAAU,CAAC,QAAQ,EAAE,QAAQ,GAAG,QAAQ;IACxC,WAAW;;;;;;;CAMd;AAED,MAAM,WAAW,QAAQ;IACrB,MAAM,EAAE,MAAM,CAAC;CAClB"}
 
-// @Filename: /dist/index.d.ts
+// @Filename: /home/src/workspaces/project/dist/index.d.ts
 ////export declare class Foo {
 ////    member: string;
 ////    methodName(propName: SomeType): SomeType;
@@ -73,8 +74,12 @@
 ////}
 //////# sourceMappingURL=index.d.ts.map
 
-goTo.file("/index.ts");
-verify.getEmitOutput(["/dist/index.js", "/dist/index.d.ts.map", "/dist/index.d.ts"]);
+goTo.file("/home/src/workspaces/project/index.ts");
+verify.getEmitOutput([
+    "/home/src/workspaces/project/dist/index.js",
+    "/home/src/workspaces/project/dist/index.d.ts.map",
+    "/home/src/workspaces/project/dist/index.d.ts"
+]);
 
 verify.baselineGoToImplementation("1");// getImplementationAtPosition
 verify.baselineGoToType("1");// getTypeDefinitionAtPosition

@@ -5,5 +5,6 @@ async function foo(): Promise<void> {
 }
 
 //// [asyncFunctionDeclaration1_es2017.js]
+"use strict";
 async function foo() {
 }

@@ -1,7 +1,18 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/workspaces/solution useCaseSensitiveFileNames:: false
 Input::
-//// [/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/workspaces/solution/no-references/tsconfig.json]
+{
+  "references": [],
+  "files": [],
+  "compilerOptions": {
+    "composite": true,
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipDefaultLibCheck": true
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -15,23 +26,10 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/src/no-references/tsconfig.json]
-{
-  "references": [],
-  "files": [],
-  "compilerOptions": {
-    "composite": true,
-    "declaration": true,
-    "forceConsistentCasingInFileNames": true,
-    "skipDefaultLibCheck": true
-  }
-}
 
-
-
+/home/src/tslibs/TS/Lib/tsc.js --b no-references
 Output::
-/lib/tsc --b /src/no-references
-[96msrc/no-references/tsconfig.json[0m:[93m3[0m:[93m12[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/src/no-references/tsconfig.json' is empty.
+[96mno-references/tsconfig.json[0m:[93m3[0m:[93m12[0m - [91merror[0m[90m TS18002: [0mThe 'files' list in config file '/home/src/workspaces/solution/no-references/tsconfig.json' is empty.
 
 [7m3[0m   "files": [],
 [7m [0m [91m           ~~[0m
@@ -39,6 +37,7 @@ Output::
 
 Found 1 error.
 
+
+
+
 exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
-
-

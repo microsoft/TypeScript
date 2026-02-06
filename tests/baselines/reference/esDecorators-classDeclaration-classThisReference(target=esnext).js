@@ -14,6 +14,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-classThisReference.js]
+"use strict";
 @dec
 class C {
     static { this; }

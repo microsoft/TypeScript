@@ -1,8 +1,8 @@
 // === goToSourceDefinition ===
-// === /a.js ===
+// === /home/src/workspaces/project/a.js ===
 // export const [|a|] = "a";
 
-// === /index.ts ===
+// === /home/src/workspaces/project/index.ts ===
 // import { a } from "./a";
 // a/*GOTO SOURCE DEF*/
 
@@ -19,10 +19,10 @@
 
 
 // === goToSourceDefinition ===
-// === /a.js ===
+// === /home/src/workspaces/project/a.js ===
 // [|export const a = "a";|]
 
-// === /index.ts ===
+// === /home/src/workspaces/project/index.ts ===
 // import { a } from "./a"/*GOTO SOURCE DEF*/;
 // a
 

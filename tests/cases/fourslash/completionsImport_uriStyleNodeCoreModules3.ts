@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
 // @module: commonjs
 
 // @Filename: /node_modules/@types/node/index.d.ts
@@ -30,6 +31,15 @@
 //// import "node:path";
 //// import "path";
 //// write/*mixed2*/
+
+// @Filename: /test1.ts
+//// import "node:test";
+//// import "path";
+//// writeFile/*test1*/
+
+// @Filename: /test2.ts
+//// import "node:test";
+//// writeFile/*test2*/
 
 verify.completions({
   marker: "noPrefix",
@@ -67,12 +77,51 @@ verify.completions({
   },
 });
 
-// We're doing as little work as possible to decide which module specifiers
-// to use, so we just take the *first* recognized node core module in the file
-// and copy its style.
+// Prefixed imports take precedence over non-prefixed imports when mixed
 
 verify.completions({
   marker: "mixed1",
+  exact: completion.globalsPlus([{
+    name: "writeFile",
+    source: "node:fs",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions
+  }, {
+    name: "writeFile",
+    source: "node:fs/promises",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions
+  }]),
+  preferences: {
+    includeCompletionsForModuleExports: true,
+  },
+});
+
+verify.completions({
+  marker: "mixed2",
+  exact: completion.globalsPlus([{
+    name: "writeFile",
+    source: "node:fs",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions
+  }, {
+    name: "writeFile",
+    source: "node:fs/promises",
+    hasAction: true,
+    sortText: completion.SortText.AutoImportSuggestions
+  }]),
+  preferences: {
+    includeCompletionsForModuleExports: true,
+  },
+});
+
+// Unless the prefixed import is not available unprefixed
+
+verify.importFixModuleSpecifiers("test1", ["fs", "fs/promises"]);
+verify.importFixModuleSpecifiers("test2", ["node:fs", "node:fs/promises"]);
+
+verify.completions({
+  marker: "test1",
   exact: completion.globalsPlus([{
     name: "writeFile",
     source: "fs",
@@ -90,7 +139,7 @@ verify.completions({
 });
 
 verify.completions({
-  marker: "mixed2",
+  marker: "test2",
   exact: completion.globalsPlus([{
     name: "writeFile",
     source: "node:fs",

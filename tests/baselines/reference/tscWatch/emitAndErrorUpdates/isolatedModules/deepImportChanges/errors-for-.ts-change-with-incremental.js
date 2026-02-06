@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 import {B} from './b';
@@ -22,8 +22,7 @@ export class C
 //// [/user/username/projects/myproject/tsconfig.json]
 {}
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -34,9 +33,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w --isolatedModules --incremental
+/home/src/tslibs/TS/Lib/tsc.js --w --isolatedModules --incremental
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -45,48 +46,34 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-        this.d = 1;
-    }
-    return C;
-}());
-exports.C = C;
+export class C {
+    d = 1;
+}
 
 
 //// [/user/username/projects/myproject/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.B = void 0;
-var c_1 = require("./c");
-var B = /** @class */ (function () {
-    function B() {
-        this.c = new c_1.C();
-    }
-    return B;
-}());
-exports.B = B;
+import { C } from './c';
+export class B {
+    c = new C();
+}
 
 
 //// [/user/username/projects/myproject/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("./b");
-var b = new b_1.B();
+import { B } from './b';
+let b = new B();
 console.log(b.c.d);
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-22447130237-export class C\n{\n    d = 1;\n}","-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./c.ts","./b.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-22447130237-export class C\n{\n    d = 1;\n}","-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../a/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./c.ts",
     "./b.ts",
     "./a.ts"
@@ -100,13 +87,13 @@ console.log(b.c.d);
     ]
   ],
   "fileInfos": {
-    "../../../../a/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "./c.ts": {
@@ -144,18 +131,12 @@ console.log(b.c.d);
     ]
   },
   "version": "FakeTSVersion",
-  "size": 806
+  "size": 875
 }
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/a.ts: *new*
   {}
@@ -183,19 +164,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/c.ts (used version)
 /user/username/projects/myproject/b.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
@@ -234,25 +215,18 @@ Output::
 
 
 //// [/user/username/projects/myproject/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-        this.d2 = 1;
-    }
-    return C;
-}());
-exports.C = C;
+export class C {
+    d2 = 1;
+}
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-22846341163-export class C\n{\n    d2 = 1;\n}","signature":"-4637923302-export declare class C {\n    d2: number;\n}\n"},"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[[4,[{"start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./c.ts","./b.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-22846341163-export class C\n{\n    d2 = 1;\n}","signature":"-4637923302-export declare class C {\n    d2: number;\n}\n"},"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[[4,[{"start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]]],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../a/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./c.ts",
     "./b.ts",
     "./a.ts"
@@ -266,13 +240,13 @@ exports.C = C;
     ]
   ],
   "fileInfos": {
-    "../../../../a/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "./c.ts": {
@@ -328,7 +302,7 @@ exports.C = C;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1035
+  "size": 1104
 }
 
 
@@ -346,7 +320,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
@@ -390,25 +364,18 @@ Output::
 
 
 //// [/user/username/projects/myproject/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-        this.d = 1;
-    }
-    return C;
-}());
-exports.C = C;
+export class C {
+    d = 1;
+}
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-22447130237-export class C\n{\n    d = 1;\n}","signature":"-6977846840-export declare class C {\n    d: number;\n}\n"},"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./c.ts","./b.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-22447130237-export class C\n{\n    d = 1;\n}","signature":"-6977846840-export declare class C {\n    d: number;\n}\n"},"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"referencedMap":[[4,1],[3,2]],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../a/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./c.ts",
     "./b.ts",
     "./a.ts"
@@ -422,13 +389,13 @@ exports.C = C;
     ]
   ],
   "fileInfos": {
-    "../../../../a/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "./c.ts": {
@@ -470,7 +437,7 @@ exports.C = C;
     ]
   },
   "version": "FakeTSVersion",
-  "size": 890
+  "size": 959
 }
 
 
@@ -488,7 +455,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
@@ -537,25 +504,18 @@ Output::
 
 
 //// [/user/username/projects/myproject/c.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-        this.d2 = 1;
-    }
-    return C;
-}());
-exports.C = C;
+export class C {
+    d2 = 1;
+}
 
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../a/lib/lib.d.ts","./c.ts","./b.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-22846341163-export class C\n{\n    d2 = 1;\n}","signature":"-4637923302-export declare class C {\n    d2: number;\n}\n"},"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[[4,[{"start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]]],"version":"FakeTSVersion"}
+{"fileNames":["../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./c.ts","./b.ts","./a.ts"],"fileIdsList":[[3],[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-22846341163-export class C\n{\n    d2 = 1;\n}","signature":"-4637923302-export declare class C {\n    d2: number;\n}\n"},"-6292386773-import {C} from './c';\nexport class B\n{\n    c = new C();\n}","4878398349-import {B} from './b';\ndeclare var console: any;\nlet b = new B();\nconsole.log(b.c.d);"],"root":[[2,4]],"referencedMap":[[4,1],[3,2]],"semanticDiagnosticsPerFile":[[4,[{"start":82,"length":1,"code":2339,"category":1,"messageText":"Property 'd' does not exist on type 'C'."}]]],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../a/lib/lib.d.ts",
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./c.ts",
     "./b.ts",
     "./a.ts"
@@ -569,13 +529,13 @@ exports.C = C;
     ]
   ],
   "fileInfos": {
-    "../../../../a/lib/lib.d.ts": {
+    "../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "./c.ts": {
@@ -631,7 +591,7 @@ exports.C = C;
     ]
   ],
   "version": "FakeTSVersion",
-  "size": 1035
+  "size": 1104
 }
 
 
@@ -649,7 +609,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/c.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts

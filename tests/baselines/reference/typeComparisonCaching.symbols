@@ -45,23 +45,23 @@ var a: A;
 >a : Symbol(a, Decl(typeComparisonCaching.ts, 20, 3))
 >A : Symbol(A, Decl(typeComparisonCaching.ts, 0, 0))
 
-var b: B;
->b : Symbol(b, Decl(typeComparisonCaching.ts, 21, 3))
+declare var b: B;
+>b : Symbol(b, Decl(typeComparisonCaching.ts, 21, 11))
 >B : Symbol(B, Decl(typeComparisonCaching.ts, 5, 1))
 
 var c: C;
 >c : Symbol(c, Decl(typeComparisonCaching.ts, 22, 3))
 >C : Symbol(C, Decl(typeComparisonCaching.ts, 10, 1))
 
-var d: D;
->d : Symbol(d, Decl(typeComparisonCaching.ts, 23, 3))
+declare var d: D;
+>d : Symbol(d, Decl(typeComparisonCaching.ts, 23, 11))
 >D : Symbol(D, Decl(typeComparisonCaching.ts, 14, 1))
 
 a = b;
 >a : Symbol(a, Decl(typeComparisonCaching.ts, 20, 3))
->b : Symbol(b, Decl(typeComparisonCaching.ts, 21, 3))
+>b : Symbol(b, Decl(typeComparisonCaching.ts, 21, 11))
 
 c = d; // Should not be allowed
 >c : Symbol(c, Decl(typeComparisonCaching.ts, 22, 3))
->d : Symbol(d, Decl(typeComparisonCaching.ts, 23, 3))
+>d : Symbol(d, Decl(typeComparisonCaching.ts, 23, 11))
 

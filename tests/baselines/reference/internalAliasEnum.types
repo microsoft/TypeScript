@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/internalAliasEnum.ts] ////
 
 === internalAliasEnum.ts ===
-module a {
+namespace a {
 >a : typeof a
 >  : ^^^^^^^^
 
@@ -23,7 +23,7 @@ module a {
     }
 }
 
-module c {
+namespace c {
 >c : typeof c
 >  : ^^^^^^^^
 

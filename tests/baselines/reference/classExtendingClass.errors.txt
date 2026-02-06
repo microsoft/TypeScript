@@ -1,0 +1,64 @@
+classExtendingClass.ts(2,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+classExtendingClass.ts(8,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+classExtendingClass.ts(12,9): error TS2454: Variable 'd' is used before being assigned.
+classExtendingClass.ts(13,10): error TS2454: Variable 'd' is used before being assigned.
+classExtendingClass.ts(14,10): error TS2454: Variable 'd' is used before being assigned.
+classExtendingClass.ts(18,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+classExtendingClass.ts(24,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+classExtendingClass.ts(28,10): error TS2454: Variable 'd2' is used before being assigned.
+classExtendingClass.ts(29,10): error TS2454: Variable 'd2' is used before being assigned.
+classExtendingClass.ts(30,10): error TS2454: Variable 'd2' is used before being assigned.
+
+
+==== classExtendingClass.ts (10 errors) ====
+    class C {
+        foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+        thing() { }
+        static other() { }
+    }
+    
+    class D extends C {
+        bar: string;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var d: D;
+    var r = d.foo;
+            ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    var r2 = d.bar;
+             ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    var r3 = d.thing();
+             ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    var r4 = D.other();
+    
+    class C2<T> {
+        foo: T;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+        thing(x: T) { }
+        static other<T>(x: T) { }
+    }
+    
+    class D2<T> extends C2<T> {
+        bar: string;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    var d2: D2<string>;
+    var r5 = d2.foo;
+             ~~
+!!! error TS2454: Variable 'd2' is used before being assigned.
+    var r6 = d2.bar;
+             ~~
+!!! error TS2454: Variable 'd2' is used before being assigned.
+    var r7 = d2.thing('');
+             ~~
+!!! error TS2454: Variable 'd2' is used before being assigned.
+    var r8 = D2.other(1);

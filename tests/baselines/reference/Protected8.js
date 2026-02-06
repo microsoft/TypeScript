@@ -7,3 +7,4 @@ interface I {
 }
 
 //// [Protected8.js]
+"use strict";

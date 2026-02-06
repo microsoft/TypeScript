@@ -1,5 +1,6 @@
+// @target: es2015
 function foo<T extends U, U>(y: T, z: U) { return y; }
-module foo {
+namespace foo {
     export var x: T;
     var y = <T>1;
 }

@@ -36,7 +36,7 @@ registerCodeFix({
     },
     fixIds: [fixId],
     getAllCodeActions: function getAllCodeActionsToConvertToTypeOnlyExport(context) {
-        const fixedExportDeclarations = new Map<number, true>();
+        const fixedExportDeclarations = new Set<number>();
         return codeFixAll(context, errorCodes, (changes, diag) => {
             const exportSpecifier = getExportSpecifierForDiagnosticSpan(diag, context.sourceFile);
             if (exportSpecifier && addToSeen(fixedExportDeclarations, getNodeId(exportSpecifier.parent.parent))) {

@@ -24,12 +24,13 @@ declare function foo<T>(arr: T[]): T;
 
 foo([]).bar;
 >foo([]).bar : any
->foo([]) : any
->        : ^^^
+>            : ^^^
+>foo([]) : never
+>        : ^^^^^
 >foo : <T>(arr: T[]) => T
 >    : ^ ^^   ^^   ^^^^^ 
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >bar : any
 >    : ^^^
 

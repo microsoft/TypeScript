@@ -8,7 +8,8 @@ class Base {
 >     : ^^^^
 
     foo: typeof undefined;
->foo : any
+>foo : undefined
+>    : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 } 
@@ -21,6 +22,7 @@ class D0 extends Base {
 
     foo: any;
 >foo : any
+>    : ^^^
 }
 
 class DA extends Base {
@@ -30,7 +32,8 @@ class DA extends Base {
 >     : ^^^^
 
     foo: typeof undefined; 
->foo : any
+>foo : undefined
+>    : ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 }
@@ -212,7 +215,7 @@ function f() { }
 >f : typeof f
 >  : ^^^^^^^^
 
-module f {
+namespace f {
 >f : typeof f
 >  : ^^^^^^^^
 
@@ -242,7 +245,7 @@ class c { baz: string }
 >baz : string
 >    : ^^^^^^
 
-module c {
+namespace c {
 >c : typeof c
 >  : ^^^^^^^^
 

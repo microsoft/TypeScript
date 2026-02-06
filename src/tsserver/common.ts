@@ -1,7 +1,7 @@
 import * as ts from "../typescript/typescript.js";
 
 /** @internal */
-export function getLogLevel(level: string | undefined) {
+export function getLogLevel(level: string | undefined): ts.server.LogLevel | undefined {
     if (level) {
         const l = level.toLowerCase();
         for (const name in ts.server.LogLevel) {

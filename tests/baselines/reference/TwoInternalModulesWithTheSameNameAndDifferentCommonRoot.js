@@ -1,14 +1,14 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesWithTheSameNameAndDifferentCommonRoot.ts] ////
 
 //// [part1.ts]
-module Root {
-    export module A {
+namespace Root {
+    export namespace A {
         export interface Point {
             x: number;
             y: number;
         }
 
-        export module Utils {
+        export namespace Utils {
             export function mirror<T extends Point>(p: T) {
                 return { x: p.y, y: p.x };
             }
@@ -17,12 +17,12 @@ module Root {
 }
 
 //// [part2.ts]
-module otherRoot {
-    export module A {
+namespace otherRoot {
+    export namespace A {
         // have to be fully qualified since in different root
         export var Origin: Root.A.Point = { x: 0, y: 0 };
 
-        export module Utils {
+        export namespace Utils {
             export class Plane {
                 constructor(public tl: Root.A.Point, public br: Root.A.Point) { }
             }
@@ -31,11 +31,12 @@ module otherRoot {
 }
 
 //// [part1.js]
+"use strict";
 var Root;
 (function (Root) {
-    var A;
+    let A;
     (function (A) {
-        var Utils;
+        let Utils;
         (function (Utils) {
             function mirror(p) {
                 return { x: p.y, y: p.x };
@@ -45,21 +46,21 @@ var Root;
     })(A = Root.A || (Root.A = {}));
 })(Root || (Root = {}));
 //// [part2.js]
+"use strict";
 var otherRoot;
 (function (otherRoot) {
-    var A;
+    let A;
     (function (A) {
         // have to be fully qualified since in different root
         A.Origin = { x: 0, y: 0 };
-        var Utils;
+        let Utils;
         (function (Utils) {
-            var Plane = /** @class */ (function () {
-                function Plane(tl, br) {
+            class Plane {
+                constructor(tl, br) {
                     this.tl = tl;
                     this.br = br;
                 }
-                return Plane;
-            }());
+            }
             Utils.Plane = Plane;
         })(Utils = A.Utils || (A.Utils = {}));
     })(A = otherRoot.A || (otherRoot.A = {}));

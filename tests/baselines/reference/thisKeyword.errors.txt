@@ -1,9 +1,12 @@
 thisKeyword.ts(2,5): error TS2331: 'this' cannot be referenced in a module or namespace body.
+thisKeyword.ts(2,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
-==== thisKeyword.ts (1 errors) ====
-    module foo {
+==== thisKeyword.ts (2 errors) ====
+    namespace foo {
         this.bar = 4;
         ~~~~
 !!! error TS2331: 'this' cannot be referenced in a module or namespace body.
+        ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     }

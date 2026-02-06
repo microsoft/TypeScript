@@ -16,7 +16,7 @@ var g: I;
 g = x;
 I = x;
 
-module M { export var x = 1; }
+namespace M { export var x = 1; }
 M = x;
 
 function i<T>(a: T) { }
@@ -24,6 +24,7 @@ function i<T>(a: T) { }
 i = x; 
 
 //// [invalidUndefinedAssignments.js]
+"use strict";
 var x;
 var E;
 (function (E) {
@@ -31,11 +32,8 @@ var E;
 })(E || (E = {}));
 E = x;
 E.A = x;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var f;
 C = x;
 var g;

@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/enumLiteralAssignableToEnumInsideUnion.ts] ////
 
 === enumLiteralAssignableToEnumInsideUnion.ts ===
-module X {
+namespace X {
 >X : typeof X
 >  : ^^^^^^^^
 
@@ -16,7 +16,7 @@ module X {
 >  : ^^^^^
     }
 }
-module Y {
+namespace Y {
 >Y : typeof Y
 >  : ^^^^^^^^
 
@@ -31,7 +31,7 @@ module Y {
 >  : ^^^^^
     }
 }
-module Z {
+namespace Z {
 >Z : typeof Z
 >  : ^^^^^^^^
 
@@ -60,7 +60,7 @@ module Z {
 >  : ^
     }
 }
-module Ka {
+namespace Ka {
 >Ka : typeof Ka
 >   : ^^^^^^^^^
 

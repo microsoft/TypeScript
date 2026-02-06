@@ -7,8 +7,8 @@
  * @param {number} [r=101]
  */
 function f(p, q, r) {
->f : (p?: number | undefined, q?: number | undefined, r?: number | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^         ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : (p?: number, q?: number | undefined, r?: number) => void
+>  : ^ ^^^      ^^ ^^^         ^^^^^^^^^^^ ^^^      ^^^^^^^^^
 >p : number | undefined
 >  : ^^^^^^^^^^^^^^^^^^
 >q : number | undefined
@@ -45,14 +45,14 @@ function f(p, q, r) {
 f()
 >f() : void
 >    : ^^^^
->f : (p?: number | undefined, q?: number | undefined, r?: number | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^         ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : (p?: number, q?: number | undefined, r?: number) => void
+>  : ^ ^^^      ^^ ^^^         ^^^^^^^^^^^ ^^^      ^^^^^^^^^
 
 f(undefined, undefined, undefined)
 >f(undefined, undefined, undefined) : void
 >                                   : ^^^^
->f : (p?: number | undefined, q?: number | undefined, r?: number | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^         ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : (p?: number, q?: number | undefined, r?: number) => void
+>  : ^ ^^^      ^^ ^^^         ^^^^^^^^^^^ ^^^      ^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 >undefined : undefined
@@ -63,8 +63,8 @@ f(undefined, undefined, undefined)
 f(1, 2, 3)
 >f(1, 2, 3) : void
 >           : ^^^^
->f : (p?: number | undefined, q?: number | undefined, r?: number | undefined) => void
->  : ^ ^^^^^^^^^^^^^^^^^^^^^^^ ^^^         ^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>f : (p?: number, q?: number | undefined, r?: number) => void
+>  : ^ ^^^      ^^ ^^^         ^^^^^^^^^^^ ^^^      ^^^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2

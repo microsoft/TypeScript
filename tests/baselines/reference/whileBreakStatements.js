@@ -45,6 +45,7 @@ while (true) {
 
 
 //// [whileBreakStatements.js]
+"use strict";
 while (true) {
     break;
 }

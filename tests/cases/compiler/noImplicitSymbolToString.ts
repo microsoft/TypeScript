@@ -1,3 +1,4 @@
+// @target: es2015
 // Fix #19666
 
 let symbol!: symbol;

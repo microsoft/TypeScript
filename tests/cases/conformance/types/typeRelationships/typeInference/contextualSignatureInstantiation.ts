@@ -1,3 +1,4 @@
+// @target: es2015
 // TypeScript Spec, section 4.12.2:
 // If e is an expression of a function type that contains exactly one generic call signature and no other members,
 // and T is a function type with exactly one non - generic call signature and no other members, then any inferences

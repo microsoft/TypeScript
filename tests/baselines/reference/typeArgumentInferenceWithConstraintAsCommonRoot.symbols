@@ -26,16 +26,16 @@ function f<T extends Animal>(x: T, y: T): T { return undefined; }
 >T : Symbol(T, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 3, 11))
 >undefined : Symbol(undefined)
 
-var g: Giraffe;
->g : Symbol(g, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 4, 3))
+declare var g: Giraffe;
+>g : Symbol(g, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 4, 11))
 >Giraffe : Symbol(Giraffe, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 0, 22))
 
-var e: Elephant;
->e : Symbol(e, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 5, 3))
+declare var e: Elephant;
+>e : Symbol(e, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 5, 11))
 >Elephant : Symbol(Elephant, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 1, 38))
 
 f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
 >f : Symbol(f, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 2, 39))
->g : Symbol(g, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 4, 3))
->e : Symbol(e, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 5, 3))
+>g : Symbol(g, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 4, 11))
+>e : Symbol(e, Decl(typeArgumentInferenceWithConstraintAsCommonRoot.ts, 5, 11))
 

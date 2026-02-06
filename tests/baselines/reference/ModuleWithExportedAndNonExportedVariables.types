@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedVariables.ts] ////
 
 === ModuleWithExportedAndNonExportedVariables.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 

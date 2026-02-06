@@ -169,7 +169,7 @@ function referencedInInferredType({ name: alias }: Named) {
 
 function referencedInNestedFunction({ name: alias }: Named) {
 >referencedInNestedFunction : ({ name: alias }: Named) => (p: typeof alias) => void
->                           : ^               ^^     ^^^^^^ ^^            ^^^^^^^^^
+>                           : ^               ^^     ^^^^^^               ^^^^^^^^^
 >name : any
 >     : ^^^
 >alias : string

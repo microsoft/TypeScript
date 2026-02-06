@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/classNonUniqueSymbolMethodHasSymbolIndexer.ts] ////
+
+=== classNonUniqueSymbolMethodHasSymbolIndexer.ts ===
+declare const a: symbol;
+>a : Symbol(a, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 0, 13))
+
+export class A {
+>A : Symbol(A, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 0, 24))
+
+    [a]() { return 1 };
+>[a] : Symbol(A[a], Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 1, 16))
+>a : Symbol(a, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 0, 13))
+}
+declare const e1: A[typeof a]; // no error, `A` has `symbol` index
+>e1 : Symbol(e1, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 4, 13))
+>A : Symbol(A, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 0, 24))
+>a : Symbol(a, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 0, 13))
+
+type Constructor = new (...args: any[]) => {};
+>Constructor : Symbol(Constructor, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 4, 30))
+>args : Symbol(args, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 6, 24))
+
+declare function Mix<T extends Constructor>(classish: T): T & (new (...args: any[]) => {mixed: true});
+>Mix : Symbol(Mix, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 6, 46))
+>T : Symbol(T, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 7, 21))
+>Constructor : Symbol(Constructor, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 4, 30))
+>classish : Symbol(classish, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 7, 44))
+>T : Symbol(T, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 7, 21))
+>T : Symbol(T, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 7, 21))
+>args : Symbol(args, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 7, 68))
+>mixed : Symbol(mixed, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 7, 88))
+
+export const Mixer = Mix(class {
+>Mixer : Symbol(Mixer, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 9, 12))
+>Mix : Symbol(Mix, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 6, 46))
+
+    [a]() { return 1 };
+>[a] : Symbol((Anonymous class)[a], Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 9, 32))
+>a : Symbol(a, Decl(classNonUniqueSymbolMethodHasSymbolIndexer.ts, 0, 13))
+
+});
+

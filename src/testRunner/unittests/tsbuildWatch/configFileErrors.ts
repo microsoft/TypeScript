@@ -1,10 +1,7 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports syntax errors in config file", () => {
     function verify(outFile?: object) {
@@ -12,7 +9,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
             scenario: "configFileErrors",
             subScenario: `${outFile ? "outFile" : "multiFile"}/reports syntax errors in config file`,
             sys: () =>
-                createWatchedSystem(
+                TestServerHost.createWatchedSystem(
                     [
                         { path: `/user/username/projects/myproject/a.ts`, content: "export function foo() { }" },
                         { path: `/user/username/projects/myproject/b.ts`, content: "export function bar() { }" },
@@ -29,7 +26,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: configFileErrors:: reports synt
     ]
 }`,
                         },
-                        libFile,
                     ],
                     { currentDirectory: "/user/username/projects/myproject" },
                 ),

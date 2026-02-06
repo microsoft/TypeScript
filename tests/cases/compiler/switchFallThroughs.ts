@@ -1,3 +1,4 @@
+// @target: es2015
 function R1(index: number) {
     switch (index) {
         case 0:

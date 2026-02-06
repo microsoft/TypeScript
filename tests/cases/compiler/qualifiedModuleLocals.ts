@@ -1,4 +1,5 @@
-module A {
+// @target: es2015
+namespace A {
 
   function b() {}
 

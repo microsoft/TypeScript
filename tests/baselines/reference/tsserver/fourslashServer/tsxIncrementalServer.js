@@ -1,21 +1,38 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
-//// [/lib.d.ts]
-lib.d.ts-Text
-
-//// [/lib.decorators.d.ts]
-lib.decorators.d.ts-Text
-
-//// [/lib.decorators.legacy.d.ts]
-lib.decorators.legacy.d.ts-Text
-
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "arguments": {
+        "options": {
+          "target": "es2024",
+          "newLine": "crlf",
+          "lib": [
+            "es5"
+          ],
+          "skipDefaultLibCheck": true
+        }
+      },
+      "command": "compilerOptionsForInferredProjects"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "compilerOptionsForInferredProjects",
+      "request_seq": 0,
+      "success": true,
+      "body": true
+    }
 //// [/tests/cases/fourslash/server/tsxIncrementalServer.ts]
 
 
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 0,
+      "seq": 1,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts"
@@ -23,35 +40,28 @@ Info seq  [hh:mm:ss:mss] request:
       "command": "open"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /tests/cases/fourslash/server/tsxIncrementalServer.ts ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: /tests/cases/fourslash/server
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/lib.d.ts Text-1 lib.d.ts-Text
-	/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
-	/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/tests/cases/fourslash/server/tsxIncrementalServer.ts SVC-1-0 ""
 
 
-	../../../../lib.d.ts
-	  Default library for target 'es5'
-	../../../../lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../../lib.d.ts'
-	../../../../lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../../lib.d.ts'
+	../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
+	../../../../home/src/tslibs/TS/Lib/lib.decorators.d.ts
+	  Library referenced via 'decorators' from file '../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts'
+	../../../../home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+	  Library referenced via 'decorators.legacy' from file '../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts'
 	tsxIncrementalServer.ts
 	  Root file specified for compilation
 
@@ -68,7 +78,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 0,
+      "request_seq": 1,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -76,42 +86,33 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts: *new*
   {"pollingInterval":500}
-/lib.decorators.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
   {"pollingInterval":500}
-/lib.decorators.legacy.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {"pollingInterval":500}
 /tests/cases/fourslash/server/jsconfig.json: *new*
   {"pollingInterval":2000}
 /tests/cases/fourslash/server/tsconfig.json: *new*
   {"pollingInterval":2000}
 
-watchedDirectoriesRecursive::
-/tests/cases/fourslash/node_modules: *new*
-  {}
-/tests/cases/fourslash/node_modules/@types: *new*
-  {}
-/tests/cases/fourslash/server/node_modules: *new*
-  {}
-/tests/cases/fourslash/server/node_modules/@types: *new*
-  {}
-
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
-/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -122,7 +123,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 1,
+      "seq": 2,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -139,7 +140,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 1,
+      "request_seq": 2,
       "success": true
     }
 After Request
@@ -148,17 +149,18 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -169,7 +171,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 2,
+      "seq": 3,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -186,20 +188,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 2,
+      "request_seq": 3,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -210,7 +212,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 3,
+      "seq": 4,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -225,13 +227,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 3,
+      "request_seq": 4,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 4,
+      "seq": 5,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -248,20 +250,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 4,
+      "request_seq": 5,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -272,7 +274,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 5,
+      "seq": 6,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -289,20 +291,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 5,
+      "request_seq": 6,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -313,7 +315,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 6,
+      "seq": 7,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -328,13 +330,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 6,
+      "request_seq": 7,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 7,
+      "seq": 8,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -351,20 +353,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 7,
+      "request_seq": 8,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -375,7 +377,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 8,
+      "seq": 9,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -390,13 +392,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 8,
+      "request_seq": 9,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 9,
+      "seq": 10,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -413,20 +415,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 9,
+      "request_seq": 10,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -437,7 +439,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 10,
+      "seq": 11,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -452,13 +454,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 10,
+      "request_seq": 11,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 11,
+      "seq": 12,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -475,20 +477,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 11,
+      "request_seq": 12,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -499,7 +501,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 12,
+      "seq": 13,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -516,20 +518,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 12,
+      "request_seq": 13,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -540,7 +542,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 13,
+      "seq": 14,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -555,13 +557,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 13,
+      "request_seq": 14,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 14,
+      "seq": 15,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -578,20 +580,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 14,
+      "request_seq": 15,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -602,7 +604,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 15,
+      "seq": 16,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -619,20 +621,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 15,
+      "request_seq": 16,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -643,7 +645,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 16,
+      "seq": 17,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -658,13 +660,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 16,
+      "request_seq": 17,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 17,
+      "seq": 18,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -681,20 +683,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 17,
+      "request_seq": 18,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -705,7 +707,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 18,
+      "seq": 19,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -720,13 +722,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 18,
+      "request_seq": 19,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 19,
+      "seq": 20,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -743,20 +745,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 19,
+      "request_seq": 20,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -767,7 +769,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 20,
+      "seq": 21,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -782,13 +784,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 20,
+      "request_seq": 21,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 21,
+      "seq": 22,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -805,20 +807,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 21,
+      "request_seq": 22,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -829,7 +831,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 22,
+      "seq": 23,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -846,20 +848,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 22,
+      "request_seq": 23,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -870,7 +872,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 23,
+      "seq": 24,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -885,13 +887,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 23,
+      "request_seq": 24,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 24,
+      "seq": 25,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -908,20 +910,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 24,
+      "request_seq": 25,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -932,7 +934,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 25,
+      "seq": 26,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -949,20 +951,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 25,
+      "request_seq": 26,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -973,7 +975,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 26,
+      "seq": 27,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -988,13 +990,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 26,
+      "request_seq": 27,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 27,
+      "seq": 28,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1011,20 +1013,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 27,
+      "request_seq": 28,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -1035,7 +1037,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 28,
+      "seq": 29,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1050,13 +1052,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 28,
+      "request_seq": 29,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 29,
+      "seq": 30,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1073,20 +1075,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 29,
+      "request_seq": 30,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -1097,7 +1099,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 30,
+      "seq": 31,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1112,13 +1114,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 30,
+      "request_seq": 31,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 31,
+      "seq": 32,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1135,20 +1137,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 31,
+      "request_seq": 32,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -1159,7 +1161,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 32,
+      "seq": 33,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1174,13 +1176,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 32,
+      "request_seq": 33,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 33,
+      "seq": 34,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1197,20 +1199,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 33,
+      "request_seq": 34,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -1221,7 +1223,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 34,
+      "seq": 35,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1238,20 +1240,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 34,
+      "request_seq": 35,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -1262,7 +1264,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 35,
+      "seq": 36,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1277,13 +1279,13 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 35,
+      "request_seq": 36,
       "success": true,
       "body": []
     }
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 36,
+      "seq": 37,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1300,20 +1302,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 36,
+      "request_seq": 37,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -1324,7 +1326,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 37,
+      "seq": 38,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1341,20 +1343,20 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "change",
-      "request_seq": 37,
+      "request_seq": 38,
       "success": true
     }
 After Request
 ScriptInfos::
-/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.d.ts
+/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
-/lib.decorators.legacy.d.ts
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -1365,7 +1367,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 38,
+      "seq": 39,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/tsxIncrementalServer.ts",
@@ -1380,7 +1382,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "formatonkey",
-      "request_seq": 38,
+      "request_seq": 39,
       "success": true,
       "body": []
     }

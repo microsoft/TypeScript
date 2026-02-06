@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 const classesByRow: Record<string, object> = {};
 for (const row of ['1', '2', '3', '4', '5']) {
   class RowClass {

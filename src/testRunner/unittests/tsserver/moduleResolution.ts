@@ -1,28 +1,22 @@
 import * as ts from "../../_namespaces/ts.js";
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
-import {
-    getFsConentsForAlternateResultAtTypesPackageJson,
-    getFsContentsForAlternateResult,
-    getFsContentsForAlternateResultDts,
-    getFsContentsForAlternateResultPackageJson,
-} from "../helpers/alternateResult.js";
-import { libContent } from "../helpers/contents.js";
+import { verifyAlternateResultScenario } from "../helpers/alternateResult.js";
 import { solutionBuildWithBaseline } from "../helpers/solutionBuilder.js";
 import {
     baselineTsserverLogs,
+    forEachTscWatchEdit,
     openFilesForSession,
     protocolTextSpanFromSubstring,
     TestSession,
     verifyGetErrRequest,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: moduleResolution", () => {
+describe("unittests:: tsserver:: moduleResolution::", () => {
     describe("package json file is edited", () => {
         function setup(packageFileContents: string) {
             const configFile: File = {
@@ -54,7 +48,12 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                         }
                     `,
             };
-            const host = createServerHost([configFile, fileA, fileB, packageFile, { ...libFile, path: "/a/lib/lib.es2016.full.d.ts" }]);
+            const host = TestServerHost.createServerHost([
+                configFile,
+                fileA,
+                fileB,
+                packageFile,
+            ]);
             const session = new TestSession(host);
             openFilesForSession([fileA], session);
             return {
@@ -157,50 +156,20 @@ describe("unittests:: tsserver:: moduleResolution", () => {
         });
     });
 
-    it("alternateResult", () => {
-        const host = createServerHost(getFsContentsForAlternateResult());
-        const session = new TestSession(host);
-        openFilesForSession(["/home/src/projects/project/index.mts"], session);
-        verifyGetErrRequest({
-            files: ["/home/src/projects/project/index.mts"],
-            session,
-        });
-        host.deleteFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts");
-        verifyErrors();
-        host.deleteFile("/home/src/projects/project/node_modules/foo/index.d.ts");
-        verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar/index.d.ts", getFsContentsForAlternateResultDts("bar"));
-        verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo/index.d.ts", getFsContentsForAlternateResultDts("foo"));
-        verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar", /*addTypesCondition*/ true));
-        verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo/package.json", getFsContentsForAlternateResultPackageJson("foo", /*addTypes*/ true, /*addTypesCondition*/ true));
-        verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/package.json", getFsConentsForAlternateResultAtTypesPackageJson("bar2", /*addTypesCondition*/ false));
-        verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo2/package.json", getFsContentsForAlternateResultPackageJson("foo2", /*addTypes*/ true, /*addTypesCondition*/ false));
-        verifyErrors();
-        host.deleteFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts");
-        verifyErrors();
-        host.deleteFile("/home/src/projects/project/node_modules/foo2/index.d.ts");
-        verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/@types/bar2/index.d.ts", getFsContentsForAlternateResultDts("bar2"));
-        verifyErrors();
-        host.writeFile("/home/src/projects/project/node_modules/foo2/index.d.ts", getFsContentsForAlternateResultDts("foo2"));
-        verifyErrors();
-
-        baselineTsserverLogs("moduleResolution", "alternateResult", session);
-
-        function verifyErrors() {
-            host.runQueuedTimeoutCallbacks();
-            host.runQueuedImmediateCallbacks();
-            verifyGetErrRequest({
-                files: ["/home/src/projects/project/index.mts"],
-                session,
+    verifyAlternateResultScenario(
+        /*forTsserver*/ true,
+        (scenario, getHost, edits) => {
+            it(scenario, () => {
+                const host = getHost();
+                const indexFile = "/home/src/projects/project/index.mts";
+                const session = new TestSession(host);
+                openFilesForSession([indexFile], session);
+                verifyGetErrRequest({ files: [indexFile], session });
+                forEachTscWatchEdit(session, edits(), () => verifyGetErrRequest({ session, files: [indexFile] }));
+                baselineTsserverLogs("moduleResolution", scenario, session);
             });
-        }
-    });
+        },
+    );
 
     describe("using referenced project", () => {
         it("not built", () => {
@@ -214,7 +183,7 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                 import { FOO } from "package-a";
                 console.log(FOO);
             `;
-            const host = createServerHost({
+            const host = TestServerHost.createServerHost({
                 "/home/src/projects/project/packages/package-a/package.json": getPackageJson("package-a"),
                 "/home/src/projects/project/packages/package-a/tsconfig.json": getTsConfig(),
                 "/home/src/projects/project/packages/package-a/src/index.ts": `export * from "./subfolder";`,
@@ -224,10 +193,9 @@ describe("unittests:: tsserver:: moduleResolution", () => {
                 "/home/src/projects/project/packages/package-b/src/index.ts": indexContent,
                 "/home/src/projects/project/node_modules/package-a": { symLink: "/home/src/projects/project/packages/package-a" },
                 "/home/src/projects/project/node_modules/package-b": { symLink: "/home/src/projects/project/packages/package-b" },
-                "/a/lib/lib.es2021.d.ts": libContent,
-            }, { currentDirectory: "/home/src/projects/project" });
+            });
             if (built) {
-                solutionBuildWithBaseline(host, ["packages/package-b"]);
+                solutionBuildWithBaseline(host, ["/home/src/projects/project/packages/package-b"]);
                 host.clearOutput();
             }
             const session = new TestSession(host);

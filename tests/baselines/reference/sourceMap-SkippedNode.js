@@ -8,6 +8,7 @@ try {
 }
 
 //// [sourceMap-SkippedNode.js]
+"use strict";
 try {
     // ...
 }

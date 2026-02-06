@@ -15,6 +15,7 @@ function SFC<T>(props: Record<string, T>) {
 
 
 //// [file.jsx]
+"use strict";
 function SFC(props) {
     return '';
 }

@@ -11,41 +11,40 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
 const packageJson: File = {
-    path: "/package.json",
+    path: "/home/src/projects/project/package.json",
     content: `{ "dependencies": { "mobx": "*" } }`,
 };
 const aTs: File = {
-    path: "/a.ts",
+    path: "/home/src/projects/project/a.ts",
     content: "export const foo = 0;",
 };
 const bTs: File = {
-    path: "/b.ts",
+    path: "/home/src/projects/project/b.ts",
     content: "foo",
 };
 const tsconfig: File = {
-    path: "/tsconfig.json",
+    path: "/home/src/projects/project/tsconfig.json",
     content: "{}",
 };
 const ambientDeclaration: File = {
-    path: "/ambient.d.ts",
+    path: "/home/src/projects/project/ambient.d.ts",
     content: "declare module 'ambient' {}",
 };
 const mobxPackageJson: File = {
-    path: "/node_modules/mobx/package.json",
+    path: "/home/src/projects/project/node_modules/mobx/package.json",
     content: jsonToReadableText({ name: "mobx", version: "1.0.0" }),
 };
 const mobxDts: File = {
-    path: "/node_modules/mobx/index.d.ts",
+    path: "/home/src/projects/project/node_modules/mobx/index.d.ts",
     content: "export declare function observable(): unknown;",
 };
 const exportEqualsMappedType: File = {
-    path: "/lib/foo/constants.d.ts",
+    path: "/home/src/projects/project/lib/foo/constants.d.ts",
     content: `
             type Signals = "SIGINT" | "SIGABRT";
             declare const exp: {} & { [K in Signals]: K };
@@ -64,7 +63,7 @@ describe("unittests:: tsserver:: exportMapCache::", () => {
 
     it("invalidates the cache when new files are added", () => {
         const { host, exportMapCache, session } = setup();
-        host.writeFile("/src/a2.ts", aTs.content);
+        host.writeFile("/home/src/projects/project/src/a2.ts", aTs.content);
         host.runQueuedTimeoutCallbacks();
         assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
         assert.ok(exportMapCache.isEmpty());
@@ -83,7 +82,7 @@ describe("unittests:: tsserver:: exportMapCache::", () => {
 
     it("does not invalidate the cache when package.json is changed inconsequentially", () => {
         const { host, exportMapCache, project, session } = setup();
-        host.writeFile("/package.json", `{ "name": "blah", "dependencies": { "mobx": "*" } }`);
+        host.writeFile("/home/src/projects/project/package.json", `{ "name": "blah", "dependencies": { "mobx": "*" } }`);
         host.runQueuedTimeoutCallbacks();
         project.getPackageJsonAutoImportProvider();
         assert.ok(exportMapCache.isUsableByFile(bTs.path as ts.Path));
@@ -94,7 +93,7 @@ describe("unittests:: tsserver:: exportMapCache::", () => {
 
     it("invalidates the cache when package.json change results in AutoImportProvider change", () => {
         const { host, exportMapCache, project, session } = setup();
-        host.writeFile("/package.json", `{}`);
+        host.writeFile("/home/src/projects/project/package.json", `{}`);
         host.runQueuedTimeoutCallbacks();
         project.getPackageJsonAutoImportProvider();
         assert.ok(!exportMapCache.isUsableByFile(bTs.path as ts.Path));
@@ -149,7 +148,7 @@ describe("unittests:: tsserver:: exportMapCache::", () => {
 
     it("invalidates the cache when a file is opened with different contents", () => {
         const utilsTs: File = {
-            path: "/utils.ts",
+            path: "/home/src/projects/project/utils.ts",
             content: `export class Element {
                 // ...
             }
@@ -159,14 +158,14 @@ describe("unittests:: tsserver:: exportMapCache::", () => {
             }`,
         };
         const classesTs: File = {
-            path: "/classes.ts",
+            path: "/home/src/projects/project/classes.ts",
             content: `import { Component } from "./utils.js";
 
             export class MyComponent extends Component {
                 render/**/
             }`,
         };
-        const host = createServerHost([utilsTs, classesTs, tsconfig]);
+        const host = TestServerHost.createServerHost([utilsTs, classesTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([classesTs], session);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
@@ -234,7 +233,7 @@ describe("unittests:: tsserver:: exportMapCache::", () => {
 
 describe("unittests:: tsserver:: exportMapCache:: project references", () => {
     const libTsconfig: File = {
-        path: "/packages/lib/tsconfig.json",
+        path: "/home/src/projects/project/packages/lib/tsconfig.json",
         content: jsonToReadableText({
             compilerOptions: {
                 composite: true,
@@ -244,12 +243,12 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
     };
 
     const libIndex: File = {
-        path: "/packages/lib/index.ts",
+        path: "/home/src/projects/project/packages/lib/index.ts",
         content: `export const foo = 0;`,
     };
 
     const appTsconfig: File = {
-        path: "/packages/app/tsconfig.json",
+        path: "/home/src/projects/project/packages/app/tsconfig.json",
         content: jsonToReadableText({
             compilerOptions: {
                 composite: true,
@@ -265,15 +264,15 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
     };
 
     const appIndex: File = {
-        path: "/packages/app/index.ts",
+        path: "/home/src/projects/project/packages/app/index.ts",
         content: `foo`,
     };
 
     function verifyReferences(includesLib: boolean) {
-        const files = [libTsconfig, libIndex, appTsconfig, appIndex, libFile];
+        const files = [libTsconfig, libIndex, appTsconfig, appIndex];
         if (includesLib) {
             files.push({
-                path: "/packages/app/other.ts",
+                path: "/home/src/projects/project/packages/app/other.ts",
                 content: `import { foo } from "../lib";`,
             });
         }
@@ -346,7 +345,7 @@ describe("unittests:: tsserver:: exportMapCache:: project references", () => {
 
 function createSetup(files: readonly File[], openFiles: readonly File[], completionRequestLocation: protocol.FileLocationRequestArgs) {
     return () => {
-        const host = createServerHost(files);
+        const host = TestServerHost.createServerHost(files);
         const session = new TestSession(host);
         session.executeCommandSeq<ts.server.protocol.ConfigureRequest>({
             command: ts.server.protocol.CommandTypes.Configure,

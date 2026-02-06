@@ -13,6 +13,7 @@ else {
 }
 
 //// [symbolType17.js]
+"use strict";
 var x;
 x;
 if (typeof x === "symbol") {

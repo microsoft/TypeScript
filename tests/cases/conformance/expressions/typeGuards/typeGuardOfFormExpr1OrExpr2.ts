@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 var str: string;
 var bool: boolean;
 var num: number;

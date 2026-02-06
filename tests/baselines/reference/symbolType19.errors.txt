@@ -1,0 +1,22 @@
+symbolType19.ts(4,1): error TS2454: Variable 'x' is used before being assigned.
+symbolType19.ts(5,12): error TS2454: Variable 'x' is used before being assigned.
+symbolType19.ts(9,5): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== symbolType19.ts (3 errors) ====
+    enum E { }
+    var x: symbol | E;
+    
+    x;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    if (typeof x === "number") {
+               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+        x;
+    }
+    else {
+        x;
+        ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    }

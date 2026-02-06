@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/logger.ts]
 export class logger { }
@@ -13,8 +13,7 @@ import { logger } from "./logger"; new logger();
   }
 }
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -25,9 +24,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
+/home/src/tslibs/TS/Lib/tsc.js --w --p /user/username/projects/myproject/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -36,34 +37,21 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/logger.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.logger = void 0;
-var logger = /** @class */ (function () {
-    function logger() {
-    }
-    return logger;
-}());
-exports.logger = logger;
+export class logger {
+}
 
 
 //// [/user/username/projects/myproject/another.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var logger_1 = require("./logger");
-new logger_1.logger();
+import { logger } from "./logger";
+new logger();
 
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/another.ts: *new*
   {}
@@ -88,17 +76,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/logger.ts
 /user/username/projects/myproject/another.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/logger.ts
 /user/username/projects/myproject/another.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/logger.ts (used version)
 /user/username/projects/myproject/another.ts (used version)
 
@@ -123,7 +111,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96muser/username/projects/myproject/another.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/Logger.ts' differs from file name '/user/username/projects/myproject/logger.ts' only in casing.
+[96manother.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS1261: [0mAlready included file name '/user/username/projects/myproject/Logger.ts' differs from file name '/user/username/projects/myproject/logger.ts' only in casing.
   The file is in the program because:
     Imported via "./Logger" from file '/user/username/projects/myproject/another.ts'
     Matched by default include pattern '**/*'
@@ -136,10 +124,8 @@ Output::
 
 
 //// [/user/username/projects/myproject/another.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var Logger_1 = require("./Logger");
-new Logger_1.logger();
+import { logger } from "./Logger";
+new logger();
 
 
 
@@ -156,7 +142,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/Logger.ts
 /user/username/projects/myproject/another.ts
 

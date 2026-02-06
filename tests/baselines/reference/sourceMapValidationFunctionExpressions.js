@@ -10,11 +10,12 @@ greet("Hello");
 var incrGreetings = () => greetings++;
 
 //// [sourceMapValidationFunctionExpressions.js]
+"use strict";
 var greetings = 0;
-var greet = function (greeting) {
+var greet = (greeting) => {
     greetings++;
     return greetings;
 };
 greet("Hello");
-var incrGreetings = function () { return greetings++; };
+var incrGreetings = () => greetings++;
 //# sourceMappingURL=sourceMapValidationFunctionExpressions.js.map

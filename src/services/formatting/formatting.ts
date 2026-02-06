@@ -1377,7 +1377,7 @@ export function getRangeOfEnclosingComment(
     sourceFile: SourceFile,
     position: number,
     precedingToken?: Node | null, // eslint-disable-line no-restricted-syntax
-    tokenAtPosition = getTokenAtPosition(sourceFile, position),
+    tokenAtPosition: Node = getTokenAtPosition(sourceFile, position),
 ): CommentRange | undefined {
     const jsdoc = findAncestor(tokenAtPosition, isJSDoc);
     if (jsdoc) tokenAtPosition = jsdoc.parent;

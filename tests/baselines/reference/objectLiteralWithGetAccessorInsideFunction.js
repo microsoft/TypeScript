@@ -11,6 +11,7 @@ function bar() {
 }
 
 //// [objectLiteralWithGetAccessorInsideFunction.js]
+"use strict";
 function bar() {
     var x = {
         get _extraOccluded() {

@@ -5,7 +5,7 @@ function f1() {
     type A = [s: string];
     type C = [...A, ...A];
 
-    return function fn(...args: C) { }
+    return function fn(...args: C) { } satisfies any
 }
 
 function f2() {
@@ -14,26 +14,17 @@ function f2() {
     type C = [c: string];
     type D = [...A, ...A, ...B, ...A, ...B, ...B, ...A, ...C];
 
-    return function fn(...args: D) { }
+    return function fn(...args: D) { } satisfies any;
 }
 
 
 //// [spreadParameterTupleType.js]
+"use strict";
 function f1() {
-    return function fn() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-    };
+    return function fn(...args) { };
 }
 function f2() {
-    return function fn() {
-        var args = [];
-        for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i] = arguments[_i];
-        }
-    };
+    return function fn(...args) { };
 }
 
 

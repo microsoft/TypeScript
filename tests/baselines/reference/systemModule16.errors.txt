@@ -1,3 +1,4 @@
+error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 systemModule16.ts(1,20): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 systemModule16.ts(2,20): error TS2792: Cannot find module 'bar'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
 systemModule16.ts(3,15): error TS2792: Cannot find module 'foo'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
@@ -10,6 +11,7 @@ systemModule16.ts(10,1): error TS2695: Left side of comma operator is unused and
 systemModule16.ts(10,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
+!!! error TS5107: Option 'module=System' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 ==== systemModule16.ts (10 errors) ====
     import * as x from "foo";
                        ~~~~~

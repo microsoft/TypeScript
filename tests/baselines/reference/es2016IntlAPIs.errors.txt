@@ -1,0 +1,21 @@
+es2016IntlAPIs.ts(12,15): error TS18046: 'err' is of type 'unknown'.
+
+
+==== es2016IntlAPIs.ts (1 errors) ====
+    // Sample from
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/getCanonicalLocales
+    console.log(Intl.getCanonicalLocales('EN-US'));
+    // Expected output: Array ["en-US"]
+    
+    console.log(Intl.getCanonicalLocales(['EN-US', 'Fr']));
+    // Expected output: Array ["en-US", "fr"]
+    
+    try {
+      Intl.getCanonicalLocales('EN_US');
+    } catch (err) {
+      console.log(err.toString());
+                  ~~~
+!!! error TS18046: 'err' is of type 'unknown'.
+      // Expected output: RangeError: invalid language tag: EN_US
+    }
+    

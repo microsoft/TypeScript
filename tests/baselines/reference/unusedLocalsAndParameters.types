@@ -92,9 +92,9 @@ var E = class {
 
 var o = {
 >o : { method(a: any): void; x: number; }
->  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^
 >{    // Object literal method declaration paramter    method(a) {    },    // Accessor declaration paramter    set x(v: number) {    }} : { method(a: any): void; x: number; }
->                                                                                                                                        : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                        : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^
 
     // Object literal method declaration paramter
     method(a) {
@@ -115,14 +115,14 @@ var o = {
 
 o;
 >o : { method(a: any): void; x: number; }
->  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^
 
 // in a for..in statment
 for (let i in o) {
 >i : string
 >  : ^^^^^^
 >o : { method(a: any): void; x: number; }
->  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^      ^^^
 }
 
 // in a for..of statment

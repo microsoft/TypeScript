@@ -1,3 +1,4 @@
+// @target: es2015
 // when multiple best common types exist we will choose the first candidate
 
 var a: { x: number; y?: number };

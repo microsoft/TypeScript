@@ -8,10 +8,10 @@ let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;
 >                                                : ^^^^^^
 
 let result = re.exec("2015-01-02");
->result : RegExpExecArray
->       : ^^^^^^^^^^^^^^^
->re.exec("2015-01-02") : RegExpExecArray
->                      : ^^^^^^^^^^^^^^^
+>result : RegExpExecArray | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>re.exec("2015-01-02") : RegExpExecArray | null
+>                      : ^^^^^^^^^^^^^^^^^^^^^^
 >re.exec : (string: string) => RegExpExecArray | null
 >        : ^      ^^      ^^^^^                      
 >re : RegExp
@@ -26,8 +26,8 @@ let date = result[0];
 >     : ^^^^^^
 >result[0] : string
 >          : ^^^^^^
->result : RegExpExecArray
->       : ^^^^^^^^^^^^^^^
+>result : RegExpExecArray | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
@@ -36,12 +36,12 @@ let year1 = result.groups.year;
 >      : ^^^^^^
 >result.groups.year : string
 >                   : ^^^^^^
->result.groups : { [key: string]: string; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->result : RegExpExecArray
->       : ^^^^^^^^^^^^^^^
->groups : { [key: string]: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result.groups : { [key: string]: string; } | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result : RegExpExecArray | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>groups : { [key: string]: string; } | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >year : string
 >     : ^^^^^^
 
@@ -50,8 +50,8 @@ let year2 = result[1];
 >      : ^^^^^^
 >result[1] : string
 >          : ^^^^^^
->result : RegExpExecArray
->       : ^^^^^^^^^^^^^^^
+>result : RegExpExecArray | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -60,12 +60,12 @@ let month1 = result.groups.month;
 >       : ^^^^^^
 >result.groups.month : string
 >                    : ^^^^^^
->result.groups : { [key: string]: string; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->result : RegExpExecArray
->       : ^^^^^^^^^^^^^^^
->groups : { [key: string]: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result.groups : { [key: string]: string; } | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result : RegExpExecArray | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>groups : { [key: string]: string; } | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >month : string
 >      : ^^^^^^
 
@@ -74,8 +74,8 @@ let month2 = result[2];
 >       : ^^^^^^
 >result[2] : string
 >          : ^^^^^^
->result : RegExpExecArray
->       : ^^^^^^^^^^^^^^^
+>result : RegExpExecArray | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >2 : 2
 >  : ^
 
@@ -84,12 +84,12 @@ let day1 = result.groups.day;
 >     : ^^^^^^
 >result.groups.day : string
 >                  : ^^^^^^
->result.groups : { [key: string]: string; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->result : RegExpExecArray
->       : ^^^^^^^^^^^^^^^
->groups : { [key: string]: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result.groups : { [key: string]: string; } | undefined
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result : RegExpExecArray | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^
+>groups : { [key: string]: string; } | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >day : string
 >    : ^^^^^^
 
@@ -98,8 +98,8 @@ let day2 = result[3];
 >     : ^^^^^^
 >result[3] : string
 >          : ^^^^^^
->result : RegExpExecArray
->       : ^^^^^^^^^^^^^^^
+>result : RegExpExecArray | null
+>       : ^^^^^^^^^^^^^^^^^^^^^^
 >3 : 3
 >  : ^
 
@@ -108,12 +108,12 @@ let foo = "foo".match(/(?<bar>foo)/)!.groups.foo;
 >    : ^^^^^^
 >"foo".match(/(?<bar>foo)/)!.groups.foo : string
 >                                       : ^^^^^^
->"foo".match(/(?<bar>foo)/)!.groups : { [key: string]: string; }
->                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"foo".match(/(?<bar>foo)/)!.groups : { [key: string]: string; } | undefined
+>                                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"foo".match(/(?<bar>foo)/)! : RegExpMatchArray
 >                            : ^^^^^^^^^^^^^^^^
->"foo".match(/(?<bar>foo)/) : RegExpMatchArray
->                           : ^^^^^^^^^^^^^^^^
+>"foo".match(/(?<bar>foo)/) : RegExpMatchArray | null
+>                           : ^^^^^^^^^^^^^^^^^^^^^^^
 >"foo".match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
 >            : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >"foo" : "foo"
@@ -122,8 +122,8 @@ let foo = "foo".match(/(?<bar>foo)/)!.groups.foo;
 >      : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >/(?<bar>foo)/ : RegExp
 >              : ^^^^^^
->groups : { [key: string]: string; }
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>groups : { [key: string]: string; } | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
 

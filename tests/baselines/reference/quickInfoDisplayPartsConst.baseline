@@ -23,7 +23,7 @@
 // | ----------------------------------------------------------------------
 //     }
 // }
-// module m {
+// namespace m {
 //     const c = 10;
 //           ^
 // | ----------------------------------------------------------------------
@@ -267,14 +267,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
-      "position": 113,
+      "position": 116,
       "name": "5"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 113,
+        "start": 116,
         "length": 1
       },
       "displayParts": [
@@ -309,14 +309,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
-      "position": 138,
+      "position": 141,
       "name": "6"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "export",
       "textSpan": {
-        "start": 138,
+        "start": 141,
         "length": 1
       },
       "displayParts": [
@@ -359,14 +359,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
-      "position": 173,
+      "position": 176,
       "name": "7"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 173,
+        "start": 176,
         "length": 1
       },
       "displayParts": [
@@ -401,14 +401,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
-      "position": 195,
+      "position": 198,
       "name": "8"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 195,
+        "start": 198,
         "length": 1
       },
       "displayParts": [
@@ -463,14 +463,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
-      "position": 229,
+      "position": 232,
       "name": "9"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 229,
+        "start": 232,
         "length": 1
       },
       "displayParts": [
@@ -525,70 +525,8 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
-      "position": 233,
-      "name": "10"
-    },
-    "item": {
-      "kind": "const",
-      "kindModifiers": "",
-      "textSpan": {
-        "start": 233,
-        "length": 1
-      },
-      "displayParts": [
-        {
-          "text": "const",
-          "kind": "keyword"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "f",
-          "kind": "localName"
-        },
-        {
-          "text": ":",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "(",
-          "kind": "punctuation"
-        },
-        {
-          "text": ")",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "=>",
-          "kind": "punctuation"
-        },
-        {
-          "text": " ",
-          "kind": "space"
-        },
-        {
-          "text": "number",
-          "kind": "keyword"
-        }
-      ],
-      "documentation": []
-    }
-  },
-  {
-    "marker": {
-      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
       "position": 236,
-      "name": "11"
+      "name": "10"
     },
     "item": {
       "kind": "const",
@@ -649,14 +587,76 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
-      "position": 247,
+      "position": 239,
+      "name": "11"
+    },
+    "item": {
+      "kind": "const",
+      "kindModifiers": "",
+      "textSpan": {
+        "start": 239,
+        "length": 1
+      },
+      "displayParts": [
+        {
+          "text": "const",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "f",
+          "kind": "localName"
+        },
+        {
+          "text": ":",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "(",
+          "kind": "punctuation"
+        },
+        {
+          "text": ")",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "=>",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "number",
+          "kind": "keyword"
+        }
+      ],
+      "documentation": []
+    }
+  },
+  {
+    "marker": {
+      "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
+      "position": 250,
       "name": "12"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 247,
+        "start": 250,
         "length": 1
       },
       "displayParts": [
@@ -795,14 +795,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
-      "position": 312,
+      "position": 315,
       "name": "13"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 312,
+        "start": 315,
         "length": 1
       },
       "displayParts": [
@@ -941,14 +941,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
-      "position": 316,
+      "position": 319,
       "name": "14"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 316,
+        "start": 319,
         "length": 1
       },
       "displayParts": [
@@ -1087,14 +1087,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
-      "position": 319,
+      "position": 322,
       "name": "15"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 319,
+        "start": 322,
         "length": 1
       },
       "displayParts": [
@@ -1193,14 +1193,14 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoDisplayPartsConst.ts",
-      "position": 326,
+      "position": 329,
       "name": "16"
     },
     "item": {
       "kind": "const",
       "kindModifiers": "",
       "textSpan": {
-        "start": 326,
+        "start": 329,
         "length": 1
       },
       "displayParts": [

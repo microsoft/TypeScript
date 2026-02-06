@@ -1019,11 +1019,11 @@ import * as ast from "./ast";
 
 export const isNodeOfType =
 >isNodeOfType : <NodeType extends ast.SyntaxKind>(nodeType: NodeType) => (node: ast.Node | null | undefined) => node is Extract<ast.Node, { kind: NodeType; }>
->             : ^        ^^^^^^^^^              ^^        ^^        ^^^^^^    ^^                           ^^^^^                                              
+>             : ^        ^^^^^^^^^              ^^        ^^        ^^^^^^                                 ^^^^^                                              
 
   <NodeType extends ast.SyntaxKind>(nodeType: NodeType) =>
 ><NodeType extends ast.SyntaxKind>(nodeType: NodeType) =>  (    node: ast.Node | null | undefined,  ): node is Extract<ast.Node, { kind: NodeType }> =>    node?.kind === nodeType : <NodeType extends ast.SyntaxKind>(nodeType: NodeType) => (node: ast.Node | null | undefined) => node is Extract<ast.Node, { kind: NodeType; }>
->                                                                                                                                                                                  : ^        ^^^^^^^^^              ^^        ^^        ^^^^^^    ^^                           ^^^^^                                              
+>                                                                                                                                                                                  : ^        ^^^^^^^^^              ^^        ^^        ^^^^^^                                 ^^^^^                                              
 >ast : any
 >    : ^^^
 >nodeType : NodeType

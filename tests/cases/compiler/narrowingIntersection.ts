@@ -1,3 +1,4 @@
+// @target: es2015
 // Somehow this being an intersection matters.
 type FooAndBaz = { foo: unknown } & { baz: unknown };
 

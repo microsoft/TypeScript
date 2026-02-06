@@ -1,6 +1,7 @@
+// @target: es2015
 //@module: commonjs
 // @sourcemap: true
-export module m {
+export namespace m {
     export class c {
     }
 }

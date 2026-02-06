@@ -1,7 +1,8 @@
+// @target: es2015
 abstract class CM {}
-module CM {}
+namespace CM {}
 
-module MC {}
+namespace MC {}
 abstract class MC {}
 
 abstract class CI {}

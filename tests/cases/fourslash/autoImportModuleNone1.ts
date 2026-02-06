@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 // @module: none
-// @moduleResolution: node10
+// @moduleResolution: bundler
 // @target: es5
 
 // @Filename: /node_modules/dep/index.d.ts

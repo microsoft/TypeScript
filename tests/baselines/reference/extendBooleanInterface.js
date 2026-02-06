@@ -13,6 +13,7 @@ var c: string = x['doStuff']();
 var d: string = x['doOtherStuff']('hm');
 
 //// [extendBooleanInterface.js]
+"use strict";
 var x = true;
 var a = x.doStuff();
 var b = x.doOtherStuff('hm');

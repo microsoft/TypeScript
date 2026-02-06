@@ -19,6 +19,7 @@ import {
     hasJSFileExtension,
     mapDefined,
     MapLike,
+    nodeCoreModules,
     normalizePath,
     Path,
     readConfigFile,
@@ -27,6 +28,7 @@ import {
     some,
     toFileNameLowerCase,
     TypeAcquisition,
+    usesWildcardTypes,
     Version,
     versionMajorMinor,
 } from "./_namespaces/ts.js";
@@ -56,71 +58,13 @@ export interface CachedTyping {
 }
 
 /** @internal */
-export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
+export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>): boolean {
     const availableVersion = new Version(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
     return availableVersion.compareTo(cachedTyping.version) <= 0;
 }
 
-const unprefixedNodeCoreModuleList = [
-    "assert",
-    "assert/strict",
-    "async_hooks",
-    "buffer",
-    "child_process",
-    "cluster",
-    "console",
-    "constants",
-    "crypto",
-    "dgram",
-    "diagnostics_channel",
-    "dns",
-    "dns/promises",
-    "domain",
-    "events",
-    "fs",
-    "fs/promises",
-    "http",
-    "https",
-    "http2",
-    "inspector",
-    "module",
-    "net",
-    "os",
-    "path",
-    "perf_hooks",
-    "process",
-    "punycode",
-    "querystring",
-    "readline",
-    "repl",
-    "stream",
-    "stream/promises",
-    "string_decoder",
-    "timers",
-    "timers/promises",
-    "tls",
-    "trace_events",
-    "tty",
-    "url",
-    "util",
-    "util/types",
-    "v8",
-    "vm",
-    "wasi",
-    "worker_threads",
-    "zlib",
-];
-
-const prefixedNodeCoreModuleList = unprefixedNodeCoreModuleList.map(name => `node:${name}`);
-
 /** @internal */
-export const nodeCoreModuleList: readonly string[] = [...unprefixedNodeCoreModuleList, ...prefixedNodeCoreModuleList];
-
-/** @internal */
-export const nodeCoreModules = new Set(nodeCoreModuleList);
-
-/** @internal */
-export function nonRelativeModuleNameForTypingCache(moduleName: string) {
+export function nonRelativeModuleNameForTypingCache(moduleName: string): string {
     return nodeCoreModules.has(moduleName) ? "node" : moduleName;
 }
 
@@ -190,7 +134,7 @@ export function discoverTypings(
     const exclude = typeAcquisition.exclude || [];
 
     // Directories to search for package.json, bower.json and other typing information
-    if (!compilerOptions.types) {
+    if (!compilerOptions.types || usesWildcardTypes(compilerOptions)) {
         const possibleSearchDirs = new Set(fileNames.map(getDirectoryPath));
         possibleSearchDirs.add(projectRootPath);
         possibleSearchDirs.forEach(searchDir => {

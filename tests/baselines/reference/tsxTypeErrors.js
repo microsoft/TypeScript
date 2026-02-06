@@ -36,6 +36,7 @@ var b2 = <MyClass pt={{x: 4, y: 'oops'}} />;
 
 
 //// [tsxTypeErrors.jsx]
+"use strict";
 // A built-in element (OK)
 var a1 = <div id="foo"/>;
 // A built-in element with a mistyped property (error)
@@ -46,11 +47,8 @@ var a3 = <div id={thing}/>;
 // Mistyped html name (error)
 var e1 = <imag src="bar.jpg"/>;
 // A custom type
-var MyClass = /** @class */ (function () {
-    function MyClass() {
-    }
-    return MyClass;
-}());
+class MyClass {
+}
 // Let's use it
 // TODO: Error on missing 'reqd'
 var b1 = <MyClass reqd={true}/>;

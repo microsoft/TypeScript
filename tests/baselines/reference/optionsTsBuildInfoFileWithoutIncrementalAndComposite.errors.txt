@@ -1,7 +1,0 @@
-error TS5111: Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.
-
-
-!!! error TS5111: Option 'tsBuildInfoFile' cannot be specified without specifying option 'incremental' or 'composite' or if not running 'tsc -b'.
-==== optionsTsBuildInfoFileWithoutIncrementalAndComposite.ts (0 errors) ====
-    const x = "Hello World";
-    

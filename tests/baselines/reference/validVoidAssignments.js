@@ -9,6 +9,7 @@ x = y;
 x = z;
 
 //// [validVoidAssignments.js]
+"use strict";
 var x;
 var y;
 var z;

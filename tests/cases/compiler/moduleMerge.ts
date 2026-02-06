@@ -1,6 +1,7 @@
+// @target: es2015
 // This should not compile both B classes are in the same module this should be a collission
 
-module A
+namespace A
 {
     class B
     {
@@ -11,7 +12,7 @@ module A
     }
 }
 
-module A
+namespace A
 {
     export class B
     {

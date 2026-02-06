@@ -70,10 +70,10 @@ const fn2 =
    * @param {number} [b]
    */
   function self(a, b) {
->function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: string, b?: number | undefined) => void
->                                                                                        : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->self : (a: string, b?: number | undefined) => void
->     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function self(a, b) {    acceptNum(b); // error    self("");    self("", undefined);  } : (a: string, b?: number) => void
+>                                                                                        : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
+>self : (a: string, b?: number) => void
+>     : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
 >b : number | undefined
@@ -90,16 +90,16 @@ const fn2 =
     self("");
 >self("") : void
 >         : ^^^^
->self : (a: string, b?: number | undefined) => void
->     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>self : (a: string, b?: number) => void
+>     : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
 >"" : ""
 >   : ^^
 
     self("", undefined);
 >self("", undefined) : void
 >                    : ^^^^
->self : (a: string, b?: number | undefined) => void
->     : ^ ^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>self : (a: string, b?: number) => void
+>     : ^ ^^^^^^^^^^ ^^^      ^^^^^^^^^
 >"" : ""
 >   : ^^
 >undefined : undefined

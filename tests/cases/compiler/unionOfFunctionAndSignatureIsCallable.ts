@@ -1,3 +1,4 @@
+// @target: es2015
 function f1(c1: Function, c2: () => object,  callable: typeof c1 | typeof c2) {
     const a = c1();
     const b = c2();

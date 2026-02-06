@@ -1,5 +1,8 @@
+// @module: commonjs
+// @target: es2015
 // @noImplicitReferences: true
 // @traceResolution: true
+// @noUncheckedSideEffectImports: false
 // This tests that a package.json "main" with an unexpected extension is ignored.
 
 // @Filename: /node_modules/normalize.css/normalize.css

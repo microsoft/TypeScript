@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // accessing any private outside the class is an error
 
 class C {

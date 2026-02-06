@@ -1,18 +1,5 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-
 //// [/user/username/projects/myproject/packages/B/package.json]
 {
   "main": "lib/index.js",
@@ -63,7 +50,22 @@ export function bar() { }
 
 //// [/user/username/projects/myproject/node_modules/b] symlink(/user/username/projects/myproject/packages/B)
 
-/a/lib/tsc.js --w --p /user/username/projects/myproject/packages/A/tsconfig.json
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+
+/home/src/tslibs/TS/Lib/tsc.js --w --p /user/username/projects/myproject/packages/A/tsconfig.json
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -72,13 +74,13 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/packages/A/lib/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var b_1 = require("b");
-var bar_1 = require("b/lib/bar");
-(0, b_1.foo)();
-(0, bar_1.bar)();
+import { foo } from 'b';
+import { bar } from 'b/lib/bar';
+foo();
+bar();
 
 
 //// [/user/username/projects/myproject/packages/A/lib/index.d.ts]
@@ -86,12 +88,12 @@ export {};
 
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../../a/lib/lib.d.ts","../b/src/index.ts","../b/src/bar.ts","./src/index.ts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"3563314629-import { foo } from 'b';\nimport { bar } from 'b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[[4,1]],"latestChangedDtsFile":"./lib/index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","../b/src/index.ts","../b/src/bar.ts","./src/index.ts"],"fileIdsList":[[2,3]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"4646078106-export function foo() { }","1045484683-export function bar() { }",{"version":"3563314629-import { foo } from 'b';\nimport { bar } from 'b/lib/bar';\nfoo();\nbar();\n","signature":"-3531856636-export {};\n"}],"root":[4],"options":{"composite":true,"outDir":"./lib","rootDir":"./src"},"referencedMap":[[4,1]],"latestChangedDtsFile":"./lib/index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/myproject/packages/A/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../../a/lib/lib.d.ts",
+    "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "../b/src/index.ts",
     "../b/src/bar.ts",
     "./src/index.ts"
@@ -103,13 +105,13 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../../../../../a/lib/lib.d.ts": {
+    "../../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../b/src/index.ts": {
@@ -148,26 +150,26 @@ export {};
   },
   "latestChangedDtsFile": "./lib/index.d.ts",
   "version": "FakeTSVersion",
-  "size": 926
+  "size": 995
 }
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/packages/A/node_modules: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/packages/A/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/packages/node_modules: *new*
   {"pollingInterval":500}
-/user/username/projects/myproject/packages/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+  {}
+/user/username/projects: *new*
+  {}
+/user/username/projects/myproject: *new*
+  {}
+/user/username/projects/myproject/packages: *new*
+  {}
+/user/username/projects/myproject/packages/A: *new*
   {}
 /user/username/projects/myproject/packages/A/src/index.ts: *new*
   {}
@@ -192,6 +194,9 @@ FsWatchesRecursive::
 /user/username/projects/myproject/packages/B/src: *new*
   {}
 
+Timeout callback:: count: 1
+2: timerToInvalidateFailedLookupResolutions *new*
+
 Program root files: [
   "/user/username/projects/myproject/packages/A/src/index.ts"
 ]
@@ -203,19 +208,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/packages/B/src/index.ts
 /user/username/projects/myproject/packages/B/src/bar.ts
 /user/username/projects/myproject/packages/A/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/packages/B/src/index.ts
 /user/username/projects/myproject/packages/B/src/bar.ts
 /user/username/projects/myproject/packages/A/src/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/packages/b/src/index.ts (used version)
 /user/username/projects/myproject/packages/b/src/bar.ts (used version)
 /user/username/projects/myproject/packages/a/src/index.ts (computed .d.ts during emit)

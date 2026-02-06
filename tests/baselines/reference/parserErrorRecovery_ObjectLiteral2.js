@@ -5,4 +5,6 @@ var v = { a
 return;
 
 //// [parserErrorRecovery_ObjectLiteral2.js]
-var v = { a: a, return:  };
+"use strict";
+var v = { a,
+    return:  };

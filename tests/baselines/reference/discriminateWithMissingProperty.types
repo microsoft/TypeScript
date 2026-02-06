@@ -24,8 +24,8 @@ type Arg = {
 
 } | {
     data: string | Uint8Array;
->data : string | Uint8Array
->     : ^^^^^^^^^^^^^^^^^^^
+>data : string | Uint8Array<ArrayBuffer>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 declare function foo(arg: Arg): void;
@@ -39,16 +39,16 @@ foo({ mode: "numeric", data: new Uint8Array([30]) }); // Should error
 >                                                     : ^^^^
 >foo : (arg: Arg) => void
 >    : ^   ^^   ^^^^^    
->{ mode: "numeric", data: new Uint8Array([30]) } : { mode: "numeric"; data: Uint8Array; }
->                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ mode: "numeric", data: new Uint8Array([30]) } : { mode: "numeric"; data: Uint8Array<ArrayBuffer>; }
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >mode : "numeric"
 >     : ^^^^^^^^^
 >"numeric" : "numeric"
 >          : ^^^^^^^^^
->data : Uint8Array
->     : ^^^^^^^^^^
->new Uint8Array([30]) : Uint8Array
->                     : ^^^^^^^^^^
+>data : Uint8Array<ArrayBuffer>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>new Uint8Array([30]) : Uint8Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^
 >Uint8Array : Uint8ArrayConstructor
 >           : ^^^^^^^^^^^^^^^^^^^^^
 >[30] : number[]

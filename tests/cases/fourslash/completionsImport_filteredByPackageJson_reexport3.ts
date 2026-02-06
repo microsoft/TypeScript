@@ -36,7 +36,7 @@ verify.completions({
     completion.undefinedVarEntry,
     {
       name: "foo",
-      source: "/node_modules/b/index",
+      source: "b",
       hasAction: true,
       sortText: completion.SortText.AutoImportSuggestions
     },

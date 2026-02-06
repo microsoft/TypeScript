@@ -1,41 +1,34 @@
 import { jsonToReadableText } from "../helpers.js";
-import { FsContents } from "../helpers/contents.js";
 import {
     TscWatchCompileChange,
     verifyTscWatch,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
-    libFile,
+    FileOrFolderOrSymLinkMap,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsc-watch:: Emit times and Error updates in builder after program changes", () => {
+describe("unittests:: tscWatch:: emitAndErrorUpdates:: Emit times and Error updates in builder after program changes", () => {
     const config: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
         content: `{}`,
     };
     interface VerifyEmitAndErrorUpdates {
         subScenario: string;
-        files: () => FsContents | readonly File[];
-        currentDirectory?: string;
+        files: () => FileOrFolderOrSymLinkMap | readonly File[];
         changes: TscWatchCompileChange[];
     }
     function verifyEmitAndErrorUpdates({
         subScenario,
         files,
-        currentDirectory,
         changes,
     }: VerifyEmitAndErrorUpdates) {
         verifyTscWatch({
             scenario: "emitAndErrorUpdates",
             subScenario: `default/${subScenario}`,
             commandLineArgs: ["--w"],
-            sys: () =>
-                createWatchedSystem(
-                    files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
@@ -44,11 +37,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `defaultAndD/${subScenario}`,
             commandLineArgs: ["--w", "--d"],
-            sys: () =>
-                createWatchedSystem(
-                    files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
@@ -57,11 +46,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `isolatedModules/${subScenario}`,
             commandLineArgs: ["--w", "--isolatedModules"],
-            sys: () =>
-                createWatchedSystem(
-                    files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
@@ -70,11 +55,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `isolatedModulesAndD/${subScenario}`,
             commandLineArgs: ["--w", "--isolatedModules", "--d"],
-            sys: () =>
-                createWatchedSystem(
-                    files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
@@ -83,11 +64,7 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `assumeChangesOnlyAffectDirectDependencies/${subScenario}`,
             commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies"],
-            sys: () =>
-                createWatchedSystem(
-                    files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
@@ -96,14 +73,17 @@ describe("unittests:: tsc-watch:: Emit times and Error updates in builder after 
             scenario: "emitAndErrorUpdates",
             subScenario: `assumeChangesOnlyAffectDirectDependenciesAndD/${subScenario}`,
             commandLineArgs: ["--w", "--assumeChangesOnlyAffectDirectDependencies", "--d"],
-            sys: () =>
-                createWatchedSystem(
-                    files(),
-                    { currentDirectory: currentDirectory || "/user/username/projects/myproject" },
-                ),
+            sys,
             edits: changes,
             baselineIncremental: true,
         });
+
+        function sys() {
+            return TestServerHost.createWatchedSystem(
+                files(),
+                { currentDirectory: "/user/username/projects/myproject" },
+            );
+        }
     }
 
     describe("deep import changes", () => {
@@ -118,7 +98,7 @@ console.log(b.c.d);`,
         function verifyDeepImportChange(subScenario: string, bFile: File, cFile: File) {
             verifyEmitAndErrorUpdates({
                 subScenario: `deepImportChanges/${subScenario}`,
-                files: () => [aFile, bFile, cFile, config, libFile],
+                files: () => [aFile, bFile, cFile, config],
                 changes: [
                     {
                         caption: "Rename property d to d2 of class C to initialize signatures",
@@ -226,7 +206,7 @@ getPoint().c.x;`,
         };
         verifyEmitAndErrorUpdates({
             subScenario: "file not exporting a deep multilevel import that changes",
-            files: () => [aFile, bFile, cFile, dFile, eFile, config, libFile],
+            files: () => [aFile, bFile, cFile, dFile, eFile, config],
             changes: [
                 {
                     caption: "Rename property x2 to x of interface Coords to initialize signatures",
@@ -297,7 +277,7 @@ export class Data {
         function verifyTransitiveExports(subScenario: string, files: readonly File[]) {
             verifyEmitAndErrorUpdates({
                 subScenario: `transitive exports/${subScenario}`,
-                files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files, config, libFile],
+                files: () => [lib1ToolsInterface, lib1ToolsPublic, app, lib2Public, lib1Public, ...files, config],
                 changes: [
                     {
                         caption: "Rename property title to title2 of interface ITest to initialize signatures",

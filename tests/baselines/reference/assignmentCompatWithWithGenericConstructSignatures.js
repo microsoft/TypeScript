@@ -4,3 +4,4 @@
 
 
 //// [assignmentCompatWithWithGenericConstructSignatures.js]
+"use strict";

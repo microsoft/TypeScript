@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @Filename:BaseClass.ts
 export type Constructor<T> = new (...args: any[]) => T;

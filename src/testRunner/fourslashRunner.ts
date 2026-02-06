@@ -26,16 +26,16 @@ export class FourSlashRunner extends RunnerBase {
         }
     }
 
-    public enumerateTestFiles() {
+    public enumerateTestFiles(): string[] {
         // see also: `enumerateTestFiles` in tests/webTestServer.ts
         return this.enumerateFiles(this.basePath, /\.ts/i, { recursive: false });
     }
 
-    public kind() {
+    public kind(): TestRunnerKind {
         return this.testSuiteName;
     }
 
-    public initializeTests() {
+    public initializeTests(): void {
         if (this.tests.length === 0) {
             this.tests = IO.enumerateTestFiles(this);
         }

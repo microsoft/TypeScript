@@ -223,8 +223,6 @@ t3 = [42,,true]
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
-> : undefined
-> : ^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -259,8 +257,6 @@ t4 = [42,,true];
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >42 : 42
 >   : ^^
-> : undefined
-> : ^^^^^^^^^
 >true : true
 >     : ^^^^
 
@@ -271,8 +267,6 @@ t4 = [,"hello", true];
 >   : ^^
 >[,"hello", true] : [undefined, string, true]
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >"hello" : "hello"
 >        : ^^^^^^^
 >true : true
@@ -285,10 +279,6 @@ t4 = [,,true];
 >   : ^^
 >[,,true] : [undefined, undefined, true]
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
-> : undefined
-> : ^^^^^^^^^
 >true : true
 >     : ^^^^
 

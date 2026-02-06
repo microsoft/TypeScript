@@ -1,11 +1,14 @@
-﻿// @filename: file.tsx
+﻿// @target: es2015
+// @filename: file.tsx
 // @jsx: preserve
-// @module: amd
-// @noLib: true
+// @module: commonjs
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
+// @lib: es5
+/// <reference path="/.lib/react.d.ts" />
 
 import React = require('react')
+
+declare function log(...args: any[]): void;
 
 export interface ClickableProps {
     children?: string;
@@ -31,13 +34,13 @@ export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
     return this._buildMainButton(props);
 }
 
-const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"
-const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
+const b0 = <MainButton {...{onClick: (k) => {log(k)}}} extra />;  // k has type "left" | "right"
+const b2 = <MainButton onClick={(k)=>{log(k)}} extra />;  // k has type "left" | "right"
 const b3 = <MainButton {...{goTo:"home"}} extra />;  // goTo has type"home" | "contact"
 const b4 = <MainButton goTo="home" extra />;  // goTo has type "home" | "contact"
 
 export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undefined }
-const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
+const c1 = <NoOverload  {...{onClick: (k) => {log(k)}}} extra />;  // k has type any
 
 export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefined }
 const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" | "contact"

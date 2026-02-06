@@ -1,0 +1,40 @@
+hidingCallSignatures.ts(18,1): error TS2454: Variable 'd' is used before being assigned.
+hidingCallSignatures.ts(19,5): error TS2454: Variable 'd' is used before being assigned.
+hidingCallSignatures.ts(22,1): error TS2454: Variable 'f' is used before being assigned.
+hidingCallSignatures.ts(25,1): error TS2454: Variable 'e' is used before being assigned.
+
+
+==== hidingCallSignatures.ts (4 errors) ====
+    interface C {
+        new (a: string): string;
+    }
+    
+    interface D extends C {
+        (a: string): number; // Should be ok
+    }
+    
+    interface E {
+        (a: string): {};
+    }
+    
+    interface F extends E {
+        (a: string): string;
+    }
+    
+    var d: D;
+    d(""); // number
+    ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    new d(""); // should be string
+        ~
+!!! error TS2454: Variable 'd' is used before being assigned.
+    
+    var f: F;
+    f(""); // string
+    ~
+!!! error TS2454: Variable 'f' is used before being assigned.
+    
+    var e: E;
+    e(""); // {}
+    ~
+!!! error TS2454: Variable 'e' is used before being assigned.

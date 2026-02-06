@@ -18,6 +18,7 @@ Color.prototype = {
 };
 
 //// [index.js]
+"use strict";
 function Color(obj) {
     this.example = true;
 }

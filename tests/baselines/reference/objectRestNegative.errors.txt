@@ -36,7 +36,7 @@ objectRestNegative.ts(17,9): error TS2701: The target of an object rest assignme
         return rest;
     }
     
-    let rest: { b: string }
+    let rest: { b: string } = { b: "" };
     ({a, ...rest.b + rest.b} = o);
             ~~~~~~~~~~~~~~~
 !!! error TS2701: The target of an object rest assignment must be a variable or a property access.

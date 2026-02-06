@@ -1,0 +1,22 @@
+mixinWithBaseDependingOnSelfNoCrash1.ts(11,48): error TS2345: Argument of type 'typeof BaseItem' is not assignable to parameter of type 'new (...args: any[]) => any'.
+  Type 'typeof BaseItem' provides no match for the signature 'new (...args: any[]): any'.
+
+
+==== mixinWithBaseDependingOnSelfNoCrash1.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/60202
+    
+    declare class Document<Parent> {}
+    
+    declare class BaseItem extends Document<typeof Item> {}
+    
+    declare function ClientDocumentMixin<
+      BaseClass extends new (...args: any[]) => any,
+    >(Base: BaseClass): any;
+    
+    declare class Item extends ClientDocumentMixin(BaseItem) {}
+                                                   ~~~~~~~~
+!!! error TS2345: Argument of type 'typeof BaseItem' is not assignable to parameter of type 'new (...args: any[]) => any'.
+!!! error TS2345:   Type 'typeof BaseItem' provides no match for the signature 'new (...args: any[]): any'.
+    
+    export {};
+    

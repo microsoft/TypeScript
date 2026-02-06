@@ -1,4 +1,5 @@
 import { jsonToReadableText } from "../helpers.js";
+import { getPathForTypeScriptTypingInstallerCacheTest } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     openExternalProjectForSession,
@@ -6,22 +7,22 @@ import {
     TestSession,
     toExternalFile,
 } from "../helpers/tsserver.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: typeAquisition:: autoDiscovery", () => {
     it("does not depend on extension", () => {
         const file1 = {
-            path: "/a/b/app.html",
+            path: "/user/username/projects/project/app.html",
             content: "",
         };
         const file2 = {
-            path: "/a/b/app.d.ts",
+            path: "/user/username/projects/project/app.d.ts",
             content: "",
         };
-        const host = createServerHost([file1, file2]);
+        const host = TestServerHost.createServerHost([file1, file2]);
         const session = new TestSession(host);
         openExternalProjectForSession({
-            projectFileName: "/a/b/proj.csproj",
+            projectFileName: "/user/username/projects/project/proj.csproj",
             rootFiles: [toExternalFile(file2.path), { fileName: file1.path, hasMixedContent: true, scriptKind: "JS" }],
             options: {},
         }, session);
@@ -33,25 +34,24 @@ describe("unittests:: tsserver:: typeAquisition:: autoDiscovery", () => {
 
 describe("unittests:: tsserver:: typeAquisition:: prefer typings to js", () => {
     it("during second resolution pass", () => {
-        const globalTypingsCacheLocation = "/a/typings";
         const f1 = {
-            path: "/a/b/app.js",
+            path: "/user/username/projects/project/app.js",
             content: "var x = require('bar')",
         };
         const barjs = {
-            path: "/a/b/node_modules/bar/index.js",
+            path: "/user/username/projects/project/node_modules/bar/index.js",
             content: "export let x = 1",
         };
         const barTypings = {
-            path: `${globalTypingsCacheLocation}/node_modules/@types/bar/index.d.ts`,
+            path: getPathForTypeScriptTypingInstallerCacheTest("node_modules/@types/bar/index.d.ts"),
             content: "export let y: number",
         };
         const config = {
-            path: "/a/b/jsconfig.json",
+            path: "/user/username/projects/project/jsconfig.json",
             content: jsonToReadableText({ compilerOptions: { allowJs: true }, exclude: ["node_modules"] }),
         };
-        const host = createServerHost([f1, barjs, barTypings, config]);
-        const session = new TestSession({ host, globalTypingsCacheLocation });
+        const host = TestServerHost.createServerHost([f1, barjs, barTypings, config]);
+        const session = new TestSession(host);
 
         openFilesForSession([f1], session);
 

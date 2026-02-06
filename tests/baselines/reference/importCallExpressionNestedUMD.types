@@ -11,6 +11,7 @@ async function foo() {
 
     return await import((await import("./foo")).default);
 >await import((await import("./foo")).default) : any
+>                                              : ^^^
 >import((await import("./foo")).default) : Promise<any>
 >                                        : ^^^^^^^^^^^^
 >(await import("./foo")).default : "./foo"

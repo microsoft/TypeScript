@@ -79,9 +79,42 @@ fileNames.forEach(fileName => {
  *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#traversing-the-ast-with-a-little-linter
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || (function () {
+    var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function (o) {
+            var ar = [];
+            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
+            return ar;
+        };
+        return ownKeys(o);
+    };
+    return function (mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        __setModuleDefault(result, mod);
+        return result;
+    };
+})();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.delint = delint;
-var ts = require("typescript");
+const ts = __importStar(require("typescript"));
 function delint(sourceFile) {
     delintNode(sourceFile);
     function delintNode(node) {
@@ -95,7 +128,7 @@ function delint(sourceFile) {
                 }
                 break;
             case ts.SyntaxKind.IfStatement:
-                var ifStatement = node;
+                let ifStatement = node;
                 if (ifStatement.thenStatement.kind !== ts.SyntaxKind.Block) {
                     report(ifStatement.thenStatement, "An if statement's contents should be wrapped in a block body.");
                 }
@@ -106,7 +139,7 @@ function delint(sourceFile) {
                 }
                 break;
             case ts.SyntaxKind.BinaryExpression:
-                var op = node.operatorToken.kind;
+                let op = node.operatorToken.kind;
                 if (op === ts.SyntaxKind.EqualsEqualsToken || op == ts.SyntaxKind.ExclamationEqualsToken) {
                     report(node, "Use '===' and '!=='.");
                 }
@@ -115,14 +148,14 @@ function delint(sourceFile) {
         ts.forEachChild(node, delintNode);
     }
     function report(node, message) {
-        var _a = sourceFile.getLineAndCharacterOfPosition(node.getStart()), line = _a.line, character = _a.character;
-        console.log("".concat(sourceFile.fileName, " (").concat(line + 1, ",").concat(character + 1, "): ").concat(message));
+        let { line, character } = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+        console.log(`${sourceFile.fileName} (${line + 1},${character + 1}): ${message}`);
     }
 }
-var fileNames = process.argv.slice(2);
-fileNames.forEach(function (fileName) {
+const fileNames = process.argv.slice(2);
+fileNames.forEach(fileName => {
     // Parse a file
-    var sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
+    let sourceFile = ts.createSourceFile(fileName, readFileSync(fileName).toString(), ts.ScriptTarget.ES2015, /*setParentNodes */ true);
     // delint it
     delint(sourceFile);
 });

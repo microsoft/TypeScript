@@ -10,6 +10,7 @@ s >>> s;
 s >>> 0;
 
 //// [symbolType7.js]
+"use strict";
 var s = Symbol.for("shift");
 s << s;
 s << 0;

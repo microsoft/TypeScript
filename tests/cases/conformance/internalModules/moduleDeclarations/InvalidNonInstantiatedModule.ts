@@ -1,4 +1,5 @@
-module M {
+// @target: es2015
+namespace M {
     export interface Point { x: number; y: number }
 }
 

@@ -1,4 +1,5 @@
-﻿// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
+﻿// @target: es2015
+// V is an array assignment pattern, S is the type Any or an array-like type (section 3.3.2), and, for each assignment element E in V,
 //      S is the type Any, or
 var [[a0], [[a1]]] = []         // Error
 var [[a2], [[a3]]] = undefined  // Error

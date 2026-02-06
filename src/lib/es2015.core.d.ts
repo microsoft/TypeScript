@@ -173,7 +173,7 @@ interface Math {
     hypot(...values: number[]): number;
 
     /**
-     * Returns the integral part of the a numeric expression, x, removing any fractional digits.
+     * Returns the integral part of the numeric expression x, removing any fractional digits.
      * If x is already an integer, the result is x.
      * @param x A numeric expression.
      */
@@ -542,38 +542,38 @@ interface StringConstructor {
     raw(template: { raw: readonly string[] | ArrayLike<string>; }, ...substitutions: any[]): string;
 }
 
-interface Int8Array {
+interface Int8Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint8Array {
+interface Uint8Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint8ClampedArray {
+interface Uint8ClampedArray<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Int16Array {
+interface Int16Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint16Array {
+interface Uint16Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Int32Array {
+interface Int32Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Uint32Array {
+interface Uint32Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Float32Array {
+interface Float32Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }
 
-interface Float64Array {
+interface Float64Array<TArrayBuffer extends ArrayBufferLike> {
     toLocaleString(locales: string | string[], options?: Intl.NumberFormatOptions): string;
 }

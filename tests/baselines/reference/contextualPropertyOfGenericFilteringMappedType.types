@@ -125,3 +125,44 @@ f2(
   },
 );
 
+f2(
+>f2(  {    foo: 0,    bar: "",  },  {    foo: (value, key) => {      // implicit `any`s    },  },) : void
+>                                                                                                  : ^^^^
+>f2 : <T extends object>(data: T, handlers: { [P in keyof T as T[P] extends string ? P : never]: (value: T[P], prop: P) => void; }) => void
+>   : ^ ^^^^^^^^^      ^^    ^^ ^^        ^^                                                                                      ^^^^^    
+  {
+>{    foo: 0,    bar: "",  } : { foo: number; bar: string; }
+>                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    foo: 0,
+>foo : number
+>    : ^^^^^^
+>0 : 0
+>  : ^
+
+    bar: "",
+>bar : string
+>    : ^^^^^^
+>"" : ""
+>   : ^^
+
+  },
+  {
+>{    foo: (value, key) => {      // implicit `any`s    },  } : { foo: (value: any, key: any) => void; }
+>                                                             : ^^^^^^^^     ^^^^^^^   ^^^^^^^^^^^^^^^^^
+
+    foo: (value, key) => {
+>foo : (value: any, key: any) => void
+>    : ^     ^^^^^^^   ^^^^^^^^^^^^^^
+>(value, key) => {      // implicit `any`s    } : (value: any, key: any) => void
+>                                               : ^     ^^^^^^^   ^^^^^^^^^^^^^^
+>value : any
+>      : ^^^
+>key : any
+>    : ^^^
+
+      // implicit `any`s
+    },
+  },
+);
+

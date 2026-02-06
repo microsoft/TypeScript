@@ -1,13 +1,13 @@
 //// [tests/cases/compiler/externalModuleResolution2.ts] ////
 
 //// [foo.ts]
-module M2 {
+namespace M2 {
     export var X = 1;
 }
 export = M2
 
 //// [foo.d.ts]
-declare module M1 {
+declare namespace M1 {
     export var Y:number;
 }
 export = M1
@@ -27,5 +27,5 @@ module.exports = M2;
 //// [consumer.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var x = require("./foo");
+const x = require("./foo");
 x.X; // .ts should be picked

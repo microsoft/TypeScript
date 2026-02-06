@@ -10,6 +10,7 @@ var isArray = Array.isArray;
 
 
 //// [myFile02.js]
+"use strict";
 /**
  * Checks if `value` is classified as an `Array` object.
  *

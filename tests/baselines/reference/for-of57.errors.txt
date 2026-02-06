@@ -1,0 +1,8 @@
+for-of57.ts(2,17): error TS2454: Variable 'iter' is used before being assigned.
+
+
+==== for-of57.ts (1 errors) ====
+    var iter: Iterable<number>;
+    for (let num of iter) { }
+                    ~~~~
+!!! error TS2454: Variable 'iter' is used before being assigned.

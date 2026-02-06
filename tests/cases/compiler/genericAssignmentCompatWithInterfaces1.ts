@@ -1,3 +1,4 @@
+// @target: es2015
 interface Comparable<T> {
    compareTo(other: T): number;
 }

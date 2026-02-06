@@ -1,0 +1,1598 @@
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(11,9): error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(14,9): error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(17,9): error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(20,9): error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(36,5): error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(87,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(90,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(93,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(96,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(114,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(117,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(120,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(123,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(141,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(144,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(147,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(150,17): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(168,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(171,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(174,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(177,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(194,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(197,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(200,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(203,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(231,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(234,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(244,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(259,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(262,17): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(272,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(310,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(313,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(316,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(319,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(337,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(340,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(343,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(346,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(364,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(367,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(370,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(373,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(391,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(394,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(397,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(400,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(417,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(420,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(423,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(426,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(454,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(457,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(467,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(482,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(485,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_GlobalFile.ts(495,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(37,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(40,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(43,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(46,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(64,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(67,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(70,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(73,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(91,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(94,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(97,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(100,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(118,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(121,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(124,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(127,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(144,5): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(147,5): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(150,5): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(153,5): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(181,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(184,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(194,5): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(209,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(212,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(222,5): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(266,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(269,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(272,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(275,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(293,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(296,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(299,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(302,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(320,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(323,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(326,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(329,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(347,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(350,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(353,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(356,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(373,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(376,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(379,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(382,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(410,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(413,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(423,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(438,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(441,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(451,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(496,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(499,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(502,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(505,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(523,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(526,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(529,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(532,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(550,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(553,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(556,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(559,13): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(577,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(580,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(583,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(586,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(603,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(606,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(609,9): error TS2322: Type 'null' is not assignable to type 'privateClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(612,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(640,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(643,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(653,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(668,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(671,13): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+privacyFunctionReturnTypeDeclFile_externalModule.ts(681,9): error TS2322: Type 'null' is not assignable to type 'publicClass'.
+
+
+==== privacyFunctionReturnTypeDeclFile_externalModule.ts (78 errors) ====
+    class privateClass {
+    }
+    
+    export class publicClass {
+    }
+    
+    export interface publicInterfaceWithPrivateParmeterTypes {
+        new (): privateClass; // Error
+        (): privateClass; // Error
+        [x: number]: privateClass; // Error
+        myMethod(): privateClass; // Error
+    }
+    
+    export interface publicInterfaceWithPublicParmeterTypes {
+        new (): publicClass;
+        (): publicClass;
+        [x: number]: publicClass;
+        myMethod(): publicClass;
+    }
+    
+    interface privateInterfaceWithPrivateParmeterTypes {
+        new (): privateClass;
+        (): privateClass;
+        [x: number]: privateClass;
+        myMethod(): privateClass;
+    }
+    
+    interface privateInterfaceWithPublicParmeterTypes {
+        new (): publicClass;
+        (): publicClass;
+        [x: number]: publicClass;
+        myMethod(): publicClass;
+    }
+    
+    export class publicClassWithWithPrivateParmeterTypes {
+        static myPublicStaticMethod(): privateClass { // Error
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        private static myPrivateStaticMethod(): privateClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        myPublicMethod(): privateClass { // Error
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        private myPrivateMethod(): privateClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        static myPublicStaticMethod1() { // Error
+            return new privateClass();
+        }
+        private static myPrivateStaticMethod1() {
+            return new privateClass();
+        }
+        myPublicMethod1() { // Error
+            return new privateClass();
+        }
+        private myPrivateMethod1() {
+            return new privateClass();
+        }
+    }
+    
+    export class publicClassWithWithPublicParmeterTypes {
+        static myPublicStaticMethod(): publicClass { 
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        private static myPrivateStaticMethod(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        myPublicMethod(): publicClass { 
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        private myPrivateMethod(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        static myPublicStaticMethod1() {
+            return new publicClass();
+        }
+        private static myPrivateStaticMethod1() {
+            return new publicClass();
+        }
+        myPublicMethod1() { 
+            return new publicClass();
+        }
+        private myPrivateMethod1() {
+            return new publicClass();
+        }
+    }
+    
+    class privateClassWithWithPrivateParmeterTypes {
+        static myPublicStaticMethod(): privateClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        private static myPrivateStaticMethod(): privateClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        myPublicMethod(): privateClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        private myPrivateMethod(): privateClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        static myPublicStaticMethod1() {
+            return new privateClass();
+        }
+        private static myPrivateStaticMethod1() {
+            return new privateClass();
+        }
+        myPublicMethod1() {
+            return new privateClass();
+        }
+        private myPrivateMethod1() {
+            return new privateClass();
+        }
+    }
+    
+    class privateClassWithWithPublicParmeterTypes {
+        static myPublicStaticMethod(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        private static myPrivateStaticMethod(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        myPublicMethod(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        private myPrivateMethod(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        static myPublicStaticMethod1() {
+            return new publicClass();
+        }
+        private static myPrivateStaticMethod1() {
+            return new publicClass();
+        }
+        myPublicMethod1() {
+            return new publicClass();
+        }
+        private myPrivateMethod1() {
+            return new publicClass();
+        }
+    }
+    
+    export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
+        return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+    }
+    export function publicFunctionWithPublicParmeterTypes(): publicClass {
+        return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+    }
+    function privateFunctionWithPrivateParmeterTypes(): privateClass {
+        return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+    }
+    function privateFunctionWithPublicParmeterTypes(): publicClass {
+        return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+    }
+    export function publicFunctionWithPrivateParmeterTypes1() { // Error
+        return new privateClass();
+    }
+    export function publicFunctionWithPublicParmeterTypes1() {
+        return new publicClass();
+    }
+    function privateFunctionWithPrivateParmeterTypes1() {
+        return new privateClass();
+    }
+    function privateFunctionWithPublicParmeterTypes1() {
+        return new publicClass();
+    }
+    
+    export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
+    export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+    declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+    declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
+    
+    export interface publicInterfaceWithPrivateModuleParameterTypes {
+        new (): privateModule.publicClass; // Error
+        (): privateModule.publicClass; // Error
+        [x: number]: privateModule.publicClass // Error
+        myMethod(): privateModule.publicClass; // Error
+    }
+    export class publicClassWithPrivateModuleParameterTypes {
+        static myPublicStaticMethod(): privateModule.publicClass { // Error
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        myPublicMethod(): privateModule.publicClass { // Error
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        static myPublicStaticMethod1() { // Error
+            return new privateModule.publicClass();
+        }
+        myPublicMethod1() { // Error
+            return new privateModule.publicClass();
+        }
+    }
+    export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
+        return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+    }
+    export function publicFunctionWithPrivateModuleParameterTypes1() { // Error
+        return new privateModule.publicClass();
+    }
+    export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
+    
+    interface privateInterfaceWithPrivateModuleParameterTypes {
+        new (): privateModule.publicClass; 
+        (): privateModule.publicClass;
+        [x: number]: privateModule.publicClass
+        myMethod(): privateModule.publicClass;
+    }
+    class privateClassWithPrivateModuleParameterTypes {
+        static myPublicStaticMethod(): privateModule.publicClass { 
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        myPublicMethod(): privateModule.publicClass { 
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        static myPublicStaticMethod1() { 
+            return new privateModule.publicClass();
+        }
+        myPublicMethod1() { 
+            return new privateModule.publicClass();
+        }
+    }
+    function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { 
+        return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+    }
+    function privateFunctionWithPrivateModuleParameterTypes1() { 
+        return new privateModule.publicClass();
+    }
+    declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
+    
+    export namespace publicModule {
+        class privateClass {
+        }
+    
+        export class publicClass {
+        }
+    
+        export interface publicInterfaceWithPrivateParmeterTypes {
+            new (): privateClass; // Error
+            (): privateClass; // Error
+            [x: number]: privateClass; // Error
+            myMethod(): privateClass; // Error
+        }
+    
+        export interface publicInterfaceWithPublicParmeterTypes {
+            new (): publicClass;
+            (): publicClass;
+            [x: number]: publicClass;
+            myMethod(): publicClass;
+        }
+    
+        interface privateInterfaceWithPrivateParmeterTypes {
+            new (): privateClass;
+            (): privateClass;
+            [x: number]: privateClass;
+            myMethod(): privateClass;
+        }
+    
+        interface privateInterfaceWithPublicParmeterTypes {
+            new (): publicClass;
+            (): publicClass;
+            [x: number]: publicClass;
+            myMethod(): publicClass;
+        }
+    
+        export class publicClassWithWithPrivateParmeterTypes {
+            static myPublicStaticMethod(): privateClass { // Error
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private static myPrivateStaticMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            myPublicMethod(): privateClass { // Error
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private myPrivateMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            static myPublicStaticMethod1() { // Error
+                return new privateClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            myPublicMethod1() { // Error
+                return new privateClass();
+            }
+            private myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        export class publicClassWithWithPublicParmeterTypes {
+            static myPublicStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private static myPrivateStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private myPrivateMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            myPublicMethod1() {
+                return new publicClass();
+            }
+            private myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        class privateClassWithWithPrivateParmeterTypes {
+            static myPublicStaticMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private static myPrivateStaticMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            myPublicMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private myPrivateMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new privateClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            myPublicMethod1() {
+                return new privateClass();
+            }
+            private myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        class privateClassWithWithPublicParmeterTypes {
+            static myPublicStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private static myPrivateStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private myPrivateMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            myPublicMethod1() {
+                return new publicClass();
+            }
+            private myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        export function publicFunctionWithPublicParmeterTypes(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        function privateFunctionWithPrivateParmeterTypes(): privateClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        function privateFunctionWithPublicParmeterTypes(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        export function publicFunctionWithPrivateParmeterTypes1() { // Error
+            return new privateClass();
+        }
+        export function publicFunctionWithPublicParmeterTypes1() {
+            return new publicClass();
+        }
+        function privateFunctionWithPrivateParmeterTypes1() {
+            return new privateClass();
+        }
+        function privateFunctionWithPublicParmeterTypes1() {
+            return new publicClass();
+        }
+    
+        export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
+        export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+        declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+        declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
+    
+        export interface publicInterfaceWithPrivateModuleParameterTypes {
+            new (): privateModule.publicClass; // Error
+            (): privateModule.publicClass; // Error
+            [x: number]: privateModule.publicClass; // Error
+            myMethod(): privateModule.publicClass; // Error
+        }
+        export class publicClassWithPrivateModuleParameterTypes {
+            static myPublicStaticMethod(): privateModule.publicClass { // Error
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): privateModule.publicClass { // Error
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() { // Error
+                return new privateModule.publicClass();
+            }
+            myPublicMethod1() { // Error
+                return new privateModule.publicClass();
+            }
+        }
+        export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        export function publicFunctionWithPrivateModuleParameterTypes1() { // Error
+            return new privateModule.publicClass();
+        }
+        export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
+    
+        interface privateInterfaceWithPrivateModuleParameterTypes {
+            new (): privateModule.publicClass;
+            (): privateModule.publicClass;
+            [x: number]: privateModule.publicClass;
+            myMethod(): privateModule.publicClass;
+        }
+        class privateClassWithPrivateModuleParameterTypes {
+            static myPublicStaticMethod(): privateModule.publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): privateModule.publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new privateModule.publicClass();
+            }
+            myPublicMethod1() {
+                return new privateModule.publicClass();
+            }
+        }
+        function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        function privateFunctionWithPrivateModuleParameterTypes1() {
+            return new privateModule.publicClass();
+        }
+        declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
+    }
+    
+    namespace privateModule {
+        class privateClass {
+        }
+    
+        export class publicClass {
+        }
+    
+        export interface publicInterfaceWithPrivateParmeterTypes {
+            new (): privateClass; 
+            (): privateClass; 
+            [x: number]: privateClass; 
+            myMethod(): privateClass; 
+        }
+    
+        export interface publicInterfaceWithPublicParmeterTypes {
+            new (): publicClass;
+            (): publicClass;
+            [x: number]: publicClass;
+            myMethod(): publicClass;
+        }
+    
+        interface privateInterfaceWithPrivateParmeterTypes {
+            new (): privateClass;
+            (): privateClass;
+            [x: number]: privateClass;
+            myMethod(): privateClass;
+        }
+    
+        interface privateInterfaceWithPublicParmeterTypes {
+            new (): publicClass;
+            (): publicClass;
+            [x: number]: publicClass;
+            myMethod(): publicClass;
+        }
+    
+        export class publicClassWithWithPrivateParmeterTypes {
+            static myPublicStaticMethod(): privateClass { 
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private static myPrivateStaticMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            myPublicMethod(): privateClass { 
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private myPrivateMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            static myPublicStaticMethod1() { 
+                return new privateClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            myPublicMethod1() { 
+                return new privateClass();
+            }
+            private myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        export class publicClassWithWithPublicParmeterTypes {
+            static myPublicStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private static myPrivateStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private myPrivateMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            myPublicMethod1() {
+                return new publicClass();
+            }
+            private myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        class privateClassWithWithPrivateParmeterTypes {
+            static myPublicStaticMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private static myPrivateStaticMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            myPublicMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private myPrivateMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new privateClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            myPublicMethod1() {
+                return new privateClass();
+            }
+            private myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        class privateClassWithWithPublicParmeterTypes {
+            static myPublicStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private static myPrivateStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private myPrivateMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            myPublicMethod1() {
+                return new publicClass();
+            }
+            private myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        export function publicFunctionWithPrivateParmeterTypes(): privateClass { 
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        export function publicFunctionWithPublicParmeterTypes(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        function privateFunctionWithPrivateParmeterTypes(): privateClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        function privateFunctionWithPublicParmeterTypes(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        export function publicFunctionWithPrivateParmeterTypes1() { 
+            return new privateClass();
+        }
+        export function publicFunctionWithPublicParmeterTypes1() {
+            return new publicClass();
+        }
+        function privateFunctionWithPrivateParmeterTypes1() {
+            return new privateClass();
+        }
+        function privateFunctionWithPublicParmeterTypes1() {
+            return new publicClass();
+        }
+    
+        export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; 
+        export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+        declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+        declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
+    
+        export interface publicInterfaceWithPrivateModuleParameterTypes {
+            new (): privateModule.publicClass;
+            (): privateModule.publicClass;
+            [x: number]: privateModule.publicClass;
+            myMethod(): privateModule.publicClass;
+        }
+        export class publicClassWithPrivateModuleParameterTypes {
+            static myPublicStaticMethod(): privateModule.publicClass { 
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): privateModule.publicClass { 
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() { 
+                return new privateModule.publicClass();
+            }
+            myPublicMethod1() { 
+                return new privateModule.publicClass();
+            }
+        }
+        export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { 
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        export function publicFunctionWithPrivateModuleParameterTypes1() { 
+            return new privateModule.publicClass();
+        }
+        export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
+    
+        interface privateInterfaceWithPrivateModuleParameterTypes {
+            new (): privateModule.publicClass;
+            (): privateModule.publicClass;
+            [x: number]: privateModule.publicClass;
+            myMethod(): privateModule.publicClass;
+        }
+        class privateClassWithPrivateModuleParameterTypes {
+            static myPublicStaticMethod(): privateModule.publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): privateModule.publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new privateModule.publicClass();
+            }
+            myPublicMethod1() {
+                return new privateModule.publicClass();
+            }
+        }
+        function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        function privateFunctionWithPrivateModuleParameterTypes1() {
+            return new privateModule.publicClass();
+        }
+        declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; 
+    }
+    
+==== privacyFunctionReturnTypeDeclFile_GlobalFile.ts (57 errors) ====
+    class publicClassInGlobal {
+    }
+    interface publicInterfaceWithPublicParmeterTypesInGlobal {
+        new (): publicClassInGlobal;
+        (): publicClassInGlobal;
+        [x: number]: publicClassInGlobal;
+        myMethod(): publicClassInGlobal;
+    }
+    class publicClassWithWithPublicParmeterTypesInGlobal {
+        static myPublicStaticMethod(): publicClassInGlobal {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+        }
+        private static myPrivateStaticMethod(): publicClassInGlobal {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+        }
+        myPublicMethod(): publicClassInGlobal {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+        }
+        private myPrivateMethod(): publicClassInGlobal {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+        }
+        static myPublicStaticMethod1() {
+            return new publicClassInGlobal();
+        }
+        private static myPrivateStaticMethod1() {
+            return new publicClassInGlobal();
+        }
+        myPublicMethod1() {
+            return new publicClassInGlobal();
+        }
+        private myPrivateMethod1() {
+            return new publicClassInGlobal();
+        }
+    }
+    function publicFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal {
+        return null;
+        ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClassInGlobal'.
+    }
+    function publicFunctionWithPublicParmeterTypesInGlobal1() {
+        return new publicClassInGlobal();
+    }
+    declare function publicAmbientFunctionWithPublicParmeterTypesInGlobal(): publicClassInGlobal;
+    
+    namespace publicModuleInGlobal {
+        class privateClass {
+        }
+    
+        export class publicClass {
+        }
+    
+        namespace privateModule {
+            class privateClass {
+            }
+    
+            export class publicClass {
+            }
+    
+            export interface publicInterfaceWithPrivateParmeterTypes {
+                new (): privateClass;
+                (): privateClass;
+                [x: number]: privateClass;
+                myMethod(): privateClass;
+            }
+    
+            export interface publicInterfaceWithPublicParmeterTypes {
+                new (): publicClass;
+                (): publicClass;
+                [x: number]: publicClass;
+                myMethod(): publicClass;
+            }
+    
+            interface privateInterfaceWithPrivateParmeterTypes {
+                new (): privateClass;
+                (): privateClass;
+                [x: number]: privateClass;
+                myMethod(): privateClass;
+            }
+    
+            interface privateInterfaceWithPublicParmeterTypes {
+                new (): publicClass;
+                (): publicClass;
+                [x: number]: publicClass;
+                myMethod(): publicClass;
+            }
+    
+            export class publicClassWithWithPrivateParmeterTypes {
+                static myPublicStaticMethod(): privateClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+                }
+                private static myPrivateStaticMethod(): privateClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+                }
+                myPublicMethod(): privateClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+                }
+                private myPrivateMethod(): privateClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+                }
+                static myPublicStaticMethod1() {
+                    return new privateClass();
+                }
+                private static myPrivateStaticMethod1() {
+                    return new privateClass();
+                }
+                myPublicMethod1() {
+                    return new privateClass();
+                }
+                private myPrivateMethod1() {
+                    return new privateClass();
+                }
+            }
+    
+            export class publicClassWithWithPublicParmeterTypes {
+                static myPublicStaticMethod(): publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                private static myPrivateStaticMethod(): publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                myPublicMethod(): publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                private myPrivateMethod(): publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                static myPublicStaticMethod1() {
+                    return new publicClass();
+                }
+                private static myPrivateStaticMethod1() {
+                    return new publicClass();
+                }
+                myPublicMethod1() {
+                    return new publicClass();
+                }
+                private myPrivateMethod1() {
+                    return new publicClass();
+                }
+            }
+    
+            class privateClassWithWithPrivateParmeterTypes {
+                static myPublicStaticMethod(): privateClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+                }
+                private static myPrivateStaticMethod(): privateClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+                }
+                myPublicMethod(): privateClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+                }
+                private myPrivateMethod(): privateClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+                }
+                static myPublicStaticMethod1() {
+                    return new privateClass();
+                }
+                private static myPrivateStaticMethod1() {
+                    return new privateClass();
+                }
+                myPublicMethod1() {
+                    return new privateClass();
+                }
+                private myPrivateMethod1() {
+                    return new privateClass();
+                }
+            }
+    
+            class privateClassWithWithPublicParmeterTypes {
+                static myPublicStaticMethod(): publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                private static myPrivateStaticMethod(): publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                myPublicMethod(): publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                private myPrivateMethod(): publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                static myPublicStaticMethod1() {
+                    return new publicClass();
+                }
+                private static myPrivateStaticMethod1() {
+                    return new publicClass();
+                }
+                myPublicMethod1() {
+                    return new publicClass();
+                }
+                private myPrivateMethod1() {
+                    return new publicClass();
+                }
+            }
+    
+            export function publicFunctionWithPrivateParmeterTypes(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            export function publicFunctionWithPublicParmeterTypes(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            function privateFunctionWithPrivateParmeterTypes(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            function privateFunctionWithPublicParmeterTypes(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            export function publicFunctionWithPrivateParmeterTypes1() {
+                return new privateClass();
+            }
+            export function publicFunctionWithPublicParmeterTypes1() {
+                return new publicClass();
+            }
+            function privateFunctionWithPrivateParmeterTypes1() {
+                return new privateClass();
+            }
+            function privateFunctionWithPublicParmeterTypes1() {
+                return new publicClass();
+            }
+    
+            export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+            export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+            declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+            declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
+    
+            export interface publicInterfaceWithPrivateModuleParameterTypes {
+                new (): privateModule.publicClass;
+                (): privateModule.publicClass;
+                [x: number]: privateModule.publicClass;
+                myMethod(): privateModule.publicClass;
+            }
+            export class publicClassWithPrivateModuleParameterTypes {
+                static myPublicStaticMethod(): privateModule.publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                myPublicMethod(): privateModule.publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                static myPublicStaticMethod1() {
+                    return new privateModule.publicClass();
+                }
+                myPublicMethod1() {
+                    return new privateModule.publicClass();
+                }
+            }
+            export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            export function publicFunctionWithPrivateModuleParameterTypes1() {
+                return new privateModule.publicClass();
+            }
+            export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+    
+            interface privateInterfaceWithPrivateModuleParameterTypes {
+                new (): privateModule.publicClass;
+                (): privateModule.publicClass;
+                [x: number]: privateModule.publicClass;
+                myMethod(): privateModule.publicClass;
+            }
+            class privateClassWithPrivateModuleParameterTypes {
+                static myPublicStaticMethod(): privateModule.publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                myPublicMethod(): privateModule.publicClass {
+                    return null;
+                    ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+                }
+                static myPublicStaticMethod1() {
+                    return new privateModule.publicClass();
+                }
+                myPublicMethod1() {
+                    return new privateModule.publicClass();
+                }
+            }
+            function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            function privateFunctionWithPrivateModuleParameterTypes1() {
+                return new privateModule.publicClass();
+            }
+            declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+        }
+    
+        export interface publicInterfaceWithPrivateParmeterTypes {
+            new (): privateClass; // Error
+            (): privateClass; // Error
+            [x: number]: privateClass; // Error
+            myMethod(): privateClass; // Error
+        }
+    
+        export interface publicInterfaceWithPublicParmeterTypes {
+            new (): publicClass;
+            (): publicClass;
+            [x: number]: publicClass;
+            myMethod(): publicClass;
+        }
+    
+        interface privateInterfaceWithPrivateParmeterTypes {
+            new (): privateClass;
+            (): privateClass;
+            [x: number]: privateClass;
+            myMethod(): privateClass;
+        }
+    
+        interface privateInterfaceWithPublicParmeterTypes {
+            new (): publicClass;
+            (): publicClass;
+            [x: number]: publicClass;
+            myMethod(): publicClass;
+        }
+    
+        export class publicClassWithWithPrivateParmeterTypes {
+            static myPublicStaticMethod(): privateClass { // Error
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private static myPrivateStaticMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            myPublicMethod(): privateClass { // Error
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private myPrivateMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            static myPublicStaticMethod1() { // Error
+                return new privateClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            myPublicMethod1() { // Error
+                return new privateClass();
+            }
+            private myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        export class publicClassWithWithPublicParmeterTypes {
+            static myPublicStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private static myPrivateStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private myPrivateMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            myPublicMethod1() {
+                return new publicClass();
+            }
+            private myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        class privateClassWithWithPrivateParmeterTypes {
+            static myPublicStaticMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private static myPrivateStaticMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            myPublicMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            private myPrivateMethod(): privateClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new privateClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new privateClass();
+            }
+            myPublicMethod1() {
+                return new privateClass();
+            }
+            private myPrivateMethod1() {
+                return new privateClass();
+            }
+        }
+    
+        class privateClassWithWithPublicParmeterTypes {
+            static myPublicStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private static myPrivateStaticMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            private myPrivateMethod(): publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new publicClass();
+            }
+            private static myPrivateStaticMethod1() {
+                return new publicClass();
+            }
+            myPublicMethod1() {
+                return new publicClass();
+            }
+            private myPrivateMethod1() {
+                return new publicClass();
+            }
+        }
+    
+        export function publicFunctionWithPrivateParmeterTypes(): privateClass { // Error
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        export function publicFunctionWithPublicParmeterTypes(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        function privateFunctionWithPrivateParmeterTypes(): privateClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'privateClass'.
+        }
+        function privateFunctionWithPublicParmeterTypes(): publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        export function publicFunctionWithPrivateParmeterTypes1() { // Error
+            return new privateClass();
+        }
+        export function publicFunctionWithPublicParmeterTypes1() {
+            return new publicClass();
+        }
+        function privateFunctionWithPrivateParmeterTypes1() {
+            return new privateClass();
+        }
+        function privateFunctionWithPublicParmeterTypes1() {
+            return new publicClass();
+        }
+    
+        export declare function publicAmbientFunctionWithPrivateParmeterTypes(): privateClass; // Error
+        export declare function publicAmbientFunctionWithPublicParmeterTypes(): publicClass;
+        declare function privateAmbientFunctionWithPrivateParmeterTypes(): privateClass;
+        declare function privateAmbientFunctionWithPublicParmeterTypes(): publicClass;
+    
+        export interface publicInterfaceWithPrivateModuleParameterTypes {
+            new (): privateModule.publicClass; // Error
+            (): privateModule.publicClass; // Error
+            [x: number]: privateModule.publicClass; // Error
+            myMethod(): privateModule.publicClass; // Error
+        }
+        export class publicClassWithPrivateModuleParameterTypes {
+            static myPublicStaticMethod(): privateModule.publicClass { // Error
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): privateModule.publicClass { // Error
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() { // Error
+                return new privateModule.publicClass();
+            }
+            myPublicMethod1() { // Error
+                return new privateModule.publicClass();
+            }
+        }
+        export function publicFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass { // Error
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        export function publicFunctionWithPrivateModuleParameterTypes1() { // Error
+            return new privateModule.publicClass();
+        }
+        export declare function publicAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass; // Error
+    
+        interface privateInterfaceWithPrivateModuleParameterTypes {
+            new (): privateModule.publicClass;
+            (): privateModule.publicClass;
+            [x: number]: privateModule.publicClass;
+            myMethod(): privateModule.publicClass;
+        }
+        class privateClassWithPrivateModuleParameterTypes {
+            static myPublicStaticMethod(): privateModule.publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            myPublicMethod(): privateModule.publicClass {
+                return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+            }
+            static myPublicStaticMethod1() {
+                return new privateModule.publicClass();
+            }
+            myPublicMethod1() {
+                return new privateModule.publicClass();
+            }
+        }
+        function privateFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass {
+            return null;
+            ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'publicClass'.
+        }
+        function privateFunctionWithPrivateModuleParameterTypes1() {
+            return new privateModule.publicClass();
+        }
+        declare function privateAmbientFunctionWithPrivateModuleParameterTypes(): privateModule.publicClass;
+    }

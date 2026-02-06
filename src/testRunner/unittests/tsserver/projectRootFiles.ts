@@ -1,25 +1,19 @@
+import { noop } from "../../_namespaces/ts.js";
 import { forEachScenarioForRootsFromReferencedProject } from "../helpers/projectRoots.js";
 import {
     baselineTsserverLogs,
+    forEachTscWatchEdit,
     openFilesForSession,
     TestSession,
 } from "../helpers/tsserver.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
 describe("unittests:: tsserver:: projectRootFiles:: roots::", () => {
     describe("when root file is from referenced project", () => {
-        forEachScenarioForRootsFromReferencedProject((subScenario, getFsContents) => {
+        forEachScenarioForRootsFromReferencedProject(/*forTsserver*/ true, (subScenario, sys, edits) => {
             it(subScenario, () => {
-                const host = createServerHost(getFsContents(), { currentDirectory: "/home/src/workspaces" });
-                const session = new TestSession(host);
-                openFilesForSession(["/home/src/workspaces/projects/server/src/server.ts"], session);
-
-                host.appendFile("/home/src/workspaces/projects/shared/src/logging.ts", "export const x = 10;");
-                host.runQueuedTimeoutCallbacks();
-
-                host.deleteFile("/home/src/workspaces/projects/shared/src/random.ts");
-                host.runQueuedTimeoutCallbacks();
-
+                const session = new TestSession(sys());
+                openFilesForSession(["/home/src/workspaces/solution/projects/server/src/server.ts"], session);
+                forEachTscWatchEdit(session, edits(), noop);
                 baselineTsserverLogs("projectRootFiles", subScenario, session);
             });
         });

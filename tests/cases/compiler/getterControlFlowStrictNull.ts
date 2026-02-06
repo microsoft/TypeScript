@@ -1,5 +1,5 @@
 //@strictNullChecks: true
-//@target: ES5
+//@target: ES5, ES2015
 class A {
    a(): string | null {
         if (Math.random() > 0.5) {

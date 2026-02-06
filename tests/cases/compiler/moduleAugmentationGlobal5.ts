@@ -1,5 +1,8 @@
+// @target: es2015
+// @strict: false
 // @module: commonjs
 // @declaration: true
+// @noUncheckedSideEffectImports: false
 // @filename: f1.d.ts
 declare module "A" {
     global {

@@ -10,9 +10,9 @@ import {
     Deferred,
 } from "../../_namespaces/Utils.js";
 import {
-    createWatchedSystem,
     FileOrFolderOrSymLinkMap,
     osFlavorToString,
+    TestServerHost,
     TestServerHostOsFlavor,
 } from "../helpers/virtualFileSystemWithWatch.js";
 describe("unittests:: sys:: symlinkWatching::", () => {
@@ -27,7 +27,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
 
     function verifyWatchFile(
         scenario: string,
-        sys: ts.System,
+        getSys: () => ts.System,
         file: string,
         link: string,
         watchOptions: Pick<ts.WatchOptions, "watchFile">,
@@ -35,6 +35,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
     ) {
         if (skipSysTests) return;
         it(scenario, async () => {
+            const sys = getSys();
             const fileResult = watchFile(file);
             const linkResult = watchFile(link);
 
@@ -211,7 +212,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         linkFileDelete: readonly ExpectedEventAndFileName[];
     }
     function verifyWatchDirectoryUsingFsEvents<System extends ts.System>(
-        sys: System,
+        getSys: () => System,
         fsWatch: FsWatch<System>,
         dir: string,
         link: string,
@@ -219,6 +220,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
     ) {
         if (skipSysTests) return;
         it(`watchDirectory using fsEvents ${osFlavorToString(osFlavor)}`, async () => {
+            const sys = getSys();
             const tableOfEvents: FsEventsForWatchDirectory = osFlavor === TestServerHostOsFlavor.MacOs ?
                 {
                     fileCreate: [
@@ -328,7 +330,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                 ],
             );
 
-            function operation(opType: keyof FsEventsForWatchDirectory) {
+            function operation(sys: System, opType: keyof FsEventsForWatchDirectory) {
                 switch (opType) {
                     case "init":
                         sys.writeFile(`${dir}/init.ts`, "export const x = 100;");
@@ -376,7 +378,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         parallelLinkFileDelete: readonly ExpectedEventAndFileName[] | undefined;
     }
     function verifyRecursiveWatchDirectoryUsingFsEvents<System extends ts.System>(
-        sys: System,
+        getSys: () => System,
         fsWatch: FsWatch<System>,
         dir: string,
         link: string,
@@ -495,6 +497,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
             };
 
         it(`recursive watchDirectory using fsEvents ${osFlavorToString(osFlavor)}`, async () => {
+            const sys = getSys();
             await testWatchDirectoryOperations(
                 sys,
                 fsWatch,
@@ -518,6 +521,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         });
 
         it(`recursive watchDirectory using fsEvents when linked in same folder ${osFlavorToString(osFlavor)}`, async () => {
+            const sys = getSys();
             await testWatchDirectoryOperations(
                 sys,
                 fsWatch,
@@ -537,6 +541,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         });
 
         it(`recursive watchDirectory using fsEvents when links not in directory ${osFlavorToString(osFlavor)}`, async () => {
+            const sys = getSys();
             await testWatchDirectoryOperations(
                 sys,
                 fsWatch,
@@ -560,6 +565,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         });
 
         function watchDirectoryOperation(
+            sys: System,
             opType: keyof RecursiveFsEventsForWatchDirectory,
             dir: string,
             link: string,
@@ -614,12 +620,12 @@ describe("unittests:: sys:: symlinkWatching::", () => {
     }
 
     type EventRecord = Record<string, readonly ExpectedEventAndFileName[] | undefined>;
-    type Operation<Events extends EventRecord> = (opType: keyof Events, dir: string, link: string) => void;
+    type Operation<System extends ts.System, Events extends EventRecord> = (sys: System, opType: keyof Events, dir: string, link: string) => void;
     async function testWatchDirectoryOperations<System extends ts.System, Events extends EventRecord>(
         sys: System,
         fsWatch: FsWatch<System>,
         tableOfEvents: Events,
-        operation: Operation<Events>,
+        operation: Operation<System, Events>,
         directoryName: string,
         linkName: string,
         recursive: boolean,
@@ -629,24 +635,25 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         const linkResult = watchDirectory(sys, fsWatch, linkName, recursive);
 
         for (const opType of opTypes) {
-            await watchDirectoryOperation(tableOfEvents, opType, operation, directoryName, linkName, dirResult, linkResult);
+            await watchDirectoryOperation(sys, tableOfEvents, opType, operation, directoryName, linkName, dirResult, linkResult);
         }
 
         dirResult.watcher.close();
         linkResult.watcher.close();
     }
 
-    async function watchDirectoryOperation<Events extends EventRecord>(
+    async function watchDirectoryOperation<System extends ts.System, Events extends EventRecord>(
+        sys: System,
         tableOfEvents: Events,
         opType: keyof Events & string,
-        operation: Operation<Events>,
+        operation: Operation<System, Events>,
         directoryName: string,
         linkName: string,
         dirResult: WatchDirectoryResult,
         linkResult: WatchDirectoryResult,
     ) {
         initializeWatchDirectoryResult(dirResult, linkResult);
-        operation(opType, directoryName, linkName);
+        operation(sys, opType, directoryName, linkName);
         await verfiyWatchDirectoryResult(
             opType,
             dirResult,
@@ -688,7 +695,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
             });
             verifyWatchFile(
                 "watchFile using polling",
-                ts.sys,
+                () => ts.sys,
                 `${root}/polling/file.ts`,
                 `${root}/linkedpolling/file.ts`,
                 { watchFile: ts.WatchFileKind.PriorityPollingInterval },
@@ -701,7 +708,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
             });
             verifyWatchFile(
                 "watchFile using fsEvents",
-                ts.sys,
+                () => ts.sys,
                 `${root}/fsevents/file.ts`,
                 `${root}/linkedfsevents/file.ts`,
                 { watchFile: ts.WatchFileKind.UseFsEvents },
@@ -714,7 +721,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
             });
             verifyWatchFile(
                 "watchDirectory using polling",
-                ts.sys,
+                () => ts.sys,
                 `${root}/dirpolling`,
                 `${root}/linkeddirpolling`,
                 { watchFile: ts.WatchFileKind.PriorityPollingInterval },
@@ -727,7 +734,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                 withSwallowException(() => fs.symlinkSync(`${root}/dirfsevents`, `${root}/linkeddirfsevents`, "junction"));
             });
             verifyWatchDirectoryUsingFsEvents(
-                ts.sys,
+                () => ts.sys,
                 (dir, _recursive, cb) => fs.watch(dir, { persistent: true }, cb),
                 `${root}/dirfsevents`,
                 `${root}/linkeddirfsevents`,
@@ -743,7 +750,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
                     setupRecursiveFsEvents("recursivefseventsparallel");
                 });
                 verifyRecursiveWatchDirectoryUsingFsEvents(
-                    ts.sys,
+                    () => ts.sys,
                     (dir, recursive, cb) => fs.watch(dir, { persistent: true, recursive }, cb),
                     `${root}/recursivefsevents`,
                     `${root}/linkedrecursivefsevents`,
@@ -762,23 +769,23 @@ describe("unittests:: sys:: symlinkWatching::", () => {
     });
 
     describe("with virtualFileSystem::", () => {
-        const root = ts.normalizePath("/tests/baselines/symlinks");
+        const root = ts.normalizePath("/home/tests/baselines/symlinks");
         function getSys(osFlavor?: TestServerHostOsFlavor) {
-            return createWatchedSystem({
+            return TestServerHost.createWatchedSystem({
                 [`${root}/folder/file.ts`]: "export const x = 10;",
                 [`${root}/linked`]: { symLink: `${root}/folder` },
-            }, { osFlavor });
+            }, { osFlavor, currentDirectory: root });
         }
         verifyWatchFile(
             "watchFile using polling",
-            getSys(),
+            getSys,
             `${root}/folder/file.ts`,
             `${root}/linked/file.ts`,
             { watchFile: ts.WatchFileKind.PriorityPollingInterval },
         );
         verifyWatchFile(
             "watchFile using fsEvents",
-            getSys(),
+            getSys,
             `${root}/folder/file.ts`,
             `${root}/linked/file.ts`,
             { watchFile: ts.WatchFileKind.UseFsEvents },
@@ -786,7 +793,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
 
         verifyWatchFile(
             "watchDirectory using polling",
-            getSys(),
+            getSys,
             `${root}/folder`,
             `${root}/linked`,
             { watchFile: ts.WatchFileKind.PriorityPollingInterval },
@@ -795,7 +802,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
 
         function verifyWatchDirectoryUsingFsEventsTestServerHost(osFlavor: TestServerHostOsFlavor) {
             verifyWatchDirectoryUsingFsEvents(
-                getSys(osFlavor),
+                () => getSys(osFlavor),
                 (dir, recursive, cb, sys) => sys.fsWatchWorker(dir, recursive, cb),
                 `${root}/folder`,
                 `${root}/linked`,
@@ -807,11 +814,11 @@ describe("unittests:: sys:: symlinkWatching::", () => {
         verifyWatchDirectoryUsingFsEventsTestServerHost(TestServerHostOsFlavor.Linux);
 
         function getRecursiveSys(osFlavor: TestServerHostOsFlavor) {
-            return createWatchedSystem({
+            return TestServerHost.createWatchedSystem({
                 ...getRecursiveFs("recursivefsevents"),
                 ...getRecursiveFs("recursivefseventssub"),
                 ...getRecursiveFs("recursivefseventsparallel"),
-            }, { osFlavor });
+            }, { osFlavor, currentDirectory: root });
 
             function getRecursiveFs(recursiveName: string): FileOrFolderOrSymLinkMap {
                 return {
@@ -826,7 +833,7 @@ describe("unittests:: sys:: symlinkWatching::", () => {
 
         function verifyRecursiveWatchDirectoryUsingFsEventsTestServerHost(osFlavor: TestServerHostOsFlavor.Windows | TestServerHostOsFlavor.MacOs) {
             verifyRecursiveWatchDirectoryUsingFsEvents(
-                getRecursiveSys(osFlavor),
+                () => getRecursiveSys(osFlavor),
                 (dir, recursive, cb, sys) => sys.fsWatchWorker(dir, recursive, cb),
                 `${root}/recursivefsevents`,
                 `${root}/linkedrecursivefsevents`,

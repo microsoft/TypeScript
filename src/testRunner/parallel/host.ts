@@ -33,7 +33,7 @@ import {
 import * as ts from "../_namespaces/ts.js";
 import * as Utils from "../_namespaces/Utils.js";
 
-export function start(importTests: () => Promise<unknown>) {
+export function start(importTests: () => Promise<unknown>): void {
     const Base = Mocha.reporters.Base;
     const color = Base.color;
     const cursor = Base.cursor;

@@ -1,4 +1,5 @@
-﻿class A<T> {
+﻿// @target: es2015
+class A<T> {
     genericVar: T
 }
 function B1<U>() {

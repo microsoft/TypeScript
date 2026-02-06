@@ -7,6 +7,7 @@ let x: string | number | boolean | RegExp | Function;
 
 let obj: any;
 >obj : any
+>    : ^^^
 
 let cond: boolean;
 >cond : boolean
@@ -24,6 +25,7 @@ for (let y in obj) {
 >y : string
 >  : ^^^^^^
 >obj : any
+>    : ^^^
 
     x = y;
 >x = y : string

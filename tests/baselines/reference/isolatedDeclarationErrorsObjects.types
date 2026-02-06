@@ -155,9 +155,9 @@ export let oWithMethodsNested = {
 
 export let oWithAccessor = {
 >oWithAccessor : { readonly singleGetterBad: number; singleSetterBad: any; getSetBad: number; getSetOk: number; getSetOk2: number; getSetOk3: number; }
->              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^
 >{    get singleGetterBad() { return 0 },    set singleSetterBad(value) { },    get getSetBad() { return 0 },    set getSetBad(value) { },    get getSetOk(): number { return 0 },    set getSetOk(value) { },    get getSetOk2() { return 0 },    set getSetOk2(value: number) { },        get getSetOk3(): number { return 0 },    set getSetOk3(value: number) { },} : { readonly singleGetterBad: number; singleSetterBad: any; getSetBad: number; getSetOk: number; getSetOk2: number; getSetOk3: number; }
->                                                                                                                                                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                                                                                                                                                                                                                                                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^^^^^^^^^^^      ^^^
 
     get singleGetterBad() { return 0 },
 >singleGetterBad : number

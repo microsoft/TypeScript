@@ -50,6 +50,7 @@ function * f4_const () {
 }
 
 //// [asyncOrYieldAsBindingIdentifier1.js]
+"use strict";
 function f_let() {
     let await = 1;
 }

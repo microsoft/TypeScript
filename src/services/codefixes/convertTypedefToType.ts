@@ -147,7 +147,7 @@ function findEndOfTextBetween(jsDocComment: JSDoc, from: number, to: number): nu
     const comment = jsDocComment.getText().substring(from - jsDocComment.getStart(), to - jsDocComment.getStart());
 
     for (let i = comment.length; i > 0; i--) {
-        if (!/[*/\s]/g.test(comment.substring(i - 1, i))) {
+        if (!/[*/\s]/.test(comment.substring(i - 1, i))) {
             return from + i;
         }
     }

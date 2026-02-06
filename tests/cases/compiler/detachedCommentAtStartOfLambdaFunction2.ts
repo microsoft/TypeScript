@@ -1,3 +1,4 @@
+// @target: es2015
 class TestFile {
     name: string;
     foo(message: string): () => string {

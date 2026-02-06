@@ -1,4 +1,4 @@
-nonPrimitiveUnionIntersection.ts(1,5): error TS2322: Type 'string' is not assignable to type 'never'.
+nonPrimitiveUnionIntersection.ts(1,5): error TS2322: Type '""' is not assignable to type 'never'.
 nonPrimitiveUnionIntersection.ts(3,5): error TS2322: Type 'number' is not assignable to type 'object'.
 nonPrimitiveUnionIntersection.ts(4,1): error TS2322: Type 'string' is not assignable to type 'never'.
 nonPrimitiveUnionIntersection.ts(8,38): error TS2353: Object literal may only specify known properties, and 'bar' does not exist in type 'object & { err: string; }'.
@@ -7,7 +7,7 @@ nonPrimitiveUnionIntersection.ts(8,38): error TS2353: Object literal may only sp
 ==== nonPrimitiveUnionIntersection.ts (4 errors) ====
     var a: object & string = ""; // error
         ~
-!!! error TS2322: Type 'string' is not assignable to type 'never'.
+!!! error TS2322: Type '""' is not assignable to type 'never'.
     var b: object | string = ""; // ok
     var c: object & {} = 123; // error
         ~

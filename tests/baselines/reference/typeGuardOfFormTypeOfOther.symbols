@@ -26,16 +26,16 @@ var numOrBool: number | boolean
 var strOrNumOrBool: string | number | boolean;
 >strOrNumOrBool : Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfOther.ts, 8, 3))
 
-var strOrC: string | C;
->strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+declare var strOrC: string | C;
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 11))
 >C : Symbol(C, Decl(typeGuardOfFormTypeOfOther.ts, 0, 0))
 
-var numOrC: number | C;
->numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 3))
+declare var numOrC: number | C;
+>numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 11))
 >C : Symbol(C, Decl(typeGuardOfFormTypeOfOther.ts, 0, 0))
 
-var boolOrC: boolean | C;
->boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 3))
+declare var boolOrC: boolean | C;
+>boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 11))
 >C : Symbol(C, Decl(typeGuardOfFormTypeOfOther.ts, 0, 0))
 
 var emptyObj: {};
@@ -51,52 +51,52 @@ var c: C;
 //  - when false, has no effect on the type of x.
 
 if (typeof strOrC === "Object") {
->strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 11))
 
     c = strOrC; // C
 >c : Symbol(c, Decl(typeGuardOfFormTypeOfOther.ts, 13, 3))
->strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 11))
 }
 else {
     var r2: string = strOrC; // string
 >r2 : Symbol(r2, Decl(typeGuardOfFormTypeOfOther.ts, 24, 7), Decl(typeGuardOfFormTypeOfOther.ts, 56, 7))
->strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 11))
 }
 if (typeof numOrC === "Object") {
->numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 3))
+>numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 11))
 
     c = numOrC; // C
 >c : Symbol(c, Decl(typeGuardOfFormTypeOfOther.ts, 13, 3))
->numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 3))
+>numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 11))
 }
 else {
     var r3: number  = numOrC; // number
 >r3 : Symbol(r3, Decl(typeGuardOfFormTypeOfOther.ts, 30, 7), Decl(typeGuardOfFormTypeOfOther.ts, 62, 7))
->numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 3))
+>numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 11))
 }
 if (typeof boolOrC === "Object") {
->boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 3))
+>boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 11))
 
     c = boolOrC; // C
 >c : Symbol(c, Decl(typeGuardOfFormTypeOfOther.ts, 13, 3))
->boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 3))
+>boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 11))
 }
 else {
     var r4: boolean = boolOrC; // boolean
 >r4 : Symbol(r4, Decl(typeGuardOfFormTypeOfOther.ts, 36, 7), Decl(typeGuardOfFormTypeOfOther.ts, 68, 7))
->boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 3))
+>boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 11))
 }
 if (typeof strOrC === "Object" as string) { // comparison is OK with cast
->strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 11))
 
     c = strOrC; // error: but no narrowing to C
 >c : Symbol(c, Decl(typeGuardOfFormTypeOfOther.ts, 13, 3))
->strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 11))
 }
 else {
     var r5: string = strOrC; // error: no narrowing to string
 >r5 : Symbol(r5, Decl(typeGuardOfFormTypeOfOther.ts, 42, 7))
->strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 11))
 }
 
 if (typeof strOrNumOrBool === "Object") {
@@ -116,40 +116,40 @@ else {
 //  - when true, narrows the type of x by typeof x === s when false, or
 //  - when false, narrows the type of x by typeof x === s when true.
 if (typeof strOrC !== "Object") {
->strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 11))
 
     var r2: string = strOrC; // string
 >r2 : Symbol(r2, Decl(typeGuardOfFormTypeOfOther.ts, 24, 7), Decl(typeGuardOfFormTypeOfOther.ts, 56, 7))
->strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 11))
 }
 else {
     c = strOrC; // C
 >c : Symbol(c, Decl(typeGuardOfFormTypeOfOther.ts, 13, 3))
->strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 11))
 }
 if (typeof numOrC !== "Object") {
->numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 3))
+>numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 11))
 
     var r3: number = numOrC; // number
 >r3 : Symbol(r3, Decl(typeGuardOfFormTypeOfOther.ts, 30, 7), Decl(typeGuardOfFormTypeOfOther.ts, 62, 7))
->numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 3))
+>numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 11))
 }
 else {
     c = numOrC; // C
 >c : Symbol(c, Decl(typeGuardOfFormTypeOfOther.ts, 13, 3))
->numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 3))
+>numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 11))
 }
 if (typeof boolOrC !== "Object") {
->boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 3))
+>boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 11))
 
     var r4: boolean = boolOrC; // boolean
 >r4 : Symbol(r4, Decl(typeGuardOfFormTypeOfOther.ts, 36, 7), Decl(typeGuardOfFormTypeOfOther.ts, 68, 7))
->boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 3))
+>boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 11))
 }
 else {
     c = boolOrC; // C
 >c : Symbol(c, Decl(typeGuardOfFormTypeOfOther.ts, 13, 3))
->boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 3))
+>boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 11))
 }
 
 if (typeof strOrNumOrBool !== "Object") {

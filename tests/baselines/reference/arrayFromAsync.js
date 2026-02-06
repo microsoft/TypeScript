@@ -12,7 +12,7 @@ function * genPromises (n) {
         yield Promise.resolve(i * 2);
     }
 }
-  
+
 const arrLike = {
     0: Promise.resolve(0),
     1: Promise.resolve(2),
@@ -43,6 +43,9 @@ const err = new Error;
 const badIterable = { [Symbol.iterator] () { throw err; } };
 // This returns a promise that will reject with `err`.
 const badArray = await Array.fromAsync(badIterable);
+
+const withIndexResult = await Array.fromAsync(["a", "b"], (str, index) => ({ index, str }));
+
 
 //// [arrayFromAsync.js]
 async function* asyncGen(n) {
@@ -79,4 +82,5 @@ const err = new Error;
 const badIterable = { [Symbol.iterator]() { throw err; } };
 // This returns a promise that will reject with `err`.
 const badArray = await Array.fromAsync(badIterable);
+const withIndexResult = await Array.fromAsync(["a", "b"], (str, index) => ({ index, str }));
 export {};

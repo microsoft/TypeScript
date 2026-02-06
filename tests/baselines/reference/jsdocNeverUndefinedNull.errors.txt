@@ -1,0 +1,14 @@
+error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== in.js (0 errors) ====
+    /**
+     * @param {never} p1
+     * @param {undefined} p2
+     * @param {null} p3
+     * @returns {void} nothing
+     */
+    function f(p1, p2, p3) {
+    }
+    

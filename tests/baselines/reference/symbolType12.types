@@ -218,10 +218,10 @@ str += (s || str);
 >                  : ^^^^^^
 >str : string
 >    : ^^^^^^
->(s || str) : string | symbol
->           : ^^^^^^^^^^^^^^^
->s || str : string | symbol
->         : ^^^^^^^^^^^^^^^
+>(s || str) : symbol
+>           : ^^^^^^
+>s || str : symbol
+>         : ^^^^^^
 >s : symbol
 >  : ^^^^^^
 >str : string

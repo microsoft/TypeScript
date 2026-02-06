@@ -45,7 +45,7 @@ export namespace Arguments {
 }
 
 /** @internal */
-export function hasArgument(argumentName: string) {
+export function hasArgument(argumentName: string): boolean {
     return sys.args.includes(argumentName);
 }
 

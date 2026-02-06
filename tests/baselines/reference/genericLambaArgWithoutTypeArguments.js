@@ -11,7 +11,8 @@ foo((arg: Foo) => { return arg.x; });
 
 
 //// [genericLambaArgWithoutTypeArguments.js]
+"use strict";
 function foo(a) {
     return null;
 }
-foo(function (arg) { return arg.x; });
+foo((arg) => { return arg.x; });

@@ -1,17 +1,14 @@
 import { dedent } from "../../_namespaces/Utils.js";
 import { jsonToReadableText } from "../helpers.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
-import {
-    createWatchedSystem,
-    libFile,
-} from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
+describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution::", () => {
     verifyTscWatch({
         scenario: "moduleResolutionCache",
         subScenario: "handles the cache correctly when two projects use different module resolution settings",
         sys: () =>
-            createWatchedSystem(
+            TestServerHost.createWatchedSystem(
                 [
                     { path: `/user/username/projects/myproject/project1/index.ts`, content: `import { foo } from "file";` },
                     { path: `/user/username/projects/myproject/project1/node_modules/file/index.d.ts`, content: "export const foo = 10;" },
@@ -43,7 +40,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                             ],
                         }),
                     },
-                    libFile,
                 ],
                 { currentDirectory: "/user/username/projects/myproject" },
             ),
@@ -61,7 +57,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
         scenario: "moduleResolution",
         subScenario: `resolves specifier in output declaration file from referenced project correctly with cts and mts extensions`,
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/package.json`,
                     content: jsonToReadableText({
@@ -118,7 +114,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg2`,
                     symLink: `/user/username/projects/myproject/packages/pkg2`,
                 },
-                { ...libFile, path: `/a/lib/lib.es2022.full.d.ts` },
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-b", "packages/pkg1", "-w", "--verbose", "--traceResolution"],
         edits: [
@@ -155,7 +150,7 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
         scenario: "moduleResolution",
         subScenario: `build mode watches for changes to package-json main fields`,
         sys: () =>
-            createWatchedSystem([
+            TestServerHost.createWatchedSystem([
                 {
                     path: `/user/username/projects/myproject/packages/pkg1/package.json`,
                     content: jsonToReadableText({
@@ -213,7 +208,6 @@ describe("unittests:: tsbuildWatch:: watchMode:: moduleResolution", () => {
                     path: `/user/username/projects/myproject/node_modules/pkg2`,
                     symLink: `/user/username/projects/myproject/packages/pkg2`,
                 },
-                libFile,
             ], { currentDirectory: "/user/username/projects/myproject" }),
         commandLineArgs: ["-b", "packages/pkg1", "--verbose", "-w", "--traceResolution"],
         edits: [

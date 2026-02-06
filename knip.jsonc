@@ -1,9 +1,10 @@
 {
     "$schema": "https://unpkg.com/knip@5/schema.json",
+    "exclude": ["duplicates", "enumMembers"],
+    "tags": ["+internal", "-knipignore"],
     "includeEntryExports": true,
     "entry": [
         "Herebyfile.mjs",
-        "src/cancellationToken/cancellationToken.ts",
         "src/testRunner/_namespaces/Harness.ts",
         "src/tsc/tsc.ts",
         "src/tsserver/server.ts",
@@ -15,7 +16,6 @@
         "src/testRunner/_namespaces/Harness.ts",
 
         // The rest of the entry files, mostly to track used dependencies:
-        ".eslint-plugin-local.cjs",
         ".gulp.js",
         "scripts/eslint/{rules,tests}/*.cjs",
         "scripts/*.{cjs,mjs}"

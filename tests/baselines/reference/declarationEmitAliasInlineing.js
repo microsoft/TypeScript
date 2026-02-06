@@ -34,20 +34,20 @@ export const fExp = fnExp;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fn = void 0;
-var fn = function (v, p, key, p2) { };
+const fn = (v, p, key, p2) => { };
 exports.fn = fn;
 //// [aExp.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fnExp = void 0;
-var fnExp = function (v, p, key, p2) { };
+const fnExp = (v, p, key, p2) => { };
 exports.fnExp = fnExp;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fExp = exports.f = void 0;
-var a_1 = require("./a");
-var aExp_1 = require("./aExp");
+const a_1 = require("./a");
+const aExp_1 = require("./aExp");
 exports.f = a_1.fn;
 exports.fExp = aExp_1.fnExp;
 

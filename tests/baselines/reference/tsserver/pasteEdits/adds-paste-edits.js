@@ -1,20 +1,21 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/project/a/target.ts]
+//// [/home/src/projects/project/a/target.ts]
 const a = 1;
 const b = 2;
 const c = 3;
 
-//// [/project/a/file1.ts]
+//// [/home/src/projects/project/a/file1.ts]
 export const r = 1;
 export const s = 2;
 
-//// [/project/tsconfig.json]
+//// [/home/src/projects/project/tsconfig.json]
 {}
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -25,54 +26,56 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
     {
       "command": "open",
       "arguments": {
-        "file": "/project/a/target.ts"
+        "file": "/home/src/projects/project/a/target.ts"
       },
       "seq": 1,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /project/a/target.ts ProjectRootPath: undefined:: Result: /project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/tsconfig.json 2000 undefined Project: /project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /home/src/projects/project/a/target.ts ProjectRootPath: undefined:: Result: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /home/src/projects/project/tsconfig.json, currentDirectory: /home/src/projects/project
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/tsconfig.json 2000 undefined Project: /home/src/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /home/src/projects/project/tsconfig.json : {
+ "rootNames": [
+  "/home/src/projects/project/a/file1.ts",
+  "/home/src/projects/project/a/target.ts"
+ ],
+ "options": {
+  "configFilePath": "/home/src/projects/project/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
       "type": "event",
       "event": "projectLoadingStart",
       "body": {
-        "projectName": "/project/tsconfig.json",
-        "reason": "Creating possible configured project for /project/a/target.ts to open"
+        "projectName": "/home/src/projects/project/tsconfig.json",
+        "reason": "Creating possible configured project for /home/src/projects/project/a/target.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /project/tsconfig.json : {
- "rootNames": [
-  "/project/a/file1.ts",
-  "/project/a/target.ts"
- ],
- "options": {
-  "configFilePath": "/project/tsconfig.json"
- }
-}
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /project 1 undefined Config: /project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /project 1 undefined Config: /project/tsconfig.json WatchType: Wild card directory
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /project/a/file1.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project 1 undefined Config: /home/src/projects/project/tsconfig.json WatchType: Wild card directory
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/a/file1.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/project/a/file1.ts Text-1 "export const r = 1;\nexport const s = 2;"
-	/project/a/target.ts SVC-1-0 "const a = 1;\nconst b = 2;\nconst c = 3;"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/project/a/file1.ts Text-1 "export const r = 1;\nexport const s = 2;"
+	/home/src/projects/project/a/target.ts SVC-1-0 "const a = 1;\nconst b = 2;\nconst c = 3;"
 
 
-	../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	../../tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	a/file1.ts
 	  Matched by default include pattern '**/*'
 	a/target.ts
@@ -85,7 +88,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "projectLoadingFinish",
       "body": {
-        "projectName": "/project/tsconfig.json"
+        "projectName": "/home/src/projects/project/tsconfig.json"
       }
     }
 Info seq  [hh:mm:ss:mss] event:
@@ -96,7 +99,7 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "telemetryEventName": "projectInfo",
         "payload": {
-          "projectId": "4877b582a3e7d5836ee46b4a0db488dc715db827bacc8ef1fbcd0dbb78ae23d1",
+          "projectId": "1097a5f82e8323ba7aba7567ec06402f7ad4ea74abce44ec5efd223ac77ff169",
           "fileStats": {
             "js": 0,
             "jsSize": 0,
@@ -107,7 +110,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -135,18 +138,18 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "configFileDiag",
       "body": {
-        "triggerFile": "/project/a/target.ts",
-        "configFile": "/project/tsconfig.json",
+        "triggerFile": "/home/src/projects/project/a/target.ts",
+        "configFile": "/home/src/projects/project/tsconfig.json",
         "diagnostics": []
       }
     }
-Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] Open files: 
-Info seq  [hh:mm:ss:mss] 	FileName: /project/a/target.ts ProjectRootPath: undefined
-Info seq  [hh:mm:ss:mss] 		Projects: /project/tsconfig.json
+Info seq  [hh:mm:ss:mss] 	FileName: /home/src/projects/project/a/target.ts ProjectRootPath: undefined
+Info seq  [hh:mm:ss:mss] 		Projects: /home/src/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] response:
     {
       "seq": 0,
@@ -159,37 +162,40 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/projects/project/a/file1.ts: *new*
   {}
-/project/a/file1.ts: *new*
+/home/src/projects/project/tsconfig.json: *new*
   {}
-/project/tsconfig.json: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
-/project: *new*
+/home/src/projects/project: *new*
   {}
 
 Projects::
-/project/tsconfig.json (Configured) *new*
+/home/src/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.d.ts *new*
+/home/src/projects/project/a/file1.ts *new*
     version: Text-1
     containingProjects: 1
-        /project/tsconfig.json
-/project/a/file1.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /project/tsconfig.json
-/project/a/target.ts (Open) *new*
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/a/target.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
-        /project/tsconfig.json *default*
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
 
 Before request
 
@@ -197,7 +203,7 @@ Info seq  [hh:mm:ss:mss] request:
     {
       "command": "getPasteEdits",
       "arguments": {
-        "file": "/project/a/target.ts",
+        "file": "/home/src/projects/project/a/target.ts",
         "pastedText": [
           "const q = 1;\nfunction e();\nconst f = r + s;"
         ],
@@ -217,13 +223,13 @@ Info seq  [hh:mm:ss:mss] request:
       "seq": 2,
       "type": "request"
     }
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/project/a/file1.ts Text-1 "export const r = 1;\nexport const s = 2;"
-	/project/a/target.ts SVC-1-1 "const a = 1;const q = 1;\nfunction e();\nconst f = r + s;\nconst b = 2;\nconst c = 3;"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/project/a/file1.ts Text-1 "export const r = 1;\nexport const s = 2;"
+	/home/src/projects/project/a/target.ts SVC-1-1 "const a = 1;const q = 1;\nfunction e();\nconst f = r + s;\nconst b = 2;\nconst c = 3;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] response:
@@ -231,7 +237,7 @@ Info seq  [hh:mm:ss:mss] response:
       "response": {
         "edits": [
           {
-            "fileName": "/project/a/target.ts",
+            "fileName": "/home/src/projects/project/a/target.ts",
             "textChanges": [
               {
                 "start": {
@@ -268,24 +274,25 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 Projects::
-/project/tsconfig.json (Configured) *changed*
+/home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 ScriptInfos::
-/a/lib/lib.d.ts
+/home/src/projects/project/a/file1.ts
     version: Text-1
     containingProjects: 1
-        /project/tsconfig.json
-/project/a/file1.ts
-    version: Text-1
-    containingProjects: 1
-        /project/tsconfig.json
-/project/a/target.ts (Open) *changed*
+        /home/src/projects/project/tsconfig.json
+/home/src/projects/project/a/target.ts (Open) *changed*
     version: SVC-1-2 *changed*
     containingProjects: 1
-        /project/tsconfig.json *default*
+        /home/src/projects/project/tsconfig.json *default*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+    version: Text-1
+    containingProjects: 1
+        /home/src/projects/project/tsconfig.json
 
 Before request
 
@@ -295,7 +302,7 @@ Info seq  [hh:mm:ss:mss] request:
       "arguments": {
         "delay": 0,
         "files": [
-          "/project/a/target.ts"
+          "/home/src/projects/project/a/target.ts"
         ]
       },
       "seq": 3,
@@ -309,13 +316,13 @@ Timeout callback:: count: 1
 Before running Timeout callback:: count: 1
 1: checkOne
 
-Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
-Info seq  [hh:mm:ss:mss] Project '/project/tsconfig.json' (Configured)
+Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /home/src/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/tsconfig.json projectStateVersion: 3 projectProgramVersion: 1 structureChanged: false structureIsReused:: Completely Elapsed:: *ms
+Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
-	/project/a/file1.ts Text-1 "export const r = 1;\nexport const s = 2;"
-	/project/a/target.ts SVC-1-2 "const a = 1;\nconst b = 2;\nconst c = 3;"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
+	/home/src/projects/project/a/file1.ts Text-1 "export const r = 1;\nexport const s = 2;"
+	/home/src/projects/project/a/target.ts SVC-1-2 "const a = 1;\nconst b = 2;\nconst c = 3;"
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 Info seq  [hh:mm:ss:mss] event:
@@ -324,7 +331,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "syntaxDiag",
       "body": {
-        "file": "/project/a/target.ts",
+        "file": "/home/src/projects/project/a/target.ts",
         "diagnostics": []
       }
     }
@@ -334,10 +341,11 @@ Immedidate callback:: count: 1
 1: semanticCheck *new*
 
 Projects::
-/project/tsconfig.json (Configured) *changed*
+/home/src/projects/project/tsconfig.json (Configured) *changed*
     projectStateVersion: 3
     projectProgramVersion: 1
     dirty: false *changed*
+    autoImportProviderHost: false
 
 Before running Immedidate callback:: count: 1
 1: semanticCheck
@@ -348,7 +356,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "semanticDiag",
       "body": {
-        "file": "/project/a/target.ts",
+        "file": "/home/src/projects/project/a/target.ts",
         "diagnostics": []
       }
     }
@@ -366,7 +374,7 @@ Info seq  [hh:mm:ss:mss] event:
       "type": "event",
       "event": "suggestionDiag",
       "body": {
-        "file": "/project/a/target.ts",
+        "file": "/home/src/projects/project/a/target.ts",
         "diagnostics": []
       }
     }
@@ -384,7 +392,7 @@ Info seq  [hh:mm:ss:mss] event:
               "syntaxDiag": *,
               "semanticDiag": *,
               "suggestionDiag": *,
-              "file": "/project/a/target.ts"
+              "file": "/home/src/projects/project/a/target.ts"
             }
           ]
         }

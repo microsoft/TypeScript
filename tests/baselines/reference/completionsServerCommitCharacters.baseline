@@ -1,5 +1,5 @@
 // === Completions ===
-=== /src/index.ts ===
+=== /home/src/workspaces/project/src/index.ts ===
 // const a: "aa" | "bb" = "";
 //                         ^
 // | ----------------------------------------------------------------------
@@ -10,7 +10,7 @@
 [
   {
     "marker": {
-      "fileName": "/src/index.ts",
+      "fileName": "/home/src/workspaces/project/src/index.ts",
       "position": 24,
       "name": ""
     },

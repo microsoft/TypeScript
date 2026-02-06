@@ -77,7 +77,7 @@ import {
  *
  * @internal
  */
-export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: number) {
+export function spanInSourceFileAtLocation(sourceFile: SourceFile, position: number): TextSpan | undefined {
     // Cannot set breakpoint in dts file
     if (sourceFile.isDeclarationFile) {
         return undefined;

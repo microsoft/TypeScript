@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/tsconfig.json]
 {
@@ -32,8 +32,7 @@ export function thing(): void {}
 export function thing(): void {}
 
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -44,9 +43,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w --traceResolution
+/home/src/tslibs/TS/Lib/tsc.js -w --traceResolution
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -62,22 +63,24 @@ Using 'exports' subpath '.' with target './dist/index.js'.
 File '/user/username/projects/myproject/index.ts' exists - use it as a name resolution result.
 Resolved under condition 'default'.
 Exiting conditional exports.
-Resolving real path for '/user/username/projects/myproject/index.ts', result '/user/username/projects/myproject/index.ts'.
 ======== Module name '@this/package' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
-File '/a/lib/package.json' does not exist.
-File '/a/package.json' does not exist.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist.
+File '/home/src/tslibs/TS/package.json' does not exist.
+File '/home/src/tslibs/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
 File '/package.json' does not exist.
-[91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
-
 [96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/dist/index.js]
 import * as me from "@this/package";
@@ -99,13 +102,15 @@ export declare function thing(): void;
 
 
 PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/TS/package.json: *new*
+  {"pollingInterval":2000}
+/home/src/tslibs/package.json: *new*
+  {"pollingInterval":2000}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/index.ts: *new*
   {}
@@ -135,14 +140,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/index.ts
 /user/username/projects/myproject/index2.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/index.ts (computed .d.ts during emit)
 /user/username/projects/myproject/index2.ts (computed .d.ts during emit)
 
@@ -168,8 +173,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
 File '/user/username/projects/myproject/package.json' exists according to earlier cached lookups.
@@ -183,17 +191,18 @@ Loading module as file / folder, candidate module location '/user/username/proje
 File name '/user/username/projects/myproject/index.js' has a '.js' extension - stripping it.
 File '/user/username/projects/myproject/index.ts' exists - use it as a name resolution result.
 ======== Module name './index.js' was successfully resolved to '/user/username/projects/myproject/index.ts'. ========
-File '/a/lib/package.json' does not exist according to earlier cached lookups.
-File '/a/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/Lib/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/TS/package.json' does not exist according to earlier cached lookups.
+File '/home/src/tslibs/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-[91merror[0m[90m TS2209: [0mThe project root is ambiguous, but is required to resolve export map entry '.' in file '/user/username/projects/myproject/package.json'. Supply the `rootDir` compiler option to disambiguate.
-
 [96mtsconfig.json[0m:[93m2[0m:[93m3[0m - [91merror[0m[90m TS5110: [0mOption 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
 
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -216,7 +225,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/index.ts
 /user/username/projects/myproject/index2.ts
 

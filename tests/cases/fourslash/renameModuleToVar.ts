@@ -6,7 +6,7 @@
 ////declare module/**/ X: IMod;// {
 //////    export var y: numb;
 ////var y: number;
-////module Y {
+////namespace Y {
 ////    var z = y + 5;
 ////}
 

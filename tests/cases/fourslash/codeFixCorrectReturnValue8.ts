@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 //// function Foo (a: (() => number) | (() => undefined) ) { a() }
 //// Foo(() => { 1 })
 

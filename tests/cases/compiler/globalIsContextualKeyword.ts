@@ -1,3 +1,4 @@
+// @target: es2015
 function a() {
     let global = 1;
 }

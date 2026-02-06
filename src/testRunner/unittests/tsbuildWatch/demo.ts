@@ -5,7 +5,7 @@ import {
 } from "../helpers/demoProjectReferences.js";
 import { verifyTscWatch } from "../helpers/tscWatch.js";
 
-describe("unittests:: tsbuildWatch:: watchMode:: with demo project", () => {
+describe("unittests:: tsbuildWatch:: watchMode:: with demo:: project", () => {
     verifyTscWatch({
         scenario: "demo",
         subScenario: "updates with circular reference",

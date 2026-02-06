@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/nonExportedElementsOfMergedModules.ts] ////
 
 === nonExportedElementsOfMergedModules.ts ===
-module One {
+namespace One {
 >One : typeof One
 >    : ^^^^^^^^^^
 
@@ -11,7 +11,7 @@ module One {
 >X : A.X
 >  : ^^^
 
-    module B {
+    namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 
@@ -21,7 +21,7 @@ module One {
     }
 }
 
-module One {
+namespace One {
 >One : typeof One
 >    : ^^^^^^^^^^
 
@@ -31,7 +31,7 @@ module One {
 >Y : A.Y
 >  : ^^^
 
-    module B {
+    namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 

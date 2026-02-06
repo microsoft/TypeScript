@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @strict: true
 // @skipLibCheck: true
 // @filename: node_modules/backbone/index.d.ts

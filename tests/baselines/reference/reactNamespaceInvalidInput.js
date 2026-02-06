@@ -5,4 +5,5 @@
 
 
 //// [reactNamespaceInvalidInput.js]
+"use strict";
 my-React-Lib.createElement("foo", { data: true });

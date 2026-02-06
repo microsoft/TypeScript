@@ -24,10 +24,10 @@ let s = `${n}`;
 >  : ^^^^^^
 
 const numericIndex = { [n]: 1 };
->numericIndex : { [x: number]: number; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^
->{ [n]: 1 } : { [x: number]: number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^
+>numericIndex : { [n]: number; }
+>             : ^^     ^^^^^^ ^^
+>{ [n]: 1 } : { [n]: number; }
+>           : ^^     ^^^^^^ ^^
 >[n] : number
 >    : ^^^^^^
 >n : number
@@ -42,18 +42,18 @@ numericIndex[n].toFixed();
 >                        : ^              ^^^      ^^^^^      
 >numericIndex[n] : number
 >                : ^^^^^^
->numericIndex : { [x: number]: number; }
->             : ^^^^^^^^^^^^^^^^^^^^^^^^
+>numericIndex : { [n]: number; }
+>             : ^^     ^^^^^^ ^^
 >n : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
 >        : ^              ^^^      ^^^^^      
 
 const stringIndex = { [s]: 1 };
->stringIndex : { [x: string]: number; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
->{ [s]: 1 } : { [x: string]: number; }
->           : ^^^^^^^^^^^^^^^^^^^^^^^^
+>stringIndex : { [s]: number; }
+>            : ^^     ^^^^^^ ^^
+>{ [s]: 1 } : { [s]: number; }
+>           : ^^     ^^^^^^ ^^
 >[s] : number
 >    : ^^^^^^
 >s : string
@@ -68,8 +68,8 @@ stringIndex[s].toFixed();
 >                       : ^              ^^^      ^^^^^      
 >stringIndex[s] : number
 >               : ^^^^^^
->stringIndex : { [x: string]: number; }
->            : ^^^^^^^^^^^^^^^^^^^^^^^^
+>stringIndex : { [s]: number; }
+>            : ^^     ^^^^^^ ^^
 >s : string
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string

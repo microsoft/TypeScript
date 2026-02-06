@@ -1,0 +1,30 @@
+genericCallWithObjectTypeArgsAndIndexers.ts(11,13): error TS2454: Variable 'a' is used before being assigned.
+genericCallWithObjectTypeArgsAndIndexers.ts(18,18): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== genericCallWithObjectTypeArgsAndIndexers.ts (2 errors) ====
+    // Type inference infers from indexers in target type, no errors expected
+    
+    function foo<T>(x: T) {
+        return x;
+    }
+    
+    var a: {
+        [x: string]: Object;
+        [x: number]: Date;
+    };
+    var r = foo(a);
+                ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    function other<T extends Date>(arg: T) {
+        var b: {
+            [x: string]: Object;
+            [x: number]: T
+        };
+        var r2 = foo(b);
+                     ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+        var d = r2[1]; 
+        var e = r2['1']; 
+    }

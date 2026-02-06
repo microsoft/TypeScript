@@ -23,11 +23,11 @@ export class SortedMap<K, V> {
         }
     }
 
-    public get size() {
+    public get size(): number {
         return this._keys.length;
     }
 
-    public get comparer() {
+    public get comparer(): (a: K, b: K) => number {
         return this._comparer;
     }
 
@@ -35,11 +35,11 @@ export class SortedMap<K, V> {
         return "SortedMap";
     }
 
-    public has(key: K) {
+    public has(key: K): boolean {
         return ts.binarySearch(this._keys, key, ts.identity, this._comparer) >= 0;
     }
 
-    public get(key: K) {
+    public get(key: K): V | undefined {
         const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
         return index >= 0 ? this._values[index] : undefined;
     }
@@ -49,7 +49,7 @@ export class SortedMap<K, V> {
         return index >= 0 ? [this._keys[index], this._values[index]] : undefined;
     }
 
-    public set(key: K, value: V) {
+    public set(key: K, value: V): this {
         const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
         if (index >= 0) {
             this._values[index] = value;
@@ -64,7 +64,7 @@ export class SortedMap<K, V> {
         return this;
     }
 
-    public delete(key: K) {
+    public delete(key: K): boolean {
         const index = ts.binarySearch(this._keys, key, ts.identity, this._comparer);
         if (index >= 0) {
             this.writePreamble();
@@ -77,7 +77,7 @@ export class SortedMap<K, V> {
         return false;
     }
 
-    public clear() {
+    public clear(): void {
         if (this.size > 0) {
             this.writePreamble();
             this._keys.length = 0;
@@ -87,7 +87,7 @@ export class SortedMap<K, V> {
         }
     }
 
-    public forEach(callback: (value: V, key: K, collection: this) => void, thisArg?: any) {
+    public forEach(callback: (value: V, key: K, collection: this) => void, thisArg?: any): void {
         const keys = this._keys;
         const values = this._values;
         const indices = this.getIterationOrder();
@@ -112,7 +112,7 @@ export class SortedMap<K, V> {
         }
     }
 
-    public *keys() {
+    public *keys(): Generator<K, undefined, unknown> {
         const keys = this._keys;
         const indices = this.getIterationOrder();
         const version = this._version;
@@ -135,7 +135,7 @@ export class SortedMap<K, V> {
         return undefined;
     }
 
-    public *values() {
+    public *values(): Generator<V, undefined, unknown> {
         const values = this._values;
         const indices = this.getIterationOrder();
         const version = this._version;
@@ -158,7 +158,7 @@ export class SortedMap<K, V> {
         return undefined;
     }
 
-    public *entries() {
+    public *entries(): Generator<[K, V], undefined, unknown> {
         const keys = this._keys;
         const values = this._values;
         const indices = this.getIterationOrder();
@@ -184,7 +184,7 @@ export class SortedMap<K, V> {
         return undefined;
     }
 
-    public [Symbol.iterator]() {
+    public [Symbol.iterator](): Generator<[K, V], undefined, unknown> {
         return this.entries();
     }
 
@@ -255,7 +255,7 @@ export class Metadata {
         return this._size;
     }
 
-    public get parent() {
+    public get parent(): Metadata | undefined {
         return this._parent;
     }
 
@@ -292,7 +292,7 @@ export class Metadata {
         this._version++;
     }
 
-    public forEach(callback: (value: any, key: string, map: this) => void) {
+    public forEach(callback: (value: any, key: string, map: this) => void): void {
         for (const key in this._map) {
             callback(this._map[key], Metadata._unescapeKey(key), this);
         }

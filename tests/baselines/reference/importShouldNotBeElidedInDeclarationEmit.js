@@ -17,7 +17,7 @@ export const thing = makeThing();
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.thing = void 0;
-var umd_1 = require("umd");
+const umd_1 = require("umd");
 exports.thing = (0, umd_1.makeThing)();
 
 

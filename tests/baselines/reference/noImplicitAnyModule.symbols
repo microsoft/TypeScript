@@ -1,11 +1,11 @@
 //// [tests/cases/compiler/noImplicitAnyModule.ts] ////
 
 === noImplicitAnyModule.ts ===
-declare module Module {
+declare namespace Module {
 >Module : Symbol(Module, Decl(noImplicitAnyModule.ts, 0, 0))
 
     interface Interface {
->Interface : Symbol(Interface, Decl(noImplicitAnyModule.ts, 0, 23))
+>Interface : Symbol(Interface, Decl(noImplicitAnyModule.ts, 0, 26))
 
         // Should return error for implicit any on return type.
         new ();

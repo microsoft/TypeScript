@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true, false
 
 function f1(a?: boolean): void {

@@ -65,12 +65,12 @@ export interface BaselineParseConfigInput {
     skipFs?: boolean;
     header?(baseline: string[]): void;
 }
-export function baselineParseConfig(input: BaselineParseConfigInput) {
+export function baselineParseConfig(input: BaselineParseConfigInput): void {
     if (!input.skipJson) baselineParseConfigWith("with json api", getParsedCommandJson, input);
     baselineParseConfigWith("with jsonSourceFile api", getParsedCommandJsonSourceFile, input);
 }
 
-export function baselineParseConfigHost(baseline: string[], host: fakes.ParseConfigHost) {
+export function baselineParseConfigHost(baseline: string[], host: fakes.ParseConfigHost): void {
     baseline.push("Fs::", vfs.formatPatch(host.sys.vfs.diff(/*base*/ undefined, { baseIsNotShadowRoot: true })!));
 }
 

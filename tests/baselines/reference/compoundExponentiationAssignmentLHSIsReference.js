@@ -29,6 +29,7 @@ function fn2(x4: number) {
 (x3['a']) **= value;
 
 //// [compoundExponentiationAssignmentLHSIsReference.js]
+"use strict";
 var _a, _b, _c;
 var value;
 // identifiers: variable and parameter

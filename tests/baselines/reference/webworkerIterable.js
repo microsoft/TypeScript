@@ -12,6 +12,7 @@ for (const element of f) {
 
 
 //// [webworkerIterable.js]
+"use strict";
 // This API is only in webworker
 importScripts("");
 // This should not raise a compiler error

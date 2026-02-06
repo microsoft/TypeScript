@@ -8,9 +8,10 @@ var x;
 >x : any
 
     () => x;
->() => x : () => any
->        : ^^^^^^^^^
->x : any
+>() => x : () => undefined
+>        : ^^^^^^^^^^^^^^^
+>x : undefined
+>  : ^^^^^^^^^
 }
 
 var y;
@@ -28,9 +29,10 @@ switch (1) {
 >y : any
 
         () => y;
->() => y : () => any
->        : ^^^^^^^^^
->y : any
+>() => y : () => undefined
+>        : ^^^^^^^^^^^^^^^
+>y : undefined
+>  : ^^^^^^^^^
 
         break;
 }

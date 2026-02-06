@@ -6,6 +6,7 @@ for (var i in something) {
 }
 
 //// [continueInIterationStatement4.js]
+"use strict";
 for (var i in something) {
     continue;
 }

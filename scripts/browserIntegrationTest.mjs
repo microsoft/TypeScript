@@ -1,6 +1,6 @@
-import chalk from "chalk";
 import { readFileSync } from "fs";
 import { join } from "path";
+import pc from "picocolors";
 import playwright from "playwright";
 
 // Turning this on will leave the Chromium browser open, giving you the
@@ -17,7 +17,7 @@ for (const browserType of browsers) {
 
     /** @type {(err: Error) => void} */
     const errorCaught = err => {
-        console.error(chalk.red("There was an error running built/typescript.js in " + browserType));
+        console.error(pc.red("There was an error running built/typescript.js in " + browserType));
         console.log(err.toString());
         process.exitCode = 1;
     };

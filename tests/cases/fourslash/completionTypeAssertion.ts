@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
+
 //// var x = 'something'
 //// var y = this as/*1*/
 

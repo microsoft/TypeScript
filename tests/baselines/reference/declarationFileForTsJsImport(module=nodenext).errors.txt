@@ -1,0 +1,89 @@
+main.ts(1,18): error TS2307: Cannot find module './file.js' or its corresponding type declarations.
+main.ts(2,18): error TS2307: Cannot find module './file.jsx' or its corresponding type declarations.
+main.ts(3,18): error TS2307: Cannot find module './file.ts' or its corresponding type declarations.
+main.ts(4,18): error TS2307: Cannot find module './file.tsx' or its corresponding type declarations.
+main.ts(5,18): error TS2307: Cannot find module './file.mjs' or its corresponding type declarations.
+main.ts(6,18): error TS2307: Cannot find module './file.cjs' or its corresponding type declarations.
+main.ts(7,18): error TS2307: Cannot find module './file.mts' or its corresponding type declarations.
+main.ts(8,18): error TS2307: Cannot find module './file.cts' or its corresponding type declarations.
+main.ts(9,18): error TS2307: Cannot find module './file.d.ts' or its corresponding type declarations.
+main.ts(10,19): error TS2307: Cannot find module './file.d.cts' or its corresponding type declarations.
+main.ts(11,19): error TS2307: Cannot find module './file.d.mts' or its corresponding type declarations.
+main.ts(12,19): error TS2307: Cannot find module './file.d.json.ts' or its corresponding type declarations.
+
+
+==== package.json (0 errors) ====
+    {"type": "module"}
+==== main.ts (12 errors) ====
+    import def1 from "./file.js";
+                     ~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.js' or its corresponding type declarations.
+    import def2 from "./file.jsx";
+                     ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.jsx' or its corresponding type declarations.
+    import def3 from "./file.ts";
+                     ~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.ts' or its corresponding type declarations.
+    import def4 from "./file.tsx";
+                     ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.tsx' or its corresponding type declarations.
+    import def5 from "./file.mjs";
+                     ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.mjs' or its corresponding type declarations.
+    import def6 from "./file.cjs";
+                     ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.cjs' or its corresponding type declarations.
+    import def7 from "./file.mts";
+                     ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.mts' or its corresponding type declarations.
+    import def8 from "./file.cts";
+                     ~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.cts' or its corresponding type declarations.
+    import def9 from "./file.d.ts";
+                     ~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.d.ts' or its corresponding type declarations.
+    import def10 from "./file.d.cts";
+                      ~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.d.cts' or its corresponding type declarations.
+    import def11 from "./file.d.mts";
+                      ~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.d.mts' or its corresponding type declarations.
+    import def12 from "./file.d.json.ts";
+                      ~~~~~~~~~~~~~~~~~~
+!!! error TS2307: Cannot find module './file.d.json.ts' or its corresponding type declarations.
+==== file.d.js.ts (0 errors) ====
+    declare var bad: "bad1";
+    export default bad;
+==== file.d.jsx.ts (0 errors) ====
+    declare var bad: "bad2";
+    export default bad;
+==== file.d.ts.ts (0 errors) ====
+    declare var bad: "bad3";
+    export default bad;
+==== file.d.tsx.ts (0 errors) ====
+    declare var bad: "bad4";
+    export default bad;
+==== file.d.mjs.ts (0 errors) ====
+    declare var bad: "bad5";
+    export default bad;
+==== file.d.cjs.ts (0 errors) ====
+    declare var bad: "bad6";
+    export default bad;
+==== file.d.mts.ts (0 errors) ====
+    declare var bad: "bad7";
+    export default bad;
+==== file.d.cts.ts (0 errors) ====
+    declare var bad: "bad8";
+    export default bad;
+==== file.d.d.ts.ts (0 errors) ====
+    declare var bad: "bad9";
+    export default bad;
+==== file.d.d.mts.ts (0 errors) ====
+    declare var bad: "bad10";
+    export default bad;
+==== file.d.d.cts.ts (0 errors) ====
+    declare var bad: "bad11";
+    export default bad;
+==== file.d.d.json.ts (0 errors) ====
+    declare var bad: "bad12";
+    export default bad;

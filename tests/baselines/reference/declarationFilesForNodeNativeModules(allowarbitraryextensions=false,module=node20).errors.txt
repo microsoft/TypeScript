@@ -1,0 +1,15 @@
+main.ts(1,22): error TS6263: Module './dir/native.node' was resolved to 'dir/native.d.node.ts', but '--allowArbitraryExtensions' is not set.
+
+
+==== main.ts (1 errors) ====
+    import mod = require("./dir/native.node");
+                         ~~~~~~~~~~~~~~~~~~~
+!!! error TS6263: Module './dir/native.node' was resolved to 'dir/native.d.node.ts', but '--allowArbitraryExtensions' is not set.
+    mod.doNativeThing("good");
+    
+==== package.json (0 errors) ====
+    {"type": "module"}
+==== dir/package.json (0 errors) ====
+    {"type": "commonjs"}
+==== dir/native.d.node.ts (0 errors) ====
+    export function doNativeThing(flag: string): unknown;

@@ -1,7 +1,8 @@
-declare module D3 {
+// @target: es2015
+declare namespace D3 {
     var x: D3.Color.Color;
 
-    module Color {
+    namespace Color {
         export interface Color {
             darker: Color;
         }

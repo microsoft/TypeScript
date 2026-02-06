@@ -2,8 +2,8 @@
 
 === plusOperatorWithNumberType.ts ===
 // + operator on number type
-var NUMBER: number;
->NUMBER : Symbol(NUMBER, Decl(plusOperatorWithNumberType.ts, 1, 3))
+declare var NUMBER: number;
+>NUMBER : Symbol(NUMBER, Decl(plusOperatorWithNumberType.ts, 1, 11))
 
 var NUMBER1: number[] = [1, 2];
 >NUMBER1 : Symbol(NUMBER1, Decl(plusOperatorWithNumberType.ts, 2, 3))
@@ -14,16 +14,16 @@ function foo(): number { return 1; }
 class A {
 >A : Symbol(A, Decl(plusOperatorWithNumberType.ts, 4, 36))
 
-    public a: number;
+    public a!: number;
 >a : Symbol(A.a, Decl(plusOperatorWithNumberType.ts, 6, 9))
 
     static foo() { return 1; }
->foo : Symbol(A.foo, Decl(plusOperatorWithNumberType.ts, 7, 21))
+>foo : Symbol(A.foo, Decl(plusOperatorWithNumberType.ts, 7, 22))
 }
-module M {
+namespace M {
 >M : Symbol(M, Decl(plusOperatorWithNumberType.ts, 9, 1))
 
-    export var n: number;
+    export var n: number = 0;
 >n : Symbol(n, Decl(plusOperatorWithNumberType.ts, 11, 14))
 }
 
@@ -34,7 +34,7 @@ var objA = new A();
 // number type var
 var ResultIsNumber1 = +NUMBER;
 >ResultIsNumber1 : Symbol(ResultIsNumber1, Decl(plusOperatorWithNumberType.ts, 17, 3))
->NUMBER : Symbol(NUMBER, Decl(plusOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(plusOperatorWithNumberType.ts, 1, 11))
 
 var ResultIsNumber2 = +NUMBER1;
 >ResultIsNumber2 : Symbol(ResultIsNumber2, Decl(plusOperatorWithNumberType.ts, 18, 3))
@@ -79,19 +79,19 @@ var ResultIsNumber9 = +foo();
 
 var ResultIsNumber10 = +A.foo();
 >ResultIsNumber10 : Symbol(ResultIsNumber10, Decl(plusOperatorWithNumberType.ts, 30, 3))
->A.foo : Symbol(A.foo, Decl(plusOperatorWithNumberType.ts, 7, 21))
+>A.foo : Symbol(A.foo, Decl(plusOperatorWithNumberType.ts, 7, 22))
 >A : Symbol(A, Decl(plusOperatorWithNumberType.ts, 4, 36))
->foo : Symbol(A.foo, Decl(plusOperatorWithNumberType.ts, 7, 21))
+>foo : Symbol(A.foo, Decl(plusOperatorWithNumberType.ts, 7, 22))
 
 var ResultIsNumber11 = +(NUMBER + NUMBER);
 >ResultIsNumber11 : Symbol(ResultIsNumber11, Decl(plusOperatorWithNumberType.ts, 31, 3))
->NUMBER : Symbol(NUMBER, Decl(plusOperatorWithNumberType.ts, 1, 3))
->NUMBER : Symbol(NUMBER, Decl(plusOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(plusOperatorWithNumberType.ts, 1, 11))
+>NUMBER : Symbol(NUMBER, Decl(plusOperatorWithNumberType.ts, 1, 11))
 
 // miss assignment operators
 +1;
 +NUMBER;
->NUMBER : Symbol(NUMBER, Decl(plusOperatorWithNumberType.ts, 1, 3))
+>NUMBER : Symbol(NUMBER, Decl(plusOperatorWithNumberType.ts, 1, 11))
 
 +NUMBER1;
 >NUMBER1 : Symbol(NUMBER1, Decl(plusOperatorWithNumberType.ts, 2, 3))

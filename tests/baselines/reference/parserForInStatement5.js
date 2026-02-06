@@ -5,5 +5,6 @@ for (var a: number in X) {
 }
 
 //// [parserForInStatement5.js]
+"use strict";
 for (var a in X) {
 }

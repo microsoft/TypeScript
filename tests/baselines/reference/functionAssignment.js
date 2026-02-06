@@ -12,8 +12,8 @@ interface baz {
     get(callback: Function): number;
 }
 
-var barbaz: baz;
-var test: foo;
+declare var barbaz: baz;
+declare var test: foo;
 
 test.get(function (param) {
     var x = barbaz.get(function () { });
@@ -40,19 +40,18 @@ callb((a) =>{ a.length; });
 
 
 //// [functionAssignment.js]
+"use strict";
 function f(n) { }
 f(function () { });
-var barbaz;
-var test;
 test.get(function (param) {
     var x = barbaz.get(function () { });
 });
 function f2(n) { }
-f2(function () {
+f2(() => {
     var n = '';
     n = 4;
 });
 function f3(a) { }
 f3({ a: 0, b: 0 });
 function callb(a) { }
-callb(function (a) { a.length; });
+callb((a) => { a.length; });

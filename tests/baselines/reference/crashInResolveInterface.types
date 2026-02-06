@@ -10,14 +10,15 @@ interface C {
     count(countTitle?: string): void;
 >count : (countTitle?: string) => void
 >      : ^          ^^^      ^^^^^    
->countTitle : string
->           : ^^^^^^
+>countTitle : string | undefined
+>           : ^^^^^^^^^^^^^^^^^^
 }
 interface C {
     log(message?: any, ...optionalParams: any[]): void;
 >log : (message?: any, ...optionalParams: any[]) => void
 >    : ^       ^^^   ^^^^^              ^^     ^^^^^    
 >message : any
+>        : ^^^
 >optionalParams : any[]
 >               : ^^^^^
 }

@@ -8,7 +8,8 @@ function f<T extends { q: (p1: number) => number }>(p: T): T {
 var v = f({ q: x => x });
 
 //// [inferringAnyFunctionType5.js]
+"use strict";
 function f(p) {
     return p;
 }
-var v = f({ q: function (x) { return x; } });
+var v = f({ q: x => x });

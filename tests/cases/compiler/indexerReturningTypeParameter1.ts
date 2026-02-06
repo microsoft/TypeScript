@@ -1,3 +1,4 @@
+// @target: es2015
 interface f {
     groupBy<T>(): { [key: string]: T[]; };
 }

@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitReferences: true
 // @traceResolution: true
 // @currentDirectory: /src

@@ -1,9 +1,9 @@
+// @target: es2015
 // @filename: file.tsx
 // @jsx: preserve
-// @module: amd
-// @noLib: true
+// @module: commonjs
 // @skipLibCheck: true
-// @libFiles: react.d.ts,lib.d.ts
+/// <reference path="/.lib/react.d.ts" />
 
 import React = require('react')
 declare function OneThing(): JSX.Element;

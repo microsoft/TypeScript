@@ -1,4 +1,5 @@
-﻿// @target:es6
+﻿// @strict: false
+// @target:es6
 function foo(x: string, y = 10) { }
 function baz(x: string, y = 5, ...rest) { }
 function bar(y = 10) { }

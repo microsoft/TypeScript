@@ -120,7 +120,7 @@ type a<T> = T extends Array<infer U> ? U : never;
 >a : Symbol(a, Decl(intersectionWithUnionConstraint.ts, 33, 43))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 37, 7))
 >T : Symbol(T, Decl(intersectionWithUnionConstraint.ts, 37, 7))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 37, 33))
 >U : Symbol(U, Decl(intersectionWithUnionConstraint.ts, 37, 33))
 

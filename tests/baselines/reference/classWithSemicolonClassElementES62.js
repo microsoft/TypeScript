@@ -7,6 +7,7 @@ class C {
 }
 
 //// [classWithSemicolonClassElementES62.js]
+"use strict";
 class C {
     ;
     ;

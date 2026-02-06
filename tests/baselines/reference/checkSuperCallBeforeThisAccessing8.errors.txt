@@ -1,9 +1,12 @@
+checkSuperCallBeforeThisAccessing8.ts(2,17): error TS7019: Rest parameter 'arg' implicitly has an 'any[]' type.
 checkSuperCallBeforeThisAccessing8.ts(7,20): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== checkSuperCallBeforeThisAccessing8.ts (1 errors) ====
+==== checkSuperCallBeforeThisAccessing8.ts (2 errors) ====
     class Base {
         constructor(...arg) {
+                    ~~~~~~
+!!! error TS7019: Rest parameter 'arg' implicitly has an 'any[]' type.
         }
     }
     class Super extends Base {

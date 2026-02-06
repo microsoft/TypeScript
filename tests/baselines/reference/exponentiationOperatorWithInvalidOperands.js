@@ -5,12 +5,12 @@
 // an enum type
 enum E { a, b, c }
 
-var a: any;
-var b: boolean;
-var c: number;
-var d: string;
-var e: { a: number };
-var f: Number;
+declare var a: any;
+declare var b: boolean;
+declare var c: number;
+declare var d: string;
+declare var e: { a: number };
+declare var f: Number;
 
 // All of the below should be an error unless otherwise noted
 // operator **
@@ -71,6 +71,7 @@ var r1h5 = e ** E.b;
 var r1h6 = f ** E.b
 
 //// [exponentiationOperatorWithInvalidOperands.js]
+"use strict";
 // these operators require their operands to be of type Any, the Number primitive type, or
 // an enum type
 var E;
@@ -79,12 +80,6 @@ var E;
     E[E["b"] = 1] = "b";
     E[E["c"] = 2] = "c";
 })(E || (E = {}));
-var a;
-var b;
-var c;
-var d;
-var e;
-var f;
 // All of the below should be an error unless otherwise noted
 // operator **
 var r1a1 = Math.pow(a, a); //ok

@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/node/nodeModulesResolveJsonModule.ts] ////
 
 === index.ts ===
-import pkg from "./package.json"
+import pkg from "./package.json" with { type: "json" };
 >pkg : Symbol(pkg, Decl(index.ts, 0, 6))
 
 export const name = pkg.name;
@@ -10,7 +10,7 @@ export const name = pkg.name;
 >pkg : Symbol(pkg, Decl(index.ts, 0, 6))
 >name : Symbol("name", Decl(package.json, 0, 1))
 
-import * as ns from "./package.json";
+import * as ns from "./package.json" with { type: "json" };
 >ns : Symbol(ns, Decl(index.ts, 2, 6))
 
 export const thing = ns;
@@ -26,7 +26,7 @@ export const name2 = ns.default.name;
 >name : Symbol("name", Decl(package.json, 0, 1))
 
 === index.cts ===
-import pkg from "./package.json"
+import pkg from "./package.json";
 >pkg : Symbol(pkg, Decl(index.cts, 0, 6))
 
 export const name = pkg.name;
@@ -51,7 +51,7 @@ export const name2 = ns.default.name;
 >name : Symbol("name", Decl(package.json, 0, 1))
 
 === index.mts ===
-import pkg from "./package.json"
+import pkg from "./package.json" with { type: "json" };
 >pkg : Symbol(pkg, Decl(index.mts, 0, 6))
 
 export const name = pkg.name;
@@ -60,7 +60,7 @@ export const name = pkg.name;
 >pkg : Symbol(pkg, Decl(index.mts, 0, 6))
 >name : Symbol("name", Decl(package.json, 0, 1))
 
-import * as ns from "./package.json";
+import * as ns from "./package.json" with { type: "json" };
 >ns : Symbol(ns, Decl(index.mts, 2, 6))
 
 export const thing = ns;

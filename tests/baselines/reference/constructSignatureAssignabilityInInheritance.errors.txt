@@ -10,7 +10,7 @@ constructSignatureAssignabilityInInheritance.ts(67,15): error TS2430: Interface 
 ==== constructSignatureAssignabilityInInheritance.ts (2 errors) ====
     // Checking basic subtype relations with construct signatures
     
-    module ConstructSignature {
+    namespace ConstructSignature {
         interface Base { // T
             // M's
             new (x: number): void; // BUG 842221
@@ -42,7 +42,7 @@ constructSignatureAssignabilityInInheritance.ts(67,15): error TS2430: Interface 
         }
     }
     
-    module MemberWithConstructSignature {
+    namespace MemberWithConstructSignature {
         interface Base { // T
             // M's
             a: new (x: number) => void;
@@ -50,7 +50,7 @@ constructSignatureAssignabilityInInheritance.ts(67,15): error TS2430: Interface 
             a3: new <T>(x: T) => void;
         }
     
-        var b: Base;
+        declare var b: Base;
         var r = new b.a(1);
     
         // S's

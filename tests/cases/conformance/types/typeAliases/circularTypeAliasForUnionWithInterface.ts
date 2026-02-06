@@ -1,3 +1,4 @@
+// @target: es2015
 var v0: T0;
 type T0 = string | I0;
 interface I0 {

@@ -13,3 +13,4 @@ interface Bar {
 
 
 //// [specializationError.js]
+"use strict";

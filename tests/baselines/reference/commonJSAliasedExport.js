@@ -18,14 +18,16 @@ var diddy = funky(1)
 
 
 //// [commonJSAliasedExport.js]
-var donkey = function (ast) { return ast; };
+"use strict";
+const donkey = (ast) => ast;
 function funky(declaration) {
     return false;
 }
 module.exports = donkey;
 module.exports.funky = funky;
 //// [bug43713.js]
-var funky = require('./commonJSAliasedExport').funky;
+"use strict";
+const { funky } = require('./commonJSAliasedExport');
 /** @type {boolean} */
 var diddy;
 var diddy = funky(1);

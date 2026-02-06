@@ -1,0 +1,72 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/awaitUsingDeclarationsWithIteratorObject.ts] ////
+
+=== awaitUsingDeclarationsWithIteratorObject.ts ===
+declare const i: Iterator<string, undefined>;
+>i : Symbol(i, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 0, 13))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+
+declare const io: IteratorObject<string, undefined, unknown>;
+>io : Symbol(io, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 1, 13))
+>IteratorObject : Symbol(IteratorObject, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.disposable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+
+declare const g: Generator<string, void>;
+>g : Symbol(g, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 2, 13))
+>Generator : Symbol(Generator, Decl(lib.es2015.generator.d.ts, --, --))
+
+class MyIterator extends Iterator<string> {
+>MyIterator : Symbol(MyIterator, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 2, 41))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+
+    next() { return { done: true, value: undefined }; }
+>next : Symbol(MyIterator.next, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 4, 43))
+>done : Symbol(done, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 5, 21))
+>value : Symbol(value, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 5, 33))
+>undefined : Symbol(undefined)
+}
+
+async function f() {
+>f : Symbol(f, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 6, 1))
+
+    // should pass
+    await using it0 = io;
+>it0 : Symbol(it0, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 10, 15))
+>io : Symbol(io, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 1, 13))
+
+    await using it1 = g;
+>it1 : Symbol(it1, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 11, 15))
+>g : Symbol(g, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 2, 13))
+
+    await using it2 = Iterator.from(i)
+>it2 : Symbol(it2, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 12, 15))
+>Iterator.from : Symbol(IteratorConstructor.from, Decl(lib.esnext.iterator.d.ts, --, --))
+>Iterator : Symbol(Iterator, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.esnext.iterator.d.ts, --, --))
+>from : Symbol(IteratorConstructor.from, Decl(lib.esnext.iterator.d.ts, --, --))
+>i : Symbol(i, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 0, 13))
+
+    await using it3 = new MyIterator();
+>it3 : Symbol(it3, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 13, 15))
+>MyIterator : Symbol(MyIterator, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 2, 41))
+
+    await using it4 = [].values();
+>it4 : Symbol(it4, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 14, 15))
+>[].values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    await using it5 = new Map<string, string>().entries();
+>it5 : Symbol(it5, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 15, 15))
+>new Map<string, string>().entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>entries : Symbol(Map.entries, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    await using it6 = new Set<string>().keys();
+>it6 : Symbol(it6, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 16, 15))
+>new Set<string>().keys : Symbol(Set.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>keys : Symbol(Set.keys, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    // should fail
+    await using it7 = i;
+>it7 : Symbol(it7, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 19, 15))
+>i : Symbol(i, Decl(awaitUsingDeclarationsWithIteratorObject.ts, 0, 13))
+}
+

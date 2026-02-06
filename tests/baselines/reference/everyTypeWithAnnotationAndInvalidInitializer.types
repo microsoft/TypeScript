@@ -53,7 +53,7 @@ function F2(x: number): boolean { return x < 42; }
 >42 : 42
 >   : ^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -81,7 +81,7 @@ module M {
 >         : ^     ^^^      ^^^^^      
 }
 
-module N {
+namespace N {
 >N : typeof N
 >  : ^^^^^^^^
 

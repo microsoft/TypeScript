@@ -22,16 +22,14 @@ class test {
 }
 
 //// [commentsOnStaticMembers.js]
-var test = /** @class */ (function () {
-    function test() {
-    }
-    /**
-     * p1 comment appears in output
-     */
-    test.p1 = "";
-    /**
-     * p3 comment appears in output
-     */
-    test.p3 = "";
-    return test;
-}());
+"use strict";
+class test {
+}
+/**
+ * p1 comment appears in output
+ */
+test.p1 = "";
+/**
+ * p3 comment appears in output
+ */
+test.p3 = "";

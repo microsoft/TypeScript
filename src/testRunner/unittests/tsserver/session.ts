@@ -663,7 +663,7 @@ describe("unittests:: tsserver:: Session:: helpers", () => {
     it(ts.server.getLocationInNewDocument.name, () => {
         const text = `// blank line\nconst x = 0;`;
         const renameLocationInOldText = text.indexOf("0");
-        const fileName = "/a.ts";
+        const fileName = "/home/src/projects/project/a.ts";
         const edits: ts.FileTextChanges = {
             fileName,
             textChanges: [

@@ -17,9 +17,11 @@ var y = {foo: "bar"};
 >"bar" : "bar"
 >      : ^^^^^
 
-var a: object;
+var a: object = {};
 >a : object
 >  : ^^^^^^
+>{} : {}
+>   : ^^
 
 x = a;
 >x = a : object

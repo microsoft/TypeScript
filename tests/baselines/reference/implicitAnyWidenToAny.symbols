@@ -62,18 +62,18 @@ var array5 = <any[]>[null, undefined];
 >array5 : Symbol(array5, Decl(implicitAnyWidenToAny.ts, 20, 3))
 >undefined : Symbol(undefined)
 
-var objLit: { new (n: number): any; };
->objLit : Symbol(objLit, Decl(implicitAnyWidenToAny.ts, 22, 3))
->n : Symbol(n, Decl(implicitAnyWidenToAny.ts, 22, 19))
+declare var objLit: { new (n: number): any; };
+>objLit : Symbol(objLit, Decl(implicitAnyWidenToAny.ts, 22, 11))
+>n : Symbol(n, Decl(implicitAnyWidenToAny.ts, 22, 27))
 
 function anyReturnFunc(): any { }
->anyReturnFunc : Symbol(anyReturnFunc, Decl(implicitAnyWidenToAny.ts, 22, 38))
+>anyReturnFunc : Symbol(anyReturnFunc, Decl(implicitAnyWidenToAny.ts, 22, 46))
 
 var obj0 = new objLit(1);
 >obj0 : Symbol(obj0, Decl(implicitAnyWidenToAny.ts, 24, 3))
->objLit : Symbol(objLit, Decl(implicitAnyWidenToAny.ts, 22, 3))
+>objLit : Symbol(objLit, Decl(implicitAnyWidenToAny.ts, 22, 11))
 
 var obj1 = anyReturnFunc();
 >obj1 : Symbol(obj1, Decl(implicitAnyWidenToAny.ts, 25, 3))
->anyReturnFunc : Symbol(anyReturnFunc, Decl(implicitAnyWidenToAny.ts, 22, 38))
+>anyReturnFunc : Symbol(anyReturnFunc, Decl(implicitAnyWidenToAny.ts, 22, 46))
 

@@ -100,13 +100,13 @@ export class TextStorage {
         this.version = initialVersion || 0;
     }
 
-    public getVersion() {
+    public getVersion(): string {
         return this.svc
             ? `SVC-${this.version}-${this.svc.getSnapshotVersion()}`
             : `Text-${this.version}`;
     }
 
-    public hasScriptVersionCache_TestOnly() {
+    public hasScriptVersionCache_TestOnly(): boolean {
         return this.svc !== undefined;
     }
 
@@ -120,7 +120,7 @@ export class TextStorage {
     }
 
     /** Public for testing */
-    public useText(newText: string) {
+    public useText(newText: string): void {
         this.svc = undefined;
         this.text = newText;
         this.textSnapshot = undefined;
@@ -130,7 +130,7 @@ export class TextStorage {
         this.version++;
     }
 
-    public edit(start: number, end: number, newText: string) {
+    public edit(start: number, end: number, newText: string): void {
         this.switchToScriptVersionCache().edit(start, end - start, newText);
         this.ownFileText = false;
         this.text = undefined;
@@ -174,7 +174,7 @@ export class TextStorage {
      * Reads the contents from tempFile(if supplied) or own file and sets it as contents
      * returns true if text changed
      */
-    public reloadWithFileText(tempFileName?: string) {
+    public reloadWithFileText(tempFileName?: string): boolean {
         const { text: newText, fileSize } = tempFileName || !this.info.isDynamicOrHasMixedContent() ?
             this.getFileTextAndSize(tempFileName) :
             { text: "", fileSize: undefined };
@@ -196,13 +196,13 @@ export class TextStorage {
      * Schedule reload from the disk if its not already scheduled and its not own text
      * returns true when scheduling reload
      */
-    public scheduleReloadIfNeeded() {
+    public scheduleReloadIfNeeded(): boolean {
         return !this.pendingReloadFromDisk && !this.ownFileText ?
             this.pendingReloadFromDisk = true :
             false;
     }
 
-    public delayReloadFromFileIntoText() {
+    public delayReloadFromFileIntoText(): void {
         this.pendingReloadFromDisk = true;
     }
 
@@ -345,7 +345,7 @@ export class TextStorage {
     }
 }
 
-export function isDynamicFileName(fileName: NormalizedPath) {
+export function isDynamicFileName(fileName: NormalizedPath): boolean {
     return fileName[0] === "^" ||
         ((fileName.includes("walkThroughSnippet:/") || fileName.includes("untitled:/")) &&
             getBaseFileName(fileName)[0] === "^") ||
@@ -428,15 +428,15 @@ export class ScriptInfo {
     }
 
     /** @internal */
-    public isDynamicOrHasMixedContent() {
+    public isDynamicOrHasMixedContent(): boolean {
         return this.hasMixedContent || this.isDynamic;
     }
 
-    public isScriptOpen() {
+    public isScriptOpen(): boolean {
         return this.textStorage.isOpen;
     }
 
-    public open(newText: string | undefined) {
+    public open(newText: string | undefined): void {
         this.textStorage.isOpen = true;
         if (
             newText !== undefined &&
@@ -447,14 +447,14 @@ export class ScriptInfo {
         }
     }
 
-    public close(fileExists = true) {
+    public close(fileExists = true): void {
         this.textStorage.isOpen = false;
         if (fileExists && this.textStorage.scheduleReloadIfNeeded()) {
             this.markContainingProjectsAsDirty();
         }
     }
 
-    public getSnapshot() {
+    public getSnapshot(): IScriptSnapshot {
         return this.textStorage.getSnapshot();
     }
 
@@ -510,7 +510,7 @@ export class ScriptInfo {
         return isNew;
     }
 
-    isAttached(project: Project) {
+    isAttached(project: Project): boolean {
         // unrolled for common cases
         switch (this.containingProjects.length) {
             case 0:
@@ -524,7 +524,7 @@ export class ScriptInfo {
         }
     }
 
-    detachFromProject(project: Project) {
+    detachFromProject(project: Project): void {
         // unrolled for common cases
         switch (this.containingProjects.length) {
             case 0:
@@ -554,7 +554,7 @@ export class ScriptInfo {
         }
     }
 
-    detachAllProjects() {
+    detachAllProjects(): void {
         for (const p of this.containingProjects) {
             if (isConfiguredProject(p)) {
                 p.getCachedDirectoryStructureHost().addOrDeleteFile(this.fileName, this.path, FileWatcherEventKind.Deleted);
@@ -572,7 +572,7 @@ export class ScriptInfo {
         clear(this.containingProjects);
     }
 
-    getDefaultProject() {
+    getDefaultProject(): Project {
         switch (this.containingProjects.length) {
             case 0:
                 return Errors.ThrowNoProject();
@@ -654,18 +654,18 @@ export class ScriptInfo {
         return this.textStorage.getVersion();
     }
 
-    saveTo(fileName: string) {
+    saveTo(fileName: string): void {
         this.host.writeFile(fileName, getSnapshotText(this.textStorage.getSnapshot()));
     }
 
     /** @internal */
-    delayReloadNonMixedContentFile() {
+    delayReloadNonMixedContentFile(): void {
         Debug.assert(!this.isDynamicOrHasMixedContent());
         this.textStorage.delayReloadFromFileIntoText();
         this.markContainingProjectsAsDirty();
     }
 
-    reloadFromFile(tempFileName?: NormalizedPath) {
+    reloadFromFile(tempFileName?: NormalizedPath): boolean {
         if (this.textStorage.reloadWithFileText(tempFileName)) {
             this.markContainingProjectsAsDirty();
             return true;
@@ -678,28 +678,20 @@ export class ScriptInfo {
         this.markContainingProjectsAsDirty();
     }
 
-    markContainingProjectsAsDirty() {
+    markContainingProjectsAsDirty(): void {
         for (const p of this.containingProjects) {
             p.markFileAsDirty(this.path);
         }
     }
 
-    isOrphan() {
+    isOrphan(): boolean {
         return this.deferredDelete || !forEach(this.containingProjects, p => !p.isOrphan());
-    }
-
-    /** @internal */
-    isContainedByBackgroundProject() {
-        return some(
-            this.containingProjects,
-            isBackgroundProject,
-        );
     }
 
     /**
      *  @param line 1 based index
      */
-    lineToTextSpan(line: number) {
+    lineToTextSpan(line: number): TextSpan {
         return this.textStorage.lineToTextSpan(line);
     }
 
@@ -721,12 +713,12 @@ export class ScriptInfo {
         return location;
     }
 
-    public isJavaScript() {
+    public isJavaScript(): boolean {
         return this.scriptKind === ScriptKind.JS || this.scriptKind === ScriptKind.JSX;
     }
 
     /** @internal */
-    closeSourceMapFileWatcher() {
+    closeSourceMapFileWatcher(): void {
         if (this.sourceMapFilePath && !isString(this.sourceMapFilePath)) {
             closeFileWatcherOf(this.sourceMapFilePath);
             this.sourceMapFilePath = undefined;
@@ -745,4 +737,20 @@ function failIfInvalidLocation(location: protocol.Location) {
 
     Debug.assert(location.line > 0, `Expected line to be non-${location.line === 0 ? "zero" : "negative"}`);
     Debug.assert(location.offset > 0, `Expected offset to be non-${location.offset === 0 ? "zero" : "negative"}`);
+}
+
+/** @internal */
+export function scriptInfoIsContainedByBackgroundProject(info: ScriptInfo): boolean {
+    return some(
+        info.containingProjects,
+        isBackgroundProject,
+    );
+}
+
+/** @internal */
+export function scriptInfoIsContainedByDeferredClosedProject(info: ScriptInfo): boolean {
+    return some(
+        info.containingProjects,
+        isProjectDeferredClose,
+    );
 }

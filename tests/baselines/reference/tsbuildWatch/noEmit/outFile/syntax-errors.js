@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/project/a.ts]
 const a = "hello
@@ -11,8 +11,7 @@ const a = "hello
   }
 }
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -27,19 +26,19 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -b -verbose /home/src/projects/project -w
+/home/src/tslibs/TS/Lib/tsc.js -b -verbose -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
 [[90mHH:MM:SS AM[0m] Projects in this build: 
-    * home/src/projects/project/tsconfig.json
+    * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/outFile.tsbuildinfo' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file '../outFile.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
 [7m [0m [91m                [0m
@@ -47,6 +46,8 @@ Output::
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/home/src/projects/outFile.tsbuildinfo]
 {"root":["./project/a.ts"],"errors":true,"version":"FakeTSVersion"}
@@ -84,7 +85,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -112,26 +113,21 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/home/src/projects/outFile.tsbuildinfo]
-{"root":["./project/a.ts"],"version":"FakeTSVersion"}
-
-//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
-{
-  "root": [
-    "./project/a.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 53
-}
-
+//// [/home/src/projects/outFile.tsbuildinfo] file written with same contents
+//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Program root files: [
@@ -146,12 +142,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
-/home/src/projects/project/a.ts
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -180,18 +174,24 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output file 'home/src/projects/outFile.js' does not exist
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js"
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
 //// [/home/src/projects/outFile.tsbuildinfo] file written with same contents
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/outFile.js]
-var a = "hello";
+"use strict";
+const a = "hello";
 
 
 
@@ -207,10 +207,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -240,11 +240,16 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/outFile.tsbuildinfo' is older than input 'home/src/projects/project/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../outFile.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
@@ -262,10 +267,10 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
-Semantic diagnostics in builder refreshed for::
+No cached semantic diagnostics in the builder::
 
 No shapes updated in the builder::
 
@@ -290,11 +295,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because output 'home/src/projects/outFile.tsbuildinfo' is older than input 'home/src/projects/project/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
 [7m [0m [91m                [0m
@@ -303,19 +308,8 @@ Output::
 
 
 
-//// [/home/src/projects/outFile.tsbuildinfo]
-{"root":["./project/a.ts"],"errors":true,"version":"FakeTSVersion"}
-
-//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt]
-{
-  "root": [
-    "./project/a.ts"
-  ],
-  "errors": true,
-  "version": "FakeTSVersion",
-  "size": 67
-}
-
+//// [/home/src/projects/outFile.tsbuildinfo] file written with same contents
+//// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 
 
 Program root files: [
@@ -330,7 +324,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -362,11 +356,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
 [7m [0m [91m                [0m
@@ -378,7 +372,8 @@ Output::
 //// [/home/src/projects/outFile.tsbuildinfo] file written with same contents
 //// [/home/src/projects/outFile.tsbuildinfo.readable.baseline.txt] file written with same contents
 //// [/home/src/projects/outFile.js]
-var a = "hello;
+"use strict";
+const a = "hello;
 
 
 
@@ -394,7 +389,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::
@@ -427,11 +422,11 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Project 'home/src/projects/project/tsconfig.json' is out of date because buildinfo file 'home/src/projects/outFile.tsbuildinfo' indicates that program needs to report errors.
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file '../outFile.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/projects/project/tsconfig.json'...
 
-[96mhome/src/projects/project/a.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
+[96ma.ts[0m:[93m1[0m:[93m17[0m - [91merror[0m[90m TS1002: [0mUnterminated string literal.
 
 [7m1[0m const a = "hello
 [7m [0m [91m                [0m
@@ -454,7 +449,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/project/a.ts
 
 No cached semantic diagnostics in the builder::

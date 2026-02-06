@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es6
 declare function hasOwnProperty<P extends PropertyKey>(target: {}, property: P): target is { readonly [K in P]: unknown };
 declare const arrayLikeOrIterable: ArrayLike<any> | Iterable<any>;

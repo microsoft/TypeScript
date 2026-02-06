@@ -277,7 +277,7 @@ namespace SourceMapSpanWriter {
     }
 }
 
-export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitResult[], program: ts.Program, jsFiles: readonly documents.TextDocument[], declarationFiles: readonly documents.TextDocument[]) {
+export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitResult[], program: ts.Program, jsFiles: readonly documents.TextDocument[], declarationFiles: readonly documents.TextDocument[]): string {
     const sourceMapRecorder = new Compiler.WriterAggregator();
 
     for (let i = 0; i < sourceMapDataList.length; i++) {
@@ -324,7 +324,7 @@ export function getSourceMapRecord(sourceMapDataList: readonly ts.SourceMapEmitR
     return sourceMapRecorder.lines.join("\r\n");
 }
 
-export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: string) {
+export function getSourceMapRecordWithSystem(sys: ts.System, sourceMapFile: string): string {
     const sourceMapRecorder = new Compiler.WriterAggregator();
     let prevSourceFile: documents.TextDocument | undefined;
     const files = new Map<string, documents.TextDocument>();

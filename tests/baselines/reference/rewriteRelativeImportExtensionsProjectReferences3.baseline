@@ -1,0 +1,16 @@
+// === Syntax and Semantic Diagnostics ===
+Syntactic Diagnostics for file '/tests/cases/fourslash/server/rewriteRelativeImportExtensionsProjectReferences3.ts':
+
+
+==== /tests/cases/fourslash/server/src/compiler/parser.ts (0 errors) ====
+    export {};
+==== /tests/cases/fourslash/server/src/services/services.ts (0 errors) ====
+    import {} from "../compiler/parser.ts";
+
+Semantic Diagnostics for file '/tests/cases/fourslash/server/rewriteRelativeImportExtensionsProjectReferences3.ts':
+
+
+==== /tests/cases/fourslash/server/src/compiler/parser.ts (0 errors) ====
+    export {};
+==== /tests/cases/fourslash/server/src/services/services.ts (0 errors) ====
+    import {} from "../compiler/parser.ts";

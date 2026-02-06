@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 ///////<reference path="./Bar.ts" />
 
 ////[|function [|{| "contextRangeIndex": 0 |}Bar|]() {

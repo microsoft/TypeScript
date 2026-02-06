@@ -1,3 +1,4 @@
+// @target: es2015
 // Index notation should resolve to the type of a declared property with that same name
 class C {
     foo: string;

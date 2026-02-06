@@ -1,4 +1,5 @@
-module O {
+// @target: es2015
+namespace O {
     export class A {
         
     }

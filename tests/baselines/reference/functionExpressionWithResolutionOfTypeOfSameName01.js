@@ -9,6 +9,7 @@ var x = function f() {
 }
 
 //// [functionExpressionWithResolutionOfTypeOfSameName01.js]
+"use strict";
 var x = function f() {
     f;
 };

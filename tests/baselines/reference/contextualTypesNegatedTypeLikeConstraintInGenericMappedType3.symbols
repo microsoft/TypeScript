@@ -1,0 +1,129 @@
+//// [tests/cases/compiler/contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts] ////
+
+=== contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts ===
+type MappedOmit<T, K extends keyof any> = { [P in keyof T as Exclude<P, K>]: T[P]; }
+>MappedOmit : Symbol(MappedOmit, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 0))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 16))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 18))
+>P : Symbol(P, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 45))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 16))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 45))
+>K : Symbol(K, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 18))
+>T : Symbol(T, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 16))
+>P : Symbol(P, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 45))
+
+type IntrinsicElements = {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 84))
+
+  div: {
+>div : Symbol(div, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 2, 26))
+
+    onChange: (ev: Event) => void;
+>onChange : Symbol(onChange, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 3, 8))
+>ev : Symbol(ev, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 4, 15))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  };
+  span: {
+>span : Symbol(span, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 5, 4))
+
+    onChange: (ev: Event) => void;
+>onChange : Symbol(onChange, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 6, 9))
+>ev : Symbol(ev, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 7, 15))
+>Event : Symbol(Event, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+
+  };
+};
+
+type ElementType = keyof IntrinsicElements;
+>ElementType : Symbol(ElementType, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 9, 2))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 84))
+
+let DEFAULT_TABS_TAG = "div" as const;
+>DEFAULT_TABS_TAG : Symbol(DEFAULT_TABS_TAG, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 13, 3))
+>const : Symbol(const)
+
+type Props<TTag extends ElementType, Overrides = {}> = MappedOmit<
+>Props : Symbol(Props, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 13, 38))
+>TTag : Symbol(TTag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 15, 11))
+>ElementType : Symbol(ElementType, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 9, 2))
+>Overrides : Symbol(Overrides, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 15, 36))
+>MappedOmit : Symbol(MappedOmit, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 0))
+
+  IntrinsicElements[TTag],
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 0, 84))
+>TTag : Symbol(TTag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 15, 11))
+
+  keyof Overrides
+>Overrides : Symbol(Overrides, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 15, 36))
+
+> &
+  Overrides;
+>Overrides : Symbol(Overrides, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 15, 36))
+
+type TabGroupProps<TTag extends ElementType = typeof DEFAULT_TABS_TAG> = Props<
+>TabGroupProps : Symbol(TabGroupProps, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 19, 12))
+>TTag : Symbol(TTag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 21, 19))
+>ElementType : Symbol(ElementType, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 9, 2))
+>DEFAULT_TABS_TAG : Symbol(DEFAULT_TABS_TAG, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 13, 3))
+>Props : Symbol(Props, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 13, 38))
+
+  TTag,
+>TTag : Symbol(TTag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 21, 19))
+  {
+    defaultIndex?: number;
+>defaultIndex : Symbol(defaultIndex, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 23, 3))
+
+    onChange?: (index: number) => void;
+>onChange : Symbol(onChange, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 24, 26))
+>index : Symbol(index, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 25, 16))
+
+    selectedIndex?: number;
+>selectedIndex : Symbol(selectedIndex, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 25, 39))
+
+    vertical?: boolean;
+>vertical : Symbol(vertical, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 26, 27))
+
+    manual?: boolean;
+>manual : Symbol(manual, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 27, 23))
+  }
+>;
+
+interface _internal_ComponentTabGroup {
+>_internal_ComponentTabGroup : Symbol(_internal_ComponentTabGroup, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 30, 2))
+
+  <TTag extends ElementType = typeof DEFAULT_TABS_TAG>(
+>TTag : Symbol(TTag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 33, 3))
+>ElementType : Symbol(ElementType, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 9, 2))
+>DEFAULT_TABS_TAG : Symbol(DEFAULT_TABS_TAG, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 13, 3))
+
+    props: TabGroupProps<TTag>,
+>props : Symbol(props, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 33, 55))
+>TabGroupProps : Symbol(TabGroupProps, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 19, 12))
+>TTag : Symbol(TTag, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 33, 3))
+
+  ): null;
+}
+
+declare let TabGroup: _internal_ComponentTabGroup;
+>TabGroup : Symbol(TabGroup, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 38, 11))
+>_internal_ComponentTabGroup : Symbol(_internal_ComponentTabGroup, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 30, 2))
+
+TabGroup({
+>TabGroup : Symbol(TabGroup, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 38, 11))
+
+  defaultIndex: 0,
+>defaultIndex : Symbol(defaultIndex, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 40, 10))
+
+  onChange: (index) => {
+>onChange : Symbol(onChange, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 41, 18))
+>index : Symbol(index, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 42, 13))
+
+    const i: number = index;
+>i : Symbol(i, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 43, 9))
+>index : Symbol(index, Decl(contextualTypesNegatedTypeLikeConstraintInGenericMappedType3.ts, 42, 13))
+
+  },
+});
+

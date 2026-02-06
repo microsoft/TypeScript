@@ -1,9 +1,9 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
-////{ "compilerOptions": { "module": "esnext" } }
+// @Filename: /home/src/workspaces/project/tsconfig.json
+////{ "compilerOptions": { "module": "esnext", "lib": ["es5"] } }
 
-// @Filename: /ambient.d.ts
+// @Filename: /home/src/workspaces/project/ambient.d.ts
 ////declare module 'ambient' {
 ////  export const ambient = 0;
 ////}

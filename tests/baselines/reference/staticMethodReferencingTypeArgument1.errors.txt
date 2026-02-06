@@ -1,13 +1,19 @@
+staticMethodReferencingTypeArgument1.ts(3,9): error TS2564: Property 'next' has no initializer and is not definitely assigned in the constructor.
+staticMethodReferencingTypeArgument1.ts(4,9): error TS2564: Property 'prev' has no initializer and is not definitely assigned in the constructor.
 staticMethodReferencingTypeArgument1.ts(9,33): error TS2302: Static members cannot reference class type parameters.
 staticMethodReferencingTypeArgument1.ts(10,29): error TS2302: Static members cannot reference class type parameters.
 staticMethodReferencingTypeArgument1.ts(10,43): error TS2302: Static members cannot reference class type parameters.
 
 
-==== staticMethodReferencingTypeArgument1.ts (3 errors) ====
-    module Editor {
+==== staticMethodReferencingTypeArgument1.ts (5 errors) ====
+    namespace Editor {
         export class List<T> {
             next: List<T>;
+            ~~~~
+!!! error TS2564: Property 'next' has no initializer and is not definitely assigned in the constructor.
             prev: List<T>;
+            ~~~~
+!!! error TS2564: Property 'prev' has no initializer and is not definitely assigned in the constructor.
     
             constructor(public isHead: boolean, public data: T) {
             }

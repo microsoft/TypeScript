@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 
 // @Filename: exportEqualCallable_0.ts

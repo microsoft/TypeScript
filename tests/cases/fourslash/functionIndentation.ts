@@ -1,6 +1,6 @@
 /// <reference path="fourslash.ts"/>
 
-////module M {
+////namespace M {
 ////export =
 ////C;
 ////class C {
@@ -41,7 +41,7 @@
 
 format.document();
 verify.currentFileContentIs(
-"module M {\n" +
+"namespace M {\n" +
 "    export =\n" +
 "        C;\n" +
 "    class C {\n" +

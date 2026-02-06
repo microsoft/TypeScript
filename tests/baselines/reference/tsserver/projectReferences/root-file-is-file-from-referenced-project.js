@@ -1,5 +1,7 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
 //// [/user/username/projects/project/src/common/tsconfig.json]
 {
@@ -58,8 +60,7 @@ function foo() {
 }
 
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -70,13 +71,14 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/project/out/input/keyboard.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.evaluateKeyboardEvent = evaluateKeyboardEvent;
 function bar() { return "just a random function so .d.ts location doesnt match"; }
-function evaluateKeyboardEvent() { }
+export function evaluateKeyboardEvent() { }
 
 
 //// [/user/username/projects/project/out/input/keyboard.d.ts.map]
@@ -87,11 +89,9 @@ export declare function evaluateKeyboardEvent(): void;
 //# sourceMappingURL=keyboard.d.ts.map
 
 //// [/user/username/projects/project/out/input/keyboard.test.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var keyboard_1 = require("common/input/keyboard");
+import { evaluateKeyboardEvent } from 'common/input/keyboard';
 function testEvaluateKeyboardEvent() {
-    return (0, keyboard_1.evaluateKeyboardEvent)();
+    return evaluateKeyboardEvent();
 }
 
 
@@ -103,12 +103,12 @@ export {};
 //# sourceMappingURL=keyboard.test.d.ts.map
 
 //// [/user/username/projects/project/out/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../a/lib/lib.d.ts","../src/common/input/keyboard.ts","../src/common/input/keyboard.test.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},{"version":"-15187822601-function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }","signature":"-14411843863-export declare function evaluateKeyboardEvent(): void;\n"},{"version":"-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"composite":true,"declarationMap":true,"outDir":"./"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./input/keyboard.test.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","../src/common/input/keyboard.ts","../src/common/input/keyboard.test.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-15187822601-function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }","signature":"-14411843863-export declare function evaluateKeyboardEvent(): void;\n"},{"version":"-7258701250-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"}],"root":[2,3],"options":{"composite":true,"declarationMap":true,"outDir":"./"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./input/keyboard.test.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/project/out/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../a/lib/lib.d.ts",
+    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "../src/common/input/keyboard.ts",
     "../src/common/input/keyboard.test.ts"
   ],
@@ -118,13 +118,13 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../../../../a/lib/lib.d.ts": {
+    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "../src/common/input/keyboard.ts": {
@@ -164,17 +164,29 @@ export {};
       "../src/common/input/keyboard.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../src/common/input/keyboard.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../src/common/input/keyboard.test.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./input/keyboard.test.d.ts",
   "version": "FakeTSVersion",
-  "size": 1184
+  "size": 1290
 }
 
 //// [/user/username/projects/project/out/terminal.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var keyboard_1 = require("common/input/keyboard");
+import { evaluateKeyboardEvent } from 'common/input/keyboard';
 function foo() {
-    return (0, keyboard_1.evaluateKeyboardEvent)();
+    return evaluateKeyboardEvent();
 }
 
 
@@ -186,12 +198,12 @@ export {};
 //# sourceMappingURL=terminal.d.ts.map
 
 //// [/user/username/projects/project/out/src.tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../a/lib/lib.d.ts","./input/keyboard.d.ts","../src/terminal.ts","./input/keyboard.test.d.ts","../src/common/input/keyboard.test.ts","../src/common/input/keyboard.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }","affectsGlobalScope":true},"-14411843863-export declare function evaluateKeyboardEvent(): void;\n",{"version":"-9992649704-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"},"-3531856636-export {};\n"],"root":[[2,4]],"resolvedRoot":[[4,5],[2,6]],"options":{"composite":true,"declarationMap":true,"outDir":"./","tsBuildInfoFile":"./src.tsconfig.tsbuildinfo"},"referencedMap":[[3,1]],"latestChangedDtsFile":"./terminal.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./input/keyboard.d.ts","../src/terminal.ts","./input/keyboard.test.d.ts","../src/common/input/keyboard.test.ts","../src/common/input/keyboard.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-14411843863-export declare function evaluateKeyboardEvent(): void;\n",{"version":"-9992649704-import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n","signature":"-3531856636-export {};\n"},"-3531856636-export {};\n"],"root":[[2,4]],"resolvedRoot":[[4,5],[2,6]],"options":{"composite":true,"declarationMap":true,"outDir":"./","tsBuildInfoFile":"./src.tsconfig.tsbuildinfo"},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./terminal.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/project/out/src.tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../a/lib/lib.d.ts",
+    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./input/keyboard.d.ts",
     "../src/terminal.ts",
     "./input/keyboard.test.d.ts",
@@ -204,13 +216,13 @@ export {};
     ]
   ],
   "fileInfos": {
-    "../../../../../a/lib/lib.d.ts": {
+    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
       "original": {
-        "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+        "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
       },
-      "version": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
-      "signature": "-7698705165-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }",
+      "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+      "signature": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
       "affectsGlobalScope": true
     },
     "./input/keyboard.d.ts": {
@@ -276,9 +288,27 @@ export {};
       "./input/keyboard.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./input/keyboard.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../src/terminal.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./input/keyboard.test.d.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./terminal.d.ts",
   "version": "FakeTSVersion",
-  "size": 1161
+  "size": 1269
 }
 
 
@@ -292,18 +322,8 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/common/input/keyboard.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/src/common/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/project/src/common/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/project/src/common/tsconfig.json, currentDirectory: /user/username/projects/project/src/common
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/tsconfig.json 2000 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Config file
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/project/src/common/tsconfig.json",
-        "reason": "Creating possible configured project for /user/username/projects/project/src/common/input/keyboard.ts to open"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/src/common/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/project/src/common/input/keyboard.test.ts",
@@ -318,29 +338,31 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/src/common/tsco
   "configFilePath": "/user/username/projects/project/src/common/tsconfig.json"
  }
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/project/src/common/tsconfig.json",
+        "reason": "Creating possible configured project for /user/username/projects/project/src/common/input/keyboard.ts to open"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common 1 undefined Config: /user/username/projects/project/src/common/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common 1 undefined Config: /user/username/projects/project/src/common/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/input/keyboard.test.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/src/common/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/common/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/src/common/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/src/common/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/src/common/input/keyboard.ts SVC-1-0 "function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }"
 	/user/username/projects/project/src/common/input/keyboard.test.ts Text-1 "import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n"
 
 
-	../../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	input/keyboard.ts
 	  Imported via 'common/input/keyboard' from file 'input/keyboard.test.ts'
 	  Matched by include pattern './**/*' in 'tsconfig.json'
@@ -376,7 +398,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -412,11 +434,26 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/project/src/common/input/keyboard.ts",
         "configFile": "/user/username/projects/project/src/common/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 6,
+              "offset": 5
+            },
+            "end": {
+              "line": 6,
+              "offset": 14
+            },
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/user/username/projects/project/src/common/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/common/tsconfig.json ProjectRootPath: undefined:: Result: /user/username/projects/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /user/username/projects/project/src/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /user/username/projects/project/src/tsconfig.json, currentDirectory: /user/username/projects/project/src
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /user/username/projects/project/src/tsconfig.json 2000 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Config file
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/tsconfig.json ProjectRootPath: undefined:: Result: undefined
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/src/common/tsconfig.json' (Configured)
@@ -443,18 +480,8 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/src/common/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/src/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/project/src/common/input/keyboard.test.ts: *new*
   {}
@@ -471,13 +498,15 @@ Projects::
 /user/username/projects/project/src/common/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/project/src/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 0
     dirty: true
+    initialLoadPending: true
 
 ScriptInfos::
-/a/lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /user/username/projects/project/src/common/tsconfig.json
@@ -502,16 +531,6 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/terminal.ts ProjectRootPath: undefined:: Result: /user/username/projects/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] event:
-    {
-      "seq": 0,
-      "type": "event",
-      "event": "projectLoadingStart",
-      "body": {
-        "projectName": "/user/username/projects/project/src/tsconfig.json",
-        "reason": "Creating project possibly referencing default composite project /user/username/projects/project/src/common/tsconfig.json of open file /user/username/projects/project/src/common/input/keyboard.ts"
-      }
-    }
 Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/src/tsconfig.json : {
  "rootNames": [
   "/user/username/projects/project/src/terminal.ts",
@@ -540,26 +559,30 @@ Info seq  [hh:mm:ss:mss] Config: /user/username/projects/project/src/tsconfig.js
   }
  ]
 }
+Info seq  [hh:mm:ss:mss] event:
+    {
+      "seq": 0,
+      "type": "event",
+      "event": "projectLoadingStart",
+      "body": {
+        "projectName": "/user/username/projects/project/src/tsconfig.json",
+        "reason": "Creating project possibly referencing default composite project /user/username/projects/project/src/common/tsconfig.json of open file /user/username/projects/project/src/common/input/keyboard.ts"
+      }
+    }
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src 1 undefined Config: /user/username/projects/project/src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src 1 undefined Config: /user/username/projects/project/src/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /user/username/projects/project/src/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/src/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/project/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Project: /user/username/projects/project/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/project/src/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/project/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/user/username/projects/project/src/common/input/keyboard.ts SVC-1-0 "function bar() { return \"just a random function so .d.ts location doesnt match\"; }\nexport function evaluateKeyboardEvent() { }"
 	/user/username/projects/project/src/terminal.ts SVC-1-0 "import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction foo() {\n    return evaluateKeyboardEvent();\n}\n"
 	/user/username/projects/project/src/common/input/keyboard.test.ts Text-1 "import { evaluateKeyboardEvent } from 'common/input/keyboard';\nfunction testEvaluateKeyboardEvent() {\n    return evaluateKeyboardEvent();\n}\n"
 
 
-	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	common/input/keyboard.ts
 	  Imported via 'common/input/keyboard' from file 'terminal.ts'
 	  Imported via 'common/input/keyboard' from file 'common/input/keyboard.test.ts'
@@ -598,7 +621,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -636,7 +659,22 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/user/username/projects/project/src/terminal.ts",
         "configFile": "/user/username/projects/project/src/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 6,
+              "offset": 5
+            },
+            "end": {
+              "line": 6,
+              "offset": 14
+            },
+            "text": "Option 'baseUrl' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/user/username/projects/project/src/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /user/username/projects/project/src/tsconfig.json ProjectRootPath: undefined:: Result: undefined
@@ -666,18 +704,8 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/src/common/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/project/src/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /user/username/projects/project/src/common/input/keyboard.test.ts:
   {}
@@ -696,13 +724,16 @@ Projects::
 /user/username/projects/project/src/common/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/project/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
     dirty: false *changed*
+    initialLoadPending: false *changed*
+    autoImportProviderHost: false *changed*
 
 ScriptInfos::
-/a/lib/lib.d.ts *changed*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *changed*
     version: Text-1
     containingProjects: 2 *changed*
         /user/username/projects/project/src/common/tsconfig.json
@@ -851,9 +882,11 @@ Projects::
 /user/username/projects/project/src/common/tsconfig.json (Configured)
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 /user/username/projects/project/src/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
     originalConfiguredProjects: 2 *changed*
         /user/username/projects/project/src/common/tsconfig.json *new*
         /user/username/projects/project/src/tsconfig.json *new*

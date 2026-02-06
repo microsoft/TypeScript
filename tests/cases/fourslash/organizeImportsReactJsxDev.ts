@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @allowSyntheticDefaultImports: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @noUnusedLocals: true
 // @target: es2018
 // @jsx: react-jsxdev
@@ -13,7 +13,7 @@
 // @filename: node_modules/react/package.json
 ////{
 ////    "name": "react",
-////    "types": "index.d.ts",
+////    "types": "index.d.ts"
 ////}
 
 // @filename: node_modules/react/index.d.ts

@@ -1,0 +1,14 @@
+ES5SymbolProperty3.ts(1,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Symbol' must be of type 'SymbolConstructor', but here has type 'any'.
+
+
+==== ES5SymbolProperty3.ts (1 errors) ====
+    var Symbol: any;
+        ~~~~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'Symbol' must be of type 'SymbolConstructor', but here has type 'any'.
+!!! related TS6203 lib.es2015.symbol.d.ts:--:--: 'Symbol' was also declared here.
+    
+    class C {
+        [Symbol.iterator]() { }
+    }
+    
+    (new C)[Symbol.iterator]

@@ -16,6 +16,7 @@ function needsToNarrowTheType<First extends { foo: string }, Second extends { ba
 }
 
 //// [genericCapturingFunctionNarrowing.js]
+"use strict";
 function needsToNarrowTheType(thing) {
     if (hasAFoo(thing)) {
         console.log(thing.foo);

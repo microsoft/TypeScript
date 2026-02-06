@@ -1,5 +1,6 @@
 // @declaration: true
 // @target: es2015
+// @module: commonjs
 // @emitDeclarationOnly: true
 
 // @fileName: v1.ts

@@ -1,18 +1,18 @@
 //// [tests/cases/compiler/innerExtern.ts] ////
 
 === innerExtern.ts ===
-module A {
+namespace A {
 >A : typeof A
 >  : ^^^^^^^^
 
-    export declare module BB {
+    export declare namespace BB {
 >BB : typeof BB
 >   : ^^^^^^^^^
 
         export var Elephant;
 >Elephant : any
     }
-    export module B {
+    export namespace B {
 >B : typeof B
 >  : ^^^^^^^^
 

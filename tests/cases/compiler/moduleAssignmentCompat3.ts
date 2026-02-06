@@ -1,7 +1,8 @@
-module A {
+// @target: es2015
+namespace A {
     export var x = 1;
 }
-module B {
+namespace B {
     export var x = "";
 }
 

@@ -1,10 +1,13 @@
 ParameterList6.ts(2,19): error TS2369: A parameter property is only allowed in a constructor implementation.
+ParameterList6.ts(2,19): error TS7006: Parameter 'A' implicitly has an 'any' type.
 
 
-==== ParameterList6.ts (1 errors) ====
+==== ParameterList6.ts (2 errors) ====
     class C {
       constructor(C: (public A) => any) {
                       ~~~~~~~~
 !!! error TS2369: A parameter property is only allowed in a constructor implementation.
+                      ~~~~~~~~
+!!! error TS7006: Parameter 'A' implicitly has an 'any' type.
       }
     }

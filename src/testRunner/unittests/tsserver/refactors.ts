@@ -5,17 +5,17 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: refactors", () => {
+describe("unittests:: tsserver:: refactors::", () => {
     it("use formatting options", () => {
         const file = {
-            path: "/a.ts",
+            path: "/home/src/projects/project/a.ts",
             content: "function f() {\n  1;\n}",
         };
-        const host = createServerHost([file]);
+        const host = TestServerHost.createServerHost([file]);
         const session = new TestSession(host);
         openFilesForSession([file], session);
 
@@ -33,7 +33,7 @@ describe("unittests:: tsserver:: refactors", () => {
             arguments: {
                 refactor: "Extract Symbol",
                 action: "function_scope_1",
-                file: "/a.ts",
+                file: "/home/src/projects/project/a.ts",
                 startLine: 2,
                 startOffset: 3,
                 endLine: 2,
@@ -45,15 +45,15 @@ describe("unittests:: tsserver:: refactors", () => {
 
     it("handles text changes in tsconfig.json", () => {
         const aTs = {
-            path: "/a.ts",
+            path: "/home/src/projects/project/a.ts",
             content: "export const a = 0;",
         };
         const tsconfig = {
-            path: "/tsconfig.json",
+            path: "/home/src/projects/project/tsconfig.json",
             content: '{ "files": ["./a.ts"] }',
         };
 
-        const host = createServerHost([aTs, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -62,7 +62,7 @@ describe("unittests:: tsserver:: refactors", () => {
             arguments: {
                 refactor: "Move to a new file",
                 action: "Move to a new file",
-                file: "/a.ts",
+                file: "/home/src/projects/project/a.ts",
                 startLine: 1,
                 startOffset: 1,
                 endLine: 1,
@@ -73,9 +73,9 @@ describe("unittests:: tsserver:: refactors", () => {
     });
 
     it("handles canonicalization of tsconfig path", () => {
-        const aTs: File = { path: "/Foo/a.ts", content: "const x = 0;" };
-        const tsconfig: File = { path: "/Foo/tsconfig.json", content: '{ "files": ["./a.ts"] }' };
-        const host = createServerHost([aTs, tsconfig]);
+        const aTs: File = { path: "/home/src/projects/project/Foo/a.ts", content: "const x = 0;" };
+        const tsconfig: File = { path: "/home/src/projects/project/Foo/tsconfig.json", content: '{ "files": ["./a.ts"] }' };
+        const host = TestServerHost.createServerHost([aTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -95,14 +95,14 @@ describe("unittests:: tsserver:: refactors", () => {
     });
 
     it("handles moving statement to an existing file", () => {
-        const aTs: File = { path: "/Foo/a.ts", content: "const x = 0;" };
+        const aTs: File = { path: "/home/src/projects/project/Foo/a.ts", content: "const x = 0;" };
         const bTs: File = {
-            path: "/Foo/b.ts",
+            path: "/home/src/projects/project/Foo/b.ts",
             content: `import {} from "./bar";
     const a = 1;`,
         };
-        const tsconfig: File = { path: "/Foo/tsconfig.json", content: `{ "files": ["./a.ts", "./b.ts"] }` };
-        const host = createServerHost([aTs, bTs, tsconfig]);
+        const tsconfig: File = { path: "/home/src/projects/project/Foo/tsconfig.json", content: `{ "files": ["./a.ts", "./b.ts"] }` };
+        const host = TestServerHost.createServerHost([aTs, bTs, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -116,7 +116,7 @@ describe("unittests:: tsserver:: refactors", () => {
                 endOffset: aTs.content.length,
                 refactor: "Move to file",
                 action: "Move to file",
-                interactiveRefactorArguments: { targetFile: "/Foo/b.ts" },
+                interactiveRefactorArguments: { targetFile: "/home/src/projects/project/Foo/b.ts" },
             },
         });
         baselineTsserverLogs("refactors", "handles moving statement to an existing file", session);
@@ -124,18 +124,18 @@ describe("unittests:: tsserver:: refactors", () => {
 
     it("handles moving statements to a non-TS file", () => {
         const aTs: File = {
-            path: "/Foo/a.ts",
+            path: "/home/src/projects/project/Foo/a.ts",
             content: "const x = 0;",
         };
         const bTxt: File = {
-            path: "/Foo/b.txt",
+            path: "/home/src/projects/project/Foo/b.txt",
             content: "",
         };
         const tsconfig: File = {
-            path: "/Foo/tsconfig.json",
+            path: "/home/src/projects/project/Foo/tsconfig.json",
             content: `{ "files": ["./a.ts"] }`,
         };
-        const host = createServerHost([aTs, bTxt, tsconfig]);
+        const host = TestServerHost.createServerHost([aTs, bTxt, tsconfig]);
         const session = new TestSession(host);
         openFilesForSession([aTs], session);
 
@@ -149,7 +149,7 @@ describe("unittests:: tsserver:: refactors", () => {
                 endOffset: aTs.content.length,
                 refactor: "Move to file",
                 action: "Move to file",
-                interactiveRefactorArguments: { targetFile: "/Foo/b.txt" },
+                interactiveRefactorArguments: { targetFile: "/home/src/projects/project/Foo/b.txt" },
             },
         });
         baselineTsserverLogs("refactors", "handles moving statements to a non-TS file", session);
@@ -157,16 +157,16 @@ describe("unittests:: tsserver:: refactors", () => {
 
     it("handles moving statements to a TS file that is not included in the TS project", () => {
         const fooATs: File = {
-            path: "/Foo/a.ts",
+            path: "/home/src/projects/project/Foo/a.ts",
             content: "",
         };
         const fooTsconfig: File = {
-            path: "/Foo/tsconfig.json",
+            path: "/home/src/projects/project/Foo/tsconfig.json",
             content: `{ "files": ["./a.ts"] }`,
         };
 
         const barATs: File = {
-            path: "/Bar/a.ts",
+            path: "/home/src/projects/project/Bar/a.ts",
             content: [
                 "const a = 1;",
                 "const b = 2;",
@@ -174,10 +174,10 @@ describe("unittests:: tsserver:: refactors", () => {
             ].join("\n"),
         };
         const barTsconfig: File = {
-            path: "/Bar/tsconfig.json",
+            path: "/home/src/projects/project/Bar/tsconfig.json",
             content: `{ "files": ["./a.ts"] }`,
         };
-        const host = createServerHost([fooATs, fooTsconfig, barATs, barTsconfig]);
+        const host = TestServerHost.createServerHost([fooATs, fooTsconfig, barATs, barTsconfig]);
         const session = new TestSession(host);
         openFilesForSession([barATs], session);
 
@@ -191,7 +191,7 @@ describe("unittests:: tsserver:: refactors", () => {
                 endOffset: 13,
                 refactor: "Move to file",
                 action: "Move to file",
-                interactiveRefactorArguments: { targetFile: "/Foo/a.ts" },
+                interactiveRefactorArguments: { targetFile: "/home/src/projects/project/Foo/a.ts" },
             },
         });
         baselineTsserverLogs("refactors", "handles moving statements to a TS file that is not included in the TS project", session);

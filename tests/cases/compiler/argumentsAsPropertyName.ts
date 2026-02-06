@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // target: es5
 type MyType = {
     arguments: Array<string>

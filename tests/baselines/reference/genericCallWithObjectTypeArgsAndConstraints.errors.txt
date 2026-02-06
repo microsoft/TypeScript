@@ -1,0 +1,54 @@
+genericCallWithObjectTypeArgsAndConstraints.ts(5,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+genericCallWithObjectTypeArgsAndConstraints.ts(9,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+genericCallWithObjectTypeArgsAndConstraints.ts(10,5): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+genericCallWithObjectTypeArgsAndConstraints.ts(14,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+genericCallWithObjectTypeArgsAndConstraints.ts(19,12): error TS2454: Variable 'x' is used before being assigned.
+genericCallWithObjectTypeArgsAndConstraints.ts(29,12): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== genericCallWithObjectTypeArgsAndConstraints.ts (6 errors) ====
+    // Generic call with constraints infering type parameter from object member properties
+    // No errors expected
+    
+    class C {
+        x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class D {
+        x: string;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+        y: string;
+        ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    class X<T> {
+        x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    }
+    
+    function foo<T extends { x: string }>(t: X<T>, t2: X<T>) {
+        var x: T;
+        return x;
+               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    }
+    
+    var c1 = new X<C>();
+    var d1 = new X<D>();
+    var r = foo(c1, d1); 
+    var r2 = foo(c1, c1);
+    
+    function foo2<T extends C>(t: X<T>, t2: X<T>) {
+        var x: T;
+        return x;
+               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    }
+    
+    var r = foo2(c1, d1); 
+    var r2 = foo2(c1, c1);

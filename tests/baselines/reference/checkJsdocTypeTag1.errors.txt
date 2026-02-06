@@ -1,7 +1,10 @@
+0.js(17,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
+0.js(21,12): error TS7006: Parameter 'a' implicitly has an 'any' type.
 0.js(24,12): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
+0.js(40,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'props' must be of type 'object', but here has type 'Object'.
 
 
-==== 0.js (1 errors) ====
+==== 0.js (4 errors) ====
     // @ts-check
     /** @type {String} */
     var S = "hello world";
@@ -19,10 +22,14 @@
     
     /** @type {Function} */
     const x = (a) => a + 1;
+               ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
     x(1);
     
     /** @type {function} */
     const y = (a) => a + 1;
+               ~
+!!! error TS7006: Parameter 'a' implicitly has an 'any' type.
     y(1);
     
     /** @type {function (number)} */
@@ -44,4 +51,7 @@
      * @type {Object}
      */
     var props = {};
+        ~~~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'props' must be of type 'object', but here has type 'Object'.
+!!! related TS6203 0.js:35:5: 'props' was also declared here.
     

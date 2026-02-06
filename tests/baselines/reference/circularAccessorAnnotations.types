@@ -2,23 +2,23 @@
 
 === circularAccessorAnnotations.ts ===
 declare const c1: {
->c1 : { readonly foo: any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>c1 : { readonly foo: typeof c1.foo; }
+>   : ^^^^^^^^^^^^^^^^             ^^^
 
     get foo(): typeof c1.foo;
 >foo : any
 >    : ^^^
 >c1.foo : any
 >       : ^^^
->c1 : { readonly foo: any; }
->   : ^^^^^^^^^^^^^^^^^^^^^^
+>c1 : { readonly foo: typeof c1.foo; }
+>   : ^^^^^^^^^^^^^^^^             ^^^
 >foo : any
 >    : ^^^
 }
 
 declare const c2: {
->c2 : { foo: any; }
->   : ^^^^^^^^^^^^^
+>c2 : { foo: typeof c2.foo; }
+>   : ^^^^^^^             ^^^
 
     set foo(value: typeof c2.foo);
 >foo : any
@@ -27,15 +27,15 @@ declare const c2: {
 >      : ^^^
 >c2.foo : any
 >       : ^^^
->c2 : { foo: any; }
->   : ^^^^^^^^^^^^^
+>c2 : { foo: typeof c2.foo; }
+>   : ^^^^^^^             ^^^
 >foo : any
 >    : ^^^
 }
 
 declare const c3: {
 >c3 : { foo: string; }
->   : ^^^^^^^^^^^^^^^^
+>   : ^^^^^^^      ^^^
 
     get foo(): string;
 >foo : string
@@ -49,7 +49,7 @@ declare const c3: {
 >c3.foo : string
 >       : ^^^^^^
 >c3 : { foo: string; }
->   : ^^^^^^^^^^^^^^^^
+>   : ^^^^^^^      ^^^
 >foo : string
 >    : ^^^^^^
 }

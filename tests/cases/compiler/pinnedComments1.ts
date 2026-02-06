@@ -1,3 +1,4 @@
+// @target: es2015
 // @removeComments: true
 /*!=========
     Keep this pinned comment

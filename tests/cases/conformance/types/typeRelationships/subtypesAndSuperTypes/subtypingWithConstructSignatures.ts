@@ -1,4 +1,5 @@
-module ConstructSignature {
+// @target: es2015
+namespace ConstructSignature {
     declare function foo1(cb: new (x: number) => void): typeof cb;
     declare function foo1(cb: any): any;
     var rarg1: new (x: number) => number;

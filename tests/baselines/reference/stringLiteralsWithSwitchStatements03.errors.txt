@@ -6,20 +6,17 @@ stringLiteralsWithSwitchStatements03.ts(14,10): error TS2678: Type '"baz"' is no
 stringLiteralsWithSwitchStatements03.ts(14,11): error TS2695: Left side of comma operator is unused and has no side effects.
 stringLiteralsWithSwitchStatements03.ts(14,11): error TS2695: Left side of comma operator is unused and has no side effects.
 stringLiteralsWithSwitchStatements03.ts(18,12): error TS2872: This kind of expression is always truthy.
-stringLiteralsWithSwitchStatements03.ts(20,10): error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
-  Type '"baz"' is not comparable to type '"foo"'.
+stringLiteralsWithSwitchStatements03.ts(20,10): error TS2678: Type '"bar"' is not comparable to type '"foo"'.
 stringLiteralsWithSwitchStatements03.ts(20,12): error TS2872: This kind of expression is always truthy.
-stringLiteralsWithSwitchStatements03.ts(22,10): error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
-  Type '"baz"' is not comparable to type '"foo"'.
+stringLiteralsWithSwitchStatements03.ts(22,10): error TS2678: Type '"bar"' is not comparable to type '"foo"'.
 stringLiteralsWithSwitchStatements03.ts(23,10): error TS2872: This kind of expression is always truthy.
-stringLiteralsWithSwitchStatements03.ts(23,10): error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
-  Type '"baz"' is not comparable to type '"foo"'.
+stringLiteralsWithSwitchStatements03.ts(23,10): error TS2678: Type '"baz"' is not comparable to type '"foo"'.
 
 
 ==== stringLiteralsWithSwitchStatements03.ts (12 errors) ====
-    let x: "foo";
-    let y: "foo" | "bar"; 
-    let z: "bar";
+    declare let x: "foo";
+    declare let y: "foo" | "bar";
+    declare let z: "bar";
     
     declare function randBool(): boolean;
     
@@ -53,21 +50,18 @@ stringLiteralsWithSwitchStatements03.ts(23,10): error TS2678: Type '"bar" | "baz
             break;
         case (("bar" || ("baz"))):
              ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
-!!! error TS2678:   Type '"baz"' is not comparable to type '"foo"'.
+!!! error TS2678: Type '"bar"' is not comparable to type '"foo"'.
                ~~~~~
 !!! error TS2872: This kind of expression is always truthy.
             break;
         case z || "baz":
              ~~~~~~~~~~
-!!! error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
-!!! error TS2678:   Type '"baz"' is not comparable to type '"foo"'.
+!!! error TS2678: Type '"bar"' is not comparable to type '"foo"'.
         case "baz" || z:
              ~~~~~
 !!! error TS2872: This kind of expression is always truthy.
              ~~~~~~~~~~
-!!! error TS2678: Type '"bar" | "baz"' is not comparable to type '"foo"'.
-!!! error TS2678:   Type '"baz"' is not comparable to type '"foo"'.
+!!! error TS2678: Type '"baz"' is not comparable to type '"foo"'.
             z;
             break;
     }

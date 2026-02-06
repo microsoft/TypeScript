@@ -1,4 +1,4 @@
-import * as Harness from "../../_namespaces/Harness.js";
+import { IO } from "../../_namespaces/Harness.js";
 import * as ts from "../../_namespaces/ts.js";
 
 function editFlat(position: number, deletedLength: number, newText: string, source: string) {
@@ -212,7 +212,7 @@ describe(`unittests:: tsserver:: VersionCache stress test`, () => {
     before(() => {
         // Use scanner.ts, decent size, does not change frequently
         const testFileName = "src/compiler/scanner.ts";
-        testContent = Harness.IO.readFile(testFileName)!;
+        testContent = IO.readFile(testFileName)!;
         const totalChars = testContent.length;
         assert.isTrue(totalChars > 0, "Failed to read test file.");
 

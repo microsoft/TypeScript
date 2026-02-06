@@ -1,0 +1,26 @@
+//// [tests/cases/conformance/node/allowJs/nodeAllowJsPackageSelfName.ts] ////
+
+=== index.js ===
+// esm format file
+import * as self from "package";
+>self : Symbol(self, Decl(index.js, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.js, 1, 6))
+
+=== index.mjs ===
+// esm format file
+import * as self from "package";
+>self : Symbol(self, Decl(index.mjs, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.mjs, 1, 6))
+
+=== index.cjs ===
+// esm format file
+import * as self from "package";
+>self : Symbol(self, Decl(index.cjs, 1, 6))
+
+self;
+>self : Symbol(self, Decl(index.cjs, 1, 6))
+

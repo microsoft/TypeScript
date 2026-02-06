@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @Filename: /a.ts
 export class A { a!: string }
 export class B { b!: number }

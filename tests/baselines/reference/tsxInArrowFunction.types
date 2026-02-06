@@ -9,8 +9,8 @@ declare namespace JSX {
 >    : ^^^^^^^^^      ^^^
 
             text?: string;
->text : string
->     : ^^^^^^
+>text : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
         }
     }
 }
@@ -42,6 +42,7 @@ declare namespace JSX {
 >x => <div text="wat" /> : (x: any) => JSX.Element
 >                        : ^ ^^^^^^^^^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 ><div text="wat" /> : JSX.Element
 >                   : ^^^^^^^^^^^
 >div : any

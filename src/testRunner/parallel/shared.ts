@@ -75,7 +75,7 @@ export interface ParallelTimeoutChangeMessage {
 
 export type ParallelClientMessage = ParallelErrorMessage | ParallelResultMessage | ParallelBatchProgressMessage | ParallelTimeoutChangeMessage;
 
-export function shimNoopTestInterface(global: Mocha.MochaGlobals) {
+export function shimNoopTestInterface(global: Mocha.MochaGlobals): void {
     global.before = ts.noop;
     global.after = ts.noop;
     global.beforeEach = ts.noop;

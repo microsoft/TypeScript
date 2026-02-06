@@ -7,8 +7,8 @@ interface Base {
 >  : ^^^^^^      ^^^^^      ^^^
 
         a?: string; b: string;
->a : string
->  : ^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >b : string
 >  : ^^^^^^
     }
@@ -22,8 +22,8 @@ interface Base2 {
         b: string; c?: number;
 >b : string
 >  : ^^^^^^
->c : number
->  : ^^^^^^
+>c : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 

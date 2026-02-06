@@ -6,5 +6,6 @@ class C {
 }
 
 //// [parserComputedPropertyName36.js]
+"use strict";
 class C {
 }

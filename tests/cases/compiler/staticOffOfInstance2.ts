@@ -1,3 +1,4 @@
+// @target: es2015
 class List<T> {
     public Blah() {
         this.Foo(); // no error

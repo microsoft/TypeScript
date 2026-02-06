@@ -10,6 +10,7 @@ var obj2 = {
 }
 
 //// [emitRestParametersFunctionPropertyES6.js]
+"use strict";
 var obj;
 var obj2 = {
     func(...rest) { }

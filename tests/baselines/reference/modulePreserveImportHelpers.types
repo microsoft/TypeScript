@@ -1,0 +1,53 @@
+//// [tests/cases/compiler/modulePreserveImportHelpers.ts] ////
+
+=== /a.mts ===
+declare var dec: any
+>dec : any
+
+@dec()
+>dec() : any
+>dec : any
+
+export class A {}
+>A : A
+>  : ^
+
+=== /b.cts ===
+declare var dec: any
+>dec : any
+
+@dec()
+>dec() : any
+>dec : any
+
+class B {}
+>B : B
+>  : ^
+
+export {};
+
+=== /c.ts ===
+declare var dec: any
+>dec : any
+
+@dec()
+>dec() : any
+>dec : any
+
+export class C {}
+>C : C
+>  : ^
+
+=== /node_modules/tslib/tslib.d.ts ===
+export declare function __esDecorate(...args: any[]): any;
+>__esDecorate : (...args: any[]) => any
+>             : ^^^^    ^^     ^^^^^   
+>args : any[]
+>     : ^^^^^
+
+export declare function __runInitializers(...args: any[]): any;
+>__runInitializers : (...args: any[]) => any
+>                  : ^^^^    ^^     ^^^^^   
+>args : any[]
+>     : ^^^^^
+

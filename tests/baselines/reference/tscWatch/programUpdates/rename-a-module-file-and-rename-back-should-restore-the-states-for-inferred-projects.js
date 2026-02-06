@@ -1,4 +1,4 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
+currentDirectory:: /users/username/projects/project useCaseSensitiveFileNames:: false
 Input::
 //// [/users/username/projects/project/moduleFile.ts]
 export function bar() { };
@@ -6,8 +6,7 @@ export function bar() { };
 //// [/users/username/projects/project/file1.ts]
 import * as T from "./moduleFile"; T.bar();
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -18,9 +17,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w /users/username/projects/project/file1.ts
+/home/src/tslibs/TS/Lib/tsc.js -w /users/username/projects/project/file1.ts
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -29,24 +30,21 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/users/username/projects/project/moduleFile.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = bar;
-function bar() { }
+export function bar() { }
 ;
 
 
 //// [/users/username/projects/project/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var T = require("./moduleFile");
+import * as T from "./moduleFile";
 T.bar();
 
 
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /users/username/projects/project/file1.ts: *new*
   {}
@@ -61,17 +59,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/moduleFile.ts
 /users/username/projects/project/file1.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/moduleFile.ts
 /users/username/projects/project/file1.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /users/username/projects/project/modulefile.ts (used version)
 /users/username/projects/project/file1.ts (used version)
 
@@ -97,7 +95,7 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96musers/username/projects/project/file1.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module './moduleFile' or its corresponding type declarations.
+[96mfile1.ts[0m:[93m1[0m:[93m20[0m - [91merror[0m[90m TS2307: [0mCannot find module './moduleFile' or its corresponding type declarations.
 
 [7m1[0m import * as T from "./moduleFile"; T.bar();
 [7m [0m [91m                   ~~~~~~~~~~~~~~[0m
@@ -108,18 +106,20 @@ Output::
 
 //// [/users/username/projects/project/file1.js] file written with same contents
 
+PolledWatches::
+/users/username/projects/project/moduleFile: *new*
+  {"pollingInterval":500}
+
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {}
+/users/username/projects/project: *new*
   {}
 /users/username/projects/project/file1.ts:
   {}
 
 FsWatches *deleted*::
 /users/username/projects/project/moduleFile.ts:
-  {}
-
-FsWatchesRecursive::
-/users/username/projects: *new*
   {}
 
 Before running Timeout callback:: count: 0
@@ -135,7 +135,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/file1.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -181,24 +181,25 @@ Output::
 
 //// [/users/username/projects/project/file1.js] file written with same contents
 //// [/users/username/projects/project/moduleFile.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.bar = bar;
-function bar() { }
+export function bar() { }
 ;
 
 
 
+PolledWatches *deleted*::
+/users/username/projects/project/moduleFile:
+  {"pollingInterval":500}
+
 FsWatches::
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 /users/username/projects/project/file1.ts:
   {}
 /users/username/projects/project/moduleFile.ts: *new*
   {}
 
-FsWatchesRecursive *deleted*::
-/users/username/projects:
+FsWatches *deleted*::
+/users/username/projects/project:
   {}
 
 
@@ -210,7 +211,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /users/username/projects/project/moduleFile.ts
 /users/username/projects/project/file1.ts
 

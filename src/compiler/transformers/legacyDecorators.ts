@@ -679,7 +679,7 @@ export function transformLegacyDecorators(context: TransformationContext): (x: S
      * @param node The class node.
      */
     function generateConstructorDecorationExpression(node: ClassExpression | ClassDeclaration) {
-        const allDecorators = getAllDecoratorsOfClass(node);
+        const allDecorators = getAllDecoratorsOfClass(node, /*useLegacyDecorators*/ true);
         const decoratorExpressions = transformAllDecoratorsOfDeclaration(allDecorators);
         if (!decoratorExpressions) {
             return undefined;

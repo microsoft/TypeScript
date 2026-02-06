@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #25559
 
 declare function call<TS extends unknown[]>(

@@ -8,6 +8,6 @@
 try {
 }
 catch(eval) {
->eval : any
->     : ^^^
+>eval : unknown
+>     : ^^^^^^^
 }

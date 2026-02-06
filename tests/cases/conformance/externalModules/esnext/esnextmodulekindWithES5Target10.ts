@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @module: esnext
 
 import i = require("mod"); // Error;

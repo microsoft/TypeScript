@@ -1,9 +1,10 @@
+// @target: es2015
 // @strict: true
 // @jsx: react
 // @filename: a.tsx
 
 declare const React: any;
-declare module JSX {
+declare namespace JSX {
     interface IntrinsicElements {
         ["package"]: any;
     }

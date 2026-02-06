@@ -86,6 +86,7 @@ export interface B {
     ["2"]: number;
 }
 export declare class C {
+    [x: number]: number;
     [Symbol.iterator]: number;
     [globalThis.Symbol.toStringTag]: number;
     [1]: number;

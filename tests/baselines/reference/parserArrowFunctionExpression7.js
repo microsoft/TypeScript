@@ -10,6 +10,7 @@
 
 
 //// [parserArrowFunctionExpression7.js]
+"use strict";
 ({
     async m() {
         for (;;) {

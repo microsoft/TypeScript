@@ -1,4 +1,4 @@
-currentDirectory:: /home/src/projects/b/2/b-impl/b useCaseSensitiveFileNames: false
+currentDirectory:: /home/src/projects/b/2/b-impl/b useCaseSensitiveFileNames:: false
 Input::
 //// [/home/src/projects/c/3/c-impl/c/src/c.ts] Inode:: 9
 export const c: string = 'test';
@@ -10,7 +10,8 @@ export * from './c';
 {
   "compilerOptions": {
     "outDir": "lib",
-    "declaration": true
+    "declaration": true,
+    "rootDir": "src"
   },
   "include": [
     "src/**/*.ts"
@@ -39,7 +40,8 @@ export * from 'c';
 {
   "compilerOptions": {
     "outDir": "lib",
-    "declaration": true
+    "declaration": true,
+    "rootDir": "src"
   },
   "include": [
     "src/**/*.ts"
@@ -54,6 +56,7 @@ export * from 'c';
 }
 
 //// [/home/src/projects/a/1/a-impl/a/node_modules/c] symlink(/home/src/projects/c/3/c-impl/c) Inode:: 26
+
 //// [/home/src/projects/a/2/unrelated/somefile.ts] Inode:: 29
 export const a: string = 'test';
 
@@ -63,7 +66,8 @@ import { a } from 'a';
 //// [/home/src/projects/b/2/b-impl/b/tsconfig.json] Inode:: 36
 {
   "compilerOptions": {
-    "outDir": "lib"
+    "outDir": "lib",
+    "rootDir": "src"
   },
   "include": [
     "src/**/*.ts"
@@ -71,8 +75,8 @@ import { a } from 'a';
 }
 
 //// [/home/src/projects/b/2/b-impl/b/node_modules/a] symlink(/home/src/projects/a/1/a-impl/a) Inode:: 38
-//// [/a/lib/lib.d.ts] Inode:: 41
-/// <reference no-default-lib="true"/>
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts] Inode:: 42
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -87,7 +91,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w -p . --extendedDiagnostics --explainFiles --traceResolution
+/home/src/tslibs/TS/Lib/tsc.js --w -p . --extendedDiagnostics --explainFiles --traceResolution
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -96,11 +100,21 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/tsconfig.json 2
 Synchronizing program
 CreatingProgramWith::
   roots: ["/home/src/projects/b/2/b-impl/b/src/index.ts"]
-  options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
+  options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","rootDir":"/home/src/projects/b/2/b-impl/b/src","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src/index.ts 250 undefined Source file
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist.
+File '/home/src/projects/b/2/package.json' does not exist.
+File '/home/src/projects/b/package.json' does not exist.
+File '/home/src/projects/package.json' does not exist.
+File '/home/src/package.json' does not exist.
+File '/home/package.json' does not exist.
+File '/package.json' does not exist.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json'.
@@ -123,8 +137,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'a' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a.js' does not exist.
@@ -139,33 +152,18 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.d.ts' does not exist.
-'package.json' does not have a 'typings' field.
-'package.json' has 'types' field './lib/index.d.ts' that references '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts'.
-Loading module as file / folder, candidate module location '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts', target file types: TypeScript, Declaration.
-File name '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts' has a '.d.ts' extension - stripping it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.d.ts' does not exist.
-Directory '/home/src/projects/b/2/b-impl/b/node_modules/@types' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/2/b-impl/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/2/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
 ======== Module name 'a' was not resolved. ========
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b 0 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects 0 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
@@ -178,24 +176,18 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Type roots
+DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 [96msrc/index.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS2307: [0mCannot find module 'a' or its corresponding type declarations.
 
 [7m1[0m import { a } from 'a';
 [7m [0m [91m                  ~~~[0m
 
-../../../../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+../../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 src/index.ts
   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
@@ -204,41 +196,42 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 unde
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Wild card directory
 
 
-//// [/home/src/projects/b/2/b-impl/b/lib/index.js] Inode:: 43
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 44
+
+//// [/home/src/projects/b/2/b-impl/b/lib/index.js] Inode:: 144
+export {};
 
 
 
 PolledWatches::
-/home/src/projects/b/2/b-impl/b/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/b/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types: *new*
   {"pollingInterval":500}
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
-  {"inode":41}
+/home/src/projects: *new*
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a/package.json: *new*
   {"inode":24}
+/home/src/projects/b: *new*
+  {"inode":30}
+/home/src/projects/b/2: *new*
+  {"inode":31}
+/home/src/projects/b/2/b-impl: *new*
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b: *new*
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/src/index.ts: *new*
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json: *new*
   {"inode":36}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+  {"inode":44}
 
 FsWatchesRecursive::
 /home/src/projects/b/2/b-impl/b/node_modules: *new*
@@ -253,6 +246,7 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/home/src/projects/b/2/b-impl/b/lib",
+  "rootDir": "/home/src/projects/b/2/b-impl/b/src",
   "watch": true,
   "project": "/home/src/projects/b/2/b-impl/b",
   "extendedDiagnostics": true,
@@ -262,15 +256,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /home/src/projects/b/2/b-impl/b/src/index.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -278,7 +272,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in a
 
 Input::
-//// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 44
+//// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 145
 export const a = 10;
 
 
@@ -296,7 +290,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in c
 
 Input::
-//// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 45
+//// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 146
 export const a = 10;
 
 
@@ -314,102 +308,64 @@ exitCode:: ExitStatus.undefined
 Change:: Build dependencies
 
 Input::
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 47
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-exports.c = 'test';
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 148
+export const c = 'test';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 48
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 149
 export declare const c: string;
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 49
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./c"), exports);
-
-
-//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 50
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 150
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 51
-{"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 151
+export * from './c';
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 52
+
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] Inode:: 152
+{"root":["./src/c.ts","./src/index.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 153
 {
   "root": [
-    "../src/c.ts",
-    "../src/index.ts"
+    "./src/c.ts",
+    "./src/index.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 68
+  "size": 66
 }
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 54
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = 'test';
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 155
+export const a = 'test';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 55
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 156
 export declare const a: string;
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 56
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./a"), exports);
-__exportStar(require("c"), exports);
-
-
-//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 57
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 157
 export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 58
-{"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 158
+export * from './a';
+export * from 'c';
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 59
+
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] Inode:: 159
+{"root":["./src/a.ts","./src/index.ts"],"version":"FakeTSVersion"}
+
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 160
 {
   "root": [
-    "../src/a.ts",
-    "../src/index.ts"
+    "./src/a.ts",
+    "./src/index.ts"
   ],
   "version": "FakeTSVersion",
-  "size": 68
+  "size": 66
 }
 
 
@@ -429,12 +385,12 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/
 DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
+DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
+Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
 
 
 Timeout callback:: count: 1
@@ -464,10 +420,20 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/b/2/b-impl/b/src/index.ts"]
-  options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
+  options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","rootDir":"/home/src/projects/b/2/b-impl/b/src","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json'.
@@ -483,8 +449,9 @@ Resolving real path for '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/inde
 ======== Module name 'a' was successfully resolved to '/home/src/projects/a/1/a-impl/a/lib/index.d.ts' with Package ID 'a/lib/index.d.ts@1.0.0'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './a' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/home/src/projects/a/1/a-impl/a/lib/a', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/home/src/projects/a/1/a-impl/a/lib/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/a/1/a-impl/a/lib/a.ts' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.tsx' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.d.ts' exists - use it as a name resolution result.
@@ -492,8 +459,11 @@ File '/home/src/projects/a/1/a-impl/a/lib/a.d.ts' exists - use it as a name reso
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
 ======== Resolving module 'c' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'c' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/projects/a/1/a-impl/a/lib/package.json' does not exist.
+Found 'package.json' at '/home/src/projects/a/1/a-impl/a/package.json'.
+Loading module 'c' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/a/1/a-impl/a/lib/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/projects/a/1/a-impl/a/node_modules/c/package.json'.
@@ -510,8 +480,9 @@ Resolving real path for '/home/src/projects/a/1/a-impl/a/node_modules/c/lib/inde
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/a.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './c' from '/home/src/projects/c/3/c-impl/c/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/home/src/projects/c/3/c-impl/c/lib/c', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/home/src/projects/c/3/c-impl/c/lib/c', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/c/3/c-impl/c/lib/c.ts' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.tsx' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.d.ts' exists - use it as a name resolution result.
@@ -534,8 +505,8 @@ DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-../../../../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+../../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
 ../../../../c/3/c-impl/c/lib/c.d.ts
@@ -550,20 +521,10 @@ src/index.ts
 
 
 
-//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 43
+//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 144
 
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -577,24 +538,34 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":41}
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
-  {"inode":55}
+  {"inode":156}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-  {"inode":57}
+  {"inode":158}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/src/index.ts:
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
-  {"inode":48}
+  {"inode":149}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-  {"inode":50}
+  {"inode":151}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":44}
 
 FsWatchesRecursive::
 /home/src/projects/a: *new*
@@ -622,6 +593,7 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/home/src/projects/b/2/b-impl/b/lib",
+  "rootDir": "/home/src/projects/b/2/b-impl/b/src",
   "watch": true,
   "project": "/home/src/projects/b/2/b-impl/b",
   "extendedDiagnostics": true,
@@ -631,7 +603,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts
@@ -657,7 +629,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in a
 
 Input::
-//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 60
+//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 161
 export const a = 10;
 
 
@@ -686,7 +658,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in c
 
 Input::
-//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 61
+//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 162
 export const a = 10;
 
 
@@ -719,14 +691,10 @@ Input::
 //// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] deleted
 //// [/home/src/projects/c/3/c-impl/c/lib/index.js] deleted
 //// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] deleted
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] deleted
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] deleted
 //// [/home/src/projects/a/1/a-impl/a/lib/a.js] deleted
 //// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] deleted
 //// [/home/src/projects/a/1/a-impl/a/lib/index.js] deleted
 //// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] deleted
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] deleted
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] deleted
 
 Output::
 FileWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/c.d.ts 2:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/c.d.ts 250 undefined Source file
@@ -749,12 +717,6 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/
 DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/index.js :: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/index.js :: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib :: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/c/3/c-impl/c/lib :: WatchInfo: /home/src/projects/c 1 undefined Failed Lookup Locations
@@ -778,12 +740,6 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/
 DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.js :: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/index.js :: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib :: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/a/1/a-impl/a/lib :: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
@@ -796,42 +752,42 @@ PolledWatches::
   {"pollingInterval":250}
 /home/src/projects/a/1/a-impl/a/lib/node_modules:
   {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
   {"pollingInterval":250}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
   {"pollingInterval":250}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":41}
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/src/index.ts:
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/package.json:
   {"inode":12}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":44}
 
 FsWatches *deleted*::
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
-  {"inode":55}
+  {"inode":156}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts:
-  {"inode":57}
+  {"inode":158}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts:
-  {"inode":48}
+  {"inode":149}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts:
-  {"inode":50}
+  {"inode":151}
 
 FsWatchesRecursive::
 /home/src/projects/a:
@@ -846,12 +802,12 @@ FsWatchesRecursive::
   {"inode":4}
 
 Timeout callback:: count: 2
-23: timerToUpdateProgram *new*
-28: timerToInvalidateFailedLookupResolutions *new*
+21: timerToUpdateProgram *new*
+24: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 2
-23: timerToUpdateProgram
-28: timerToInvalidateFailedLookupResolutions
+21: timerToUpdateProgram
+24: timerToInvalidateFailedLookupResolutions
 
 After running Timeout callback:: count: 0
 Output::
@@ -860,11 +816,21 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/b/2/b-impl/b/src/index.ts"]
-  options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
+  options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","rootDir":"/home/src/projects/b/2/b-impl/b/src","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
 FileWatcher:: Close:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/a.d.ts 250 undefined Source file
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
@@ -886,8 +852,7 @@ Directory '/home/src/projects/node_modules' does not exist, skipping all lookups
 Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/node_modules' does not exist, skipping all lookups in it.
 Directory '/node_modules' does not exist, skipping all lookups in it.
-Loading module 'a' from 'node_modules' folder, target file types: JavaScript.
-Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript, JSON.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a.js' does not exist.
@@ -895,29 +860,6 @@ File '/home/src/projects/b/2/b-impl/b/node_modules/a.jsx' does not exist.
 'package.json' does not have a 'main' field.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.js' does not exist.
 File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.jsx' does not exist.
-Directory '/home/src/projects/b/2/b-impl/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/2/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/b/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/projects/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/src/node_modules' does not exist, skipping all lookups in it.
-Directory '/home/node_modules' does not exist, skipping all lookups in it.
-Directory '/node_modules' does not exist, skipping all lookups in it.
-Resolution of non-relative name failed; trying with '--moduleResolution bundler' to see if project may need configuration update.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
-Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
-Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json' exists according to earlier cached lookups.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a.d.ts' does not exist.
-'package.json' does not have a 'typings' field.
-'package.json' has 'types' field './lib/index.d.ts' that references '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts'.
-Loading module as file / folder, candidate module location '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts', target file types: TypeScript, Declaration.
-File name '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts' has a '.d.ts' extension - stripping it.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.ts' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.tsx' does not exist.
-File '/home/src/projects/b/2/b-impl/b/node_modules/a/index.d.ts' does not exist.
-Directory '/home/src/projects/b/2/b-impl/b/node_modules/@types' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/b/2/b-impl/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/b/2/node_modules' does not exist, skipping all lookups in it.
 Directory '/home/src/projects/b/node_modules' does not exist, skipping all lookups in it.
@@ -953,34 +895,24 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 20
 [7m1[0m import { a } from 'a';
 [7m [0m [91m                  ~~~[0m
 
-../../../../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+../../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 src/index.ts
   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 43
+//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 144
 
 PolledWatches::
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/b/2/b-impl/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/b/2/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/b/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -996,14 +928,24 @@ PolledWatches *deleted*::
   {"pollingInterval":250}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":41}
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/src/index.ts:
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":44}
 
 FsWatches *deleted*::
 /home/src/projects/c/3/c-impl/c/package.json:
@@ -1026,7 +968,7 @@ FsWatchesRecursive *deleted*::
   {"inode":4}
 
 Timeout callback:: count: 0
-28: timerToInvalidateFailedLookupResolutions *deleted*
+24: timerToInvalidateFailedLookupResolutions *deleted*
 
 
 Program root files: [
@@ -1034,6 +976,7 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/home/src/projects/b/2/b-impl/b/lib",
+  "rootDir": "/home/src/projects/b/2/b-impl/b/src",
   "watch": true,
   "project": "/home/src/projects/b/2/b-impl/b",
   "extendedDiagnostics": true,
@@ -1043,7 +986,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -1057,103 +1000,43 @@ exitCode:: ExitStatus.undefined
 Change:: Build dependencies
 
 Input::
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 63
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.c = void 0;
-exports.c = 'test';
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] file written with same contents Inode:: 152
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 153
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] file written with same contents Inode:: 159
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 160
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 164
+export const c = 'test';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 64
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 165
 export declare const c: string;
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 65
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./c"), exports);
-
-
-//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 66
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 166
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo] Inode:: 67
-{"root":["../src/c.ts","../src/index.ts"],"version":"FakeTSVersion"}
-
-//// [/home/src/projects/c/3/c-impl/c/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 68
-{
-  "root": [
-    "../src/c.ts",
-    "../src/index.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 68
-}
-
-//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 70
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.a = void 0;
-exports.a = 'test';
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 167
+export * from './c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 71
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 169
+export const a = 'test';
+
+
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 170
 export declare const a: string;
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 72
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __exportStar = (this && this.__exportStar) || function(m, exports) {
-    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-__exportStar(require("./a"), exports);
-__exportStar(require("c"), exports);
-
-
-//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 73
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 171
 export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo] Inode:: 74
-{"root":["../src/a.ts","../src/index.ts"],"version":"FakeTSVersion"}
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 172
+export * from './a';
+export * from 'c';
 
-//// [/home/src/projects/a/1/a-impl/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 75
-{
-  "root": [
-    "../src/a.ts",
-    "../src/index.ts"
-  ],
-  "version": "FakeTSVersion",
-  "size": 68
-}
 
 
 Output::
@@ -1172,21 +1055,14 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/
 DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/index.d.ts :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
-DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
-Scheduling invalidateFailedLookup, Cancelled earlier one
-Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/node_modules/a/lib/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/b/2/b-impl/b/node_modules/a 1 undefined Failed Lookup Locations
 
 
 Timeout callback:: count: 1
-35: timerToInvalidateFailedLookupResolutions *new*
+29: timerToInvalidateFailedLookupResolutions *new*
 
 Before running Timeout callback:: count: 1
-35: timerToInvalidateFailedLookupResolutions
+29: timerToInvalidateFailedLookupResolutions
 
-Host is moving to new time
 After running Timeout callback:: count: 1
 Output::
 Scheduling update
@@ -1194,10 +1070,10 @@ Scheduling update
 
 
 Timeout callback:: count: 1
-36: timerToUpdateProgram *new*
+30: timerToUpdateProgram *new*
 
 Before running Timeout callback:: count: 1
-36: timerToUpdateProgram
+30: timerToUpdateProgram
 
 Host is moving to new time
 After running Timeout callback:: count: 0
@@ -1207,10 +1083,20 @@ Synchronizing program
 
 CreatingProgramWith::
   roots: ["/home/src/projects/b/2/b-impl/b/src/index.ts"]
-  options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
+  options: {"outDir":"/home/src/projects/b/2/b-impl/b/lib","rootDir":"/home/src/projects/b/2/b-impl/b/src","watch":true,"project":"/home/src/projects/b/2/b-impl/b","extendedDiagnostics":true,"explainFiles":true,"traceResolution":true,"configFilePath":"/home/src/projects/b/2/b-impl/b/tsconfig.json"}
 ======== Resolving module 'a' from '/home/src/projects/b/2/b-impl/b/src/index.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'a' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/projects/b/2/b-impl/b/src/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/b-impl/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/2/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/b/package.json' does not exist according to earlier cached lookups.
+File '/home/src/projects/package.json' does not exist according to earlier cached lookups.
+File '/home/src/package.json' does not exist according to earlier cached lookups.
+File '/home/package.json' does not exist according to earlier cached lookups.
+File '/package.json' does not exist according to earlier cached lookups.
+Loading module 'a' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/b/2/b-impl/b/src/node_modules' does not exist, skipping all lookups in it.
 Found 'package.json' at '/home/src/projects/b/2/b-impl/b/node_modules/a/package.json'.
@@ -1226,8 +1112,9 @@ Resolving real path for '/home/src/projects/b/2/b-impl/b/node_modules/a/lib/inde
 ======== Module name 'a' was successfully resolved to '/home/src/projects/a/1/a-impl/a/lib/index.d.ts' with Package ID 'a/lib/index.d.ts@1.0.0'. ========
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './a' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/home/src/projects/a/1/a-impl/a/lib/a', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/home/src/projects/a/1/a-impl/a/lib/a', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/a/1/a-impl/a/lib/a.ts' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.tsx' does not exist.
 File '/home/src/projects/a/1/a-impl/a/lib/a.d.ts' exists - use it as a name resolution result.
@@ -1235,8 +1122,11 @@ File '/home/src/projects/a/1/a-impl/a/lib/a.d.ts' exists - use it as a name reso
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a 1 undefined Failed Lookup Locations
 ======== Resolving module 'c' from '/home/src/projects/a/1/a-impl/a/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module 'c' from 'node_modules' folder, target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+File '/home/src/projects/a/1/a-impl/a/lib/package.json' does not exist.
+File '/home/src/projects/a/1/a-impl/a/package.json' exists according to earlier cached lookups.
+Loading module 'c' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration, JSON.
 Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
 Directory '/home/src/projects/a/1/a-impl/a/lib/node_modules' does not exist, skipping all lookups in it.
 File '/home/src/projects/a/1/a-impl/a/node_modules/c/package.json' exists according to earlier cached lookups.
@@ -1251,8 +1141,9 @@ Resolving real path for '/home/src/projects/a/1/a-impl/a/node_modules/c/lib/inde
 FileWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-impl/a/lib/a.d.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/index.d.ts 250 undefined Source file
 ======== Resolving module './c' from '/home/src/projects/c/3/c-impl/c/lib/index.d.ts'. ========
-Module resolution kind is not specified, using 'Node10'.
-Loading module as file / folder, candidate module location '/home/src/projects/c/3/c-impl/c/lib/c', target file types: TypeScript, Declaration.
+Module resolution kind is not specified, using 'Bundler'.
+Resolving in CJS mode with conditions 'import', 'types'.
+Loading module as file / folder, candidate module location '/home/src/projects/c/3/c-impl/c/lib/c', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/c/3/c-impl/c/lib/c.ts' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.tsx' does not exist.
 File '/home/src/projects/c/3/c-impl/c/lib/c.d.ts' exists - use it as a name resolution result.
@@ -1275,8 +1166,8 @@ DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-../../../../../../../a/lib/lib.d.ts
-  Default library for target 'es5'
+../../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
+  Default library for target 'es2024'
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
 ../../../../c/3/c-impl/c/lib/c.d.ts
@@ -1291,20 +1182,10 @@ src/index.ts
 
 
 
-//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 43
+//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 144
 
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/b-impl/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/2/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/b/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -1318,24 +1199,34 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts:
-  {"inode":41}
+/home/src/projects:
+  {"inode":3}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
-  {"inode":71}
+  {"inode":170}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-  {"inode":73}
+  {"inode":172}
 /home/src/projects/a/1/a-impl/a/package.json:
   {"inode":24}
+/home/src/projects/b:
+  {"inode":30}
+/home/src/projects/b/2:
+  {"inode":31}
+/home/src/projects/b/2/b-impl:
+  {"inode":32}
+/home/src/projects/b/2/b-impl/b:
+  {"inode":33}
 /home/src/projects/b/2/b-impl/b/src/index.ts:
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
-  {"inode":64}
+  {"inode":165}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-  {"inode":66}
+  {"inode":167}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+  {"inode":44}
 
 FsWatchesRecursive::
 /home/src/projects/a: *new*
@@ -1363,6 +1254,7 @@ Program root files: [
 ]
 Program options: {
   "outDir": "/home/src/projects/b/2/b-impl/b/lib",
+  "rootDir": "/home/src/projects/b/2/b-impl/b/src",
   "watch": true,
   "project": "/home/src/projects/b/2/b-impl/b",
   "extendedDiagnostics": true,
@@ -1372,7 +1264,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts

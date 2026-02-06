@@ -185,8 +185,8 @@ declare function f7(a: number): number;
 declare function f7(a?: typeof f7): typeof f7;
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
 >   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
->a : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
->  : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
+>a : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; } | undefined
+>  : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^^^^^^^^^^^^^
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }
 >   : ^^^^^^         ^^^ ^^         ^^^            ^^^ ^^      ^^^      ^^^ ^^^         ^^^         ^^^
 >f7 : { (): typeof f7; (a: typeof f7): () => number; (a: number): number; (a?: typeof f7): typeof f7; }

@@ -30,6 +30,7 @@ var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge.p4 + 
 
 
 //// [typeFromPropertyAssignment31.js]
+"use strict";
 function ExpandoMerge(n) {
     return n;
 }

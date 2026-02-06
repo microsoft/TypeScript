@@ -1,4 +1,5 @@
-﻿class A {
+﻿// @target: es2015
+class A {
     blub = 6;
 }
 

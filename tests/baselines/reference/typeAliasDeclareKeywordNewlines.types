@@ -1,9 +1,11 @@
 //// [tests/cases/compiler/typeAliasDeclareKeywordNewlines.ts] ////
 
 === typeAliasDeclareKeywordNewlines.ts ===
-var declare: string, type: number;
+declare var declare: string;
 >declare : string
 >        : ^^^^^^
+
+declare var type: number;
 >type : number
 >     : ^^^^^^
 
@@ -17,7 +19,7 @@ const t1: T1 = null; // Assert that T1 is the null type.
 >t1 : null
 >   : ^^^^
 
-let T: null;
+let T: null = null;
 >T : null
 >  : ^^^^
 

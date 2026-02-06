@@ -7,7 +7,7 @@ var x = '';
 >'' : ""
 >   : ^^
 
-var a: String;
+declare var a: String;
 >a : String
 >  : ^^^^^^
 

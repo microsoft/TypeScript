@@ -7,7 +7,7 @@ taggedTemplateWithConstructableTag02.ts(6,1): error TS2349: This expression is n
         new (...args: any[]): string;
         new (): number;
     }
-    var tag: I;
+    declare var tag: I;
     tag `Hello world!`;
     ~~~
 !!! error TS2349: This expression is not callable.

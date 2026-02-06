@@ -7,7 +7,7 @@ export enum Test {
 
 export type TestType = typeof Test;
 
-export const bar = (null as TestType[Extract<keyof TestType, string>][]);
+export const bar = null! as TestType[Extract<keyof TestType, string>][] satisfies any;
 
 //// [declarationEmitNoNonRequiredParens.js]
 "use strict";

@@ -3,7 +3,7 @@
 //// class Dictionary<V> {
 //// }
 //// 
-//// module Maps {
+//// namespace Maps {
 ////    class C1 extends D/*1*/ictionary<string> { }
 ////    /*2*/
 //// }

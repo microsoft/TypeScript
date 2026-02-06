@@ -384,3 +384,49 @@ function fn6(): number {
 >obj1 : { a: number; }
 >     : ^^^^^^^^^^^^^^
 
+((): { a: true } => (({}) satisfies unknown) satisfies unknown)();
+>((): { a: true } => (({}) satisfies unknown) satisfies unknown)() : { a: true; }
+>                                                                  : ^^^^^    ^^^
+>((): { a: true } => (({}) satisfies unknown) satisfies unknown) : () => { a: true; }
+>                                                                : ^^^^^^            
+>(): { a: true } => (({}) satisfies unknown) satisfies unknown : () => { a: true; }
+>                                                              : ^^^^^^            
+>a : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>(({}) satisfies unknown) satisfies unknown : {}
+>                                           : ^^
+>(({}) satisfies unknown) : {}
+>                         : ^^
+>({}) satisfies unknown : {}
+>                       : ^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+
+((): { a: true } => ((({}) satisfies unknown)) satisfies unknown)();
+>((): { a: true } => ((({}) satisfies unknown)) satisfies unknown)() : { a: true; }
+>                                                                    : ^^^^^    ^^^
+>((): { a: true } => ((({}) satisfies unknown)) satisfies unknown) : () => { a: true; }
+>                                                                  : ^^^^^^            
+>(): { a: true } => ((({}) satisfies unknown)) satisfies unknown : () => { a: true; }
+>                                                                : ^^^^^^            
+>a : true
+>  : ^^^^
+>true : true
+>     : ^^^^
+>((({}) satisfies unknown)) satisfies unknown : {}
+>                                             : ^^
+>((({}) satisfies unknown)) : {}
+>                           : ^^
+>(({}) satisfies unknown) : {}
+>                         : ^^
+>({}) satisfies unknown : {}
+>                       : ^^
+>({}) : {}
+>     : ^^
+>{} : {}
+>   : ^^
+

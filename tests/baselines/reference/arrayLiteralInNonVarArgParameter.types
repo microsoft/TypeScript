@@ -14,8 +14,8 @@ panic([], 'one', 'two');
 >                        : ^^^^
 >panic : (val: string[], ...opt: string[]) => void
 >      : ^   ^^        ^^^^^   ^^        ^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >'one' : "one"
 >      : ^^^^^
 >'two' : "two"

@@ -9,5 +9,7 @@ var foo = <{ (): number; }> function(a) { return a };
 >function(a) { return a } : (a: any) => any
 >                         : ^ ^^^^^^^^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 

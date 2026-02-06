@@ -67,7 +67,7 @@ typeGuardFunctionOfFormThisErrors.ts(58,7): error TS2339: Property 'lead' does n
         return false;
     }
     
-    let c: number | number[];
+    declare var c: number | number[];
     if (invalidGuard(c)) {
         c;
     }

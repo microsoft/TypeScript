@@ -10,7 +10,7 @@ interfaceNameAsIdentifier.ts(12,1): error TS2708: Cannot use namespace 'm2' as a
     ~
 !!! error TS2693: 'C' only refers to a type, but is being used as a value here.
     
-    module m2 {
+    namespace m2 {
         export interface C {
             (): void;
         }

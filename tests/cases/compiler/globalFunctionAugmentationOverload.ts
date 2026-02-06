@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: mod.d.ts
 declare function expect(spy: Function): void;
 declare module "mod" {

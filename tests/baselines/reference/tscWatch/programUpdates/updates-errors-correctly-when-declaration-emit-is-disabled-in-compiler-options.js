@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/myproject/a.ts]
 import test from './b';
@@ -10,8 +10,16 @@ function test(x: number, y: number) {
 }
 export default test;
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/user/username/projects/myproject/tsconfig.json]
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noEmit": true,
+    "strict": true
+  }
+}
+
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -22,18 +30,11 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [/user/username/projects/myproject/tsconfig.json]
-{
-  "compilerOptions": {
-    "module": "commonjs",
-    "noEmit": true,
-    "strict": true
-  }
-}
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js -w
+/home/src/tslibs/TS/Lib/tsc.js -w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -42,15 +43,11 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/a.ts: *new*
   {}
@@ -76,17 +73,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/b.ts (used version)
 /user/username/projects/myproject/a.ts (used version)
 
@@ -138,7 +135,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
 
@@ -193,7 +190,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
 
@@ -258,7 +255,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
 
@@ -313,7 +310,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/b.ts
 /user/username/projects/myproject/a.ts
 

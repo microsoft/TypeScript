@@ -6,6 +6,7 @@ var x = 0;
 
 
 //// [declarationEmitInvalidReferenceAllowJs.js]
+"use strict";
 /// <reference path="invalid" />
 var x = 0;
 

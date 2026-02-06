@@ -24,12 +24,12 @@ declare namespace JSX {
 >    : ^^^^^^^^^      ^^^^^^^^^^      ^^^
 
             text?: string;
->text : string
->     : ^^^^^^
+>text : string | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 
             width?: number;
->width : number
->      : ^^^^^^
+>width : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
         }
 
         span: any;
@@ -52,7 +52,7 @@ interface I {
 >       : ^^^^^^    
     }
 }
-var E: I;
+declare var E: I;
 >E : I
 >  : ^
 

@@ -1,11 +1,13 @@
+// @target: es2015
+// @strict: false
 class C {
     set x(y) { }
     static set y(z) { }
 }
 
-module C {
+namespace C {
     export var x = 1;
 }
-module C {
+namespace C {
     export function x() { }
 }

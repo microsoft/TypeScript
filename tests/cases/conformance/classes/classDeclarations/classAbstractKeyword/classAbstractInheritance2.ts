@@ -1,3 +1,4 @@
+// @target: es2015
 abstract class A {
     abstract m1(): number;
     abstract m2(): number;

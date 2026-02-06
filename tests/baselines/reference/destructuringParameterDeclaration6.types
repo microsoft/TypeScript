@@ -24,8 +24,8 @@ function a1({public}) { }
 >       : ^^^
 
 function a4([while, for, public]){ }
->a4 : ([]: any[]) => any
->   : ^  ^^^^^^^^^^^^^^^
+>a4 : ([]: Iterable<any, void, undefined>) => any
+>   : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >, : any
 >  : ^^^
 > : any

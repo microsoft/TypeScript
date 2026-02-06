@@ -1,3 +1,4 @@
+// @target: es2015
 var x: (...y: string[]) => void = function (.../*3*/y) { 
     var t = y; 
     var x2: string = t; // This should be error

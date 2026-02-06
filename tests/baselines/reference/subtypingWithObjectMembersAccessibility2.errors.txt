@@ -1,31 +1,43 @@
+subtypingWithObjectMembersAccessibility2.ts(4,5): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembersAccessibility2.ts(8,5): error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
+subtypingWithObjectMembersAccessibility2.ts(13,17): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 subtypingWithObjectMembersAccessibility2.ts(16,11): error TS2415: Class 'B' incorrectly extends base class 'A'.
   Property 'foo' is private in type 'A' but not in type 'B'.
+subtypingWithObjectMembersAccessibility2.ts(17,16): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 subtypingWithObjectMembersAccessibility2.ts(24,11): error TS2415: Class 'B2' incorrectly extends base class 'A2'.
   Property '1' is private in type 'A2' but not in type 'B2'.
 subtypingWithObjectMembersAccessibility2.ts(32,11): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
   Property ''1'' is private in type 'A3' but not in type 'B3'.
+subtypingWithObjectMembersAccessibility2.ts(39,17): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 subtypingWithObjectMembersAccessibility2.ts(42,11): error TS2415: Class 'B' incorrectly extends base class 'A'.
   Property 'foo' is private in type 'A' but not in type 'B'.
+subtypingWithObjectMembersAccessibility2.ts(43,9): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 subtypingWithObjectMembersAccessibility2.ts(50,11): error TS2415: Class 'B2' incorrectly extends base class 'A2'.
   Property '1' is private in type 'A2' but not in type 'B2'.
 subtypingWithObjectMembersAccessibility2.ts(58,11): error TS2415: Class 'B3' incorrectly extends base class 'A3'.
   Property ''1'' is private in type 'A3' but not in type 'B3'.
 
 
-==== subtypingWithObjectMembersAccessibility2.ts (6 errors) ====
+==== subtypingWithObjectMembersAccessibility2.ts (12 errors) ====
     // Derived member is private, base member is not causes errors
     
     class Base {
         foo: string;
+        ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     }
     
     class Derived extends Base {
         bar: string;
+        ~~~
+!!! error TS2564: Property 'bar' has no initializer and is not definitely assigned in the constructor.
     }
     
-    module ExplicitPublic {
+    namespace ExplicitPublic {
         class A {
             private foo: Base;
+                    ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         }
     
         class B extends A {
@@ -33,6 +45,8 @@ subtypingWithObjectMembersAccessibility2.ts(58,11): error TS2415: Class 'B3' inc
 !!! error TS2415: Class 'B' incorrectly extends base class 'A'.
 !!! error TS2415:   Property 'foo' is private in type 'A' but not in type 'B'.
             public foo: Derived; // error
+                   ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         }
     
         class A2 {
@@ -58,9 +72,11 @@ subtypingWithObjectMembersAccessibility2.ts(58,11): error TS2415: Class 'B3' inc
         }
     }
     
-    module ImplicitPublic {
+    namespace ImplicitPublic {
         class A {
             private foo: Base;
+                    ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         }
     
         class B extends A {
@@ -68,6 +84,8 @@ subtypingWithObjectMembersAccessibility2.ts(58,11): error TS2415: Class 'B3' inc
 !!! error TS2415: Class 'B' incorrectly extends base class 'A'.
 !!! error TS2415:   Property 'foo' is private in type 'A' but not in type 'B'.
             foo: Derived; // error
+            ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
         }
     
         class A2 {

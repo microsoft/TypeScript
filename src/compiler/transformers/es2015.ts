@@ -218,6 +218,7 @@ import {
 } from "../_namespaces/ts.js";
 
 const enum ES2015SubstitutionFlags {
+    None = 0,
     /** Enables substitutions for captured `this` */
     CapturedThis = 1 << 0,
     /** Enables substitutions for block-scoped bindings. */
@@ -523,7 +524,7 @@ export function transformES2015(context: TransformationContext): (x: SourceFile 
      * They are persisted between each SourceFile transformation and should not
      * be reset.
      */
-    let enabledSubstitutions: ES2015SubstitutionFlags;
+    let enabledSubstitutions = ES2015SubstitutionFlags.None;
 
     return chainBundle(context, transformSourceFile);
 

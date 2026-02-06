@@ -1,6 +1,6 @@
 import * as ts from "./_namespaces/ts.js";
 
-export function reportDocumentRegistryStats(documentRegistry: ts.DocumentRegistry) {
+export function reportDocumentRegistryStats(documentRegistry: ts.DocumentRegistry): string[] {
     const str: string[] = [];
     documentRegistry.getBuckets().forEach((bucketEntries, key) => {
         str.push(`  Key:: ${key}`);
@@ -107,6 +107,7 @@ interface ResolutionInfo {
     fileName: string;
     name: string;
     mode: ts.ResolutionMode;
+    watched: boolean;
 }
 
 function getResolutionCacheDetails<File, T extends ts.ResolutionWithFailedLookupLocations>(
@@ -159,7 +160,7 @@ function getProgramStructure(program: ts.Program | undefined) {
     const baseline: string[] = [];
     program?.getSourceFiles().slice().sort((f1, f2) => ts.comparePathsCaseSensitive(f1.path, f2.path)).forEach(f => {
         baseline.push(`  File: ${f.fileName} Path: ${f.path} ResolvedPath: ${f.resolvedPath} impliedNodeFormat: ${f.impliedNodeFormat}`);
-        baseline.push(f.text.split(/\r?\n/g).map(l => l ? "    " + l : "").join("\n"));
+        baseline.push(f.text.split(/\r?\n/).map(l => l ? "    " + l : "").join("\n"));
         getResolutionCacheDetails(
             baseline,
             "Modules",
@@ -193,7 +194,7 @@ function getProgramStructure(program: ts.Program | undefined) {
     return baseline.join("\n");
 }
 
-export function verifyProgramStructure(expectedProgram: ts.Program, actualProgram: ts.Program, projectName: string) {
+export function verifyProgramStructure(expectedProgram: ts.Program, actualProgram: ts.Program, projectName: string): void {
     const actual = getProgramStructure(actualProgram);
     const expected = getProgramStructure(expectedProgram);
     ts.Debug.assert(actual === expected, `Program verification:: ${projectName}`);
@@ -204,7 +205,7 @@ export function verifyResolutionCache(
     actualProgram: ts.Program,
     resolutionHostCacheHost: ts.ResolutionCacheHost,
     projectName: string,
-) {
+): void {
     const currentDirectory = resolutionHostCacheHost.getCurrentDirectory!();
     const expected = ts.createResolutionCache(resolutionHostCacheHost, actual.rootDirForResolution, /*logChangesWhenResolvingModule*/ false);
     expected.startCachingPerDirectoryResolution();
@@ -254,8 +255,8 @@ export function verifyResolutionCache(
     // Verify ref count
     resolutionToRefs.forEach((info, resolution) => {
         ts.Debug.assert(
-            resolution.files?.size === info.length,
-            `${projectName}:: Expected Resolution ref count ${info.length} but got ${resolution.files?.size}`,
+            (resolution.files?.size ?? 0) === info.filter(i => i.watched).length,
+            `${projectName}:: Expected Resolution ref count ${info.filter(i => i.watched).length} but got ${resolution.files?.size}`,
             () =>
                 `Expected from:: ${JSON.stringify(info, undefined, " ")}` +
                 `Actual from: ${resolution.files?.size}`,
@@ -317,12 +318,13 @@ export function verifyResolutionCache(
     ): ExpectedResolution {
         const existing = resolutionToRefs.get(resolved);
         let expectedResolution: ExpectedResolution;
+        const watched = !resolutionHostCacheHost.skipWatchingFailedLookups?.(fileName);
         if (existing) {
-            existing.push({ cacheType, fileName, name, mode });
+            existing.push({ cacheType, fileName, name, mode, watched });
             expectedResolution = resolutionToExpected.get(resolved)!;
         }
         else {
-            resolutionToRefs.set(resolved, [{ cacheType, fileName, name, mode }]);
+            resolutionToRefs.set(resolved, [{ cacheType, fileName, name, mode, watched }]);
             expectedResolution = {
                 resolvedModule: (resolved as any).resolvedModule,
                 resolvedTypeReferenceDirective: (resolved as any).resolvedTypeReferenceDirective,
@@ -333,7 +335,9 @@ export function verifyResolutionCache(
             expectedToResolution.set(expectedResolution, resolved);
             resolutionToExpected.set(resolved, expectedResolution);
         }
-        expected.watchFailedLookupLocationsOfExternalModuleResolutions(name, expectedResolution, fileName, () => ({ resolvedFileName }), deferWatchingNonRelativeResolution);
+        if (watched) {
+            expected.watchFailedLookupLocationsOfExternalModuleResolutions(name, expectedResolution, fileName, () => ({ resolvedFileName }), deferWatchingNonRelativeResolution);
+        }
         return expectedResolution;
     }
 
@@ -499,6 +503,24 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         if (fileSize > ts.server.maxFileSize) return "";
         return text !== undefined ? text || undefined : readFile(fileName);
     };
+    const getSourceFile = compilerHost.getSourceFile;
+    compilerHost.getSourceFile = (fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile) => {
+        const projectScriptKind = project.getScriptKind(fileName);
+        const scriptKind = ts.ensureScriptKind(fileName, /*scriptKind*/ undefined);
+        if (scriptKind === projectScriptKind) return getSourceFile(fileName, languageVersionOrOptions, onError, shouldCreateNewSourceFile);
+
+        let text: string | undefined;
+        try {
+            text = compilerHost.readFile(fileName);
+        }
+        catch (e) {
+            onError?.(e.message);
+            text = "";
+        }
+        return text !== undefined ?
+            ts.createSourceFile(fileName, text, languageVersionOrOptions, /*setParentNodes*/ undefined, projectScriptKind) :
+            undefined;
+    };
     const resolutionHostCacheHost: ts.ResolutionCacheHost = {
         ...compilerHost,
 
@@ -506,9 +528,11 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
         toPath: project.toPath.bind(project),
         getCompilationSettings: project.getCompilationSettings.bind(project),
         projectName: project.projectName,
-        getGlobalCache: project.getGlobalCache.bind(project),
+        getGlobalTypingsCacheLocation: project.getGlobalTypingsCacheLocation.bind(project),
         globalCacheResolutionModuleName: project.globalCacheResolutionModuleName.bind(project),
         fileIsOpen: project.fileIsOpen.bind(project),
+        skipWatchingFailedLookups: project.skipWatchingFailedLookups.bind(project),
+        skipWatchingTypeRoots: project.skipWatchingTypeRoots.bind(project),
         getCurrentProgram: () => project.getCurrentProgram(),
 
         preferNonRecursiveWatch: project.preferNonRecursiveWatch,
@@ -540,6 +564,7 @@ function verifyProgram(service: ts.server.ProjectService, project: ts.server.Pro
                     moduleResolutionCache,
                 ),
         );
+    compilerHost.getGlobalTypingsCacheLocation = resolutionHostCacheHost.getGlobalTypingsCacheLocation;
     verifyProgramStructure(
         ts.createProgram({
             rootNames: project.getScriptFileNames(),
@@ -626,7 +651,7 @@ export interface IncrementalVerifierCallbacks {
     afterVerification?(dataFromBefore: any): void;
 }
 
-export function incrementalVerifier(service: ts.server.ProjectService) {
+export function incrementalVerifier(service: ts.server.ProjectService): void {
     service.verifyDocumentRegistry = withIncrementalVerifierCallbacks(service, verifyDocumentRegistry);
     service.verifyProgram = withIncrementalVerifierCallbacks(service, verifyProgram);
     service.onProjectCreation = onProjectCreation;

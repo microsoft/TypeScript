@@ -1,10 +1,10 @@
 // === getDefinitionAtPosition ===
-// === /node_modules/a/src/index.ts ===
+// === /home/src/workspaces/project/node_modules/a/src/index.ts ===
 // export class [|Foo|] {
 // }
 // 
 
-// === /index.ts ===
+// === /home/src/workspaces/project/index.ts ===
 // import { Foo/*GOTO DEF POS*/ } from "a";
 
   // === Details ===

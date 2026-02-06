@@ -1,14 +1,14 @@
 //// [tests/cases/conformance/internalModules/DeclarationMerging/TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts] ////
 
 //// [TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.ts]
-module A {
+namespace A {
     export class Point {
         x: number;
         y: number;
     }
 }
 
-module A {
+namespace A {
     class Point {
         fromCarthesian(p: A.Point) {
             return { x: p.x, y: p.y };
@@ -20,15 +20,15 @@ module A {
 var p: { x: number; y: number; };
 var p: A.Point;
 
-module X.Y.Z {
+namespace X.Y.Z {
     export class Line {
         length: number;
     }
 }
 
-module X {
-    export module Y {
-        export module Z {
+namespace X {
+    export namespace Y {
+        export namespace Z {
             class Line {
                 name: string;
             }
@@ -43,24 +43,19 @@ var l: X.Y.Z.Line;
 
 
 //// [TwoInternalModulesThatMergeEachWithExportedAndNonExportedClassesOfTheSameName.js]
+"use strict";
 var A;
 (function (A) {
-    var Point = /** @class */ (function () {
-        function Point() {
-        }
-        return Point;
-    }());
+    class Point {
+    }
     A.Point = Point;
 })(A || (A = {}));
 (function (A) {
-    var Point = /** @class */ (function () {
-        function Point() {
-        }
-        Point.prototype.fromCarthesian = function (p) {
+    class Point {
+        fromCarthesian(p) {
             return { x: p.x, y: p.y };
-        };
-        return Point;
-    }());
+        }
+    }
 })(A || (A = {}));
 // ensure merges as expected
 var p;
@@ -71,25 +66,19 @@ var X;
     (function (Y) {
         var Z;
         (function (Z) {
-            var Line = /** @class */ (function () {
-                function Line() {
-                }
-                return Line;
-            }());
+            class Line {
+            }
             Z.Line = Line;
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 (function (X) {
-    var Y;
+    let Y;
     (function (Y) {
-        var Z;
+        let Z;
         (function (Z) {
-            var Line = /** @class */ (function () {
-                function Line() {
-                }
-                return Line;
-            }());
+            class Line {
+            }
         })(Z = Y.Z || (Y.Z = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));

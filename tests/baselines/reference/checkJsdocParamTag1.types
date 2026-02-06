@@ -9,10 +9,10 @@
 function foo(n, s) {}
 >foo : (n?: number | undefined, s?: string) => void
 >    : ^ ^^^         ^^^^^^^^^^^ ^^^      ^^^^^^^^^
->n : number
->  : ^^^^^^
->s : string
->  : ^^^^^^
+>n : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>s : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 foo();
 >foo() : void

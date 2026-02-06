@@ -1,8 +1,9 @@
+// @target: es2015
 // @module: commonjs
 // @alwaysStrict: true
 // @noImplicitUseStrict: true
 
-module M {
+namespace M {
     export function f() {
         var arguments = [];
     }

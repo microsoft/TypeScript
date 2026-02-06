@@ -4,7 +4,7 @@
 var a,b,c;
 var x=1,y=2,z=3;
 
-module m2 {
+namespace m2 {
 
     export var a, b2: number = 10, b;
     var m1;
@@ -49,6 +49,7 @@ for (var i = 0; i < 30; i++) {
 var b5 = 10;
 
 //// [multivar.js]
+"use strict";
 var a, b, c;
 var x = 1, y = 2, z = 3;
 var m2;
@@ -57,18 +58,16 @@ var m2;
     var m1;
     var a2, b22 = 10, b222;
     var m3;
-    var C = /** @class */ (function () {
-        function C(b) {
+    class C {
+        constructor(b) {
             this.b = b;
         }
-        return C;
-    }());
-    var C2 = /** @class */ (function () {
-        function C2(b) {
+    }
+    class C2 {
+        constructor(b) {
             this.b = b;
         }
-        return C2;
-    }());
+    }
     m2.C2 = C2;
     var m;
     var b2;

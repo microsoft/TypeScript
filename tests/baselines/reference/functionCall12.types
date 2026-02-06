@@ -6,10 +6,10 @@ function foo(a:string, b?:number, c?:string){}
 >    : ^ ^^      ^^ ^^^      ^^ ^^^      ^^^^^^^^^
 >a : string
 >  : ^^^^^^
->b : number
->  : ^^^^^^
->c : string
->  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 foo('foo', 1); 
 >foo('foo', 1) : void

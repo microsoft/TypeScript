@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @module: commonjs
 // @declaration: true
 
@@ -7,11 +7,11 @@ class Bbb {
 
 class Aaa extends Bbb { }
 
-module Aaa {
+namespace Aaa {
     export class SomeType { }
 }
 
-module Bbb {
+namespace Bbb {
     export class SomeType { }
 
     export * from Aaa;      // this line causes the nullref

@@ -228,6 +228,7 @@ import {
 } from "../_namespaces/ts.js";
 
 const enum ClassPropertySubstitutionFlags {
+    None = 0,
     /**
      * Enables substitutions for class expressions with static fields
      * which have initializers that reference the class name.
@@ -401,7 +402,7 @@ export function transformClassFields(context: TransformationContext): (x: Source
     context.onEmitNode = onEmitNode;
 
     let shouldTransformPrivateStaticElementsInFile = false;
-    let enabledSubstitutions: ClassPropertySubstitutionFlags;
+    let enabledSubstitutions = ClassPropertySubstitutionFlags.None;
 
     let classAliases: Identifier[];
 

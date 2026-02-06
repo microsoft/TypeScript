@@ -14,16 +14,16 @@ export class TranspileRunner extends RunnerBase {
     protected basePath = "tests/cases/transpile";
     protected testSuiteName: TestRunnerKind = "transpile";
 
-    public enumerateTestFiles() {
+    public enumerateTestFiles(): string[] {
         // see also: `enumerateTestFiles` in tests/webTestServer.ts
         return this.enumerateFiles(this.basePath, /\.[cm]?[tj]sx?/i, { recursive: true });
     }
 
-    public kind() {
+    public kind(): TestRunnerKind {
         return this.testSuiteName;
     }
 
-    public initializeTests() {
+    public initializeTests(): void {
         if (this.tests.length === 0) {
             this.tests = IO.enumerateTestFiles(this);
         }

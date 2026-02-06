@@ -927,9 +927,9 @@ export function getEncodedSyntacticClassifications(cancellationToken: Cancellati
     }
 
     function tryClassifyTripleSlashComment(start: number, width: number): boolean {
-        const tripleSlashXMLCommentRegEx = /^(\/\/\/\s*)(<)(?:(\S+)((?:[^/]|\/[^>])*)(\/>)?)?/im;
+        const tripleSlashXMLCommentRegEx = /^(\/\/\/\s*)(<)(?:(\S+)((?:[^/]|\/[^>])*)(\/>)?)?/m;
         // Require a leading whitespace character (the parser already does) to prevent terrible backtracking performance
-        const attributeRegex = /(\s)(\S+)(\s*)(=)(\s*)('[^']+'|"[^"]+")/img;
+        const attributeRegex = /(\s)(\S+)(\s*)(=)(\s*)('[^']+'|"[^"]+")/g;
 
         const text = sourceFile.text.substr(start, width);
         const match = tripleSlashXMLCommentRegEx.exec(text);

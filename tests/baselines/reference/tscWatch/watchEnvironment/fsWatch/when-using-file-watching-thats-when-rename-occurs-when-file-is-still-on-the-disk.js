@@ -1,18 +1,5 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-
 //// [/user/username/projects/myproject/main.ts]
 import { foo } from "./foo"; foo();
 
@@ -30,8 +17,22 @@ export declare function foo(): string;
   ]
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
-/a/lib/tsc.js -w --extendedDiagnostics
+
+/home/src/tslibs/TS/Lib/tsc.js -w --extendedDiagnostics
 Output::
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
 
@@ -43,36 +44,25 @@ CreatingProgramWith::
   options: {"watch":true,"extendedDiagnostics":true,"configFilePath":"/user/username/projects/myproject/tsconfig.json"}
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/foo.ts 250 {"watchFile":4} Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":4} Source file
-FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 250 {"watchFile":4} Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 {"watchFile":4} Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":4} Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 {"watchFile":4} Type roots
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 {"watchFile":4} Source file
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/foo.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/user/username/projects/myproject/main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var foo_1 = require("./foo");
-(0, foo_1.foo)();
+import { foo } from "./foo";
+foo();
 
 
-
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/myproject/foo.ts: *new*
   {}
@@ -92,17 +82,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/foo.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 
@@ -165,7 +155,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 
@@ -229,7 +219,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/foo.ts
 /user/username/projects/myproject/main.ts
 

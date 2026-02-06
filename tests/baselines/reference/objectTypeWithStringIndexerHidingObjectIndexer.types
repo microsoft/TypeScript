@@ -1,9 +1,10 @@
 //// [tests/cases/conformance/types/members/objectTypeWithStringIndexerHidingObjectIndexer.ts] ////
 
 === Performance Stats ===
-Assignability cache: 2,500
-Type Count: 10,000
-Instantiation count: 2,500
+Assignability cache: 10,000
+Type Count: 25,000
+Instantiation count: 25,000
+Symbol count: 50,000
 
 === objectTypeWithStringIndexerHidingObjectIndexer.ts ===
 // object types can define string indexers that are more specific than the default 'any' that would be returned
@@ -34,7 +35,7 @@ class C {
 >C : C
 >  : ^
 
-    foo: string;
+    foo!: string;
 >foo : string
 >    : ^^^^^^
 
@@ -42,7 +43,7 @@ class C {
 >x : string
 >  : ^^^^^^
 }
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 
@@ -65,7 +66,7 @@ interface I {
 >x : string
 >  : ^^^^^^
 }
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
@@ -79,7 +80,7 @@ var r3: string = i[''];
 >'' : ""
 >   : ^^
 
-var o2: {
+declare var o2: {
 >o2 : { [x: string]: string; baz: string; }
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 

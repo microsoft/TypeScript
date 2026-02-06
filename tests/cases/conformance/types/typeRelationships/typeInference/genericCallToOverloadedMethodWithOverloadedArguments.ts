@@ -1,18 +1,19 @@
+// @target: es2015
 
-module m1 {
+namespace m1 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
     }
 
     declare function testFunction(n: number): Promise<number>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }
 
 //////////////////////////////////////
 
-module m2 {
+namespace m2 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
     }
@@ -20,13 +21,13 @@ module m2 {
     declare function testFunction(n: number): Promise<number>;
     declare function testFunction(s: string): Promise<string>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }
 
 //////////////////////////////////////
 
-module m3 {
+namespace m3 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -34,13 +35,13 @@ module m3 {
 
     declare function testFunction(n: number): Promise<number>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }
 
 //////////////////////////////////////
 
-module m4 {
+namespace m4 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -49,13 +50,13 @@ module m4 {
     declare function testFunction(n: number): Promise<number>;
     declare function testFunction(s: string): Promise<string>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }
 
 //////////////////////////////////////
 
-module m5 {
+namespace m5 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -65,13 +66,13 @@ module m5 {
     declare function testFunction(n: number): Promise<number>;
     declare function testFunction(s: string): Promise<string>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }
 
 //////////////////////////////////////
 
-module m6 {
+namespace m6 {
     interface Promise<T> {
         then<U>(cb: (x: T) => Promise<U>): Promise<U>;
         then<U>(cb: (x: T) => Promise<U>, error?: (error: any) => Promise<U>): Promise<U>;
@@ -81,6 +82,6 @@ module m6 {
     declare function testFunction(s: string): Promise<string>;
     declare function testFunction(b: boolean): Promise<boolean>;
 
-    var numPromise: Promise<number>;
+    declare var numPromise: Promise<number>;
     var newPromise = numPromise.then(testFunction);
 }

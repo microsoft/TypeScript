@@ -7,7 +7,7 @@ describe("unittests:: jsonParserRecovery", () => {
             const file = ts.parseJsonText(name, text);
             assert(file.parseDiagnostics.length, "Should have parse errors");
             Harness.Baseline.runBaseline(
-                `jsonParserRecovery/${name.replace(/[^a-z0-9_-]/ig, "_")}.errors.txt`,
+                `jsonParserRecovery/${name.replace(/[^\w-]/g, "_")}.errors.txt`,
                 Harness.Compiler.getErrorBaseline([{
                     content: text,
                     unitName: name,

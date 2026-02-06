@@ -6,13 +6,14 @@ import {
 import {
     Debug,
     Diagnostics,
+    getJSXImplicitImportBase,
     getTokenAtPosition,
     getTypesPackageName,
     InstallPackageAction,
     isExternalModuleNameRelative,
     isStringLiteral,
-    JsTyping,
     LanguageServiceHost,
+    nodeCoreModules,
     parsePackageName,
     SourceFile,
     tryCast,
@@ -22,17 +23,25 @@ const fixName = "fixCannotFindModule";
 const fixIdInstallTypesPackage = "installTypesPackage";
 
 const errorCodeCannotFindModule = Diagnostics.Cannot_find_module_0_or_its_corresponding_type_declarations.code;
+const errorCannotFindImplicitJsxImport = Diagnostics.This_JSX_tag_requires_the_module_path_0_to_exist_but_none_could_be_found_Make_sure_you_have_types_for_the_appropriate_package_installed.code;
 const errorCodes = [
     errorCodeCannotFindModule,
     Diagnostics.Could_not_find_a_declaration_file_for_module_0_1_implicitly_has_an_any_type.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode.code,
+    Diagnostics.Cannot_find_name_0_Do_you_need_to_install_type_definitions_for_node_Try_npm_i_save_dev_types_Slashnode_and_then_add_node_to_the_types_field_in_your_tsconfig.code,
+    errorCannotFindImplicitJsxImport,
 ];
 registerCodeFix({
     errorCodes,
     getCodeActions: function getCodeActionsToFixNotFoundModule(context) {
-        const { host, sourceFile, span: { start } } = context;
-        const packageName = tryGetImportedPackageName(sourceFile, start);
+        const { host, sourceFile, span: { start }, errorCode } = context;
+
+        const packageName = errorCode === errorCannotFindImplicitJsxImport ?
+            getJSXImplicitImportBase(context.program.getCompilerOptions(), sourceFile) :
+            tryGetImportedPackageName(sourceFile, start);
         if (packageName === undefined) return undefined;
-        const typesPackageName = getTypesPackageNameToInstall(packageName, host, context.errorCode);
+
+        const typesPackageName = getTypesPackageNameToInstall(packageName, host, errorCode);
         return typesPackageName === undefined
             ? []
             : [createCodeFixAction(fixName, /*changes*/ [], [Diagnostics.Install_0, typesPackageName], fixIdInstallTypesPackage, Diagnostics.Install_all_missing_types_packages, getInstallCommand(sourceFile.fileName, typesPackageName))];
@@ -70,7 +79,11 @@ function tryGetImportedPackageName(sourceFile: SourceFile, pos: number): string 
 }
 
 function getTypesPackageNameToInstall(packageName: string, host: LanguageServiceHost, diagCode: number): string | undefined {
-    return diagCode === errorCodeCannotFindModule
-        ? (JsTyping.nodeCoreModules.has(packageName) ? "@types/node" : undefined)
-        : (host.isKnownTypesPackageName?.(packageName) ? getTypesPackageName(packageName) : undefined);
+    if (nodeCoreModules.has(packageName)) {
+        return "@types/node";
+    }
+    if (diagCode !== errorCodeCannotFindModule) {
+        return host.isKnownTypesPackageName?.(packageName) ? getTypesPackageName(packageName) : undefined;
+    }
+    return undefined;
 }

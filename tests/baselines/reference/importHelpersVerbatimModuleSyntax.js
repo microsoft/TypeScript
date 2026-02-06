@@ -45,9 +45,9 @@ export = foo;
 
 
 //// [main.cjs]
-import * as tslib_1 from "tslib";
+const tslib_1 = require("tslib");
 function foo(args) {
-    const { bar } = args, extraArgs = __rest(args, ["bar"]);
+    const { bar } = args, extraArgs = tslib_1.__rest(args, ["bar"]);
     return extraArgs;
 }
 module.exports = foo;

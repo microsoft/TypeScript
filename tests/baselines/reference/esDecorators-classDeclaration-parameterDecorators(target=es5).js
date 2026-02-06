@@ -20,6 +20,7 @@ class C {
 });
 
 //// [esDecorators-classDeclaration-parameterDecorators.js]
+"use strict";
 var C = /** @class */ (function () {
     function C(x) {
     }

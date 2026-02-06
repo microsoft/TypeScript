@@ -20,6 +20,7 @@ try { } catch (e) {
 }
 
 //// [duplicateIdentifierInCatchBlock.js]
+"use strict";
 var v;
 try { }
 catch (e) {

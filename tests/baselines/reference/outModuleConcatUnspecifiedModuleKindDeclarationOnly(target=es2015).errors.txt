@@ -1,0 +1,12 @@
+error TS5069: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declaration' or option 'composite'.
+error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5069: Option 'emitDeclarationOnly' cannot be specified without specifying option 'declaration' or option 'composite'.
+!!! error TS5101: Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== a.ts (0 errors) ====
+    export class A { } // module
+    
+==== b.ts (0 errors) ====
+    var x = 0; // global
+    

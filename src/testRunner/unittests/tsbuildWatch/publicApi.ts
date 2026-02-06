@@ -1,17 +1,16 @@
 import * as ts from "../../_namespaces/ts.js";
 import { jsonToReadableText } from "../helpers.js";
+import { createBaseline } from "../helpers/baseline.js";
 import {
-    createBaseline,
     createSolutionBuilderWithWatchHostForBaseline,
     runWatchBaseline,
 } from "../helpers/tscWatch.js";
 import {
-    createWatchedSystem,
     File,
-    libFile,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-it("unittests:: tsbuildWatch:: watchMode:: Public API with custom transformers", () => {
+it("unittests:: tsbuildWatch:: watchMode:: publicAPI:: Public API with custom transformers", () => {
     const solution: File = {
         path: `/user/username/projects/myproject/tsconfig.json`,
         content: jsonToReadableText({
@@ -52,7 +51,10 @@ export enum e2 { }
 export function f22() { } // trailing`,
     };
     const commandLineArgs = ["--b", "--w"];
-    const { sys, baseline, cb, getPrograms } = createBaseline(createWatchedSystem([libFile, solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex], { currentDirectory: "/user/username/projects/myproject" }));
+    const { sys, baseline, cb, getPrograms } = createBaseline(TestServerHost.createWatchedSystem(
+        [solution, sharedConfig, sharedIndex, webpackConfig, webpackIndex],
+        { currentDirectory: "/user/username/projects/myproject" },
+    ));
     const buildHost = createSolutionBuilderWithWatchHostForBaseline(sys, cb);
     buildHost.getCustomTransformers = getCustomTransformers;
     const builder = ts.createSolutionBuilderWithWatch(buildHost, [solution.path], { verbose: true });

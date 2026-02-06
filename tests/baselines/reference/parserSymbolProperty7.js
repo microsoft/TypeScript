@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserSymbolProperty7.js]
+"use strict";
 class C {
     [Symbol.toStringTag]() { }
 }

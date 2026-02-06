@@ -1,0 +1,153 @@
+//// [tests/cases/compiler/controlFlowUnionContainingTypeParameter1.ts] ////
+
+=== controlFlowUnionContainingTypeParameter1.ts ===
+// https://github.com/microsoft/TypeScript/issues/44814
+
+class TestClass<T> {
+>TestClass : TestClass<T>
+>          : ^^^^^^^^^^^^
+
+  typeguard(val: unknown): val is T {
+>typeguard : (val: unknown) => val is T
+>          : ^   ^^       ^^^^^        
+>val : unknown
+>    : ^^^^^^^
+
+    return true;
+>true : true
+>     : ^^^^
+  }
+  f(v: number): void {}
+>f : (v: number) => void
+>  : ^ ^^      ^^^^^    
+>v : number
+>  : ^^^^^^
+
+  h(v: T): void {}
+>h : (v: T) => void
+>  : ^ ^^ ^^^^^    
+>v : T
+>  : ^
+
+  func(val: T | number): void {
+>func : (val: T | number) => void
+>     : ^   ^^          ^^^^^    
+>val : number | T
+>    : ^^^^^^^^^^
+
+    if (this.typeguard(val)) {
+>this.typeguard(val) : boolean
+>                    : ^^^^^^^
+>this.typeguard : (val: unknown) => val is T
+>               : ^   ^^       ^^^^^        
+>this : this
+>     : ^^^^
+>typeguard : (val: unknown) => val is T
+>          : ^   ^^       ^^^^^        
+>val : number | T
+>    : ^^^^^^^^^^
+
+      this.h(val);
+>this.h(val) : void
+>            : ^^^^
+>this.h : (v: T) => void
+>       : ^ ^^ ^^^^^    
+>this : this
+>     : ^^^^
+>h : (v: T) => void
+>  : ^ ^^ ^^^^^    
+>val : T
+>    : ^
+
+      return;
+    }
+    this.f(val);
+>this.f(val) : void
+>            : ^^^^
+>this.f : (v: number) => void
+>       : ^ ^^      ^^^^^    
+>this : this
+>     : ^^^^
+>f : (v: number) => void
+>  : ^ ^^      ^^^^^    
+>val : number
+>    : ^^^^^^
+  }
+}
+
+class TestClass2<T extends Date> {
+>TestClass2 : TestClass2<T>
+>           : ^^^^^^^^^^^^^
+
+  typeguard(val: unknown): val is T {
+>typeguard : (val: unknown) => val is T
+>          : ^   ^^       ^^^^^        
+>val : unknown
+>    : ^^^^^^^
+
+    return true;
+>true : true
+>     : ^^^^
+  }
+  f(v: number): void {}
+>f : (v: number) => void
+>  : ^ ^^      ^^^^^    
+>v : number
+>  : ^^^^^^
+
+  h(v: T): void {}
+>h : (v: T) => void
+>  : ^ ^^ ^^^^^    
+>v : T
+>  : ^
+
+  func(val: T | number): void {
+>func : (val: T | number) => void
+>     : ^   ^^          ^^^^^    
+>val : number | T
+>    : ^^^^^^^^^^
+
+    if (this.typeguard(val)) {
+>this.typeguard(val) : boolean
+>                    : ^^^^^^^
+>this.typeguard : (val: unknown) => val is T
+>               : ^   ^^       ^^^^^        
+>this : this
+>     : ^^^^
+>typeguard : (val: unknown) => val is T
+>          : ^   ^^       ^^^^^        
+>val : number | T
+>    : ^^^^^^^^^^
+
+      this.h(val);
+>this.h(val) : void
+>            : ^^^^
+>this.h : (v: T) => void
+>       : ^ ^^ ^^^^^    
+>this : this
+>     : ^^^^
+>h : (v: T) => void
+>  : ^ ^^ ^^^^^    
+>val : T
+>    : ^
+
+      return;
+    }
+    val;
+>val : number
+>    : ^^^^^^
+
+    this.f(val);
+>this.f(val) : void
+>            : ^^^^
+>this.f : (v: number) => void
+>       : ^ ^^      ^^^^^    
+>this : this
+>     : ^^^^
+>f : (v: number) => void
+>  : ^ ^^      ^^^^^    
+>val : number
+>    : ^^^^^^
+  }
+}
+

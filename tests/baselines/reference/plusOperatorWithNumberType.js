@@ -2,17 +2,17 @@
 
 //// [plusOperatorWithNumberType.ts]
 // + operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 
 function foo(): number { return 1; }
 
 class A {
-    public a: number;
+    public a!: number;
     static foo() { return 1; }
 }
-module M {
-    export var n: number;
+namespace M {
+    export var n: number = 0;
 }
 
 var objA = new A();
@@ -44,18 +44,15 @@ var ResultIsNumber11 = +(NUMBER + NUMBER);
 +objA.a, M.n;
 
 //// [plusOperatorWithNumberType.js]
-// + operator on number type
-var NUMBER;
+"use strict";
 var NUMBER1 = [1, 2];
 function foo() { return 1; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return 1; };
-    return A;
-}());
+class A {
+    static foo() { return 1; }
+}
 var M;
 (function (M) {
+    M.n = 0;
 })(M || (M = {}));
 var objA = new A();
 // number type var
@@ -64,7 +61,7 @@ var ResultIsNumber2 = +NUMBER1;
 // number type literal
 var ResultIsNumber3 = +1;
 var ResultIsNumber4 = +{ x: 1, y: 2 };
-var ResultIsNumber5 = +{ x: 1, y: function (n) { return n; } };
+var ResultIsNumber5 = +{ x: 1, y: (n) => { return n; } };
 // number type expressions
 var ResultIsNumber6 = +objA.a;
 var ResultIsNumber7 = +M.n;

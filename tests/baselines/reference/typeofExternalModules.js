@@ -20,25 +20,19 @@ y2 = ext;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 exports.C = C;
 //// [typeofExternalModules_exportAssign.js]
 "use strict";
-var D = /** @class */ (function () {
-    function D() {
-    }
-    return D;
-}());
+class D {
+}
 module.exports = D;
 //// [typeofExternalModules_core.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var ext = require("./typeofExternalModules_external");
-var exp = require("./typeofExternalModules_exportAssign");
+const ext = require("./typeofExternalModules_external");
+const exp = require("./typeofExternalModules_exportAssign");
 var y1 = ext;
 y1 = exp;
 var y2 = exp;

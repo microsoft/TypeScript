@@ -1,7 +1,7 @@
 5:: no-change-run
 Clean build will have check pending since it didnt type check
 Incremental build has typechecked before this so wont have checkPending
-TsBuild info text without affectedFilesPendingEmit:: /src/tsconfig.tsbuildinfo.readable.baseline.txt::
+TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
   "root": [
@@ -22,7 +22,7 @@ IncrementalBuild:
 15:: no-change-run
 Clean build will have check pending since it didnt type check
 Incremental build has typechecked before this so wont have checkPending
-TsBuild info text without affectedFilesPendingEmit:: /src/tsconfig.tsbuildinfo.readable.baseline.txt::
+TsBuild info text without affectedFilesPendingEmit:: /home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt::
 CleanBuild:
 {
   "root": [

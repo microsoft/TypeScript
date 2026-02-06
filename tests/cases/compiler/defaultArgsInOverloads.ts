@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 function fun(a: string);
 function fun(a = 3);
 function fun(a = null) { }

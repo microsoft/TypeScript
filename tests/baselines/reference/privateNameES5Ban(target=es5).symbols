@@ -1,0 +1,35 @@
+//// [tests/cases/conformance/classes/members/privateNames/privateNameES5Ban.ts] ////
+
+=== privateNameES5Ban.ts ===
+class A {
+>A : Symbol(A, Decl(privateNameES5Ban.ts, 0, 0))
+
+    constructor() {}
+    #field = 123;
+>#field : Symbol(A.#field, Decl(privateNameES5Ban.ts, 1, 20))
+
+    #method() {}
+>#method : Symbol(A.#method, Decl(privateNameES5Ban.ts, 2, 17))
+
+    static #sField = "hello world";
+>#sField : Symbol(A.#sField, Decl(privateNameES5Ban.ts, 3, 16))
+
+    static #sMethod() {}
+>#sMethod : Symbol(A.#sMethod, Decl(privateNameES5Ban.ts, 4, 35))
+
+    get #acc() { return ""; }
+>#acc : Symbol(A.#acc, Decl(privateNameES5Ban.ts, 5, 24), Decl(privateNameES5Ban.ts, 6, 29))
+
+    set #acc(x: string) {}
+>#acc : Symbol(A.#acc, Decl(privateNameES5Ban.ts, 5, 24), Decl(privateNameES5Ban.ts, 6, 29))
+>x : Symbol(x, Decl(privateNameES5Ban.ts, 7, 13))
+
+    static get #sAcc() { return 0; }
+>#sAcc : Symbol(A.#sAcc, Decl(privateNameES5Ban.ts, 7, 26), Decl(privateNameES5Ban.ts, 8, 36))
+
+    static set #sAcc(x: number) {}
+>#sAcc : Symbol(A.#sAcc, Decl(privateNameES5Ban.ts, 7, 26), Decl(privateNameES5Ban.ts, 8, 36))
+>x : Symbol(x, Decl(privateNameES5Ban.ts, 9, 21))
+}
+
+

@@ -1,3 +1,5 @@
+// @lib: es5
+
 //// Object.create(null);
 //// const x = Promise.resolve(Number.MAX_VALUE);
 //// if (x instanceof Promise) {}

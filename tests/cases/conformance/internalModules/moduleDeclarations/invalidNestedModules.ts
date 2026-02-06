@@ -1,26 +1,27 @@
-module A.B.C {
+// @target: es2015
+namespace A.B.C {
     export class Point {
         x: number;
         y: number;
     }
 }
 
-module A {
-    export module B {
+namespace A {
+    export namespace B {
         export class C { // Error
             name: string;
         }
     }
 }
 
-module M2.X {
+namespace M2.X {
     export class Point {
         x: number; y: number;
     }
 }
 
-module M2 {
-    export module X {
+namespace M2 {
+    export namespace X {
         export var Point: number; // Error
     }
 }

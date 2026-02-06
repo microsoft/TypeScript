@@ -22,7 +22,7 @@ declare module "baz" {
 >"baz" : typeof import("baz")
 >      : ^^^^^^^^^^^^^^^^^^^^
 
-    export module a {
+    export namespace a {
 >a : typeof a
 >  : ^^^^^^^^
 
@@ -31,7 +31,7 @@ declare module "baz" {
 >  : ^^^^^^
     }
  
-    module c {
+    namespace c {
 >c : typeof import("baz")
 >  : ^^^^^^^^^^^^^^^^^^^^
 

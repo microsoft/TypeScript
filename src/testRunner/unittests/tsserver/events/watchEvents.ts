@@ -4,12 +4,9 @@ import {
     openFilesForSession,
     TestSession,
 } from "../../helpers/tsserver.js";
-import {
-    createServerHost,
-    libFile,
-} from "../../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: events:: watchEvents", () => {
+describe("unittests:: tsserver:: events:: watchEvents::", () => {
     function verifyCanUseWatchEvents(
         canUseEvents: boolean,
         projectPath: string,
@@ -17,13 +14,12 @@ describe("unittests:: tsserver:: events:: watchEvents", () => {
         windowsStyleRoot?: string,
     ) {
         it(canUseEvents ? windowsStyleRoot ? "canUseWatchEvents on windows" : "canUseWatchEvents" : "canUseWatchEvents without canUseEvents", () => {
-            const host = createServerHost({
+            const host = TestServerHost.createServerHost({
                 [`${projectPath}${directorySeparator}tsconfig.json`]: "{}",
                 [`${projectPath}${directorySeparator}a.ts`]: `export class a { prop = "hello"; foo() { return this.prop; } }`,
                 [`${projectPath}${directorySeparator}b.ts`]: `export class b { prop = "hello"; foo() { return this.prop; } }`,
                 [`${projectPath}${directorySeparator}m.ts`]: `import { x } from "something"`,
                 [`${projectPath}${directorySeparator}node_modules${directorySeparator}something${directorySeparator}index.d.ts`]: `export const x = 10;`,
-                [libFile.path]: libFile.content,
             }, { windowsStyleRoot });
             const session = new TestSession({ host, canUseWatchEvents: true, canUseEvents });
             if (!canUseEvents) session.logger.msg = (s, type) => session.logger.info(`${type}:: ${s}`);

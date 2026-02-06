@@ -1,3 +1,4 @@
+// @target: es5, es2015
 class B {
     static a = 1;
 }
@@ -59,4 +60,16 @@ function foo1 () {
             }
         }
     }
+}
+
+class foo2 {
+    static {
+        this.b  // should error
+        let b: typeof this.b;   // ok
+        if (1) {
+            this.b; // should error
+        }
+    }
+
+    static b = 1;
 }

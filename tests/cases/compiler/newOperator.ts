@@ -1,4 +1,5 @@
-﻿interface ifc { }
+﻿// @target: es2015
+interface ifc { }
 // Attempting to 'new' an interface yields poor error
 var i = new ifc();
 
@@ -45,7 +46,7 @@ new ctorUnion("");
 declare const ctorUnion2: (new <T extends number>(a: T) => void) | (new <T>(a: string) => void)
 new ctorUnion2("");
 
-module M {
+namespace M {
     export class T {
         x: number;
     }

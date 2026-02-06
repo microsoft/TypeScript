@@ -1,3 +1,4 @@
+// @target: es2015
 class TestProgressBar {
     public total: number;
     public total(total: number) {

@@ -1,3 +1,4 @@
+// @target: es2015
 interface A {
   method1(): this is {
     a: 1

@@ -88,3 +88,24 @@ f2(
   },
 );
 
+f2(
+>f2 : Symbol(f2, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 14, 2))
+  {
+    foo: 0,
+>foo : Symbol(foo, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 32, 3))
+
+    bar: "",
+>bar : Symbol(bar, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 33, 11))
+
+  },
+  {
+    foo: (value, key) => {
+>foo : Symbol(foo, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 36, 3))
+>value : Symbol(value, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 37, 10))
+>key : Symbol(key, Decl(contextualPropertyOfGenericFilteringMappedType.ts, 37, 16))
+
+      // implicit `any`s
+    },
+  },
+);
+

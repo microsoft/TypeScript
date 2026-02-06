@@ -1,23 +1,23 @@
-import * as Utils from "../../_namespaces/Utils.js";
+import { dedent } from "../../_namespaces/Utils.js";
+import { tscTypeScriptTestLocation } from "../helpers/contents.js";
 import {
     baselineTsserverLogs,
     logDiagnostics,
     openFilesForSession,
     TestSession,
 } from "../helpers/tsserver.js";
-import { createServerHost } from "../helpers/virtualFileSystemWithWatch.js";
+import { TestServerHost } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: languageService", () => {
+describe("unittests:: tsserver:: languageService::", () => {
     it("should work correctly on case-sensitive file systems", () => {
-        const lib = {
-            path: "/a/Lib/lib.d.ts",
-            content: "let x: number",
-        };
         const f = {
-            path: "/a/b/app.ts",
+            path: "/home/src/projects/project/app.ts",
             content: "let x = 1;",
         };
-        const host = createServerHost([lib, f], { executingFilePath: "/a/Lib/tsc.js", useCaseSensitiveFileNames: true });
+        const host = TestServerHost.createServerHost([f], {
+            executingFilePath: tscTypeScriptTestLocation.replace("/Lib/", "/lib/"),
+            useCaseSensitiveFileNames: true,
+        });
         const session = new TestSession(host);
         openFilesForSession([f], session);
         baselineTsserverLogs("languageService", "should work correctly on case-sensitive file systems", session);
@@ -26,42 +26,42 @@ describe("unittests:: tsserver:: languageService", () => {
     it("should support multiple projects with the same file under differing `paths` settings", () => {
         const files = [
             {
-                path: "/project/shared.ts",
-                content: Utils.dedent`
+                path: "/home/src/projects/project/shared.ts",
+                content: dedent`
                     import {foo_a} from "foo";
                     `,
             },
             {
-                path: `/project/a/tsconfig.json`,
+                path: `/home/src/projects/project/a/tsconfig.json`,
                 content: `{ "compilerOptions": { "paths": { "foo": ["./foo.d.ts"] } }, "files": ["./index.ts", "./foo.d.ts"] }`,
             },
             {
-                path: `/project/a/foo.d.ts`,
-                content: Utils.dedent`
+                path: `/home/src/projects/project/a/foo.d.ts`,
+                content: dedent`
                     export const foo_a = 1;
                     `,
             },
             {
-                path: "/project/a/index.ts",
+                path: "/home/src/projects/project/a/index.ts",
                 content: `import "../shared";`,
             },
             {
-                path: `/project/b/tsconfig.json`,
+                path: `/home/src/projects/project/b/tsconfig.json`,
                 content: `{ "compilerOptions": { "paths": { "foo": ["./foo.d.ts"] } }, "files": ["./index.ts", "./foo.d.ts"] }`,
             },
             {
-                path: `/project/b/foo.d.ts`,
-                content: Utils.dedent`
+                path: `/home/src/projects/project/b/foo.d.ts`,
+                content: dedent`
                     export const foo_b = 1;
                     `,
             },
             {
-                path: "/project/b/index.ts",
+                path: "/home/src/projects/project/b/index.ts",
                 content: `import "../shared";`,
             },
         ];
 
-        const host = createServerHost(files, { executingFilePath: "/project/tsc.js", useCaseSensitiveFileNames: true });
+        const host = TestServerHost.createServerHost(files, { useCaseSensitiveFileNames: true });
         const session = new TestSession(host);
         openFilesForSession([files[3], files[6].path], session);
         logDiagnostics(

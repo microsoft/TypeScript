@@ -10,7 +10,7 @@ const sourceFileJs = vpath.combine(vfs.srcFolder, "source.js");
 
 // Define a custom "Symbol" constructor to attach missing built-in symbols without
 // modifying the global "Symbol" constructor
-const FakeSymbol: SymbolConstructor = ((description?: string) => Symbol(description)) as any;
+export const FakeSymbol: SymbolConstructor = ((description?: string) => Symbol(description)) as any;
 (FakeSymbol as any).prototype = Symbol.prototype;
 for (const key of Object.getOwnPropertyNames(Symbol)) {
     Object.defineProperty(FakeSymbol, key, Object.getOwnPropertyDescriptor(Symbol, key)!);
@@ -33,13 +33,15 @@ for (const symbolName of symbolNames) {
     }
 }
 
-export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFiles: string[]; main: string; }, options?: ts.CompilerOptions, globals?: Record<string, any>) {
+export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFiles: string[]; main: string; }, options?: ts.CompilerOptions, globals?: Record<string, any>): any {
     if (typeof source === "string") source = { files: { [sourceFile]: source }, rootFiles: [sourceFile], main: sourceFile };
     const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { files: source.files });
     const compilerOptions: ts.CompilerOptions = {
         target: ts.ScriptTarget.ES5,
         module: ts.ModuleKind.CommonJS,
+        strict: false,
         lib: ["lib.esnext.d.ts", "lib.dom.d.ts"],
+        ignoreDeprecations: "6.0",
         ...options,
     };
     const host = new fakes.CompilerHost(fs, compilerOptions);
@@ -62,7 +64,7 @@ export function evaluateTypeScript(source: string | { files: vfs.FileSet; rootFi
     return loader.import(output.file);
 }
 
-export function evaluateJavaScript(sourceText: string, globals?: Record<string, any>, sourceFile = sourceFileJs) {
+export function evaluateJavaScript(sourceText: string, globals?: Record<string, any>, sourceFile: string = sourceFileJs): any {
     globals = { Symbol: FakeSymbol, ...globals };
     const fs = new vfs.FileSystem(/*ignoreCase*/ false, { files: { [sourceFile]: sourceText } });
     return new CommonJsLoader(fs, globals).import(sourceFile);

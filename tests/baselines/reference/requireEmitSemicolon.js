@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/requireEmitSemicolon.ts] ////
 
 //// [requireEmitSemicolon_0.ts]
-export module Models {
+export namespace Models {
 	export class Person {
         constructor(name: string) { }
 	}
@@ -11,7 +11,7 @@ export module Models {
 ///<reference path='requireEmitSemicolon_0.ts'/>
 import P = require("requireEmitSemicolon_0"); // bug was we were not emitting a ; here and causing runtime failures in node
 
-export module Database {
+export namespace Database {
 	export class DB {
 	    public findPerson(id: number): P.Models.Person {
 	        return new P.Models.Person("Rock");
@@ -26,11 +26,9 @@ define(["require", "exports"], function (require, exports) {
     exports.Models = void 0;
     var Models;
     (function (Models) {
-        var Person = /** @class */ (function () {
-            function Person(name) {
-            }
-            return Person;
-        }());
+        class Person {
+            constructor(name) { }
+        }
         Models.Person = Person;
     })(Models || (exports.Models = Models = {}));
 });
@@ -41,14 +39,11 @@ define(["require", "exports", "requireEmitSemicolon_0"], function (require, expo
     exports.Database = void 0;
     var Database;
     (function (Database) {
-        var DB = /** @class */ (function () {
-            function DB() {
-            }
-            DB.prototype.findPerson = function (id) {
+        class DB {
+            findPerson(id) {
                 return new P.Models.Person("Rock");
-            };
-            return DB;
-        }());
+            }
+        }
         Database.DB = DB;
     })(Database || (exports.Database = Database = {}));
 });

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 type PartialDeep<T> = {[K in keyof T]?: PartialDeep<T[K]>};
 type Many<T> = T | readonly T[];

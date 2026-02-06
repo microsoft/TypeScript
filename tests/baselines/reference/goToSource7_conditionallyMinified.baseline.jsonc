@@ -1,8 +1,8 @@
 // === goToSourceDefinition ===
-// === /node_modules/react/cjs/react.production.min.js ===
+// === /home/src/workspaces/project/node_modules/react/cjs/react.production.min.js ===
 // 'use strict';exports.[|{| defId: 0 |}useState|]=function(a){};exports.version='16.8.6';
 
-// === /node_modules/react/cjs/react.development.js ===
+// === /home/src/workspaces/project/node_modules/react/cjs/react.development.js ===
 // 'use strict';
 // if (process.env.NODE_ENV !== 'production') {
 //   (function() {
@@ -12,7 +12,7 @@
 //   }());
 // }
 
-// === /index.ts ===
+// === /home/src/workspaces/project/index.ts ===
 // import { /*GOTO SOURCE DEF*/useState } from 'react';
 
   // === Details ===

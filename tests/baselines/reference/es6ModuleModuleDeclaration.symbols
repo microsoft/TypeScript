@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/es6ModuleModuleDeclaration.ts] ////
 
 === es6ModuleModuleDeclaration.ts ===
-export module m1 {
+export namespace m1 {
 >m1 : Symbol(m1, Decl(es6ModuleModuleDeclaration.ts, 0, 0))
 
     export var a = 10;
@@ -10,7 +10,7 @@ export module m1 {
     var b = 10;
 >b : Symbol(b, Decl(es6ModuleModuleDeclaration.ts, 2, 7))
 
-    export module innerExportedModule {
+    export namespace innerExportedModule {
 >innerExportedModule : Symbol(innerExportedModule, Decl(es6ModuleModuleDeclaration.ts, 2, 15))
 
         export var k = 10;
@@ -19,7 +19,7 @@ export module m1 {
         var l = 10;
 >l : Symbol(l, Decl(es6ModuleModuleDeclaration.ts, 5, 11))
     }
-    export module innerNonExportedModule {
+    export namespace innerNonExportedModule {
 >innerNonExportedModule : Symbol(innerNonExportedModule, Decl(es6ModuleModuleDeclaration.ts, 6, 5))
 
         export var x = 10;
@@ -29,7 +29,7 @@ export module m1 {
 >y : Symbol(y, Decl(es6ModuleModuleDeclaration.ts, 9, 11))
     }
 }
-module m2 {
+namespace m2 {
 >m2 : Symbol(m2, Decl(es6ModuleModuleDeclaration.ts, 11, 1))
 
     export var a = 10;
@@ -38,7 +38,7 @@ module m2 {
     var b = 10;
 >b : Symbol(b, Decl(es6ModuleModuleDeclaration.ts, 14, 7))
 
-    export module innerExportedModule {
+    export namespace innerExportedModule {
 >innerExportedModule : Symbol(innerExportedModule, Decl(es6ModuleModuleDeclaration.ts, 14, 15))
 
         export var k = 10;
@@ -47,7 +47,7 @@ module m2 {
         var l = 10;
 >l : Symbol(l, Decl(es6ModuleModuleDeclaration.ts, 17, 11))
     }
-    export module innerNonExportedModule {
+    export namespace innerNonExportedModule {
 >innerNonExportedModule : Symbol(innerNonExportedModule, Decl(es6ModuleModuleDeclaration.ts, 18, 5))
 
         export var x = 10;

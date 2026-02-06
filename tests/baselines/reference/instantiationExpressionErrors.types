@@ -179,7 +179,7 @@ const c1 = g<string> || ((x: string) => x);
 >c1 : (x: string) => string
 >   : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> || ((x: string) => x) : (x: string) => string
->                                : ^ ^^      ^^^^^^^^^^^
+>                                : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> : ((x: string) => string) | undefined
 >          : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (<T>(x: T) => T) | undefined
@@ -197,7 +197,7 @@ const c2 = g<string> ?? ((x: string) => x);
 >c2 : (x: string) => string
 >   : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> ?? ((x: string) => x) : (x: string) => string
->                                : ^ ^^      ^^^^^^^^^^^
+>                                : ^ ^^^^^^^^^^^^^^^^^^^
 >g<string> : ((x: string) => string) | undefined
 >          : ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >g : (<T>(x: T) => T) | undefined

@@ -1,3 +1,4 @@
+// @target: es2015
 // @moduleResolution: classic, node, node16, nodenext, bundler
 // @resolvePackageJsonImports: true
 // @resolvePackageJsonExports: true

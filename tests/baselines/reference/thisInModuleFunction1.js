@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/thisInModuleFunction1.ts] ////
 
 //// [thisInModuleFunction1.ts]
-module bar {
+namespace bar {
  export function bar() {
   return this;
  } 
@@ -9,6 +9,7 @@ module bar {
 var z = bar.bar();
 
 //// [thisInModuleFunction1.js]
+"use strict";
 var bar;
 (function (bar_1) {
     function bar() {

@@ -1,3 +1,4 @@
+// @target: es5, es2015
 // @module: none
 // @outdir: out/
 // @fullEmitPaths: true

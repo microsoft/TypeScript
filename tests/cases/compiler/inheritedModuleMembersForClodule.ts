@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     static foo(): string {
         return "123";
@@ -7,7 +8,7 @@ class C {
 class D extends C {
 }
 
-module D {
+namespace D {
     export function foo(): number {
         return 0;
     };

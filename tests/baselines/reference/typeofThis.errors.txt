@@ -66,7 +66,7 @@ typeofThis.ts(57,24): error TS7017: Element implicitly has an 'any' type because
         }
     }
     
-    module Test7 {
+    namespace Test7 {
         export let f = () => {
             let x: typeof this.no = 1;
                           ~~~~

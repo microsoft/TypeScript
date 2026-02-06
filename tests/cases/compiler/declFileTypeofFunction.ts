@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @declaration: true
 
 function f(n: typeof f): string;

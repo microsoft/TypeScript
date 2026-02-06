@@ -1,17 +1,17 @@
 //// [tests/cases/conformance/externalModules/exportAssignmentMergedModule.ts] ////
 
 //// [foo_0.ts]
-module Foo {
+namespace Foo {
 	export function a(){
 		return 5;
 	}
 	export var b = true;
 }
-module Foo {
+namespace Foo {
 	export function c(a: number){
 		return a;
 	}
-	export module Test {
+	export namespace Test {
 		export var answer = 42;
 	}
 }
@@ -39,7 +39,7 @@ var Foo;
         return a;
     }
     Foo.c = c;
-    var Test;
+    let Test;
     (function (Test) {
         Test.answer = 42;
     })(Test = Foo.Test || (Foo.Test = {}));
@@ -48,7 +48,7 @@ module.exports = Foo;
 //// [foo_1.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var foo = require("./foo_0");
+const foo = require("./foo_0");
 var a = foo.a();
 if (!!foo.b) {
     foo.Test.answer = foo.c(42);

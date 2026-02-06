@@ -1,4 +1,4 @@
-//@target: ES5
+//@target: ES5, ES2015
 interface A {
     prop: string;
     raw: string;
@@ -17,6 +17,6 @@ class C extends B {
     set prop(v) { }
     raw = "edge";
     readonly ro = "readonly please";
-    readonlyProp: string; // don't have to give a value, in fact
+    readonlyProp!: string;
     m() { }
 }

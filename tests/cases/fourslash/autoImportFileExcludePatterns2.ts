@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
+
 // @Filename: /lib/components/button/Button.ts
 //// export function Button() {}
 

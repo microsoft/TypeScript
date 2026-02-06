@@ -1,13 +1,17 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /jsconfig.json
+// @lib: es5
+
+// @Filename: /home/src/workspaces/project/jsconfig.json
 ////{
 ////  "compilerOptions": {
+////    "lib": ["es5"],
 ////    "module": "commonjs",
+////    "types": ["*"]
 ////  },
 ////}
 
-// @Filename: /node_modules/@types/node/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/node/index.d.ts
 ////declare module 'fs' {
 ////  export function readFile(): void;
 ////}
@@ -15,10 +19,10 @@
 ////  export function promisify(): void;
 ////}
 
-// @Filename: /package.json
+// @Filename: /home/src/workspaces/project/package.json
 ////{ "mod" }
 
-// @Filename: /a.js
+// @Filename: /home/src/workspaces/project/a.js
 ////
 ////readF/**/
 

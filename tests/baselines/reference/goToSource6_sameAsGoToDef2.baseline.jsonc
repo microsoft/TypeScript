@@ -1,8 +1,8 @@
 // === goToSourceDefinition ===
-// === /node_modules/foo/src/a.ts ===
+// === /home/src/workspaces/project/node_modules/foo/src/a.ts ===
 // export const [|a |]= 'a';
 
-// === /b.ts ===
+// === /home/src/workspaces/project/b.ts ===
 // import { a } from 'foo/a';
 // a/*GOTO SOURCE DEF*/
 
@@ -19,10 +19,10 @@
 
 
 // === goToDefinition ===
-// === /node_modules/foo/src/a.ts ===
+// === /home/src/workspaces/project/node_modules/foo/src/a.ts ===
 // export const [|a |]= 'a';
 
-// === /b.ts ===
+// === /home/src/workspaces/project/b.ts ===
 // import { a } from 'foo/a';
 // [|a|]/*GOTO DEF*/
 

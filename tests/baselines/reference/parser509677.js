@@ -4,4 +4,5 @@
 var n: { y: string };
 
 //// [parser509677.js]
+"use strict";
 var n;

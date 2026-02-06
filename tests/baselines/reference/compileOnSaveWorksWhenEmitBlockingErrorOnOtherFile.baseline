@@ -7,5 +7,6 @@ Diagnostics:
 EmitSkipped: false
 
 FileName : /tests/cases/fourslash/a.js
+"use strict";
 function foo2() { return 30; } // no error - should emit a.js
 

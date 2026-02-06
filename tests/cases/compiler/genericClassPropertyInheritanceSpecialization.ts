@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 interface KnockoutObservableBase<T> {
     peek(): T;
     (): T;
@@ -33,11 +35,11 @@ interface KnockoutObservableArrayStatic {
     <T>(value?: T[]): KnockoutObservableArray<T>;
 }
 
-declare module ko {
+declare namespace ko {
     export var observableArray: KnockoutObservableArrayStatic;
 }
 
-module Portal.Controls.Validators {
+namespace Portal.Controls.Validators {
 
     export class Validator<TValue> {
         private _subscription;
@@ -50,7 +52,7 @@ module Portal.Controls.Validators {
     }
 }
 
-module PortalFx.ViewModels.Controls.Validators {
+namespace PortalFx.ViewModels.Controls.Validators {
 
     export class Validator<TValue> extends Portal.Controls.Validators.Validator<TValue> {
 

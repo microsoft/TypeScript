@@ -1,18 +1,5 @@
-currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/myproject useCaseSensitiveFileNames:: false
 Input::
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
-interface Boolean {}
-interface Function {}
-interface CallableFunction {}
-interface NewableFunction {}
-interface IArguments {}
-interface Number { toExponential: any; }
-interface Object {}
-interface RegExp {}
-interface String { charAt: any; }
-interface Array<T> { length: number; [n: number]: T; }
-
 //// [/user/username/projects/myproject/typings/xterm.d.ts]
 export const typing = 10;
 
@@ -72,6 +59,20 @@ export const pkg3 = 3;
   ]
 }
 
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
+interface Boolean {}
+interface Function {}
+interface CallableFunction {}
+interface NewableFunction {}
+interface IArguments {}
+interface Number { toExponential: any; }
+interface Object {}
+interface RegExp {}
+interface String { charAt: any; }
+interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
+
 //// [/user/username/projects/myproject/tsconfig.json]
 {
   "files": [],
@@ -93,7 +94,7 @@ export const pkg3 = 3;
 }
 
 
-/a/lib/tsc.js --b --w
+/home/src/tslibs/TS/Lib/tsc.js --b --w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -125,11 +126,10 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 //// [/user/username/projects/myproject/pkg0/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.pkg0 = void 0;
-exports.pkg0 = 0;
+export const pkg0 = 0;
 
 
 //// [/user/username/projects/myproject/pkg0/tsconfig.tsbuildinfo]
@@ -146,10 +146,7 @@ exports.pkg0 = 0;
 }
 
 //// [/user/username/projects/myproject/pkg1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.pkg1 = void 0;
-exports.pkg1 = 1;
+export const pkg1 = 1;
 
 
 //// [/user/username/projects/myproject/pkg1/tsconfig.tsbuildinfo]
@@ -166,10 +163,7 @@ exports.pkg1 = 1;
 }
 
 //// [/user/username/projects/myproject/pkg2/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.pkg2 = void 0;
-exports.pkg2 = 2;
+export const pkg2 = 2;
 
 
 //// [/user/username/projects/myproject/pkg2/tsconfig.tsbuildinfo]
@@ -186,10 +180,7 @@ exports.pkg2 = 2;
 }
 
 //// [/user/username/projects/myproject/pkg3/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.pkg3 = void 0;
-exports.pkg3 = 3;
+export const pkg3 = 3;
 
 
 //// [/user/username/projects/myproject/pkg3/tsconfig.tsbuildinfo]
@@ -249,17 +240,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg0/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg0/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/pkg0/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
@@ -274,17 +265,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg1/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg1/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/pkg1/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
@@ -299,17 +290,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg2/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg2/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/pkg2/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
@@ -324,17 +315,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg3/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg3/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
 Shape signatures in builder refreshed for::
-/a/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
 /user/username/projects/myproject/pkg3/index.ts (used version)
 /user/username/projects/myproject/typings/xterm.d.ts (used version)
 
@@ -424,7 +415,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg0/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
@@ -445,7 +436,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg1/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
@@ -466,7 +457,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg2/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
@@ -487,7 +478,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg3/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
@@ -651,7 +642,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg0/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
@@ -672,7 +663,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg1/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 
@@ -693,7 +684,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/myproject/pkg2/index.ts
 /user/username/projects/myproject/typings/xterm.d.ts
 

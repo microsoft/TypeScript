@@ -1,4 +1,5 @@
-﻿var a = ``;
+﻿// @target: es2015
+var a = ``;
 
 var b = `${ 0 }`;
 

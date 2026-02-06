@@ -1,4 +1,5 @@
-﻿// @declaration: true
+﻿// @target: es2015
+// @declaration: true
 
 interface Animal { animal: {} };
 interface Dog extends Animal { dog: {} }

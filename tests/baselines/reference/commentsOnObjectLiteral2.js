@@ -15,6 +15,7 @@ var Person = makeClass(
 );
 
 //// [commentsOnObjectLiteral2.js]
+"use strict";
 var Person = makeClass({
     /**
      This is just another way to define a constructor.

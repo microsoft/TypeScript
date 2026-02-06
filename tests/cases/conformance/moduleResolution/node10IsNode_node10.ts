@@ -1,4 +1,5 @@
-// @moduleResolution: node10
+// @target: es2015
+// @moduleResolution: bundler
 // @module: commonjs
 // @noEmit: true
 // @traceResolution: true

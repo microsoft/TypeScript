@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 // Because the fourslash runner automatically opens the first file with the default setting,
 // to test the openFile function, the targeted file cannot be the first one.
 

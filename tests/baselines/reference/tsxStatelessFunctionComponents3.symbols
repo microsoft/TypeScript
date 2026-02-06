@@ -1,26 +1,28 @@
 //// [tests/cases/conformance/jsx/tsxStatelessFunctionComponents3.tsx] ////
 
 === file.tsx ===
+/// <reference path="react.d.ts" />
+
 import React = require('react');
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 
 const Foo = (props: any) => <div/>;
->Foo : Symbol(Foo, Decl(file.tsx, 2, 5))
->props : Symbol(props, Decl(file.tsx, 2, 13))
+>Foo : Symbol(Foo, Decl(file.tsx, 4, 5))
+>props : Symbol(props, Decl(file.tsx, 4, 13))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
 // Should be OK
 const foo = <Foo />;
->foo : Symbol(foo, Decl(file.tsx, 4, 5))
->Foo : Symbol(Foo, Decl(file.tsx, 2, 5))
+>foo : Symbol(foo, Decl(file.tsx, 6, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 4, 5))
 
 
 // Should be OK
 var MainMenu: React.StatelessComponent<{}> = (props) => (<div>
->MainMenu : Symbol(MainMenu, Decl(file.tsx, 8, 3))
+>MainMenu : Symbol(MainMenu, Decl(file.tsx, 10, 3))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 >StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 198, 40))
->props : Symbol(props, Decl(file.tsx, 8, 46))
+>props : Symbol(props, Decl(file.tsx, 10, 46))
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
     <h3>Main Menu</h3>
@@ -31,17 +33,17 @@ var MainMenu: React.StatelessComponent<{}> = (props) => (<div>
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
 var App: React.StatelessComponent<{ children }> = ({children}) => (
->App : Symbol(App, Decl(file.tsx, 12, 3))
+>App : Symbol(App, Decl(file.tsx, 14, 3))
 >React : Symbol(React, Decl(file.tsx, 0, 0))
 >StatelessComponent : Symbol(React.StatelessComponent, Decl(react.d.ts, 198, 40))
->children : Symbol(children, Decl(file.tsx, 12, 35))
->children : Symbol(children, Decl(file.tsx, 12, 52))
+>children : Symbol(children, Decl(file.tsx, 14, 35))
+>children : Symbol(children, Decl(file.tsx, 14, 52))
 
     <div >
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
 
         <MainMenu/>
->MainMenu : Symbol(MainMenu, Decl(file.tsx, 8, 3))
+>MainMenu : Symbol(MainMenu, Decl(file.tsx, 10, 3))
 
 	</div>
 >div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))

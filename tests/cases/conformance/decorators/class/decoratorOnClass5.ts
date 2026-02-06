@@ -1,4 +1,4 @@
-// @target:es5
+// @target:es5, es2015
 // @experimentaldecorators: true
 declare function dec(): <T>(target: T) => T;
 

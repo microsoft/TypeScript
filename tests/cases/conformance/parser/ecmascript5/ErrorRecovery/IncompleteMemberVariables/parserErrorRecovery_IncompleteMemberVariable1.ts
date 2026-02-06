@@ -1,10 +1,11 @@
+// @target: es2015
 // Interface
 interface IPoint {
     getDist(): number;
 }
 
 // Module
-module Shapes {
+namespace Shapes {
 
     // Class
     export class Point implements IPoint {

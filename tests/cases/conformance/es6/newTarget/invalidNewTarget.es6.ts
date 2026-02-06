@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es6
 const a = new.target;
 const b = () => new.target;

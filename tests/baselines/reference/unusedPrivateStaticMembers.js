@@ -46,6 +46,7 @@ class Test6 {
 
 
 //// [unusedPrivateStaticMembers.js]
+"use strict";
 class Test1 {
     static m1() { }
     static test() {

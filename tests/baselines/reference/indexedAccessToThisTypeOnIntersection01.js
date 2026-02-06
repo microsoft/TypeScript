@@ -9,3 +9,4 @@ interface A {
 type T = (A & { a: number })['getA'];
 
 //// [indexedAccessToThisTypeOnIntersection01.js]
+"use strict";

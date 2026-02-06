@@ -8,19 +8,13 @@ function foo<T>(x = class { static prop: T }): T {
 foo(class { static prop = "hello" }).length;
 
 //// [typeArgumentInferenceWithClassExpression1.js]
+"use strict";
 var _a;
-function foo(x) {
-    if (x === void 0) { x = /** @class */ (function () {
-        function class_1() {
-        }
-        return class_1;
-    }()); }
+function foo(x = class {
+}) {
     return undefined;
 }
-foo((_a = /** @class */ (function () {
-        function class_2() {
-        }
-        return class_2;
-    }()),
+foo((_a = class {
+    },
     _a.prop = "hello",
     _a)).length;

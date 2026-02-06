@@ -7,7 +7,7 @@ namespacesDeclaration2.ts(14,11): error TS2694: Namespace 'ns' has no exported m
     namespace N {
         function S() {}
     }
-    module M {
+    namespace M {
         function F() {}
     }
     

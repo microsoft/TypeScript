@@ -1,3 +1,4 @@
+// @target: es2015
 interface Base<T, U> {
     x: T;
     y: U;

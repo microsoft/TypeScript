@@ -6,4 +6,5 @@ run(1);
 
 
 //// [isolatedModulesPlainFile-ES6.js]
+"use strict";
 run(1);

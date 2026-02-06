@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: /a.d.ts
 declare global {
     export namespace ns {

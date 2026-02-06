@@ -4,7 +4,7 @@
 ////    doStuff(): number { return 0; }
 ////    static staticMethod() {}
 ////}
-////module Foo {
+////namespace Foo {
 ////    export var x: number;
 ////}
 ////Foo/*c1*/; // should get "x", "prototype"

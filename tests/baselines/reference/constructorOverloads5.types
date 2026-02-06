@@ -3,7 +3,7 @@
 === constructorOverloads5.ts ===
  interface IArguments {}
 
- declare module M {
+ declare namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 

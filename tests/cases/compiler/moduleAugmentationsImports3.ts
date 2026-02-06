@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: amd
 // @declaration: true
 // @outFile: f.js

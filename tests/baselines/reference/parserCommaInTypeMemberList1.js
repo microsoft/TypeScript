@@ -4,4 +4,5 @@
 var v: { workItem: any, width: string };
 
 //// [parserCommaInTypeMemberList1.js]
+"use strict";
 var v;

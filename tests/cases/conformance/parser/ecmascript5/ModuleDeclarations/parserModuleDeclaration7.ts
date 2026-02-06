@@ -1,2 +1,3 @@
-module number.a {
+// @target: es2015
+namespace number.a {
 }

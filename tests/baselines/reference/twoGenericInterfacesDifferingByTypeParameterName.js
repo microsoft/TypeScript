@@ -19,7 +19,7 @@ interface B<T,V> { // error
     y: V;
 }
 
-module M {
+namespace M {
     interface A<T> {
         x: T;
     }
@@ -37,25 +37,25 @@ module M {
     }
 }
 
-module M2 {
+namespace M2 {
     interface B<T, U> {
         x: U;
     }
 }
 
-module M2 {
+namespace M2 {
     interface B<T, V> { // ok, different declaration space than other M2
         y: V;
     }
 }
 
-module M3 {
+namespace M3 {
     export interface B<T, U> {
         x: U;
     }
 }
 
-module M3 {
+namespace M3 {
     export interface B<T, V> { // error
         y: V;
     }
@@ -64,4 +64,5 @@ module M3 {
 
 
 //// [twoGenericInterfacesDifferingByTypeParameterName.js]
+"use strict";
 // type parameter names are relevant when choosing whether to merge interface declarations

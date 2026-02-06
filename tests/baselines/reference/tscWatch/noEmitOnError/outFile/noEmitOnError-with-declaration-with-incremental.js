@@ -1,4 +1,4 @@
-currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames: false
+currentDirectory:: /user/username/projects/noEmitOnError useCaseSensitiveFileNames:: false
 Input::
 //// [/user/username/projects/noEmitOnError/tsconfig.json]
 {
@@ -29,8 +29,7 @@ console.log("hi");
 export { }
 
 
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -45,7 +44,7 @@ interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
 
-/a/lib/tsc.js --w
+/home/src/tslibs/TS/Lib/tsc.js --w
 Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] Starting compilation in watch mode...
@@ -55,23 +54,35 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../dev-build.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
 
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
+{"fileNames":["../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../a/lib/lib.d.ts",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./noemitonerror/shared/types/db.ts",
     "./noemitonerror/src/main.ts",
     "./noemitonerror/src/other.ts"
   ],
   "fileInfos": {
-    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
     "./noemitonerror/src/main.ts": "-2574607723-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n;\n",
     "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
@@ -101,18 +112,12 @@ Output::
   ],
   "errors": true,
   "version": "FakeTSVersion",
-  "size": 962
+  "size": 951
 }
 
 
-PolledWatches::
-/user/username/projects/noEmitOnError/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 /user/username/projects/noEmitOnError/shared/types/db.ts: *new*
   {}
@@ -143,13 +148,13 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -197,23 +202,33 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../dev-build.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"version":"FakeTSVersion"}
+{"fileNames":["../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../a/lib/lib.d.ts",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./noemitonerror/shared/types/db.ts",
     "./noemitonerror/src/main.ts",
     "./noemitonerror/src/other.ts"
   ],
   "fileInfos": {
-    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
     "./noemitonerror/src/main.ts": "-2574605496-import { A } from \"../shared/types/db\";\nconst a = {\n    lastName: 'sdsd'\n};",
     "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
@@ -237,40 +252,14 @@ Output::
     "noEmitOnError": true,
     "outFile": "./dev-build.js"
   },
+  "pendingEmit": [
+    "Js | Dts",
+    false
+  ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 927
+  "size": 950
 }
-
-//// [/user/username/projects/dev-build.js]
-define("shared/types/db", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("src/main", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var a = {
-        lastName: 'sdsd'
-    };
-});
-define("src/other", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    console.log("hi");
-});
-
-
-//// [/user/username/projects/dev-build.d.ts]
-declare module "shared/types/db" {
-    export interface A {
-        name: string;
-    }
-}
-declare module "src/main" { }
-declare module "src/other" {
-    export {};
-}
-
 
 
 
@@ -290,13 +279,13 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -347,23 +336,33 @@ Output::
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../dev-build.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
 
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"semanticDiagnosticsPerFile":[[3,[{"start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]],"pendingEmit":false,"version":"FakeTSVersion"}
+{"fileNames":["../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"semanticDiagnosticsPerFile":[[3,[{"start":46,"length":1,"code":2322,"category":1,"messageText":"Type 'number' is not assignable to type 'string'."}]]],"pendingEmit":false,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../a/lib/lib.d.ts",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./noemitonerror/shared/types/db.ts",
     "./noemitonerror/src/main.ts",
     "./noemitonerror/src/other.ts"
   ],
   "fileInfos": {
-    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
     "./noemitonerror/src/main.ts": "-11111345725-import { A } from \"../shared/types/db\";\nconst a: string = 10;",
     "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
@@ -406,7 +405,7 @@ Output::
     false
   ],
   "version": "FakeTSVersion",
-  "size": 1084
+  "size": 1073
 }
 
 
@@ -427,13 +426,13 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -479,23 +478,33 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../dev-build.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"version":"FakeTSVersion"}
+{"fileNames":["../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../a/lib/lib.d.ts",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./noemitonerror/shared/types/db.ts",
     "./noemitonerror/src/main.ts",
     "./noemitonerror/src/other.ts"
   ],
   "fileInfos": {
-    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
     "./noemitonerror/src/main.ts": "-8373351622-import { A } from \"../shared/types/db\";\nconst a: string = \"hello\";",
     "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
@@ -519,28 +528,15 @@ Output::
     "noEmitOnError": true,
     "outFile": "./dev-build.js"
   },
+  "pendingEmit": [
+    "Js | Dts",
+    false
+  ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 918
+  "size": 941
 }
 
-//// [/user/username/projects/dev-build.js]
-define("shared/types/db", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("src/main", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var a = "hello";
-});
-define("src/other", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    console.log("hi");
-});
-
-
-//// [/user/username/projects/dev-build.d.ts] file written with same contents
 
 
 Program root files: [
@@ -559,13 +555,13 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -612,33 +608,33 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[96msrc/main.ts[0m:[93m2[0m:[93m14[0m - [91merror[0m[90m TS4094: [0mProperty 'p' of exported anonymous class type may not be private or protected.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m2[0m export const a = class { private p = 10; };
-[7m [0m [91m             ~[0m
+[7m3[0m     "outFile": "../dev-build.js",
+[7m [0m [91m    ~~~~~~~~~[0m
 
-  [96msrc/main.ts[0m:[93m2[0m:[93m14[0m
-    [7m2[0m export const a = class { private p = 10; };
-    [7m [0m [96m             ~[0m
-    Add a type annotation to the variable a.
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"emitDiagnosticsPerFile":[[3,[{"start":53,"length":1,"messageText":"Property 'p' of exported anonymous class type may not be private or protected.","category":1,"code":4094,"relatedInformation":[{"start":53,"length":1,"messageText":"Add a type annotation to the variable a.","category":1,"code":9027}]}]]],"pendingEmit":17,"version":"FakeTSVersion"}
+{"fileNames":["../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../a/lib/lib.d.ts",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./noemitonerror/shared/types/db.ts",
     "./noemitonerror/src/main.ts",
     "./noemitonerror/src/other.ts"
   ],
   "fileInfos": {
-    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
     "./noemitonerror/src/main.ts": "5099365167-import { A } from \"../shared/types/db\";\nexport const a = class { private p = 10; };\n",
     "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
@@ -662,35 +658,13 @@ Output::
     "noEmitOnError": true,
     "outFile": "./dev-build.js"
   },
-  "emitDiagnosticsPerFile": [
-    [
-      "./noemitonerror/src/main.ts",
-      [
-        {
-          "start": 53,
-          "length": 1,
-          "messageText": "Property 'p' of exported anonymous class type may not be private or protected.",
-          "category": 1,
-          "code": 4094,
-          "relatedInformation": [
-            {
-              "start": 53,
-              "length": 1,
-              "messageText": "Add a type annotation to the variable a.",
-              "category": 1,
-              "code": 9027
-            }
-          ]
-        }
-      ]
-    ]
-  ],
   "pendingEmit": [
-    "Js | DtsEmit",
-    17
+    "Js | Dts",
+    false
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 1257
+  "size": 957
 }
 
 
@@ -711,13 +685,13 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
@@ -764,23 +738,33 @@ Output::
 >> Screen clear
 [[90mHH:MM:SS AM[0m] File change detected. Starting incremental compilation...
 
-[[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
+[96mtsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../dev-build.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mtsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd",
+[7m [0m [91m              ~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
 
 
 
 //// [/user/username/projects/dev-build.tsbuildinfo]
-{"fileNames":["../../../a/lib/lib.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-614304812-import { A } from \"../shared/types/db\";\nexport const a = class { p = 10; };\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"version":"FakeTSVersion"}
+{"fileNames":["../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./noemitonerror/shared/types/db.ts","./noemitonerror/src/main.ts","./noemitonerror/src/other.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","-5014788164-export interface A {\n    name: string;\n}\n","-614304812-import { A } from \"../shared/types/db\";\nexport const a = class { p = 10; };\n","9084524823-console.log(\"hi\");\nexport { }\n"],"root":[[2,4]],"options":{"declaration":true,"module":2,"noEmitOnError":true,"outFile":"./dev-build.js"},"pendingEmit":false,"errors":true,"version":"FakeTSVersion"}
 
 //// [/user/username/projects/dev-build.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../a/lib/lib.d.ts",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
     "./noemitonerror/shared/types/db.ts",
     "./noemitonerror/src/main.ts",
     "./noemitonerror/src/other.ts"
   ],
   "fileInfos": {
-    "../../../a/lib/lib.d.ts": "3858781397-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./noemitonerror/shared/types/db.ts": "-5014788164-export interface A {\n    name: string;\n}\n",
     "./noemitonerror/src/main.ts": "-614304812-import { A } from \"../shared/types/db\";\nexport const a = class { p = 10; };\n",
     "./noemitonerror/src/other.ts": "9084524823-console.log(\"hi\");\nexport { }\n"
@@ -804,50 +788,14 @@ Output::
     "noEmitOnError": true,
     "outFile": "./dev-build.js"
   },
+  "pendingEmit": [
+    "Js | Dts",
+    false
+  ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 926
+  "size": 949
 }
-
-//// [/user/username/projects/dev-build.js]
-define("shared/types/db", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
-define("src/main", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.a = void 0;
-    exports.a = /** @class */ (function () {
-        function class_1() {
-            this.p = 10;
-        }
-        return class_1;
-    }());
-});
-define("src/other", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    console.log("hi");
-});
-
-
-//// [/user/username/projects/dev-build.d.ts]
-declare module "shared/types/db" {
-    export interface A {
-        name: string;
-    }
-}
-declare module "src/main" {
-    export const a: {
-        new (): {
-            p: number;
-        };
-    };
-}
-declare module "src/other" {
-    export {};
-}
-
 
 
 
@@ -867,13 +815,13 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts
 
 Semantic diagnostics in builder refreshed for::
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
 /user/username/projects/noEmitOnError/shared/types/db.ts
 /user/username/projects/noEmitOnError/src/main.ts
 /user/username/projects/noEmitOnError/src/other.ts

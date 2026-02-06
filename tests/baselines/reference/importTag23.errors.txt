@@ -1,0 +1,21 @@
+/b.js(6,14): error TS2420: Class 'C' incorrectly implements interface 'I'.
+  Property 'foo' is missing in type 'C' but required in type 'I'.
+
+
+==== /a.ts (0 errors) ====
+    export interface I {
+        foo(): void;
+    }
+    
+==== /b.js (1 errors) ====
+    /**
+     * @import * as NS from './a'
+     */
+    
+    /** @implements {NS.I} */
+    export class C {}
+                 ~
+!!! error TS2420: Class 'C' incorrectly implements interface 'I'.
+!!! error TS2420:   Property 'foo' is missing in type 'C' but required in type 'I'.
+!!! related TS2728 /a.ts:2:5: 'foo' is declared here.
+    

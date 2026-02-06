@@ -9,6 +9,7 @@ var v = {
 }
 
 //// [computedPropertyNamesDeclarationEmit5_ES6.js]
+"use strict";
 var v = {
     ["" + ""]: 0,
     ["" + ""]() { },

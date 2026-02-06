@@ -5,15 +5,15 @@ import {
     TestSession,
 } from "../helpers/tsserver.js";
 import {
-    createServerHost,
     File,
     SymLink,
+    TestServerHost,
 } from "../helpers/virtualFileSystemWithWatch.js";
 
-describe("unittests:: tsserver:: symlinkCache", () => {
+describe("unittests:: tsserver:: symlinkCache::", () => {
     it("contains symlinks discovered by project references resolution after program creation", () => {
         const appTsconfigJson: File = {
-            path: "/packages/app/tsconfig.json",
+            path: "/home/src/projects/project/packages/app/tsconfig.json",
             content: `
         {
             "compilerOptions": {
@@ -27,17 +27,17 @@ describe("unittests:: tsserver:: symlinkCache", () => {
         };
 
         const appSrcIndexTs: File = {
-            path: "/packages/app/src/index.ts",
+            path: "/home/src/projects/project/packages/app/src/index.ts",
             content: `import "dep/does/not/exist";`,
         };
 
         const depPackageJson: File = {
-            path: "/packages/dep/package.json",
+            path: "/home/src/projects/project/packages/dep/package.json",
             content: `{ "name": "dep", "main": "dist/index.js", "types": "dist/index.d.ts" }`,
         };
 
         const depTsconfigJson: File = {
-            path: "/packages/dep/tsconfig.json",
+            path: "/home/src/projects/project/packages/dep/tsconfig.json",
             content: `
         {
             "compilerOptions": { "outDir": "dist", "rootDir": "src", "module": "commonjs" }
@@ -45,21 +45,21 @@ describe("unittests:: tsserver:: symlinkCache", () => {
         };
 
         const depSrcIndexTs: File = {
-            path: "/packages/dep/src/index.ts",
+            path: "/home/src/projects/project/packages/dep/src/index.ts",
             content: `
         import "./sub/folder";`,
         };
 
         const depSrcSubFolderIndexTs: File = {
-            path: "/packages/dep/src/sub/folder/index.ts",
+            path: "/home/src/projects/project/packages/dep/src/sub/folder/index.ts",
             content: `export const dep = 0;`,
         };
 
         const link: SymLink = {
-            path: "/packages/app/node_modules/dep",
+            path: "/home/src/projects/project/packages/app/node_modules/dep",
             symLink: "../../dep",
         };
-        const host = createServerHost([
+        const host = TestServerHost.createServerHost([
             appTsconfigJson,
             appSrcIndexTs,
             depPackageJson,
@@ -71,10 +71,7 @@ describe("unittests:: tsserver:: symlinkCache", () => {
         const session = new TestSession(host);
         openFilesForSession([appSrcIndexTs], session);
         const project = session.getProjectService().configuredProjects.get(appTsconfigJson.path)!;
-        assert.deepEqual(
-            project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as ts.Path),
-            { real: "/packages/dep/", realPath: "/packages/dep/" as ts.Path },
-        );
+        session.logger.log(`Symlinked directories: ${JSON.stringify(project.getSymlinkCache()?.getSymlinkedDirectories()?.get(link.path + "/" as ts.Path), undefined, " ")}`);
         baselineTsserverLogs("symlinkCache", "contains symlinks discovered by project references resolution after program creation", session);
     });
 

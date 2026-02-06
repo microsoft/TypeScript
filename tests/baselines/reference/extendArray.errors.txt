@@ -7,7 +7,7 @@ extendArray.ts(7,32): error TS2552: Cannot find name '_element'. Did you mean 'E
     a.forEach(function (v,i,a) {});
     
     
-    declare module _Core {
+    declare namespace _Core {
       interface Array {
         collect(fn:(e:_element) => _element[]) : any[];
                       ~~~~~~~~

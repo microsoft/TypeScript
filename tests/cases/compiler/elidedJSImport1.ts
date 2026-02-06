@@ -1,6 +1,7 @@
+// @target: es2015
 // @allowJs: true
 // @checkJs: true
-// @moduleResolution: node
+// @moduleResolution: bundler
 // @module: ES2020
 // @outDir: out
 

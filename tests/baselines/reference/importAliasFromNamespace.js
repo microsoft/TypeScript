@@ -22,6 +22,7 @@ namespace SomeOther.Thing {
 }
 
 //// [internal.js]
+"use strict";
 var My;
 (function (My) {
     var Internal;
@@ -31,19 +32,19 @@ var My;
     })(Internal = My.Internal || (My.Internal = {}));
 })(My || (My = {}));
 //// [usage.js]
+"use strict";
 /// <reference path="./internal.ts" preserve="true" />
 var SomeOther;
 (function (SomeOther) {
     var Thing;
     (function (Thing) {
         var Internal = My.Internal;
-        var Foo = /** @class */ (function () {
-            function Foo() {
+        class Foo {
+            constructor() {
                 Internal.getThing();
                 0 /* Internal.WhichThing.A */ ? "foo" : "bar";
             }
-            return Foo;
-        }());
+        }
         Thing.Foo = Foo;
     })(Thing = SomeOther.Thing || (SomeOther.Thing = {}));
 })(SomeOther || (SomeOther = {}));

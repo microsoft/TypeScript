@@ -1,3 +1,4 @@
+// @target: es2015
 // Test for #26758
 
 function foo<T extends "a" | "b">(t: T) {

@@ -1,17 +1,16 @@
-interface PromiseWithResolvers<T> {
-    promise: Promise<T>;
-    resolve: (value: T | PromiseLike<T>) => void;
-    reject: (reason?: any) => void;
-}
-
 interface PromiseConstructor {
     /**
-     * Creates a new Promise and returns it in an object, along with its resolve and reject functions.
-     * @returns An object with the properties `promise`, `resolve`, and `reject`.
+     * Takes a callback of any kind (returns or throws, synchronously or asynchronously) and wraps its result
+     * in a Promise.
      *
-     * ```ts
-     * const { promise, resolve, reject } = Promise.withResolvers<T>();
-     * ```
+     * @param callbackFn A function that is called synchronously. It can do anything: either return
+     * a value, throw an error, or return a promise.
+     * @param args Additional arguments, that will be passed to the callback.
+     *
+     * @returns A Promise that is:
+     * - Already fulfilled, if the callback synchronously returns a value.
+     * - Already rejected, if the callback synchronously throws an error.
+     * - Asynchronously fulfilled or rejected, if the callback returns a promise.
      */
-    withResolvers<T>(): PromiseWithResolvers<T>;
+    try<T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U): Promise<Awaited<T>>;
 }

@@ -41,7 +41,7 @@ function F(x: string): number { return 42; }
 >42 : 42
 >   : ^^
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -101,9 +101,11 @@ var anObject: Object = new Object();
 
 var anAny: any = null;
 >anAny : any
+>      : ^^^
 
 var aSecondAny: any = undefined;
 >aSecondAny : any
+>           : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

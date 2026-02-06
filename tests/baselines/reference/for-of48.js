@@ -10,6 +10,7 @@ for ({x, y = E.x} of array) {
 }
 
 //// [for-of48.js]
+"use strict";
 var x, y;
 var array = [{ x: "", y: true }];
 var E;

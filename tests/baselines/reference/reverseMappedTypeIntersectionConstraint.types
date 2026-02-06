@@ -128,9 +128,9 @@ const inferredParams2 = createMachine({
 
 const checkType = <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value;
 >checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->          : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^           ^^                                          ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->                                                                           : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>                                                                           : ^ ^^^^^^^^           ^^                                          ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ><U extends T>(value: { [K in keyof U & keyof T]: U[K] }) => value : <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
 >                                                                  : ^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >value : { [K in keyof U & keyof T]: U[K]; }
@@ -146,7 +146,7 @@ const checked = checkType<{x: number, y: string}>()({
 >checkType<{x: number, y: string}>() : <U extends { x: number; y: string; }>(value: { [K in keyof U & ("x" | "y")]: U[K]; }) => { [K in keyof U & ("x" | "y")]: U[K]; }
 >                                    : ^ ^^^^^^^^^^^^^^      ^^^^^      ^^^^^     ^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >checkType : <T>() => <U extends T>(value: { [K in keyof U & keyof T]: U[K]; }) => { [K in keyof U & keyof T]: U[K]; }
->          : ^ ^^^^^^^^ ^^^^^^^^^ ^^     ^^                                   ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>          : ^ ^^^^^^^^           ^^                                          ^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >y : string
@@ -585,18 +585,18 @@ declare function createXMachine<
 >       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const child = () => Promise.resolve("foo");
->child : () => any
->      : ^^^^^^^^^
->() => Promise.resolve("foo") : () => any
->                             : ^^^^^^^^^
->Promise.resolve("foo") : any
->                       : ^^^
->Promise.resolve : any
->                : ^^^
->Promise : any
->        : ^^^
->resolve : any
->        : ^^^
+>child : () => Promise<string>
+>      : ^^^^^^^^^^^^^^^^^^^^^
+>() => Promise.resolve("foo") : () => Promise<string>
+>                             : ^^^^^^^^^^^^^^^^^^^^^
+>Promise.resolve("foo") : Promise<string>
+>                       : ^^^^^^^^^^^^^^^
+>Promise.resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>                : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
+>Promise : PromiseConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+>resolve : { (): Promise<void>; <T>(value: T): Promise<Awaited<T>>; <T>(value: T | PromiseLike<T>): Promise<Awaited<T>>; }
+>        : ^^^^^^             ^^^ ^^     ^^ ^^^                   ^^^ ^^     ^^                  ^^^                   ^^^
 >"foo" : "foo"
 >      : ^^^^^
 
@@ -627,10 +627,10 @@ const config = createXMachine({
 >    : ^^^^^
 
       logic: typeof child;
->logic : () => any
->      : ^^^^^^^^^
->child : () => any
->      : ^^^^^^^^^
+>logic : () => Promise<string>
+>      : ^^^^^^^^^^^^^^^^^^^^^
+>child : () => Promise<string>
+>      : ^^^^^^^^^^^^^^^^^^^^^
 
     };
   },

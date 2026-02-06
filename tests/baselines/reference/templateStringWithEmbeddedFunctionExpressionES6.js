@@ -4,4 +4,5 @@
 var x = `abc${ function y() { return y; } }def`;
 
 //// [templateStringWithEmbeddedFunctionExpressionES6.js]
+"use strict";
 var x = `abc${function y() { return y; }}def`;

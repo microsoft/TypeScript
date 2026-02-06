@@ -3,7 +3,7 @@
 === duplicateVariablesByScope.ts ===
 // duplicate local variables are only reported at global scope
 
-module M {
+namespace M {
 >M : typeof M
 >  : ^^^^^^^^
 
@@ -93,7 +93,8 @@ class C {
 >  : ^
         }
         catch (e) {
->e : any
+>e : unknown
+>  : ^^^^^^^
 
             var x = 2;
 >x : number

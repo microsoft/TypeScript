@@ -9,25 +9,25 @@ plusOperatorWithAnyOtherType.ts(54,1): error TS2695: Left side of comma operator
 ==== plusOperatorWithAnyOtherType.ts (6 errors) ====
     // + operator on any type
     
-    var ANY: any;
-    var ANY1;
+    declare var ANY: any;
+    declare var ANY1: any;
     var ANY2: any[] = ["", ""];
-    var obj: () => {}
+    declare var obj: () => {}
     var obj1 = { x: (s: string) => { }, y: (s1) => { }};
     
     function foo(): any {
-        var a;
+        var a = undefined;
         return a;
     }
     class A {
-        public a: any;
+        public a!: any;
         static foo() {
-            var a;
+            var a: any = undefined;
             return a;
         }
     }
-    module M {
-        export var n: any;
+    namespace M {
+        export var n: any = undefined;
     }
     var objA = new A();
     

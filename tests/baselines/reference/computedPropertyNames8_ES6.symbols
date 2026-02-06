@@ -6,11 +6,11 @@ function f<T, U extends string>() {
 >T : Symbol(T, Decl(computedPropertyNames8_ES6.ts, 0, 11))
 >U : Symbol(U, Decl(computedPropertyNames8_ES6.ts, 0, 13))
 
-    var t: T;
+    var t!: T;
 >t : Symbol(t, Decl(computedPropertyNames8_ES6.ts, 1, 7))
 >T : Symbol(T, Decl(computedPropertyNames8_ES6.ts, 0, 11))
 
-    var u: U;
+    var u!: U;
 >u : Symbol(u, Decl(computedPropertyNames8_ES6.ts, 2, 7))
 >U : Symbol(U, Decl(computedPropertyNames8_ES6.ts, 0, 13))
 

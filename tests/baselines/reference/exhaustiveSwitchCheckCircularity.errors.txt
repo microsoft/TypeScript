@@ -1,4 +1,4 @@
-exhaustiveSwitchCheckCircularity.ts(14,26): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+exhaustiveSwitchCheckCircularity.ts(14,26): error TS2345: Argument of type '"bbb"' is not assignable to parameter of type 'never'.
 
 
 ==== exhaustiveSwitchCheckCircularity.ts (1 errors) ====
@@ -17,7 +17,7 @@ exhaustiveSwitchCheckCircularity.ts(14,26): error TS2345: Argument of type 'stri
             }
             else if (isNever(foo)) {  // Error expected
                              ~~~
-!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
+!!! error TS2345: Argument of type '"bbb"' is not assignable to parameter of type 'never'.
                 break;
             }
         }

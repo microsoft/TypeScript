@@ -1,3 +1,4 @@
+// @target: es2015
 // checking whether other types are subtypes of type parameters with constraints
 
 function f<T extends U, U, V>(t: T, u: U, v: V) {

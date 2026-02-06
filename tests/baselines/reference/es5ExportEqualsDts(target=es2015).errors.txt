@@ -1,0 +1,18 @@
+es5ExportEqualsDts.ts(4,16): error TS2454: Variable 'aVal' is used before being assigned.
+
+
+==== es5ExportEqualsDts.ts (1 errors) ====
+    class A {
+        foo() {
+            var aVal: A.B;
+            return aVal;
+                   ~~~~
+!!! error TS2454: Variable 'aVal' is used before being assigned.
+        }
+    }
+    
+    namespace A {
+        export interface B { }
+    }
+    
+    export = A

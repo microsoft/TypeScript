@@ -1,9 +1,13 @@
 Info seq  [hh:mm:ss:mss] For files of style c:/myprojects/project/x.js
-currentDirectory:: c:/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: c:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: c:/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: c:\home\src\Library\Caches\typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [c:/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [c:/myprojects/project/x.js]
+const x = 10
+
+//// [c:/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -14,9 +18,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [c:/myprojects/project/x.js]
-const x = 10
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -29,41 +32,36 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/myprojects/project/x.js ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: c:/myprojects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/myprojects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/myprojects/project/x.js SVC-1-0 "const x = 10"
 
 
-	../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	x.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
-c:/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
 c:/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-c:/myprojects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 c:/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-c:/a/lib/lib.d.ts: *new*
+c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 Projects::
@@ -72,7 +70,7 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-c:/a/lib/lib.d.ts *new*
+c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -81,20 +79,20 @@ c:/myprojects/project/x.js (Open) *new*
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data'
-TI:: [hh:mm:ss:mss] Trying to find 'c:/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location 'c:/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: c:/a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: 'c:/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location 'c:\home\src\Library\Caches\typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location 'c:\home\src\Library\Caches\typescript'
+TI:: [hh:mm:ss:mss] Trying to find 'c:/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location 'c:\home\src\Library\Caches\typescript'
+TI:: [hh:mm:ss:mss] Npm config file: c:/home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: 'c:/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [c:/a/data/package.json]
+//// [c:/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [c:/a/data/node_modules/types-registry/index.json]
+//// [c:/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
@@ -104,11 +102,11 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "c:/a/lib/lib.d.ts",
+        "c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "c:/myprojects/project/x.js"
       ],
       "compilerOptions": {
-        "target": 1,
+        "target": 11,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -124,7 +122,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "c:/myprojects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -158,7 +156,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
+        "target": 11,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -182,7 +180,7 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
+          "target": 11,
           "jsx": 1,
           "allowNonTsExtensions": true,
           "allowJs": true,
@@ -216,34 +214,35 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/myprojects/node_modules/@types:
-  {"pollingInterval":500}
 c:/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
 c:/myprojects/project/jsconfig.json:
   {"pollingInterval":2000}
 c:/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
-c:/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 c:/myprojects/project/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-c:/a/lib/lib.d.ts:
+c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/myprojects/project/x.js
-currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: //vda1cs4850/home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: //vda1cs4850/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: //vda1cs4850/home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [//vda1cs4850/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [//vda1cs4850/vda1cs4850/myprojects/project/x.js]
+const x = 10
+
+//// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -254,9 +253,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [//vda1cs4850/vda1cs4850/myprojects/project/x.js]
-const x = 10
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -269,25 +267,28 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: //vda1cs4850/myprojects/project/x.js ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: //vda1cs4850/myprojects/project
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	//vda1cs4850/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	//vda1cs4850/myprojects/project/x.js SVC-1-0 ""
 
 
-	../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	x.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 FsWatches::
-//vda1cs4850/a/lib/lib.d.ts: *new*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 Projects::
@@ -296,7 +297,7 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-//vda1cs4850/a/lib/lib.d.ts *new*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -305,20 +306,20 @@ ScriptInfos::
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
-TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [//vda1cs4850/a/data/package.json]
+//// [//vda1cs4850/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [//vda1cs4850/a/data/node_modules/types-registry/index.json]
+//// [//vda1cs4850/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
@@ -328,11 +329,11 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "//vda1cs4850/a/lib/lib.d.ts",
+        "//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "//vda1cs4850/myprojects/project/x.js"
       ],
       "compilerOptions": {
-        "target": 1,
+        "target": 11,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -348,7 +349,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "//vda1cs4850/myprojects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -369,10 +370,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "//vda1cs4850/myprojects/project/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/bower_components 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/myprojects/project/node_modules 1 undefined Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Sending response:
     {
       "projectName": "/dev/null/inferredProject1*",
@@ -382,7 +379,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
+        "target": 11,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -406,7 +403,7 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
+          "target": 11,
           "jsx": 1,
           "allowNonTsExtensions": true,
           "allowJs": true,
@@ -439,27 +436,22 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After request
 
-PolledWatches::
-//vda1cs4850/myprojects/project/bower_components: *new*
-  {"pollingInterval":500}
-//vda1cs4850/myprojects/project/node_modules: *new*
-  {"pollingInterval":500}
-
-FsWatches::
-//vda1cs4850/a/lib/lib.d.ts:
-  {}
-
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/myprojects/project/x.js
-currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: //vda1cs4850/home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: //vda1cs4850/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: //vda1cs4850/home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [//vda1cs4850/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [//vda1cs4850/vda1cs4850/c$/myprojects/project/x.js]
+const x = 10
+
+//// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -470,9 +462,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [//vda1cs4850/vda1cs4850/c$/myprojects/project/x.js]
-const x = 10
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -485,41 +476,36 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: //vda1cs4850/c$/myprojects/project/x.js ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: //vda1cs4850/c$/myprojects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	//vda1cs4850/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	//vda1cs4850/c$/myprojects/project/x.js SVC-1-0 ""
 
 
-	../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	x.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
-//vda1cs4850/c$/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-//vda1cs4850/c$/myprojects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-//vda1cs4850/a/lib/lib.d.ts: *new*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 Projects::
@@ -528,29 +514,29 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-//vda1cs4850/a/lib/lib.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 //vda1cs4850/c$/myprojects/project/x.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
-TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [//vda1cs4850/a/data/package.json]
+//// [//vda1cs4850/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [//vda1cs4850/a/data/node_modules/types-registry/index.json]
+//// [//vda1cs4850/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
@@ -560,11 +546,11 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "//vda1cs4850/a/lib/lib.d.ts",
+        "//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "//vda1cs4850/c$/myprojects/project/x.js"
       ],
       "compilerOptions": {
-        "target": 1,
+        "target": 11,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -580,7 +566,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "//vda1cs4850/c$/myprojects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -614,7 +600,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
+        "target": 11,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -638,7 +624,7 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
+          "target": 11,
           "jsx": 1,
           "allowNonTsExtensions": true,
           "allowJs": true,
@@ -672,34 +658,35 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-//vda1cs4850/c$/myprojects/node_modules/@types:
-  {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/jsconfig.json:
   {"pollingInterval":2000}
 //vda1cs4850/c$/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
-//vda1cs4850/c$/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 //vda1cs4850/c$/myprojects/project/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-//vda1cs4850/a/lib/lib.d.ts:
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style c:/users/username/myprojects/project/x.js
-currentDirectory:: c:/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: c:\home\src\Vscode\Projects\bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: c:/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: c:\home\src\Library\Caches\typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [c:/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [c:/users/username/myprojects/project/x.js]
+const x = 10
+
+//// [c:/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -710,9 +697,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [c:/users/username/myprojects/project/x.js]
-const x = 10
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -725,41 +711,36 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: c:/users/username/myprojects/project/x.js ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: c:/users/username/myprojects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: c:/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	c:/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	c:/users/username/myprojects/project/x.js SVC-1-0 "const x = 10"
 
 
-	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	x.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
-c:/users/username/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
 c:/users/username/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-c:/users/username/myprojects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 c:/users/username/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-c:/a/lib/lib.d.ts: *new*
+c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 Projects::
@@ -768,7 +749,7 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-c:/a/lib/lib.d.ts *new*
+c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -777,20 +758,20 @@ c:/users/username/myprojects/project/x.js (Open) *new*
     containingProjects: 1
         /dev/null/inferredProject1* *default*
 
-TI:: [hh:mm:ss:mss] Global cache location 'c:/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location 'c:/a/data'
-TI:: [hh:mm:ss:mss] Trying to find 'c:/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location 'c:/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: c:/a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: 'c:/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location 'c:\home\src\Library\Caches\typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location 'c:\home\src\Library\Caches\typescript'
+TI:: [hh:mm:ss:mss] Trying to find 'c:/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location 'c:\home\src\Library\Caches\typescript'
+TI:: [hh:mm:ss:mss] Npm config file: c:/home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: 'c:/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [c:/a/data/package.json]
+//// [c:/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [c:/a/data/node_modules/types-registry/index.json]
+//// [c:/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
@@ -800,11 +781,11 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "c:/a/lib/lib.d.ts",
+        "c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "c:/users/username/myprojects/project/x.js"
       ],
       "compilerOptions": {
-        "target": 1,
+        "target": 11,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -820,7 +801,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "c:/users/username/myprojects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -854,7 +835,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
+        "target": 11,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -878,7 +859,7 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
+          "target": 11,
           "jsx": 1,
           "allowNonTsExtensions": true,
           "allowJs": true,
@@ -912,34 +893,35 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-c:/users/username/myprojects/node_modules/@types:
-  {"pollingInterval":500}
 c:/users/username/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
 c:/users/username/myprojects/project/jsconfig.json:
   {"pollingInterval":2000}
 c:/users/username/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
-c:/users/username/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 c:/users/username/myprojects/project/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-c:/a/lib/lib.d.ts:
+c:/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*
 
 Info seq  [hh:mm:ss:mss] For files of style //vda1cs4850/c$/users/username/myprojects/project/x.js
-currentDirectory:: //vda1cs4850/ useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: //vda1cs4850/home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: //vda1cs4850/home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: //vda1cs4850/home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [//vda1cs4850/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [//vda1cs4850/vda1cs4850/c$/users/username/myprojects/project/x.js]
+const x = 10
+
+//// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -950,9 +932,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
-
-//// [//vda1cs4850/vda1cs4850/c$/users/username/myprojects/project/x.js]
-const x = 10
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 
 Info seq  [hh:mm:ss:mss] request:
@@ -965,41 +946,36 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: //vda1cs4850/c$/users/username/myprojects/project/x.js ProjectRootPath: undefined:: Result: undefined
+Info seq  [hh:mm:ss:mss] Creating InferredProject: /dev/null/inferredProject1*, currentDirectory: //vda1cs4850/c$/users/username/myprojects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/project/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: //vda1cs4850/c$/users/username/myprojects/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: //vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	//vda1cs4850/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	//vda1cs4850/c$/users/username/myprojects/project/x.js SVC-1-0 ""
 
 
-	../../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	x.js
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
+//// [//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+
 
 PolledWatches::
-//vda1cs4850/c$/users/username/myprojects/node_modules/@types: *new*
-  {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/jsconfig.json: *new*
   {"pollingInterval":2000}
-//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json: *new*
   {"pollingInterval":2000}
 
 FsWatches::
-//vda1cs4850/a/lib/lib.d.ts: *new*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 Projects::
@@ -1008,29 +984,29 @@ Projects::
     projectProgramVersion: 0
 
 ScriptInfos::
-//vda1cs4850/a/lib/lib.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 //vda1cs4850/c$/users/username/myprojects/project/x.js (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /dev/null/inferredProject1* *default*
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
 
-TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/a/data', safe file path '/safeList.json', types map path /typesMap.json
-TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/a/data'
-TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/a/data/package.json'...
-TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/a/data'
-TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/a/data/package.json
-TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/a/data/package.json' is missing, creating new one...
+TI:: [hh:mm:ss:mss] Global cache location '//vda1cs4850/home/src/Library/Caches/typescript', safe file path '/home/src/tslibs/TS/Lib/typingSafeList.json', types map path /home/src/tslibs/TS/Lib/typesMap.json
+TI:: [hh:mm:ss:mss] Processing cache location '//vda1cs4850/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Trying to find '//vda1cs4850/home/src/Library/Caches/typescript/package.json'...
+TI:: [hh:mm:ss:mss] Finished processing cache location '//vda1cs4850/home/src/Library/Caches/typescript'
+TI:: [hh:mm:ss:mss] Npm config file: //vda1cs4850/home/src/Library/Caches/typescript/package.json
+TI:: [hh:mm:ss:mss] Npm config file: '//vda1cs4850/home/src/Library/Caches/typescript/package.json' is missing, creating new one...
 TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [//vda1cs4850/a/data/package.json]
+//// [//vda1cs4850/home/src/Library/Caches/typescript/package.json]
 { "private": true }
 
-//// [//vda1cs4850/a/data/node_modules/types-registry/index.json]
+//// [//vda1cs4850/home/src/Library/Caches/typescript/node_modules/types-registry/index.json]
 {
   "entries": {}
 }
@@ -1040,11 +1016,11 @@ TI:: [hh:mm:ss:mss] Got install request
     {
       "projectName": "/dev/null/inferredProject1*",
       "fileNames": [
-        "//vda1cs4850/a/lib/lib.d.ts",
+        "//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts",
         "//vda1cs4850/c$/users/username/myprojects/project/x.js"
       ],
       "compilerOptions": {
-        "target": 1,
+        "target": 11,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -1060,7 +1036,7 @@ TI:: [hh:mm:ss:mss] Got install request
       "projectRootPath": "//vda1cs4850/c$/users/username/myprojects/project",
       "kind": "discover"
     }
-TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/typesMap.json'
+TI:: [hh:mm:ss:mss] Failed to load safelist from types map file '/home/src/tslibs/TS/Lib/typesMap.json'
 TI:: [hh:mm:ss:mss] Explicitly included types: []
 TI:: [hh:mm:ss:mss] Inferred typings from unresolved imports: []
 TI:: [hh:mm:ss:mss] Finished typings discovery:
@@ -1094,7 +1070,7 @@ TI:: [hh:mm:ss:mss] Sending response:
         "exclude": []
       },
       "compilerOptions": {
-        "target": 1,
+        "target": 11,
         "jsx": 1,
         "allowNonTsExtensions": true,
         "allowJs": true,
@@ -1118,7 +1094,7 @@ Info seq  [hh:mm:ss:mss] event:
           "exclude": []
         },
         "compilerOptions": {
-          "target": 1,
+          "target": 11,
           "jsx": 1,
           "allowNonTsExtensions": true,
           "allowJs": true,
@@ -1152,24 +1128,21 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-//vda1cs4850/c$/users/username/myprojects/node_modules/@types:
-  {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/bower_components: *new*
   {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/jsconfig.json:
   {"pollingInterval":2000}
 //vda1cs4850/c$/users/username/myprojects/project/node_modules: *new*
   {"pollingInterval":500}
-//vda1cs4850/c$/users/username/myprojects/project/node_modules/@types:
-  {"pollingInterval":500}
 //vda1cs4850/c$/users/username/myprojects/project/tsconfig.json:
   {"pollingInterval":2000}
 
 FsWatches::
-//vda1cs4850/a/lib/lib.d.ts:
+//vda1cs4850/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *changed*
     projectStateVersion: 1
     projectProgramVersion: 1 *changed*
+    autoImportProviderHost: false *changed*

@@ -1,8 +1,7 @@
-type.ts(7,28): error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
 type.ts(7,28): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 
-==== type.ts (2 errors) ====
+==== type.ts (1 errors) ====
     export namespace Foo {
       export enum Enum {
         A = "a",
@@ -10,8 +9,6 @@ type.ts(7,28): error TS2464: A computed property name must be of type 'string', 
       }
     }
     export type Type = { x?: { [Foo.Enum]: 0 } };
-                               ~~~~~~~~~~
-!!! error TS1170: A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type.
                                ~~~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
     

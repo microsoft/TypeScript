@@ -1,7 +1,7 @@
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-// module FindRef4 {
-// 	module MixedStaticsClassTest {
+// namespace FindRef4 {
+// 	namespace MixedStaticsClassTest {
 // 		export class Foo {
 // 			/*FIND ALL REFS*/<|[|{| isDefinition: true |}bar|]: Foo;|>
 // 			static bar: Foo;
@@ -21,8 +21,8 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-  // module FindRef4 {
-  // 	module MixedStaticsClassTest {
+  // namespace FindRef4 {
+  // 	namespace MixedStaticsClassTest {
   // 		export class Foo {
   // 			/*FIND ALL REFS*/<|[|bar|]: Foo;|>
   // 			static bar: Foo;
@@ -94,8 +94,8 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-// module FindRef4 {
-// 	module MixedStaticsClassTest {
+// namespace FindRef4 {
+// 	namespace MixedStaticsClassTest {
 // 		export class Foo {
 // 			bar: Foo;
 // 			/*FIND ALL REFS*/<|static [|{| isDefinition: true |}bar|]: Foo;|>
@@ -114,8 +114,8 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-  // module FindRef4 {
-  // 	module MixedStaticsClassTest {
+  // namespace FindRef4 {
+  // 	namespace MixedStaticsClassTest {
   // 		export class Foo {
   // 			bar: Foo;
   // 			/*FIND ALL REFS*/<|static [|bar|]: Foo;|>
@@ -188,8 +188,8 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-// module FindRef4 {
-// 	module MixedStaticsClassTest {
+// namespace FindRef4 {
+// 	namespace MixedStaticsClassTest {
 // 		export class Foo {
 // 			bar: Foo;
 // 			<|static /*FIND ALL REFS*/[|{| isDefinition: true |}bar|]: Foo;|>
@@ -208,8 +208,8 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-  // module FindRef4 {
-  // 	module MixedStaticsClassTest {
+  // namespace FindRef4 {
+  // 	namespace MixedStaticsClassTest {
   // 		export class Foo {
   // 			bar: Foo;
   // 			<|static /*FIND ALL REFS*/[|bar|]: Foo;|>
@@ -816,8 +816,8 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-// module FindRef4 {
-// 	module MixedStaticsClassTest {
+// namespace FindRef4 {
+// 	namespace MixedStaticsClassTest {
 // 		export class Foo {
 // 			<|[|bar|]: Foo;|>
 // 			static bar: Foo;
@@ -837,8 +837,8 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-  // module FindRef4 {
-  // 	module MixedStaticsClassTest {
+  // namespace FindRef4 {
+  // 	namespace MixedStaticsClassTest {
   // 		export class Foo {
   // 			<|[|bar|]: Foo;|>
   // 			static bar: Foo;
@@ -1034,8 +1034,8 @@
 
 // === findAllReferences ===
 // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-// module FindRef4 {
-// 	module MixedStaticsClassTest {
+// namespace FindRef4 {
+// 	namespace MixedStaticsClassTest {
 // 		export class Foo {
 // 			bar: Foo;
 // 			<|static [|bar|]: Foo;|>
@@ -1054,8 +1054,8 @@
 
   // === Definitions ===
   // === /tests/cases/fourslash/referencesForStaticsAndMembersWithSameNames.ts ===
-  // module FindRef4 {
-  // 	module MixedStaticsClassTest {
+  // namespace FindRef4 {
+  // 	namespace MixedStaticsClassTest {
   // 		export class Foo {
   // 			bar: Foo;
   // 			<|static [|bar|]: Foo;|>

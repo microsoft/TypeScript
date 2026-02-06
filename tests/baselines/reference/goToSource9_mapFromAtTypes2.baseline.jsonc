@@ -1,12 +1,12 @@
 // === goToSourceDefinition ===
-// === /node_modules/lodash/lodash.js ===
+// === /home/src/workspaces/project/node_modules/lodash/lodash.js ===
 // [||];(function() {
 //     /**
 //      * Adds two numbers.
 //      *
 // --- (line: 5) skipped ---
 
-// === /index.ts ===
+// === /home/src/workspaces/project/index.ts ===
 // import /*GOTO SOURCE DEF*/_, { foo } from 'lodash';
 // _.add
 
@@ -24,14 +24,14 @@
 
 
 // === goToSourceDefinition ===
-// === /node_modules/lodash/lodash.js ===
+// === /home/src/workspaces/project/node_modules/lodash/lodash.js ===
 // [||];(function() {
 //     /**
 //      * Adds two numbers.
 //      *
 // --- (line: 5) skipped ---
 
-// === /index.ts ===
+// === /home/src/workspaces/project/index.ts ===
 // import _, { /*GOTO SOURCE DEF*/foo } from 'lodash';
 // _.add
 
@@ -49,14 +49,14 @@
 
 
 // === goToSourceDefinition ===
-// === /node_modules/lodash/lodash.js ===
+// === /home/src/workspaces/project/node_modules/lodash/lodash.js ===
 // [||];(function() {
 //     /**
 //      * Adds two numbers.
 //      *
 // --- (line: 5) skipped ---
 
-// === /index.ts ===
+// === /home/src/workspaces/project/index.ts ===
 // import _, { foo } from /*GOTO SOURCE DEF*/'lodash';
 // _.add
 

@@ -1,0 +1,28 @@
+//// [tests/cases/conformance/node/nodeModulesImportAttributesTypeModeDeclarationEmit.ts] ////
+
+=== /index.ts ===
+export type LocalInterface =
+>LocalInterface : Symbol(LocalInterface, Decl(index.ts, 0, 0))
+
+    & import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+
+    & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+
+export const a = (null as any as import("pkg", { with: {"resolution-mode": "require"} }).RequireInterface);
+>a : Symbol(a, Decl(index.ts, 4, 12))
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+
+export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
+>b : Symbol(b, Decl(index.ts, 5, 12))
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+
+=== /node_modules/pkg/import.d.ts ===
+export interface ImportInterface {}
+>ImportInterface : Symbol(ImportInterface, Decl(import.d.ts, 0, 0))
+
+=== /node_modules/pkg/require.d.ts ===
+export interface RequireInterface {}
+>RequireInterface : Symbol(RequireInterface, Decl(require.d.ts, 0, 0))
+

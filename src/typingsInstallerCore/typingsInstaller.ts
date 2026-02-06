@@ -46,7 +46,10 @@ interface NpmConfig {
 }
 
 interface NpmLock {
-    dependencies: { [packageName: string]: { version: string; }; };
+    dependencies?: { [packageName: string]: { version: string; }; };
+    packages?: {
+        [nodeModulesAtTypesPackage: string]: { version: string; };
+    };
 }
 
 export interface Log {
@@ -73,7 +76,7 @@ function typingToFileName(cachePath: string, packageName: string, installTypingH
 }
 
 /** @internal */
-export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean) {
+export function installNpmPackages(npmPath: string, tsVersion: string, packageNames: string[], install: (command: string) => boolean): boolean {
     let hasError = false;
     for (let remaining = packageNames.length; remaining > 0;) {
         const result = getNpmCommandForInstallation(npmPath, tsVersion, packageNames, remaining);
@@ -84,7 +87,10 @@ export function installNpmPackages(npmPath: string, tsVersion: string, packageNa
 }
 
 /** @internal */
-export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number) {
+export function getNpmCommandForInstallation(npmPath: string, tsVersion: string, packageNames: string[], remaining: number): {
+    command: string;
+    remaining: number;
+} {
     const sliceStart = packageNames.length - remaining;
     let command: string, toSlice = remaining;
     while (true) {
@@ -126,7 +132,7 @@ export abstract class TypingsInstaller {
         private readonly safeListPath: Path,
         private readonly typesMapLocation: Path,
         private readonly throttleLimit: number,
-        protected readonly log = nullLog,
+        protected readonly log: Log = nullLog,
     ) {
         const isLoggingEnabled = this.log.isEnabled();
         if (isLoggingEnabled) {
@@ -136,7 +142,7 @@ export abstract class TypingsInstaller {
     }
 
     /** @internal */
-    handleRequest(req: TypingInstallerRequestUnion) {
+    handleRequest(req: TypingInstallerRequestUnion): void {
         switch (req.kind) {
             case "discover":
                 this.install(req);
@@ -162,7 +168,7 @@ export abstract class TypingsInstaller {
         }
     }
 
-    closeProject(req: CloseProject) {
+    closeProject(req: CloseProject): void {
         this.closeWatchers(req.projectName);
     }
 
@@ -186,7 +192,7 @@ export abstract class TypingsInstaller {
         }
     }
 
-    install(req: DiscoverTypings) {
+    install(req: DiscoverTypings): void {
         if (this.log.isEnabled()) {
             this.log.writeLine(`Got install request${stringifyIndented(req)}`);
         }
@@ -231,7 +237,7 @@ export abstract class TypingsInstaller {
     }
 
     /** @internal */
-    installPackage(req: InstallPackageRequest) {
+    installPackage(req: InstallPackageRequest): void {
         const { fileName, packageName, projectName, projectRootPath, id } = req;
         const cwd = forEachAncestorDirectory(getDirectoryPath(fileName), directory => {
             if (this.installTypingHost.fileExists(combinePaths(directory, "package.json"))) {
@@ -301,9 +307,13 @@ export abstract class TypingsInstaller {
                 this.log.writeLine(`Loaded content of '${packageJson}':${stringifyIndented(npmConfig)}`);
                 this.log.writeLine(`Loaded content of '${packageLockJson}':${stringifyIndented(npmLock)}`);
             }
-            if (npmConfig.devDependencies && npmLock.dependencies) {
+            // Packages is present in lock file 3 vs lockfile 2 has dependencies field for already installed types package
+            if (npmConfig.devDependencies && (npmLock.packages || npmLock.dependencies)) {
                 for (const key in npmConfig.devDependencies) {
-                    if (!hasProperty(npmLock.dependencies, key)) {
+                    if (
+                        (npmLock.packages && !hasProperty(npmLock.packages, `node_modules/${key}`)) ||
+                        (npmLock.dependencies && !hasProperty(npmLock.dependencies, key))
+                    ) {
                         // if package in package.json but not package-lock.json, skip adding to cache so it is reinstalled on next use
                         continue;
                     }
@@ -330,7 +340,8 @@ export abstract class TypingsInstaller {
                     if (this.log.isEnabled()) {
                         this.log.writeLine(`Adding entry into typings cache: '${packageName}' => '${typingFile}'`);
                     }
-                    const info = getProperty(npmLock.dependencies, key);
+                    const info = npmLock.packages && getProperty(npmLock.packages, `node_modules/${key}`) ||
+                        getProperty(npmLock.dependencies!, key);
                     const version = info && info.version;
                     if (!version) {
                         continue;
@@ -373,7 +384,7 @@ export abstract class TypingsInstaller {
         });
     }
 
-    protected ensurePackageDirectoryExists(directory: string) {
+    protected ensurePackageDirectoryExists(directory: string): void {
         const npmConfigPath = combinePaths(directory, "package.json");
         if (this.log.isEnabled()) {
             this.log.writeLine(`Npm config file: ${npmConfigPath}`);

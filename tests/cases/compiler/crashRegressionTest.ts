@@ -1,4 +1,5 @@
-module MsPortal.Util.TemplateEngine {
+// @target: es2015
+namespace MsPortal.Util.TemplateEngine {
     "use strict";
  
     interface TemplateKeyValue {

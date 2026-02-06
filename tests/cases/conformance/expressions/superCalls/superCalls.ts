@@ -1,3 +1,4 @@
+// @target: es2015
 class Base {
     x = 43;
     constructor(n: string) {

@@ -3,7 +3,7 @@ file.tsx(11,30): error TS18007: JSX expressions may not use the comma operator. 
 
 
 ==== file.tsx (2 errors) ====
-    declare module JSX {
+    declare namespace JSX {
     	interface Element { }
     	interface IntrinsicElements {
     		[s: string]: any;

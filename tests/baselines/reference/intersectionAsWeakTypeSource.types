@@ -10,8 +10,8 @@ interface Y { y: number }
 >  : ^^^^^^
 
 interface Z { z?: boolean }
->z : boolean
->  : ^^^^^^^
+>z : boolean | undefined
+>  : ^^^^^^^^^^^^^^^^^^^
 
 type XY = X & Y;
 >XY : XY

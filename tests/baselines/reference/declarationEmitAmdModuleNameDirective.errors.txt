@@ -1,0 +1,11 @@
+error TS5107: Option 'module=UMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=UMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== foo.ts (0 errors) ====
+    /// <amd-module name="name_of_foo"/>
+    export const foo = 1;
+==== bar.ts (0 errors) ====
+    /// <amd-dependency name="name_of_foo" path="./foo" />
+    import {foo} from './foo';
+    void foo;

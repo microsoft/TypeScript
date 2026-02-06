@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: three.d.ts
 export namespace THREE {
   export class Vector2 {}

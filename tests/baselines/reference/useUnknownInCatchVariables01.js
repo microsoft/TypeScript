@@ -36,6 +36,7 @@ catch (e: any) {
 }
 
 //// [useUnknownInCatchVariables01.js]
+"use strict";
 var _a;
 try {
     // ...

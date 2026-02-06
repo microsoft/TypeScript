@@ -7,7 +7,7 @@
 // 
 // export {}
 
-// === lib.d.ts ===
+// === /home/src/tslibs/TS/Lib/lib.es5.d.ts ===
 // --- (line: --) skipped ---
 // /**
 //  * Represents the completion of an asynchronous operation
@@ -33,6 +33,14 @@
 //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
 // --- (line: --) skipped ---
 
+// === /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts ===
+// --- (line: --) skipped ---
+//     resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>;
+// }
+// 
+// <|declare var [|{| defId: 2 |}Promise|]: PromiseConstructor;|>
+// 
+
   // === Details ===
   [
    {
@@ -47,7 +55,17 @@
    },
    {
     "defId": 1,
-    "kind": "interface",
+    "kind": "var",
+    "name": "Promise",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 2,
+    "kind": "var",
     "name": "Promise",
     "containerName": "",
     "isLocal": false,
@@ -68,7 +86,7 @@
 // 
 // export {}
 
-// === lib.d.ts ===
+// === /home/src/tslibs/TS/Lib/lib.es5.d.ts ===
 // --- (line: --) skipped ---
 // /**
 //  * Represents the completion of an asynchronous operation
@@ -94,6 +112,14 @@
 //  * Recursively unwraps the "awaited type" of a type. Non-promise "thenables" should resolve to `never`. This emulates the behavior of `await`.
 // --- (line: --) skipped ---
 
+// === /home/src/tslibs/TS/Lib/lib.es2015.promise.d.ts ===
+// --- (line: --) skipped ---
+//     resolve<T>(value: T | PromiseLike<T>): Promise<Awaited<T>>;
+// }
+// 
+// <|declare var [|{| defId: 2 |}Promise|]: PromiseConstructor;|>
+// 
+
   // === Details ===
   [
    {
@@ -108,7 +134,17 @@
    },
    {
     "defId": 1,
-    "kind": "interface",
+    "kind": "var",
+    "name": "Promise",
+    "containerName": "",
+    "isLocal": false,
+    "isAmbient": true,
+    "unverified": false,
+    "failedAliasResolution": false
+   },
+   {
+    "defId": 2,
+    "kind": "var",
     "name": "Promise",
     "containerName": "",
     "isLocal": false,

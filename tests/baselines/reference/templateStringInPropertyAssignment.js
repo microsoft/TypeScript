@@ -6,6 +6,7 @@ var x = {
 }
 
 //// [templateStringInPropertyAssignment.js]
+"use strict";
 var x = {
-    a: "abc".concat(123, "def").concat(456, "ghi")
+    a: `abc${123}def${456}ghi`
 };

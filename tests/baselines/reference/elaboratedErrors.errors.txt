@@ -1,12 +1,13 @@
 elaboratedErrors.ts(11,3): error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
   Type 'string' is not assignable to type 'number'.
+elaboratedErrors.ts(11,3): error TS2564: Property 'read' has no initializer and is not definitely assigned in the constructor.
 elaboratedErrors.ts(20,1): error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.
 elaboratedErrors.ts(21,1): error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.
 elaboratedErrors.ts(24,1): error TS2741: Property 'y' is missing in type 'Alpha' but required in type 'Beta'.
 elaboratedErrors.ts(25,1): error TS2741: Property 'y' is missing in type 'Alpha' but required in type 'Beta'.
 
 
-==== elaboratedErrors.ts (5 errors) ====
+==== elaboratedErrors.ts (6 errors) ====
     interface FileSystem {
       read: number;
     }
@@ -21,12 +22,14 @@ elaboratedErrors.ts(25,1): error TS2741: Property 'y' is missing in type 'Alpha'
       ~~~~
 !!! error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
 !!! error TS2416:   Type 'string' is not assignable to type 'number'.
+      ~~~~
+!!! error TS2564: Property 'read' has no initializer and is not definitely assigned in the constructor.
     }
     
     interface Alpha { x: string; }
     interface Beta { y: number; }
-    var x: Alpha;
-    var y: Beta;
+    declare var x: Alpha;
+    declare var y: Beta;
     
     // Only one of these errors should be large
     x = y;

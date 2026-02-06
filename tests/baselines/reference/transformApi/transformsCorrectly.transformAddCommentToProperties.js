@@ -1,3 +1,4 @@
+"use strict";
 /*comment*/
 class Clazz {
     /*comment*/

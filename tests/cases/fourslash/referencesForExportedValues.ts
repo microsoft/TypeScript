@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////module M {
+////namespace M {
 ////    /*1*/export var /*2*/variable = 0;
 ////
 ////    // local use

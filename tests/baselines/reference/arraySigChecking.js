@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/arraySigChecking.ts] ////
 
 //// [arraySigChecking.ts]
-declare module M {
+declare namespace M {
     interface iBar { t: any; }
     interface iFoo extends iBar {
         s: any;
@@ -17,7 +17,7 @@ declare module M {
 interface myInt {
     voidFn(): void;
 }
-var myVar: myInt;
+declare var myVar: myInt;
 var strArray: string[] = [myVar.voidFn()];
 
 
@@ -35,7 +35,7 @@ isEmpty(['a']);
 
 
 //// [arraySigChecking.js]
-var myVar;
+"use strict";
 var strArray = [myVar.voidFn()];
 var myArray;
 myArray = [[1, 2]];

@@ -24,3 +24,17 @@ class B extends A {
     }
 }
 
+/**
+ * @extends { A }
+ * @constructor
+ */
+class C extends A {
+>C : Symbol(C, Decl(foo.js, 15, 1))
+>A : Symbol(A, Decl(foo.js, 0, 0))
+
+    constructor() {
+        super();
+>super : Symbol(A, Decl(foo.js, 0, 0))
+    }
+}
+

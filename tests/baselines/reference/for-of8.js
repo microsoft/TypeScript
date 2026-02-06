@@ -5,5 +5,6 @@ v;
 for (var v of [0]) { }
 
 //// [for-of8.js]
+"use strict";
 v;
 for (var v of [0]) { }

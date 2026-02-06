@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // repro from https://github.com/Microsoft/TypeScript/issues/25274
 export function safeInvoke<A1, R>(

@@ -190,32 +190,32 @@ stringVal = bigintVal.toLocaleString('de-DE', { style: 'currency', currency: 'EU
 
 // Test BigInt64Array
 let bigIntArray: BigInt64Array = new BigInt64Array();
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
->new BigInt64Array() : BigInt64Array
->                    : ^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigInt64Array() : BigInt64Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 
 bigIntArray = new BigInt64Array(10);
->bigIntArray = new BigInt64Array(10) : BigInt64Array
->                                    : ^^^^^^^^^^^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
->new BigInt64Array(10) : BigInt64Array
->                      : ^^^^^^^^^^^^^
+>bigIntArray = new BigInt64Array(10) : BigInt64Array<ArrayBuffer>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigInt64Array(10) : BigInt64Array<ArrayBuffer>
+>                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
 >   : ^^
 
 bigIntArray = new BigInt64Array([1n, 2n, 3n]);
->bigIntArray = new BigInt64Array([1n, 2n, 3n]) : BigInt64Array
->                                              : ^^^^^^^^^^^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
->new BigInt64Array([1n, 2n, 3n]) : BigInt64Array
->                                : ^^^^^^^^^^^^^
+>bigIntArray = new BigInt64Array([1n, 2n, 3n]) : BigInt64Array<ArrayBuffer>
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigInt64Array([1n, 2n, 3n]) : BigInt64Array<ArrayBuffer>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[1n, 2n, 3n] : bigint[]
@@ -228,12 +228,12 @@ bigIntArray = new BigInt64Array([1n, 2n, 3n]);
 >   : ^^
 
 bigIntArray = new BigInt64Array([1, 2, 3]); // should error
->bigIntArray = new BigInt64Array([1, 2, 3]) : BigInt64Array
->                                           : ^^^^^^^^^^^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
->new BigInt64Array([1, 2, 3]) : BigInt64Array
->                             : ^^^^^^^^^^^^^
+>bigIntArray = new BigInt64Array([1, 2, 3]) : BigInt64Array<ArrayBuffer>
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigInt64Array([1, 2, 3]) : BigInt64Array<ArrayBuffer>
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
@@ -246,12 +246,12 @@ bigIntArray = new BigInt64Array([1, 2, 3]); // should error
 >  : ^
 
 bigIntArray = new BigInt64Array(new ArrayBuffer(80));
->bigIntArray = new BigInt64Array(new ArrayBuffer(80)) : BigInt64Array
->                                                     : ^^^^^^^^^^^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
->new BigInt64Array(new ArrayBuffer(80)) : BigInt64Array
->                                       : ^^^^^^^^^^^^^
+>bigIntArray = new BigInt64Array(new ArrayBuffer(80)) : BigInt64Array<ArrayBuffer>
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigInt64Array(new ArrayBuffer(80)) : BigInt64Array<ArrayBuffer>
+>                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >new ArrayBuffer(80) : ArrayBuffer
@@ -262,12 +262,12 @@ bigIntArray = new BigInt64Array(new ArrayBuffer(80));
 >   : ^^
 
 bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
->bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8) : BigInt64Array
->                                                        : ^^^^^^^^^^^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
->new BigInt64Array(new ArrayBuffer(80), 8) : BigInt64Array
->                                          : ^^^^^^^^^^^^^
+>bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8) : BigInt64Array<ArrayBuffer>
+>                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigInt64Array(new ArrayBuffer(80), 8) : BigInt64Array<ArrayBuffer>
+>                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >new ArrayBuffer(80) : ArrayBuffer
@@ -280,12 +280,12 @@ bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
 >  : ^
 
 bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
->bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3) : BigInt64Array
->                                                           : ^^^^^^^^^^^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
->new BigInt64Array(new ArrayBuffer(80), 8, 3) : BigInt64Array
->                                             : ^^^^^^^^^^^^^
+>bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3) : BigInt64Array<ArrayBuffer>
+>                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigInt64Array(new ArrayBuffer(80), 8, 3) : BigInt64Array<ArrayBuffer>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigInt64Array : BigInt64ArrayConstructor
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^
 >new ArrayBuffer(80) : ArrayBuffer
@@ -304,8 +304,8 @@ let len: number = bigIntArray.length;
 >    : ^^^^^^
 >bigIntArray.length : number
 >                   : ^^^^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >length : number
 >       : ^^^^^^
 
@@ -314,47 +314,47 @@ bigIntArray.length = 10; // should error
 >                        : ^^
 >bigIntArray.length : any
 >                   : ^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >length : any
 >       : ^^^
 >10 : 10
 >   : ^^
 
 let arrayBufferLike: ArrayBufferView = bigIntArray;
->arrayBufferLike : ArrayBufferView
->                : ^^^^^^^^^^^^^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
+>arrayBufferLike : ArrayBufferView<ArrayBufferLike>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Test BigUint64Array
 let bigUintArray: BigUint64Array = new BigUint64Array();
->bigUintArray : BigUint64Array
->             : ^^^^^^^^^^^^^^
->new BigUint64Array() : BigUint64Array
->                     : ^^^^^^^^^^^^^^
+>bigUintArray : BigUint64Array<ArrayBufferLike>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigUint64Array() : BigUint64Array<ArrayBuffer>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
 bigUintArray = new BigUint64Array(10);
->bigUintArray = new BigUint64Array(10) : BigUint64Array
->                                      : ^^^^^^^^^^^^^^
->bigUintArray : BigUint64Array
->             : ^^^^^^^^^^^^^^
->new BigUint64Array(10) : BigUint64Array
->                       : ^^^^^^^^^^^^^^
+>bigUintArray = new BigUint64Array(10) : BigUint64Array<ArrayBuffer>
+>                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigUintArray : BigUint64Array<ArrayBufferLike>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigUint64Array(10) : BigUint64Array<ArrayBuffer>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >10 : 10
 >   : ^^
 
 bigUintArray = new BigUint64Array([1n, 2n, 3n]);
->bigUintArray = new BigUint64Array([1n, 2n, 3n]) : BigUint64Array
->                                                : ^^^^^^^^^^^^^^
->bigUintArray : BigUint64Array
->             : ^^^^^^^^^^^^^^
->new BigUint64Array([1n, 2n, 3n]) : BigUint64Array
->                                 : ^^^^^^^^^^^^^^
+>bigUintArray = new BigUint64Array([1n, 2n, 3n]) : BigUint64Array<ArrayBuffer>
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigUintArray : BigUint64Array<ArrayBufferLike>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigUint64Array([1n, 2n, 3n]) : BigUint64Array<ArrayBuffer>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1n, 2n, 3n] : bigint[]
@@ -367,12 +367,12 @@ bigUintArray = new BigUint64Array([1n, 2n, 3n]);
 >   : ^^
 
 bigUintArray = new BigUint64Array([1, 2, 3]); // should error
->bigUintArray = new BigUint64Array([1, 2, 3]) : BigUint64Array
->                                             : ^^^^^^^^^^^^^^
->bigUintArray : BigUint64Array
->             : ^^^^^^^^^^^^^^
->new BigUint64Array([1, 2, 3]) : BigUint64Array
->                              : ^^^^^^^^^^^^^^
+>bigUintArray = new BigUint64Array([1, 2, 3]) : BigUint64Array<ArrayBuffer>
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigUintArray : BigUint64Array<ArrayBufferLike>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigUint64Array([1, 2, 3]) : BigUint64Array<ArrayBuffer>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >[1, 2, 3] : number[]
@@ -385,12 +385,12 @@ bigUintArray = new BigUint64Array([1, 2, 3]); // should error
 >  : ^
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80));
->bigUintArray = new BigUint64Array(new ArrayBuffer(80)) : BigUint64Array
->                                                       : ^^^^^^^^^^^^^^
->bigUintArray : BigUint64Array
->             : ^^^^^^^^^^^^^^
->new BigUint64Array(new ArrayBuffer(80)) : BigUint64Array
->                                        : ^^^^^^^^^^^^^^
+>bigUintArray = new BigUint64Array(new ArrayBuffer(80)) : BigUint64Array<ArrayBuffer>
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigUintArray : BigUint64Array<ArrayBufferLike>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigUint64Array(new ArrayBuffer(80)) : BigUint64Array<ArrayBuffer>
+>                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >new ArrayBuffer(80) : ArrayBuffer
@@ -401,12 +401,12 @@ bigUintArray = new BigUint64Array(new ArrayBuffer(80));
 >   : ^^
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
->bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8) : BigUint64Array
->                                                          : ^^^^^^^^^^^^^^
->bigUintArray : BigUint64Array
->             : ^^^^^^^^^^^^^^
->new BigUint64Array(new ArrayBuffer(80), 8) : BigUint64Array
->                                           : ^^^^^^^^^^^^^^
+>bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8) : BigUint64Array<ArrayBuffer>
+>                                                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigUintArray : BigUint64Array<ArrayBufferLike>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigUint64Array(new ArrayBuffer(80), 8) : BigUint64Array<ArrayBuffer>
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >new ArrayBuffer(80) : ArrayBuffer
@@ -419,12 +419,12 @@ bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
 >  : ^
 
 bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
->bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3) : BigUint64Array
->                                                             : ^^^^^^^^^^^^^^
->bigUintArray : BigUint64Array
->             : ^^^^^^^^^^^^^^
->new BigUint64Array(new ArrayBuffer(80), 8, 3) : BigUint64Array
->                                              : ^^^^^^^^^^^^^^
+>bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3) : BigUint64Array<ArrayBuffer>
+>                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigUintArray : BigUint64Array<ArrayBufferLike>
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new BigUint64Array(new ArrayBuffer(80), 8, 3) : BigUint64Array<ArrayBuffer>
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >BigUint64Array : BigUint64ArrayConstructor
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >new ArrayBuffer(80) : ArrayBuffer
@@ -445,8 +445,8 @@ len = bigIntArray.length;
 >    : ^^^^^^
 >bigIntArray.length : number
 >                   : ^^^^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >length : number
 >       : ^^^^^^
 
@@ -455,27 +455,27 @@ bigIntArray.length = 10; // should error
 >                        : ^^
 >bigIntArray.length : any
 >                   : ^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >length : any
 >       : ^^^
 >10 : 10
 >   : ^^
 
 arrayBufferLike = bigIntArray;
->arrayBufferLike = bigIntArray : BigInt64Array
->                              : ^^^^^^^^^^^^^
->arrayBufferLike : ArrayBufferView
->                : ^^^^^^^^^^^^^^^
->bigIntArray : BigInt64Array
->            : ^^^^^^^^^^^^^
+>arrayBufferLike = bigIntArray : BigInt64Array<ArrayBufferLike>
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>arrayBufferLike : ArrayBufferView<ArrayBufferLike>
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>bigIntArray : BigInt64Array<ArrayBufferLike>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Test added DataView methods
 const dataView = new DataView(new ArrayBuffer(80));
->dataView : DataView
->         : ^^^^^^^^
->new DataView(new ArrayBuffer(80)) : DataView
->                                  : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
+>new DataView(new ArrayBuffer(80)) : DataView<ArrayBuffer>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^
 >DataView : DataViewConstructor
 >         : ^^^^^^^^^^^^^^^^^^^
 >new ArrayBuffer(80) : ArrayBuffer
@@ -490,8 +490,8 @@ dataView.setBigInt64(1, -1n);
 >                             : ^^^^
 >dataView.setBigInt64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >                     : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigInt64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >            : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
 >1 : 1
@@ -506,8 +506,8 @@ dataView.setBigInt64(1, -1n, true);
 >                                   : ^^^^
 >dataView.setBigInt64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >                     : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigInt64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >            : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
 >1 : 1
@@ -524,8 +524,8 @@ dataView.setBigInt64(1, -1); // should error
 >                            : ^^^^
 >dataView.setBigInt64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >                     : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigInt64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >            : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
 >1 : 1
@@ -540,8 +540,8 @@ dataView.setBigUint64(2, 123n);
 >                               : ^^^^
 >dataView.setBigUint64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >                      : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigUint64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >             : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
 >2 : 2
@@ -554,8 +554,8 @@ dataView.setBigUint64(2, 123n, true);
 >                                     : ^^^^
 >dataView.setBigUint64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >                      : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigUint64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >             : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
 >2 : 2
@@ -570,8 +570,8 @@ dataView.setBigUint64(2, 123); // should error
 >                              : ^^^^
 >dataView.setBigUint64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >                      : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >setBigUint64 : (byteOffset: number, value: bigint, littleEndian?: boolean) => void
 >             : ^          ^^      ^^     ^^      ^^            ^^^       ^^^^^    
 >2 : 2
@@ -588,8 +588,8 @@ bigintVal = dataView.getBigInt64(1);
 >                        : ^^^^^^
 >dataView.getBigInt64 : (byteOffset: number, littleEndian?: boolean) => bigint
 >                     : ^          ^^      ^^            ^^^       ^^^^^      
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >getBigInt64 : (byteOffset: number, littleEndian?: boolean) => bigint
 >            : ^          ^^      ^^            ^^^       ^^^^^      
 >1 : 1
@@ -604,8 +604,8 @@ bigintVal = dataView.getBigInt64(1, true);
 >                              : ^^^^^^
 >dataView.getBigInt64 : (byteOffset: number, littleEndian?: boolean) => bigint
 >                     : ^          ^^      ^^            ^^^       ^^^^^      
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >getBigInt64 : (byteOffset: number, littleEndian?: boolean) => bigint
 >            : ^          ^^      ^^            ^^^       ^^^^^      
 >1 : 1
@@ -622,8 +622,8 @@ bigintVal = dataView.getBigUint64(2);
 >                         : ^^^^^^
 >dataView.getBigUint64 : (byteOffset: number, littleEndian?: boolean) => bigint
 >                      : ^          ^^      ^^            ^^^       ^^^^^      
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >getBigUint64 : (byteOffset: number, littleEndian?: boolean) => bigint
 >             : ^          ^^      ^^            ^^^       ^^^^^      
 >2 : 2
@@ -638,8 +638,8 @@ bigintVal = dataView.getBigUint64(2, true);
 >                               : ^^^^^^
 >dataView.getBigUint64 : (byteOffset: number, littleEndian?: boolean) => bigint
 >                      : ^          ^^      ^^            ^^^       ^^^^^      
->dataView : DataView
->         : ^^^^^^^^
+>dataView : DataView<ArrayBuffer>
+>         : ^^^^^^^^^^^^^^^^^^^^^
 >getBigUint64 : (byteOffset: number, littleEndian?: boolean) => bigint
 >             : ^          ^^      ^^            ^^^       ^^^^^      
 >2 : 2

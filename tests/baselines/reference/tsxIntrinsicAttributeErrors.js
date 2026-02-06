@@ -28,10 +28,10 @@ interface I {
         render(): void
     }
 }
-var E: I;
+declare var E: I;
 <E x={10} />
 
 
 //// [tsxIntrinsicAttributeErrors.jsx]
-var E;
+"use strict";
 <E x={10}/>;

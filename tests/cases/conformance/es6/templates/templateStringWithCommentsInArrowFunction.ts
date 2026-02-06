@@ -1,4 +1,5 @@
-﻿// @removeComments: false
+﻿// @target: es2015
+// @removeComments: false
 
 const a = 1;
 const f1 = () =>

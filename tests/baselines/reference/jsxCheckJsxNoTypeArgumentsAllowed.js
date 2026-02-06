@@ -12,6 +12,7 @@ export interface Prop {
 }
 
 //// [file.jsx]
+/// <reference path="/.lib/react.d.ts" />
 import { MyComp, Prop } from "./component";
 import * as React from "react";
 
@@ -19,9 +20,8 @@ let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
 
 
 //// [file.jsx]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var component_1 = require("./component");
-var React = require("react");
-var x = <component_1.MyComp />, <component_1.Prop> a={10} b="hi" />; // error, no type arguments in js
+/// <reference path="/.lib/react.d.ts" />
+import { MyComp, Prop } from "./component";
+import * as React from "react";
+let x = <MyComp />, <Prop> a={10} b="hi" />; // error, no type arguments in js
 </>;

@@ -1,0 +1,21 @@
+usingDeclarationsWithObjectLiterals2.ts(2,38): error TS7018: Object literal's property 'value' implicitly has an 'any' type.
+usingDeclarationsWithObjectLiterals2.ts(7,57): error TS7018: Object literal's property 'value' implicitly has an 'any' type.
+
+
+==== usingDeclarationsWithObjectLiterals2.ts (2 errors) ====
+    {
+      using _ = { [Symbol.dispose]() {}, value: null };
+                                         ~~~~~~~~~~~
+!!! error TS7018: Object literal's property 'value' implicitly has an 'any' type.
+    }
+    
+    async function f() {
+      {
+        await using _ = { async [Symbol.asyncDispose]() {}, value: null };
+                                                            ~~~~~~~~~~~
+!!! error TS7018: Object literal's property 'value' implicitly has an 'any' type.
+      }
+    }
+    
+    export {};
+    

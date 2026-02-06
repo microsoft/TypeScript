@@ -1,13 +1,19 @@
+instancePropertyInClassType.ts(3,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 instancePropertyInClassType.ts(17,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'Number' has no call signatures.
+instancePropertyInClassType.ts(23,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+instancePropertyInClassType.ts(25,13): error TS2322: Type 'null' is not assignable to type 'U'.
+  'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
 instancePropertyInClassType.ts(37,16): error TS6234: This expression is not callable because it is a 'get' accessor. Did you mean to use it without '()'?
   Type 'String' has no call signatures.
 
 
-==== instancePropertyInClassType.ts (2 errors) ====
-    module NonGeneric {
+==== instancePropertyInClassType.ts (5 errors) ====
+    namespace NonGeneric {
         class C {
             x: string;
+            ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
             get y() {
                 return 1;
             }
@@ -28,11 +34,16 @@ instancePropertyInClassType.ts(37,16): error TS6234: This expression is not call
     
     }
     
-    module Generic {
+    namespace Generic {
         class C<T,U> {
             x: T;
+            ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
             get y() {
                 return null;
+                ~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'U'.
+!!! error TS2322:   'U' could be instantiated with an arbitrary type which could be unrelated to 'null'.
             }
             set y(v: U) { }
             fn() { return this; }

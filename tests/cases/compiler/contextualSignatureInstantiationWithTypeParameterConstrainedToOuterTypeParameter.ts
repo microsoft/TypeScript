@@ -1,3 +1,4 @@
+// @target: es2015
 function f<T>() {
     function g<U extends T>(u: U): U { return null }
     return g;

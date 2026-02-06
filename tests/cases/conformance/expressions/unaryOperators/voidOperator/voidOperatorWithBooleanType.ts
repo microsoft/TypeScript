@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // void  operator on boolean type
 var BOOLEAN: boolean;
 
@@ -7,7 +9,7 @@ class A {
     public a: boolean;
     static foo() { return false; }
 }
-module M {
+namespace M {
     export var n: boolean;
 }
 

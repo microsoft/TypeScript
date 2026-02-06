@@ -1,5 +1,7 @@
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(2,12): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 derivedClassWithPrivateInstanceShadowingPublicInstance.ts(12,7): error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
   Property 'x' is private in type 'Derived' but not in type 'Base'.
+derivedClassWithPrivateInstanceShadowingPublicInstance.ts(13,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 derivedClassWithPrivateInstanceShadowingPublicInstance.ts(22,14): error TS2339: Property 'x' does not exist on type 'typeof Base'.
 derivedClassWithPrivateInstanceShadowingPublicInstance.ts(23,18): error TS2339: Property 'x' does not exist on type 'typeof Derived'.
 derivedClassWithPrivateInstanceShadowingPublicInstance.ts(25,15): error TS2339: Property 'fn' does not exist on type 'typeof Base'.
@@ -10,9 +12,11 @@ derivedClassWithPrivateInstanceShadowingPublicInstance.ts(31,18): error TS2339: 
 derivedClassWithPrivateInstanceShadowingPublicInstance.ts(32,9): error TS2339: Property 'a' does not exist on type 'typeof Derived'.
 
 
-==== derivedClassWithPrivateInstanceShadowingPublicInstance.ts (9 errors) ====
+==== derivedClassWithPrivateInstanceShadowingPublicInstance.ts (11 errors) ====
     class Base {
         public x: string;
+               ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         public fn(): string {
             return '';
         }
@@ -27,6 +31,8 @@ derivedClassWithPrivateInstanceShadowingPublicInstance.ts(32,9): error TS2339: P
 !!! error TS2415: Class 'Derived' incorrectly extends base class 'Base'.
 !!! error TS2415:   Property 'x' is private in type 'Derived' but not in type 'Base'.
         private x: string; 
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         private fn(): string {
             return '';
         }

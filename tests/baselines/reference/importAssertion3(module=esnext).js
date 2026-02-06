@@ -4,12 +4,12 @@
 export interface I { }
 
 //// [1.ts]
-export type {} from './0' assert { type: "json" }
-export type { I } from './0' assert { type: "json" }
+export type {} from './0' with { type: "json" }
+export type { I } from './0' with { type: "json" }
 
 //// [2.ts]
-import type { I } from './0'  assert { type: "json" }
-import type * as foo from './0' assert { type: "json" }
+import type { I } from './0'  with { type: "json" }
+import type * as foo from './0' with { type: "json" }
 
 
 

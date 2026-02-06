@@ -17,7 +17,7 @@ import {
     UnitTestTask,
 } from "../_namespaces/Harness.Parallel.js";
 
-export function start(importTests: () => Promise<unknown>) {
+export function start(importTests: () => Promise<unknown>): void {
     // This brings in the tests after we finish setting things up and yield to the event loop.
     const importTestsPromise = importTests();
 

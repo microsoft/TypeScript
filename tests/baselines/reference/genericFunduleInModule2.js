@@ -1,12 +1,12 @@
 //// [tests/cases/compiler/genericFunduleInModule2.ts] ////
 
 //// [genericFunduleInModule2.ts]
-module A {
+namespace A {
     export function B<T>(x: T) { return x; }
 }
 
-module A {
-    export module B {
+namespace A {
+    export namespace B {
         export var x = 1;
     }
 }
@@ -15,13 +15,14 @@ var b: A.B;
 A.B(1);
 
 //// [genericFunduleInModule2.js]
+"use strict";
 var A;
 (function (A) {
     function B(x) { return x; }
     A.B = B;
 })(A || (A = {}));
 (function (A) {
-    var B;
+    let B;
     (function (B) {
         B.x = 1;
     })(B = A.B || (A.B = {}));

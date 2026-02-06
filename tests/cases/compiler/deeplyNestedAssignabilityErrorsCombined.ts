@@ -1,3 +1,4 @@
+// @target: es2015
 let x = { a: { b: { c: { d: { e: { f() { return { g: "hello" }; } } } } } } };
 let y = { a: { b: { c: { d: { e: { f() { return { g: 12345 }; } } } } } } };
 x = y;

@@ -13,15 +13,15 @@ function diamondTop<Top>() {
 >diamondBottom : <Bottom extends Top | T | U>() => void
 >              : ^      ^^^^^^^^^           ^^^^^^^^^^^
 
-            var top: Top;
+            var top!: Top;
 >top : Top
 >    : ^^^
 
-            var middle: T | U;
+            var middle!: T | U;
 >middle : T | U
 >       : ^^^^^
 
-            var bottom: Bottom;
+            var bottom!: Bottom;
 >bottom : Bottom
 >       : ^^^^^^
 

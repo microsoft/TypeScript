@@ -1,3 +1,4 @@
+// @target: es2015
 interface IList<T> {
     data(): T;
     next(): string;

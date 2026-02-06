@@ -1,7 +1,6 @@
 import { Octokit } from "@octokit/rest";
 import assert from "assert";
 import ado from "azure-devops-node-api";
-import fetch from "node-fetch";
 
 /**
  * @param {string} name

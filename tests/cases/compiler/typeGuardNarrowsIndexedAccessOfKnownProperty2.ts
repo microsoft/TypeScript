@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 const foo: { key?: number } = {};

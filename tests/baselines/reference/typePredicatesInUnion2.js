@@ -9,5 +9,6 @@ f(isNumber);
 
 
 //// [typePredicatesInUnion2.js]
+"use strict";
 f(isString);
 f(isNumber);

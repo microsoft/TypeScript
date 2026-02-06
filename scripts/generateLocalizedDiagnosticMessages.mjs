@@ -113,7 +113,7 @@ async function main() {
                 ItemId = ItemId.slice(1); // remove leading semicolon
             }
 
-            val = val.replace(/]5D;/, "]"); // unescape `]`
+            val = val.replace(/\]5D;/, "]"); // unescape `]`
             out[ItemId] = val;
         }
         return JSON.stringify(out, undefined, 2);
@@ -146,7 +146,7 @@ async function main() {
          */
         function getItemXML(key, value) {
             // escape entrt value
-            value = value.replace(/]/g, "]5D;");
+            value = value.replace(/\]/g, "]5D;");
 
             return `
             <Item ItemId=";${key}" ItemType="0" PsrId="306" Leaf="true">

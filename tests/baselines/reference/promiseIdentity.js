@@ -24,11 +24,10 @@ var y: IPromise2<string, number>;
 var y: Promise2<any, string>;
 
 //// [promiseIdentity.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 var x;
 var x;
 // Ok because T in this particular Promise2 is any, as are all the U and W references.
 // Also, the V of Promise2 happens to coincide with the T of IPromise2 (they are both string).
 var y;
 var y;
+export {};

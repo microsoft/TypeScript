@@ -28,6 +28,7 @@ class E extends D {
 
 
 //// [classFieldSuperAccessible.js]
+"use strict";
 class A extends class Expr {
 } {
     static {

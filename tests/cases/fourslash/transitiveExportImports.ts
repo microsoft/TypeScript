@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @module: commonjs
+
 // @Filename: a.ts
 ////[|class /*1*/[|{| "isWriteAccess": true, "isDefinition": true, "contextRangeIndex": 0 |}A|] {
 ////}|]

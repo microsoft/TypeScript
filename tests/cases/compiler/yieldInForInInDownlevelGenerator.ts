@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @lib: esnext
 // https://github.com/microsoft/TypeScript/issues/49808
 function* gen() {

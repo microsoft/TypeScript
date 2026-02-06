@@ -245,6 +245,10 @@ export class TypeWriterWalker {
                 return undefined;
             }
 
+            if (ts.isOmittedExpression(node)) {
+                return undefined;
+            }
+
             // Workaround to ensure we output 'C' instead of 'typeof C' for base class expressions
             // let type = this.checker.getTypeAtLocation(node);
             let type = ts.isExpressionWithTypeArgumentsInClassExtendsClause(node.parent) ? this.checker.getTypeAtLocation(node.parent) : undefined;
@@ -321,7 +325,7 @@ export class TypeWriterWalker {
                 const declSourceFile = declaration.getSourceFile();
                 const declLineAndCharacter = declSourceFile.getLineAndCharacterOfPosition(declaration.pos);
                 const fileName = ts.getBaseFileName(declSourceFile.fileName);
-                const isLibFile = /lib(.*)\.d\.ts/i.test(fileName);
+                const isLibFile = /lib.*\.d\.ts/i.test(fileName);
                 const declText = `Decl(${fileName}, ${isLibFile ? "--" : declLineAndCharacter.line}, ${isLibFile ? "--" : declLineAndCharacter.character})`;
                 symbolString += declText;
                 (declaration as any).__symbolTestOutputCache = declText;

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 function test(strOrNull: string | null, strOrUndefined: string | undefined) {
     var str: string = "original";

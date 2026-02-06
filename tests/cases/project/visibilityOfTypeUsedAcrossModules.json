@@ -4,5 +4,6 @@
     "inputFiles": [
         "commands.ts"
     ],
-    "baselineCheck": true
+    "baselineCheck": true,
+    "strict": false
 }

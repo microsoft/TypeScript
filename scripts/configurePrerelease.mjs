@@ -112,7 +112,7 @@ function getPrereleasePatch(tag, plainPatch) {
     // but we'd prefer to just remove separators and limit ourselves to YYYYMMDD.
     // UTC time will always be implicit here.
     const now = new Date();
-    const timeStr = now.toISOString().replace(/:|T|\.|-/g, "").slice(0, 8);
+    const timeStr = now.toISOString().replace(/[:T.-]/g, "").slice(0, 8);
 
     return `${plainPatch}-${tag}.${timeStr}`;
 }

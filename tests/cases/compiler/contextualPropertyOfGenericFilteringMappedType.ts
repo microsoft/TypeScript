@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 // @noEmit: true
 
@@ -29,5 +30,17 @@ f2(
   },
   {
     bar: (value, key) => {},
+  },
+);
+
+f2(
+  {
+    foo: 0,
+    bar: "",
+  },
+  {
+    foo: (value, key) => {
+      // implicit `any`s
+    },
   },
 );

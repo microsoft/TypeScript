@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     x = this;
     foo() {
@@ -16,7 +17,7 @@ class C {
     }
 }
 
-var c: C;
+declare var c: C;
 // all ok
 var r = c.x;
 var ra = c.x.x.x;

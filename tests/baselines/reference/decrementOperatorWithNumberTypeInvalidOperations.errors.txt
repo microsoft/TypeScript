@@ -1,3 +1,4 @@
+decrementOperatorWithNumberTypeInvalidOperations.ts(8,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 decrementOperatorWithNumberTypeInvalidOperations.ts(18,25): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 decrementOperatorWithNumberTypeInvalidOperations.ts(19,23): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 decrementOperatorWithNumberTypeInvalidOperations.ts(22,25): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
@@ -20,18 +21,20 @@ decrementOperatorWithNumberTypeInvalidOperations.ts(45,1): error TS2356: An arit
 decrementOperatorWithNumberTypeInvalidOperations.ts(46,1): error TS2357: The operand of an increment or decrement operator must be a variable or a property access.
 
 
-==== decrementOperatorWithNumberTypeInvalidOperations.ts (20 errors) ====
+==== decrementOperatorWithNumberTypeInvalidOperations.ts (21 errors) ====
     // -- operator on number type
-    var NUMBER: number;
+    declare var NUMBER: number;
     var NUMBER1: number[] = [1, 2];
     
     function foo(): number { return 1; }
     
     class A {
         public a: number;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
         static foo() { return 1; }
     }
-    module M {
+    namespace M {
         export var n: number;
     }
     

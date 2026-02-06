@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @allowSyntheticDefaultImports: true
+// @module: commonjs
 
 // @Filename: /export.ts
 ////const /*0*/foo = 1;

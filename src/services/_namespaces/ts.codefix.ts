@@ -8,6 +8,7 @@ export * from "../codefixes/addMissingAwait.js";
 export * from "../codefixes/addMissingConst.js";
 export * from "../codefixes/addMissingDeclareProperty.js";
 export * from "../codefixes/addMissingInvocationForDecorator.js";
+export * from "../codefixes/addMissingResolutionModeImportAttribute.js";
 export * from "../codefixes/addNameToNamelessParameter.js";
 export * from "../codefixes/addOptionalPropertyUndefined.js";
 export * from "../codefixes/annotateWithTypeFromJSDoc.js";

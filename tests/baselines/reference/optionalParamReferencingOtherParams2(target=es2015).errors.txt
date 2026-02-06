@@ -1,0 +1,11 @@
+optionalParamReferencingOtherParams2.ts(2,29): error TS2304: Cannot find name 'b'.
+
+
+==== optionalParamReferencingOtherParams2.ts (1 errors) ====
+    var a = 1;
+    function strange(x = a, y = b) { 
+                                ~
+!!! error TS2304: Cannot find name 'b'.
+        var b = "";
+        return y;
+    }

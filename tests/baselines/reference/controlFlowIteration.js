@@ -22,9 +22,10 @@ function ff() {
 
 
 //// [controlFlowIteration.js]
-var cond;
+"use strict";
+let cond;
 function ff() {
-    var x;
+    let x;
     while (true) {
         if (cond) {
             x = "";

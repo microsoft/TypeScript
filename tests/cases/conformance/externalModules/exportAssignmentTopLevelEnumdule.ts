@@ -1,9 +1,10 @@
+// @target: es2015
 // @module: amd
 // @Filename: foo_0.ts
 enum foo {
 	red, green, blue
 }
-module foo {
+namespace foo {
 	export var answer = 42;
 }
 export = foo;

@@ -9,7 +9,7 @@ import {
 
 export let enableDeprecationWarnings = true;
 
-export function setEnableDeprecationWarnings(value: boolean) {
+export function setEnableDeprecationWarnings(value: boolean): void {
     enableDeprecationWarnings = value;
 }
 

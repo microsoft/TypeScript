@@ -1,21 +1,23 @@
 /// <reference path="../fourslash.ts" />
 
-// @Filename: /tsconfig.json
+// @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
-////     "module": "commonjs"
+////     "module": "commonjs",
+////     "types": ["*"],
+////     "lib": ["es5"]
 ////   }
 //// }
 
-// @Filename: /node_modules/@types/node/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/node/index.d.ts
 //// declare module "fs" {
 ////   export function accessSync(path: string): void;
 //// }
 
-// @Filename: /node_modules/@types/fs-extra/index.d.ts
+// @Filename: /home/src/workspaces/project/node_modules/@types/fs-extra/index.d.ts
 //// export * from "fs";
 
-// @Filename: /index.ts
+// @Filename: /home/src/workspaces/project/index.ts
 //// access/**/
 
 verify.completions({
@@ -46,7 +48,7 @@ verify.applyCodeActionFromCompletion("", {
   newFileContent: `import { accessSync } from "fs-extra";\r\n\r\naccess`,
   data: {
     exportName: "accessSync",
-    fileName: "/node_modules/@types/fs-extra/index.d.ts",
+    fileName: "/home/src/workspaces/project/node_modules/@types/fs-extra/index.d.ts",
     moduleSpecifier: "fs-extra",
   }
 });

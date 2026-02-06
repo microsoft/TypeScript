@@ -8,12 +8,12 @@ class C {
 >  : ^
 
     x?: string;
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     f?() {}
->f : () => void
->  : ^^^^^^^^^^
+>f : (() => void) | undefined
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 class C2<T> {
@@ -21,12 +21,12 @@ class C2<T> {
 >   : ^^^^^
 
     x?: T;
->x : T
->  : ^
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
 
     f?(x: T) {}
->f : (x: T) => void
->  : ^ ^^ ^^^^^^^^^
+>f : ((x: T) => void) | undefined
+>  : ^^ ^^ ^^^^^^^^^^^^^^^^^^^^^^
 >x : T
 >  : ^
 }

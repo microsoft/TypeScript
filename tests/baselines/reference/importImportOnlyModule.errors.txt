@@ -1,0 +1,18 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== foo_2.ts (0 errors) ====
+    import foo = require("./foo_1");
+    var x = foo; // Cause a runtime dependency
+    
+==== foo_0.ts (0 errors) ====
+    export class C1 {
+    	m1 = 42;
+    	static s1 = true;
+    }
+    
+==== foo_1.ts (0 errors) ====
+    import c1 = require('./foo_0'); // Makes this an external module
+    var answer = 42; // No exports
+    

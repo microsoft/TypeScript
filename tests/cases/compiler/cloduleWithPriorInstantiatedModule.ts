@@ -1,5 +1,6 @@
-﻿// Non-ambient & instantiated module.
-module Moclodule {
+﻿// @target: es2015
+// Non-ambient & instantiated module.
+namespace Moclodule {
     export interface Someinterface {
         foo(): void;
     }
@@ -10,7 +11,7 @@ class Moclodule {
 }
 
 // Instantiated module.
-module Moclodule {
+namespace Moclodule {
     export class Manager {
     }
 }

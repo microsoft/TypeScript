@@ -103,8 +103,8 @@ suite("another suite", () => {
 >       : ^^^
 >from : any
 >     : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
         const z = module.exports;
 >z : any

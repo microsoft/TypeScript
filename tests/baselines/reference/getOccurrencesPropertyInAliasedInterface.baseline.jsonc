@@ -1,6 +1,6 @@
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPropertyInAliasedInterface.ts ===
-// module m {
+// namespace m {
 //     export interface Foo {
 //         /*HIGHLIGHTS*/[|{| kind: "reference" |}abc|]
 //     }
@@ -22,7 +22,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPropertyInAliasedInterface.ts ===
-// module m {
+// namespace m {
 //     export interface Foo {
 //         [|{| kind: "reference" |}abc|]
 //     }
@@ -44,7 +44,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPropertyInAliasedInterface.ts ===
-// module m {
+// namespace m {
 //     export interface Foo {
 //         [|{| kind: "reference" |}abc|]
 //     }
@@ -66,7 +66,7 @@
 
 // === documentHighlights ===
 // === /tests/cases/fourslash/getOccurrencesPropertyInAliasedInterface.ts ===
-// module m {
+// namespace m {
 //     export interface Foo {
 //         [|{| kind: "reference" |}abc|]
 //     }

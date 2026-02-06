@@ -9,6 +9,7 @@ if ({} == {}) {}
 
 
 //// [plainJSTypeErrors.js]
+"use strict";
 // should error
 if ({} === {}) { }
 // should not error

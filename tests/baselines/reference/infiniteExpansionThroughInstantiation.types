@@ -24,11 +24,11 @@ interface OwnerList<U> extends List<List<U>> {
 >     : ^^^^^^
 }
 
-var list: List<string>;
+declare var list: List<string>;
 >list : List<string>
 >     : ^^^^^^^^^^^^
 
-var ownerList: OwnerList<string>;
+declare var ownerList: OwnerList<string>;
 >ownerList : OwnerList<string>
 >          : ^^^^^^^^^^^^^^^^^
 
@@ -50,7 +50,7 @@ function other<T>(x: T) {
 >list : List<T>
 >     : ^^^^^^^
 
-    var ownerList: OwnerList<T>;
+    var ownerList!: OwnerList<T>;
 >ownerList : OwnerList<T>
 >          : ^^^^^^^^^^^^
 

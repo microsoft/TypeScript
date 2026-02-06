@@ -8,8 +8,8 @@ interface ErrorConstructor {
 >                  : ^            ^^      ^^              ^^^        ^^^^^    
 >targetObject : Object
 >             : ^^^^^^
->constructorOpt : Function
->               : ^^^^^^^^
+>constructorOpt : Function | undefined
+>               : ^^^^^^^^^^^^^^^^^^^^
 }
 
 declare var x: ErrorConstructor

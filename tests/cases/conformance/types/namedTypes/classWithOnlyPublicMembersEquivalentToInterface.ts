@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // no errors expected
 
 class C {

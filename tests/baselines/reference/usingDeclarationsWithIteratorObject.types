@@ -1,0 +1,123 @@
+//// [tests/cases/conformance/statements/VariableStatements/usingDeclarations/usingDeclarationsWithIteratorObject.ts] ////
+
+=== usingDeclarationsWithIteratorObject.ts ===
+declare const i: Iterator<string, undefined>;
+>i : Iterator<string, undefined, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const io: IteratorObject<string, undefined, unknown>;
+>io : IteratorObject<string, undefined, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const g: Generator<string, void>;
+>g : Generator<string, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+class MyIterator extends Iterator<string> {
+>MyIterator : MyIterator
+>           : ^^^^^^^^^^
+>Iterator : Iterator<string, undefined, unknown>
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    next() { return { done: true, value: undefined }; }
+>next : () => { done: boolean; value: any; }
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ done: true, value: undefined } : { done: boolean; value: undefined; }
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>done : boolean
+>     : ^^^^^^^
+>true : true
+>     : ^^^^
+>value : undefined
+>      : ^^^^^^^^^
+>undefined : undefined
+>          : ^^^^^^^^^
+}
+
+function f() {
+>f : () => void
+>  : ^^^^^^^^^^
+
+    // should pass
+    using it0 = io;
+>it0 : IteratorObject<string, undefined, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>io : IteratorObject<string, undefined, unknown>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    using it1 = g;
+>it1 : Generator<string, void, any>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>g : Generator<string, void, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    using it2 = Iterator.from(i)
+>it2 : IteratorObject<string, undefined, unknown>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from(i) : IteratorObject<string, undefined, unknown>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Iterator.from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>              : ^ ^^     ^^                                                                 ^^^^^                                     
+>Iterator : IteratorConstructor
+>         : ^^^^^^^^^^^^^^^^^^^
+>from : <T>(value: Iterator<T, unknown, undefined> | Iterable<T, unknown, undefined>) => IteratorObject<T, undefined, unknown>
+>     : ^ ^^     ^^                                                                 ^^^^^                                     
+>i : Iterator<string, undefined, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    using it3 = new MyIterator();
+>it3 : MyIterator
+>    : ^^^^^^^^^^
+>new MyIterator() : MyIterator
+>                 : ^^^^^^^^^^
+>MyIterator : typeof MyIterator
+>           : ^^^^^^^^^^^^^^^^^
+
+    using it4 = [].values();
+>it4 : ArrayIterator<any>
+>    : ^^^^^^^^^^^^^^^^^^
+>[].values() : ArrayIterator<any>
+>            : ^^^^^^^^^^^^^^^^^^
+>[].values : () => ArrayIterator<any>
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^
+>[] : undefined[]
+>   : ^^^^^^^^^^^
+>values : () => ArrayIterator<any>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+    using it5 = new Map<string, string>().entries();
+>it5 : MapIterator<[string, string]>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Map<string, string>().entries() : MapIterator<[string, string]>
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Map<string, string>().entries : () => MapIterator<[string, string]>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Map<string, string>() : Map<string, string>
+>                          : ^^^^^^^^^^^^^^^^^^^
+>Map : MapConstructor
+>    : ^^^^^^^^^^^^^^
+>entries : () => MapIterator<[string, string]>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    using it6 = new Set<string>().keys();
+>it6 : SetIterator<string>
+>    : ^^^^^^^^^^^^^^^^^^^
+>new Set<string>().keys() : SetIterator<string>
+>                         : ^^^^^^^^^^^^^^^^^^^
+>new Set<string>().keys : () => SetIterator<string>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Set<string>() : Set<string>
+>                  : ^^^^^^^^^^^
+>Set : SetConstructor
+>    : ^^^^^^^^^^^^^^
+>keys : () => SetIterator<string>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    // should fail
+    using it7 = i;
+>it7 : Iterator<string, undefined, any>
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>i : Iterator<string, undefined, any>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+

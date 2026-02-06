@@ -7,6 +7,7 @@ for (const [key, entry] of new FormData()) {
 
 
 //// [modularizeLibrary_Worker.iterable.js]
+"use strict";
 for (const [key, entry] of new FormData()) {
     entry;
 }

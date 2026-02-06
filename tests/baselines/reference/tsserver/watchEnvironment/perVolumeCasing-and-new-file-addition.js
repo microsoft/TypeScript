@@ -1,8 +1,9 @@
-currentDirectory:: / useCaseSensitiveFileNames: false
-Info seq  [hh:mm:ss:mss] Provided types map file "/typesMap.json" doesn't exist
+Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
+Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
+Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
+Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
 Before request
-//// [/a/lib/lib.d.ts]
-/// <reference no-default-lib="true"/>
+//// [/home/src/tslibs/TS/Lib/lib.d.ts]
 interface Boolean {}
 interface Function {}
 interface CallableFunction {}
@@ -13,6 +14,8 @@ interface Object {}
 interface RegExp {}
 interface String { charAt: any; }
 interface Array<T> { length: number; [n: number]: T; }
+interface ReadonlyArray<T> {}
+declare const console: { log(msg: any): void; };
 
 //// [/Volumes/git/projects/project/foo.ts]
 export const foo = "foo";
@@ -37,8 +40,16 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request"
     }
 Info seq  [hh:mm:ss:mss] getConfigFileNameForFile:: File: /Volumes/git/projects/project/foo.ts ProjectRootPath: undefined:: Result: /Volumes/git/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] Creating configuration project /Volumes/git/projects/project/tsconfig.json
+Info seq  [hh:mm:ss:mss] Creating ConfiguredProject: /Volumes/git/projects/project/tsconfig.json, currentDirectory: /Volumes/git/projects/project
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/tsconfig.json 2000 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: Config file
+Info seq  [hh:mm:ss:mss] Config: /Volumes/git/projects/project/tsconfig.json : {
+ "rootNames": [
+  "/Volumes/git/projects/project/foo.ts"
+ ],
+ "options": {
+  "configFilePath": "/Volumes/git/projects/project/tsconfig.json"
+ }
+}
 Info seq  [hh:mm:ss:mss] event:
     {
       "seq": 0,
@@ -49,31 +60,19 @@ Info seq  [hh:mm:ss:mss] event:
         "reason": "Creating possible configured project for /Volumes/git/projects/project/foo.ts to open"
       }
     }
-Info seq  [hh:mm:ss:mss] Config: /Volumes/git/projects/project/tsconfig.json : {
- "rootNames": [
-  "/Volumes/git/projects/project/foo.ts"
- ],
- "options": {
-  "configFilePath": "/Volumes/git/projects/project/tsconfig.json"
- }
-}
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/project 1 undefined Config: /Volumes/git/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/project 1 undefined Config: /Volumes/git/projects/project/tsconfig.json WatchType: Wild card directory
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Volumes/git/projects/project/tsconfig.json
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /a/lib/lib.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/node_modules/@types 1 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/node_modules/@types 1 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/node_modules/@types 1 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /Volumes/git/projects/node_modules/@types 1 undefined Project: /Volumes/git/projects/project/tsconfig.json WatchType: Type roots
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Volumes/git/projects/project/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Volumes/git/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (2)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/Volumes/git/projects/project/foo.ts SVC-1-0 "export const foo = \"foo\";"
 
 
-	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	foo.ts
 	  Matched by default include pattern '**/*'
 
@@ -107,7 +106,7 @@ Info seq  [hh:mm:ss:mss] event:
             "tsx": 0,
             "tsxSize": 0,
             "dts": 1,
-            "dtsSize": 334,
+            "dtsSize": 374,
             "deferred": 0,
             "deferredSize": 0
           },
@@ -159,19 +158,15 @@ Info seq  [hh:mm:ss:mss] response:
       }
     }
 After request
+//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
 
-PolledWatches::
-/Volumes/git/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/Volumes/git/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /Volumes/git/projects/project/package.json: *new*
   {}
 /Volumes/git/projects/project/tsconfig.json: *new*
   {}
-/a/lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -182,13 +177,14 @@ Projects::
 /Volumes/git/projects/project/tsconfig.json (Configured) *new*
     projectStateVersion: 1
     projectProgramVersion: 1
+    autoImportProviderHost: false
 
 ScriptInfos::
 /Volumes/git/projects/project/foo.ts (Open) *new*
     version: SVC-1-0
     containingProjects: 1
         /Volumes/git/projects/project/tsconfig.json *default*
-/a/lib/lib.d.ts *new*
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts *new*
     version: Text-1
     containingProjects: 1
         /Volumes/git/projects/project/tsconfig.json
@@ -213,6 +209,7 @@ Projects::
     projectStateVersion: 2 *changed*
     projectProgramVersion: 1
     dirty: true *changed*
+    autoImportProviderHost: false
 
 Info seq  [hh:mm:ss:mss] Running: /Volumes/git/projects/project/tsconfig.json
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /Volumes/git/projects/project/Bar.ts 500 undefined WatchType: Closed Script info
@@ -220,13 +217,13 @@ Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /Volumes/git/proje
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /Volumes/git/projects/project/tsconfig.json projectStateVersion: 2 projectProgramVersion: 1 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/Volumes/git/projects/project/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
-	/a/lib/lib.d.ts Text-1 "/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }"
+	/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts Text-1 "interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };"
 	/Volumes/git/projects/project/foo.ts SVC-1-0 "export const foo = \"foo\";"
 	/Volumes/git/projects/project/Bar.ts Text-1 "export const bar = \"bar\";"
 
 
-	../../../../a/lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+	  Default library for target 'es2024'
 	foo.ts
 	  Matched by default include pattern '**/*'
 	Bar.ts
@@ -264,12 +261,6 @@ Info seq  [hh:mm:ss:mss] event:
     }
 After running Timeout callback:: count: 0
 
-PolledWatches::
-/Volumes/git/projects/node_modules/@types:
-  {"pollingInterval":500}
-/Volumes/git/projects/project/node_modules/@types:
-  {"pollingInterval":500}
-
 FsWatches::
 /Volumes/git/projects/project/Bar.ts: *new*
   {}
@@ -277,7 +268,7 @@ FsWatches::
   {}
 /Volumes/git/projects/project/tsconfig.json:
   {}
-/a/lib/lib.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
   {}
 
 FsWatchesRecursive::
@@ -289,6 +280,7 @@ Projects::
     projectStateVersion: 2
     projectProgramVersion: 2 *changed*
     dirty: false *changed*
+    autoImportProviderHost: undefined *changed*
 
 ScriptInfos::
 /Volumes/git/projects/project/Bar.ts *new*
@@ -299,7 +291,7 @@ ScriptInfos::
     version: SVC-1-0
     containingProjects: 1
         /Volumes/git/projects/project/tsconfig.json *default*
-/a/lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
     version: Text-1
     containingProjects: 1
         /Volumes/git/projects/project/tsconfig.json

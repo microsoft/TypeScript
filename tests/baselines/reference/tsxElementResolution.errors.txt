@@ -1,0 +1,33 @@
+tsxElementResolution.tsx(4,3): error TS7008: Member ''string_named'' implicitly has an 'any' type.
+tsxElementResolution.tsx(5,3): error TS7008: Member ''var'' implicitly has an 'any' type.
+
+
+==== tsxElementResolution.tsx (2 errors) ====
+    declare namespace JSX {
+    	interface IntrinsicElements {
+    		foundFirst: { x: string };
+    		'string_named';
+    		~~~~~~~~~~~~~~
+!!! error TS7008: Member ''string_named'' implicitly has an 'any' type.
+    		'var';
+    		~~~~~
+!!! error TS7008: Member ''var'' implicitly has an 'any' type.
+    	}
+    }
+    
+    class foundFirst { }
+    class Other {}
+    
+    namespace Dotted {
+    	export class Name { }
+    }
+    
+    // Should find the intrinsic element, not the class element
+    var a = <foundFirst  x="hello" />;
+    var b = <string_named />;
+    // TODO: This should not be a parse error (should
+    //        parse a property name here, not identifier)
+    // var c = <var />;
+    var d = <Other />;
+    var e = <Dotted.Name />;
+    

@@ -1,0 +1,7 @@
+parserVariableDeclaration4.d.ts(1,13): error TS7005: Variable 'v' implicitly has an 'any' type.
+
+
+==== parserVariableDeclaration4.d.ts (1 errors) ====
+    declare var v;
+                ~
+!!! error TS7005: Variable 'v' implicitly has an 'any' type.

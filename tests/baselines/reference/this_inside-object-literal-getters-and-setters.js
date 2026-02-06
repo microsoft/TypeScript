@@ -1,7 +1,7 @@
 //// [tests/cases/compiler/this_inside-object-literal-getters-and-setters.ts] ////
 
 //// [this_inside-object-literal-getters-and-setters.ts]
-module ObjectLiteral {
+namespace ObjectLiteral {
     var ThisInObjectLiteral = {
         _foo: '1',
         get foo(): string {
@@ -19,6 +19,7 @@ module ObjectLiteral {
 
 
 //// [this_inside-object-literal-getters-and-setters.js]
+"use strict";
 var ObjectLiteral;
 (function (ObjectLiteral) {
     var ThisInObjectLiteral = {

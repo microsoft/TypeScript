@@ -1,5 +1,5 @@
 // === goToImplementation ===
-// === /bar.ts ===
+// === /home/src/workspaces/project/bar.ts ===
 // import {Foo} from './foo'
 // 
 // class [|{| defId: 0 |}A|] implements Foo {
@@ -10,7 +10,7 @@
 //     func() {}
 // }
 
-// === /foo.ts ===
+// === /home/src/workspaces/project/foo.ts ===
 // export interface /*GOTO IMPL*/Foo {
 //     func();
 // }

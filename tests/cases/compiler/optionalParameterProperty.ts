@@ -1,7 +1,8 @@
+// @target: es2015
 // @strictNullChecks: true
 
 class C {
-    p: number;
+    p: number = 0;
 }
 
 class D extends C { 

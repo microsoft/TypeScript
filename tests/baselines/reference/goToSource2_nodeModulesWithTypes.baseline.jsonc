@@ -1,8 +1,8 @@
 // === goToSourceDefinition ===
-// === /node_modules/foo/lib/main.js ===
+// === /home/src/workspaces/project/node_modules/foo/lib/main.js ===
 // export const [|a|] = "a";
 
-// === /index.ts ===
+// === /home/src/workspaces/project/index.ts ===
 // import { a } from "foo";
 // a/*GOTO SOURCE DEF*/
 

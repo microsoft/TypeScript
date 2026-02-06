@@ -686,7 +686,7 @@ export function transformESDecorators(context: TransformationContext): (x: Sourc
         let shouldTransformPrivateStaticElementsInClass = false;
 
         // 1. Class decorators are evaluated outside of the private name scope of the class.
-        const classDecorators = transformAllDecoratorsOfDeclaration(getAllDecoratorsOfClass(node));
+        const classDecorators = transformAllDecoratorsOfDeclaration(getAllDecoratorsOfClass(node, /*useLegacyDecorators*/ false));
         if (classDecorators) {
             // - Since class decorators don't have privileged access to private names defined inside the class,
             //   they must be evaluated outside of the class body.

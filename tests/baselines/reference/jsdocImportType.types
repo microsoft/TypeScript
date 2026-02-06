@@ -48,11 +48,13 @@ declare function require(name: string): any;
 
 declare var exports: any;
 >exports : any
+>        : ^^^
 
 declare var module: { exports: any };
 >module : { exports: any; }
 >       : ^^^^^^^^^^^   ^^^
 >exports : any
+>        : ^^^
 
 === mod1.js ===
 /// <reference path='./types.d.ts'/>
@@ -65,6 +67,7 @@ class Chunk {
 >this.chunk = 1 : 1
 >               : ^
 >this.chunk : any
+>           : ^^^
 >this : this
 >     : ^^^^
 >chunk : any

@@ -6,5 +6,6 @@
     ],
     "outDir": "outdir/simple",
     "declaration": true,
-    "baselineCheck": true
+    "baselineCheck": true,
+    "strict": false
 }

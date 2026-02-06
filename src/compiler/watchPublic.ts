@@ -103,7 +103,7 @@ export interface ReadBuildProgramHost {
     /** @internal */
     getBuildInfo?(fileName: string, configFilePath: string | undefined): BuildInfo | undefined;
 }
-export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost) {
+export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadBuildProgramHost): EmitAndSemanticDiagnosticsBuilderProgram | undefined {
     const buildInfoPath = getTsBuildInfoEmitOutputFilePath(compilerOptions);
     if (!buildInfoPath) return undefined;
     let buildInfo;
@@ -120,7 +120,7 @@ export function readBuilderProgram(compilerOptions: CompilerOptions, host: ReadB
     return createBuilderProgramUsingIncrementalBuildInfo(buildInfo, buildInfoPath, host);
 }
 
-export function createIncrementalCompilerHost(options: CompilerOptions, system = sys): CompilerHost {
+export function createIncrementalCompilerHost(options: CompilerOptions, system: System = sys): CompilerHost {
     const host = createCompilerHostWorker(options, /*setParentNodes*/ undefined, system);
     host.createHash = maybeBind(system, system.createHash);
     host.storeSignatureInfo = system.storeSignatureInfo;
@@ -435,6 +435,11 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     let updateLevel: ProgramUpdateLevel; // level to indicate if the program needs to be reloaded from config file/just filenames etc
     let missingFilesMap: Map<Path, FileWatcher>; // Map of file watchers for the missing files
     let watchedWildcardDirectories: Map<string, WildcardDirectoryWatcher>; // map of watchers for the wild card directories in the config file
+    /**
+     * undefined - own watches are stale,
+     * path - for referenced project which need to be watched
+     */
+    let staleWatches: Map<Path | undefined, string | undefined> | undefined = new Map([[undefined, undefined]]);
     let timerToUpdateProgram: any; // timer callback to recompile the program
     let timerToInvalidateFailedLookupResolutions: any; // timer callback to invalidate resolutions for changes in failed lookup locations
     let parsedConfigs: Map<Path, ParsedConfig> | undefined; // Parsed commandline and watching cached for referenced projects
@@ -550,12 +555,6 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
     builderProgram = readBuilderProgram(compilerOptions, compilerHost) as any as T;
     synchronizeProgram();
 
-    // Update the wild card directory watch
-    watchConfigFileWildCardDirectories();
-
-    // Update extended config file watch
-    if (configFileName) updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
-
     return configFileName ?
         { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, close, getResolutionCache } :
         { getCurrentProgram: getCurrentBuilderProgram, getProgram: updateProgram, updateRootFileNames, close, getResolutionCache };
@@ -663,6 +662,20 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         compilerHost.createDirectory = originalCreateDirectory;
         compilerHost.writeFile = originalWriteFile!;
 
+        staleWatches?.forEach((configFile, configPath) => {
+            if (!configPath) {
+                // Update the wild card directory watch
+                watchConfigFileWildCardDirectories();
+
+                // Update extended config file watch
+                if (configFileName) updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
+            }
+            else {
+                const config = parsedConfigs?.get(configPath);
+                if (config) watchReferencedProject(configFile!, configPath, config);
+            }
+        });
+        staleWatches = undefined;
         return builderProgram;
     }
 
@@ -912,7 +925,15 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
 
         updateLevel = ProgramUpdateLevel.Update;
         rootFileNames = getFileNamesFromConfigSpecs(compilerOptions.configFile!.configFileSpecs!, getNormalizedAbsolutePath(getDirectoryPath(configFileName), currentDirectory), compilerOptions, parseConfigFileHost, extraFileExtensions);
-        if (updateErrorForNoInputFiles(rootFileNames, getNormalizedAbsolutePath(configFileName, currentDirectory), compilerOptions.configFile!.configFileSpecs!, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
+        if (
+            updateErrorForNoInputFiles(
+                rootFileNames,
+                getNormalizedAbsolutePath(configFileName, currentDirectory),
+                compilerOptions.configFile!.configFileSpecs!,
+                configFileParsingDiagnostics!,
+                canConfigFileJsonReportNoInputFiles,
+            )
+        ) {
             hasChangedConfigFileParsingErrors = true;
         }
 
@@ -930,13 +951,8 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         }
         parseConfigFile();
         hasChangedCompilerOptions = true;
+        (staleWatches ??= new Map()).set(undefined, undefined);
         synchronizeProgram();
-
-        // Update the wild card directory watch
-        watchConfigFileWildCardDirectories();
-
-        // Update extended config file watch
-        updateExtendedConfigFilesWatches(toPath(configFileName), compilerOptions, watchOptions, WatchType.ExtendedConfigFile);
     }
 
     function parseConfigFile() {
@@ -996,7 +1012,7 @@ export function createWatchProgram<T extends BuilderProgram>(host: WatchCompiler
         else {
             (parsedConfigs ||= new Map()).set(configPath, config = { parsedCommandLine });
         }
-        watchReferencedProject(configFileName, configPath, config);
+        (staleWatches ??= new Map()).set(configPath, configFileName);
         return parsedCommandLine;
     }
 

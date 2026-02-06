@@ -40,8 +40,8 @@ function doThing(x: string, y?: string): Moose {
 >        : ^^^ ^^     ^^^   ^^^ ^^     ^^^   ^^^ ^^      ^^^      ^^^
 >x : string
 >  : ^^^^^^
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     return undefined;
 >undefined : undefined

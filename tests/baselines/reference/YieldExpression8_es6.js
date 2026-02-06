@@ -7,6 +7,7 @@ function* foo() {
 }
 
 //// [YieldExpression8_es6.js]
+"use strict";
 yield(foo);
 function* foo() {
     yield (foo);

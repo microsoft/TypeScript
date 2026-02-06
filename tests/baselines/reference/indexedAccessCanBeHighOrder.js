@@ -14,10 +14,11 @@ const r = impl(o, "x");
 r[0][r[1]] = o[r[1]];
 
 //// [indexedAccessCanBeHighOrder.js]
+"use strict";
 function impl(a, b) {
-    var item = get(a, b);
+    const item = get(a, b);
     return find(item);
 }
-var o = { x: 42 };
-var r = impl(o, "x");
+const o = { x: 42 };
+const r = impl(o, "x");
 r[0][r[1]] = o[r[1]];

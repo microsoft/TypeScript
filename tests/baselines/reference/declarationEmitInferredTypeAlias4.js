@@ -8,6 +8,7 @@ function f<A>() {
 }
 
 //// [declarationEmitInferredTypeAlias4.js]
+"use strict";
 function f() {
     var x;
     return x;
@@ -16,5 +17,5 @@ function f() {
 
 //// [declarationEmitInferredTypeAlias4.d.ts]
 declare function f<A>(): A[] | {
-    x: A[] | any;
+    x: A[] | /*elided*/ any;
 };

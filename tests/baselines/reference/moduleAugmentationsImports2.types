@@ -36,8 +36,8 @@ import {B} from "./b";
 >  : ^^^^^^^^
 
 A.prototype.getB = function () { return undefined; }
->A.prototype.getB = function () { return undefined; } : () => any
->                                                     : ^^^^^^^^^
+>A.prototype.getB = function () { return undefined; } : () => undefined
+>                                                     : ^^^^^^^^^^^^^^^
 >A.prototype.getB : () => B
 >                 : ^^^^^^ 
 >A.prototype : A
@@ -48,8 +48,8 @@ A.prototype.getB = function () { return undefined; }
 >          : ^
 >getB : () => B
 >     : ^^^^^^ 
->function () { return undefined; } : () => any
->                                  : ^^^^^^^^^
+>function () { return undefined; } : () => undefined
+>                                  : ^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -74,8 +74,8 @@ import {Cls} from "C";
 >    : ^^^^^^^^^^
 
 A.prototype.getCls = function () { return undefined; }
->A.prototype.getCls = function () { return undefined; } : () => any
->                                                       : ^^^^^^^^^
+>A.prototype.getCls = function () { return undefined; } : () => undefined
+>                                                       : ^^^^^^^^^^^^^^^
 >A.prototype.getCls : () => Cls
 >                   : ^^^^^^   
 >A.prototype : A
@@ -86,8 +86,8 @@ A.prototype.getCls = function () { return undefined; }
 >          : ^
 >getCls : () => Cls
 >       : ^^^^^^   
->function () { return undefined; } : () => any
->                                  : ^^^^^^^^^
+>function () { return undefined; } : () => undefined
+>                                  : ^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
