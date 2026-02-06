@@ -35,7 +35,7 @@ declare namespace Intl {
          *
          * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getTimeZones)
          */
-        getTimeZones(): string[];
+        getTimeZones(): string[] | undefined;
         /**
          * Returns a `WeekInfo` object with the properties `firstDay`, `weekend` and `minimalDays` for this locale.
          *
@@ -55,7 +55,7 @@ declare namespace Intl {
          *
          * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getTextInfo#direction)
          */
-        direction: "ltr" | "rtl";
+        direction?: "ltr" | "rtl";
     }
 
     /**
