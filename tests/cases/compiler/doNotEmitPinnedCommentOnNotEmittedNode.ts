@@ -1,4 +1,6 @@
-﻿// @removeComments: true
+﻿// @strict: false
+// @target: es2015
+// @removeComments: true
 
 class C {
     /*! remove pinned comment anywhere else */

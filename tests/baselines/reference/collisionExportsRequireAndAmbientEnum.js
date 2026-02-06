@@ -61,14 +61,13 @@ namespace m4 {
 }
 
 //// [collisionExportsRequireAndAmbientEnum_externalmodule.js]
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var m2;
-    (function (m2) {
-    })(m2 || (m2 = {}));
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var m2;
+(function (m2) {
+})(m2 || (m2 = {}));
 //// [collisionExportsRequireAndAmbientEnum_globalFile.js]
+"use strict";
 var m4;
 (function (m4) {
 })(m4 || (m4 = {}));

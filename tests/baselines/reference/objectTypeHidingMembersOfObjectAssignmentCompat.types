@@ -7,11 +7,11 @@ interface I {
 >         : ^^^^^^    
 }
 
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
-var o: Object;
+declare var o: Object;
 >o : Object
 >  : ^^^^^^
 
@@ -39,7 +39,7 @@ class C {
 >toString : () => void
 >         : ^^^^^^    
 }
-var c: C;
+declare var c: C;
 >c : C
 >  : ^
 

@@ -4,7 +4,7 @@
 //// { "dependencies": { "@types/classnames": "*" } }
 
 // @filename: /tsconfig.json
-//// { "compilerOptions": { "allowUmdGlobalAccess": true } }
+//// { "compilerOptions": { "allowUmdGlobalAccess": true, "types": ["*"] } }
 
 // @filename: /node_modules/@types/classnames/package.json
 //// { "name": "@types/classnames", "types": "index.d.ts" }

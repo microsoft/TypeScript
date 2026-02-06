@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @declaration: true
 
 // @Filename: file1.ts

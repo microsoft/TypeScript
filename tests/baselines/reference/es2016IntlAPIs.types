@@ -65,7 +65,8 @@ try {
 >        : ^^^^^^^
 
 } catch (err) {
->err : any
+>err : unknown
+>    : ^^^^^^^
 
   console.log(err.toString());
 >console.log(err.toString()) : void
@@ -77,9 +78,11 @@ try {
 >log : (...data: any[]) => void
 >    : ^^^^    ^^     ^^^^^    
 >err.toString() : any
+>               : ^^^
 >err.toString : any
->err : any
->    : ^^^
+>             : ^^^
+>err : unknown
+>    : ^^^^^^^
 >toString : any
 >         : ^^^
 

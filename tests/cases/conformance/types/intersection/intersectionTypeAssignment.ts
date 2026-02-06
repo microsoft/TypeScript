@@ -1,7 +1,8 @@
-var a: { a: string };
-var b: { b: string };
-var x: { a: string, b: string };
-var y: { a: string } & { b: string };
+// @target: es2015
+declare var a: { a: string };
+declare var b: { b: string };
+declare var x: { a: string, b: string };
+declare var y: { a: string } & { b: string };
 
 a = x;
 a = y;

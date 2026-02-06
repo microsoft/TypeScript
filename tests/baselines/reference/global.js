@@ -13,6 +13,7 @@ M.f(3);
 
 
 //// [global.js]
+"use strict";
 var M;
 (function (M) {
     function f(y) {

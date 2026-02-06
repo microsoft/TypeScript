@@ -10,6 +10,7 @@ namespace Bar {
 }
 
 //// [reboundIdentifierOnImportAlias.js]
+"use strict";
 var Foo;
 (function (Foo) {
     Foo.x = "hello";

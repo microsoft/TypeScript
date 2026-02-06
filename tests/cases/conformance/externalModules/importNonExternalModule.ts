@@ -1,4 +1,5 @@
-// @module: amd
+// @target: es2015
+// @module: commonjs
 // @Filename: foo_0.ts
 namespace foo {
 	export var answer = 42;

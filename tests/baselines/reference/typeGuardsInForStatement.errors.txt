@@ -1,0 +1,43 @@
+typeGuardsInForStatement.ts(3,10): error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+typeGuardsInForStatement.ts(3,48): error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+typeGuardsInForStatement.ts(9,10): error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+typeGuardsInForStatement.ts(9,48): error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+typeGuardsInForStatement.ts(16,10): error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+typeGuardsInForStatement.ts(16,48): error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+
+
+==== typeGuardsInForStatement.ts (6 errors) ====
+    let cond: boolean;
+    function a(x: string | number) {
+        for (x = undefined; typeof x !== "number"; x = undefined) {
+             ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+                                                   ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+            x; // string
+        }
+        x; // number
+    }
+    function b(x: string | number) {
+        for (x = undefined; typeof x !== "number"; x = undefined) {
+             ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+                                                   ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+            x; // string
+            if (cond) continue;
+        }
+        x; // number
+    }
+    function c(x: string | number) {
+        for (x = undefined; typeof x !== "number"; x = undefined) {
+             ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+                                                   ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string | number'.
+            x; // string
+            if (cond) break;
+        }
+        x; // string | number
+    }
+    

@@ -141,12 +141,12 @@ const jsxOptionMap = new Map(Object.entries({
 export const inverseJsxOptionMap: Map<string, string> = new Map(mapIterator(jsxOptionMap.entries(), ([key, value]: [string, JsxEmit]) => ["" + value, key] as const));
 
 // NOTE: The order here is important to default lib ordering as entries will have the same
-//       order in the generated program (see `getDefaultLibPriority` in program.ts). This
+//       order in the generated program (see `getDefaultLibFilePriority` in program.ts). This
 //       order also affects overload resolution when a type declared in one lib is
 //       augmented in another lib.
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
 //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 const libEntries: [string, string][] = [
     // JavaScript only
@@ -163,6 +163,7 @@ const libEntries: [string, string][] = [
     ["es2022", "lib.es2022.d.ts"],
     ["es2023", "lib.es2023.d.ts"],
     ["es2024", "lib.es2024.d.ts"],
+    ["es2025", "lib.es2025.d.ts"],
     ["esnext", "lib.esnext.d.ts"],
     // Host only
     ["dom", "lib.dom.d.ts"],
@@ -173,7 +174,7 @@ const libEntries: [string, string][] = [
     ["webworker.iterable", "lib.webworker.iterable.d.ts"],
     ["webworker.asynciterable", "lib.webworker.asynciterable.d.ts"],
     ["scripthost", "lib.scripthost.d.ts"],
-    // ES2015 Or ESNext By-feature options
+    // ES2015 and later By-feature options
     ["es2015.core", "lib.es2015.core.d.ts"],
     ["es2015.collection", "lib.es2015.collection.d.ts"],
     ["es2015.generator", "lib.es2015.generator.d.ts"],
@@ -230,27 +231,33 @@ const libEntries: [string, string][] = [
     ["es2024.regexp", "lib.es2024.regexp.d.ts"],
     ["es2024.sharedmemory", "lib.es2024.sharedmemory.d.ts"],
     ["es2024.string", "lib.es2024.string.d.ts"],
-    ["esnext.array", "lib.es2023.array.d.ts"],
-    ["esnext.collection", "lib.esnext.collection.d.ts"],
-    ["esnext.symbol", "lib.es2019.symbol.d.ts"],
+    ["es2025.collection", "lib.es2025.collection.d.ts"],
+    ["es2025.float16", "lib.es2025.float16.d.ts"],
+    ["es2025.intl", "lib.es2025.intl.d.ts"],
+    ["es2025.iterator", "lib.es2025.iterator.d.ts"],
+    ["es2025.promise", "lib.es2025.promise.d.ts"],
+    ["es2025.regexp", "lib.es2025.regexp.d.ts"],
+    // Fallback for backward compatibility
     ["esnext.asynciterable", "lib.es2018.asynciterable.d.ts"],
-    ["esnext.intl", "lib.esnext.intl.d.ts"],
-    ["esnext.disposable", "lib.esnext.disposable.d.ts"],
+    ["esnext.symbol", "lib.es2019.symbol.d.ts"],
     ["esnext.bigint", "lib.es2020.bigint.d.ts"],
-    ["esnext.string", "lib.es2022.string.d.ts"],
-    ["esnext.promise", "lib.es2024.promise.d.ts"],
     ["esnext.weakref", "lib.es2021.weakref.d.ts"],
-    ["esnext.decorators", "lib.esnext.decorators.d.ts"],
     ["esnext.object", "lib.es2024.object.d.ts"],
-    ["esnext.array", "lib.esnext.array.d.ts"],
     ["esnext.regexp", "lib.es2024.regexp.d.ts"],
     ["esnext.string", "lib.es2024.string.d.ts"],
-    ["esnext.iterator", "lib.esnext.iterator.d.ts"],
-    ["esnext.promise", "lib.esnext.promise.d.ts"],
-    ["esnext.float16", "lib.esnext.float16.d.ts"],
-    ["esnext.typedarrays", "lib.esnext.typedarrays.d.ts"],
+    ["esnext.collection", "lib.es2025.collection.d.ts"],
+    ["esnext.float16", "lib.es2025.float16.d.ts"],
+    ["esnext.iterator", "lib.es2025.iterator.d.ts"],
+    ["esnext.promise", "lib.es2025.promise.d.ts"],
+    // ESNext By-feature options
+    ["esnext.array", "lib.esnext.array.d.ts"],
+    ["esnext.decorators", "lib.esnext.decorators.d.ts"],
+    ["esnext.disposable", "lib.esnext.disposable.d.ts"],
     ["esnext.error", "lib.esnext.error.d.ts"],
+    ["esnext.intl", "lib.esnext.intl.d.ts"],
     ["esnext.sharedmemory", "lib.esnext.sharedmemory.d.ts"],
+    ["esnext.typedarrays", "lib.esnext.typedarrays.d.ts"],
+    // Decorators
     ["decorators", "lib.decorators.d.ts"],
     ["decorators.legacy", "lib.decorators.legacy.d.ts"],
 ];
@@ -555,6 +562,10 @@ export const commonOptionsWithBuild: CommandLineOption[] = [
     },
 ];
 
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 /** @internal */
 export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
     name: "target",
@@ -573,18 +584,19 @@ export const targetOptionDeclaration: CommandLineOptionOfCustomType = {
         es2022: ScriptTarget.ES2022,
         es2023: ScriptTarget.ES2023,
         es2024: ScriptTarget.ES2024,
+        es2025: ScriptTarget.ES2025,
         esnext: ScriptTarget.ESNext,
     })),
     affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
     affectsBuildInfo: true,
-    deprecatedKeys: new Set(["es3"]),
+    deprecatedKeys: new Set(["es3", "es5"]),
     paramType: Diagnostics.VERSION,
     showInSimplifiedHelpView: true,
     category: Diagnostics.Language_and_Environment,
     description: Diagnostics.Set_the_JavaScript_language_version_for_emitted_JavaScript_and_include_compatible_library_declarations,
-    defaultValueDescription: ScriptTarget.ES5,
+    defaultValueDescription: ScriptTarget.LatestStandard,
 };
 
 /** @internal */
@@ -608,6 +620,7 @@ export const moduleOptionDeclaration: CommandLineOptionOfCustomType = {
         nodenext: ModuleKind.NodeNext,
         preserve: ModuleKind.Preserve,
     })),
+    deprecatedKeys: new Set(["none", "amd", "system", "umd"]),
     affectsSourceFile: true,
     affectsModuleResolution: true,
     affectsEmit: true,
@@ -673,6 +686,15 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         description: Diagnostics.Print_names_of_files_that_are_part_of_the_compilation_and_then_stop_processing,
         defaultValueDescription: false,
     },
+    {
+        name: "ignoreConfig",
+        type: "boolean",
+        showInSimplifiedHelpView: true,
+        category: Diagnostics.Command_line_Options,
+        isCommandLineOnly: true,
+        description: Diagnostics.Ignore_the_tsconfig_found_and_build_with_commandline_options_and_files,
+        defaultValueDescription: false,
+    },
 
     // Basic
     targetOptionDeclaration,
@@ -699,7 +721,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.JavaScript_Support,
         description: Diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these_files,
-        defaultValueDescription: false,
+        defaultValueDescription: Diagnostics.false_unless_checkJs_is_set,
     },
     {
         name: "checkJs",
@@ -889,7 +911,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Enable_all_strict_type_checking_options,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
     {
         name: "noImplicitAny",
@@ -899,7 +921,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Enable_error_reporting_for_expressions_and_declarations_with_an_implied_any_type,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "strictNullChecks",
@@ -909,7 +931,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.When_type_checking_take_into_account_null_and_undefined,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "strictFunctionTypes",
@@ -919,7 +941,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.When_assigning_functions_check_to_ensure_parameters_and_the_return_values_are_subtype_compatible,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "strictBindCallApply",
@@ -929,7 +951,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Check_that_the_arguments_for_bind_call_and_apply_methods_match_the_original_function,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "strictPropertyInitialization",
@@ -939,7 +961,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Check_for_class_properties_that_are_declared_but_not_set_in_the_constructor,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "strictBuiltinIteratorReturn",
@@ -949,7 +971,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Built_in_iterators_are_instantiated_with_a_TReturn_type_of_undefined_instead_of_any,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "noImplicitThis",
@@ -959,7 +981,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Enable_error_reporting_when_this_is_given_the_type_any,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "useUnknownInCatchVariables",
@@ -969,7 +991,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Default_catch_clause_variables_as_unknown_instead_of_any,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: Diagnostics.true_unless_strict_is_false,
     },
     {
         name: "alwaysStrict",
@@ -977,10 +999,9 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsSourceFile: true,
         affectsEmit: true,
         affectsBuildInfo: true,
-        strictFlag: true,
         category: Diagnostics.Type_Checking,
         description: Diagnostics.Ensure_use_strict_is_always_emitted,
-        defaultValueDescription: Diagnostics.false_unless_strict_is_set,
+        defaultValueDescription: true,
     },
 
     // Additional Checks
@@ -1071,13 +1092,13 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
             nodenext: ModuleResolutionKind.NodeNext,
             bundler: ModuleResolutionKind.Bundler,
         })),
-        deprecatedKeys: new Set(["node"]),
+        deprecatedKeys: new Set(["node", "node10", "classic"]),
         affectsSourceFile: true,
         affectsModuleResolution: true,
         paramType: Diagnostics.STRATEGY,
         category: Diagnostics.Modules,
         description: Diagnostics.Specify_how_TypeScript_looks_up_a_file_from_a_given_module_specifier,
-        defaultValueDescription: Diagnostics.module_AMD_or_UMD_or_System_or_ES6_then_Classic_Otherwise_Node,
+        defaultValueDescription: Diagnostics.nodenext_if_module_is_nodenext_node16_if_module_is_node16_or_node18_otherwise_bundler,
     },
     {
         name: "baseUrl",
@@ -1150,7 +1171,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         affectsBuildInfo: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Allow_import_x_from_y_when_a_module_doesn_t_have_a_default_export,
-        defaultValueDescription: Diagnostics.module_system_or_esModuleInterop,
+        defaultValueDescription: true,
     },
     {
         name: "esModuleInterop",
@@ -1161,7 +1182,7 @@ const commandOptionsWithoutBuild: CommandLineOption[] = [
         showInSimplifiedHelpView: true,
         category: Diagnostics.Interop_Constraints,
         description: Diagnostics.Emit_additional_JavaScript_to_ease_support_for_importing_CommonJS_modules_This_enables_allowSyntheticDefaultImports_for_type_compatibility,
-        defaultValueDescription: false,
+        defaultValueDescription: true,
     },
     {
         name: "preserveSymlinks",

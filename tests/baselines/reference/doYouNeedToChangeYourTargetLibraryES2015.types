@@ -37,8 +37,8 @@ const testReflectConstruct = Reflect.construct(noOp, []);
 >          : ^^^ ^^^^^^^^^              ^^ ^^      ^^                     ^^             ^^           ^^         ^^^                         ^^^ ^^^      ^^        ^^             ^^              ^^         ^^^        ^^^   ^^^
 >noOp : () => void
 >     : ^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 const testReflectDefineProperty = Reflect.defineProperty({}, "", {});
 >testReflectDefineProperty : boolean
@@ -89,10 +89,10 @@ const testReflectGet = Reflect.get({}, "");
 >   : ^^
 
 const testReflectGetOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor({}, "");
->testReflectGetOwnPropertyDescriptor : TypedPropertyDescriptor<any>
->                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Reflect.getOwnPropertyDescriptor({}, "") : TypedPropertyDescriptor<any>
->                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>testReflectGetOwnPropertyDescriptor : TypedPropertyDescriptor<any> | undefined
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Reflect.getOwnPropertyDescriptor({}, "") : TypedPropertyDescriptor<any> | undefined
+>                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Reflect.getOwnPropertyDescriptor : <T extends object, P extends PropertyKey>(target: T, propertyKey: P) => TypedPropertyDescriptor<P extends keyof T ? T[P] : any> | undefined
 >                                 : ^ ^^^^^^^^^      ^^ ^^^^^^^^^           ^^      ^^ ^^           ^^ ^^^^^                                                                   
 >Reflect : typeof Reflect
@@ -105,10 +105,10 @@ const testReflectGetOwnPropertyDescriptor = Reflect.getOwnPropertyDescriptor({},
 >   : ^^
 
 const testReflectGetPrototypeOf = Reflect.getPrototypeOf({});
->testReflectGetPrototypeOf : object
->                          : ^^^^^^
->Reflect.getPrototypeOf({}) : object
->                           : ^^^^^^
+>testReflectGetPrototypeOf : object | null
+>                          : ^^^^^^^^^^^^^
+>Reflect.getPrototypeOf({}) : object | null
+>                           : ^^^^^^^^^^^^^
 >Reflect.getPrototypeOf : (target: object) => object | null
 >                       : ^      ^^      ^^^^^             
 >Reflect : typeof Reflect
@@ -195,18 +195,18 @@ const testReflectSetPrototypeOf = Reflect.setPrototypeOf({}, {});
 >   : ^^
 
 const testArrayFind = [""].find((val, idx, obj) => {
->testArrayFind : string
->              : ^^^^^^
->[""].find((val, idx, obj) => {    return true;}) : string
->                                                 : ^^^^^^
->[""].find : { <S extends string>(predicate: (value: string, index: number, obj: string[]) => value is S, thisArg?: any): S; (predicate: (value: string, index: number, obj: string[]) => unknown, thisArg?: any): string; }
->          : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^
+>testArrayFind : string | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>[""].find((val, idx, obj) => {    return true;}) : string | undefined
+>                                                 : ^^^^^^^^^^^^^^^^^^
+>[""].find : { <S extends string>(predicate: (value: string, index: number, obj: string[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: string, index: number, obj: string[]) => unknown, thisArg?: any): string | undefined; }
+>          : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 >[""] : string[]
 >     : ^^^^^^^^
 >"" : ""
 >   : ^^
->find : { <S extends string>(predicate: (value: string, index: number, obj: string[]) => value is S, thisArg?: any): S; (predicate: (value: string, index: number, obj: string[]) => unknown, thisArg?: any): string; }
->     : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^
+>find : { <S extends string>(predicate: (value: string, index: number, obj: string[]) => value is S, thisArg?: any): S | undefined; (predicate: (value: string, index: number, obj: string[]) => unknown, thisArg?: any): string | undefined; }
+>     : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^   ^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^
 >(val, idx, obj) => {    return true;} : (val: string, idx: number, obj: string[]) => true
 >                                      : ^   ^^^^^^^^^^   ^^^^^^^^^^   ^^^^^^^^^^^^^^^^^^^
 >val : string
@@ -325,32 +325,32 @@ const testArrayValues = [""].values();
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const testArrayConstructorFrom = Array.from([]);
->testArrayConstructorFrom : any[]
->                         : ^^^^^
->Array.from([]) : any[]
->               : ^^^^^
+>testArrayConstructorFrom : never[]
+>                         : ^^^^^^^
+>Array.from([]) : never[]
+>               : ^^^^^^^
 >Array.from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >           : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >from : { <T>(arrayLike: ArrayLike<T>): T[]; <T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; <T>(iterable: Iterable<T> | ArrayLike<T>): T[]; <T, U>(iterable: Iterable<T> | ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; }
 >     : ^^^ ^^         ^^            ^^^   ^^^ ^^ ^^         ^^            ^^     ^^                      ^^       ^^^   ^^^   ^^^ ^^        ^^                          ^^^   ^^^ ^^ ^^        ^^                          ^^     ^^                      ^^       ^^^   ^^^   ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 const testArrayConstructorOf = Array.of([]);
->testArrayConstructorOf : any[][]
->                       : ^^^^^^^
->Array.of([]) : any[][]
->             : ^^^^^^^
+>testArrayConstructorOf : never[][]
+>                       : ^^^^^^^^^
+>Array.of([]) : never[][]
+>             : ^^^^^^^^^
 >Array.of : <T>(...items: T[]) => T[]
 >         : ^ ^^^^^     ^^   ^^^^^   
 >Array : ArrayConstructor
 >      : ^^^^^^^^^^^^^^^^
 >of : <T>(...items: T[]) => T[]
 >   : ^ ^^^^^     ^^   ^^^^^   
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 const testObjectConstructorAssign = Object.assign({}, {});
 >testObjectConstructorAssign : {}
@@ -829,10 +829,10 @@ const testSymbolFor = Symbol.for('a');
 >    : ^^^
 
 const testSymbolKeyFor = Symbol.keyFor(testSymbolFor);
->testSymbolKeyFor : string
->                 : ^^^^^^
->Symbol.keyFor(testSymbolFor) : string
->                             : ^^^^^^
+>testSymbolKeyFor : string | undefined
+>                 : ^^^^^^^^^^^^^^^^^^
+>Symbol.keyFor(testSymbolFor) : string | undefined
+>                             : ^^^^^^^^^^^^^^^^^^
 >Symbol.keyFor : (sym: symbol) => string | undefined
 >              : ^   ^^      ^^^^^                  
 >Symbol : SymbolConstructor
@@ -863,10 +863,10 @@ const testAsyncIterator: AsyncIterator<any, any, any> = null as any;
 >null as any : any
 
 const testStringCodePointAt = "".codePointAt(0);
->testStringCodePointAt : number
->                      : ^^^^^^
->"".codePointAt(0) : number
->                  : ^^^^^^
+>testStringCodePointAt : number | undefined
+>                      : ^^^^^^^^^^^^^^^^^^
+>"".codePointAt(0) : number | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
 >"".codePointAt : (pos: number) => number | undefined
 >               : ^   ^^      ^^^^^                  
 >"" : ""

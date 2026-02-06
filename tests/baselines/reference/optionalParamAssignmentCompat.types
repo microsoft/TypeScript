@@ -16,10 +16,10 @@ interface I2 {
     m1(p1?: string): I1;
 >m1 : (p1?: string) => I1
 >   : ^  ^^^      ^^^^^  
->p1 : string
->   : ^^^^^^
+>p1 : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 }
-var i2: I2;
+declare var i2: I2;
 >i2 : I2
 >   : ^^
 

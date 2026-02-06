@@ -1,7 +1,8 @@
+// @strict: false
 // @lib: es5,es2015.promise
 // @noEmitHelpers: true
 // @allowUnreachableCode: true
-// @target: ES5
+// @target: ES5, ES2015
 declare var x, y, z, a, b, c;
 
 async function binaryPlus0() {

@@ -7,3 +7,4 @@ interface Foo {
 
 
 //// [errorOnInitializerInInterfaceProperty.js]
+"use strict";

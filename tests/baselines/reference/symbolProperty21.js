@@ -15,6 +15,7 @@ foo({
 });
 
 //// [symbolProperty21.js]
+"use strict";
 foo({
     [Symbol.isConcatSpreadable]: "",
     [Symbol.toPrimitive]: 0,

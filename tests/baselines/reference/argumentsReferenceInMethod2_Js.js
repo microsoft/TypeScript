@@ -25,5 +25,5 @@ declare class A {
     /**
      * @type object
      */
-    arguments: object;
+    arguments: object | undefined;
 }

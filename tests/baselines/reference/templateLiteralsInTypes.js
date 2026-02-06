@@ -8,7 +8,7 @@ f("x").foo;
 
 //// [templateLiteralsInTypes.js]
 "use strict";
-var f = function (hdr, val) { return "".concat(hdr, ":\t").concat(val, "\r\n"); };
+const f = (hdr, val) => `${hdr}:\t${val}\r\n`;
 f("x").foo;
 
 

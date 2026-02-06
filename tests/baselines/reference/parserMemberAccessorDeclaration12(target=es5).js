@@ -1,0 +1,19 @@
+//// [tests/cases/conformance/parser/ecmascript5/MemberAccessorDeclarations/parserMemberAccessorDeclaration12.ts] ////
+
+//// [parserMemberAccessorDeclaration12.ts]
+class C {
+   get Foo(a: number) { }
+}
+
+//// [parserMemberAccessorDeclaration12.js]
+"use strict";
+var C = /** @class */ (function () {
+    function C() {
+    }
+    Object.defineProperty(C.prototype, "Foo", {
+        get: function (a) { },
+        enumerable: false,
+        configurable: true
+    });
+    return C;
+}());

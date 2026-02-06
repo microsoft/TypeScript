@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare module "m2" {
     export namespace X {
         interface I { }

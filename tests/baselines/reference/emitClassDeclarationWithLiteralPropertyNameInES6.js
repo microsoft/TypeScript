@@ -17,6 +17,7 @@ class B {
 }
 
 //// [emitClassDeclarationWithLiteralPropertyNameInES6.js]
+"use strict";
 class B {
     constructor() {
         this["hello"] = 10;

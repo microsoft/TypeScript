@@ -8,7 +8,7 @@ interface I {
     [x: number]: I;
 }
 
-var f: I;
+declare var f: I;
 
 f `abc`
 

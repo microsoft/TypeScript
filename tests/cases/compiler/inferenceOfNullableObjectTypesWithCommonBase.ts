@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 function equal<T>(a: T, b: T) { }

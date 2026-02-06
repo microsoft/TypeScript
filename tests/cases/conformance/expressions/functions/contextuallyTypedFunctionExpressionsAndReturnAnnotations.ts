@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare function foo(x: (y: string) => (y2: number) => void);
 
 // Contextually type the parameter even if there is a return annotation

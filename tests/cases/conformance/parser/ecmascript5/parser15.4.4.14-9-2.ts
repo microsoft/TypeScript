@@ -1,3 +1,4 @@
+// @target: es2015
 /// Copyright (c) 2012 Ecma International.  All rights reserved. 
 /// Ecma International makes this code available under the terms and conditions set
 /// forth on http://hg.ecmascript.org/tests/test262/raw-file/tip/LICENSE (the 

@@ -3,7 +3,7 @@
 === Performance Stats ===
 Assignability cache: 2,500
 Type Count: 10,000
-Instantiation count: 50,000
+Instantiation count: 100,000
 Symbol count: 50,000
 
 === tsxUnionMemberChecksFilterDataProps.tsx ===
@@ -19,20 +19,20 @@ declare function NotHappy(props: ({ fixed?: boolean } | { value?: number })): Re
 >         : ^     ^^                                            ^^^^^                 
 >props : { fixed?: boolean; } | { value?: number; }
 >      : ^^^^^^^^^^       ^^^^^^^^^^^^^^^^      ^^^
->fixed : boolean
->      : ^^^^^^^
->value : number
->      : ^^^^^^
+>fixed : boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^
+>value : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
 declare function Happy(props: { fixed?: boolean, value?: number }): ReactElement<any>;
 >Happy : (props: { fixed?: boolean; value?: number; }) => ReactElement<any>
 >      : ^     ^^                                    ^^^^^                 
 >props : { fixed?: boolean; value?: number; }
 >      : ^^^^^^^^^^       ^^^^^^^^^^      ^^^
->fixed : boolean
->      : ^^^^^^^
->value : number
->      : ^^^^^^
+>fixed : boolean | undefined
+>      : ^^^^^^^^^^^^^^^^^^^
+>value : number | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 
 const RootNotHappy = () => (<NotHappy data-testid="my-test-id" />);
 >RootNotHappy : () => JSX.Element

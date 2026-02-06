@@ -12,3 +12,4 @@ interface IFace {
 
 
 //// [implicitAnyDeclareMemberWithoutType.js]
+"use strict";

@@ -7,3 +7,4 @@ declare namespace M {
 }
 
 //// [parserClassDeclaration7.js]
+"use strict";

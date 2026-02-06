@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: esnext
 
 // @filename: a.ts

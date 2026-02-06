@@ -1,3 +1,4 @@
+// @target: es2015
 // Derived member is optional but base member is not, should be an error
 
 interface Base { foo: string; }
@@ -28,6 +29,6 @@ interface S3 extends T3 {
 }
 
 // object literal case
-var a: { Foo: Base; }
-var b: { Foo?: Derived; }
+declare var a: { Foo: Base; }
+declare var b: { Foo?: Derived; }
 var r = true ? a : b; // ok

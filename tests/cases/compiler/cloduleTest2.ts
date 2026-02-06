@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 namespace T1 {
     namespace m3d { export var y = 2; }
     declare class m3d { constructor(foo); foo(): void ; static bar(); }

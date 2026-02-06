@@ -7505,7 +7505,11 @@ namespace Parser {
             case SyntaxKind.LetKeyword:
             case SyntaxKind.ConstKeyword:
             case SyntaxKind.UsingKeyword:
+                return parseVariableStatement(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.AwaitKeyword:
+                if (!isAwaitUsingDeclaration()) {
+                    break;
+                }
                 return parseVariableStatement(pos, hasJSDoc, modifiersIn);
             case SyntaxKind.FunctionKeyword:
                 return parseFunctionDeclaration(pos, hasJSDoc, modifiersIn);
@@ -7534,17 +7538,16 @@ namespace Parser {
                     default:
                         return parseExportDeclaration(pos, hasJSDoc, modifiersIn);
                 }
-            default:
-                if (modifiersIn) {
-                    // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
-                    // would follow. For recovery and error reporting purposes, return an incomplete declaration.
-                    const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
-                    setTextRangePos(missing, pos);
-                    (missing as Mutable<MissingDeclaration>).modifiers = modifiersIn;
-                    return missing;
-                }
-                return undefined!; // TODO: GH#18217
         }
+        if (modifiersIn) {
+            // We reached this point because we encountered decorators and/or modifiers and assumed a declaration
+            // would follow. For recovery and error reporting purposes, return an incomplete declaration.
+            const missing = createMissingNode<MissingDeclaration>(SyntaxKind.MissingDeclaration, /*reportAtCurrentPosition*/ true, Diagnostics.Declaration_expected);
+            setTextRangePos(missing, pos);
+            (missing as Mutable<MissingDeclaration>).modifiers = modifiersIn;
+            return missing;
+        }
+        return undefined!; // TODO: GH#18217
     }
 
     function nextTokenIsStringLiteral() {
@@ -7677,7 +7680,9 @@ namespace Parser {
                 flags |= NodeFlags.Using;
                 break;
             case SyntaxKind.AwaitKeyword:
-                Debug.assert(isAwaitUsingDeclaration());
+                if (!isAwaitUsingDeclaration()) {
+                    break;
+                }
                 flags |= NodeFlags.AwaitUsing;
                 nextToken();
                 break;

@@ -14,6 +14,7 @@ if(null === isVoid()) { }
 
 
 //// [literals-negative.js]
+"use strict";
 // Type type of the null literal is the Null type.
 // Null can be converted to anything except Void
 var n = (null);

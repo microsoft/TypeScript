@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @declaration: true
 function simpleFunc() {
     return "this is my simple func";

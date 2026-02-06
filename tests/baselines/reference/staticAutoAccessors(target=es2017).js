@@ -14,6 +14,7 @@ class A {
 
 
 //// [staticAutoAccessors.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/53752
 var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (receiver, state, kind, f) {
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a getter");

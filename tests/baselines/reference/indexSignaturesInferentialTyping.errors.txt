@@ -1,0 +1,20 @@
+indexSignaturesInferentialTyping.ts(1,53): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+indexSignaturesInferentialTyping.ts(2,53): error TS2322: Type 'undefined' is not assignable to type 'T'.
+  'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+
+
+==== indexSignaturesInferentialTyping.ts (2 errors) ====
+    function foo<T>(items: { [index: number]: T }): T { return undefined; }
+                                                        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+    function bar<T>(items: { [index: string]: T }): T { return undefined; }
+                                                        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T'.
+!!! error TS2322:   'T' could be instantiated with an arbitrary type which could be unrelated to 'undefined'.
+    
+    var x1 = foo({ 0: 0, 1: 1 });       // type should be number
+    var x2 = bar({ 0: 0, 1: 1 });
+    var x3 = bar({ zero: 0, one: 1 });  // type should be number
+    

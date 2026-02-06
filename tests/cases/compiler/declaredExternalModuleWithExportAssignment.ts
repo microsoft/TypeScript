@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare module 'connect' {
     interface connectModule {
         (res, req, next): void;

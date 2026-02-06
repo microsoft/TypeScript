@@ -1,3 +1,4 @@
+// @target: es2015
 namespace A {
     export class Point {
         constructor(public x: number, public y: number) { }

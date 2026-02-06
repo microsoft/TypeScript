@@ -7,9 +7,7 @@ class C {
 }
 
 //// [invalidReferenceSyntax1.js]
+"use strict";
 /// <reference path="missingquote.ts />
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}

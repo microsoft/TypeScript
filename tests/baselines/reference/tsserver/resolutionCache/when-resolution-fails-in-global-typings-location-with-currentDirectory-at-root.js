@@ -86,12 +86,12 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 12
+//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 13
 
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
-  {"inode":12}
+  {"inode":13}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
@@ -118,10 +118,10 @@ TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 110
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 114
 { "private": true }
 
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 113
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 117
 {
   "entries": {}
 }
@@ -178,8 +178,6 @@ TI:: [hh:mm:ss:mss] Sending response:
         "/node_modules"
       ]
     }
-Info seq  [hh:mm:ss:mss] Skipping watcher creation at /bower_components:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
-Info seq  [hh:mm:ss:mss] Skipping watcher creation at /node_modules:: Project: /dev/null/inferredProject1* WatchType: Directory location for typing installer
 TI:: [hh:mm:ss:mss] Installing typings ["node"]
 TI:: [hh:mm:ss:mss] 'node':: Entry for package 'node' does not exist in local types registry - skipping...
 TI:: [hh:mm:ss:mss] All typings are known to be missing or invalid - no need to install more typings

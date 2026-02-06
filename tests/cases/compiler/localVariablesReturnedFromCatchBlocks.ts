@@ -1,3 +1,5 @@
+// @target: es2015
+// @useUnknownInCatchVariables: false
 function f() {
     try {
     } catch (e) {

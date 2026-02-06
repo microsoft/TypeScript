@@ -9,3 +9,4 @@ interface Entry {
 }
 
 //// [noImplicitAnyInBareInterface.js]
+"use strict";

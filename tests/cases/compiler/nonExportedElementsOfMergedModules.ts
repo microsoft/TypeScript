@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 namespace One {
     enum A { X }
     namespace B {

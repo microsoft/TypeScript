@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @allowUnreachableCode: true
 
 var a = false ? 1 : null;

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // string literal types are subtypes of string, any
 
 // ok

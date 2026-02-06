@@ -1,5 +1,6 @@
+// @target: es2015
 //@jsx: react
-//@module: amd
+//@module: commonjs
 
 //@filename: react.d.ts
 declare module "react" {

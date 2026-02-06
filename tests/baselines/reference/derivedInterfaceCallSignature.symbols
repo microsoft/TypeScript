@@ -100,12 +100,12 @@ interface D3SvgArea extends D3SvgPath {
 >D3SvgArea : Symbol(D3SvgArea, Decl(derivedInterfaceCallSignature.ts, 8, 1))
 }
 
-var area: D3SvgArea;
->area : Symbol(area, Decl(derivedInterfaceCallSignature.ts, 25, 3))
+declare var area: D3SvgArea;
+>area : Symbol(area, Decl(derivedInterfaceCallSignature.ts, 25, 11))
 >D3SvgArea : Symbol(D3SvgArea, Decl(derivedInterfaceCallSignature.ts, 8, 1))
 
 area.interpolate('two')('one');
 >area.interpolate : Symbol(D3SvgArea.interpolate, Decl(derivedInterfaceCallSignature.ts, 18, 60))
->area : Symbol(area, Decl(derivedInterfaceCallSignature.ts, 25, 3))
+>area : Symbol(area, Decl(derivedInterfaceCallSignature.ts, 25, 11))
 >interpolate : Symbol(D3SvgArea.interpolate, Decl(derivedInterfaceCallSignature.ts, 18, 60))
 

@@ -20,6 +20,7 @@ async function* test(x: Promise<string>) {
 }
 
 //// [awaitAndYieldInProperty.js]
+"use strict";
 async function* test(x) {
     var _a, _b, _c, _d, _e, _f, _g, _h, _j;
     class C {

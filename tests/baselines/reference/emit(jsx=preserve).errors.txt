@@ -18,7 +18,7 @@ no.ts(6,16): error TS2307: Cannot find module './foo.d.mts' or its corresponding
 no.ts(7,16): error TS2307: Cannot find module './foo.d.css.ts' or its corresponding type declarations.
 no.ts(8,16): error TS2307: Cannot find module '#internal/foo.ts' or its corresponding type declarations.
 no.ts(9,16): error TS2307: Cannot find module 'node:foo.ts' or its corresponding type declarations.
-no.ts(11,8): error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+no.ts(11,8): error TS2591: Cannot find name 'node:path'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 
 
 ==== globals.d.ts (0 errors) ====
@@ -111,7 +111,7 @@ no.ts(11,8): error TS2307: Cannot find module 'node:path' or its corresponding t
     (require)("./foo.ts");
     import("node:path");
            ~~~~~~~~~~~
-!!! error TS2307: Cannot find module 'node:path' or its corresponding type declarations.
+!!! error TS2591: Cannot find name 'node:path'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
     require("node:path");
     
 ==== lol.ts (0 errors) ====

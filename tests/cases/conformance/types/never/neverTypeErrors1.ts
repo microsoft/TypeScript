@@ -1,3 +1,4 @@
+// @target: es2015
 function f1() {
     let x: never;
     x = 1;

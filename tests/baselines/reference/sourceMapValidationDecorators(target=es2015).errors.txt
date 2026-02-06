@@ -1,0 +1,80 @@
+sourceMapValidationDecorators.ts(12,8): error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+  Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+sourceMapValidationDecorators.ts(13,8): error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+  Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+sourceMapValidationDecorators.ts(16,8): error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+  Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+sourceMapValidationDecorators.ts(17,8): error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+  Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+sourceMapValidationDecorators.ts(29,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+
+
+==== sourceMapValidationDecorators.ts (5 errors) ====
+    declare function ClassDecorator1(target: Function): void;
+    declare function ClassDecorator2(x: number): (target: Function) => void;
+    declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
+    declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
+    declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
+    declare function ParameterDecorator2(x: number): (target: Object, key: string | symbol, paramIndex: number) => void;
+    
+    @ClassDecorator1
+    @ClassDecorator2(10)
+    class Greeter {
+        constructor(
+          @ParameterDecorator1 
+           ~~~~~~~~~~~~~~~~~~~
+!!! error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+!!! error TS1239:   Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+          @ParameterDecorator2(20) 
+           ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+!!! error TS1239:   Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+          public greeting: string, 
+          
+          @ParameterDecorator1 
+           ~~~~~~~~~~~~~~~~~~~
+!!! error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+!!! error TS1239:   Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+          @ParameterDecorator2(30) 
+           ~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1239: Unable to resolve signature of parameter decorator when called as an expression.
+!!! error TS1239:   Argument of type 'undefined' is not assignable to parameter of type 'string | symbol'.
+          ...b: string[]) {
+        }
+        
+        @PropertyDecorator1
+        @PropertyDecorator2(40)
+        greet() {
+            return "<h1>" + this.greeting + "</h1>";
+        }
+    
+        @PropertyDecorator1
+        @PropertyDecorator2(50)
+        private x: string;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+    
+        @PropertyDecorator1
+        @PropertyDecorator2(60)
+        private static x1: number = 10;
+        
+        private fn(
+          @ParameterDecorator1 
+          @ParameterDecorator2(70) 
+          x: number) {
+            return this.greeting;
+        }
+    
+        @PropertyDecorator1
+        @PropertyDecorator2(80)
+        get greetings() {
+            return this.greeting;
+        }
+    
+        set greetings(
+          @ParameterDecorator1 
+          @ParameterDecorator2(90) 
+          greetings: string) {
+            this.greeting = greetings;
+        }    
+    }

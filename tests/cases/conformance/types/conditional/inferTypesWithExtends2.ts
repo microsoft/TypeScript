@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 // infer twice with different constraints (same behavior as class/interface)

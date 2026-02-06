@@ -118,10 +118,10 @@ class C1<T, U, V> {
 }
 
 var x = new C1(undefined, [0, true, ""]);
->x : C1<number, boolean, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->new C1(undefined, [0, true, ""]) : C1<number, boolean, string>
->                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : C1<number | undefined, boolean, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new C1(undefined, [0, true, ""]) : C1<number | undefined, boolean, string>
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C1 : typeof C1
 >   : ^^^^^^^^^
 >undefined : undefined
@@ -148,24 +148,24 @@ var [x_a, x_b, x_c] = [x.getA(), x.getB(), x.getC()];
 >         : ^^^
 >x.getA : () => any
 >       : ^^^^^^^^^
->x : C1<number, boolean, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : C1<number | undefined, boolean, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getA : () => any
 >     : ^^^^^^^^^
 >x.getB() : any
 >         : ^^^
 >x.getB : () => any
 >       : ^^^^^^^^^
->x : C1<number, boolean, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : C1<number | undefined, boolean, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getB : () => any
 >     : ^^^^^^^^^
 >x.getC() : any
 >         : ^^^
 >x.getC : () => any
 >       : ^^^^^^^^^
->x : C1<number, boolean, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : C1<number | undefined, boolean, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getC : () => any
 >     : ^^^^^^^^^
 
@@ -222,10 +222,10 @@ var [y_a, y_b, y_c] = [y.getA(), y.getB(), y.getC()];
 >     : ^^^^^^^^^
 
 var z = new C1(10, [undefined, "", ""]);
->z : C1<10, string, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^
->new C1(10, [undefined, "", ""]) : C1<10, string, string>
->                                : ^^^^^^^^^^^^^^^^^^^^^^
+>z : C1<10 | undefined, string, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new C1(10, [undefined, "", ""]) : C1<10 | undefined, string, string>
+>                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C1 : typeof C1
 >   : ^^^^^^^^^
 >10 : 10
@@ -252,32 +252,32 @@ var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
 >         : ^^^
 >z.getA : () => any
 >       : ^^^^^^^^^
->z : C1<10, string, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>z : C1<10 | undefined, string, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getA : () => any
 >     : ^^^^^^^^^
 >z.getB() : any
 >         : ^^^
 >z.getB : () => any
 >       : ^^^^^^^^^
->z : C1<10, string, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>z : C1<10 | undefined, string, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getB : () => any
 >     : ^^^^^^^^^
 >z.getC() : any
 >         : ^^^
 >z.getC : () => any
 >       : ^^^^^^^^^
->z : C1<10, string, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>z : C1<10 | undefined, string, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getC : () => any
 >     : ^^^^^^^^^
 
 var w = new C1(10, [undefined, undefined, undefined]);
->w : C1<10, any, any>
->  : ^^^^^^^^^^^^^^^^
->new C1(10, [undefined, undefined, undefined]) : C1<10, any, any>
->                                              : ^^^^^^^^^^^^^^^^
+>w : C1<10 | undefined, undefined, undefined>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>new C1(10, [undefined, undefined, undefined]) : C1<10 | undefined, undefined, undefined>
+>                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >C1 : typeof C1
 >   : ^^^^^^^^^
 >10 : 10
@@ -304,24 +304,24 @@ var [z_a, z_b, z_c] = [z.getA(), z.getB(), z.getC()];
 >         : ^^^
 >z.getA : () => any
 >       : ^^^^^^^^^
->z : C1<10, string, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>z : C1<10 | undefined, string, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getA : () => any
 >     : ^^^^^^^^^
 >z.getB() : any
 >         : ^^^
 >z.getB : () => any
 >       : ^^^^^^^^^
->z : C1<10, string, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>z : C1<10 | undefined, string, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getB : () => any
 >     : ^^^^^^^^^
 >z.getC() : any
 >         : ^^^
 >z.getC : () => any
 >       : ^^^^^^^^^
->z : C1<10, string, string>
->  : ^^^^^^^^^^^^^^^^^^^^^^
+>z : C1<10 | undefined, string, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >getC : () => any
 >     : ^^^^^^^^^
 

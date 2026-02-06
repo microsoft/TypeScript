@@ -149,8 +149,8 @@ someGenerics3 `${() => undefined}`;
 >              : ^ ^^    ^^                    ^^        ^^       ^^^^^^^^^
 >`${() => undefined}` : string
 >                     : ^^^^^^
->() => undefined : () => any
->                : ^^^^^^^^^
+>() => undefined : () => undefined
+>                : ^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
@@ -188,8 +188,8 @@ someGenerics4 `${4}${ () => null }`;
 >                      : ^^^^^^
 >4 : 4
 >  : ^
->() => null : () => any
->           : ^^^^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
 
 someGenerics4 `${''}${ () => 3 }`;
 >someGenerics4 `${''}${ () => 3 }` : void
@@ -235,8 +235,8 @@ someGenerics5 `${ 4 } ${ () => null }`;
 >                         : ^^^^^^
 >4 : 4
 >  : ^
->() => null : () => any
->           : ^^^^^^^^^
+>() => null : () => null
+>           : ^^^^^^^^^^
 
 someGenerics5 `${ '' }${ () => 3 }`;
 >someGenerics5 `${ '' }${ () => 3 }` : void
@@ -513,8 +513,8 @@ var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
 >   : ^^
 >0 : 0
 >  : ^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 var a9a: {};
 >a9a : string
@@ -527,8 +527,8 @@ interface A91 {
 >  : ^^^^^^
 
     y?: string;
->y : string
->  : ^^^^^^
+>y : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 interface A92 {
     x: number;
@@ -536,15 +536,15 @@ interface A92 {
 >  : ^^^^^^
 
     z?: Date;
->z : Date
->  : ^^^^
+>z : Date | undefined
+>  : ^^^^^^^^^^^^^^^^
 }
 
 var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }`;
->a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }` : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
->                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; } | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }` : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; } | undefined
+>                                                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
 >              : ^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >`${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }` : string
@@ -575,8 +575,8 @@ var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y:
 >   : ^^
 
 var a9e: {};
->a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a9e : { x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; } | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 // Generic tag with multiple parameters of generic type passed arguments with a single best common type
 var a9d = someGenerics9 `${ { x: 3 }}${ { x: 6 }}${ { x: 6 } }`;
@@ -640,21 +640,21 @@ var a: any;
 
 // Generic tag with multiple parameters of generic type where one argument is [] and the other is not 'any'
 var arr = someGenerics9 `${ [] }${ null }${ undefined }`;
->arr : any[]
->    : ^^^^^
->someGenerics9 `${ [] }${ null }${ undefined }` : any[]
->                                               : ^^^^^
+>arr : never[] | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>someGenerics9 `${ [] }${ null }${ undefined }` : never[] | null | undefined
+>                                               : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >someGenerics9 : <T>(strs: TemplateStringsArray, a: T, b: T, c: T) => T
 >              : ^ ^^    ^^                    ^^ ^^ ^^ ^^ ^^ ^^ ^^^^^ 
 >`${ [] }${ null }${ undefined }` : string
 >                                 : ^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
 var arr: any[];
->arr : any[]
->    : ^^^^^
+>arr : never[] | null | undefined
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 

@@ -11,7 +11,7 @@ typeParameterWithInvalidConstraintType.ts(7,17): error TS2349: This expression i
                       ~
 !!! error TS2313: Type parameter 'T' has a circular constraint.
         foo() {
-            var x: T;
+            var x!: T;
             var a = x.foo();
                       ~~~
 !!! error TS2339: Property 'foo' does not exist on type 'T'.

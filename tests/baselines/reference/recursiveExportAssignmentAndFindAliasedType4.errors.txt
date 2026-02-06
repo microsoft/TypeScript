@@ -2,12 +2,12 @@ recursiveExportAssignmentAndFindAliasedType4_moduleC.ts(1,1): error TS2303: Circ
 
 
 ==== recursiveExportAssignmentAndFindAliasedType4_moduleA.ts (0 errors) ====
-    import moduleC = require("recursiveExportAssignmentAndFindAliasedType4_moduleC");
-    import ClassB = require("recursiveExportAssignmentAndFindAliasedType4_moduleB");
+    import moduleC = require("./recursiveExportAssignmentAndFindAliasedType4_moduleC");
+    import ClassB = require("./recursiveExportAssignmentAndFindAliasedType4_moduleB");
     export var b: ClassB; // This should result in type ClassB
 ==== recursiveExportAssignmentAndFindAliasedType4_moduleC.ts (1 errors) ====
-    import self = require("recursiveExportAssignmentAndFindAliasedType4_moduleC");
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    import self = require("./recursiveExportAssignmentAndFindAliasedType4_moduleC");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2303: Circular definition of import alias 'self'.
     export = self;
     

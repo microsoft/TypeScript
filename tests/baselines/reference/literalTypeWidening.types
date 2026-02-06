@@ -555,10 +555,10 @@ export function Set<K extends string>(...keys: K[]): Record<K, true | undefined>
 >     : ^^^^
 
   const result = {} as Record<K, true | undefined>
->result : Record<K, true>
->       : ^^^^^^^^^^^^^^^
->{} as Record<K, true | undefined> : Record<K, true>
->                                  : ^^^^^^^^^^^^^^^
+>result : Record<K, true | undefined>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} as Record<K, true | undefined> : Record<K, true | undefined>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 >true : true
@@ -579,18 +579,18 @@ export function Set<K extends string>(...keys: K[]): Record<K, true | undefined>
 >    : ^
 >result[key] = true : true
 >                   : ^^^^
->result[key] : Record<K, true>[K]
->            : ^^^^^^^^^^^^^^^^^^
->result : Record<K, true>
->       : ^^^^^^^^^^^^^^^
+>result[key] : Record<K, true | undefined>[K]
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>result : Record<K, true | undefined>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >key : K
 >    : ^
 >true : true
 >     : ^^^^
 
   return result
->result : Record<K, true>
->       : ^^^^^^^^^^^^^^^
+>result : Record<K, true | undefined>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 export function keys<K extends string, V>(obj: Record<K, V>): K[] {
@@ -621,10 +621,10 @@ type Obj = { code: LangCode }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
->langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Set('fr', 'en', 'es', 'it', 'nl') : Record<"fr" | "en" | "es" | "it" | "nl", true>
->                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true | undefined>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Set('fr', 'en', 'es', 'it', 'nl') : Record<"fr" | "en" | "es" | "it" | "nl", true | undefined>
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Set : <K extends string>(...keys: K[]) => Record<K, true | undefined>
 >    : ^ ^^^^^^^^^      ^^^^^    ^^   ^^^^^                           
 >'fr' : "fr"
@@ -641,8 +641,8 @@ const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
 export type LangCode = keyof typeof langCodeSet
 >LangCode : "fr" | "en" | "es" | "it" | "nl"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true | undefined>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export const langCodes = keys(langCodeSet)
 >langCodes : ("fr" | "en" | "es" | "it" | "nl")[]
@@ -651,8 +651,8 @@ export const langCodes = keys(langCodeSet)
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >keys : <K extends string, V>(obj: Record<K, V>) => K[]
 >     : ^ ^^^^^^^^^      ^^ ^^   ^^            ^^^^^   
->langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
->            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true | undefined>
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 const arr: Obj[] = langCodes.map(code => ({ code }))
 >arr : Obj[]

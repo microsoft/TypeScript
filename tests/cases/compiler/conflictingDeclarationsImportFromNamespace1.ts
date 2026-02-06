@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @strict: true
 
 // @filename: node_modules/@types/lodash/object.d.ts

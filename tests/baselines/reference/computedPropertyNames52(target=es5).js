@@ -11,6 +11,7 @@ for (let i = 0; i < 10; ++i) {
 
 
 //// [computedPropertyNames52-emit.js]
+"use strict";
 var _a;
 var array = [];
 var _loop_1 = function (i) {

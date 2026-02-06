@@ -1,3 +1,6 @@
+// @target: es2015
+// @module: commonjs
+// @strict: false
 // @declarationMap: true
 namespace m2 {
     export interface connectModule {
@@ -10,7 +13,7 @@ namespace m2 {
 
 }
 
-var m2: {
+declare var m2: {
     (): m2.connectExport;
     test1: m2.connectModule;
     test2(): m2.connectModule;

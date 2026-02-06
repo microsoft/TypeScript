@@ -27,3 +27,4 @@ declare module "express" {
 
 
 //// [declareExternalModuleWithExportAssignedFundule.js]
+"use strict";

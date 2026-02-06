@@ -1,10 +1,11 @@
+// @target: es2015
 enum E { a, b, c }
 
-var a: number;
-var b: boolean;
-var c: string;
-var d: void;
-var e: E;
+declare var a: number;
+declare var b: boolean;
+declare var c: string;
+declare var d: void;
+declare var e: E;
 
 // operator <
 var ra1 = a < a;

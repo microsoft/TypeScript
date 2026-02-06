@@ -823,6 +823,7 @@ export const enum NodeFlags {
     JsonFile                                       = 1 << 27, // If node was parsed in a Json
     /** @internal */ TypeCached                    = 1 << 28, // If a type was cached for node at any point
     /** @internal */ Deprecated                    = 1 << 29, // If has '@deprecated' JSDoc tag
+    /** @internal */ Unreachable                   = 1 << 30, // If node is unreachable according to the binder
 
     BlockScoped = Let | Const | Using,
     Constant = Const | Using,
@@ -5514,11 +5515,11 @@ export const enum IntersectionFlags {
 // dprint-ignore
 /** @internal */
 export const enum ContextFlags {
-    None           = 0,
-    Signature      = 1 << 0, // Obtaining contextual signature
-    NoConstraints  = 1 << 1, // Don't obtain type variable constraints
-    Completions    = 1 << 2, // Ignore inference to current node and parent nodes out to the containing call for completions
-    SkipBindingPatterns = 1 << 3, // Ignore contextual types applied by binding patterns
+    None                 = 0,
+    Signature            = 1 << 0, // Obtaining contextual signature
+    NoConstraints        = 1 << 1, // Don't obtain type variable constraints
+    IgnoreNodeInferences = 1 << 2, // Ignore inference to current node and parent nodes out to the containing call for, for example, completions
+    SkipBindingPatterns  = 1 << 3, // Ignore contextual types applied by binding patterns
 }
 
 // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!
@@ -6393,7 +6394,7 @@ export const enum TypeFlags {
     /** @internal */
     ObjectFlagsType = Any | Nullable | Never | Object | Union | Intersection,
     /** @internal */
-    Simplifiable = IndexedAccess | Conditional,
+    Simplifiable = IndexedAccess | Conditional | Index,
     /** @internal */
     Singleton = Any | Unknown | String | Number | Boolean | BigInt | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
     // 'Narrowable' types are types where narrowing actually narrows.
@@ -6525,7 +6526,7 @@ export const enum ObjectFlags {
     /** @internal */
     ContainsObjectOrArrayLiteral = 1 << 17, // Type is or contains object literal type
     /** @internal */
-    NonInferrableType = 1 << 18, // Type is or contains anyFunctionType or silentNeverType
+    NonInferrableType = 1 << 18, // Type is or contains anyFunctionType or silentNeverType, or it's a context free `returnTypeOnly`
     /** @internal */
     CouldContainTypeVariablesComputed = 1 << 19, // CouldContainTypeVariables flag has been computed
     /** @internal */
@@ -7313,6 +7314,7 @@ export function diagnosticCategoryName(d: { category: DiagnosticCategory; }, low
 }
 
 export enum ModuleResolutionKind {
+    /** @deprecated */
     Classic = 1,
     /**
      * @deprecated
@@ -7429,6 +7431,7 @@ export interface CompilerOptions {
     disableSourceOfProjectReferenceRedirect?: boolean;
     disableSolutionSearching?: boolean;
     disableReferencedProjectLoad?: boolean;
+    /** @deprecated */
     downlevelIteration?: boolean;
     emitBOM?: boolean;
     emitDecoratorMetadata?: boolean;
@@ -7550,6 +7553,7 @@ export interface CompilerOptions {
     /** @internal */ watch?: boolean;
     esModuleInterop?: boolean;
     /** @internal */ showConfig?: boolean;
+    /** @internal */ ignoreConfig?: boolean;
     useDefineForClassFields?: boolean;
     /** @internal */ tscBuild?: boolean;
 
@@ -7576,10 +7580,14 @@ export interface TypeAcquisition {
 }
 
 export enum ModuleKind {
+    /** @deprecated */
     None = 0,
     CommonJS = 1,
+    /** @deprecated */
     AMD = 2,
+    /** @deprecated */
     UMD = 3,
+    /** @deprecated */
     System = 4,
 
     // NOTE: ES module kinds should be contiguous to more easily check whether a module kind is *any* ES module kind.
@@ -7647,11 +7655,12 @@ export const enum ScriptKind {
 
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
 //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = 0,
+    /** @deprecated */
     ES5 = 1,
     ES2015 = 2,
     ES2016 = 3,
@@ -7663,9 +7672,11 @@ export const enum ScriptTarget {
     ES2022 = 9,
     ES2023 = 10,
     ES2024 = 11,
+    ES2025 = 12,
     ESNext = 99,
     JSON = 100,
     Latest = ESNext,
+    LatestStandard = ES2025,
 }
 
 export const enum LanguageVariant {
@@ -8451,7 +8462,7 @@ export type LanugageFeatures =
     // Upcoming Features
     // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
     //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-    //       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+    //       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
     //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
     | "UsingAndAwaitUsing" // `using x = y`, `await using x = y`
     | "ClassAndClassElementDecorators" // `@dec class C {}`, `class C { @dec m() {} }`

@@ -8,3 +8,4 @@ interface I {
 }
 
 //// [decoratorOnInterface.js]
+"use strict";

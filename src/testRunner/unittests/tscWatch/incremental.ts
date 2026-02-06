@@ -130,7 +130,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
         };
         const config: File = {
             path: configFile.path,
-            content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd" } }),
+            content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd", ignoreDeprecations: "6.0" } }),
         };
 
         verifyIncrementalWatchEmit({
@@ -157,7 +157,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
                     { currentDirectory: project },
                 );
                 const reportDiagnostic = ts.createDiagnosticReporter(system);
-                const parsedConfig = ts.parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, reportDiagnostic)!;
+                const parsedConfig = ts.parseConfigFileWithSystem("tsconfig.json", { target: ts.ScriptTarget.ES5, module: ts.ModuleKind.AMD }, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, reportDiagnostic)!;
                 ts.performIncrementalCompilation({
                     rootNames: parsedConfig.fileNames,
                     options: parsedConfig.options,
@@ -167,7 +167,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
                     system,
                 });
 
-                const command = ts.parseConfigFileWithSystem("tsconfig.json", {}, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, ts.noop)!;
+                const command = ts.parseConfigFileWithSystem("tsconfig.json", { target: ts.ScriptTarget.ES5, module: ts.ModuleKind.AMD }, /*extendedConfigCache*/ undefined, /*watchOptionsToExtend*/ undefined, system, ts.noop)!;
                 const builderProgram = ts.createIncrementalProgram({
                     rootNames: command.fileNames,
                     options: command.options,
@@ -200,8 +200,10 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
 
                 assert.deepEqual(builderProgram.state.compilerOptions, {
                     incremental: true,
+                    target: ts.ScriptTarget.ES5,
                     module: ts.ModuleKind.AMD,
                     configFilePath: config.path,
+                    ignoreDeprecations: "6.0",
                 });
 
                 assert.equal(ts.arrayFrom(builderProgram.state.referencedMap!.keys()).length, 0);
@@ -228,7 +230,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
         verifyIncrementalWatchEmit({
             files: () => [file1, file2, {
                 path: configFile.path,
-                content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js" } }),
+                content: jsonToReadableText({ compilerOptions: { incremental: true, module: "amd", outFile: "out.js", ignoreDeprecations: "6.0" } }),
             }],
             subScenario: "module compilation/with --out",
         });
@@ -241,7 +243,7 @@ describe("unittests:: tscWatch:: incremental:: emit file --incremental", () => {
                 content: jsonToReadableText({
                     compilerOptions: {
                         incremental: true,
-                        target: "es5",
+                        target: "es2015",
                         module: "commonjs",
                         declaration: true,
                         emitDeclarationOnly: true,

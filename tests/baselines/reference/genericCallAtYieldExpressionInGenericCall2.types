@@ -70,8 +70,8 @@ fn(function* <T>(queue: Enqueue<T>, value: T) {
 >                                                                               : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^   
 >fn : <Eff extends Effect, AEff, Args extends Array<any>>(body: (...args: Args) => Generator<Eff, AEff, any>) => (...args: Args) => any
 >   : ^   ^^^^^^^^^      ^^    ^^    ^^^^^^^^^          ^^    ^^                                            ^^^^^                      
->function* <T>(queue: Enqueue<T>, value: T) {  yield* offer(queue, value);} : <T>(queue: Enqueue<T>, value: T) => Generator<never, void, never>
->                                                                           : ^ ^^     ^^          ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>function* <T>(queue: Enqueue<T>, value: T) {  yield* offer(queue, value);} : <T>(queue: Enqueue<T>, value: T) => Generator<any, void, any>
+>                                                                           : ^ ^^     ^^          ^^     ^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >queue : Enqueue<T>
 >      : ^^^^^^^^^^
 >value : T

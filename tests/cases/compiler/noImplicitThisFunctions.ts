@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @noImplicitThis: true
 
 function f1(x) {

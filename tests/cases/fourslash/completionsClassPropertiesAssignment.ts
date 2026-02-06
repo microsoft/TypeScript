@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 ////class Class1 {
 ////   public a = this./*0*/
 ////   protected b = /*1*/

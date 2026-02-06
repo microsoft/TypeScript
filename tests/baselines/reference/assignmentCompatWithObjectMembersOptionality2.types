@@ -36,11 +36,11 @@ namespace TargetHasOptional {
 >opt : Base
 >    : ^^^^
     }
-    var c: C;
+    declare var c: C;
 >c : C
 >  : ^
 
-    var a: { opt?: Base; }
+    declare var a: { opt?: Base; };
 >a : { opt?: Base; }
 >  : ^^^^^^^^    ^^^
 >opt : Base
@@ -76,15 +76,15 @@ namespace TargetHasOptional {
 >other : Derived
 >      : ^^^^^^^
     }
-    var d: D;
+    declare var d: D;
 >d : D
 >  : ^
 
-    var e: E;
+    declare var e: E;
 >e : E
 >  : ^
 
-    var f: F;
+    declare var f: F;
 >f : F
 >  : ^
 
@@ -205,11 +205,11 @@ namespace SourceHasOptional {
 >opt : Base
 >    : ^^^^
     }
-    var c: C;
+    declare var c: C;
 >c : C
 >  : ^
 
-    var a: { opt: Base; }
+    declare var a: { opt: Base; };
 >a : { opt: Base; }
 >  : ^^^^^^^    ^^^
 >opt : Base
@@ -243,15 +243,15 @@ namespace SourceHasOptional {
 >other : Derived
 >      : ^^^^^^^
     }
-    var d: D;
+    declare var d: D;
 >d : D
 >  : ^
 
-    var e: E;
+    declare var e: E;
 >e : E
 >  : ^
 
-    var f: F;
+    declare var f: F;
 >f : F
 >  : ^
 

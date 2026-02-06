@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 enum Foo {
   a = 2,
   b = 3,

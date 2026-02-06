@@ -11,6 +11,7 @@ var b: WithNonPrimitive = {foo: "bar"}; // expect error
 
 
 //// [nonPrimitiveAsProperty.js]
+"use strict";
 var a = { foo: { bar: "bar" } };
 var b = { foo: "bar" }; // expect error
 

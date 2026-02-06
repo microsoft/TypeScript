@@ -9,10 +9,7 @@ import * as vpath from "./_namespaces/vpath.js";
 import { LoggerWithInMemoryLogs } from "./tsserverLogger.js";
 
 import ArrayOrSingle = FourSlashInterface.ArrayOrSingle;
-import {
-    harnessSessionLibLocation,
-    harnessTypingInstallerCacheLocation,
-} from "./harnessLanguageService.js";
+import { harnessTypingInstallerCacheLocation } from "./harnessLanguageService.js";
 import { ensureWatchablePath } from "./watchUtils.js";
 
 export const enum FourSlashTestType {
@@ -105,7 +102,7 @@ const enum MetadataOptionNames {
 const fileMetadataNames = [MetadataOptionNames.fileName, MetadataOptionNames.emitThisFile, MetadataOptionNames.resolveReference, MetadataOptionNames.symlink];
 
 function convertGlobalOptionsToCompilerOptions(globalOptions: Harness.TestCaseParser.CompilerSettings): ts.CompilerOptions {
-    const settings: ts.CompilerOptions = { target: ts.ScriptTarget.ES5, newLine: ts.NewLineKind.CarriageReturnLineFeed };
+    const settings: ts.CompilerOptions = { ...ts.getDefaultCompilerOptions(), jsx: undefined, newLine: ts.NewLineKind.CarriageReturnLineFeed };
     Harness.Compiler.setCompilerOptionsFromHarnessSetting(globalOptions, settings);
     return settings;
 }
@@ -367,11 +364,6 @@ export class TestState {
             }
         }
 
-        const libName = (name: string) =>
-            this.testType !== FourSlashTestType.Server ?
-                name :
-                `${harnessSessionLibLocation}/${name}`;
-
         let configParseResult: ts.ParsedCommandLine | undefined;
         if (configFileName) {
             const baseDir = ts.normalizePath(ts.getDirectoryPath(configFileName));
@@ -422,24 +414,6 @@ export class TestState {
                 const importedFilePath = this.basePath + "/" + importedFile.fileName;
                 this.addMatchedInputFile(importedFilePath, exts);
             });
-
-            this.languageServiceAdapterHost.addScript(
-                libName(Harness.Compiler.defaultLibFileName),
-                Harness.Compiler.getDefaultLibrarySourceFile()!.text,
-                /*isRootFile*/ false,
-            );
-
-            compilationOptions.lib?.forEach(fileName => {
-                const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
-                ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                if (libFile) {
-                    this.languageServiceAdapterHost.addScript(
-                        libName(fileName),
-                        libFile.text,
-                        /*isRootFile*/ false,
-                    );
-                }
-            });
         }
         else {
             // resolveReference file-option is not specified then do not resolve any files and include all inputFiles
@@ -452,24 +426,6 @@ export class TestState {
                     this.languageServiceAdapterHost.addScript(fileName, file, isRootFile);
                 }
             });
-
-            if (!compilationOptions.noLib) {
-                const seen = new Set<string>();
-                const addSourceFile = (fileName: string) => {
-                    if (seen.has(fileName)) return;
-                    seen.add(fileName);
-                    const libFile = Harness.Compiler.getDefaultLibrarySourceFile(fileName);
-                    ts.Debug.assertIsDefined(libFile, `Could not find lib file '${fileName}'`);
-                    this.languageServiceAdapterHost.addScript(libName(fileName), libFile.text, /*isRootFile*/ false);
-                    if (!ts.some(libFile.libReferenceDirectives)) return;
-                    for (const directive of libFile.libReferenceDirectives) {
-                        addSourceFile(`lib.${directive.fileName}.d.ts`);
-                    }
-                };
-
-                addSourceFile(Harness.Compiler.defaultLibFileName);
-                compilationOptions.lib?.forEach(addSourceFile);
-            }
         }
 
         for (const file of testData.files) {
@@ -557,7 +513,13 @@ export class TestState {
     }
     private tryGetFileContent(fileName: string): string | undefined {
         const script = this.languageServiceAdapterHost.getScriptInfo(fileName);
-        return script && script.content;
+        if (script) return script.content;
+        try {
+            return this.languageServiceAdapterHost.vfs.readFileSync(fileName, "utf8");
+        }
+        catch {
+            return undefined;
+        }
     }
 
     // Entry points from fourslash.ts
@@ -4870,18 +4832,6 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
         }
     }
 
-    // @Filename is the only directive that can be used in a test that contains tsconfig.json file.
-    const config = ts.find(files, isConfig);
-    if (config) {
-        let directive = getNonFileNameOptionInFileList(files);
-        if (!directive) {
-            directive = getNonFileNameOptionInObject(globalOptions);
-        }
-        if (directive) {
-            throw Error(`It is not allowed to use ${config.fileName} along with directive '${directive}'`);
-        }
-    }
-
     return {
         markerPositions,
         markers,
@@ -4894,24 +4844,6 @@ function parseTestData(basePath: string, contents: string, fileName: string): Fo
 
 function isConfig(file: FourSlashFile): boolean {
     return Harness.getConfigNameFromFileName(file.fileName) !== undefined;
-}
-
-function getNonFileNameOptionInFileList(files: FourSlashFile[]): string | undefined {
-    return ts.forEach(files, f => getNonFileNameOptionInObject(f.fileOptions));
-}
-
-function getNonFileNameOptionInObject(optionObject: { [s: string]: string; }): string | undefined {
-    for (const option in optionObject) {
-        switch (option) {
-            case MetadataOptionNames.fileName:
-            case MetadataOptionNames.baselineFile:
-            case MetadataOptionNames.emitThisFile:
-                break;
-            default:
-                return option;
-        }
-    }
-    return undefined;
 }
 
 const enum State {

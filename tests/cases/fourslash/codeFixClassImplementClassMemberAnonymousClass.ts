@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 //// class A {
 ////     foo() {
 ////         return class { x: number; }

@@ -30,10 +30,8 @@ System.register([], function (exports_1, context_1) {
     return {
         setters: [],
         execute: function () {
-            Component = /** @class */ (function () {
-                function Component() {
-                }
-                Component.prototype.render = function () {
+            Component = class Component {
+                render() {
                     return <div>
             {/* missing */}
             {null /* preserved */}
@@ -48,9 +46,8 @@ System.register([], function (exports_1, context_1) {
                         // ??? 4
                         /* ??? 5 */ }
         </div>;
-                };
-                return Component;
-            }());
+                }
+            };
         }
     };
 });

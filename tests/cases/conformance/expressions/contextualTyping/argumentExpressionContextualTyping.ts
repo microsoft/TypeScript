@@ -1,4 +1,5 @@
-﻿// In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
+﻿// @target: es2015
+// In a typed function call, argument expressions are contextually typed by their corresponding parameter types.
 function foo({x: [a, b], y: {c, d, e}}) { }
 function bar({x: [a, b = 10], y: {c, d, e = { f:1 }}}) { }
 function baz(x: [string, number, boolean]) { }

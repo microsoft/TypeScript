@@ -77,6 +77,7 @@ a = b;
 
 
 //// [genericTypeAliases.js]
+"use strict";
 var tree = {
     left: {
         left: 0,
@@ -89,7 +90,7 @@ var tree = {
 };
 var ls;
 ls = "eager";
-ls = function () { return "lazy"; };
+ls = () => "lazy";
 // Deeply instantiated generics
 var x;
 var y;

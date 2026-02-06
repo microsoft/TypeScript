@@ -45,50 +45,34 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/home/src/projects/a/b/moduleFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo = Foo;
-function Foo() { }
+export function Foo() { }
 ;
 
 
 //// [/home/src/projects/a/b/file1Consumer1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
+export var y = 10;
 
 
 //// [/home/src/projects/a/b/file1Consumer1Consumer1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/home/src/projects/a/b/file1Consumer2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var z = 10;
+let z = 10;
+export {};
 
 
 //// [/home/src/projects/a/b/globalFile3.js]
+"use strict";
 
 
 //// [/home/src/projects/a/b/moduleFile2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Foo4 = void 0;
-exports.Foo4 = 10;
+export var Foo4 = 10;
 
 
-
-PolledWatches::
-/home/src/projects/a/b/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/b/file1Consumer1.ts: *new*
@@ -105,7 +89,7 @@ FsWatches::
   {}
 /home/src/projects/a/b/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -126,7 +110,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer1Consumer1.ts
@@ -135,7 +119,7 @@ Program files::
 /home/src/projects/a/b/moduleFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer1Consumer1.ts
@@ -144,7 +128,7 @@ Semantic diagnostics in builder refreshed for::
 /home/src/projects/a/b/moduleFile2.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/b/modulefile1.ts (used version)
 /home/src/projects/a/b/file1consumer1.ts (used version)
 /home/src/projects/a/b/file1consumer1consumer1.ts (used version)
@@ -178,10 +162,8 @@ Output::
 
 
 //// [/home/src/projects/a/b/file1Consumer1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.T = exports.y = void 0;
-exports.y = 10;
+export var y = 10;
+export var T;
 
 
 //// [/home/src/projects/a/b/file1Consumer1Consumer1.js] file written with same contents
@@ -201,7 +183,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer1Consumer1.ts
@@ -243,11 +225,8 @@ Output::
 
 
 //// [/home/src/projects/a/b/moduleFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.T = void 0;
-exports.Foo = Foo;
-function Foo() { }
+export var T;
+export function Foo() { }
 ;
 
 
@@ -269,7 +248,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer1Consumer1.ts
@@ -318,19 +297,15 @@ Output::
 
 
 //// [/home/src/projects/a/b/moduleFile1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.T2 = void 0;
-exports.Foo = Foo;
-function Foo() { }
+export var T2;
+export function Foo() { }
 ;
 
 
 //// [/home/src/projects/a/b/file1Consumer1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.T2 = exports.T = exports.y = void 0;
-exports.y = 10;
+export var y = 10;
+export var T;
+export var T2;
 
 
 //// [/home/src/projects/a/b/file1Consumer1Consumer1.js] file written with same contents
@@ -351,7 +326,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer1Consumer1.ts

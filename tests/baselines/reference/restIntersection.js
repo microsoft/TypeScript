@@ -8,6 +8,7 @@ var {x, ...rest1 } = intersection;
 
 
 //// [restIntersection.js]
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -21,4 +22,4 @@ var __rest = (this && this.__rest) || function (s, e) {
 };
 var intersection;
 var rest1;
-var x = intersection.x, rest1 = __rest(intersection, ["x"]);
+var { x } = intersection, rest1 = __rest(intersection, ["x"]);

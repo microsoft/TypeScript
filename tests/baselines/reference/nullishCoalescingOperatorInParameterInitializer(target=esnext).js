@@ -6,6 +6,7 @@ const a = (): string | undefined => undefined;
 ((b = a() ?? "d") => {})();
 
 //// [nullishCoalescingOperatorInParameterInitializer.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/36295
 const a = () => undefined;
 ((b = a() ?? "d") => { })();

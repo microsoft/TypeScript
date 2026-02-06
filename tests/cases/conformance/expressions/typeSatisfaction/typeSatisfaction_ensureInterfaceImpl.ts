@@ -1,3 +1,4 @@
+// @target: es2015
 type Movable = {
     move(distance: number): void;
 };

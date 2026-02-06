@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: /tsconfig1.json
 {
     "compilerOptions": {

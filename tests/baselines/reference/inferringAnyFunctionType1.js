@@ -9,7 +9,8 @@ var v = f([x => x]);
 
 
 //// [inferringAnyFunctionType1.js]
+"use strict";
 function f(p) {
     return p;
 }
-var v = f([function (x) { return x; }]);
+var v = f([x => x]);

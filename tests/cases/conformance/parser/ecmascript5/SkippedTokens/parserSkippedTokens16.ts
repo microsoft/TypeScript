@@ -1,3 +1,4 @@
+// @target: es2015
 foo(): Bar { }
 function Foo      () ¬   { }
 4+:5

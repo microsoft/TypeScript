@@ -1,19 +1,27 @@
+typeOfThisInStaticMembers8.ts(4,56): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 typeOfThisInStaticMembers8.ts(5,49): error TS2339: Property 'f' does not exist on type '(Anonymous class)'.
+typeOfThisInStaticMembers8.ts(8,20): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 typeOfThisInStaticMembers8.ts(11,22): error TS2339: Property 'f' does not exist on type 'CC'.
 typeOfThisInStaticMembers8.ts(13,29): error TS2339: Property 'f' does not exist on type 'CC'.
 
 
-==== typeOfThisInStaticMembers8.ts (3 errors) ====
+==== typeOfThisInStaticMembers8.ts (5 errors) ====
     class C {
         static f = 1;
         static arrowFunctionBoundary = () => this.f + 1;
         static functionExprBoundary = function () { return this.f + 2 };
+                                                           ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 typeOfThisInStaticMembers8.ts:4:35: An outer value of 'this' is shadowed by this container.
         static classExprBoundary = class { a = this.f + 3 };
                                                     ~
 !!! error TS2339: Property 'f' does not exist on type '(Anonymous class)'.
         static functionAndClassDeclBoundary = (() => {
             function foo () {
                 return this.f + 4
+                       ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 typeOfThisInStaticMembers8.ts:7:18: An outer value of 'this' is shadowed by this container.
             }
             class CC {
                 a = this.f + 5

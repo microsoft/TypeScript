@@ -2,6 +2,7 @@
 
 // https://github.com/microsoft/TypeScript/issues/55574
 
+// @strict: false
 //// declare const rest:
 ////   | ((a?: { a: true }, ...rest: string[]) => unknown)
 ////   | ((b?: { b: true }) => unknown);

@@ -13,11 +13,11 @@ interface Refrigerator extends Runnable {
 >                : ^^^^^^^
 }
 
-let x: string;
+declare let x: string;
 >x : string
 >  : ^^^^^^
 
-let y: "foo" | Refrigerator;
+declare let y: "foo" | Refrigerator;
 >y : Refrigerator | "foo"
 >  : ^^^^^^^^^^^^^^^^^^^^
 

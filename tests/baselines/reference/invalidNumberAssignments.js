@@ -26,16 +26,14 @@ function i<T>(a: T) {
 i = x;
 
 //// [invalidNumberAssignments.js]
+"use strict";
 var x = 1;
 var a = x;
 var b = x;
 var c = x;
 var d = x;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var e = x;
 var f = x;
 var g = 1;

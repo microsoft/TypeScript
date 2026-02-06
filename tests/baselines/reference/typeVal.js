@@ -11,5 +11,6 @@ I.I=4;
 
 
 //// [typeVal.js]
+"use strict";
 var I = { I: 3 };
 I.I = 4;

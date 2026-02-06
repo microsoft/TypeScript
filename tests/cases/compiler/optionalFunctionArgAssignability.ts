@@ -1,3 +1,4 @@
+// @target: es2015
 interface Promise<T> {
     then<U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>;
 }

@@ -16,11 +16,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.b = exports.m = void 0;
 var m;
 (function (m) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     m.c = c;
 })(m || (exports.m = m = {}));
 var a = m.c;

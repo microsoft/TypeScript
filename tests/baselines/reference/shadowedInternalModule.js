@@ -68,6 +68,7 @@ namespace s {
 
 
 //// [shadowedInternalModule.js]
+"use strict";
 // all errors imported modules conflict with local variables
 var A;
 (function (A) {
@@ -79,11 +80,8 @@ var B;
 })(B || (B = {}));
 var X;
 (function (X) {
-    var Y = /** @class */ (function () {
-        function Y() {
-        }
-        return Y;
-    }());
+    class Y {
+    }
     X.Y = Y;
 })(X || (X = {}));
 var Z;
@@ -104,5 +102,5 @@ var r;
 })(r || (r = {}));
 var s;
 (function (s) {
-    var Q = 0;
+    const Q = 0;
 })(s || (s = {}));

@@ -15,8 +15,6 @@ class Baz implements Wrapper {
 
 
 //// [implementsIncorrectlyNoAssertion.js]
-var Baz = /** @class */ (function () {
-    function Baz() {
-    }
-    return Baz;
-}());
+"use strict";
+class Baz {
+}

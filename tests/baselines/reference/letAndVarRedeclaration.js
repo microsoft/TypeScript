@@ -54,6 +54,7 @@ namespace M2 {
 }
 
 //// [letAndVarRedeclaration.js]
+"use strict";
 let e0;
 var e0;
 function e0() { }

@@ -1,3 +1,4 @@
+// @target: es2015
 // valid invocations of generic functions with no explicit type arguments provided 
 
 function f<T>(x: T): T { return null; }

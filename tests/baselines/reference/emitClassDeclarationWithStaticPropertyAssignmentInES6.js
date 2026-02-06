@@ -12,6 +12,7 @@ class D {
 
 
 //// [emitClassDeclarationWithStaticPropertyAssignmentInES6.js]
+"use strict";
 class C {
 }
 C.z = "Foo";

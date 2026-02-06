@@ -1,3 +1,4 @@
+// @target: es2015
 // @pretty: true
 // @filename: file1.ts
 interface TopLevel {

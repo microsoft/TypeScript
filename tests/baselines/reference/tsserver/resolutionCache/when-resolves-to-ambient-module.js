@@ -129,8 +129,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/pr
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects 0 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 0 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Failed Lookup Locations
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/typings 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/typings 1 undefined Project: /user/username/projects/myproject/src/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /user/username/projects/myproject/src/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/user/username/projects/myproject/src/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
@@ -222,6 +220,62 @@ Info seq  [hh:mm:ss:mss] event:
         "triggerFile": "/user/username/projects/myproject/src/somefolder/srcfile.ts",
         "configFile": "/user/username/projects/myproject/src/tsconfig.json",
         "diagnostics": [
+          {
+            "start": {
+              "line": 3,
+              "offset": 15
+            },
+            "end": {
+              "line": 3,
+              "offset": 20
+            },
+            "text": "Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/src/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 4,
+              "offset": 25
+            },
+            "end": {
+              "line": 4,
+              "offset": 34
+            },
+            "text": "Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/src/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 5,
+              "offset": 15
+            },
+            "end": {
+              "line": 5,
+              "offset": 20
+            },
+            "text": "Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5107,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/src/tsconfig.json"
+          },
+          {
+            "start": {
+              "line": 6,
+              "offset": 5
+            },
+            "end": {
+              "line": 6,
+              "offset": 13
+            },
+            "text": "The common source directory of 'tsconfig.json' is './somefolder'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.\n  Visit https://aka.ms/ts6 for migration information.",
+            "code": 5011,
+            "category": "error",
+            "fileName": "/user/username/projects/myproject/src/tsconfig.json"
+          },
           {
             "start": {
               "line": 7,

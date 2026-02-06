@@ -47,7 +47,7 @@ enum Computed {
 >3 : 3
 >  : ^
 }
-let n: number;
+declare let n: number;
 >n : number
 >  : ^^^^^^
 

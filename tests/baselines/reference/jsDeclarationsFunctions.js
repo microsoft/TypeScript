@@ -79,11 +79,8 @@ function a() { }
 function b() { }
 b.cat = "cat";
 function c() { }
-c.Cls = /** @class */ (function () {
-    function Cls() {
-    }
-    return Cls;
-}());
+c.Cls = class {
+};
 /**
  * @param {number} a
  * @param {number} b
@@ -166,7 +163,7 @@ export function g(a: {
     x: string;
 }, b: {
     y: typeof import(".").b;
-}): void;
+}): void | "";
 /**
  * @param {{x: string}} a
  * @param {{y: typeof b}} b
@@ -175,5 +172,5 @@ declare function hh(a: {
     x: string;
 }, b: {
     y: typeof import(".").b;
-}): void;
+}): void | "";
 export { hh as h, i as ii, j as jj };

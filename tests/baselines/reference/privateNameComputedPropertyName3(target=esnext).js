@@ -27,6 +27,7 @@ console.log(new Foo("NAME").getValue(100));
 
 
 //// [privateNameComputedPropertyName3.js]
+"use strict";
 class Foo {
     #name;
     constructor(name) {

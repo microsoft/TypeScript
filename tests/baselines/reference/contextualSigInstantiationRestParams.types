@@ -4,10 +4,10 @@
 declare function toInstantiate<A, B>(a?: A, b?: B): B;
 >toInstantiate : <A, B>(a?: A, b?: B) => B
 >              : ^ ^^ ^^ ^^^ ^^ ^^^ ^^^^^ 
->a : A
->  : ^
->b : B
->  : ^
+>a : A | undefined
+>  : ^^^^^^^^^^^^^
+>b : B | undefined
+>  : ^^^^^^^^^^^^^
 
 declare function contextual(...s: string[]): string
 >contextual : (...s: string[]) => string

@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es2015
 const sym = Symbol();
 type O = Record<symbol, unknown>

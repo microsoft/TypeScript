@@ -1,7 +1,8 @@
+controlFlowWhileStatement.ts(23,9): error TS2322: Type 'undefined' is not assignable to type 'string | number'.
 controlFlowWhileStatement.ts(81,12): error TS2365: Operator '>' cannot be applied to types 'string | number' and 'number'.
 
 
-==== controlFlowWhileStatement.ts (1 errors) ====
+==== controlFlowWhileStatement.ts (2 errors) ====
     let cond: boolean;
     function a() {
         let x: string | number;
@@ -25,6 +26,8 @@ controlFlowWhileStatement.ts(81,12): error TS2365: Operator '>' cannot be applie
         while (cond) {
             x; // string
             x = undefined;
+            ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string | number'.
             if (typeof x === "string") continue;
             break;
         }

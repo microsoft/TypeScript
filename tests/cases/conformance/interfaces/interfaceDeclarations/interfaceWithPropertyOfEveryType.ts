@@ -1,3 +1,4 @@
+// @target: es2015
 class C { foo: string; }
 function f1() { }
 namespace M {

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 namespace M1 {
     export interface I {
         foo();

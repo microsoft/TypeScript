@@ -19,6 +19,7 @@ function g(result: unknown) {
 
 
 //// [truthinessCallExpressionCoercion3.js]
+"use strict";
 function f(result) {
     if (result.always) {
         return result;

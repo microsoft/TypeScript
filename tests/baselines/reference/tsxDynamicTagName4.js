@@ -13,5 +13,6 @@ var CustomTag: "h1" = "h1";
 <CustomTag> Hello World </CustomTag>
 
 //// [tsxDynamicTagName4.jsx]
+"use strict";
 var CustomTag = "h1";
 <CustomTag> Hello World </CustomTag>;

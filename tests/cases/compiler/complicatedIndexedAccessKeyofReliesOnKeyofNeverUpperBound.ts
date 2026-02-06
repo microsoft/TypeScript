@@ -1,3 +1,4 @@
+// @target: es2015
 interface TextChannel {
     id: string;
     type: 'text';

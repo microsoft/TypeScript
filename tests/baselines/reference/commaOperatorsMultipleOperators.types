@@ -3,6 +3,7 @@
 === commaOperatorsMultipleOperators.ts ===
 var ANY: any;
 >ANY : any
+>    : ^^^
 
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
@@ -27,6 +28,7 @@ ANY, BOOLEAN, NUMBER;
 >ANY, BOOLEAN : boolean
 >             : ^^^^^^^
 >ANY : any
+>    : ^^^
 >BOOLEAN : boolean
 >        : ^^^^^^^
 >NUMBER : number
@@ -58,6 +60,7 @@ NUMBER, STRING, OBJECT;
 
 STRING, OBJECT, ANY;
 >STRING, OBJECT, ANY : any
+>                    : ^^^
 >STRING, OBJECT : Object
 >               : ^^^^^^
 >STRING : string
@@ -65,22 +68,28 @@ STRING, OBJECT, ANY;
 >OBJECT : Object
 >       : ^^^^^^
 >ANY : any
+>    : ^^^
 
 OBJECT, ANY, BOOLEAN;
 >OBJECT, ANY, BOOLEAN : boolean
 >                     : ^^^^^^^
 >OBJECT, ANY : any
+>            : ^^^
 >OBJECT : Object
 >       : ^^^^^^
 >ANY : any
+>    : ^^^
 >BOOLEAN : boolean
 >        : ^^^^^^^
 
 //Results should have the same type as the third operand
 var resultIsAny1 = (STRING, OBJECT, ANY);
 >resultIsAny1 : any
+>             : ^^^
 >(STRING, OBJECT, ANY) : any
+>                      : ^^^
 >STRING, OBJECT, ANY : any
+>                    : ^^^
 >STRING, OBJECT : Object
 >               : ^^^^^^
 >STRING : string
@@ -88,6 +97,7 @@ var resultIsAny1 = (STRING, OBJECT, ANY);
 >OBJECT : Object
 >       : ^^^^^^
 >ANY : any
+>    : ^^^
 
 var resultIsBoolean1 = (OBJECT, ANY, BOOLEAN);
 >resultIsBoolean1 : boolean
@@ -97,9 +107,11 @@ var resultIsBoolean1 = (OBJECT, ANY, BOOLEAN);
 >OBJECT, ANY, BOOLEAN : boolean
 >                     : ^^^^^^^
 >OBJECT, ANY : any
+>            : ^^^
 >OBJECT : Object
 >       : ^^^^^^
 >ANY : any
+>    : ^^^
 >BOOLEAN : boolean
 >        : ^^^^^^^
 
@@ -113,6 +125,7 @@ var resultIsNumber1 = (ANY, BOOLEAN, NUMBER);
 >ANY, BOOLEAN : boolean
 >             : ^^^^^^^
 >ANY : any
+>    : ^^^
 >BOOLEAN : boolean
 >        : ^^^^^^^
 >NUMBER : number

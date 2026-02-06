@@ -45,6 +45,7 @@ namespace E {
 
 
 //// [mixingFunctionAndAmbientModule1.js]
+"use strict";
 var A;
 (function (A) {
     function My(s) { }

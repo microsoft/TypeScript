@@ -15,7 +15,7 @@ interface Obj1type {
 >n : string
 >  : ^^^^^^
 }
-var Obj1: Obj1type;
+declare var Obj1: Obj1type;
 >Obj1 : Obj1type
 >     : ^^^^^^^^
 
@@ -33,12 +33,12 @@ interface Obj2type {
 	new(n: string): { q?: number; pr: any };
 >n : string
 >  : ^^^^^^
->q : number
->  : ^^^^^^
+>q : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >pr : any
 >   : ^^^
 }
-var Obj2: Obj2type;
+declare var Obj2: Obj2type;
 >Obj2 : Obj2type
 >     : ^^^^^^^^
 
@@ -59,7 +59,7 @@ interface Obj3type {
 >x : number
 >  : ^^^^^^
 }
-var Obj3: Obj3type;
+declare var Obj3: Obj3type;
 >Obj3 : Obj3type
 >     : ^^^^^^^^
 
@@ -104,7 +104,7 @@ interface Obj4type {
 >x : number
 >  : ^^^^^^
 }
-var Obj4: Obj4type;
+declare var Obj4: Obj4type;
 >Obj4 : Obj4type
 >     : ^^^^^^^^
 

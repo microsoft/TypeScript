@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: a.ts
 export const texts: string[] = [];
 
@@ -15,7 +17,7 @@ texts.push("100");
 
 // @filename: b.tsx
 // @jsx: react
-// @libFiles: react.d.ts,lib.d.ts
+/// <reference path="/.lib/react.d.ts" />
 import * as React from "react";
 
 export function MyComponent(props: { foo: string }) {

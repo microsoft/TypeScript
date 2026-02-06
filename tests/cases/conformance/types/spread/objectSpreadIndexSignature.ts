@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 declare let indexed1: { [n: string]: number; a: number; };
 declare let indexed2: { [n: string]: boolean; c: boolean; };

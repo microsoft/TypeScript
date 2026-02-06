@@ -24,6 +24,7 @@ namespace q {
 
 
 //// [file.jsx]
+"use strict";
 var my;
 (function (my) {
 })(my || (my = {}));

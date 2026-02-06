@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 
 var [] = [1, "hello"]; // Dont emit anything

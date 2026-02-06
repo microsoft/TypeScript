@@ -20,7 +20,7 @@ class EventAggregator
 >      : ^
 }
 
-var ea: EventAggregator;
+declare var ea: EventAggregator;
 >ea : EventAggregator
 >   : ^^^^^^^^^^^^^^^
 

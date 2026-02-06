@@ -1,0 +1,15 @@
+error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== es6ImportWithoutFromClauseAmd_0.ts (0 errors) ====
+    export var a = 10;
+    
+==== es6ImportWithoutFromClauseAmd_1.ts (0 errors) ====
+    export var b = 10;
+    
+==== es6ImportWithoutFromClauseAmd_2.ts (0 errors) ====
+    import "es6ImportWithoutFromClauseAmd_0"; 
+    import "es6ImportWithoutFromClauseAmd_2";
+    var _a = 10;
+    var _b = 10;

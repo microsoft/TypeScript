@@ -16,16 +16,16 @@ namespace A {
 
 
 //// [innerExtern.js]
+"use strict";
 var A;
 (function (A) {
-    var B;
+    let B;
     (function (B) {
-        var C = /** @class */ (function () {
-            function C() {
+        class C {
+            constructor() {
                 this.x = BB.Elephant.X;
             }
-            return C;
-        }());
+        }
         B.C = C;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));

@@ -13,7 +13,7 @@ class Derived extends Based {
 >Based : Based
 >      : ^^^^^
 
-    public x: number;
+    public x!: number;
 >x : number
 >  : ^^^^^^
 

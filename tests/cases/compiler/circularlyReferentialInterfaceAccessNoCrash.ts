@@ -1,3 +1,4 @@
+// @target: es2015
 type Mxs = Mx<'list', Mxs['p1']>;
 
 interface Mx<T, K> {

@@ -11,4 +11,4 @@ type Test = keyof typeof Foo;
 //// [indexTypeNoSubstitutionTemplateLiteral.js]
 "use strict";
 function Foo() { }
-Foo["b"] = function () { };
+Foo[`b`] = function () { };

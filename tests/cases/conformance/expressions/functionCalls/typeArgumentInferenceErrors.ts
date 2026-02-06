@@ -1,3 +1,4 @@
+// @target: es2015
 // Generic call with multiple type parameters and only one used in parameter type annotation
 function someGenerics1<T, U>(n: T, m: number) { }
 someGenerics1<string, number>(3, 4); // Error

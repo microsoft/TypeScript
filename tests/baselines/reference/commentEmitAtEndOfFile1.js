@@ -13,6 +13,7 @@ namespace empty {
 // test #4
 
 //// [commentEmitAtEndOfFile1.js]
+"use strict";
 // test
 var f = '';
 // test #2

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @experimentalDecorators: true
 
 declare function y(...args: any[]): any;

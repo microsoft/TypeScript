@@ -1,3 +1,4 @@
+// @target: es2022
 // @allowArbitraryExtensions: true
 // @module: node18,node20,nodenext
 // @filename: package.json

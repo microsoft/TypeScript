@@ -1,0 +1,41 @@
+error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'moduleResolution=classic' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== A.ts (0 errors) ====
+    export class A
+    {
+        public A(): string{ return "hello from A"; }
+    }
+    
+==== AA.ts (0 errors) ====
+    export class AA
+    {
+        public A(): string{ return "hello from AA"; }
+    }
+    
+==== B.ts (0 errors) ====
+    import A = require("../A/A");
+    import AA = require("../A/AA/AA");
+    
+    export class B
+    {
+        public Create(): IA
+        {
+            return new A.A();
+        }
+    }
+    
+    export interface IA
+    {
+        A(): string;
+    }
+    
+==== root.ts (0 errors) ====
+    //import A = require("./A/A");
+    import B = require("B/B");
+    
+    var a = (new B.B()).Create();
+    
+    
+    

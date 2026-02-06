@@ -25,11 +25,11 @@ import { A, B } from './a'; // Error
 >B : any
 >  : ^^^
 
-let a: A;
+declare let a: A;
 >a : A
 >  : ^
 
-let b: B;
+declare let b: B;
 >b : B
 >  : ^
 
@@ -54,11 +54,11 @@ import Default, * as named from './a'; // Error
 >named : typeof named
 >      : ^^^^^^^^^^^^
 
-let a: Default;
+declare let a: Default;
 >a : Default
 >  : ^^^^^^^
 
-let b: named.B;
+declare let b: named.B;
 >b : named.B
 >  : ^^^^^^^
 >named : any
@@ -91,7 +91,7 @@ const a = A;
 >A : typeof A
 >  : ^^^^^^^^
 
-let b: Default;
+declare let b: Default;
 >b : Default
 >  : ^^^^^^^
 
@@ -176,11 +176,11 @@ import { C } from './a';
 >C : typeof C
 >  : ^^^^^^^^
 
-let c: C;
+declare let c: C;
 >c : C
 >  : ^
 
-let d: C.Two;
+declare let d: C.Two;
 >d : C.Two
 >  : ^^^^^
 >C : any

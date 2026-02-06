@@ -1,3 +1,4 @@
+// @target: es2015
 export type Blah =
     | { type: "foo", abc: string }
     | { type: "bar", xyz: number, extra: any };

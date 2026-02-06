@@ -11,7 +11,7 @@
 goTo.marker("");
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
-    source: "/a",
+    source: "./a",
     description: `Add import from "./a"`,
     preferences: {
         quotePreference: "single",

@@ -12,8 +12,9 @@ const items = [];
 module.exports = items;
 
 //// [index.js]
+"use strict";
 /** @type {typeof import("/some-mod")} */
-var items = [];
+const items = [];
 module.exports = items;
 
 

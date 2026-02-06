@@ -1,7 +1,7 @@
 //// [tests/cases/conformance/importAssertion/importAssertion4.ts] ////
 
 //// [importAssertion4.ts]
-import * as f from "./first" assert
+import * as f from "./first" with
 
 
 //// [importAssertion4.js]

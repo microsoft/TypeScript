@@ -1,3 +1,4 @@
+// @target: es2015
 let strOrBool: string|boolean;
 if ((typeof strOrBool === 'boolean' && !strOrBool) || typeof strOrBool === 'string') {
 	let label: string = (typeof strOrBool === 'string') ? strOrBool : "string";

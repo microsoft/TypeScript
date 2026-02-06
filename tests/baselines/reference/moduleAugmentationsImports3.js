@@ -51,22 +51,16 @@ define("a", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.A = void 0;
-    var A = /** @class */ (function () {
-        function A() {
-        }
-        return A;
-    }());
+    class A {
+    }
     exports.A = A;
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.B = void 0;
-    var B = /** @class */ (function () {
-        function B() {
-        }
-        return B;
-    }());
+    class B {
+    }
     exports.B = B;
 });
 define("e", ["require", "exports", "a"], function (require, exports, a_1) {
@@ -77,9 +71,9 @@ define("e", ["require", "exports", "a"], function (require, exports, a_1) {
 define("main", ["require", "exports", "D", "e"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    var a;
-    var b = a.getB().x.toFixed();
-    var c = a.getCls().y.toLowerCase();
+    let a;
+    let b = a.getB().x.toFixed();
+    let c = a.getCls().y.toLowerCase();
 });
 
 
@@ -106,53 +100,3 @@ declare module "main" {
     import "D";
     import "e";
 }
-
-
-//// [DtsFileErrors]
-
-
-f.d.ts(20,12): error TS2882: Cannot find module or type declarations for side-effect import of 'D'.
-
-
-==== f.d.ts (1 errors) ====
-    /// <reference path="c.d.ts" preserve="true" />
-    declare module "a" {
-        export class A {
-        }
-    }
-    declare module "b" {
-        export class B {
-            x: number;
-        }
-    }
-    declare module "e" {
-        import { Cls } from "C";
-        module "a" {
-            interface A {
-                getCls(): Cls;
-            }
-        }
-    }
-    declare module "main" {
-        import "D";
-               ~~~
-!!! error TS2882: Cannot find module or type declarations for side-effect import of 'D'.
-        import "e";
-    }
-    
-==== c.d.ts (0 errors) ====
-    declare module "C" {
-        class Cls {y: string; }
-    }
-    
-==== d.d.ts (0 errors) ====
-    declare module "D" {
-        import {A} from "a";
-        import {B} from "b";
-        module "a" {
-            interface A {
-                getB(): B;
-            }
-        }
-    }
-    

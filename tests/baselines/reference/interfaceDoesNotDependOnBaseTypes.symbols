@@ -9,14 +9,10 @@ if (typeof x !== "string") {
 >x : Symbol(x, Decl(interfaceDoesNotDependOnBaseTypes.ts, 0, 3))
 
     x.push("");
->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(interfaceDoesNotDependOnBaseTypes.ts, 0, 3))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 
     x.push([""]);
->x.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(interfaceDoesNotDependOnBaseTypes.ts, 0, 3))
->push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 }
 
 type StringTree = string | StringTreeArray;

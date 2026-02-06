@@ -1821,9 +1821,8 @@
         "code": 1539
     },
     "A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.": {
-        "category": "Suggestion",
-        "code": 1540,
-        "reportsDeprecated": true
+        "category": "Error",
+        "code": 1540
     },
     "Type-only import of an ECMAScript module from a CommonJS module must have a 'resolution-mode' attribute.": {
         "category": "Error",
@@ -1848,6 +1847,18 @@
     "'await using' declarations are not allowed in ambient contexts.": {
         "category": "Error",
         "code": 1546
+    },
+    "'using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.": {
+        "category": "Error",
+        "code": 1547
+    },
+    "'await using' declarations are not allowed in 'case' or 'default' clauses unless contained within a block.": {
+        "category": "Error",
+        "code": 1548
+    },
+    "Ignore the tsconfig found and build with commandline options and files.": {
+        "category": "Message",
+        "code": 1549
     },
 
     "The types of '{0}' are incompatible between these types.": {
@@ -4469,6 +4480,10 @@
         "category": "Error",
         "code": 5010
     },
+    "The common source directory of '{0}' is '{1}'. The 'rootDir' setting must be explicitly set to this or another path to adjust your output's file layout.": {
+        "category": "Error",
+        "code": 5011
+    },
     "Cannot read file '{0}': {1}.": {
         "category": "Error",
         "code": 5012
@@ -4669,7 +4684,7 @@
         "category": "Error",
         "code": 5095
     },
-    "Option 'allowImportingTsExtensions' can only be used when either 'noEmit' or 'emitDeclarationOnly' is set.": {
+    "Option 'allowImportingTsExtensions' can only be used when one of 'noEmit', 'emitDeclarationOnly', or 'rewriteRelativeImportExtensions' is set.": {
         "category": "Error",
         "code": 5096
     },
@@ -4724,6 +4739,10 @@
     "Visit https://aka.ms/ts6 for migration information.": {
         "category": "Message",
         "code": 5111
+    },
+    "tsconfig.json is present but will not be loaded if files are specified on commandline. Use '--ignoreConfig' to skip this error.": {
+        "category": "Error",
+        "code": 5112
     },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
@@ -6587,11 +6606,8 @@
         "category": "Message",
         "code": 6903
     },
-    "module === \"system\" or esModuleInterop": {
-        "category": "Message",
-        "code": 6904
-    },
-    "`false`, unless `strict` is set": {
+
+    "`true`, unless `strict` is `false`": {
         "category": "Message",
         "code": 6905
     },
@@ -6611,7 +6627,7 @@
         "category": "Message",
         "code": 6909
     },
-    "module === `AMD` or `UMD` or `System` or `ES6`, then `Classic`, Otherwise `Node`": {
+    "`nodenext` if `module` is `nodenext`; `node16` if `module` is `node16` or `node18`; otherwise, `bundler`.": {
         "category": "Message",
         "code": 69010
     },
@@ -6698,6 +6714,10 @@
     "List of file name suffixes to search when resolving a module.": {
         "category": "Error",
         "code": 6931
+    },
+    "`false`, unless `checkJs` is set": {
+        "category": "Message",
+        "code": 6932
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {

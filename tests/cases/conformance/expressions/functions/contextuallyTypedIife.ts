@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // arrow
 (jake => { })("build");
 // function expression

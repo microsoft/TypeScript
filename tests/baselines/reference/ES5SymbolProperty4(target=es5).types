@@ -1,0 +1,40 @@
+//// [tests/cases/conformance/Symbols/ES5SymbolProperty4.ts] ////
+
+=== ES5SymbolProperty4.ts ===
+var Symbol: { iterator: string };
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : string
+>         : ^^^^^^
+
+class C {
+>C : C
+>  : ^
+
+    [Symbol.iterator]() { }
+>[Symbol.iterator] : () => void
+>                  : ^^^^^^^^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+}
+
+(new C)[Symbol.iterator]
+>(new C)[Symbol.iterator] : () => void
+>                         : ^^^^^^^^^^
+>(new C) : C
+>        : ^
+>new C : C
+>      : ^
+>C : typeof C
+>  : ^^^^^^^^
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+

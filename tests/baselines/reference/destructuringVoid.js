@@ -6,4 +6,5 @@ const {} = v;
 
 
 //// [destructuringVoid.js]
-var _a = v;
+"use strict";
+const {} = v;

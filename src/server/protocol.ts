@@ -3281,9 +3281,14 @@ export const enum NewLineKind {
     Lf = "Lf",
 }
 
+// NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
+//       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
+//       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
+//       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 export const enum ScriptTarget {
     /** @deprecated */
     ES3 = "es3",
+    /** @deprecated */
     ES5 = "es5",
     ES6 = "es6",
     ES2015 = "es2015",
@@ -3296,9 +3301,11 @@ export const enum ScriptTarget {
     ES2022 = "es2022",
     ES2023 = "es2023",
     ES2024 = "es2024",
+    ES2025 = "es2025",
     ESNext = "esnext",
     JSON = "json",
     Latest = ESNext,
+    LatestStandard = ES2025,
 }
 
 {

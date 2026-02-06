@@ -1,10 +1,14 @@
 /// <reference path="fourslash.ts" />
+
 // @filename: /dir/a.ts
 ////declare const p: number[];
 ////for await (const _ of p);
 ////export {};
 // @filename: /dir/tsconfig.json
 ////{
+////    "compilerOptions": {
+////        "module": "commonjs"
+////    }
 ////}
 
 // cannot fix module when default options are applied

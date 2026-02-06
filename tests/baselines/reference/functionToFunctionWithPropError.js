@@ -8,5 +8,6 @@ x = y;
 y = x;
 
 //// [functionToFunctionWithPropError.js]
+"use strict";
 x = y;
 y = x;

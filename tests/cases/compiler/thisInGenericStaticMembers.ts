@@ -1,4 +1,5 @@
-﻿// this.call in static generic method not resolved correctly
+﻿// @target: es2015
+// this.call in static generic method not resolved correctly
 
 class A {
 

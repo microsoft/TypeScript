@@ -46,48 +46,32 @@ void p3.result.three;
 "use strict";
 // Note that both of the following have an `any` in their return type from where we bottom out the type printout
 // for having too many instances of the same symbol nesting.
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testRecFun = exports.updateIfChanged = void 0;
-var updateIfChanged = function (t) {
-    var reduce = function (u, update) {
-        var set = function (newU) { return Object.is(u, newU) ? t : update(newU); };
-        return Object.assign(function (key) {
-            return reduce(u[key], function (v) {
-                var _a;
-                return update(Object.assign(Array.isArray(u) ? [] : {}, u, (_a = {}, _a[key] = v, _a)));
-            });
-        }, { map: function (updater) { return set(updater(u)); }, set: set });
+const updateIfChanged = (t) => {
+    const reduce = (u, update) => {
+        const set = (newU) => Object.is(u, newU) ? t : update(newU);
+        return Object.assign((key) => reduce(u[key], (v) => {
+            return update(Object.assign(Array.isArray(u) ? [] : {}, u, { [key]: v }));
+        }), { map: (updater) => set(updater(u)), set });
     };
-    return reduce(t, function (t) { return t; });
+    return reduce(t, (t) => t);
 };
 exports.updateIfChanged = updateIfChanged;
 // example from https://github.com/microsoft/TypeScript/issues/31605
-var testRecFun = function (parent) {
+const testRecFun = (parent) => {
     return {
         result: parent,
-        deeper: function (child) {
-            return (0, exports.testRecFun)(__assign(__assign({}, parent), child));
-        }
+        deeper: (child) => (0, exports.testRecFun)(Object.assign(Object.assign({}, parent), child))
     };
 };
 exports.testRecFun = testRecFun;
-var p1 = (0, exports.testRecFun)({ one: '1' });
+let p1 = (0, exports.testRecFun)({ one: '1' });
 void p1.result.one;
-var p2 = p1.deeper({ two: '2' });
+let p2 = p1.deeper({ two: '2' });
 void p2.result.one;
 void p2.result.two;
-var p3 = p2.deeper({ three: '3' });
+let p3 = p2.deeper({ three: '3' });
 void p3.result.one;
 void p3.result.two;
 void p3.result.three;

@@ -1,7 +1,11 @@
-file.tsx(32,17): error TS2322: Type 'string' is not assignable to type 'never'.
+file.tsx(34,17): error TS2322: Type 'string' is not assignable to type 'number'.
+file.tsx(37,10): error TS2741: Property 'x' is missing in type '{}' but required in type '{ x: number; }'.
+file.tsx(38,10): error TS2741: Property 'x' is missing in type '{ "data-extra": string; }' but required in type '{ x: number; }'.
 
 
-==== file.tsx (1 errors) ====
+==== file.tsx (3 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react');
     
     class RC1 extends React.Component<{x : number}, {}> {
@@ -35,9 +39,15 @@ file.tsx(32,17): error TS2322: Type 'string' is not assignable to type 'never'.
     // OK
     let a = <RCComp x="Hi" />;
                     ~
-!!! error TS2322: Type 'string' is not assignable to type 'never'.
-!!! related TS6500 file.tsx:3:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1 | RC2> & { x: number; } & { children?: ReactNode; } & { x: string; } & { children?: ReactNode; }'
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 file.tsx:5:36: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC1> & { x: number; } & { children?: ReactNode | undefined; }'
     let a1 = <EmptyRCComp />;
     let a2 = <EmptyRCComp data-prop="hello" />;
     let b = <PartRCComp />
+             ~~~~~~~~~~
+!!! error TS2741: Property 'x' is missing in type '{}' but required in type '{ x: number; }'.
+!!! related TS2728 file.tsx:5:36: 'x' is declared here.
     let c = <PartRCComp data-extra="hello" />
+             ~~~~~~~~~~
+!!! error TS2741: Property 'x' is missing in type '{ "data-extra": string; }' but required in type '{ x: number; }'.
+!!! related TS2728 file.tsx:5:36: 'x' is declared here.

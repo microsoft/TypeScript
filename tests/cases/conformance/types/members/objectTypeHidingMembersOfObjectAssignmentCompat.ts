@@ -1,16 +1,17 @@
+// @target: es2015
 interface I {
     toString(): void;
 }
 
-var i: I;
-var o: Object;
+declare var i: I;
+declare var o: Object;
 o = i; // error
 i = o; // ok
 
 class C {
     toString(): void { }
 }
-var c: C;
+declare var c: C;
 o = c; // error
 c = o; // ok
 

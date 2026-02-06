@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @filename: node_modules/mod/ctor.d.ts
 export interface Ctor {

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 declare function f({ a: number }): void
 interface I {
     readonly n: number;

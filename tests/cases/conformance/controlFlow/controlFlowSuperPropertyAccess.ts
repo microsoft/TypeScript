@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 class B {
     protected m?(): void;

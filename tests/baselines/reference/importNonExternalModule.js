@@ -14,15 +14,15 @@ if(foo.answer === 42){
 
 
 //// [foo_0.js]
+"use strict";
 var foo;
 (function (foo) {
     foo.answer = 42;
 })(foo || (foo = {}));
 //// [foo_1.js]
-define(["require", "exports", "./foo_0"], function (require, exports, foo) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    // Import should fail.  foo_0 not an external module
-    if (foo.answer === 42) {
-    }
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const foo = require("./foo_0");
+// Import should fail.  foo_0 not an external module
+if (foo.answer === 42) {
+}

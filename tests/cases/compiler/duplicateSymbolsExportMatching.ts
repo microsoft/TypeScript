@@ -1,4 +1,5 @@
-//@module: amd
+// @target: es2015
+//@module: commonjs
 namespace M {
     export interface E { }
     interface I { }

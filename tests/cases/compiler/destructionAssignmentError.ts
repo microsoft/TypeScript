@@ -1,3 +1,4 @@
+// @target: es2015
 declare function fn(): { a: 1, b: 2 }
 let a: number;
 let b: number;

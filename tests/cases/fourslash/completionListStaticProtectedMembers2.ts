@@ -1,5 +1,8 @@
 /// <reference path='fourslash.ts'/>
 
+// @target: es2015
+// @lib: es5
+
 ////class Base {
 ////    private static privateMethod() { }
 ////    private static privateProperty;
@@ -59,10 +62,17 @@ verify.completions(
         exact: [
             { name: "protectedMethod", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "protectedOverriddenMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "protectedOverriddenProperty", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "protectedProperty", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "publicMethod", sortText: completion.SortText.LocalDeclarationPriority },
+            { name: "publicProperty", sortText: completion.SortText.LocalDeclarationPriority },
             { name: "apply", sortText: completion.SortText.LocationPriority },
+            { name: "arguments", sortText: completion.SortText.LocationPriority },
             { name: "bind", sortText: completion.SortText.LocationPriority },
             { name: "call", sortText: completion.SortText.LocationPriority },
+            { name: "caller", sortText: completion.SortText.LocationPriority },
+            { name: "length", sortText: completion.SortText.LocationPriority },
+            { name: "prototype", sortText: completion.SortText.LocationPriority },
             { name: "toString", sortText: completion.SortText.LocationPriority },
         ],
     },

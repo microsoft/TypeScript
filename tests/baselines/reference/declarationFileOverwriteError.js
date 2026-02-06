@@ -9,8 +9,6 @@ class d {
 }
 
 //// [a.js]
-var d = /** @class */ (function () {
-    function d() {
-    }
-    return d;
-}());
+"use strict";
+class d {
+}

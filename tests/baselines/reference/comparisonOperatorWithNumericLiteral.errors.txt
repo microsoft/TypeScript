@@ -1,0 +1,118 @@
+comparisonOperatorWithNumericLiteral.ts(5,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(6,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(7,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(10,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(11,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(12,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(15,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(16,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(17,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(20,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(21,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(22,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(25,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(26,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(27,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(30,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(31,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(32,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(35,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(36,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(37,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(40,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(41,1): error TS2454: Variable 'x' is used before being assigned.
+comparisonOperatorWithNumericLiteral.ts(42,1): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== comparisonOperatorWithNumericLiteral.ts (24 errors) ====
+    type BrandedNum = number & { __numberBrand: any };
+    var x : BrandedNum;
+    
+    // operator >
+    x > 0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x > <number>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x > <BrandedNum>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+    // operator <
+    x < 0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x < <number>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x < <BrandedNum>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+    // operator >=
+    x >= 0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x >= <number>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x >= <BrandedNum>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+    // operator <=
+    x <= 0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x <= <number>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x <= <BrandedNum>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+    // operator ==
+    x == 0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x == <number>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x == <BrandedNum>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+    // operator !=
+    x != 0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x != <number>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x != <BrandedNum>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+    // operator ===
+    x === 0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x === <number>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x === <BrandedNum>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    
+    // operator !==
+    x !== 0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x !== <number>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    x !== <BrandedNum>0;
+    ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    

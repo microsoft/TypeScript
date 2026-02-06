@@ -24,5 +24,6 @@ f(x);
 
 
 //// [thisInTupleTypeParameterConstraints.js]
-var x;
+"use strict";
+let x;
 f(x);

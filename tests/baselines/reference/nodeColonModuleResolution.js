@@ -25,7 +25,5 @@ console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE)
 
 
 //// [main.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var ph = require("node:ph");
+import * as ph from 'node:ph';
 console.log(ph.constants.NODE_PERFORMANCE_GC_FLAGS_ALL_AVAILABLE_GARBAGE);

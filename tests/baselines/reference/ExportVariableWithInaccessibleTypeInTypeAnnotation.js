@@ -21,6 +21,7 @@ namespace A {
 
 
 //// [ExportVariableWithInaccessibleTypeInTypeAnnotation.js]
+"use strict";
 var A;
 (function (A) {
     // valid since Point is exported

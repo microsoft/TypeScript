@@ -139,20 +139,54 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/first/tsconfig.json'...
 
+[96mfirst/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "target": "es5",
+[7m [0m [91m              ~~~~~[0m
+
+[96mfirst/tsconfig.json[0m:[93m4[0m:[93m34[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "composite": true, "module": "none",
+[7m [0m [91m                                 ~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Project 'second/tsconfig.json' is out of date because output file 'second/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/second/tsconfig.json'...
+
+[96msecond/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "target": "es5",
+[7m [0m [91m              ~~~~~[0m
+
+[96msecond/tsconfig.json[0m:[93m4[0m:[93m34[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "composite": true, "module": "none",
+[7m [0m [91m                                 ~~~~~~[0m
 
 [[90mHH:MM:SS AM[0m] Project 'third/tsconfig.json' is out of date because output file 'third/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/third/tsconfig.json'...
 
+[96mthird/tsconfig.json[0m:[93m3[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "target": "es5",
+[7m [0m [91m              ~~~~~[0m
+
+[96mthird/tsconfig.json[0m:[93m4[0m:[93m34[0m - [91merror[0m[90m TS5107: [0mOption 'module=None' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "composite": true, "module": "none",
+[7m [0m [91m                                 ~~~~~~[0m
+
+
+Found 6 errors.
+
 
 
 //// [/home/src/workspaces/solution/first/first_PART1.js.map]
-{"version":3,"file":"first_PART1.js","sourceRoot":"","sources":["first_PART1.ts"],"names":[],"mappings":"AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC"}
+{"version":3,"file":"first_PART1.js","sourceRoot":"","sources":["first_PART1.ts"],"names":[],"mappings":";AAIA,IAAM,CAAC,GAAG,cAAc,CAAC;AAMzB,OAAO,CAAC,GAAG,CAAC,CAAC,CAAC,CAAC"}
 
 //// [/home/src/workspaces/solution/first/first_PART1.js]
+"use strict";
 var s = "Hello, world";
 console.log(s);
 //# sourceMappingURL=first_PART1.js.map
@@ -171,9 +205,10 @@ interface NoJsForHereEither {
 //# sourceMappingURL=first_PART1.d.ts.map
 
 //// [/home/src/workspaces/solution/first/first_part2.js.map]
-{"version":3,"file":"first_part2.js","sourceRoot":"","sources":["first_part2.ts"],"names":[],"mappings":"AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC"}
+{"version":3,"file":"first_part2.js","sourceRoot":"","sources":["first_part2.ts"],"names":[],"mappings":";AAAA,OAAO,CAAC,GAAG,CAAC,CAAC,EAAE,CAAC,CAAC"}
 
 //// [/home/src/workspaces/solution/first/first_part2.js]
+"use strict";
 console.log(f());
 //# sourceMappingURL=first_part2.js.map
 
@@ -184,9 +219,10 @@ console.log(f());
 //# sourceMappingURL=first_part2.d.ts.map
 
 //// [/home/src/workspaces/solution/first/first_part3.js.map]
-{"version":3,"file":"first_part3.js","sourceRoot":"","sources":["first_part3.ts"],"names":[],"mappings":"AAAA,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
+{"version":3,"file":"first_part3.js","sourceRoot":"","sources":["first_part3.ts"],"names":[],"mappings":";AAAA,SAAS,CAAC;IACN,OAAO,gBAAgB,CAAC;AAC5B,CAAC"}
 
 //// [/home/src/workspaces/solution/first/first_part3.js]
+"use strict";
 function f() {
     return "JS does hoists";
 }
@@ -200,7 +236,7 @@ declare function f(): string;
 //# sourceMappingURL=first_part3.d.ts.map
 
 //// [/home/src/workspaces/solution/first/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./first_part1.ts","./first_part2.ts","./first_part3.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-22071182994-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\n","signature":"-14851202444-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\n","affectsGlobalScope":true},{"version":"6007494133-console.log(f());\n","signature":"5381-","affectsGlobalScope":true},{"version":"4357625305-function f() {\n    return \"JS does hoists\";\n}\n","signature":"-6420944280-declare function f(): string;\n","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"latestChangedDtsFile":"./first_part3.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./first_part1.ts","./first_part2.ts","./first_part3.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-22071182994-interface TheFirst {\n    none: any;\n}\n\nconst s = \"Hello, world\";\n\ninterface NoJsForHereEither {\n    none: any;\n}\n\nconsole.log(s);\n","signature":"-14851202444-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\n","affectsGlobalScope":true},{"version":"6007494133-console.log(f());\n","signature":"5381-","affectsGlobalScope":true},{"version":"4357625305-function f() {\n    return \"JS does hoists\";\n}\n","signature":"-6420944280-declare function f(): string;\n","affectsGlobalScope":true}],"root":[[2,4]],"options":{"composite":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3,4],"latestChangedDtsFile":"./first_part3.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/first/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -274,15 +310,34 @@ declare function f(): string;
     "strict": false,
     "target": 1
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./first_part1.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./first_part2.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./first_part3.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./first_part3.d.ts",
   "version": "FakeTSVersion",
-  "size": 1403
+  "size": 1442
 }
 
 //// [/home/src/workspaces/solution/second/second_part1.js.map]
-{"version":3,"file":"second_part1.js","sourceRoot":"","sources":["second_part1.ts"],"names":[],"mappings":"AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV"}
+{"version":3,"file":"second_part1.js","sourceRoot":"","sources":["second_part1.ts"],"names":[],"mappings":";AAIA,IAAU,CAAC,CAMV;AAND,WAAU,CAAC;IACP,SAAS,CAAC;QACN,OAAO,CAAC,GAAG,CAAC,SAAS,CAAC,CAAC;IAC3B,CAAC;IAED,CAAC,EAAE,CAAC;AACR,CAAC,EANS,CAAC,KAAD,CAAC,QAMV"}
 
 //// [/home/src/workspaces/solution/second/second_part1.js]
+"use strict";
 var N;
 (function (N) {
     function f() {
@@ -303,9 +358,10 @@ declare namespace N {
 //# sourceMappingURL=second_part1.d.ts.map
 
 //// [/home/src/workspaces/solution/second/second_part2.js.map]
-{"version":3,"file":"second_part2.js","sourceRoot":"","sources":["second_part2.ts"],"names":[],"mappings":"AAAA;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
+{"version":3,"file":"second_part2.js","sourceRoot":"","sources":["second_part2.ts"],"names":[],"mappings":";AAAA;IAAA;IAIA,CAAC;IAHG,uBAAW,GAAX;QACI,OAAO,CAAC,GAAG,CAAC,oBAAoB,CAAC,CAAC;IACtC,CAAC;IACL,QAAC;AAAD,CAAC,AAJD,IAIC"}
 
 //// [/home/src/workspaces/solution/second/second_part2.js]
+"use strict";
 var C = (function () {
     function C() {
     }
@@ -326,7 +382,7 @@ declare class C {
 //# sourceMappingURL=second_part2.d.ts.map
 
 //// [/home/src/workspaces/solution/second/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./second_part1.ts","./second_part2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12195290447-namespace N {\n    // Comment text\n}\n\nnamespace N {\n    function f() {\n        console.log('testing');\n    }\n\n    f();\n}\n","signature":"-12385043917-declare namespace N {\n}\ndeclare namespace N {\n}\n","affectsGlobalScope":true},{"version":"3642692259-class C {\n    doSomething() {\n        console.log(\"something got done\");\n    }\n}\n","signature":"-4226833059-declare class C {\n    doSomething(): void;\n}\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"latestChangedDtsFile":"./second_part2.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","./second_part1.ts","./second_part2.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-12195290447-namespace N {\n    // Comment text\n}\n\nnamespace N {\n    function f() {\n        console.log('testing');\n    }\n\n    f();\n}\n","signature":"-12385043917-declare namespace N {\n}\ndeclare namespace N {\n}\n","affectsGlobalScope":true},{"version":"3642692259-class C {\n    doSomething() {\n        console.log(\"something got done\");\n    }\n}\n","signature":"-4226833059-declare class C {\n    doSomething(): void;\n}\n","affectsGlobalScope":true}],"root":[2,3],"options":{"composite":true,"declaration":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./second_part2.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/second/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -387,15 +443,30 @@ declare class C {
     "strict": false,
     "target": 1
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./second_part1.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./second_part2.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./second_part2.d.ts",
   "version": "FakeTSVersion",
-  "size": 1279
+  "size": 1316
 }
 
 //// [/home/src/workspaces/solution/third/third_part1.js.map]
-{"version":3,"file":"third_part1.js","sourceRoot":"","sources":["third_part1.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
+{"version":3,"file":"third_part1.js","sourceRoot":"","sources":["third_part1.ts"],"names":[],"mappings":";AAAA,IAAI,CAAC,GAAG,IAAI,CAAC,EAAE,CAAC;AAChB,CAAC,CAAC,WAAW,EAAE,CAAC"}
 
 //// [/home/src/workspaces/solution/third/third_part1.js]
+"use strict";
 var c = new C();
 c.doSomething();
 //# sourceMappingURL=third_part1.js.map
@@ -408,7 +479,7 @@ declare var c: C;
 //# sourceMappingURL=third_part1.d.ts.map
 
 //// [/home/src/workspaces/solution/third/tsconfig.tsbuildinfo]
-{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../first/first_part1.d.ts","../first/first_part2.d.ts","../first/first_part3.d.ts","../second/second_part1.d.ts","../second/second_part2.d.ts","./third_part1.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14851202444-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\n","affectsGlobalScope":true},"-2054710634-//# sourceMappingURL=first_part2.d.ts.map",{"version":"-6420944280-declare function f(): string;\n","affectsGlobalScope":true},{"version":"-12385043917-declare namespace N {\n}\ndeclare namespace N {\n}\n","affectsGlobalScope":true},{"version":"-4226833059-declare class C {\n    doSomething(): void;\n}\n","affectsGlobalScope":true},{"version":"7305100057-var c = new C();\nc.doSomething();\n","signature":"1894672131-declare var c: C;\n","affectsGlobalScope":true}],"root":[7],"options":{"composite":true,"declaration":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"latestChangedDtsFile":"./third_part1.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../tslibs/ts/lib/lib.d.ts","../first/first_part1.d.ts","../first/first_part2.d.ts","../first/first_part3.d.ts","../second/second_part1.d.ts","../second/second_part2.d.ts","./third_part1.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-14851202444-interface TheFirst {\n    none: any;\n}\ndeclare const s = \"Hello, world\";\ninterface NoJsForHereEither {\n    none: any;\n}\n","affectsGlobalScope":true},"-2054710634-//# sourceMappingURL=first_part2.d.ts.map",{"version":"-6420944280-declare function f(): string;\n","affectsGlobalScope":true},{"version":"-12385043917-declare namespace N {\n}\ndeclare namespace N {\n}\n","affectsGlobalScope":true},{"version":"-4226833059-declare class C {\n    doSomething(): void;\n}\n","affectsGlobalScope":true},{"version":"7305100057-var c = new C();\nc.doSomething();\n","signature":"1894672131-declare var c: C;\n","affectsGlobalScope":true}],"root":[7],"options":{"composite":true,"declaration":true,"declarationMap":true,"module":0,"removeComments":true,"skipDefaultLibCheck":true,"sourceMap":true,"strict":false,"target":1},"semanticDiagnosticsPerFile":[1,2,3,4,5,6,7],"latestChangedDtsFile":"./third_part1.d.ts","version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/third/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
@@ -499,10 +570,40 @@ declare var c: C;
     "strict": false,
     "target": 1
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../../tslibs/ts/lib/lib.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../first/first_part1.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../first/first_part2.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../first/first_part3.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../second/second_part1.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "../second/second_part2.d.ts",
+      "not cached or not changed"
+    ],
+    [
+      "./third_part1.ts",
+      "not cached or not changed"
+    ]
+  ],
   "latestChangedDtsFile": "./third_part1.d.ts",
   "version": "FakeTSVersion",
-  "size": 1581
+  "size": 1626
 }
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped

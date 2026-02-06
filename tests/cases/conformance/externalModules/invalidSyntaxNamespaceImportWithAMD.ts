@@ -1,4 +1,5 @@
-﻿// @module: amd
+﻿// @target: es2015
+// @module: amd
 // @filename: 0.ts
 export class C { }
 

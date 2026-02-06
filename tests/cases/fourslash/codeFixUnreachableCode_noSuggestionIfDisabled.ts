@@ -2,6 +2,6 @@
 
 // @allowUnreachableCode: true
 
-////if (false) 0;
+////if (false) [|0;|]
 
 verify.getSuggestionDiagnostics([]);

@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnusedLabels: true
 // @allowUnreachableCode: true
 
@@ -25,7 +26,7 @@ b ++;
 namespace moduleType1 { 
     export var baz1: number;
 }
-module moduleType\u0032 { 
+declare module moduleType\u0032 { 
     export var baz2: number;
 }
 

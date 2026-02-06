@@ -1,16 +1,36 @@
 Info seq  [hh:mm:ss:mss] currentDirectory:: /home/src/Vscode/Projects/bin useCaseSensitiveFileNames:: false
 Info seq  [hh:mm:ss:mss] libs Location:: /home/src/tslibs/TS/Lib
 Info seq  [hh:mm:ss:mss] globalTypingsCacheLocation:: /home/src/Library/Caches/typescript
-Info seq  [hh:mm:ss:mss] Provided types map file "/home/src/tslibs/TS/Lib/typesMap.json" doesn't exist
-//// [/home/src/tslibs/TS/Lib/lib.d.ts]
-lib.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.decorators.d.ts]
-lib.decorators.d.ts-Text
-
-//// [/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts]
-lib.decorators.legacy.d.ts-Text
-
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 0,
+      "type": "request",
+      "arguments": {
+        "options": {
+          "lib": [
+            "es5"
+          ],
+          "strict": false,
+          "sourceMap": true,
+          "declaration": true,
+          "declarationMap": true,
+          "outFile": "/tests/cases/fourslash/server/buttonClass/Source.js",
+          "target": "es2025",
+          "newLine": "crlf",
+          "skipDefaultLibCheck": true
+        }
+      },
+      "command": "compilerOptionsForInferredProjects"
+    }
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "compilerOptionsForInferredProjects",
+      "request_seq": 0,
+      "success": true,
+      "body": true
+    }
 //// [/tests/cases/fourslash/server/BaseClass/Source.d.ts]
 declare class Control {
     constructor();
@@ -65,6 +85,8 @@ class Button extends Control {
     "$schema": "http://json.schemastore.org/tsconfig",
     "compileOnSave": true,
     "compilerOptions": {
+      "lib": ["es5"],
+      "strict": false,
       "sourceMap": true,
       "declaration": true,
       "declarationMap": true
@@ -74,7 +96,7 @@ class Button extends Control {
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 0,
+      "seq": 1,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/BaseClass/Source.d.ts"
@@ -88,30 +110,24 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /dev/null/inferredProject1*
-Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 500 undefined WatchType: Closed Script info
+Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es5.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.d.ts 500 undefined WatchType: Closed Script info
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts 500 undefined WatchType: Closed Script info
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/BaseClass/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/BaseClass/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /dev/null/inferredProject1* projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/tests/cases/fourslash/server/BaseClass/Source.d.ts SVC-1-0 "declare class Control {\n    constructor();\n    /** this is a super var */\n    myVar: boolean | 'yeah';\n}\n//# sourceMappingURL=Source.d.ts.map"
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../../../home/src/tslibs/TS/Lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../../../home/src/tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators' from file '../../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts'
 	../../../../../home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../../../home/src/tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators.legacy' from file '../../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts'
 	Source.d.ts
 	  Root file specified for compilation
 
@@ -128,7 +144,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 0,
+      "request_seq": 1,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -136,11 +152,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts: *new*
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts: *new*
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts: *new*
   {"pollingInterval":500}
 /tests/cases/fourslash/server/BaseClass/jsconfig.json: *new*
   {"pollingInterval":2000}
@@ -151,14 +167,6 @@ watchedFiles::
 /tests/cases/fourslash/server/tsconfig.json: *new*
   {"pollingInterval":2000}
 
-watchedDirectoriesRecursive::
-/tests/cases/fourslash/node_modules/@types: *new*
-  {}
-/tests/cases/fourslash/server/BaseClass/node_modules/@types: *new*
-  {}
-/tests/cases/fourslash/server/node_modules/@types: *new*
-  {}
-
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
     projectStateVersion: 1
@@ -166,15 +174,15 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *new*
-    version: Text-1
-    containingProjects: 1
-        /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *new*
+    version: Text-1
+    containingProjects: 1
+        /dev/null/inferredProject1*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts *new*
     version: Text-1
     containingProjects: 1
         /dev/null/inferredProject1*
@@ -185,7 +193,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 1,
+      "seq": 2,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/buttonClass/Source.ts"
@@ -201,6 +209,10 @@ Info seq  [hh:mm:ss:mss] Config: /tests/cases/fourslash/server/buttonClass/tscon
   "/tests/cases/fourslash/server/BaseClass/Source.d.ts"
  ],
  "options": {
+  "lib": [
+   "lib.es5.d.ts"
+  ],
+  "strict": false,
   "sourceMap": true,
   "declaration": true,
   "declarationMap": true,
@@ -224,28 +236,22 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /tests/cases/fourslash
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /tests/cases/fourslash/server/tsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] FileWatcher:: Close:: WatchInfo: /tests/cases/fourslash/server/jsconfig.json 2000 undefined WatchType: Config file for the inferred project root
 Info seq  [hh:mm:ss:mss] Starting updateGraphWorker: Project: /tests/cases/fourslash/server/buttonClass/tsconfig.json
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/buttonClass/node_modules/@types 1 undefined Project: /tests/cases/fourslash/server/buttonClass/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/buttonClass/node_modules/@types 1 undefined Project: /tests/cases/fourslash/server/buttonClass/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /tests/cases/fourslash/server/buttonClass/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /tests/cases/fourslash/server/buttonClass/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /tests/cases/fourslash/server/buttonClass/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /tests/cases/fourslash/server/buttonClass/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /tests/cases/fourslash/server/buttonClass/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/tests/cases/fourslash/server/buttonClass/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
-	/home/src/tslibs/TS/Lib/lib.d.ts Text-1 lib.d.ts-Text
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
 	/tests/cases/fourslash/server/buttonClass/Source.ts SVC-1-0 "// I cannot F12 navigate to Control\n//                   vvvvvvv\nclass Button extends Control {\n    public myFunction() {\n        // I cannot F12 navigate to myVar\n        //              vvvvv\n        if (typeof this.myVar === 'boolean') {\n            this.myVar;\n        } else {\n            this.myVar.toLocaleUpperCase();\n        }\n    }\n}"
 	/tests/cases/fourslash/server/BaseClass/Source.d.ts SVC-1-0 "declare class Control {\n    constructor();\n    /** this is a super var */\n    myVar: boolean | 'yeah';\n}\n//# sourceMappingURL=Source.d.ts.map"
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../../../home/src/tslibs/TS/Lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../../../home/src/tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators' from file '../../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts'
 	../../../../../home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../../../home/src/tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators.legacy' from file '../../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts'
 	Source.ts
 	  Part of 'files' list in tsconfig.json
 	../BaseClass/Source.d.ts
@@ -269,34 +275,43 @@ Info seq  [hh:mm:ss:mss] event:
       "body": {
         "triggerFile": "/tests/cases/fourslash/server/buttonClass/Source.ts",
         "configFile": "/tests/cases/fourslash/server/buttonClass/tsconfig.json",
-        "diagnostics": []
+        "diagnostics": [
+          {
+            "start": {
+              "line": 4,
+              "offset": 7
+            },
+            "end": {
+              "line": 4,
+              "offset": 16
+            },
+            "text": "Option 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '\"ignoreDeprecations\": \"6.0\"' to silence this error.",
+            "code": 5101,
+            "category": "error",
+            "fileName": "/tests/cases/fourslash/server/buttonClass/tsconfig.json"
+          }
+        ]
       }
     }
 Info seq  [hh:mm:ss:mss] `remove Project::
 Info seq  [hh:mm:ss:mss] Project '/dev/null/inferredProject1*' (Inferred)
 Info seq  [hh:mm:ss:mss] 	Files (4)
-	/home/src/tslibs/TS/Lib/lib.d.ts
+	/home/src/tslibs/TS/Lib/lib.es5.d.ts
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
 	/tests/cases/fourslash/server/BaseClass/Source.d.ts
 
 
-	../../../../../home/src/tslibs/TS/Lib/lib.d.ts
-	  Default library for target 'es5'
+	../../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts
+	  Library 'lib.es5.d.ts' specified in compilerOptions
 	../../../../../home/src/tslibs/TS/Lib/lib.decorators.d.ts
-	  Library referenced via 'decorators' from file '../../../../../home/src/tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators' from file '../../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts'
 	../../../../../home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
-	  Library referenced via 'decorators.legacy' from file '../../../../../home/src/tslibs/TS/Lib/lib.d.ts'
+	  Library referenced via 'decorators.legacy' from file '../../../../../home/src/tslibs/TS/Lib/lib.es5.d.ts'
 	Source.d.ts
 	  Root file specified for compilation
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /tests/cases/fourslash/server/BaseClass/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /tests/cases/fourslash/server/BaseClass/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /tests/cases/fourslash/server/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Close:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /tests/cases/fourslash/node_modules/@types 1 undefined Project: /dev/null/inferredProject1* WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Project '/tests/cases/fourslash/server/buttonClass/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (5)
 
@@ -311,7 +326,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "open",
-      "request_seq": 1,
+      "request_seq": 2,
       "success": true,
       "performanceData": {
         "updateGraphDurationMs": *
@@ -319,11 +334,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /tests/cases/fourslash/server/buttonClass/tsconfig.json: *new*
   {"pollingInterval":2000}
@@ -340,22 +355,6 @@ watchedFiles *deleted*::
 /tests/cases/fourslash/server/tsconfig.json:
   {"pollingInterval":2000}
 
-watchedDirectoriesRecursive::
-/tests/cases/fourslash/node_modules/@types:
-  {} *new*
-/tests/cases/fourslash/server/buttonClass/node_modules/@types: *new*
-  {}
-/tests/cases/fourslash/server/node_modules/@types:
-  {} *new*
-
-watchedDirectoriesRecursive *deleted*::
-/tests/cases/fourslash/node_modules/@types:
-  {}
-/tests/cases/fourslash/server/BaseClass/node_modules/@types:
-  {}
-/tests/cases/fourslash/server/node_modules/@types:
-  {}
-
 Projects::
 /dev/null/inferredProject1* (Inferred) *deleted*
     projectStateVersion: 2 *changed*
@@ -370,17 +369,17 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts *changed*
-    version: Text-1
-    containingProjects: 1 *changed*
-        /tests/cases/fourslash/server/buttonClass/tsconfig.json *new*
-        /dev/null/inferredProject1* *deleted*
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
         /tests/cases/fourslash/server/buttonClass/tsconfig.json *new*
         /dev/null/inferredProject1* *deleted*
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts *changed*
+    version: Text-1
+    containingProjects: 1 *changed*
+        /tests/cases/fourslash/server/buttonClass/tsconfig.json *new*
+        /dev/null/inferredProject1* *deleted*
+/home/src/tslibs/TS/Lib/lib.es5.d.ts *changed*
     version: Text-1
     containingProjects: 1 *changed*
         /tests/cases/fourslash/server/buttonClass/tsconfig.json *new*
@@ -397,7 +396,7 @@ ScriptInfos::
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 2,
+      "seq": 3,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/buttonClass/Source.ts",
@@ -413,7 +412,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "definitionAndBoundSpan",
-      "request_seq": 2,
+      "request_seq": 3,
       "success": true,
       "body": {
         "definitions": [
@@ -451,11 +450,11 @@ Info seq  [hh:mm:ss:mss] response:
     }
 After Request
 watchedFiles::
-/home/src/tslibs/TS/Lib/lib.d.ts:
-  {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts:
   {"pollingInterval":500}
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts:
+  {"pollingInterval":500}
+/home/src/tslibs/TS/Lib/lib.es5.d.ts:
   {"pollingInterval":500}
 /tests/cases/fourslash/server/BaseClass/Source.d.ts.map: *new*
   {"pollingInterval":500}
@@ -466,14 +465,6 @@ watchedFiles::
 /tests/cases/fourslash/server/tsbase.json:
   {"pollingInterval":2000}
 
-watchedDirectoriesRecursive::
-/tests/cases/fourslash/node_modules/@types:
-  {}
-/tests/cases/fourslash/server/buttonClass/node_modules/@types:
-  {}
-/tests/cases/fourslash/server/node_modules/@types:
-  {}
-
 Projects::
 /tests/cases/fourslash/server/buttonClass/tsconfig.json (Configured) *changed*
     projectStateVersion: 1
@@ -483,15 +474,15 @@ Projects::
     autoImportProviderHost: false
 
 ScriptInfos::
-/home/src/tslibs/TS/Lib/lib.d.ts
-    version: Text-1
-    containingProjects: 1
-        /tests/cases/fourslash/server/buttonClass/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.decorators.d.ts
     version: Text-1
     containingProjects: 1
         /tests/cases/fourslash/server/buttonClass/tsconfig.json
 /home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts
+    version: Text-1
+    containingProjects: 1
+        /tests/cases/fourslash/server/buttonClass/tsconfig.json
+/home/src/tslibs/TS/Lib/lib.es5.d.ts
     version: Text-1
     containingProjects: 1
         /tests/cases/fourslash/server/buttonClass/tsconfig.json
@@ -520,7 +511,7 @@ DocumentPositionMapper1 *new*
 
 Info seq  [hh:mm:ss:mss] request:
     {
-      "seq": 3,
+      "seq": 4,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/buttonClass/Source.ts",
@@ -534,7 +525,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "definitionAndBoundSpan",
-      "request_seq": 3,
+      "request_seq": 4,
       "success": true,
       "body": {
         "definitions": [

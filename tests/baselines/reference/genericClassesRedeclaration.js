@@ -80,3 +80,4 @@ declare namespace TypeScript {
 }
 
 //// [genericClassesRedeclaration.js]
+"use strict";

@@ -36,7 +36,7 @@ function foo<T>(t: X<T>, t2: X<T>) {
 >t2 : X<T>
 >   : ^^^^
 
-    var x: T;
+    var x!: T;
 >x : T
 >  : ^
 

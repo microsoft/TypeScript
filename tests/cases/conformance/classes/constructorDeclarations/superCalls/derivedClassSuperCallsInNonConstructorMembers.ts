@@ -1,3 +1,4 @@
+// @target: es2015
 // error to use super calls outside a constructor
 
 class Base {

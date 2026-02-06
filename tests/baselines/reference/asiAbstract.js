@@ -18,21 +18,13 @@ class C3 {
 
 
 //// [asiAbstract.js]
+"use strict";
 abstract;
-var NonAbstractClass = /** @class */ (function () {
-    function NonAbstractClass() {
+class NonAbstractClass {
+}
+class C2 {
+    nonAbstractFunction() {
     }
-    return NonAbstractClass;
-}());
-var C2 = /** @class */ (function () {
-    function C2() {
-    }
-    C2.prototype.nonAbstractFunction = function () {
-    };
-    return C2;
-}());
-var C3 = /** @class */ (function () {
-    function C3() {
-    }
-    return C3;
-}());
+}
+class C3 {
+}

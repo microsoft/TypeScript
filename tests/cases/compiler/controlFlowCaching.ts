@@ -1,3 +1,5 @@
+// @strict: false
+// @target: es2015
 // @strictNullChecks: true
 
 // Repro for #8401

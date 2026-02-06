@@ -1,5 +1,6 @@
+// @target: es2015
 // @outFile: concat.js
-// @module: amd
+// @module: esnext
 // @moduleResolution: bundler
 // @Filename: A:/bar.ts
 import {z} from "./foo";

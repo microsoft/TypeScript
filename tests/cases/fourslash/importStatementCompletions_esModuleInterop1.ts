@@ -2,6 +2,7 @@
 
 // @esModuleInterop: false
 // @allowSyntheticDefaultImports: false
+// @module: commonjs
 
 // @Filename: /mod.ts
 //// const foo = 0;

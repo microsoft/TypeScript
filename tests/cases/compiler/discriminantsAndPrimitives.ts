@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 
 // Repro from #10257 plus other tests

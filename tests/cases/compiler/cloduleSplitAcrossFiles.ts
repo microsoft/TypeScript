@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: cloduleSplitAcrossFiles_class.ts
 class D { }
 

@@ -13,6 +13,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-fields-nonStatic.js]
+"use strict";
 const field3 = "field3";
 class C {
     @dec(1)

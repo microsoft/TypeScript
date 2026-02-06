@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 function f1(obj: { kind: 'a', data: string } | { kind: 1, data: number }) {

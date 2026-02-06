@@ -1,16 +1,17 @@
+// @target: es2015
 var x: void;
 x = 1;
 x = true;
 x = '';
 x = {}
 
-class C { foo: string; }
-var c: C;
+class C { foo!: string; }
+declare var c: C;
 x = C;
 x = c;
 
 interface I { foo: string; }
-var i: I;
+declare var i: I;
 x = i;
 
 namespace M { export var x = 1; }

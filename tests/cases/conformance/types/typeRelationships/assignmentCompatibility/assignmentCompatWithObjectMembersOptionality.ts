@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // Derived member is not optional but base member is, should be ok
 
 class Base { foo: string; }
@@ -9,9 +11,9 @@ namespace TargetHasOptional {
     interface C {
         opt?: Base
     }
-    var c: C;
+    declare var c: C;
 
-    var a: { opt?: Base; }
+    declare var a: { opt?: Base; };
     var b: typeof a = { opt: new Base() }
 
     // sources
@@ -24,9 +26,9 @@ namespace TargetHasOptional {
     interface F {
         opt?: Derived;
     }
-    var d: D;
-    var e: E;
-    var f: F;
+    declare var d: D;
+    declare var e: E;
+    declare var f: F;
 
     // all ok
     c = d;
@@ -51,9 +53,9 @@ namespace SourceHasOptional {
     interface C {
         opt: Base
     }
-    var c: C;
+    declare var c: C;
 
-    var a: { opt: Base; }
+    declare var a: { opt: Base; };
     var b = { opt: new Base() }
 
     // sources
@@ -66,9 +68,9 @@ namespace SourceHasOptional {
     interface F {
         opt: Derived;
     }
-    var d: D;
-    var e: E;
-    var f: F;
+    declare var d: D;
+    declare var e: E;
+    declare var f: F;
 
     c = d; // error
     c = e; // error

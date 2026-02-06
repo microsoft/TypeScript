@@ -48,14 +48,29 @@ Output::
 Module resolution kind is not specified, using 'Classic'.
 File '/home/src/workspaces/solution/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/home/src/workspaces/solution/child/child2.ts'. ========
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+[96mchild/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m3[0m     "outFile": "../childResult.js",
+[7m [0m [91m    ~~~~~~~~~[0m
+
+[96mchild/tsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 child/child2.ts
   Imported via "../child/child2" from file 'child/child.ts'
   Matched by default include pattern '**/*'
 child/child.ts
   Matched by default include pattern '**/*'
 
+Found 2 errors.
+
+
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/solution/childResult.js]
 define("child2", ["require", "exports"], function (require, exports) {
@@ -76,7 +91,7 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
 
 
 //// [/home/src/workspaces/solution/childResult.tsbuildinfo]
-{"root":["./child/child.ts","./child/child2.ts"],"version":"FakeTSVersion"}
+{"root":["./child/child.ts","./child/child2.ts"],"errors":true,"version":"FakeTSVersion"}
 
 //// [/home/src/workspaces/solution/childResult.tsbuildinfo.readable.baseline.txt]
 {
@@ -84,12 +99,13 @@ define("child", ["require", "exports", "child2"], function (require, exports, ch
     "./child/child.ts",
     "./child/child2.ts"
   ],
+  "errors": true,
   "version": "FakeTSVersion",
-  "size": 75
+  "size": 89
 }
 
 
-exitCode:: ExitStatus.Success
+exitCode:: ExitStatus.DiagnosticsPresent_OutputsSkipped
 
 Change:: delete child2 file
 
@@ -101,7 +117,7 @@ Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * child/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'child/tsconfig.json' is out of date because buildinfo file 'childResult.tsbuildinfo' indicates that file 'child/child2.ts' was root file of compilation but not any more.
+[[90mHH:MM:SS AM[0m] Project 'child/tsconfig.json' is out of date because buildinfo file 'childResult.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspaces/solution/child/tsconfig.json'...
 
@@ -113,17 +129,22 @@ File '/home/src/workspaces/solution/child/child2.d.ts' does not exist.
 File '/home/src/workspaces/solution/child/child2.js' does not exist.
 File '/home/src/workspaces/solution/child/child2.jsx' does not exist.
 ======== Module name '../child/child2' was not resolved. ========
-[96mchild/child.ts[0m:[93m1[0m:[93m24[0m - [91merror[0m[90m TS2792: [0mCannot find module '../child/child2'. Did you mean to set the 'moduleResolution' option to 'nodenext', or to add aliases to the 'paths' option?
+[96mchild/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
-[7m1[0m import { child2 } from "../child/child2";
-[7m [0m [91m                       ~~~~~~~~~~~~~~~~~[0m
+[7m3[0m     "outFile": "../childResult.js",
+[7m [0m [91m    ~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+[96mchild/tsconfig.json[0m:[93m4[0m:[93m15[0m - [91merror[0m[90m TS5107: [0mOption 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+[7m4[0m     "module": "amd"
+[7m [0m [91m              ~~~~~[0m
+
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 child/child.ts
   Matched by default include pattern '**/*'
 
-Found 1 error.
+Found 2 errors.
 
 
 

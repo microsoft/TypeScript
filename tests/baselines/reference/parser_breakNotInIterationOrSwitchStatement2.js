@@ -8,6 +8,7 @@ while (true) {
 }
 
 //// [parser_breakNotInIterationOrSwitchStatement2.js]
+"use strict";
 while (true) {
     function f() {
         break;

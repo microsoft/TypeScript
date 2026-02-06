@@ -59,11 +59,11 @@ var c: C;
 >c : C
 >  : ^
 
-var i: I;
+declare var i: I;
 >i : I
 >  : ^
 
-var d: D;
+declare var d: D;
 >d : D
 >  : ^
 

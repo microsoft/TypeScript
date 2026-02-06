@@ -6,28 +6,28 @@ class ClassA<TEntityClass>  {
 >       : ^^^^^^^^^^^^^^^^^^^^
 
     constructor(private entity?: TEntityClass, public settings?: SettingsInterface<TEntityClass>) {
->entity : TEntityClass
->       : ^^^^^^^^^^^^
->settings : SettingsInterface<TEntityClass>
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>entity : TEntityClass | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>settings : SettingsInterface<TEntityClass> | undefined
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     }
 }
 export interface ValueInterface<TValueClass> {
     func?: (row: TValueClass) => any;
->func : (row: TValueClass) => any
->     : ^   ^^           ^^^^^   
+>func : ((row: TValueClass) => any) | undefined
+>     : ^^   ^^           ^^^^^   ^^^^^^^^^^^^^
 >row : TValueClass
 >    : ^^^^^^^^^^^
 
     value?: string;
->value : string
->      : ^^^^^^
+>value : string | undefined
+>      : ^^^^^^^^^^^^^^^^^^
 }
 export interface SettingsInterface<TClass> {
     values?: (row: TClass) => ValueInterface<TClass>[],
->values : (row: TClass) => ValueInterface<TClass>[]
->       : ^   ^^      ^^^^^                        
+>values : ((row: TClass) => ValueInterface<TClass>[]) | undefined
+>       : ^^   ^^      ^^^^^                        ^^^^^^^^^^^^^
 >row : TClass
 >    : ^^^^^^
 }

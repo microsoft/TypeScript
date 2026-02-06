@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 function f1() {
 	var a = { x: 1, y: 2 };
 	a = {}; // error

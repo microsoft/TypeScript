@@ -1,3 +1,4 @@
+// @target: es2015
 interface Promise<T> {
     then<U>(value: T): void;
 }

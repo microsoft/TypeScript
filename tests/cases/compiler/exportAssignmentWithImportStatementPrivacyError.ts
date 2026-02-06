@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 //@module: amd
 namespace m2 {
     export interface connectModule {

@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: esnext
 
 const test1: Promise<[one: number, two: string]> = (async () => {

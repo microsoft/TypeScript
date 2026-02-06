@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 
 var array0 = [1, 2, 3]
 var i0 = 0;

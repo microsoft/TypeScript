@@ -7,8 +7,8 @@ interface I {
 >  : ^^^^^^
 
     b?: number;
->b : number
->  : ^^^^^^
+>b : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 
 interface J {

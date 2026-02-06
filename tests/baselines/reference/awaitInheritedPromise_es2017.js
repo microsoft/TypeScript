@@ -8,6 +8,7 @@ async function f() {
 }
 
 //// [awaitInheritedPromise_es2017.js]
+"use strict";
 async function f() {
     await a;
 }

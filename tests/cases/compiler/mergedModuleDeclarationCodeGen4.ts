@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 namespace superContain {
     export namespace contain {
         export namespace my.buz {

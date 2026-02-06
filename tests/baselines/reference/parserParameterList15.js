@@ -5,4 +5,5 @@ function foo(a = 4);
 function foo(a, b) {}
 
 //// [parserParameterList15.js]
+"use strict";
 function foo(a, b) { }

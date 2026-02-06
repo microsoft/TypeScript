@@ -1,3 +1,4 @@
+// @target: es2015
 // Symlinks are always resolved for type reference directives.
 // NOTE: This test would still compile without errors even if they were not,
 // because `processTypeReferenceDirective` also checks for textual equivalence of file contents.

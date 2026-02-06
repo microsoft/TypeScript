@@ -1,3 +1,4 @@
+// @target: es2015
 // Before fix this would cause compiler to hang (#1170)
 
 declare namespace Bacon {

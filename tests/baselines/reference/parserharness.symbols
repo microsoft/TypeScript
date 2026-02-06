@@ -1841,9 +1841,9 @@ namespace Harness {
             }
 
             f.call(benchmark, subBenchmark);
->f.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>f.call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(parserharness.ts, 625, 30))
->call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>call : Symbol(CallableFunction.call, Decl(lib.es5.d.ts, --, --))
 >benchmark : Symbol(benchmark, Decl(parserharness.ts, 622, 33))
 >subBenchmark : Symbol(subBenchmark, Decl(parserharness.ts, 632, 15))
 
@@ -3811,7 +3811,6 @@ namespace Harness {
 >path.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
 >path : Symbol(path, Decl(parserharness.ts, 1285, 36))
 >match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
->0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 
             var code = readFile(path);
 >code : Symbol(code, Decl(parserharness.ts, 1288, 15))
@@ -3949,7 +3948,6 @@ namespace Harness {
 >lastUnit : Symbol(lastUnit, Decl(parserharness.ts, 1326, 15))
 >name : Symbol(TestCaseParser.TestUnitData.name, Decl(parserharness.ts, 1422, 28))
 >match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
->0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 
             var dependencies = units.slice(0, units.length - 1);
 >dependencies : Symbol(dependencies, Decl(parserharness.ts, 1329, 15))
@@ -5702,7 +5700,6 @@ namespace Harness {
 >path.match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
 >path : Symbol(path, Decl(parserharness.ts, 1869, 38))
 >match : Symbol(String.match, Decl(lib.es5.d.ts, --, --))
->0 : Symbol(RegExpMatchArray[0], Decl(lib.es5.d.ts, --, --))
 >callback : Symbol(callback, Decl(parserharness.ts, 1869, 51))
         }
 

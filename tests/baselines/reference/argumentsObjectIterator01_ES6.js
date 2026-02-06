@@ -10,6 +10,7 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
 }
 
 //// [argumentsObjectIterator01_ES6.js]
+"use strict";
 function doubleAndReturnAsArray(x, y, z) {
     let result = [];
     for (let arg of arguments) {

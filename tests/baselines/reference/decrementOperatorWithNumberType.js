@@ -42,14 +42,12 @@ M.n--;
 objA.a--, M.n--;
 
 //// [decrementOperatorWithNumberType.js]
+"use strict";
 // -- operator on number type
 var NUMBER;
 var NUMBER1 = [1, 2];
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 var M;
 (function (M) {
 })(M || (M = {}));

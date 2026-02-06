@@ -1,3 +1,4 @@
+// @target: es2015
 type BrandedNum = number & { __numberBrand: any };
 var x : BrandedNum;
 

@@ -134,8 +134,8 @@ Promise.try((foo: string | undefined) => "Async result", undefined);
 >    : ^ ^^ ^^^^^^^^^         ^^          ^^                                  ^^^^^    ^^ ^^^^^                   
 >(foo: string | undefined) => "Async result" : (foo: string | undefined) => string
 >                                            : ^   ^^                  ^^^^^^^^^^^
->foo : string
->    : ^^^^^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"Async result" : "Async result"
 >               : ^^^^^^^^^^^^^^
 >undefined : undefined
@@ -152,8 +152,8 @@ Promise.try((foo: string | undefined) => "Async result", "foo");
 >    : ^ ^^ ^^^^^^^^^         ^^          ^^                                  ^^^^^    ^^ ^^^^^                   
 >(foo: string | undefined) => "Async result" : (foo: string | undefined) => string
 >                                            : ^   ^^                  ^^^^^^^^^^^
->foo : string
->    : ^^^^^^
+>foo : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"Async result" : "Async result"
 >               : ^^^^^^^^^^^^^^
 >"foo" : "foo"
@@ -168,9 +168,10 @@ Promise.try((foo) => "Async result", undefined);
 >        : ^^^^^^^^^^^^^^^^^^
 >try : <T, U extends unknown[]>(callbackFn: (...args: U) => T | PromiseLike<T>, ...args: U) => Promise<Awaited<T>>
 >    : ^ ^^ ^^^^^^^^^         ^^          ^^                                  ^^^^^    ^^ ^^^^^                   
->(foo) => "Async result" : (foo: any) => string
->                        : ^   ^^^^^^^^^^^^^^^^
->foo : any
+>(foo) => "Async result" : (foo: undefined) => string
+>                        : ^   ^^^^^^^^^^^^^^^^^^^^^^
+>foo : undefined
+>    : ^^^^^^^^^
 >"Async result" : "Async result"
 >               : ^^^^^^^^^^^^^^
 >undefined : undefined
@@ -275,8 +276,8 @@ Promise.try((foo: string, bar?: number) => "Async result", "foo");
 >                                              : ^   ^^      ^^   ^^^      ^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->bar : number
->    : ^^^^^^
+>bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"Async result" : "Async result"
 >               : ^^^^^^^^^^^^^^
 >"foo" : "foo"
@@ -295,8 +296,8 @@ Promise.try((foo: string, bar?: number) => "Async result", "foo", undefined);
 >                                              : ^   ^^      ^^   ^^^      ^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->bar : number
->    : ^^^^^^
+>bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"Async result" : "Async result"
 >               : ^^^^^^^^^^^^^^
 >"foo" : "foo"
@@ -317,8 +318,8 @@ Promise.try((foo: string, bar?: number) => "Async result", "foo", 42);
 >                                              : ^   ^^      ^^   ^^^      ^^^^^^^^^^^
 >foo : string
 >    : ^^^^^^
->bar : number
->    : ^^^^^^
+>bar : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >"Async result" : "Async result"
 >               : ^^^^^^^^^^^^^^
 >"foo" : "foo"

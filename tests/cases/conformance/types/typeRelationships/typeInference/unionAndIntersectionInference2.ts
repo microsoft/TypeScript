@@ -1,3 +1,4 @@
+// @target: es2015
 declare function f1<T>(x: T | string): T;
 
 var a1: string;

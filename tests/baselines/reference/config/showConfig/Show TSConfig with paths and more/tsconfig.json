@@ -27,7 +27,8 @@
         "emitDecoratorMetadata": true,
         "resolveJsonModule": true,
         "resolvePackageJsonExports": false,
-        "resolvePackageJsonImports": false
+        "resolvePackageJsonImports": false,
+        "useDefineForClassFields": false
     },
     "include": [
         "./src/**/*"

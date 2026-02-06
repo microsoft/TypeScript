@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #17829
 
 function base<T>() {

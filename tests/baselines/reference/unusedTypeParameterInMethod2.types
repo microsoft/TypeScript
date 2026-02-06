@@ -9,11 +9,11 @@ class A {
 >f1 : <X, Y, Z>() => void
 >   : ^ ^^ ^^ ^^^^^^^^^^^
 
-        var a: X;
+        var a!: X;
 >a : X
 >  : ^
 
-        var b: Z;
+        var b!: Z;
 >b : Z
 >  : ^
 

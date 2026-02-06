@@ -1,15 +1,26 @@
+unionTypesAssignability.ts(14,5): error TS2454: Variable 'd' is used before being assigned.
+unionTypesAssignability.ts(15,5): error TS2454: Variable 'e' is used before being assigned.
+unionTypesAssignability.ts(16,5): error TS2454: Variable 'unionDE' is used before being assigned.
+unionTypesAssignability.ts(17,5): error TS2454: Variable 'd' is used before being assigned.
 unionTypesAssignability.ts(18,1): error TS2741: Property 'foo1' is missing in type 'E' but required in type 'D'.
+unionTypesAssignability.ts(18,5): error TS2454: Variable 'e' is used before being assigned.
 unionTypesAssignability.ts(19,1): error TS2322: Type 'D | E' is not assignable to type 'D'.
   Property 'foo1' is missing in type 'E' but required in type 'D'.
+unionTypesAssignability.ts(19,5): error TS2454: Variable 'unionDE' is used before being assigned.
 unionTypesAssignability.ts(20,1): error TS2741: Property 'foo2' is missing in type 'D' but required in type 'E'.
 unionTypesAssignability.ts(22,1): error TS2322: Type 'D | E' is not assignable to type 'E'.
   Property 'foo2' is missing in type 'D' but required in type 'E'.
+unionTypesAssignability.ts(22,5): error TS2454: Variable 'unionDE' is used before being assigned.
+unionTypesAssignability.ts(23,7): error TS2454: Variable 'num' is used before being assigned.
 unionTypesAssignability.ts(24,1): error TS2322: Type 'string' is not assignable to type 'number'.
+unionTypesAssignability.ts(24,7): error TS2454: Variable 'str' is used before being assigned.
 unionTypesAssignability.ts(25,1): error TS2322: Type 'string | number' is not assignable to type 'number'.
   Type 'string' is not assignable to type 'number'.
+unionTypesAssignability.ts(25,7): error TS2454: Variable 'unionNumberString' is used before being assigned.
 unionTypesAssignability.ts(26,1): error TS2322: Type 'number' is not assignable to type 'string'.
 unionTypesAssignability.ts(28,1): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
+unionTypesAssignability.ts(28,7): error TS2454: Variable 'unionNumberString' is used before being assigned.
 unionTypesAssignability.ts(31,1): error TS2741: Property 'foo1' is missing in type 'C' but required in type 'D'.
 unionTypesAssignability.ts(32,1): error TS2741: Property 'foo2' is missing in type 'C' but required in type 'E'.
 unionTypesAssignability.ts(33,1): error TS2322: Type 'C' is not assignable to type 'D | E'.
@@ -17,17 +28,22 @@ unionTypesAssignability.ts(35,1): error TS2741: Property 'foo2' is missing in ty
 unionTypesAssignability.ts(37,1): error TS2741: Property 'foo1' is missing in type 'E' but required in type 'D'.
 unionTypesAssignability.ts(41,1): error TS2322: Type 'number' is not assignable to type 'string'.
 unionTypesAssignability.ts(43,1): error TS2322: Type 'string' is not assignable to type 'number'.
+unionTypesAssignability.ts(55,1): error TS2322: Type 'null' is not assignable to type 'D | E'.
+unionTypesAssignability.ts(56,1): error TS2322: Type 'null' is not assignable to type 'string | number'.
+unionTypesAssignability.ts(59,1): error TS2322: Type 'undefined' is not assignable to type 'D | E'.
+unionTypesAssignability.ts(60,1): error TS2322: Type 'undefined' is not assignable to type 'string | number'.
 unionTypesAssignability.ts(64,5): error TS2322: Type 'U' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'U'.
 unionTypesAssignability.ts(65,5): error TS2322: Type 'T' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T'.
+unionTypesAssignability.ts(69,5): error TS2322: Type 'undefined' is not assignable to type 'T | U'.
 unionTypesAssignability.ts(70,5): error TS2322: Type 'T | U' is not assignable to type 'T'.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
 unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable to type 'U'.
   'U' could be instantiated with an arbitrary type which could be unrelated to 'T | U'.
 
 
-==== unionTypesAssignability.ts (19 errors) ====
+==== unionTypesAssignability.ts (35 errors) ====
     var unionNumberString: number | string;
     class C { }
     class D extends C { foo1() { } }
@@ -42,18 +58,30 @@ unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable t
     
     // A union type U is assignable to a type T if each type in U is assignable to T
     c = d;
+        ~
+!!! error TS2454: Variable 'd' is used before being assigned.
     c = e;
+        ~
+!!! error TS2454: Variable 'e' is used before being assigned.
     c = unionDE; // ok
+        ~~~~~~~
+!!! error TS2454: Variable 'unionDE' is used before being assigned.
     d = d;
+        ~
+!!! error TS2454: Variable 'd' is used before being assigned.
     d = e;
     ~
 !!! error TS2741: Property 'foo1' is missing in type 'E' but required in type 'D'.
 !!! related TS2728 unionTypesAssignability.ts:3:21: 'foo1' is declared here.
+        ~
+!!! error TS2454: Variable 'e' is used before being assigned.
     d = unionDE; // error e is not assignable to d
     ~
 !!! error TS2322: Type 'D | E' is not assignable to type 'D'.
 !!! error TS2322:   Property 'foo1' is missing in type 'E' but required in type 'D'.
 !!! related TS2728 unionTypesAssignability.ts:3:21: 'foo1' is declared here.
+        ~~~~~~~
+!!! error TS2454: Variable 'unionDE' is used before being assigned.
     e = d;
     ~
 !!! error TS2741: Property 'foo2' is missing in type 'D' but required in type 'E'.
@@ -64,14 +92,22 @@ unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable t
 !!! error TS2322: Type 'D | E' is not assignable to type 'E'.
 !!! error TS2322:   Property 'foo2' is missing in type 'D' but required in type 'E'.
 !!! related TS2728 unionTypesAssignability.ts:4:21: 'foo2' is declared here.
+        ~~~~~~~
+!!! error TS2454: Variable 'unionDE' is used before being assigned.
     num = num;
+          ~~~
+!!! error TS2454: Variable 'num' is used before being assigned.
     num = str;
     ~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
+          ~~~
+!!! error TS2454: Variable 'str' is used before being assigned.
     num = unionNumberString; // error string is not assignable to number
     ~~~
 !!! error TS2322: Type 'string | number' is not assignable to type 'number'.
 !!! error TS2322:   Type 'string' is not assignable to type 'number'.
+          ~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'unionNumberString' is used before being assigned.
     str = num;
     ~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.
@@ -80,6 +116,8 @@ unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable t
     ~~~
 !!! error TS2322: Type 'string | number' is not assignable to type 'string'.
 !!! error TS2322:   Type 'number' is not assignable to type 'string'.
+          ~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'unionNumberString' is used before being assigned.
     
     // A type T is assignable to a union type U if T is assignable to any type in U
     d = c;
@@ -125,11 +163,19 @@ unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable t
     
     // null
     unionDE = null;
+    ~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'D | E'.
     unionNumberString = null;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'null' is not assignable to type 'string | number'.
     
     // undefined
     unionDE = undefined;
+    ~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'D | E'.
     unionNumberString = undefined;
+    ~~~~~~~~~~~~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'string | number'.
     
     // type parameters
     function foo<T, U>(t: T, u: U) {
@@ -147,6 +193,8 @@ unionTypesAssignability.ts(71,5): error TS2322: Type 'T | U' is not assignable t
         x = t; // ok
         x = u; // ok
         x = undefined;
+        ~
+!!! error TS2322: Type 'undefined' is not assignable to type 'T | U'.
         t = x; // error U not assignable to T
         ~
 !!! error TS2322: Type 'T | U' is not assignable to type 'T'.

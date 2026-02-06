@@ -1,13 +1,16 @@
 parserComputedPropertyName28.ts(2,6): error TS2304: Cannot find name 'e'.
+parserComputedPropertyName28.ts(3,5): error TS2564: Property '[e2]' has no initializer and is not definitely assigned in the constructor.
 parserComputedPropertyName28.ts(3,6): error TS2304: Cannot find name 'e2'.
 
 
-==== parserComputedPropertyName28.ts (2 errors) ====
+==== parserComputedPropertyName28.ts (3 errors) ====
     class C {
         [e]: number = 0;
          ~
 !!! error TS2304: Cannot find name 'e'.
         [e2]: number
+        ~~~~
+!!! error TS2564: Property '[e2]' has no initializer and is not definitely assigned in the constructor.
          ~~
 !!! error TS2304: Cannot find name 'e2'.
     }

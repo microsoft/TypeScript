@@ -13,6 +13,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-fields-static.js]
+"use strict";
 var _this = this;
 var field3 = "field3";
 var C = function () {

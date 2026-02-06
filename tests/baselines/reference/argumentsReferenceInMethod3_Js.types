@@ -31,7 +31,8 @@ class B extends A {
 	m(foo = {}) {
 >m : (foo?: object) => void
 >  : ^   ^^^      ^^^^^^^^^
->foo : any
+>foo : object | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >{} : {}
 >   : ^^
 
@@ -39,13 +40,16 @@ class B extends A {
 		 * @type object
 		 */
 		this.x = foo;
->this.x = foo : any
->this.x : any
+>this.x = foo : object
+>             : ^^^^^^
+>this.x : object | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->x : any
->  : ^^^
->foo : any
+>x : object | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>foo : object
+>    : ^^^^^^
 
 		/**
 		 * @type object
@@ -53,11 +57,12 @@ class B extends A {
 		this.y = super.arguments.bar;
 >this.y = super.arguments.bar : {}
 >                             : ^^
->this.y : any
+>this.y : object | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->y : any
->  : ^^^
+>y : object | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >super.arguments.bar : {}
 >                    : ^^
 >super.arguments : { bar: {}; }

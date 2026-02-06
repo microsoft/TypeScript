@@ -4,4 +4,5 @@
 var results = number[];
 
 //// [badArrayIndex.js]
+"use strict";
 var results = number[];

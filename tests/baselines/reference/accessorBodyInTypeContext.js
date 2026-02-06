@@ -20,3 +20,4 @@ interface Y {
 
 
 //// [accessorBodyInTypeContext.js]
+"use strict";

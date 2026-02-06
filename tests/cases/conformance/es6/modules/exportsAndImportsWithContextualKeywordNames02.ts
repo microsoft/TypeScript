@@ -1,5 +1,5 @@
 ﻿// @module: commonjs
-// @target: es5
+// @target: es5, es2015
 
 // @filename: t1.ts
 let as = 100;

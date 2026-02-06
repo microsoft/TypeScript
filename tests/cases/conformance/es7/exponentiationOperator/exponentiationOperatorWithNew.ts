@@ -1,4 +1,5 @@
-﻿var a: any;
+﻿// @target: es2015
+var a: any;
 var b: any;
 var c: any;
 new a ** b ** c;

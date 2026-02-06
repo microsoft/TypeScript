@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 type Cb<T> = {noAlias: () => T}["noAlias"]; // `"noAlias"` here prevents an alias symbol from being made
 // which means the comparison will definitely be structural, rather than by variance

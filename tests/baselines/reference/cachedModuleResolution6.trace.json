@@ -1,7 +1,7 @@
 [
     "======== Resolving module 'foo' from '/a/b/c/d/e/app.ts'. ========",
     "Explicitly specified module resolution kind: 'Bundler'.",
-    "Resolving in CJS mode with conditions 'require', 'types'.",
+    "Resolving in CJS mode with conditions 'import', 'types'.",
     "File '/a/b/c/d/e/package.json' does not exist.",
     "File '/a/b/c/d/package.json' does not exist.",
     "File '/a/b/c/package.json' does not exist.",
@@ -26,7 +26,7 @@
     "======== Module name 'foo' was not resolved. ========",
     "======== Resolving module 'foo' from '/a/b/c/lib.ts'. ========",
     "Explicitly specified module resolution kind: 'Bundler'.",
-    "Resolving in CJS mode with conditions 'require', 'types'.",
+    "Resolving in CJS mode with conditions 'import', 'types'.",
     "File '/a/b/c/package.json' does not exist according to earlier cached lookups.",
     "File '/a/b/package.json' does not exist according to earlier cached lookups.",
     "File '/a/package.json' does not exist according to earlier cached lookups.",

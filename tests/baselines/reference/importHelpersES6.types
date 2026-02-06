@@ -3,9 +3,11 @@
 === a.ts ===
 declare var dec: any;
 >dec : any
+>    : ^^^
 
 @dec export class A {
 >dec : any
+>    : ^^^
 >A : A
 >  : ^
 
@@ -35,10 +37,13 @@ declare var dec: any;
 >g : (u: any) => u is A
 >  : ^ ^^^^^^^^^^^^^^^^
 >u : any
+>  : ^^^
 >#x in u : boolean
 >        : ^^^^^^^
 >#x : any
+>   : ^^^
 >u : any
+>  : ^^^
 }
 
 const o = { a: 1 };
@@ -74,9 +79,11 @@ export declare function __decorate(decorators: Function[], target: any, key?: st
 >decorators : Function[]
 >           : ^^^^^^^^^^
 >target : any
+>       : ^^^
 >key : string | symbol
 >    : ^^^^^^^^^^^^^^^
 >desc : any
+>     : ^^^
 
 export declare function __param(paramIndex: number, decorator: Function): Function;
 >__param : (paramIndex: number, decorator: Function) => Function
@@ -90,13 +97,17 @@ export declare function __metadata(metadataKey: any, metadataValue: any): Functi
 >__metadata : (metadataKey: any, metadataValue: any) => Function
 >           : ^           ^^   ^^             ^^   ^^^^^        
 >metadataKey : any
+>            : ^^^
 >metadataValue : any
+>              : ^^^
 
 export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
 >__awaiter : (thisArg: any, _arguments: any, P: Function, generator: Function) => any
 >          : ^       ^^   ^^          ^^   ^^ ^^        ^^         ^^        ^^^^^   
 >thisArg : any
+>        : ^^^
 >_arguments : any
+>           : ^^^
 >P : Function
 >  : ^^^^^^^^
 >generator : Function
@@ -106,22 +117,33 @@ export declare function __classPrivateFieldGet(a: any, b: any, c: any, d: any): 
 >__classPrivateFieldGet : (a: any, b: any, c: any, d: any) => any
 >                       : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^   
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 
 export declare function __classPrivateFieldSet(a: any, b: any, c: any, d: any, e: any): any;
 >__classPrivateFieldSet : (a: any, b: any, c: any, d: any, e: any) => any
 >                       : ^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^ ^^   ^^^^^   
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 >c : any
+>  : ^^^
 >d : any
+>  : ^^^
 >e : any
+>  : ^^^
 
 export declare function __classPrivateFieldIn(a: any, b: any): boolean;
 >__classPrivateFieldIn : (a: any, b: any) => boolean
 >                      : ^ ^^   ^^ ^^   ^^^^^       
 >a : any
+>  : ^^^
 >b : any
+>  : ^^^
 

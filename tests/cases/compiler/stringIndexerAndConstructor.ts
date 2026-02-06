@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     [s: string]: number;
     constructor() { }

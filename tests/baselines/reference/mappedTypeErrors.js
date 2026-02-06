@@ -110,6 +110,9 @@ setState(foo, { c: true });  // Error
 
 class C<T> {
     state: T;
+    constructor(initialState: T) {
+        this.state = initialState;
+    }
     setState<K extends keyof T>(props: Pick<T, K>) {
         for (let k in props) {
             this.state[k] = props[k];
@@ -117,7 +120,7 @@ class C<T> {
     }
 }
 
-let c = new C<Foo>();
+let c = new C<Foo>({ a: "hello", b: 42 });
 c.setState({ a: "test", b: 43 });
 c.setState({ a: "hi" });
 c.setState({ b: undefined });
@@ -157,17 +160,18 @@ function test2<T, K extends keyof T>(obj: Record<K, number>) {
 
 
 //// [mappedTypeErrors.js]
+"use strict";
 function f1(x) {
-    var y; // Error
+    let y; // Error
 }
 function f2(x) {
-    var y; // Error
+    let y; // Error
 }
 function f3(x) {
-    var y;
+    let y;
 }
 function f4(x) {
-    var y;
+    let y;
 }
 // Type identity checking
 function f10() {
@@ -186,21 +190,21 @@ function f12() {
     var x; // Error
 }
 function f20() {
-    var x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 }); // Error
-    var x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
-    var x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }); // Error
+    let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 }); // Error
+    let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
+    let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }); // Error
 }
 function f21() {
-    var x1 = objAndPartial({ x: 0, y: 0 }, { x: 1 });
-    var x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
-    var x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }); // Error
+    let x1 = objAndPartial({ x: 0, y: 0 }, { x: 1 });
+    let x2 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1 });
+    let x3 = objAndPartial({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 }); // Error
 }
 function setState(obj, props) {
-    for (var k in props) {
+    for (let k in props) {
         obj[k] = props[k];
     }
 }
-var foo = { a: "hello", b: 42 };
+let foo = { a: "hello", b: 42 };
 setState(foo, { a: "test", b: 43 });
 setState(foo, { a: "hi" });
 setState(foo, { b: undefined });
@@ -208,17 +212,17 @@ setState(foo, {});
 setState(foo, foo);
 setState(foo, { a: undefined }); // Error
 setState(foo, { c: true }); // Error
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor(initialState) {
+        this.state = initialState;
     }
-    C.prototype.setState = function (props) {
-        for (var k in props) {
+    setState(props) {
+        for (let k in props) {
             this.state[k] = props[k];
         }
-    };
-    return C;
-}());
-var c = new C();
+    }
+}
+let c = new C({ a: "hello", b: 42 });
 c.setState({ a: "test", b: 43 });
 c.setState({ a: "hi" });
 c.setState({ b: undefined });
@@ -226,20 +230,20 @@ c.setState({});
 c.setState(foo);
 c.setState({ a: undefined }); // Error
 c.setState({ c: true }); // Error
-var x1 = { a: 'no' }; // Error
-var x2 = { a: 'no' }; // Error
-var x3 = { a: 'no' }; // Error
-var o = { x: 5, y: false };
-var f = {
+let x1 = { a: 'no' }; // Error
+let x2 = { a: 'no' }; // Error
+let x3 = { a: 'no' }; // Error
+let o = { x: 5, y: false };
+let f = {
     pf: { x: 7 },
     pt: { x: 7, y: false },
 };
 // Repro from #28170
 function test1(obj) {
-    var x = obj.foo; // Error
+    let x = obj.foo; // Error
 }
 function test2(obj) {
-    var x = obj.foo; // Error
+    let x = obj.foo; // Error
 }
 
 
@@ -293,6 +297,7 @@ declare function setState<T, K extends keyof T>(obj: T, props: Pick<T, K>): void
 declare let foo: Foo;
 declare class C<T> {
     state: T;
+    constructor(initialState: T);
     setState<K extends keyof T>(props: Pick<T, K>): void;
 }
 declare let c: C<Foo>;

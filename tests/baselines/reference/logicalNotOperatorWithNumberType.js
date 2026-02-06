@@ -2,17 +2,17 @@
 
 //// [logicalNotOperatorWithNumberType.ts]
 // ! operator on number type
-var NUMBER: number;
+declare var NUMBER: number;
 var NUMBER1: number[] = [1, 2];
 
 function foo(): number { return 1; }
 
 class A {
-    public a: number;
+    public a!: number;
     static foo() { return 1; }
 }
 namespace M {
-    export var n: number;
+    export declare var n: number;
 }
 
 var objA = new A();
@@ -48,16 +48,12 @@ var ResultIsBoolean13 = !!!(NUMBER + NUMBER);
 !objA.a, M.n;
 
 //// [logicalNotOperatorWithNumberType.js]
-// ! operator on number type
-var NUMBER;
+"use strict";
 var NUMBER1 = [1, 2];
 function foo() { return 1; }
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.foo = function () { return 1; };
-    return A;
-}());
+class A {
+    static foo() { return 1; }
+}
 var M;
 (function (M) {
 })(M || (M = {}));
@@ -68,7 +64,7 @@ var ResultIsBoolean2 = !NUMBER1;
 // number type literal
 var ResultIsBoolean3 = !1;
 var ResultIsBoolean4 = !{ x: 1, y: 2 };
-var ResultIsBoolean5 = !{ x: 1, y: function (n) { return n; } };
+var ResultIsBoolean5 = !{ x: 1, y: (n) => { return n; } };
 // number type expressions
 var ResultIsBoolean6 = !objA.a;
 var ResultIsBoolean7 = !M.n;

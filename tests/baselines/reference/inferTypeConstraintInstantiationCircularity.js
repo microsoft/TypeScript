@@ -94,5 +94,4 @@ type InferIOItemToJSType<T extends Items> =
 
 
 //// [inferTypeConstraintInstantiationCircularity.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};

@@ -18,6 +18,7 @@ class D {
 
 
 //// [esDecorators-classDeclaration-fields-staticPrivateAccessor.js]
+"use strict";
 let C = (() => {
     let _static_private_field1_decorators;
     let _static_private_field1_initializers = [];

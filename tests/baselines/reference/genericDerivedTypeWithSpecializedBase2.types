@@ -23,7 +23,7 @@ class B<U> extends A<string> {
 >  : ^
 }
 
-var x: A<{ length: number; foo: number }>;
+declare var x: A<{ length: number; foo: number }>;
 >x : A<{ length: number; foo: number; }>
 >  : ^^^^^^^^^^^^      ^^^^^^^      ^^^^
 >length : number
@@ -31,7 +31,7 @@ var x: A<{ length: number; foo: number }>;
 >foo : number
 >    : ^^^^^^
 
-var y: B<number>;
+declare var y: B<number>;
 >y : B<number>
 >  : ^^^^^^^^^
 

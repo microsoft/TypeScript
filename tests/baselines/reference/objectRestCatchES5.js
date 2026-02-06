@@ -5,6 +5,7 @@ let a = 1, b = 2;
 try {} catch ({ a, ...b }) {}
 
 //// [objectRestCatchES5.js]
+"use strict";
 var __rest = (this && this.__rest) || function (s, e) {
     var t = {};
     for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
@@ -16,8 +17,8 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var a = 1, b = 2;
+let a = 1, b = 2;
 try { }
 catch (_a) {
-    var a_1 = _a.a, b_1 = __rest(_a, ["a"]);
+    var { a } = _a, b = __rest(_a, ["a"]);
 }

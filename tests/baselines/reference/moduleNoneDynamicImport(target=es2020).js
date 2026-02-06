@@ -8,4 +8,5 @@ export default 1;
 
 
 //// [a.js]
+"use strict";
 const foo = import("./b");

@@ -1,0 +1,18 @@
+test.tsx(4,13): error TS7005: Variable 'Foo' implicitly has an 'any' type.
+test.tsx(4,18): error TS7005: Variable 'Bar' implicitly has an 'any' type.
+test.tsx(4,23): error TS7005: Variable 'baz' implicitly has an 'any' type.
+
+
+==== test.tsx (3 errors) ====
+    declare namespace JSX { interface Element { } }
+    declare var React: any;
+    
+    declare var Foo, Bar, baz;
+                ~~~
+!!! error TS7005: Variable 'Foo' implicitly has an 'any' type.
+                     ~~~
+!!! error TS7005: Variable 'Bar' implicitly has an 'any' type.
+                          ~~~
+!!! error TS7005: Variable 'baz' implicitly has an 'any' type.
+    
+    <Foo> <Bar> q </Bar> <Bar/>   s <Bar/><Bar/></Foo>;

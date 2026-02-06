@@ -9,6 +9,7 @@ function returnSomeGlobalValue() {
 }
 
 //// [declarationEmitInferredTypeAlias8.js]
+"use strict";
 var x;
 function returnSomeGlobalValue() {
     return x;

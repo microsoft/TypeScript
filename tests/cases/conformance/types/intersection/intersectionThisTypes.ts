@@ -1,3 +1,4 @@
+// @target: es2015
 interface Thing1 {
     a: number;
     self(): this;

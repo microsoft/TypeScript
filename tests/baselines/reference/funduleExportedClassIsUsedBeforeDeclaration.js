@@ -12,4 +12,5 @@ declare namespace B {
 new B.C(); 
 
 //// [funduleExportedClassIsUsedBeforeDeclaration.js]
+"use strict";
 new B.C();

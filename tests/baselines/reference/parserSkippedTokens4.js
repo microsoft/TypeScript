@@ -4,4 +4,5 @@
 \  /regexp/;
 
 //// [parserSkippedTokens4.js]
+"use strict";
 /regexp/;

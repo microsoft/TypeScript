@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 //@module: umd
 
 var;

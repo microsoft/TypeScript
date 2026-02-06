@@ -12,6 +12,7 @@ function foo<T, U>(x: T, y: U) {
 }
 
 //// [typeParametersAvailableInNestedScope2.js]
+"use strict";
 function foo(x, y) {
     function bar(z) {
         function baz(a) {

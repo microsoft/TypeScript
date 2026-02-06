@@ -1,11 +1,12 @@
+// @target: es2015
 //Cond ? Expr1 : Expr2,  Expr1 and Expr2 have no identical best common type
 class X { propertyX: any; propertyX1: number; propertyX2: string };
 class A extends X { propertyA: number };
 class B extends X { propertyB: string };
 
-var x: X;
-var a: A;
-var b: B;
+declare var x: X;
+declare var a: A;
+declare var b: B;
 
 // No errors anymore, uses union types
 true ? a : b;

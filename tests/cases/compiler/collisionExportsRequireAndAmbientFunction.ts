@@ -1,4 +1,5 @@
-//@module: amd
+// @target: es2015
+//@module: commonjs
 export declare function exports(): number;
 
 export declare function require(): string[];

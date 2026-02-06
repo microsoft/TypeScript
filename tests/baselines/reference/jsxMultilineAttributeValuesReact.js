@@ -14,6 +14,7 @@ foo: 23\n
 
 
 //// [jsxMultilineAttributeValuesReact.js]
-var a = React.createElement("input", { value: "\nfoo: 23\n" });
-var b = React.createElement("input", { value: '\nfoo: 23\n' });
-var c = React.createElement("input", { value: '\nfoo: 23\\n\n' });
+"use strict";
+const a = React.createElement("input", { value: "\nfoo: 23\n" });
+const b = React.createElement("input", { value: '\nfoo: 23\n' });
+const c = React.createElement("input", { value: '\nfoo: 23\\n\n' });

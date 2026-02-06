@@ -1,3 +1,4 @@
+// @target: es2015
 declare module '~popsicle/dist/request' {
     export class Request {}
 }

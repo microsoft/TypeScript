@@ -6,9 +6,11 @@ nonPrimitiveInGeneric.ts(19,7): error TS2345: Argument of type 'string' is not a
 nonPrimitiveInGeneric.ts(25,8): error TS2344: Type 'number' does not satisfy the constraint 'object'.
 nonPrimitiveInGeneric.ts(26,8): error TS2344: Type 'string' does not satisfy the constraint 'object'.
 nonPrimitiveInGeneric.ts(34,14): error TS2344: Type 'number' does not satisfy the constraint 'object'.
+nonPrimitiveInGeneric.ts(35,14): error TS2344: Type 'null' does not satisfy the constraint 'object'.
+nonPrimitiveInGeneric.ts(36,14): error TS2344: Type 'undefined' does not satisfy the constraint 'object'.
 
 
-==== nonPrimitiveInGeneric.ts (8 errors) ====
+==== nonPrimitiveInGeneric.ts (10 errors) ====
     function generic<T>(t: T) {
         var o: object = t; // expect error
             ~
@@ -61,7 +63,11 @@ nonPrimitiveInGeneric.ts(34,14): error TS2344: Type 'number' does not satisfy th
                  ~~~~~~
 !!! error TS2344: Type 'number' does not satisfy the constraint 'object'.
     var y: Proxy<null>; // ok
+                 ~~~~
+!!! error TS2344: Type 'null' does not satisfy the constraint 'object'.
     var z: Proxy<undefined> ; // ok
+                 ~~~~~~~~~
+!!! error TS2344: Type 'undefined' does not satisfy the constraint 'object'.
     
     
     interface Blah {

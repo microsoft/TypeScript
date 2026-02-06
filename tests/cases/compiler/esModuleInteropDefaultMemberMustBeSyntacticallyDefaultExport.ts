@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @esModuleInterop: true
 // @filename: point.d.ts
 declare class Point {

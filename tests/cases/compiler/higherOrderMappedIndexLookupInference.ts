@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict
 
 function f1(a: <T>() => keyof T, b: <U>() => keyof U) {

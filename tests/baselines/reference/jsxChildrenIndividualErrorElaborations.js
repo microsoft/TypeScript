@@ -79,43 +79,38 @@ var a = <Blah3>
 
 
 //// [index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.Blah = Blah;
-exports.Blah2 = Blah2;
-exports.Blah3 = Blah3;
-/// <reference path="react16.d.ts" />
-var React = require("react");
-function Blah(props) {
+/// <reference path="/.lib/react16.d.ts" />
+import * as React from "react";
+export function Blah(props) {
     return React.createElement(React.Fragment, null);
 }
 // Incompatible child.
-var a = React.createElement(Blah, null, function (x) { return x; });
+var a = React.createElement(Blah, null, x => x);
 // Blah components don't accept text as child elements
 var a = React.createElement(Blah, null, "Hello unexpected text!");
 // Blah components don't accept multiple children.
 var a = React.createElement(Blah, null,
-    function (x) { return "" + x; },
-    function (x) { return "" + x; });
-function Blah2(props) {
+    x => "" + x,
+    x => "" + x);
+export function Blah2(props) {
     return React.createElement(React.Fragment, null);
 }
 // Incompatible child.
-var a = React.createElement(Blah2, null, function (x) { return x; });
+var a = React.createElement(Blah2, null, x => x);
 // Blah2 components don't accept text as child elements
 var a = React.createElement(Blah2, null, "Hello unexpected text!");
 // Blah2 components don't accept multiple children of the wrong type.
 var a = React.createElement(Blah2, null,
-    function (x) { return x; },
-    function (x) { return x; });
-function Blah3(props) {
+    x => x,
+    x => x);
+export function Blah3(props) {
     return React.createElement(React.Fragment, null);
 }
 // Incompatible child.
-var a = React.createElement(Blah3, null, function (x) { return x; });
+var a = React.createElement(Blah3, null, x => x);
 // Blah3 components don't accept text as child elements
 var a = React.createElement(Blah3, null, "Hello unexpected text!");
 // Blah3 components don't accept multiple children of the wrong type.
 var a = React.createElement(Blah3, null,
-    function (x) { return x; },
-    function (x) { return x; });
+    x => x,
+    x => x);

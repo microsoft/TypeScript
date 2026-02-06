@@ -1,3 +1,4 @@
+// @target: es2015
 function foo(a: number, b: string) {
   return true;
 }

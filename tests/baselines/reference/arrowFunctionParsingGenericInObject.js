@@ -43,6 +43,7 @@ const fn4async = () => ({
 
 
 //// [arrowFunctionParsingGenericInObject.js]
+"use strict";
 const fn1 = () => ({
     test: (value) => value,
     extraValue: () => { },

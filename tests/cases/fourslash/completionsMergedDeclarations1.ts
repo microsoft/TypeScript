@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 ////interface Point {
 ////    x: number;
 ////    y: number;

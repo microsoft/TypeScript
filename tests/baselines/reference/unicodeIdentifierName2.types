@@ -10,6 +10,6 @@ var a₁ = "hello"; alert(a₁)
 >          : ^^^^
 >alert : (message?: any) => void
 >      : ^       ^^^   ^^^^^    
->a : any
->  : ^^^
+>a : undefined
+>  : ^^^^^^^^^
 

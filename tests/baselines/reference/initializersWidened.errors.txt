@@ -15,8 +15,8 @@ initializersWidened.ts(24,10): error TS2873: This kind of expression is always f
     
     // these are not widened
     
-    var x2: null;
-    var y2: undefined;
+    declare var x2: null;
+    declare var y2: undefined;
     
     var x3: null = null;
     var y3: undefined = undefined;

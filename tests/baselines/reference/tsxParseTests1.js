@@ -10,4 +10,5 @@ var x = <div><div><span><div></div></span></div></div>;
 
 
 //// [file.jsx]
+"use strict";
 var x = <div><div><span><div></div></span></div></div>;

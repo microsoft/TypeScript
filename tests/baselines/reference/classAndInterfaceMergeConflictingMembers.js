@@ -26,3 +26,4 @@ interface C3 {
 }
 
 //// [classAndInterfaceMergeConflictingMembers.js]
+"use strict";

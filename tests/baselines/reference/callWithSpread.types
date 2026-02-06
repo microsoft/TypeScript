@@ -468,6 +468,7 @@ xa[1].foo(1, 2, ...a, "abc");
 
 (<Function>xa[1].foo)(...[1, 2, "abc"]);
 >(<Function>xa[1].foo)(...[1, 2, "abc"]) : any
+>                                        : ^^^
 >(<Function>xa[1].foo) : Function
 >                      : ^^^^^^^^
 ><Function>xa[1].foo : Function

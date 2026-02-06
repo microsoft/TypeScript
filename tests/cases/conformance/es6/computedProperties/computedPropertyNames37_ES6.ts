@@ -1,3 +1,4 @@
+// @strict: false
 // @target: es6
 class Foo { x }
 class Foo2 { x; y }

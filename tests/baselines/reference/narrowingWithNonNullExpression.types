@@ -2,10 +2,10 @@
 
 === narrowingWithNonNullExpression.ts ===
 const m = ''.match('');
->m : RegExpMatchArray
->  : ^^^^^^^^^^^^^^^^
->''.match('') : RegExpMatchArray
->             : ^^^^^^^^^^^^^^^^
+>m : RegExpMatchArray | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
+>''.match('') : RegExpMatchArray | null
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
 >''.match : { (regexp: string | RegExp): RegExpMatchArray | null; (matcher: { [Symbol.match](string: string): RegExpMatchArray | null; }): RegExpMatchArray | null; }
 >         : ^^^      ^^               ^^^                       ^^^       ^^                                                            ^^^                       ^^^
 >'' : ""
@@ -20,8 +20,8 @@ m! && m[0];
 >           : ^^^^^^
 >m! : RegExpMatchArray
 >   : ^^^^^^^^^^^^^^^^
->m : RegExpMatchArray
->  : ^^^^^^^^^^^^^^^^
+>m : RegExpMatchArray | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >m[0] : string
 >     : ^^^^^^
 >m : RegExpMatchArray
@@ -34,10 +34,10 @@ m?.[0]! && m[0];
 >                : ^^^^^^
 >m?.[0]! : string
 >        : ^^^^^^
->m?.[0] : string
->       : ^^^^^^
->m : RegExpMatchArray
->  : ^^^^^^^^^^^^^^^^
+>m?.[0] : string | undefined
+>       : ^^^^^^^^^^^^^^^^^^
+>m : RegExpMatchArray | null
+>  : ^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 >m[0] : string

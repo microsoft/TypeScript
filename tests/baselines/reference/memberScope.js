@@ -10,13 +10,11 @@ namespace Salt {
 
 
 //// [memberScope.js]
+"use strict";
 var Salt;
 (function (Salt) {
-    var Pepper = /** @class */ (function () {
-        function Pepper() {
-        }
-        return Pepper;
-    }());
+    class Pepper {
+    }
     Salt.Pepper = Pepper;
     var z = Basil.Pepper;
 })(Salt || (Salt = {}));

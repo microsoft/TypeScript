@@ -58,8 +58,8 @@ f11<1, 2, 3, 4>(); // error
 declare function f12<T, U = T>(a?: U): void;
 >f12 : <T, U = T>(a?: U) => void
 >    : ^ ^^ ^^^^^^ ^^^ ^^^^^    
->a : U
->  : ^
+>a : U | undefined
+>  : ^^^^^^^^^^^^^
 
 f12<number>(); // ok
 >f12<number>() : void

@@ -1,12 +1,18 @@
+superCallBeforeThisAccessing3.ts(2,17): error TS7006: Parameter 'c' implicitly has an 'any' type.
+superCallBeforeThisAccessing3.ts(5,13): error TS7008: Member '_t' implicitly has an 'any' type.
 superCallBeforeThisAccessing3.ts(9,9): error TS17009: 'super' must be called before accessing 'this' in the constructor of a derived class.
 
 
-==== superCallBeforeThisAccessing3.ts (1 errors) ====
+==== superCallBeforeThisAccessing3.ts (3 errors) ====
     class Base {
         constructor(c) { }
+                    ~
+!!! error TS7006: Parameter 'c' implicitly has an 'any' type.
     }
     class D extends Base {
         private _t;
+                ~~
+!!! error TS7008: Member '_t' implicitly has an 'any' type.
         constructor() {
             let x = () => { this._t };
             x();  // no error; we only check super is called before this when the container is a constructor

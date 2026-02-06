@@ -1,5 +1,5 @@
-// @target: ES5
-// @module: AMD
+// @target: ES5, ES2015
+// @module: commonjs
 
 export namespace M {
     // variable

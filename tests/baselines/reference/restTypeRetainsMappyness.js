@@ -12,7 +12,8 @@ function test<T extends any[]>(fn: (...args: Foo<T>) => void) {
 
 
 //// [restTypeRetainsMappyness.js]
+"use strict";
 function test(fn) {
-    var arr = {};
-    fn.apply(void 0, arr); // Error: Argument of type 'any[]' is not assignable to parameter of type 'Foo<T>'
+    const arr = {};
+    fn(...arr); // Error: Argument of type 'any[]' is not assignable to parameter of type 'Foo<T>'
 }

@@ -47,7 +47,7 @@ var n = 0;
 >0 : 0
 >  : ^
 
-var N: Number;
+declare var N: Number;
 >N : Number
 >  : ^^^^^^
 

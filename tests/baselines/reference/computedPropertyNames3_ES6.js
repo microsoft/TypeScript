@@ -12,6 +12,7 @@ class C {
 }
 
 //// [computedPropertyNames3_ES6.js]
+"use strict";
 var id;
 class C {
     [0 + 1]() { }

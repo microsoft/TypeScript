@@ -14,22 +14,21 @@ interface OwnerList<U> extends List<List<U>> {
     name: string;
 }
 
-var list: List<string>;
-var ownerList: OwnerList<string>;
+declare var list: List<string>;
+declare var ownerList: OwnerList<string>;
 list = ownerList; 
 
 function other<T>(x: T) {
     var list: List<T>;
-    var ownerList: OwnerList<T>;
+    var ownerList!: OwnerList<T>;
     list = ownerList; 
 
 }
 
 
 //// [infiniteExpansionThroughInstantiation.js]
+"use strict";
 // instantiating a derived type can cause an infinitely expanding type reference to be generated
-var list;
-var ownerList;
 list = ownerList;
 function other(x) {
     var list;

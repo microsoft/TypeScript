@@ -59,6 +59,7 @@ function foo(tagName: any): Base {
 >foo : { (tagName: "canvas"): Derived3; (tagName: "div"): Derived2; (tagName: "span"): Derived1; (tagName: number): Base; }
 >    : ^^^       ^^        ^^^        ^^^       ^^     ^^^        ^^^       ^^      ^^^        ^^^       ^^      ^^^    ^^^
 >tagName : any
+>        : ^^^
 
     return null;
 }

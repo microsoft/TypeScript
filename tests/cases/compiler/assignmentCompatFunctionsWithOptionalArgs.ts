@@ -1,3 +1,4 @@
+// @target: es2015
 function foo(x: { id: number; name?: string; }): void;
 foo({ id: 1234 });                 // Ok
 foo({ id: 1234, name: "hello" });  // Ok

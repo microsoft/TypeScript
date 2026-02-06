@@ -1,7 +1,9 @@
+file.tsx(11,16): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+file.tsx(11,26): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
 file.tsx(18,21): error TS2607: JSX element class does not support attributes because it does not have a 'props' property.
 
 
-==== file.tsx (1 errors) ====
+==== file.tsx (3 errors) ====
     declare global {
         namespace JSX {
             interface Element {}
@@ -13,6 +15,10 @@ file.tsx(18,21): error TS2607: JSX element class does not support attributes bec
     export class Empty extends React.Component<{}, {}> {
         render() {
             return <div>Hello</div>;
+                   ~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+                             ~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
         }
     }
     

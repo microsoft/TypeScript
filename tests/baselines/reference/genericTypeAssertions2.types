@@ -76,6 +76,6 @@ var r5: A<number> = <A<number>>[]; // error
 >   : ^^^^^^^^^
 ><A<number>>[] : A<number>
 >              : ^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 

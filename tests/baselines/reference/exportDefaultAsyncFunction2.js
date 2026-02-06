@@ -5,23 +5,23 @@ export function async<T>(...args: any[]): any { }
 export function await(...args: any[]): any { }
 
 //// [a.ts]
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 export default async(() => await(Promise.resolve(1)));
 
 //// [b.ts]
 export default async () => { return 0; };
 
 //// [c.ts]
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 export default async<number>();
 
 //// [d.ts]
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 
 export default async;
 
 //// [e.ts]
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 
 export default async
 
@@ -31,7 +31,7 @@ export function foo() { }
 export function async(...args) { }
 export function await(...args) { }
 //// [a.js]
-import { async, await } from 'asyncawait';
+import { async, await } from './asyncawait';
 export default async(() => await(Promise.resolve(1)));
 //// [b.js]
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -45,12 +45,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 export default () => __awaiter(void 0, void 0, void 0, function* () { return 0; });
 //// [c.js]
-import { async } from 'asyncawait';
+import { async } from './asyncawait';
 export default async();
 //// [d.js]
-import { async } from 'asyncawait';
+import { async } from './asyncawait';
 export default async;
 //// [e.js]
-import { async } from 'asyncawait';
+import { async } from './asyncawait';
 export default async;
 export function foo() { }

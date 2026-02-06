@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: host.ts
 export class Host { }
 

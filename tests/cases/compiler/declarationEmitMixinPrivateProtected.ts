@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @filename: first.ts
 declare function mix<TMix>(mixin: TMix): TMix;

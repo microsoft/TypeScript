@@ -1,3 +1,4 @@
+// @target: es2015
 // @skipLibCheck: true
 // @lib: dom, es7
 

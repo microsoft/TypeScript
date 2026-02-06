@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 namespace x {
     interface c {

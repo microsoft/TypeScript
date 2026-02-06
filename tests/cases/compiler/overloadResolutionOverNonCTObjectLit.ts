@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 namespace Bugs {
                 export interface IToken {
                                 startIndex:number;

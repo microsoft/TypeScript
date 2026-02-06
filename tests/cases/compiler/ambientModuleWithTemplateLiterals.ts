@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace Foo {
     enum Bar {
         a = `1`,

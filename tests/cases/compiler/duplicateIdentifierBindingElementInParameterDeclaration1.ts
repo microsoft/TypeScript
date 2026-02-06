@@ -1,4 +1,4 @@
-﻿// @target: es5
+﻿// @target: es5, es2015
 
 function f0(a, [a, [b]], {b}) { }
 function f1([a, a]) { }

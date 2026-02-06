@@ -1382,9 +1382,8 @@ export function displayPartsToString(displayParts: SymbolDisplayPart[] | undefin
 }
 
 export function getDefaultCompilerOptions(): CompilerOptions {
-    // Always default to "ScriptTarget.ES5" for the language service
     return {
-        target: ScriptTarget.ES5,
+        target: ScriptTarget.LatestStandard,
         jsx: JsxEmit.Preserve,
     };
 }
@@ -3575,6 +3574,7 @@ function getSymbolAtLocationForQuickInfo(node: Node, checker: TypeChecker): Symb
  * @internal
  */
 export function getPropertySymbolsFromContextualType(node: ObjectLiteralElementWithName, checker: TypeChecker, contextualType: Type, unionSymbolOk: boolean): readonly Symbol[] {
+    contextualType = contextualType.getNonNullableType();
     const name = getNameFromPropertyName(node.name);
     if (!name) return emptyArray;
     if (!contextualType.isUnion()) {

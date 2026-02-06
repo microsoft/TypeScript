@@ -1,10 +1,11 @@
+// @target: es2015
 // ++ operator on boolean type
-var BOOLEAN: boolean;
+declare var BOOLEAN: boolean;
 
 function foo(): boolean { return true; }
 
 class A {
-    public a: boolean;
+    public a!: boolean;
     static foo() { return true; }
 }
 namespace M {

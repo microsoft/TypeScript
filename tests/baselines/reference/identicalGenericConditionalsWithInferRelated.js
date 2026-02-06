@@ -32,19 +32,15 @@ class Y implements X {
 
 
 //// [identicalGenericConditionalsWithInferRelated.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 function f(arg) {
-    var x = null;
-    var y = null;
+    let x = null;
+    let y = null;
     x = y; // is err, should be ok
     y = x; // is err, should be ok
 }
-var Y = /** @class */ (function () {
-    function Y() {
-    }
-    Y.prototype.decode = function (ctor) {
+class Y {
+    decode(ctor) {
         throw new Error();
-    };
-    return Y;
-}());
+    }
+}
+export {};

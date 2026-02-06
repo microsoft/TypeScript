@@ -10,5 +10,6 @@ declare var h: HTML;
 h.div(h);
 
 //// [mappedTypeInferenceCircularity.js]
+"use strict";
 // Repro from #12511
 h.div(h);

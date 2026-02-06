@@ -9,3 +9,4 @@ declare namespace mod {
 
 
 //// [parameterPropertyInConstructor1.js]
+"use strict";

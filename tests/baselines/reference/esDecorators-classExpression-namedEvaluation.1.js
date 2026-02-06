@@ -31,6 +31,7 @@ x ??= class { @dec y: any; };
 
 
 //// [esDecorators-classExpression-namedEvaluation.1.js]
+"use strict";
 let x;
 // 13.15.2 RS: Evaluation
 //  AssignmentExpression : LeftHandSideExpression `=` AssignmentExpression

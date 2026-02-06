@@ -13,7 +13,7 @@
 //// }
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-////{ "files": ["folder/c.ts", "a.ts", "b.ts"] }
+////{ "compilerOptions": { "lib": ["es5"] }, "files": ["folder/c.ts", "a.ts", "b.ts"] }
 
 const range = test.ranges();
 verify.pasteEdits({

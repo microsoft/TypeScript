@@ -16,6 +16,7 @@ function f() {
 }
 
 //// [emitArrowFunctionWhenUsingArguments19_ES6.js]
+"use strict";
 function f() {
     function g() {
         var _arguments = 10; // No capture in 'g', so no conflict.

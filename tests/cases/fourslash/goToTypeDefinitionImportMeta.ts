@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
 // @module: esnext
 // @Filename: foo.ts
 /////// <reference path='./bar.d.ts' />

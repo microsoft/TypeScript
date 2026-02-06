@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 // @allowSyntheticDefaultImports: true
 // @module: commonjs
 // @Filename: b.d.ts

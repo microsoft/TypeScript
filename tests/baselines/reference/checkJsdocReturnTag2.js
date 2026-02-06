@@ -18,6 +18,7 @@ function f1() {
 
 
 //// [dummy.js]
+"use strict";
 // @ts-check
 /**
  * @returns {string} This comment is not currently exposed

@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 function C(x: number) { }
 
 namespace C {

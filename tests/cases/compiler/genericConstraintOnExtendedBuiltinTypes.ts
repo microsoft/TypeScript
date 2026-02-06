@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace EndGate {
     export interface ICloneable {
         Clone(): any;

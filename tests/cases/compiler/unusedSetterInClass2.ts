@@ -1,3 +1,4 @@
+// @target: es2015
 // @noUnusedLocals:true
 
 // Unlike everything else, a setter without a getter is used by a write access.

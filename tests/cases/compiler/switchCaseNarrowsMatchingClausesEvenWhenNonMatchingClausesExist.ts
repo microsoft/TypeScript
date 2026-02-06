@@ -1,3 +1,4 @@
+// @target: es2015
 export const narrowToLiterals = (str: string) => {
     switch (str) {
       case 'abc': {

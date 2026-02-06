@@ -1,3 +1,4 @@
+// @target: es2015
 // Generic typed parameters with initializers
 
 function foo<T>(x: T = null) { return x; } // ok

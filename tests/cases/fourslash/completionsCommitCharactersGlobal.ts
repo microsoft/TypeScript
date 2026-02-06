@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 //// declare function func(a: string, b: number): { a: string, b: number };
 //// const x1 = func(/*1*/)
 //// const x2 = func

@@ -1,3 +1,4 @@
+// @target: es2015
 // test for #17069
 function sum<T extends Record<K, number>, K extends string>(n: number, v: T, k: K) {
     n = n + v[k];

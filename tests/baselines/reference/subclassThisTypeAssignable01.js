@@ -31,13 +31,12 @@ const test9 = new C();
 
 
 //// [tile1.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.view = function (v) { return 0; };
-    return C;
-}());
-var test8 = new C();
+"use strict";
+class C {
+    view(v) { return 0; }
+}
+const test8 = new C();
 //// [file1.js]
+"use strict";
 /** @type {ClassComponent<any>} */
-var test9 = new C();
+const test9 = new C();

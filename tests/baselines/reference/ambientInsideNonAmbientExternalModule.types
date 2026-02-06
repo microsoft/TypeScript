@@ -3,6 +3,7 @@
 === ambientInsideNonAmbientExternalModule.ts ===
 export declare var x;
 >x : any
+>  : ^^^
 
 export declare function f();
 >f : () => any

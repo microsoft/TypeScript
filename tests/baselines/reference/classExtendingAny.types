@@ -3,11 +3,13 @@
 === a.ts ===
 declare var Err: any
 >Err : any
+>    : ^^^
 
 class A extends Err {
 >A : A
 >  : ^
 >Err : any
+>    : ^^^
 
     payload: string
 >payload : string
@@ -18,6 +20,7 @@ class A extends Err {
 >super(1,2,3,3,4,56) : void
 >                    : ^^^^
 >super : any
+>      : ^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -33,6 +36,7 @@ class A extends Err {
 
         super.unknown
 >super.unknown : any
+>              : ^^^
 >super : any
 >      : ^^^
 >unknown : any
@@ -40,7 +44,9 @@ class A extends Err {
 
         super['unknown']
 >super['unknown'] : any
+>                 : ^^^
 >super : any
+>      : ^^^
 >'unknown' : "unknown"
 >          : ^^^^^^^^^
     }
@@ -74,6 +80,7 @@ var o = {
 
         super.unknown
 >super.unknown : any
+>              : ^^^
 >super : any
 >      : ^^^
 >unknown : any
@@ -85,17 +92,20 @@ class B extends Err {
 >B : B
 >  : ^
 >Err : any
+>    : ^^^
 
     constructor() {
         super()
 >super() : void
 >        : ^^^^
 >super : any
+>      : ^^^
 
         this.wat = 12
 >this.wat = 12 : 12
 >              : ^^
 >this.wat : any
+>         : ^^^
 >this : this
 >     : ^^^^
 >wat : any
@@ -117,6 +127,7 @@ class B extends Err {
 
         this.wit
 >this.wit : any
+>         : ^^^
 >this : this
 >     : ^^^^
 >wit : any
@@ -124,6 +135,7 @@ class B extends Err {
 
         this['wot']
 >this['wot'] : any
+>            : ^^^
 >this : this
 >     : ^^^^
 >'wot' : "wot"
@@ -131,6 +143,7 @@ class B extends Err {
 
         super.alsoBad
 >super.alsoBad : any
+>              : ^^^
 >super : any
 >      : ^^^
 >alsoBad : any

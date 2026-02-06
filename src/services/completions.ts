@@ -481,7 +481,7 @@ export const enum SymbolOriginInfoKind {
     ComputedPropertyName = 1 << 9,
 
     SymbolMemberNoExport = SymbolMember,
-    SymbolMemberExport   = SymbolMember | Export,
+    SymbolMemberExport   = SymbolMember | ResolvedExport,
 }
 
 /** @internal */
@@ -535,7 +535,7 @@ function originIsExport(origin: SymbolOriginInfo | undefined): origin is SymbolO
 }
 
 function originIsResolvedExport(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoResolvedExport {
-    return !!(origin && origin.kind === SymbolOriginInfoKind.ResolvedExport);
+    return !!(origin && origin.kind & SymbolOriginInfoKind.ResolvedExport);
 }
 
 function originIncludesSymbolName(origin: SymbolOriginInfo | undefined): origin is SymbolOriginInfoExport | SymbolOriginInfoResolvedExport | SymbolOriginInfoComputedPropertyName {
@@ -2621,11 +2621,11 @@ function isRecommendedCompletionMatch(localSymbol: Symbol, recommendedCompletion
 }
 
 function getSourceFromOrigin(origin: SymbolOriginInfo | undefined): string | undefined {
-    if (originIsExport(origin)) {
-        return stripQuotes(origin.moduleSymbol.name);
-    }
     if (originIsResolvedExport(origin)) {
         return origin.moduleSpecifier;
+    }
+    if (originIsExport(origin)) {
+        return stripQuotes(origin.moduleSymbol.name);
     }
     if (origin?.kind === SymbolOriginInfoKind.ThisType) {
         return CompletionSource.ThisProperty;
@@ -3280,7 +3280,7 @@ function getContextualType(previousToken: Node, position: number, sourceFile: So
                 isEqualityOperatorKind(previousToken.kind) && isBinaryExpression(parent) && isEqualityOperatorKind(parent.operatorToken.kind) ?
                 // completion at `x ===/**/` should be for the right side
                 checker.getTypeAtLocation(parent.left) :
-                checker.getContextualType(previousToken as Expression, ContextFlags.Completions) || checker.getContextualType(previousToken as Expression);
+                checker.getContextualType(previousToken as Expression, ContextFlags.IgnoreNodeInferences) || checker.getContextualType(previousToken as Expression);
     }
 }
 
@@ -3966,7 +3966,7 @@ function getCompletionData(
         // Cursor is inside a JSX self-closing element or opening element
         const attrsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes);
         if (!attrsType) return GlobalsSearch.Continue;
-        const completionsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes, ContextFlags.Completions);
+        const completionsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes, ContextFlags.IgnoreNodeInferences);
         symbols = concatenate(symbols, filterJsxAttributes(getPropertiesForObjectExpression(attrsType, completionsType, jsxContainer.attributes, typeChecker), jsxContainer.attributes.properties));
         setSortTextToOptionalMember();
         completionKind = CompletionKind.MemberLike;
@@ -4564,7 +4564,7 @@ function getCompletionData(
                 }
                 return GlobalsSearch.Continue;
             }
-            const completionsType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.Completions);
+            const completionsType = typeChecker.getContextualType(objectLikeContainer, ContextFlags.IgnoreNodeInferences);
             const hasStringIndexType = (completionsType || instantiatedType).getStringIndexType();
             const hasNumberIndextype = (completionsType || instantiatedType).getNumberIndexType();
             isNewIdentifierLocation = !!hasStringIndexType || !!hasNumberIndextype;

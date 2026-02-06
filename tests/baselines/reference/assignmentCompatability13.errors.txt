@@ -1,5 +1,7 @@
 assignmentCompatability13.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: string; }'.
-  Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type '{ two: string; }'.
+  Types of property 'two' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
 
 
 ==== assignmentCompatability13.ts (1 errors) ====
@@ -14,4 +16,6 @@ assignmentCompatability13.ts(9,1): error TS2322: Type 'interfaceWithPublicAndOpt
     __test2__.__val__obj = __test1__.__val__obj4
     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'interfaceWithPublicAndOptional<number, string>' is not assignable to type '{ two: string; }'.
-!!! error TS2322:   Property 'two' is optional in type 'interfaceWithPublicAndOptional<number, string>' but required in type '{ two: string; }'.
+!!! error TS2322:   Types of property 'two' are incompatible.
+!!! error TS2322:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string'.

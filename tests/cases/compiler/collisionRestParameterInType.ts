@@ -1,3 +1,5 @@
+// @target: es2015
+// @strict: false
 var v1: (_i: number, ...restParameters) => void; // no error - no code gen
 var v2: {
     (_i: number, ...restParameters); // no error - no code gen

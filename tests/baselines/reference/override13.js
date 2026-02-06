@@ -29,6 +29,7 @@ class StaticDerived extends Intermediate {
 }
 
 //// [override13.js]
+"use strict";
 class Foo {
     property = 1;
     static staticProperty = 2;

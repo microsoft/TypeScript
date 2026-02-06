@@ -147,14 +147,14 @@ function anonymousClasses(x: { a: string; } | { b: number; }) {
 class AWithOptionalProp { a?: string; }
 >AWithOptionalProp : AWithOptionalProp
 >                  : ^^^^^^^^^^^^^^^^^
->a : string
->  : ^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 class BWithOptionalProp { b?: string; }
 >BWithOptionalProp : BWithOptionalProp
 >                  : ^^^^^^^^^^^^^^^^^
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
 >positiveTestClassesWithOptionalProperties : (x: AWithOptionalProp | BWithOptionalProp) => void
@@ -173,12 +173,12 @@ function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithO
         x.a = "1";
 >x.a = "1" : "1"
 >          : ^^^
->x.a : string
->    : ^^^^^^
+>x.a : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >x : AWithOptionalProp
 >  : ^^^^^^^^^^^^^^^^^
->a : string
->  : ^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >"1" : "1"
 >    : ^^^
 
@@ -186,8 +186,8 @@ function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithO
         const y: string = x instanceof AWithOptionalProp
 >y : string
 >  : ^^^^^^
->x instanceof AWithOptionalProp            ? x.a            : x.b : string
->                                                                 : ^^^^^^
+>x instanceof AWithOptionalProp            ? x.a            : x.b : string | undefined
+>                                                                 : ^^^^^^^^^^^^^^^^^^
 >x instanceof AWithOptionalProp : boolean
 >                               : ^^^^^^^
 >x : AWithOptionalProp | BWithOptionalProp
@@ -196,20 +196,20 @@ function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithO
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^
 
             ? x.a
->x.a : string
->    : ^^^^^^
+>x.a : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >x : AWithOptionalProp
 >  : ^^^^^^^^^^^^^^^^^
->a : string
->  : ^^^^^^
+>a : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
             : x.b
->x.b : string
->    : ^^^^^^
+>x.b : string | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 >x : BWithOptionalProp
 >  : ^^^^^^^^^^^^^^^^^
->b : string
->  : ^^^^^^
+>b : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -488,6 +488,7 @@ function f(i: Indexed) {
 
         return i.a;
 >i.a : any
+>    : ^^^
 >i : Indexed
 >  : ^^^^^^^
 >a : any
@@ -503,6 +504,7 @@ function f(i: Indexed) {
 
         return i.b;
 >i.b : any
+>    : ^^^
 >i : Indexed
 >  : ^^^^^^^
 >b : any
@@ -510,6 +512,7 @@ function f(i: Indexed) {
     }
     return "c" in i && i.c;
 >"c" in i && i.c : any
+>                : ^^^
 >"c" in i : boolean
 >         : ^^^^^^^
 >"c" : "c"
@@ -517,6 +520,7 @@ function f(i: Indexed) {
 >i : Indexed
 >  : ^^^^^^^
 >i.c : any
+>    : ^^^
 >i : Indexed
 >  : ^^^^^^^
 >c : any

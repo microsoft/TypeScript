@@ -1,5 +1,5 @@
 ﻿// @lib: es5,es2015.core
-// @target: es5
+// @target: es5, es2015
 
 // No error
 function f(x: number, y: number, z: number) {

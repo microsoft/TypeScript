@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/es2025/float16Array.ts] ////
+
+=== float16Array.ts ===
+const float16 = new Float16Array(4);
+>float16 : Float16Array<ArrayBuffer>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>new Float16Array(4) : Float16Array<ArrayBuffer>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>Float16Array : Float16ArrayConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^
+>4 : 4
+>  : ^
+

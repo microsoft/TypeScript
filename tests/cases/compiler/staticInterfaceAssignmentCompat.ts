@@ -1,3 +1,4 @@
+// @target: es2015
 class Shape {
     static create(): Shape {
         return new Shape();

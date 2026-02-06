@@ -1,4 +1,5 @@
-//@module: amd
+// @target: es2015
+//@module: commonjs
 interface I1 { item:number; }
 
 namespace M1 {

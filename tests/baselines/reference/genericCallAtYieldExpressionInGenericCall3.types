@@ -1,0 +1,154 @@
+//// [tests/cases/compiler/genericCallAtYieldExpressionInGenericCall3.ts] ////
+
+=== Performance Stats ===
+Type Count: 1,000
+Instantiation count: 2,500
+
+=== genericCallAtYieldExpressionInGenericCall3.ts ===
+type ReadonlyRecord<in out K extends string | symbol, out A> = {
+>ReadonlyRecord : ReadonlyRecord<K, A>
+>               : ^^^^^^^^^^^^^^^^^^^^
+
+  readonly [P in K]: A;
+};
+
+type Success<T> = T extends Micro<infer _A, infer _E, infer _R> ? _A : never;
+>Success : Success<T>
+>        : ^^^^^^^^^^
+
+interface MicroIterator<T extends Micro<any, any, any>> {
+  next(...args: ReadonlyArray<any>): IteratorResult<T, Success<T>>;
+>next : (...args: ReadonlyArray<any>) => IteratorResult<T, Success<T>>
+>     : ^^^^    ^^                  ^^^^^                             
+>args : readonly any[]
+>     : ^^^^^^^^^^^^^^
+}
+
+interface Micro<out A, out E = never, out R = never> {
+  _A: A;
+>_A : A
+>   : ^
+
+  _E: E;
+>_E : E
+>   : ^
+
+  _R: R;
+>_R : R
+>   : ^
+
+  [Symbol.iterator](): MicroIterator<Micro<A, E, R>>;
+>[Symbol.iterator] : () => MicroIterator<Micro<A, E, R>>
+>                  : ^^^^^^                             
+>Symbol.iterator : unique symbol
+>                : ^^^^^^^^^^^^^
+>Symbol : SymbolConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>iterator : unique symbol
+>         : ^^^^^^^^^^^^^
+}
+
+declare function runPromise<A, E>(effect: Micro<A, E>): Promise<A>;
+>runPromise : <A, E>(effect: Micro<A, E>) => Promise<A>
+>           : ^ ^^ ^^      ^^           ^^^^^          
+>effect : Micro<A, E, never>
+>       : ^^^^^^^^^^^^^^^^^^
+
+declare function gen<Eff extends Micro<any, any, any>, AEff>(
+>gen : <Eff extends Micro<any, any, any>, AEff>(body: () => Generator<Eff, AEff, never>) => Micro<AEff, any, never>
+>    : ^   ^^^^^^^^^                    ^^    ^^    ^^                                 ^^^^^                       
+
+  body: () => Generator<Eff, AEff, never>,
+>body : () => Generator<Eff, AEff, never>
+>     : ^^^^^^                           
+
+): Micro<AEff, any, never>;
+
+declare const traverse: {
+>traverse : { <A, R, O, E, B>(f: (a: A) => Micro<B, E, O>): (self: ReadonlyRecord<string, A>) => Micro<ReadonlyRecord<string, B>, E, O>; <A, O, E, B>(self: ReadonlyRecord<string, A>, f: (a: A) => Micro<B, E, O>): Micro<ReadonlyRecord<string, B>, E, O>; }
+>         : ^^^ ^^ ^^ ^^ ^^ ^^ ^^                        ^^^                                                                           ^^^ ^^ ^^ ^^ ^^    ^^                         ^^ ^^                        ^^^                                      ^^^
+
+  <A, R, O, E, B>(
+    f: (a: A) => Micro<B, E, O>,
+>f : (a: A) => Micro<B, E, O>
+>  : ^ ^^ ^^^^^              
+>a : A
+>  : ^
+
+  ): (
+    self: ReadonlyRecord<string, A>,
+>self : ReadonlyRecord<string, A>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  ) => Micro<ReadonlyRecord<string, B>, E, O>;
+  <A, O, E, B>(
+    self: ReadonlyRecord<string, A>,
+>self : ReadonlyRecord<string, A>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    f: (a: A) => Micro<B, E, O>,
+>f : (a: A) => Micro<B, E, O>
+>  : ^ ^^ ^^^^^              
+>a : A
+>  : ^
+
+  ): Micro<ReadonlyRecord<string, B>, E, O>;
+};
+
+runPromise(
+>runPromise(  gen(function* () {    yield* traverse({ a: 1, b: 2 }, (n) =>      gen(function* () {        return n + 1;      }),    );  }),) : Promise<void>
+>                                                                                                                                            : ^^^^^^^^^^^^^
+>runPromise : <A, E>(effect: Micro<A, E>) => Promise<A>
+>           : ^ ^^ ^^      ^^           ^^^^^          
+
+  gen(function* () {
+>gen(function* () {    yield* traverse({ a: 1, b: 2 }, (n) =>      gen(function* () {        return n + 1;      }),    );  }) : Micro<void, any, never>
+>                                                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^
+>gen : <Eff extends Micro<any, any, any>, AEff>(body: () => Generator<Eff, AEff, never>) => Micro<AEff, any, never>
+>    : ^   ^^^^^^^^^                    ^^    ^^    ^^                                 ^^^^^                       
+>function* () {    yield* traverse({ a: 1, b: 2 }, (n) =>      gen(function* () {        return n + 1;      }),    );  } : () => Generator<Micro<ReadonlyRecord<string, number>, any, never>, void, any>
+>                                                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    yield* traverse({ a: 1, b: 2 }, (n) =>
+>yield* traverse({ a: 1, b: 2 }, (n) =>      gen(function* () {        return n + 1;      }),    ) : ReadonlyRecord<string, number>
+>                                                                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>traverse({ a: 1, b: 2 }, (n) =>      gen(function* () {        return n + 1;      }),    ) : Micro<ReadonlyRecord<string, number>, any, never>
+>                                                                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>traverse : { <A, R, O, E, B>(f: (a: A) => Micro<B, E, O>): (self: ReadonlyRecord<string, A>) => Micro<ReadonlyRecord<string, B>, E, O>; <A, O, E, B>(self: ReadonlyRecord<string, A>, f: (a: A) => Micro<B, E, O>): Micro<ReadonlyRecord<string, B>, E, O>; }
+>         : ^^^ ^^ ^^ ^^ ^^ ^^ ^^                        ^^^                                                                           ^^^ ^^ ^^ ^^ ^^    ^^                         ^^ ^^                        ^^^                                      ^^^
+>{ a: 1, b: 2 } : { a: number; b: number; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>b : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>(n) =>      gen(function* () {        return n + 1;      }) : (n: number) => Micro<number, any, never>
+>                                                            : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>n : number
+>  : ^^^^^^
+
+      gen(function* () {
+>gen(function* () {        return n + 1;      }) : Micro<number, any, never>
+>                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>gen : <Eff extends Micro<any, any, any>, AEff>(body: () => Generator<Eff, AEff, never>) => Micro<AEff, any, never>
+>    : ^   ^^^^^^^^^                    ^^    ^^    ^^                                 ^^^^^                       
+>function* () {        return n + 1;      } : () => Generator<never, number, never>
+>                                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+        return n + 1;
+>n + 1 : number
+>      : ^^^^^^
+>n : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+
+      }),
+    );
+  }),
+);
+

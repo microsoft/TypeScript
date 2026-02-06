@@ -1,3 +1,4 @@
+// @target: es2015
 var x: any;
 var a = x.foo;
 var b = x['foo'];

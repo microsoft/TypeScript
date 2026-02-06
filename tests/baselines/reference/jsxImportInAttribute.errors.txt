@@ -1,0 +1,17 @@
+consumer.tsx(5,1): error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+
+
+==== consumer.tsx (1 errors) ====
+    /// <reference path="component.d.ts" />
+    import Test from 'Test';
+    
+    let x = Test; // emit test_1.default
+    <anything attr={Test} />; // ?
+    ~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS7026: JSX element implicitly has type 'any' because no interface 'JSX.IntrinsicElements' exists.
+    
+==== component.d.ts (0 errors) ====
+    declare module "Test" {
+    	export default class Text { }
+    }
+    

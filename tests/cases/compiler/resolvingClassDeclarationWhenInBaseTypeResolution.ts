@@ -1,4 +1,6 @@
+// @target: es2015
 // @declaration: true
+// @strict: false
 namespace rionegrensis {
   export class caniventer extends Lanthanum.nitidus<petrophilus.minutilla, julianae.sumatrana> {
     salomonseni() : caniventer { var x : caniventer; () => { var y = this; }; return x; }

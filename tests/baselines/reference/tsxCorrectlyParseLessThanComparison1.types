@@ -17,9 +17,10 @@ declare namespace React {
 >          : ^^^^^^^^^^^^^^^
 
         constructor(props?: P, context?: any);
->props : P
->      : ^
+>props : P | undefined
+>      : ^^^^^^^^^^^^^
 >context : any
+>        : ^^^
 
         props: P;
 >props : P
@@ -62,8 +63,10 @@ export class ShortDetails extends React.Component<{ id: number }, {}> {
 >  : ^
 
             return (<div></div>);
->(<div></div>) : error
-><div></div> : error
+>(<div></div>) : any
+>              : ^^^
+><div></div> : any
+>            : ^^^
 >div : any
 >    : ^^^
 >div : any

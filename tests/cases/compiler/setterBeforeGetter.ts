@@ -1,3 +1,4 @@
+// @target: es2015
 class Foo {
 
     private _bar: { a: string; };

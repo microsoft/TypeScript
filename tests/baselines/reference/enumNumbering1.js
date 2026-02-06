@@ -11,6 +11,7 @@ enum Test {
 
 
 //// [enumNumbering1.js]
+"use strict";
 var Test;
 (function (Test) {
     Test[Test["A"] = 0] = "A";

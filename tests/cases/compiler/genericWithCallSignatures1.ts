@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: genericWithCallSignatures_0.ts
 interface Callable<T> {
     (): T;

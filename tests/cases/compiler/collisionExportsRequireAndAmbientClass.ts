@@ -1,4 +1,5 @@
-//@module: amd
+// @target: es2015
+//@module: commonjs
 //@filename: collisionExportsRequireAndAmbientClass_externalmodule.ts
 export declare class require {
 }

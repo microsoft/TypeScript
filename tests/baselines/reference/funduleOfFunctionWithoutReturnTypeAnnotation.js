@@ -10,6 +10,7 @@ namespace fn {
 
 
 //// [funduleOfFunctionWithoutReturnTypeAnnotation.js]
+"use strict";
 function fn() {
     return fn.n;
 }
