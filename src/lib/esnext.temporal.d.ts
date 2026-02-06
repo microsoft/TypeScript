@@ -355,7 +355,7 @@ declare namespace Temporal {
         new (years?: number, months?: number, weeks?: number, days?: number, hours?: number, minutes?: number, seconds?: number, milliseconds?: number, microseconds?: number, nanoseconds?: number): Duration;
         readonly prototype: Duration;
         from(item: DurationLike): Duration;
-        compare(one: DurationLike, two: DurationLike, options?: DurationRelativeToOptions): Duration;
+        compare(one: DurationLike, two: DurationLike, options?: DurationRelativeToOptions): number;
     }
     var Duration: DurationConstructor;
 
