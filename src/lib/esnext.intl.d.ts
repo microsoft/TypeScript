@@ -76,12 +76,5 @@ declare namespace Intl {
          * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getWeekInfo#weekend)
          */
         weekend: number[];
-        /**
-         * An integer between 1 and 7 (commonly 1 and 4) indicating the minimal days required in the
-         * first week of a month or year, for week-of-year or week-of-month calculations (e.g. The 20th week of the year).
-         *
-         * [MDN Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Locale/getWeekInfo#minimaldays)
-         */
-        minimalDays: number;
     }
 }
