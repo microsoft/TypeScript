@@ -9,9 +9,11 @@ declare namespace Intl {
         negative: never;
     }
 
-    interface NumberFormatPartTypeRegistry {
+    interface NumberFormatRangePartTypeRegistry extends NumberFormatPartTypeRegistry {
         approximatelySign: never;
     }
+
+    type NumberFormatRangePartTypes = keyof NumberFormatRangePartTypeRegistry;
 
     interface NumberFormatOptions {
         roundingPriority?: "auto" | "morePrecision" | "lessPrecision" | undefined;
@@ -28,6 +30,7 @@ declare namespace Intl {
     }
 
     interface NumberRangeFormatPart extends NumberFormatPart {
+        type: NumberFormatRangePartTypes;
         source: "startRange" | "endRange" | "shared";
     }
 

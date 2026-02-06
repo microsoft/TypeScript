@@ -162,9 +162,9 @@ const filtered = nf
   .filter((part) => part.type !== "approximatelySign")
 >filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >part : Symbol(part, Decl(intlNumberFormatES2023.ts, 40, 11))
->part.type : Symbol(Intl.NumberFormatPart.type, Decl(lib.es2018.intl.d.ts, --, --))
+>part.type : Symbol(Intl.NumberRangeFormatPart.type, Decl(lib.es2023.intl.d.ts, --, --))
 >part : Symbol(part, Decl(intlNumberFormatES2023.ts, 40, 11))
->type : Symbol(Intl.NumberFormatPart.type, Decl(lib.es2018.intl.d.ts, --, --))
+>type : Symbol(Intl.NumberRangeFormatPart.type, Decl(lib.es2023.intl.d.ts, --, --))
 
   .map((part) => part.value)
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))

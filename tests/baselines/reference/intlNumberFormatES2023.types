@@ -452,12 +452,12 @@ const filtered = nf
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >part.type !== "approximatelySign" : boolean
 >                                  : ^^^^^^^
->part.type : keyof Intl.NumberFormatPartTypeRegistry
->          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>part.type : keyof Intl.NumberFormatRangePartTypeRegistry
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >part : Intl.NumberRangeFormatPart
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
->type : keyof Intl.NumberFormatPartTypeRegistry
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : keyof Intl.NumberFormatRangePartTypeRegistry
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"approximatelySign" : "approximatelySign"
 >                    : ^^^^^^^^^^^^^^^^^^^
 
