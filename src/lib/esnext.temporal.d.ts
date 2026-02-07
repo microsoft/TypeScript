@@ -429,7 +429,9 @@ declare namespace Temporal {
     var PlainYearMonth: PlainYearMonthConstructor;
 
     interface PlainMonthDayToPlainDateOptions {
-        year: number;
+        era?: string | undefined;
+        eraYear?: number | undefined;
+        year?: number | undefined;
     }
 
     interface PlainMonthDay {
