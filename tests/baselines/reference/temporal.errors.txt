@@ -1,11 +1,10 @@
 temporal.ts(25,13): error TS2339: Property 'year' does not exist on type 'Instant'.
-temporal.ts(72,54): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'number'.
-temporal.ts(1503,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
-temporal.ts(1513,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
-temporal.ts(1519,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
+temporal.ts(1502,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
+temporal.ts(1512,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
+temporal.ts(1518,8): error TS2339: Property 'month' does not exist on type 'PlainMonthDay'.
 
 
-==== temporal.ts (5 errors) ====
+==== temporal.ts (4 errors) ====
     /**
      * Test cases derived from documentation at tc39/proposal-temporal,
      * under the following license:
@@ -79,9 +78,6 @@ temporal.ts(1519,8): error TS2339: Property 'month' does not exist on type 'Plai
         const legacyDate = new Date("1995-12-17T03:24Z");
         let instant: Temporal.Instant;
         instant = Temporal.Instant.fromEpochMilliseconds(legacyDate.getTime()); // => 1995-12-17T03:24:00Z
-        instant = Temporal.Instant.fromEpochMilliseconds(legacyDate); // valueOf() called implicitly
-                                                         ~~~~~~~~~~
-!!! error TS2345: Argument of type 'Date' is not assignable to parameter of type 'number'.
         instant = legacyDate.toTemporalInstant(); // recommended
     }
     

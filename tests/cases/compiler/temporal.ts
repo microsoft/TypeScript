@@ -73,7 +73,6 @@
     const legacyDate = new Date("1995-12-17T03:24Z");
     let instant: Temporal.Instant;
     instant = Temporal.Instant.fromEpochMilliseconds(legacyDate.getTime()); // => 1995-12-17T03:24:00Z
-    instant = Temporal.Instant.fromEpochMilliseconds(legacyDate); // valueOf() called implicitly
     instant = legacyDate.toTemporalInstant(); // recommended
 }
 

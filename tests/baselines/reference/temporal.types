@@ -407,26 +407,6 @@ Type Count: 2,500
 >getTime : () => number
 >        : ^^^^^^      
 
-    instant = Temporal.Instant.fromEpochMilliseconds(legacyDate); // valueOf() called implicitly
->instant = Temporal.Instant.fromEpochMilliseconds(legacyDate) : Temporal.Instant
->                                                             : ^^^^^^^^^^^^^^^^
->instant : Temporal.Instant
->        : ^^^^^^^^^^^^^^^^
->Temporal.Instant.fromEpochMilliseconds(legacyDate) : Temporal.Instant
->                                                   : ^^^^^^^^^^^^^^^^
->Temporal.Instant.fromEpochMilliseconds : (epochMilliseconds: number) => Temporal.Instant
->                                       : ^                 ^^      ^^^^^^^^^^^^^^^^^^^^^
->Temporal.Instant : Temporal.InstantConstructor
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->Temporal : typeof Temporal
->         : ^^^^^^^^^^^^^^^
->Instant : Temporal.InstantConstructor
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->fromEpochMilliseconds : (epochMilliseconds: number) => Temporal.Instant
->                      : ^                 ^^      ^^^^^^^^^^^^^^^^^^^^^
->legacyDate : Date
->           : ^^^^
-
     instant = legacyDate.toTemporalInstant(); // recommended
 >instant = legacyDate.toTemporalInstant() : Temporal.Instant
 >                                         : ^^^^^^^^^^^^^^^^
