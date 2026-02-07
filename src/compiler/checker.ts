@@ -33581,6 +33581,33 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 objectFlags |= getObjectFlags(type) & ObjectFlags.PropagatingFlags;
+
+                // When the computed property name type is a union of literal property name types,
+                // distribute the property over the union members, creating a separate named property
+                // for each. This fixes #13948 where { [key]: value } with key: 'a' | 'b' would
+                // produce { [x: string]: V } instead of { a: V; b: V }.
+                if (
+                    computedNameType && (computedNameType.flags & TypeFlags.Union) &&
+                    every((computedNameType as UnionType).types, isTypeUsableAsPropertyName)
+                ) {
+                    for (const constituentType of (computedNameType as UnionType).types) {
+                        const propName = getPropertyNameFromType(constituentType as StringLiteralType | NumberLiteralType | UniqueESSymbolType);
+                        const distributedProp = createSymbol(SymbolFlags.Property | member.flags, propName, checkFlags | CheckFlags.Late);
+                        distributedProp.links.nameType = constituentType;
+                        distributedProp.declarations = member.declarations;
+                        distributedProp.parent = member.parent;
+                        if (member.valueDeclaration) {
+                            distributedProp.valueDeclaration = member.valueDeclaration;
+                        }
+                        distributedProp.links.type = type;
+                        distributedProp.links.target = member;
+                        propertiesTable.set(distributedProp.escapedName, distributedProp);
+                        propertiesArray.push(distributedProp);
+                        allPropertiesTable?.set(distributedProp.escapedName, distributedProp);
+                    }
+                    continue;
+                }
+
                 const nameType = computedNameType && isTypeUsableAsPropertyName(computedNameType) ? computedNameType : undefined;
                 const prop = nameType ?
                     createSymbol(SymbolFlags.Property | member.flags, getPropertyNameFromType(nameType), checkFlags | CheckFlags.Late) :

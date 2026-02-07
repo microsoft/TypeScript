@@ -1,0 +1,216 @@
+//// [tests/cases/compiler/computedPropertyNamesUnionTypes.ts] ////
+
+=== computedPropertyNamesUnionTypes.ts ===
+// Fixes #13948: Computed property key names should not be widened when the key
+// type is a union of literal types.
+
+interface Person {
+>Person : Symbol(Person, Decl(computedPropertyNamesUnionTypes.ts, 0, 0))
+
+    name: string;
+>name : Symbol(Person.name, Decl(computedPropertyNamesUnionTypes.ts, 3, 18))
+
+    age: number;
+>age : Symbol(Person.age, Decl(computedPropertyNamesUnionTypes.ts, 4, 17))
+}
+
+// Union of string literal keys should produce distributed named properties
+function unionStringLiterals(key: 'a' | 'b', value: number) {
+>unionStringLiterals : Symbol(unionStringLiterals, Decl(computedPropertyNamesUnionTypes.ts, 6, 1))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 9, 29))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 9, 44))
+
+    const obj = { [key]: value };
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 10, 9))
+>[key] : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 10, 17))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 9, 29))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 9, 44))
+
+    obj.a; // ok
+>obj.a : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 10, 17))
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 10, 9))
+>a : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 10, 17))
+
+    obj.b; // ok
+>obj.b : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 10, 17))
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 10, 9))
+>b : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 10, 17))
+}
+
+// keyof should work with computed properties
+function keyofComputed(key: keyof Person, value: string | number) {
+>keyofComputed : Symbol(keyofComputed, Decl(computedPropertyNamesUnionTypes.ts, 13, 1))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 16, 23))
+>Person : Symbol(Person, Decl(computedPropertyNamesUnionTypes.ts, 0, 0))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 16, 41))
+
+    const obj = { [key]: value };
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 17, 9))
+>[key] : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 17, 17))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 16, 23))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 16, 41))
+
+    obj.name; // ok
+>obj.name : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 17, 17))
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 17, 9))
+>name : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 17, 17))
+
+    obj.age;  // ok
+>obj.age : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 17, 17))
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 17, 9))
+>age : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 17, 17))
+}
+
+// Partial<T> assignability (React setState pattern)
+declare function setState(state: Partial<Person>): void;
+>setState : Symbol(setState, Decl(computedPropertyNamesUnionTypes.ts, 20, 1))
+>state : Symbol(state, Decl(computedPropertyNamesUnionTypes.ts, 23, 26))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Person : Symbol(Person, Decl(computedPropertyNamesUnionTypes.ts, 0, 0))
+
+function reactSetState(key: 'name', value: string) {
+>reactSetState : Symbol(reactSetState, Decl(computedPropertyNamesUnionTypes.ts, 23, 56))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 24, 23))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 24, 35))
+
+    setState({ [key]: value }); // should not error
+>setState : Symbol(setState, Decl(computedPropertyNamesUnionTypes.ts, 20, 1))
+>[key] : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 25, 14))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 24, 23))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 24, 35))
+}
+
+// Three-member union
+function threeWay(key: 'x' | 'y' | 'z', value: boolean) {
+>threeWay : Symbol(threeWay, Decl(computedPropertyNamesUnionTypes.ts, 26, 1))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 29, 18))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 29, 39))
+
+    const obj = { [key]: value };
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 30, 9))
+>[key] : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 30, 17))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 29, 18))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 29, 39))
+
+    obj.x; // ok
+>obj.x : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 30, 17))
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 30, 9))
+>x : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 30, 17))
+
+    obj.y; // ok
+>obj.y : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 30, 17))
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 30, 9))
+>y : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 30, 17))
+
+    obj.z; // ok
+>obj.z : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 30, 17))
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 30, 9))
+>z : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 30, 17))
+}
+
+// Number literal union
+function numberLiterals(key: 0 | 1, value: string) {
+>numberLiterals : Symbol(numberLiterals, Decl(computedPropertyNamesUnionTypes.ts, 34, 1))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 37, 24))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 37, 35))
+
+    const obj = { [key]: value };
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 38, 9))
+>[key] : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 38, 17))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 37, 24))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 37, 35))
+}
+
+// Union key + fixed properties
+function withFixed(key: 'a' | 'b') {
+>withFixed : Symbol(withFixed, Decl(computedPropertyNamesUnionTypes.ts, 39, 1))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 42, 19))
+
+    const obj = { [key]: 1, fixed: 'hello' };
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 43, 9))
+>[key] : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 43, 17))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 42, 19))
+>fixed : Symbol(fixed, Decl(computedPropertyNamesUnionTypes.ts, 43, 27))
+
+    obj.a;     // ok, number
+>obj.a : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 43, 17))
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 43, 9))
+>a : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 43, 17))
+
+    obj.b;     // ok, number
+>obj.b : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 43, 17))
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 43, 9))
+>b : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 43, 17))
+
+    obj.fixed; // ok, string
+>obj.fixed : Symbol(fixed, Decl(computedPropertyNamesUnionTypes.ts, 43, 27))
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 43, 9))
+>fixed : Symbol(fixed, Decl(computedPropertyNamesUnionTypes.ts, 43, 27))
+}
+
+// Mapped type equivalence
+type Mapped = { [P in 'x' | 'y']: boolean };
+>Mapped : Symbol(Mapped, Decl(computedPropertyNamesUnionTypes.ts, 47, 1))
+>P : Symbol(P, Decl(computedPropertyNamesUnionTypes.ts, 50, 17))
+
+function mappedEquivalence(key: 'x' | 'y', value: boolean) {
+>mappedEquivalence : Symbol(mappedEquivalence, Decl(computedPropertyNamesUnionTypes.ts, 50, 44))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 51, 27))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 51, 42))
+
+    const obj = { [key]: value };
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 52, 9))
+>[key] : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 52, 17))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 51, 27))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 51, 42))
+
+    const mapped: Mapped = obj; // should be assignable
+>mapped : Symbol(mapped, Decl(computedPropertyNamesUnionTypes.ts, 53, 9))
+>Mapped : Symbol(Mapped, Decl(computedPropertyNamesUnionTypes.ts, 47, 1))
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 52, 9))
+}
+
+// Non-literal key should still produce index signature (unchanged behavior)
+function dynamicKey(key: string, value: number) {
+>dynamicKey : Symbol(dynamicKey, Decl(computedPropertyNamesUnionTypes.ts, 54, 1))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 57, 20))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 57, 32))
+
+    const obj = { [key]: value };
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 58, 9))
+>[key] : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 58, 17))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 57, 20))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 57, 32))
+
+    obj.anything; // ok via index signature
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 58, 9))
+}
+
+// Template literal key should still produce index signature
+function templateKey(key: `prefix_${string}`, value: number) {
+>templateKey : Symbol(templateKey, Decl(computedPropertyNamesUnionTypes.ts, 60, 1))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 63, 21))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 63, 45))
+
+    const obj = { [key]: value };
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 64, 9))
+>[key] : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 64, 17))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 63, 21))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 63, 45))
+}
+
+// Generic extends literal union should work
+function genericKey<K extends 'a' | 'b'>(key: K, value: number) {
+>genericKey : Symbol(genericKey, Decl(computedPropertyNamesUnionTypes.ts, 65, 1))
+>K : Symbol(K, Decl(computedPropertyNamesUnionTypes.ts, 68, 20))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 68, 41))
+>K : Symbol(K, Decl(computedPropertyNamesUnionTypes.ts, 68, 20))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 68, 48))
+
+    const obj = { [key]: value };
+>obj : Symbol(obj, Decl(computedPropertyNamesUnionTypes.ts, 69, 9))
+>[key] : Symbol([key], Decl(computedPropertyNamesUnionTypes.ts, 69, 17))
+>key : Symbol(key, Decl(computedPropertyNamesUnionTypes.ts, 68, 41))
+>value : Symbol(value, Decl(computedPropertyNamesUnionTypes.ts, 68, 48))
+}
+

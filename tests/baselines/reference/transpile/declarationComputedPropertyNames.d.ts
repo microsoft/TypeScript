@@ -93,12 +93,13 @@ export declare class C {
     ["2"]: number;
 }
 export declare const D: {
-    [x: string]: number;
     [x: number]: number;
     [presentNs.a]: number;
     [aliasing.toStringTag]: number;
     1: number;
     "2": number;
+    f1: number;
+    f2: number;
 };
 export {};
 

@@ -1,0 +1,344 @@
+//// [tests/cases/compiler/computedPropertyNamesUnionTypes.ts] ////
+
+=== computedPropertyNamesUnionTypes.ts ===
+// Fixes #13948: Computed property key names should not be widened when the key
+// type is a union of literal types.
+
+interface Person {
+    name: string;
+>name : string
+>     : ^^^^^^
+
+    age: number;
+>age : number
+>    : ^^^^^^
+}
+
+// Union of string literal keys should produce distributed named properties
+function unionStringLiterals(key: 'a' | 'b', value: number) {
+>unionStringLiterals : (key: "a" | "b", value: number) => void
+>                    : ^   ^^         ^^     ^^      ^^^^^^^^^
+>key : "a" | "b"
+>    : ^^^^^^^^^
+>value : number
+>      : ^^^^^^
+
+    const obj = { [key]: value };
+>obj : { a: number; b: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [key]: value } : { a: number; b: number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>[key] : number
+>      : ^^^^^^
+>key : "a" | "b"
+>    : ^^^^^^^^^
+>value : number
+>      : ^^^^^^
+
+    obj.a; // ok
+>obj.a : number
+>      : ^^^^^^
+>obj : { a: number; b: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+
+    obj.b; // ok
+>obj.b : number
+>      : ^^^^^^
+>obj : { a: number; b: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+}
+
+// keyof should work with computed properties
+function keyofComputed(key: keyof Person, value: string | number) {
+>keyofComputed : (key: keyof Person, value: string | number) => void
+>              : ^   ^^            ^^     ^^               ^^^^^^^^^
+>key : keyof Person
+>    : ^^^^^^^^^^^^
+>value : string | number
+>      : ^^^^^^^^^^^^^^^
+
+    const obj = { [key]: value };
+>obj : { name: string | number; age: string | number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [key]: value } : { name: string | number; age: string | number; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[key] : string | number
+>      : ^^^^^^^^^^^^^^^
+>key : keyof Person
+>    : ^^^^^^^^^^^^
+>value : string | number
+>      : ^^^^^^^^^^^^^^^
+
+    obj.name; // ok
+>obj.name : string | number
+>         : ^^^^^^^^^^^^^^^
+>obj : { name: string | number; age: string | number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>name : string | number
+>     : ^^^^^^^^^^^^^^^
+
+    obj.age;  // ok
+>obj.age : string | number
+>        : ^^^^^^^^^^^^^^^
+>obj : { name: string | number; age: string | number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>age : string | number
+>    : ^^^^^^^^^^^^^^^
+}
+
+// Partial<T> assignability (React setState pattern)
+declare function setState(state: Partial<Person>): void;
+>setState : (state: Partial<Person>) => void
+>         : ^     ^^               ^^^^^    
+>state : Partial<Person>
+>      : ^^^^^^^^^^^^^^^
+
+function reactSetState(key: 'name', value: string) {
+>reactSetState : (key: "name", value: string) => void
+>              : ^   ^^      ^^     ^^      ^^^^^^^^^
+>key : "name"
+>    : ^^^^^^
+>value : string
+>      : ^^^^^^
+
+    setState({ [key]: value }); // should not error
+>setState({ [key]: value }) : void
+>                           : ^^^^
+>setState : (state: Partial<Person>) => void
+>         : ^     ^^               ^^^^^    
+>{ [key]: value } : { name: string; }
+>                 : ^^^^^^^^^^^^^^^^^
+>[key] : string
+>      : ^^^^^^
+>key : "name"
+>    : ^^^^^^
+>value : string
+>      : ^^^^^^
+}
+
+// Three-member union
+function threeWay(key: 'x' | 'y' | 'z', value: boolean) {
+>threeWay : (key: "x" | "y" | "z", value: boolean) => void
+>         : ^   ^^               ^^     ^^       ^^^^^^^^^
+>key : "x" | "y" | "z"
+>    : ^^^^^^^^^^^^^^^
+>value : boolean
+>      : ^^^^^^^
+
+    const obj = { [key]: value };
+>obj : { x: boolean; y: boolean; z: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [key]: value } : { x: boolean; y: boolean; z: boolean; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[key] : boolean
+>      : ^^^^^^^
+>key : "x" | "y" | "z"
+>    : ^^^^^^^^^^^^^^^
+>value : boolean
+>      : ^^^^^^^
+
+    obj.x; // ok
+>obj.x : boolean
+>      : ^^^^^^^
+>obj : { x: boolean; y: boolean; z: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : boolean
+>  : ^^^^^^^
+
+    obj.y; // ok
+>obj.y : boolean
+>      : ^^^^^^^
+>obj : { x: boolean; y: boolean; z: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>y : boolean
+>  : ^^^^^^^
+
+    obj.z; // ok
+>obj.z : boolean
+>      : ^^^^^^^
+>obj : { x: boolean; y: boolean; z: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>z : boolean
+>  : ^^^^^^^
+}
+
+// Number literal union
+function numberLiterals(key: 0 | 1, value: string) {
+>numberLiterals : (key: 0 | 1, value: string) => void
+>               : ^   ^^     ^^     ^^      ^^^^^^^^^
+>key : 0 | 1
+>    : ^^^^^
+>value : string
+>      : ^^^^^^
+
+    const obj = { [key]: value };
+>obj : { 0: string; 1: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [key]: value } : { 0: string; 1: string; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^
+>[key] : string
+>      : ^^^^^^
+>key : 0 | 1
+>    : ^^^^^
+>value : string
+>      : ^^^^^^
+}
+
+// Union key + fixed properties
+function withFixed(key: 'a' | 'b') {
+>withFixed : (key: "a" | "b") => void
+>          : ^   ^^         ^^^^^^^^^
+>key : "a" | "b"
+>    : ^^^^^^^^^
+
+    const obj = { [key]: 1, fixed: 'hello' };
+>obj : { a: number; b: number; fixed: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [key]: 1, fixed: 'hello' } : { a: number; b: number; fixed: string; }
+>                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[key] : number
+>      : ^^^^^^
+>key : "a" | "b"
+>    : ^^^^^^^^^
+>1 : 1
+>  : ^
+>fixed : string
+>      : ^^^^^^
+>'hello' : "hello"
+>        : ^^^^^^^
+
+    obj.a;     // ok, number
+>obj.a : number
+>      : ^^^^^^
+>obj : { a: number; b: number; fixed: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : number
+>  : ^^^^^^
+
+    obj.b;     // ok, number
+>obj.b : number
+>      : ^^^^^^
+>obj : { a: number; b: number; fixed: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>b : number
+>  : ^^^^^^
+
+    obj.fixed; // ok, string
+>obj.fixed : string
+>          : ^^^^^^
+>obj : { a: number; b: number; fixed: string; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>fixed : string
+>      : ^^^^^^
+}
+
+// Mapped type equivalence
+type Mapped = { [P in 'x' | 'y']: boolean };
+>Mapped : Mapped
+>       : ^^^^^^
+
+function mappedEquivalence(key: 'x' | 'y', value: boolean) {
+>mappedEquivalence : (key: "x" | "y", value: boolean) => void
+>                  : ^   ^^         ^^     ^^       ^^^^^^^^^
+>key : "x" | "y"
+>    : ^^^^^^^^^
+>value : boolean
+>      : ^^^^^^^
+
+    const obj = { [key]: value };
+>obj : { x: boolean; y: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [key]: value } : { x: boolean; y: boolean; }
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[key] : boolean
+>      : ^^^^^^^
+>key : "x" | "y"
+>    : ^^^^^^^^^
+>value : boolean
+>      : ^^^^^^^
+
+    const mapped: Mapped = obj; // should be assignable
+>mapped : Mapped
+>       : ^^^^^^
+>obj : { x: boolean; y: boolean; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+// Non-literal key should still produce index signature (unchanged behavior)
+function dynamicKey(key: string, value: number) {
+>dynamicKey : (key: string, value: number) => void
+>           : ^   ^^      ^^     ^^      ^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>value : number
+>      : ^^^^^^
+
+    const obj = { [key]: value };
+>obj : { [key]: number; }
+>    : ^^       ^^^^^^ ^^
+>{ [key]: value } : { [key]: number; }
+>                 : ^^       ^^^^^^ ^^
+>[key] : number
+>      : ^^^^^^
+>key : string
+>    : ^^^^^^
+>value : number
+>      : ^^^^^^
+
+    obj.anything; // ok via index signature
+>obj.anything : number
+>             : ^^^^^^
+>obj : { [key]: number; }
+>    : ^^       ^^^^^^ ^^
+>anything : number
+>         : ^^^^^^
+}
+
+// Template literal key should still produce index signature
+function templateKey(key: `prefix_${string}`, value: number) {
+>templateKey : (key: `prefix_${string}`, value: number) => void
+>            : ^   ^^                  ^^     ^^      ^^^^^^^^^
+>key : `prefix_${string}`
+>    : ^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+
+    const obj = { [key]: value };
+>obj : { [key]: number; }
+>    : ^^       ^^^^^^ ^^
+>{ [key]: value } : { [key]: number; }
+>                 : ^^       ^^^^^^ ^^
+>[key] : number
+>      : ^^^^^^
+>key : `prefix_${string}`
+>    : ^^^^^^^^^^^^^^^^^^
+>value : number
+>      : ^^^^^^
+}
+
+// Generic extends literal union should work
+function genericKey<K extends 'a' | 'b'>(key: K, value: number) {
+>genericKey : <K extends "a" | "b">(key: K, value: number) => void
+>           : ^ ^^^^^^^^^         ^^   ^^ ^^     ^^      ^^^^^^^^^
+>key : K
+>    : ^
+>value : number
+>      : ^^^^^^
+
+    const obj = { [key]: value };
+>obj : { [key]: number; }
+>    : ^^       ^^^^^^ ^^
+>{ [key]: value } : { [key]: number; }
+>                 : ^^       ^^^^^^ ^^
+>[key] : number
+>      : ^^^^^^
+>key : K
+>    : ^
+>value : number
+>      : ^^^^^^
+}
+
