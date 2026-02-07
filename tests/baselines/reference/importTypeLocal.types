@@ -61,8 +61,8 @@ export { Bar }
 
 === usage.ts ===
 export const x: import("./foo") = { x: 0, y: 0 };
->x : import("foo")
->  : ^^^^^^^^^^^^^
+>x : import("./foo")
+>  : ^^^^^^^^^^^^^^^
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >               : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
@@ -75,8 +75,8 @@ export const x: import("./foo") = { x: 0, y: 0 };
 >  : ^
 
 export let y: import("./foo2").Bar.I = { a: "", b: 0 };
->y : import("foo2").Bar.I
->  : ^^^^^^^^^^^^^^^^^^^^
+>y : import("./foo2").Bar.I
+>  : ^^^^^^^^^^^^^^^^^^^^^^
 >Bar : any
 >    : ^^^
 >{ a: "", b: 0 } : { a: string; b: number; }
@@ -110,8 +110,8 @@ export class Bar2 {
 }
 
 export let shim: typeof import("./foo2") = {
->shim : typeof import("foo2")
->     : ^^^^^^^^^^^^^^^^^^^^^
+>shim : typeof import("./foo2")
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 >{    Bar: Bar2} : { Bar: typeof Bar2; }
 >                : ^^^^^^^^^^^^^^^^^^^^^
 

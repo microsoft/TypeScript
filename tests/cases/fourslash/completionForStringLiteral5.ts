@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @stableTypeOrdering: true
 ////interface Foo {
 ////    foo: string;
 ////    bar: string;

@@ -443,7 +443,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns the position of the first occurrence of a substring.",
+              "text": "Returns the position of the first occurrence of a substring, or -1 if it is not present.",
               "kind": "text"
             }
           ],
@@ -585,7 +585,7 @@
           ],
           "documentation": [
             {
-              "text": "Returns the last occurrence of a substring in the string.",
+              "text": "Returns the last occurrence of a substring in the string, or -1 if it is not present.",
               "kind": "text"
             }
           ],

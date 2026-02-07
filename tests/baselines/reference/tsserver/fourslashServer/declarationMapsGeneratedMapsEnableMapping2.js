@@ -7,6 +7,7 @@ Info seq  [hh:mm:ss:mss] request:
       "type": "request",
       "arguments": {
         "options": {
+          "stableTypeOrdering": true,
           "module": "commonjs",
           "target": "es6",
           "lib": [
@@ -96,6 +97,7 @@ instance.methodName({member: 12});
 //// [/home/src/workspaces/project/tsconfig.json]
 {
     "compilerOptions": {
+        "stableTypeOrdering": true,
         "module": "commonjs",
         "target": "es2015",
         "lib": ["es5"],
@@ -128,6 +130,7 @@ Info seq  [hh:mm:ss:mss] Config: /home/src/workspaces/project/tsconfig.json : {
   "/home/src/workspaces/project/index.ts"
  ],
  "options": {
+  "stableTypeOrdering": true,
   "module": 1,
   "target": 2,
   "lib": [
@@ -207,7 +210,7 @@ Info seq  [hh:mm:ss:mss] 	Files (4)
 	/home/src/tslibs/TS/Lib/lib.es5.d.ts Text-1 lib.es5.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.d.ts Text-1 lib.decorators.d.ts-Text
 	/home/src/tslibs/TS/Lib/lib.decorators.legacy.d.ts Text-1 lib.decorators.legacy.d.ts-Text
-	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n    \"compilerOptions\": {\n        \"module\": \"commonjs\",\n        \"target\": \"es2015\",\n        \"lib\": [\"es5\"],\n        \"strict\": false,\n        \"outDir\": \"./dist\",\n        \"sourceMap\": true,\n        \"sourceRoot\": \"/home/src/workspaces/project/\",\n        \"declaration\": true,\n        \"declarationMap\": true,\n        \"newLine\": \"lf\",\n    },\n    \"files\": [\"/home/src/workspaces/project/index.ts\"],\n}"
+	/home/src/workspaces/project/tsconfig.json SVC-1-0 "{\n    \"compilerOptions\": {\n        \"stableTypeOrdering\": true,\n        \"module\": \"commonjs\",\n        \"target\": \"es2015\",\n        \"lib\": [\"es5\"],\n        \"strict\": false,\n        \"outDir\": \"./dist\",\n        \"sourceMap\": true,\n        \"sourceRoot\": \"/home/src/workspaces/project/\",\n        \"declaration\": true,\n        \"declarationMap\": true,\n        \"newLine\": \"lf\",\n    },\n    \"files\": [\"/home/src/workspaces/project/index.ts\"],\n}"
 
 
 	../../tslibs/TS/Lib/lib.es5.d.ts

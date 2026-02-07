@@ -4,8 +4,8 @@
 const {myTypes} = require('./file.js');
 >myTypes : { [x: string]: any; }
 >        : ^^^^^^^^^^^^^^^^^^^^^
->require('./file.js') : typeof import("file")
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require('./file.js') : typeof import("./file.js")
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./file.js' : "./file.js"
 >            : ^^^^^^^^^^^
@@ -107,8 +107,8 @@ exports.myTypes = myTypes;
 >                          : ^^^^^^^^^^^^^^^^^^^^^
 >exports.myTypes : { [x: string]: any; }
 >                : ^^^^^^^^^^^^^^^^^^^^^
->exports : typeof import("file")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./file")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >myTypes : { [x: string]: any; }
 >        : ^^^^^^^^^^^^^^^^^^^^^
 >myTypes : { [x: string]: any; }

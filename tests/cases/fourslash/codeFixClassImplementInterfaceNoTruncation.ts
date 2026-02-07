@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @stableTypeOrdering: true
+
 //// type GeneratePrefixedNumbers<Limit extends number, Prefix extends string, Result extends number[] = []> = 
 ////     Result['length'] extends Limit ? `${Prefix}${Result[number]}` : GeneratePrefixedNumbers<Limit, Prefix, [...Result, Result['length']]>;
 //// 

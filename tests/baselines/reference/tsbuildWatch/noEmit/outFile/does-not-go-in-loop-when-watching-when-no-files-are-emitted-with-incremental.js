@@ -51,20 +51,20 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/out.tsbuildinfo]
-{"fileNames":["../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./myproject/a.js","./myproject/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5381-","5381-"],"root":[2,3],"options":{"allowJs":true,"outFile":"./out.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts","./myproject/a.js","./myproject/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5381-","5381-"],"root":[2,3],"options":{"allowJs":true,"outFile":"./out.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/out.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
     "./myproject/a.js",
     "./myproject/b.ts"
   ],
   "fileInfos": {
-    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./myproject/a.js": "5381-",
     "./myproject/b.ts": "5381-"
   },
@@ -83,7 +83,7 @@ Output::
     "outFile": "./out.js"
   },
   "changeFileSet": [
-    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
     "./myproject/a.js",
     "./myproject/b.ts"
   ],
@@ -119,7 +119,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
@@ -176,7 +176,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 
@@ -219,17 +219,17 @@ Output::
 
 
 //// [/user/username/projects/out.tsbuildinfo]
-{"fileNames":["../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./myproject/a.js","./myproject/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5029505981-const x = 10;","5381-"],"root":[2,3],"options":{"allowJs":true,"outFile":"./out.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
+{"fileNames":["../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts","./myproject/a.js","./myproject/b.ts"],"fileInfos":["-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","5029505981-const x = 10;","5381-"],"root":[2,3],"options":{"allowJs":true,"outFile":"./out.js"},"changeFileSet":[1,2,3],"version":"FakeTSVersion"}
 
 //// [/user/username/projects/out.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
     "./myproject/a.js",
     "./myproject/b.ts"
   ],
   "fileInfos": {
-    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
+    "../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
     "./myproject/a.js": "5029505981-const x = 10;",
     "./myproject/b.ts": "5381-"
   },
@@ -248,7 +248,7 @@ Output::
     "outFile": "./out.js"
   },
   "changeFileSet": [
-    "../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
     "./myproject/a.js",
     "./myproject/b.ts"
   ],
@@ -273,7 +273,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/a.js
 /user/username/projects/myproject/b.ts
 

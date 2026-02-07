@@ -161,4 +161,4 @@ builtinIterator.ts(73,35): error TS2322: Type 'Generator<string, number, boolean
 !!! error TS2322:             Type '[undefined]' is not assignable to type '[] | [boolean]'.
 !!! error TS2322:               Type '[undefined]' is not assignable to type '[boolean]'.
 !!! error TS2322:                 Type 'undefined' is not assignable to type 'boolean'.
-!!! related TS6502 lib.esnext.iterator.d.ts:--:--: The expected type comes from the return type of this signature.
+!!! related TS6502 lib.es2025.iterator.d.ts:--:--: The expected type comes from the return type of this signature.

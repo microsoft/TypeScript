@@ -42,7 +42,7 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/projects/a/b/moduleFile1.js]
 export function Foo() { }
@@ -80,7 +80,7 @@ FsWatches::
   {}
 /home/src/projects/a/b/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -100,7 +100,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer2.ts
@@ -108,7 +108,7 @@ Program files::
 /home/src/projects/a/b/moduleFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer2.ts
@@ -116,7 +116,7 @@ Semantic diagnostics in builder refreshed for::
 /home/src/projects/a/b/moduleFile2.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/b/modulefile1.ts (used version)
 /home/src/projects/a/b/file1consumer1.ts (used version)
 /home/src/projects/a/b/file1consumer2.ts (used version)
@@ -171,7 +171,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer2.ts
@@ -234,7 +234,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/b/moduleFile1.ts
 /home/src/projects/a/b/file1Consumer1.ts
 /home/src/projects/a/b/file1Consumer2.ts

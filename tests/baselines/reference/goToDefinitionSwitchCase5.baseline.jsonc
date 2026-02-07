@@ -7,7 +7,7 @@
    {
     "kind": "property",
     "name": "default",
-    "containerName": "\"/tests/cases/fourslash/goToDefinitionSwitchCase5\"",
+    "containerName": "\"./goToDefinitionSwitchCase5\"",
     "isLocal": true,
     "isAmbient": false,
     "unverified": false,

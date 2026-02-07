@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @stableTypeOrdering: true
 // @isolatedDeclarations: true
 // @declaration: true
 //// function foo() {

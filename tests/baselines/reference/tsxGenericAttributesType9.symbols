@@ -22,8 +22,8 @@ export function makeP<P>(Ctor: React.ComponentClass<P>) {
 
 		public render(): JSX.Element {
 >render : Symbol((Anonymous class).render, Decl(file.tsx, 5, 52))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 			return (
 				<Ctor {...this.props } />

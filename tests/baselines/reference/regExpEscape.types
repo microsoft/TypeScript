@@ -1,0 +1,33 @@
+//// [tests/cases/conformance/es2025/regExpEscape.ts] ////
+
+=== regExpEscape.ts ===
+const regExp = new RegExp(RegExp.escape("foo.bar"));
+>regExp : RegExp
+>       : ^^^^^^
+>new RegExp(RegExp.escape("foo.bar")) : RegExp
+>                                     : ^^^^^^
+>RegExp : RegExpConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>RegExp.escape("foo.bar") : string
+>                         : ^^^^^^
+>RegExp.escape : (string: string) => string
+>              : ^      ^^      ^^^^^      
+>RegExp : RegExpConstructor
+>       : ^^^^^^^^^^^^^^^^^
+>escape : (string: string) => string
+>       : ^      ^^      ^^^^^      
+>"foo.bar" : "foo.bar"
+>          : ^^^^^^^^^
+
+regExp.test("foo.bar");
+>regExp.test("foo.bar") : boolean
+>                       : ^^^^^^^
+>regExp.test : (string: string) => boolean
+>            : ^      ^^      ^^^^^       
+>regExp : RegExp
+>       : ^^^^^^
+>test : (string: string) => boolean
+>     : ^      ^^      ^^^^^       
+>"foo.bar" : "foo.bar"
+>          : ^^^^^^^^^
+

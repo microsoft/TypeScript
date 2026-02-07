@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @stableTypeOrdering: true
 ////type T = "foo" | "bar";
 ////type U = "oof" | "rab";
 ////function f(x: T, ...args: U[]) { };

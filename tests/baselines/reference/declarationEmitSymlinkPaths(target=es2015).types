@@ -30,19 +30,19 @@ import { test } from "search/lib/index";
 >     : ^ ^^ ^^       ^^^^^       
 
 import { getNotification } from "../API/NotificationAPIUtils";
->getNotification : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
->                : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+>getNotification : () => import("../API/NotificationAPIUtils").NotificationResponse
+>                : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
 
 export const NotificationScenario = test(
->NotificationScenario : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
->                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->test(  getNotification) : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
->                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>NotificationScenario : () => import("../API/NotificationAPIUtils").NotificationResponse
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>test(  getNotification) : () => import("../API/NotificationAPIUtils").NotificationResponse
+>                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >test : <T>(a: () => T) => () => T
 >     : ^ ^^ ^^       ^^^^^       
 
   getNotification
->getNotification : () => import("/packages/search-prefix/src/API/NotificationAPIUtils").NotificationResponse
->                : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
+>getNotification : () => import("../API/NotificationAPIUtils").NotificationResponse
+>                : ^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^
 
 );

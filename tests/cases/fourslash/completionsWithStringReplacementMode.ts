@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @stableTypeOrdering: true
 ////interface Foo { foo: string; bar: string; }
 ////type T = Pick<Foo, "[|/*1*/|]">;
 ////type TT = Pick<Foo, "[|fo/*2*/|]">;

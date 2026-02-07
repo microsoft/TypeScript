@@ -13,7 +13,7 @@ Info seq  [hh:mm:ss:mss] request:
           ],
           "strict": true,
           "outDir": "/home/src/workspaces/project/out",
-          "target": "es2024",
+          "target": "es2025",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

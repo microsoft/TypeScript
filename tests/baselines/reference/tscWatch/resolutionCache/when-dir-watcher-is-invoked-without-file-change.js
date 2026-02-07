@@ -52,7 +52,7 @@ File '/home/src/workspaces/project/src/app/services/generated/index.ts' exists -
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/workspaces/project/src/app/services/generated/index.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/app/services/generated/index.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Triggered with /home/src/workspaces/project/src/main.js :: WatchInfo: /home/src/workspaces/project/src 1 undefined Failed Lookup Locations
@@ -63,7 +63,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined W
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspaces/project 1 undefined Wild card directory
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/src/app/services/generated/index.js]
 export const y = 10;
@@ -76,7 +76,7 @@ const x = y;
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /home/src/workspaces/project/src/app/services/generated/index.ts: *new*
   {}
@@ -103,17 +103,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/src/app/services/generated/index.ts
 /home/src/workspaces/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/src/app/services/generated/index.ts
 /home/src/workspaces/project/src/main.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/workspaces/project/src/app/services/generated/index.ts (used version)
 /home/src/workspaces/project/src/main.ts (used version)
 
@@ -190,7 +190,7 @@ FileWatcher:: Close:: WatchInfo: /home/src/workspaces/project/src/app/services/g
 //// [/home/src/workspaces/project/src/main.js] file written with same contents
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /home/src/workspaces/project/src/main.ts:
   {}
@@ -223,7 +223,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/src/main.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -310,7 +310,7 @@ export const y = 10;
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /home/src/workspaces/project/src/app/services/generated/index.ts: *new*
   {}
@@ -338,7 +338,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/workspaces/project/src/app/services/generated/index.ts
 /home/src/workspaces/project/src/main.ts
 

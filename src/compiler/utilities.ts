@@ -1378,7 +1378,7 @@ export type ScriptTargetFeatures = ReadonlyMap<string, ReadonlyMap<string, strin
 
 // NOTE: We must reevaluate the target for upcoming features when each successive TC39 edition is ratified in
 //       June of each year. This includes changes to `LanguageFeatureMinimumTarget`, `ScriptTarget`,
-//       `ScriptTargetFeatures` transformers/esnext.ts, compiler/commandLineParser.ts,
+//       `ScriptTargetFeatures`, `CommandLineOptionOfCustomType`, transformers/esnext.ts, compiler/commandLineParser.ts,
 //       compiler/utilitiesPublic.ts, and the contents of each lib/esnext.*.d.ts file.
 /** @internal */
 export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ */ memoize((): ScriptTargetFeatures =>
@@ -1486,6 +1486,11 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "unicodeSets",
             ],
         })),
+        RegExpConstructor: new Map(Object.entries({
+            es2025: [
+                "escape",
+            ],
+        })),
         Reflect: new Map(Object.entries({
             es2015: [
                 "apply",
@@ -1565,7 +1570,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "fround",
                 "cbrt",
             ],
-            esnext: [
+            es2025: [
                 "f16round",
             ],
         })),
@@ -1574,6 +1579,10 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "entries",
                 "keys",
                 "values",
+            ],
+            esnext: [
+                "getOrInsert",
+                "getOrInsertComputed",
             ],
         })),
         MapConstructor: new Map(Object.entries({
@@ -1587,7 +1596,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "keys",
                 "values",
             ],
-            esnext: [
+            es2025: [
                 "union",
                 "intersection",
                 "difference",
@@ -1613,6 +1622,9 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2024: [
                 "withResolvers",
             ],
+            es2025: [
+                "try",
+            ],
         })),
         Symbol: new Map(Object.entries({
             es2015: [
@@ -1628,6 +1640,10 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "entries",
                 "keys",
                 "values",
+            ],
+            esnext: [
+                "getOrInsert",
+                "getOrInsertComputed",
             ],
         })),
         WeakSet: new Map(Object.entries({
@@ -1714,6 +1730,21 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             es2018: [
                 "PluralRules",
             ],
+            es2020: [
+                "RelativeTimeFormat",
+                "Locale",
+                "DisplayNames",
+            ],
+            es2021: [
+                "ListFormat",
+                "DateTimeFormat",
+            ],
+            es2022: [
+                "Segmenter",
+            ],
+            es2025: [
+                "DurationFormat",
+            ],
         })),
         NumberFormat: new Map(Object.entries({
             es2018: [
@@ -1737,7 +1768,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "getBigInt64",
                 "getBigUint64",
             ],
-            esnext: [
+            es2025: [
                 "setFloat16",
                 "getFloat16",
             ],
@@ -1850,7 +1881,7 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
             ],
         })),
         Float16Array: new Map(Object.entries({
-            esnext: emptyArray,
+            es2025: emptyArray,
         })),
         Float32Array: new Map(Object.entries({
             es2022: [
@@ -1911,11 +1942,27 @@ export const getScriptTargetFeatures: () => ScriptTargetFeatures = /* @__PURE__ 
                 "cause",
             ],
         })),
+        ErrorConstructor: new Map(Object.entries({
+            esnext: [
+                "isError",
+            ],
+        })),
         Uint8ArrayConstructor: new Map(Object.entries({
             esnext: [
                 "fromBase64",
                 "fromHex",
             ],
+        })),
+        Date: new Map(Object.entries({
+            esnext: [
+                "toTemporalInstant",
+            ],
+        })),
+        DisposableStack: new Map(Object.entries({
+            esnext: emptyArray,
+        })),
+        AsyncDisposableStack: new Map(Object.entries({
+            esnext: emptyArray,
         })),
     }))
 );

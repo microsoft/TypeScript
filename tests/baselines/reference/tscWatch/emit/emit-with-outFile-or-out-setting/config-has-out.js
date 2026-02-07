@@ -42,7 +42,7 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/projects/a/a.js]
 "use strict";
@@ -62,7 +62,7 @@ FsWatches::
   {}
 /home/src/projects/a/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -81,14 +81,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/a.ts
 /home/src/projects/a/b.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/a.ts (used version)
 /home/src/projects/a/b.ts (used version)
 
@@ -142,7 +142,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/a.ts
 /home/src/projects/a/b.ts
 
@@ -150,7 +150,7 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/a.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
@@ -203,7 +203,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/a.ts
 /home/src/projects/a/b.ts
 
@@ -211,7 +211,7 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/a.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

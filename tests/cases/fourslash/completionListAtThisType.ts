@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @stableTypeOrdering: true
 ////class Test {
 ////    foo() {}
 ////

@@ -43,26 +43,26 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 16
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 16
 
-//// [/user/username/projects/myproject/dist/src/file2.js] Inode:: 117
+//// [/user/username/projects/myproject/dist/src/file2.js] Inode:: 124
 export const x = 10;
 
 
-//// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 118
+//// [/user/username/projects/myproject/dist/src/file1.js] Inode:: 125
 export {};
 
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {"inode":16}
 /user/username/projects/myproject: *new*
   {"inode":4}
 /user/username/projects/myproject/dist: *new*
-  {"inode":115}
+  {"inode":122}
 /user/username/projects/myproject/dist/src: *new*
-  {"inode":116}
+  {"inode":123}
 /user/username/projects/myproject/src: *new*
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts: *new*
@@ -83,14 +83,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/src/file2.ts
 /user/username/projects/myproject/src/file1.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/src/file2.ts (used version)
 /user/username/projects/myproject/src/file1.ts (used version)
 
@@ -106,7 +106,7 @@ exitCode:: ExitStatus.undefined
 Change:: rename the file
 
 Input::
-//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 119
+//// [/user/username/projects/myproject/src/renamed.ts] Inode:: 126
 export const x = 10;
 
 //// [/user/username/projects/myproject/src/file2.ts] deleted
@@ -120,14 +120,14 @@ PolledWatches::
   {"pollingInterval":250}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":16}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-  {"inode":115}
+  {"inode":122}
 /user/username/projects/myproject/dist/src:
-  {"inode":116}
+  {"inode":123}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -167,7 +167,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/src/file1.js] file written with same contents Inode:: 118
+//// [/user/username/projects/myproject/dist/src/file1.js] file written with same contents Inode:: 125
 
 PolledWatches::
 /user/username/projects/myproject/src/file2.ts:
@@ -178,14 +178,14 @@ PolledWatches *deleted*::
   {"pollingInterval":250}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":16}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-  {"inode":115}
+  {"inode":122}
 /user/username/projects/myproject/dist/src:
-  {"inode":116}
+  {"inode":123}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
@@ -205,7 +205,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/src/file1.ts
 
 No cached semantic diagnostics in the builder::
@@ -248,7 +248,7 @@ Output::
 
 
 
-//// [/user/username/projects/myproject/dist/src/renamed.js] Inode:: 120
+//// [/user/username/projects/myproject/dist/src/renamed.js] Inode:: 127
 export const x = 10;
 
 
@@ -258,20 +258,20 @@ PolledWatches *deleted*::
   {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":16}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/dist:
-  {"inode":115}
+  {"inode":122}
 /user/username/projects/myproject/dist/src:
-  {"inode":116}
+  {"inode":123}
 /user/username/projects/myproject/src:
   {"inode":5}
 /user/username/projects/myproject/src/file1.ts:
   {"inode":6}
 /user/username/projects/myproject/src/renamed.ts: *new*
-  {"inode":119}
+  {"inode":126}
 /user/username/projects/myproject/tsconfig.json:
   {"inode":8}
 
@@ -296,7 +296,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/src/file1.ts
 /user/username/projects/myproject/src/renamed.ts
 

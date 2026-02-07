@@ -15,8 +15,8 @@ export { b } from "./b";
 >  : ^^^^^^
 
 export { default as Foo } from "./b";
->default : typeof import("b")
->        : ^^^^^^^^^^^^^^^^^^
->Foo : typeof import("b")
->    : ^^^^^^^^^^^^^^^^^^
+>default : typeof import("./b")
+>        : ^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof import("./b")
+>    : ^^^^^^^^^^^^^^^^^^^^
 

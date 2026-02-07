@@ -31,8 +31,8 @@ export * from './0' with { type: "json" }
 >     : ^^^
 
 export * as ns from './0' with { type: "json" }
->ns : typeof import("0")
->   : ^^^^^^^^^^^^^^^^^^
+>ns : typeof import("./0")
+>   : ^^^^^^^^^^^^^^^^^^^^
 >type : any
 >     : ^^^
 

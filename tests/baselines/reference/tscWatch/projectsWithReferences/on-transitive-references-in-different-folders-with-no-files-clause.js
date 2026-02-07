@@ -74,7 +74,7 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/transitiveReferences/a/index.js]
 export class A {
@@ -87,16 +87,16 @@ export declare class A {
 
 
 //// [/user/username/projects/transitiveReferences/a/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","./index.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-7264743946-export class A {}","signature":"-8728835846-export declare class A {\n}\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts","./index.ts"],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},{"version":"-7264743946-export class A {}","signature":"-8728835846-export declare class A {\n}\n"}],"root":[2],"options":{"composite":true},"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/a/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
     "./index.ts"
   ],
   "fileInfos": {
-    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -139,12 +139,12 @@ export declare const b: A;
 
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","../a/index.d.ts","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-2591036212-import {A} from '@ref/a';\nexport const b = new A();","signature":"-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n"}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts","../a/index.d.ts","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"-2591036212-import {A} from '@ref/a';\nexport const b = new A();","signature":"-9732944696-import { A } from '@ref/a';\nexport declare const b: A;\n"}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
     "../a/index.d.ts",
     "./index.ts"
   ],
@@ -154,7 +154,7 @@ export declare const b: A;
     ]
   ],
   "fileInfos": {
-    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -192,7 +192,7 @@ export declare const b: A;
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -269,8 +269,8 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m3[0m     "baseUrl": "./",
 [7m [0m [91m    ~~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -288,7 +288,7 @@ c/index.ts
 //// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/transitiveReferences: *new*
   {}
@@ -336,7 +336,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/transitiveReferences/a/index.d.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -345,15 +345,15 @@ Program files::
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/transitivereferences/a/index.d.ts (used version)
 /user/username/projects/transitivereferences/b/index.d.ts (used version)
 /user/username/projects/transitivereferences/refs/a.d.ts (used version)
 /user/username/projects/transitivereferences/c/index.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -393,12 +393,12 @@ export declare function gfoo(): void;
 
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo]
-{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts","../a/index.d.ts","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"1841609480-import {A} from '@ref/a';\nexport const b = new A();export function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
+{"fileNames":["../../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts","../a/index.d.ts","./index.ts"],"fileIdsList":[[2]],"fileInfos":[{"version":"-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true},"-8728835846-export declare class A {\n}\n",{"version":"1841609480-import {A} from '@ref/a';\nexport const b = new A();export function gfoo() { }","signature":"4376023469-import { A } from '@ref/a';\nexport declare const b: A;\nexport declare function gfoo(): void;\n"}],"root":[3],"options":{"composite":true},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts","version":"FakeTSVersion"}
 
 //// [/user/username/projects/transitiveReferences/b/tsconfig.tsbuildinfo.readable.baseline.txt]
 {
   "fileNames": [
-    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+    "../../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
     "../a/index.d.ts",
     "./index.ts"
   ],
@@ -408,7 +408,7 @@ export declare function gfoo(): void;
     ]
   ],
   "fileInfos": {
-    "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts": {
+    "../../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts": {
       "original": {
         "version": "-25093698414-interface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ndeclare const console: { log(msg: any): void; };",
         "affectsGlobalScope": true
@@ -446,7 +446,7 @@ export declare function gfoo(): void;
   },
   "semanticDiagnosticsPerFile": [
     [
-      "../../../../../home/src/tslibs/ts/lib/lib.es2024.full.d.ts",
+      "../../../../../home/src/tslibs/ts/lib/lib.es2025.full.d.ts",
       "not cached or not changed"
     ],
     [
@@ -491,8 +491,8 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 [7m3[0m     "baseUrl": "./",
 [7m [0m [91m    ~~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -529,7 +529,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/transitiveReferences/a/index.d.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -542,8 +542,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -637,8 +637,8 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m3[0m     "baseUrl": "./",
 [7m [0m [91m    ~~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -656,7 +656,7 @@ c/index.ts
 //// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/transitiveReferences:
   {}
@@ -713,7 +713,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/transitiveReferences/a/index.d.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/nrefs/a.d.ts
@@ -726,8 +726,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/nrefs/a.d.ts
@@ -814,8 +814,8 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m3[0m     "baseUrl": "./",
 [7m [0m [91m    ~~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -833,7 +833,7 @@ c/index.ts
 //// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/transitiveReferences:
   {}
@@ -890,7 +890,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/transitiveReferences/a/index.d.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -903,8 +903,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -970,8 +970,8 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m3[0m     "baseUrl": "./",
 [7m [0m [91m    ~~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 nrefs/a.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
 b/index.d.ts
@@ -987,7 +987,7 @@ c/index.ts
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/transitiveReferences:
   {}
@@ -1042,7 +1042,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/transitiveReferences/nrefs/a.d.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1056,8 +1056,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c/index.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   /user/username/projects/transitiveReferences/nrefs/a.d.ts
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1123,8 +1123,8 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m3[0m     "baseUrl": "./",
 [7m [0m [91m    ~~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   Imported via "@ref/a" from file 'c/index.ts'
@@ -1139,7 +1139,7 @@ c/index.ts
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/transitiveReferences:
   {}
@@ -1194,7 +1194,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/c/index.ts
@@ -1205,8 +1205,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/b/index.d.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/c/index.ts
@@ -1270,8 +1270,8 @@ File '/user/username/projects/transitiveReferences/refs/a.d.ts' exists - use it 
 [7m13[0m     }
 [7m  [0m [91m~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 refs/a.d.ts
   Imported via '@ref/a' from file 'b/index.ts'
   Imported via "@ref/a" from file 'c/index.ts'
@@ -1287,7 +1287,7 @@ c/index.ts
 //// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/transitiveReferences:
   {}
@@ -1343,7 +1343,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
 /user/username/projects/transitiveReferences/b/index.ts
 /user/username/projects/transitiveReferences/c/index.ts
@@ -1355,8 +1355,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
   /user/username/projects/transitiveReferences/b/index.ts
   /user/username/projects/transitiveReferences/c/index.ts
@@ -1420,8 +1420,8 @@ Module resolution kind is not specified, using 'Bundler'.
 [7m3[0m     "baseUrl": "./",
 [7m [0m [91m    ~~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -1439,7 +1439,7 @@ c/index.ts
 //// [/user/username/projects/transitiveReferences/c/index.js] file written with same contents
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/transitiveReferences:
   {}
@@ -1495,7 +1495,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/transitiveReferences/a/index.d.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1509,8 +1509,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c/index.ts (computed .d.ts)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1567,8 +1567,8 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 [7m3[0m     "baseUrl": "./",
 [7m [0m [91m    ~~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 a/index.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
 b/index.d.ts
@@ -1585,7 +1585,7 @@ c/index.ts
 //// [/user/username/projects/transitiveReferences/a/index.js] file written with same contents
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/transitiveReferences:
   {}
@@ -1641,7 +1641,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/transitiveReferences/a/index.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1655,8 +1655,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c/index.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   /user/username/projects/transitiveReferences/a/index.ts
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1710,8 +1710,8 @@ Reusing resolution of module '@ref/a' from '/user/username/projects/transitiveRe
 [7m3[0m     "baseUrl": "./",
 [7m [0m [91m    ~~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 a/index.d.ts
   Imported via '@ref/a' from file 'b/index.d.ts'
   File is output of project reference source 'a/index.ts'
@@ -1728,7 +1728,7 @@ c/index.ts
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {}
 /user/username/projects/transitiveReferences:
   {}
@@ -1784,7 +1784,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/transitiveReferences/a/index.d.ts
 /user/username/projects/transitiveReferences/b/index.d.ts
 /user/username/projects/transitiveReferences/refs/a.d.ts
@@ -1798,8 +1798,8 @@ Shape signatures in builder refreshed for::
 /user/username/projects/transitivereferences/c/index.ts (used version)
 
 Dependencies for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
-  /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
+  /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
   /user/username/projects/transitiveReferences/a/index.d.ts
   /user/username/projects/transitiveReferences/b/index.d.ts
   /user/username/projects/transitiveReferences/refs/a.d.ts

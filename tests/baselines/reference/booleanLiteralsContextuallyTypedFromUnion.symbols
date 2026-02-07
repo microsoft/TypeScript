@@ -63,8 +63,8 @@ let Funk = (_props: ComponentProps) => <div>Hello</div>;
 >Funk : Symbol(Funk, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 17, 3))
 >_props : Symbol(_props, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 17, 12))
 >ComponentProps : Symbol(ComponentProps, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 6, 78))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 
 let Fail1 = () => <Funk mandatoryFn={() => { }} optionalBool={true} />
 >Fail1 : Symbol(Fail1, Decl(booleanLiteralsContextuallyTypedFromUnion.tsx, 19, 3))

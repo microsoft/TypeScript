@@ -33,11 +33,11 @@ const Foo = (props: Props) => <div>{ props.a }</div>;
 >Foo : Symbol(Foo, Decl(file.tsx, 13, 5))
 >props : Symbol(props, Decl(file.tsx, 13, 13))
 >Props : Symbol(Props, Decl(file.tsx, 2, 32))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 >props.a : Symbol(Props.a, Decl(file.tsx, 4, 17))
 >props : Symbol(props, Decl(file.tsx, 13, 13))
 >a : Symbol(Props.a, Decl(file.tsx, 4, 17))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 
 // ok
 const a1 = <Foo {...props}></Foo>;

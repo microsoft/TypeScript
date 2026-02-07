@@ -23,13 +23,13 @@ let b = a.getB().x.toFixed();
 >a.getB().x : number
 >           : ^^^^^^
 >a.getB() : import("b").B
->         : ^^^^^^^^^^^^^^^^^^^
+>         : ^^^^^^^^^^^^^
 >a.getB : () => import("b").B
->       : ^^^^^^       ^^^^^^^^^  ^
+>       : ^^^^^^       ^^^  ^
 >a : A
 >  : ^
 >getB : () => import("b").B
->     : ^^^^^^       ^^^^^^^^^  ^
+>     : ^^^^^^       ^^^  ^
 >x : number
 >  : ^^^^^^
 >toFixed : (fractionDigits?: number) => string
@@ -96,7 +96,7 @@ declare module "D" {
 
     module "a" {
 >"a" : typeof import("a")
->    : ^^^^^^^^^^^^^^^^^^^^^^^^
+>    : ^^^^^^^^^^^^^^^^^^
 
         interface A {
             getB(): B;
@@ -136,7 +136,7 @@ A.prototype.getCls = function () { return undefined; }
 
 declare module "./a" {
 >"./a" : typeof import("a")
->      : ^^^^^^^^^^^^^^^^^^^^^^^^
+>      : ^^^^^^^^^^^^^^^^^^
 
     interface A {
         getCls(): Cls;

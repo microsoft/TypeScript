@@ -10,24 +10,24 @@ declare function OneThing(k: {yxx: string}): JSX.Element;
 >OneThing : Symbol(OneThing, Decl(file.tsx, 2, 31), Decl(file.tsx, 4, 57), Decl(file.tsx, 5, 76), Decl(file.tsx, 6, 69), Decl(file.tsx, 7, 83))
 >k : Symbol(k, Decl(file.tsx, 4, 26))
 >yxx : Symbol(yxx, Decl(file.tsx, 4, 30))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function OneThing(k: {yxx1: string, children: string}): JSX.Element;
 >OneThing : Symbol(OneThing, Decl(file.tsx, 2, 31), Decl(file.tsx, 4, 57), Decl(file.tsx, 5, 76), Decl(file.tsx, 6, 69), Decl(file.tsx, 7, 83))
 >k : Symbol(k, Decl(file.tsx, 5, 26))
 >yxx1 : Symbol(yxx1, Decl(file.tsx, 5, 30))
 >children : Symbol(children, Decl(file.tsx, 5, 43))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >OneThing : Symbol(OneThing, Decl(file.tsx, 2, 31), Decl(file.tsx, 4, 57), Decl(file.tsx, 5, 76), Decl(file.tsx, 6, 69), Decl(file.tsx, 7, 83))
 >l : Symbol(l, Decl(file.tsx, 6, 26))
 >yy : Symbol(yy, Decl(file.tsx, 6, 30))
 >yy1 : Symbol(yy1, Decl(file.tsx, 6, 41))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function OneThing(l: {yy: number, yy1: string, yy2: boolean}): JSX.Element;
 >OneThing : Symbol(OneThing, Decl(file.tsx, 2, 31), Decl(file.tsx, 4, 57), Decl(file.tsx, 5, 76), Decl(file.tsx, 6, 69), Decl(file.tsx, 7, 83))
@@ -35,16 +35,16 @@ declare function OneThing(l: {yy: number, yy1: string, yy2: boolean}): JSX.Eleme
 >yy : Symbol(yy, Decl(file.tsx, 7, 30))
 >yy1 : Symbol(yy1, Decl(file.tsx, 7, 41))
 >yy2 : Symbol(yy2, Decl(file.tsx, 7, 54))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function OneThing(l1: {data: string, "data-prop": boolean}): JSX.Element;
 >OneThing : Symbol(OneThing, Decl(file.tsx, 2, 31), Decl(file.tsx, 4, 57), Decl(file.tsx, 5, 76), Decl(file.tsx, 6, 69), Decl(file.tsx, 7, 83))
 >l1 : Symbol(l1, Decl(file.tsx, 8, 26))
 >data : Symbol(data, Decl(file.tsx, 8, 31))
 >"data-prop" : Symbol("data-prop", Decl(file.tsx, 8, 44))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 // OK
 const c1 = <OneThing yxx='ok' />
@@ -81,32 +81,32 @@ declare function TestingOneThing({y1: string}): JSX.Element;
 >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 15, 47), Decl(file.tsx, 18, 60), Decl(file.tsx, 19, 86), Decl(file.tsx, 20, 83))
 >y1 : Symbol(y1)
 >string : Symbol(string, Decl(file.tsx, 18, 34))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function TestingOneThing(j: {"extra-data": string, yy?: string}): JSX.Element;
 >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 15, 47), Decl(file.tsx, 18, 60), Decl(file.tsx, 19, 86), Decl(file.tsx, 20, 83))
 >j : Symbol(j, Decl(file.tsx, 19, 33))
 >"extra-data" : Symbol("extra-data", Decl(file.tsx, 19, 37))
 >yy : Symbol(yy, Decl(file.tsx, 19, 58))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function TestingOneThing(n: {yy: number, direction?: number}): JSX.Element;
 >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 15, 47), Decl(file.tsx, 18, 60), Decl(file.tsx, 19, 86), Decl(file.tsx, 20, 83))
 >n : Symbol(n, Decl(file.tsx, 20, 33))
 >yy : Symbol(yy, Decl(file.tsx, 20, 37))
 >direction : Symbol(direction, Decl(file.tsx, 20, 48))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function TestingOneThing(n: {yy: string, name: string}): JSX.Element;
 >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 15, 47), Decl(file.tsx, 18, 60), Decl(file.tsx, 19, 86), Decl(file.tsx, 20, 83))
 >n : Symbol(n, Decl(file.tsx, 21, 33))
 >yy : Symbol(yy, Decl(file.tsx, 21, 37))
 >name : Symbol(name, Decl(file.tsx, 21, 48))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 // OK
 const d1 = <TestingOneThing y1 extra-data />;
@@ -146,8 +146,8 @@ declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
 >a : Symbol(a, Decl(file.tsx, 31, 33))
 >y1 : Symbol(y1, Decl(file.tsx, 31, 37))
 >y2 : Symbol(y2, Decl(file.tsx, 31, 49))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
 >TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 28, 72), Decl(file.tsx, 31, 77))
@@ -155,8 +155,8 @@ declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JS
 >y1 : Symbol(y1, Decl(file.tsx, 32, 37))
 >y2 : Symbol(y2, Decl(file.tsx, 32, 49))
 >y3 : Symbol(y3, Decl(file.tsx, 32, 62))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 // OK
 const e1 = <TestingOptional />

@@ -10,8 +10,8 @@ export type {} from './0' with { type: "json" }
 >     : ^^^
 
 export type { I } from './0' with { type: "json" }
->I : import("0").I
->  : ^^^^^^^^^^^^^
+>I : import("./0").I
+>  : ^^^^^^^^^^^^^^^
 >type : any
 >     : ^^^
 

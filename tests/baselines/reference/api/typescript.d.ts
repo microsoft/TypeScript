@@ -2556,10 +2556,11 @@ declare namespace ts {
                 ES2022 = "es2022",
                 ES2023 = "es2023",
                 ES2024 = "es2024",
+                ES2025 = "es2025",
                 ESNext = "esnext",
                 JSON = "json",
                 Latest = "esnext",
-                LatestStandard = "es2024",
+                LatestStandard = "es2025",
             }
         }
         namespace typingsInstaller {
@@ -7222,10 +7223,11 @@ declare namespace ts {
         ES2022 = 9,
         ES2023 = 10,
         ES2024 = 11,
+        ES2025 = 12,
         ESNext = 99,
         JSON = 100,
         Latest = 99,
-        LatestStandard = 11,
+        LatestStandard = 12,
     }
     enum LanguageVariant {
         Standard = 0,

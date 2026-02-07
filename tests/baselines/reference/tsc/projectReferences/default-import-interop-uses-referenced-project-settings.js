@@ -90,7 +90,7 @@ app/src/index.ts(4,28): error TS1192: Module '"/home/src/workspaces/project/lib/
 app/src/index.ts(5,28): error TS1192: Module '"/home/src/workspaces/project/lib/dist/a"' has no default export.
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/app/dist/local.js]
 export const local = 0;

@@ -78,8 +78,8 @@ declare namespace React {
 
 === /node_modules/preact/index.d.ts ===
 export as namespace preact;
->preact : typeof import("/node_modules/preact/index")
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>preact : typeof import("preact")
+>       : ^^^^^^^^^^^^^^^^^^^^^^^
 
 export interface VNode<P = {}> {}
 

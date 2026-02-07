@@ -90,28 +90,28 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 44
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 44
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 144
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 151
 export const c = 'test';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 145
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 152
 export declare const c: string;
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 146
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 153
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 147
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 154
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] Inode:: 148
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] Inode:: 155
 {"root":["./src/c.ts","./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 149
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 156
 {
   "root": [
     "./src/c.ts",
@@ -121,28 +121,28 @@ export * from './c';
   "size": 66
 }
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 151
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 158
 export const a = 'test';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 152
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 159
 export declare const a: string;
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 153
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 160
 export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 154
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 161
 export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] Inode:: 155
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] Inode:: 162
 {"root":["./src/a.ts","./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 156
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 163
 {
   "root": [
     "./src/a.ts",
@@ -233,7 +233,7 @@ File '/home/src/projects/c/3/c-impl/c/lib/c.d.ts' exists - use it as a name reso
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib 0 undefined Failed Lookup Locations
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/lib/c.d.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 undefined Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 undefined Source file
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl 0 undefined Failed Lookup Locations
@@ -256,8 +256,8 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/a/1/a-imp
 FileWatcher:: Added:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 2000 undefined File location affecting resolution
 DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/b/2/b-impl/b/lib :: WatchInfo: /home/src/projects/b/2/b-impl/b 0 undefined Failed Lookup Locations
-../../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
 ../../../../c/3/c-impl/c/lib/c.d.ts
@@ -274,7 +274,7 @@ DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 unde
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/b/2/b-impl/b/src 1 undefined Wild card directory
 
 
-//// [/home/src/projects/b/2/b-impl/b/lib/index.js] Inode:: 158
+//// [/home/src/projects/b/2/b-impl/b/lib/index.js] Inode:: 165
 export {};
 
 
@@ -287,11 +287,11 @@ FsWatches::
 /home/src/projects: *new*
   {"inode":3}
 /home/src/projects/a/1/a-impl/a/lib: *new*
-  {"inode":150}
+  {"inode":157}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
-  {"inode":152}
+  {"inode":159}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-  {"inode":154}
+  {"inode":161}
 /home/src/projects/a/1/a-impl/a/node_modules: *new*
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json: *new*
@@ -313,14 +313,14 @@ FsWatches::
 /home/src/projects/b/2/b-impl/b/tsconfig.json: *new*
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/lib: *new*
-  {"inode":143}
+  {"inode":150}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
-  {"inode":145}
+  {"inode":152}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-  {"inode":147}
+  {"inode":154}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {"inode":44}
 
 Program root files: [
@@ -338,7 +338,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts
@@ -346,7 +346,7 @@ Program files::
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts
@@ -354,7 +354,7 @@ Semantic diagnostics in builder refreshed for::
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts (used version)
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts (used version)
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts (used version)
@@ -366,7 +366,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in a
 
 Input::
-//// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 159
+//// [/home/src/projects/a/2/unrelated/somethingUnrelated.ts] Inode:: 166
 export const a = 10;
 
 
@@ -384,7 +384,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in c
 
 Input::
-//// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 160
+//// [/home/src/projects/c/4/unrelated/somethingUnrelated.ts] Inode:: 167
 export const a = 10;
 
 
@@ -402,7 +402,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in a
 
 Input::
-//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 161
+//// [/home/src/projects/a/2/unrelated/anotherFile.ts] Inode:: 168
 export const a = 10;
 
 
@@ -420,7 +420,7 @@ exitCode:: ExitStatus.undefined
 Change:: change in unrelated folder in c
 
 Input::
-//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 162
+//// [/home/src/projects/c/4/unrelated/anotherFile.ts] Inode:: 169
 export const a = 10;
 
 
@@ -539,22 +539,22 @@ FsWatches::
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/package.json:
   {"inode":12}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":44}
 
 FsWatches *deleted*::
 /home/src/projects/a/1/a-impl/a/lib:
-  {"inode":150}
+  {"inode":157}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts:
-  {"inode":152}
+  {"inode":159}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts:
-  {"inode":154}
+  {"inode":161}
 /home/src/projects/c/3/c-impl/c/lib:
-  {"inode":143}
+  {"inode":150}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts:
-  {"inode":145}
+  {"inode":152}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts:
-  {"inode":147}
+  {"inode":154}
 
 Timeout callback:: count: 2
 11: timerToUpdateProgram *new*
@@ -650,15 +650,15 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/c/3/c-impl/c/package.json 20
 [7m1[0m import { a } from 'a';
 [7m [0m [91m                  ~~~[0m
 
-../../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 src/index.ts
   Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 [[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
 
 
 
-//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 158
+//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 165
 
 PolledWatches::
 /home/src/projects/b/2/b-impl/node_modules: *new*
@@ -715,7 +715,7 @@ FsWatches::
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":44}
 
 FsWatches *deleted*::
@@ -741,7 +741,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/b/2/b-impl/b/src/index.ts
 
 Semantic diagnostics in builder refreshed for::
@@ -774,40 +774,40 @@ exitCode:: ExitStatus.undefined
 Change:: Build dependencies
 
 Input::
-//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] file written with same contents Inode:: 148
-//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 149
-//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] file written with same contents Inode:: 155
-//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 156
-//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 164
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo] file written with same contents Inode:: 155
+//// [/home/src/projects/c/3/c-impl/c/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 156
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo] file written with same contents Inode:: 162
+//// [/home/src/projects/a/1/a-impl/a/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 163
+//// [/home/src/projects/c/3/c-impl/c/lib/c.js] Inode:: 171
 export const c = 'test';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 165
+//// [/home/src/projects/c/3/c-impl/c/lib/c.d.ts] Inode:: 172
 export declare const c: string;
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 166
+//// [/home/src/projects/c/3/c-impl/c/lib/index.js] Inode:: 173
 export * from './c';
 
 
-//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 167
+//// [/home/src/projects/c/3/c-impl/c/lib/index.d.ts] Inode:: 174
 export * from './c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 169
+//// [/home/src/projects/a/1/a-impl/a/lib/a.js] Inode:: 176
 export const a = 'test';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 170
+//// [/home/src/projects/a/1/a-impl/a/lib/a.d.ts] Inode:: 177
 export declare const a: string;
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 171
+//// [/home/src/projects/a/1/a-impl/a/lib/index.js] Inode:: 178
 export * from './a';
 export * from 'c';
 
 
-//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 172
+//// [/home/src/projects/a/1/a-impl/a/lib/index.d.ts] Inode:: 179
 export * from './a';
 export * from 'c';
 
@@ -846,7 +846,7 @@ FsWatches::
 /home/src/projects/a/1/a-impl/a:
   {"inode":19}
 /home/src/projects/a/1/a-impl/a/lib: *new*
-  {"inode":168}
+  {"inode":175}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
@@ -871,7 +871,7 @@ FsWatches::
   {"inode":35}
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":44}
 
 Timeout callback:: count: 1
@@ -984,8 +984,8 @@ DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefi
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/b/node_modules 1 undefined Failed Lookup Locations
 DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modules 1 undefined Failed Lookup Locations
-../../../../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../../../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 ../../../../a/1/a-impl/a/lib/a.d.ts
   Imported via './a' from file '../../../../a/1/a-impl/a/lib/index.d.ts'
 ../../../../c/3/c-impl/c/lib/c.d.ts
@@ -1000,7 +1000,7 @@ src/index.ts
 
 
 
-//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 158
+//// [/home/src/projects/b/2/b-impl/b/lib/index.js] file written with same contents Inode:: 165
 
 PolledWatches::
 /home/src/projects/a/1/a-impl/a/lib/node_modules: *new*
@@ -1020,11 +1020,11 @@ FsWatches::
 /home/src/projects:
   {"inode":3}
 /home/src/projects/a/1/a-impl/a/lib:
-  {"inode":168}
+  {"inode":175}
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts: *new*
-  {"inode":170}
+  {"inode":177}
 /home/src/projects/a/1/a-impl/a/lib/index.d.ts: *new*
-  {"inode":172}
+  {"inode":179}
 /home/src/projects/a/1/a-impl/a/node_modules:
   {"inode":25}
 /home/src/projects/a/1/a-impl/a/package.json:
@@ -1046,14 +1046,14 @@ FsWatches::
 /home/src/projects/b/2/b-impl/b/tsconfig.json:
   {"inode":36}
 /home/src/projects/c/3/c-impl/c/lib: *new*
-  {"inode":163}
+  {"inode":170}
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts: *new*
-  {"inode":165}
+  {"inode":172}
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts: *new*
-  {"inode":167}
+  {"inode":174}
 /home/src/projects/c/3/c-impl/c/package.json: *new*
   {"inode":12}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":44}
 
 FsWatches *deleted*::
@@ -1080,7 +1080,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/1/a-impl/a/lib/a.d.ts
 /home/src/projects/c/3/c-impl/c/lib/c.d.ts
 /home/src/projects/c/3/c-impl/c/lib/index.d.ts

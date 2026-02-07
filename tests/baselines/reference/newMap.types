@@ -7,3 +7,9 @@ new Map<string>();
 >Map : MapConstructor
 >    : ^^^^^^^^^^^^^^
 
+new WeakMap<object>();
+>new WeakMap<object>() : WeakMap<object, any>
+>                      : ^^^^^^^^^^^^^^^^^^^^
+>WeakMap : WeakMapConstructor
+>        : ^^^^^^^^^^^^^^^^^^
+

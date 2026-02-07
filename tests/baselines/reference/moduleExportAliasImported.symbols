@@ -17,5 +17,5 @@ module.exports = alias
 
 === importer.js ===
 import('./bug28014')
->'./bug28014' : Symbol("bug28014", Decl(bug28014.js, 0, 0))
+>'./bug28014' : Symbol("./bug28014", Decl(bug28014.js, 0, 0))
 

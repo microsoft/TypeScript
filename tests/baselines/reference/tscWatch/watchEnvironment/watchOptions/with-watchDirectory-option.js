@@ -37,21 +37,21 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 15
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 15
 
-//// [/user/username/projects/project/commonFile1.js] Inode:: 114
+//// [/user/username/projects/project/commonFile1.js] Inode:: 121
 "use strict";
 let x = 1;
 
 
-//// [/user/username/projects/project/commonFile2.js] Inode:: 115
+//// [/user/username/projects/project/commonFile2.js] Inode:: 122
 "use strict";
 let y = 1;
 
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {"inode":15}
 /user/username/projects/project: *new*
   {"inode":4}
@@ -72,17 +72,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/project/commonFile1.ts
 /user/username/projects/project/commonFile2.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/project/commonFile1.ts
 /user/username/projects/project/commonFile2.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/project/commonfile1.ts (used version)
 /user/username/projects/project/commonfile2.ts (used version)
 

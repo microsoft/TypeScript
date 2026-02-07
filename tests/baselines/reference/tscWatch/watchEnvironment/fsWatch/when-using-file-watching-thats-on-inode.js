@@ -46,23 +46,23 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/foo.d.ts 250 
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/main.ts 250 {"watchFile":4} Source file
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts 250 {"watchFile":4} Source file
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 {"watchFile":4} Source file
 DirectoryWatcher:: Triggered with /user/username/projects/myproject/main.js :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myproject/main.js :: WatchInfo: /user/username/projects/myproject 0 {"watchFile":4} Failed Lookup Locations
 [[90mHH:MM:SS AM[0m] Found 0 errors. Watching for file changes.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 15
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 15
 
-//// [/user/username/projects/myproject/main.js] Inode:: 114
+//// [/user/username/projects/myproject/main.js] Inode:: 121
 import { foo } from "./foo";
 foo();
 
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {"inode":15}
 /user/username/projects/myproject: *new*
   {"inode":4}
@@ -84,17 +84,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/foo.d.ts
 /user/username/projects/myproject/main.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/foo.d.ts
 /user/username/projects/myproject/main.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/myproject/foo.d.ts (used version)
 /user/username/projects/myproject/main.ts (used version)
 
@@ -103,7 +103,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that introduces error
 
 Input::
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 115
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 122
 export function foo2(): string;
 
 
@@ -129,12 +129,12 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":15}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/foo.d.ts:
-  {"inode":115} *new*
+  {"inode":122} *new*
 /user/username/projects/myproject/main.ts:
   {"inode":5}
 /user/username/projects/myproject/tsconfig.json:
@@ -175,7 +175,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 114
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 121
 
 Timeout callback:: count: 0
 5: timerToInvalidateFailedLookupResolutions *deleted*
@@ -192,7 +192,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/foo.d.ts
 /user/username/projects/myproject/main.ts
 
@@ -209,7 +209,7 @@ exitCode:: ExitStatus.undefined
 Change:: Replace file with rename event that fixes error
 
 Input::
-//// [/user/username/projects/myproject/foo.d.ts] Inode:: 116
+//// [/user/username/projects/myproject/foo.d.ts] Inode:: 123
 export function foo(): string;
 
 
@@ -235,12 +235,12 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":15}
 /user/username/projects/myproject:
   {"inode":4}
 /user/username/projects/myproject/foo.d.ts:
-  {"inode":116} *new*
+  {"inode":123} *new*
 /user/username/projects/myproject/main.ts:
   {"inode":5}
 /user/username/projects/myproject/tsconfig.json:
@@ -248,7 +248,7 @@ FsWatches::
 
 FsWatches *deleted*::
 /user/username/projects/myproject/foo.d.ts:
-  {"inode":115}
+  {"inode":122}
 
 Timeout callback:: count: 2
 9: timerToUpdateProgram *new*
@@ -271,7 +271,7 @@ CreatingProgramWith::
 
 
 
-//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 114
+//// [/user/username/projects/myproject/main.js] file written with same contents Inode:: 121
 
 Timeout callback:: count: 0
 10: timerToInvalidateFailedLookupResolutions *deleted*
@@ -288,7 +288,7 @@ Program options: {
 }
 Program structureReused: SafeModules
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/foo.d.ts
 /user/username/projects/myproject/main.ts
 

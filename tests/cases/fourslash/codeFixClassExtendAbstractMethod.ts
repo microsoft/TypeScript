@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @stableTypeOrdering: true
 // @noImplicitOverride: true
 ////abstract class A {
 ////    abstract f(a: number, b: string): boolean;

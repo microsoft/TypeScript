@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @stableTypeOrdering: true
+
 ////var a = { name: 'bob', age: 18 };
 ////var b = { name: 'jim', age: 20 };
 ////var /*1*/c = [a, b];

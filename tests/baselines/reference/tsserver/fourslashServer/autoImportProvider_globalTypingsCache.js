@@ -14,7 +14,7 @@ Info seq  [hh:mm:ss:mss] request:
           "allowJs": true,
           "checkJs": true,
           "maxNodeModuleJsDepth": 2,
-          "target": "es2024",
+          "target": "es2025",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

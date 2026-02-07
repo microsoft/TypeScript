@@ -1084,7 +1084,6 @@ import {
     tryGetModuleSpecifierFromDeclaration,
     tryGetPropertyAccessOrIdentifierToString,
     TryStatement,
-    TSGO_COMPAT,
     TupleType,
     TupleTypeNode,
     TupleTypeReference,
@@ -1507,8 +1506,6 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     var scanner: Scanner | undefined;
 
-    var fileIndexMap = new Map(host.getSourceFiles().map((file, i) => [file, i]));
-
     var Symbol = objectAllocator.getSymbolConstructor();
     var Type = objectAllocator.getTypeConstructor();
     var Signature = objectAllocator.getSignatureConstructor();
@@ -1545,6 +1542,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
     var noUncheckedSideEffectImports = compilerOptions.noUncheckedSideEffectImports !== false;
+    var stableTypeOrdering = compilerOptions.stableTypeOrdering !== false;
+
+    var fileIndexMap = stableTypeOrdering ? new Map(host.getSourceFiles().map((file, i) => [file, i])) : undefined;
 
     var checkBinaryExpression = createCheckBinaryExpression();
     var emitResolver = createResolver();
@@ -5561,7 +5561,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function createTypeofType() {
-        return getUnionType(map(TSGO_COMPAT ? [...typeofNEFacts.keys()].sort() : arrayFrom(typeofNEFacts.keys()), getStringLiteralType));
+        return getUnionType(map(stableTypeOrdering ? [...typeofNEFacts.keys()].sort() : arrayFrom(typeofNEFacts.keys()), getStringLiteralType));
     }
 
     function createTypeParameter(symbol?: Symbol) {
@@ -5581,14 +5581,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getNamedMembers(members: SymbolTable, container: Symbol | undefined): Symbol[] {
-        if (!TSGO_COMPAT) {
+        if (!stableTypeOrdering) {
             let result: Symbol[] | undefined;
             members.forEach((symbol, id) => {
                 if (isNamedMember(symbol, id)) {
-                    (result || (result = [])).push(symbol);
+                    (result ??= []).push(symbol);
                 }
             });
-            return result || emptyArray;
+            return result ?? emptyArray;
         }
 
         if (members.size === 0) {
@@ -5616,12 +5616,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
         contained?.sort(compareSymbols);
         nonContained?.sort(compareSymbols);
-        return concatenate(contained, nonContained) || emptyArray;
+        return concatenate(contained, nonContained) ?? emptyArray;
 
         function isDeclarationContainedBy(symbol: Symbol, container: Symbol): boolean {
             const declaration = symbol.valueDeclaration;
-            if (declaration) {
-                return some(container.declarations, d => containedBy(declaration, d));
+            if (declaration && container.declarations) {
+                for (const d of container.declarations) {
+                    if (containedBy(declaration, d)) {
+                        return true;
+                    }
+                }
             }
             return false;
 
@@ -6629,9 +6633,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             cb: (context: NodeBuilderContext) => T,
             out?: WriterContextOut,
         ): T | undefined {
-            const moduleResolverHost = tracker?.trackSymbol ? tracker.moduleResolverHost :
-                (internalFlags || InternalNodeBuilderFlags.None) & InternalNodeBuilderFlags.DoNotIncludeSymbolChain ? createBasicNodeBuilderModuleSpecifierResolutionHost(host) :
-                undefined;
+            const moduleResolverHost = tracker?.moduleResolverHost ?? createBasicNodeBuilderModuleSpecifierResolutionHost(host);
             flags = flags || NodeBuilderFlags.None;
             const maxTruncationLength = maximumLength ||
                 (flags & NodeBuilderFlags.NoTruncation ? noTruncationMaximumTruncationLength : defaultMaximumTruncationLength);
@@ -18064,11 +18066,11 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function containsType(types: readonly Type[], type: Type): boolean {
-        return TSGO_COMPAT ? binarySearch(types, type, identity, compareTypes) >= 0 : binarySearch(types, type, getTypeId, compareValues) >= 0;
+        return stableTypeOrdering ? binarySearch(types, type, identity, compareTypes) >= 0 : binarySearch(types, type, getTypeId, compareValues) >= 0;
     }
 
     function insertType(types: Type[], type: Type): boolean {
-        const index = TSGO_COMPAT ? binarySearch(types, type, identity, compareTypes) : binarySearch(types, type, getTypeId, compareValues);
+        const index = stableTypeOrdering ? binarySearch(types, type, identity, compareTypes) : binarySearch(types, type, getTypeId, compareValues);
         if (index < 0) {
             types.splice(~index, 0, type);
             return true;
@@ -18090,7 +18092,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             }
             else {
                 const len = typeSet.length;
-                const index = TSGO_COMPAT ? binarySearch(typeSet, type, identity, compareTypes) : (len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues));
+                const index = stableTypeOrdering ? binarySearch(typeSet, type, identity, compareTypes) : (len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues));
                 if (index < 0) {
                     typeSet.splice(~index, 0, type);
                 }
@@ -53795,7 +53797,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     function sortSymbolsIfTSGoCompat(array: Symbol[]): Symbol[];
     function sortSymbolsIfTSGoCompat(array: Symbol[] | undefined): Symbol[] | undefined;
     function sortSymbolsIfTSGoCompat(array: Symbol[] | undefined): Symbol[] | undefined {
-        if (TSGO_COMPAT && array) {
+        if (stableTypeOrdering && array) {
             return array.sort(compareSymbols); // eslint-disable-line local/no-array-mutating-method-expressions
         }
         return array;
@@ -53827,8 +53829,8 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const s1 = getSourceFileOfNode(n1);
         const s2 = getSourceFileOfNode(n2);
         if (s1 !== s2) {
-            const f1 = fileIndexMap.get(s1)!;
-            const f2 = fileIndexMap.get(s2)!;
+            const f1 = fileIndexMap!.get(s1)!;
+            const f2 = fileIndexMap!.get(s2)!;
             // Order by index of file in the containing program
             return f1 - f2;
         }
@@ -53983,7 +53985,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (c !== 0) {
                 return c;
             }
-            c = (t1 as IndexType).flags - (t2 as IndexType).flags;
+            c = (t1 as IndexType).indexFlags - (t2 as IndexType).indexFlags;
             if (c !== 0) {
                 return c;
             }

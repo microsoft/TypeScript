@@ -1,4 +1,6 @@
 /// <reference path='fourslash.ts' />
+
+// @stableTypeOrdering: true
 // @strict: true
 // based on acorn, translated to TS
 

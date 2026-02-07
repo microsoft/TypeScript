@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @stableTypeOrdering: true
 // @strict: true
 //// type keyword = "foo" | "bar" | "baz"
 //// 

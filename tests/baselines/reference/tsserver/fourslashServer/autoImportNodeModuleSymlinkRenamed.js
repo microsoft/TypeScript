@@ -16,7 +16,7 @@ Info seq  [hh:mm:ss:mss] request:
           "rootDir": "/home/src/workspaces/solution/packages/web/src",
           "outDir": "/home/src/workspaces/solution/packages/web/dist",
           "emitDeclarationOnly": true,
-          "target": "es2024",
+          "target": "es2025",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

@@ -3,6 +3,7 @@
 // @Filename: /home/src/workspaces/project/tsconfig.json
 ////{
 ////    "compilerOptions": {
+////        "stableTypeOrdering": true,
 ////        "module": "commonjs",
 ////        "target": "es2015",
 ////        "lib": ["es5"],

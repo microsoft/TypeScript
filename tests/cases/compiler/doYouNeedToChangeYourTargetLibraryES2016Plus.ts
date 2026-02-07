@@ -48,3 +48,4 @@ const testPromiseAny = Promise.any([]);
 const testStringReplaceAll = "".replaceAll();
 
 // esnext
+const testDateToTemporalInstant = new Date().toTemporalInstant();

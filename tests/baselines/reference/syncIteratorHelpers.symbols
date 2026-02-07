@@ -1,0 +1,23 @@
+//// [tests/cases/conformance/es2025/syncIteratorHelpers.ts] ////
+
+=== syncIteratorHelpers.ts ===
+[1, 2, 3, 4].values()
+>[1, 2, 3, 4].values()    .filter((x) => x % 2 === 0)    .map((x) => x * 10)    .toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+>[1, 2, 3, 4].values()    .filter((x) => x % 2 === 0)    .map : Symbol(IteratorObject.map, Decl(lib.es2025.iterator.d.ts, --, --))
+>[1, 2, 3, 4].values()    .filter : Symbol(IteratorObject.filter, Decl(lib.es2025.iterator.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>[1, 2, 3, 4].values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
+>values : Symbol(Array.values, Decl(lib.es2015.iterable.d.ts, --, --))
+
+    .filter((x) => x % 2 === 0)
+>filter : Symbol(IteratorObject.filter, Decl(lib.es2025.iterator.d.ts, --, --), Decl(lib.es2025.iterator.d.ts, --, --))
+>x : Symbol(x, Decl(syncIteratorHelpers.ts, 1, 13))
+>x : Symbol(x, Decl(syncIteratorHelpers.ts, 1, 13))
+
+    .map((x) => x * 10)
+>map : Symbol(IteratorObject.map, Decl(lib.es2025.iterator.d.ts, --, --))
+>x : Symbol(x, Decl(syncIteratorHelpers.ts, 2, 10))
+>x : Symbol(x, Decl(syncIteratorHelpers.ts, 2, 10))
+
+    .toArray();
+>toArray : Symbol(IteratorObject.toArray, Decl(lib.es2025.iterator.d.ts, --, --))
+

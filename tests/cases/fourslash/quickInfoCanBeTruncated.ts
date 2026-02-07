@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @stableTypeOrdering: true
 // @noLib: true
 //// interface Foo {
 ////   _0: 0;

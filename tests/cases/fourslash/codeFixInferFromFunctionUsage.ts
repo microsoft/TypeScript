@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @stableTypeOrdering: true
 // @noImplicitAny: true
 ////function wrap( [| arr |] ) {
 ////     arr.other(function (a: number, b: number) { return a < b ? -1 : 1 });

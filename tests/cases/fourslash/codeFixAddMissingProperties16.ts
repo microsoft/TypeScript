@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @stableTypeOrdering: true
+
 ////type A = 'a' | 'b' | 'c' | 'd' | 'e';
 ////type B = 1 | 2 | 3;
 ////type C = '@' | '!';

@@ -66,16 +66,16 @@ exports.f = exports.g = function fg(n) {
 >                                                          : ^ ^^      ^^^^^^^^^^^
 >exports.f : (n: number) => number
 >          : ^ ^^      ^^^^^^^^^^^
->exports : typeof import("mod")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./mod")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >f : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >exports.g = function fg(n) {    return n + 1} : (n: number) => number
 >                                              : ^ ^^      ^^^^^^^^^^^
 >exports.g : (n: number) => number
 >          : ^ ^^      ^^^^^^^^^^^
->exports : typeof import("mod")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./mod")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >g : (n: number) => number
 >  : ^ ^^      ^^^^^^^^^^^
 >function fg(n) {    return n + 1} : (n: number) => number

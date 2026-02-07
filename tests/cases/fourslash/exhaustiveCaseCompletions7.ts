@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @stableTypeOrdering: true
 // @newline: LF
 ////export function foo(position: -1 | 0 | 1) {
 ////    switch (position) {

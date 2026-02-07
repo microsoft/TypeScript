@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @stableTypeOrdering: true
 // @Filename: /a.tsx
 //// declare function test<T>(a: {
 ////   [K in keyof T]: {

@@ -78,10 +78,10 @@ const fp = { l10ns: {} } as FlatpickrFn;
 >   : ^^
 
 export default fp.l10ns;
->fp.l10ns : { ar?: import("locale").CustomLocale | undefined; bg?: import("locale").CustomLocale | undefined; } & { default: import("locale").Locale; }
->         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^  ^^^^^^^^^
+>fp.l10ns : { ar?: import("./locale").CustomLocale | undefined; bg?: import("./locale").CustomLocale | undefined; } & { default: import("./locale").Locale; }
+>         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^  ^^^^^^^^^
 >fp : FlatpickrFn
 >   : ^^^^^^^^^^^
->l10ns : { ar?: import("locale").CustomLocale | undefined; bg?: import("locale").CustomLocale | undefined; } & { default: import("locale").Locale; }
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^  ^^^^^^^^^
+>l10ns : { ar?: import("./locale").CustomLocale | undefined; bg?: import("./locale").CustomLocale | undefined; } & { default: import("./locale").Locale; }
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^  ^^^^^^^^^
 

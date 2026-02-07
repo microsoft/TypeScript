@@ -1,5 +1,6 @@
 /// <reference path="../fourslash.ts"/>
 
+// @stableTypeOrdering: true
 // @lib: es5
 
 //// interface I {

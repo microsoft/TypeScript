@@ -168,8 +168,8 @@ Context.prototype = {
 >          : ^     ^^     ^^      ^^^              ^^^^^^^^^^^^^^     
 >input : Input
 >      : ^^^^^
->handle : import("hook").HookHandler | undefined
->       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>handle : import("./hook").HookHandler | undefined
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >() => void 0 : () => undefined
 >             : ^^^^^^^^^^^^^^^
 >void 0 : undefined

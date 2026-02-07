@@ -13,7 +13,7 @@ Info seq  [hh:mm:ss:mss] request:
           "module": "nodenext",
           "rootDir": "/home/src/workspaces/project/src",
           "outDir": "/home/src/workspaces/project/dist",
-          "target": "es2024",
+          "target": "es2025",
           "newLine": "crlf",
           "skipDefaultLibCheck": true
         }

@@ -10,8 +10,8 @@ exports.a.b.c = 0;
 >            : ^^^
 >exports.a : any
 >          : ^^^
->exports : typeof import("a")
->        : ^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./a")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >a : any
 >  : ^^^
 >b : any

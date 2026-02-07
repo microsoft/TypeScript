@@ -34,9 +34,9 @@ Output::
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib* Inode:: 15
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib* Inode:: 15
 
-//// [/a/username/projects/project/src/file1.js] Inode:: 114
+//// [/a/username/projects/project/src/file1.js] Inode:: 121
 "use strict";
 
 
@@ -50,7 +50,7 @@ FsWatches::
   {"inode":6}
 /a/username/projects/project/tsconfig.json: *new*
   {"inode":7}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {"inode":15}
 
 Program root files: [
@@ -62,15 +62,15 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /a/username/projects/project/src/file1.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /a/username/projects/project/src/file1.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.es2024.full.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /a/username/projects/project/src/file1.ts (used version)
 
 exitCode:: ExitStatus.undefined
@@ -78,7 +78,7 @@ exitCode:: ExitStatus.undefined
 Change:: Rename file1 to file2
 
 Input::
-//// [/a/username/projects/project/src/file2.ts] Inode:: 115
+//// [/a/username/projects/project/src/file2.ts] Inode:: 122
 
 
 //// [/a/username/projects/project/src/file1.ts] deleted
@@ -98,7 +98,7 @@ FsWatches::
   {"inode":5}
 /a/username/projects/project/tsconfig.json:
   {"inode":7}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":15}
 
 FsWatches *deleted*::
@@ -121,7 +121,7 @@ Output::
 
 
 
-//// [/a/username/projects/project/src/file2.js] Inode:: 116
+//// [/a/username/projects/project/src/file2.js] Inode:: 123
 "use strict";
 
 
@@ -136,10 +136,10 @@ FsWatches::
 /a/username/projects/project/src:
   {"inode":5}
 /a/username/projects/project/src/file2.ts: *new*
-  {"inode":115}
+  {"inode":122}
 /a/username/projects/project/tsconfig.json:
   {"inode":7}
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts:
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts:
   {"inode":15}
 
 
@@ -152,7 +152,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /a/username/projects/project/src/file2.ts
 
 Semantic diagnostics in builder refreshed for::

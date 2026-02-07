@@ -10,8 +10,8 @@ exports["D"] = D;
 >                 : ^^^^^^^^^^
 >exports["D"] : () => void
 >             : ^^^^^^^^^^
->exports : typeof import("moduleExportAliasElementAccessExpression")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./moduleExportAliasElementAccessExpression")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"D" : "D"
 >    : ^^^
 >D : () => void
@@ -23,8 +23,8 @@ exports["Does not work yet"] = D;
 >                                 : ^^^^^^^^^^
 >exports["Does not work yet"] : () => void
 >                             : ^^^^^^^^^^
->exports : typeof import("moduleExportAliasElementAccessExpression")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./moduleExportAliasElementAccessExpression")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >"Does not work yet" : "Does not work yet"
 >                    : ^^^^^^^^^^^^^^^^^^^
 >D : () => void

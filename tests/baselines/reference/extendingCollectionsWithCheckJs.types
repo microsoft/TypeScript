@@ -1,6 +1,6 @@
-//// [tests/cases/compiler/extendingSetWithCheckJs.ts] ////
+//// [tests/cases/compiler/extendingCollectionsWithCheckJs.ts] ////
 
-=== extendingSetWithCheckJs.ts ===
+=== extendingCollectionsWithCheckJs.js ===
 class MySet extends Set {
 >MySet : MySet
 >      : ^^^^^
@@ -60,3 +60,4 @@ class MyWeakMap extends WeakMap {
 >      : ^^^^^^^^^^^^^^^^^^
     }
 }
+

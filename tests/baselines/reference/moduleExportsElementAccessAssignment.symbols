@@ -46,12 +46,12 @@ exports.a = { x: "x" };
 >x : Symbol(x, Decl(mod1.js, 0, 13))
 
 exports["b"] = { x: "x" };
->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+>exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 >"b" : Symbol("b", Decl(mod1.js, 0, 23))
 >x : Symbol(x, Decl(mod1.js, 1, 16))
 
 exports["default"] = { x: "x" };
->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+>exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 >"default" : Symbol("default", Decl(mod1.js, 1, 26))
 >x : Symbol(x, Decl(mod1.js, 2, 22))
 

@@ -22,28 +22,28 @@ export function foo() {
 import.defer("./a.js").then(ns => {
 >import.defer("./a.js").then(ns => {  ns.foo();}) : Promise<void>
 >                                                 : ^^^^^^^^^^^^^
->import.defer("./a.js").then : <TResult1 = typeof import("a"), TResult2 = never>(onfulfilled?: ((value: typeof import("a")) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->                            : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->import.defer("./a.js") : Promise<typeof import("a")>
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import.defer("./a.js").then : <TResult1 = typeof import("./a.js"), TResult2 = never>(onfulfilled?: ((value: typeof import("./a.js")) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>                            : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>import.defer("./a.js") : Promise<typeof import("./a.js")>
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >defer : any
 >      : ^^^
 >"./a.js" : "./a.js"
 >         : ^^^^^^^^
->then : <TResult1 = typeof import("a"), TResult2 = never>(onfulfilled?: ((value: typeof import("a")) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
->     : ^        ^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->ns => {  ns.foo();} : (ns: typeof import("a")) => void
->                    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->ns : typeof import("a")
->   : ^^^^^^^^^^^^^^^^^^
+>then : <TResult1 = typeof import("./a.js"), TResult2 = never>(onfulfilled?: ((value: typeof import("./a.js")) => TResult1 | PromiseLike<TResult1>) | null | undefined, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | null | undefined) => Promise<TResult1 | TResult2>
+>     : ^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^^^^^           ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^          ^^^^^      ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ns => {  ns.foo();} : (ns: typeof import("./a.js")) => void
+>                    : ^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>ns : typeof import("./a.js")
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 
   ns.foo();
 >ns.foo() : void
 >         : ^^^^
 >ns.foo : () => void
 >       : ^^^^^^^^^^
->ns : typeof import("a")
->   : ^^^^^^^^^^^^^^^^^^
+>ns : typeof import("./a.js")
+>   : ^^^^^^^^^^^^^^^^^^^^^^^
 >foo : () => void
 >    : ^^^^^^^^^^
 

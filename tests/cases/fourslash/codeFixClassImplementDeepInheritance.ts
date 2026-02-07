@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @stableTypeOrdering: true
 // @strict: false
 ////// Referenced throughout the inheritance chain.
 ////interface I0 { a: number }

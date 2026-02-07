@@ -74,8 +74,8 @@ Output::
 
 TSFILE: /home/src/workspaces/project/outFile.js
 TSFILE: /home/src/workspaces/project/outFile.tsbuildinfo
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'
 src/index.ts
@@ -87,7 +87,7 @@ Found 4 errors.
 
 
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/outFile.js]
 var __importDefault = (this && this.__importDefault) || function (mod) {
@@ -154,8 +154,8 @@ Output::
 
 TSFILE: /home/src/workspaces/project/outFile.js
 TSFILE: /home/src/workspaces/project/outFile.tsbuildinfo
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-  Default library for target 'es2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 ky.d.ts
   Imported via 'ky' from file 'src/index.ts'
 src/index.ts

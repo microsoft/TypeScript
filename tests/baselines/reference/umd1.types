@@ -44,6 +44,6 @@ export interface Thing { n: typeof x }
 >  : ^^^^^^
 
 export as namespace Foo;
->Foo : typeof import("foo")
->    : ^^^^^^^^^^^^^^^^^^^^
+>Foo : typeof import("./foo")
+>    : ^^^^^^^^^^^^^^^^^^^^^^
 
