@@ -1542,7 +1542,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     var useUnknownInCatchVariables = getStrictOptionValue(compilerOptions, "useUnknownInCatchVariables");
     var exactOptionalPropertyTypes = compilerOptions.exactOptionalPropertyTypes;
     var noUncheckedSideEffectImports = compilerOptions.noUncheckedSideEffectImports !== false;
-    var stableTypeOrdering = !!compilerOptions.stableTypeOrdering;
+    var stableTypeOrdering = compilerOptions.stableTypeOrdering !== false;
 
     var fileIndexMap = stableTypeOrdering ? new Map(host.getSourceFiles().map((file, i) => [file, i])) : undefined;
 
