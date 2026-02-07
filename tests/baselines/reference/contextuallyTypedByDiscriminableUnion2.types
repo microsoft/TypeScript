@@ -86,7 +86,7 @@ export interface DisableD<I extends Identifiable> {
 }
 
 type MyComponentProps<I extends Identifiable> = (EnableA | DisableA) &
->MyComponentProps : (EnableA & EnableB & DisableD<I>) | (EnableA & EnableB & EnableD<I>) | (DisableA & EnableB & DisableD<I>) | (DisableA & EnableB & EnableD<I>) | (DisableA & DisableB & DisableD<I>) | (DisableA & DisableB & EnableD<I>)
+>MyComponentProps : (DisableA & DisableB & DisableD<I>) | (DisableA & DisableB & EnableD<I>) | (DisableA & EnableB & DisableD<I>) | (DisableA & EnableB & EnableD<I>) | (EnableA & EnableB & DisableD<I>) | (EnableA & EnableB & EnableD<I>)
 >                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   (EnableB | DisableB) &
@@ -97,7 +97,7 @@ const MyComponent = <I extends Identifiable>(props: MyComponentProps<I>) => {};
 >            : ^ ^^^^^^^^^            ^^     ^^                   ^^^^^^^^^
 ><I extends Identifiable>(props: MyComponentProps<I>) => {} : <I extends Identifiable>(props: MyComponentProps<I>) => void
 >                                                           : ^ ^^^^^^^^^            ^^     ^^                   ^^^^^^^^^
->props : (EnableA & EnableB & DisableD<I>) | (EnableA & EnableB & EnableD<I>) | (DisableA & EnableB & DisableD<I>) | (DisableA & EnableB & EnableD<I>) | (DisableA & DisableB & DisableD<I>) | (DisableA & DisableB & EnableD<I>)
+>props : (DisableA & DisableB & DisableD<I>) | (DisableA & DisableB & EnableD<I>) | (DisableA & EnableB & DisableD<I>) | (DisableA & EnableB & EnableD<I>) | (EnableA & EnableB & DisableD<I>) | (EnableA & EnableB & EnableD<I>)
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const item: string | null;

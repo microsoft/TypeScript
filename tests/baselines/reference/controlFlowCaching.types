@@ -634,7 +634,7 @@ function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {
 >                            : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
->isRtl ? -1 : 1 : 1 | -1
+>isRtl ? -1 : 1 : -1 | 1
 >               : ^^^^^^
 >isRtl : any
 >-1 : -1

@@ -69,7 +69,7 @@ type FlattenedUser = FlattenType<User, FieldSelect>;
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 type FlattenedUserKeys = keyof FlattenType<User, FieldSelect>;
->FlattenedUserKeys : "id" | "name" | "address.address" | "address.postCode" | "address.description"
+>FlattenedUserKeys : "address.address" | "address.description" | "address.postCode" | "id" | "name"
 >                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export type FlattenTypeKeys<Source extends object, Target> = keyof {
@@ -84,6 +84,6 @@ export type FlattenTypeKeys<Source extends object, Target> = keyof {
 };
 
 type FlattenedUserKeys2 = FlattenTypeKeys<User, FieldSelect>;
->FlattenedUserKeys2 : "id" | "name" | "address.address" | "address.postCode" | "address.description"
+>FlattenedUserKeys2 : "address.address" | "address.description" | "address.postCode" | "id" | "name"
 >                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 

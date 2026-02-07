@@ -64,7 +64,7 @@ fun({
 >                                                                        : ^^^^
 >fun : (thing: Thing) => void
 >    : ^     ^^     ^^^^^    
->{    id: 'foo',    ...find('foo') ?? {        label: 'Foo',    },} : { id: string; label: string; } | { label: string; id: string; }
+>{    id: 'foo',    ...find('foo') ?? {        label: 'Foo',    },} : { id: string; label: string; } | { id: string; label: string; }
 >                                                                   : ^^^^^^      ^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     id: 'foo',
@@ -96,9 +96,9 @@ fun({
 
 // Should not error when spreading a union where one type doesn't have the property
 const obj1 = {
->obj1 : { y: number; x: number; } | { y: number; x: number; }
+>obj1 : { x: number; y: number; } | { y: number; x: number; }
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->{    x: 1,    ...(Math.random() > 0.5 ? { y: 2 } : { y: 2, x: 3 }),} : { y: number; x: number; } | { y: number; x: number; }
+>{    x: 1,    ...(Math.random() > 0.5 ? { y: 2 } : { y: 2, x: 3 }),} : { x: number; y: number; } | { y: number; x: number; }
 >                                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     x: 1,

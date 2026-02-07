@@ -47,7 +47,7 @@ function f2(fetcherParams: object | (() => object)) {
 >typeof fetcherParams === 'function'        ? fetcherParams()        : fetcherParams : error
 >typeof fetcherParams === 'function' : boolean
 >                                    : ^^^^^^^
->typeof fetcherParams : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof fetcherParams : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >fetcherParams : object | (() => object)
 >              : ^^^^^^^^^^^^^^^^      ^

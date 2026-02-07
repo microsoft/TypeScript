@@ -17,8 +17,8 @@ export const ExampleFunctionalComponent = ({ "data-testid": dataTestId, [dynProp
 
 //// [jsDeclarationsNonIdentifierInferredNames.d.ts]
 export function ExampleFunctionalComponent({ "data-testid": dataTestId, [dynPropName]: dynProp }: {
-    "data-testid": any;
     "data-dyn": any;
+    "data-testid": any;
 }): JSX.Element;
 declare const dynPropName: "data-dyn";
 export {};
@@ -32,8 +32,8 @@ out/jsDeclarationsNonIdentifierInferredNames.d.ts(4,5): error TS2503: Cannot fin
 
 ==== out/jsDeclarationsNonIdentifierInferredNames.d.ts (1 errors) ====
     export function ExampleFunctionalComponent({ "data-testid": dataTestId, [dynPropName]: dynProp }: {
-        "data-testid": any;
         "data-dyn": any;
+        "data-testid": any;
     }): JSX.Element;
         ~~~
 !!! error TS2503: Cannot find namespace 'JSX'.

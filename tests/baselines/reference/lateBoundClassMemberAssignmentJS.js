@@ -17,8 +17,8 @@ export class MyClass {
 
 //// [lateBoundClassMemberAssignmentJS.d.ts]
 export class MyClass {
-    method(): void;
     [_sym]: string;
+    method(): void;
 }
 declare const _sym: unique symbol;
 export {};

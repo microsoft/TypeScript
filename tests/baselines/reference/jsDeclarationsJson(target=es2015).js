@@ -41,9 +41,9 @@ declare const j: {
             y: number;
             err?: undefined;
         } | {
+            y?: undefined;
             x: number;
             err: boolean;
-            y?: undefined;
         })[];
     };
 };

@@ -423,7 +423,7 @@ function ff3<A extends unknown[]>(s1: (...args: [x: string, ...rest: A | [number
 >   : ^ ^^      ^^^^^    ^^            ^^^^^    
 >x : string
 >  : ^^^^^^
->rest : [number] | A
+>rest : A | [number]
 >     : ^^^^^^^^^^^^
 
     s1 = s2;

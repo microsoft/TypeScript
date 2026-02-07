@@ -19,7 +19,7 @@ export declare let b: ({
     m(): void;
     bar?: undefined;
 } | {
-    bar: number;
     foo?: undefined;
     m?: undefined;
+    bar: number;
 })[];

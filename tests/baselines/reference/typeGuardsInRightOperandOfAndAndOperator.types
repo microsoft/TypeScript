@@ -14,7 +14,7 @@ function foo(x: number | string) {
 >                                         : ^^^^^^^
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
@@ -43,7 +43,7 @@ function foo2(x: number | string) {
 >                                         : ^^^^^^^^^^^^^^
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
@@ -76,7 +76,7 @@ function foo3(x: number | string) {
 >                                              : ^^^^^^^^^^^^^^
 >typeof x === "string" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number
 >  : ^^^^^^^^^^^^^^^
@@ -110,7 +110,7 @@ function foo4(x: number | string | boolean) {
 >                                                                                   : ^^^^^^^
 >typeof x !== "string" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -120,7 +120,7 @@ function foo4(x: number | string | boolean) {
         && typeof x !== "number"  // number | boolean
 >typeof x !== "number" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | boolean
 >  : ^^^^^^^^^^^^^^^^
@@ -132,7 +132,7 @@ function foo4(x: number | string | boolean) {
 >  : ^^^^^^^
 }
 function foo5(x: number | string | boolean) {
->foo5 : (x: number | string | boolean) => boolean | 0
+>foo5 : (x: number | string | boolean) => 0 | boolean
 >     : ^ ^^                         ^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -143,11 +143,11 @@ function foo5(x: number | string | boolean) {
 >  : ^^^^^^^^^^^^^^^^
 
     return typeof x !== "string" // string | number | boolean
->typeof x !== "string" // string | number | boolean        && ((b = x) && (typeof x !== "number"  // number | boolean        && x)) : boolean | 0
+>typeof x !== "string" // string | number | boolean        && ((b = x) && (typeof x !== "number"  // number | boolean        && x)) : 0 | boolean
 >                                                                                                                                   : ^^^^^^^^^^^
 >typeof x !== "string" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -155,9 +155,9 @@ function foo5(x: number | string | boolean) {
 >         : ^^^^^^^^
 
         && ((b = x) && (typeof x !== "number"  // number | boolean
->((b = x) && (typeof x !== "number"  // number | boolean        && x)) : boolean | 0
+>((b = x) && (typeof x !== "number"  // number | boolean        && x)) : 0 | boolean
 >                                                                      : ^^^^^^^^^^^
->(b = x) && (typeof x !== "number"  // number | boolean        && x) : boolean | 0
+>(b = x) && (typeof x !== "number"  // number | boolean        && x) : 0 | boolean
 >                                                                    : ^^^^^^^^^^^
 >(b = x) : number | boolean
 >        : ^^^^^^^^^^^^^^^^
@@ -173,7 +173,7 @@ function foo5(x: number | string | boolean) {
 >                                                       : ^^^^^^^
 >typeof x !== "number" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | true
 >  : ^^^^^^^^^^^^^
@@ -196,7 +196,7 @@ function foo6(x: number | string | boolean) {
 >                                                                                                                                                 : ^^^^^^^
 >typeof x !== "string" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -210,7 +210,7 @@ function foo6(x: number | string | boolean) {
 >                                                                                  : ^^^^^^^
 >typeof x !== "number" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | boolean
 >  : ^^^^^^^^^^^^^^^^
@@ -230,7 +230,7 @@ function foo6(x: number | string | boolean) {
 >   : ^^
 }
 function foo7(x: number | string | boolean) {
->foo7 : (x: number | string | boolean) => string | false | 0
+>foo7 : (x: number | string | boolean) => string | 0 | false
 >     : ^ ^^                         ^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -245,11 +245,11 @@ function foo7(x: number | string | boolean) {
 
     // Mixing typeguard narrowing
     return typeof x !== "string"
->typeof x !== "string"        && ((z = x) // number | boolean        && (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // x is number        // do not change value        : ((y = x) && x.toString()))) : string | false | 0
+>typeof x !== "string"        && ((z = x) // number | boolean        && (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // x is number        // do not change value        : ((y = x) && x.toString()))) : string | 0 | false
 >                                                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^
 >typeof x !== "string" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : string | number | boolean
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -257,9 +257,9 @@ function foo7(x: number | string | boolean) {
 >         : ^^^^^^^^
 
         && ((z = x) // number | boolean
->((z = x) // number | boolean        && (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // x is number        // do not change value        : ((y = x) && x.toString()))) : string | false | 0
+>((z = x) // number | boolean        && (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // x is number        // do not change value        : ((y = x) && x.toString()))) : string | 0 | false
 >                                                                                                                                                                                                                : ^^^^^^^^^^^^^^^^^^
->(z = x) // number | boolean        && (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // x is number        // do not change value        : ((y = x) && x.toString())) : string | false | 0
+>(z = x) // number | boolean        && (typeof x === "number"        // change value of x        ? ((x = 10) && x.toString()) // x is number        // do not change value        : ((y = x) && x.toString())) : string | 0 | false
 >                                                                                                                                                                                                              : ^^^^^^^^^^^^^^^^^^
 >(z = x) : number | boolean
 >        : ^^^^^^^^^^^^^^^^
@@ -277,7 +277,7 @@ function foo7(x: number | string | boolean) {
 >                                                                                                                                                                      : ^^^^^^
 >typeof x === "number" : boolean
 >                      : ^^^^^^^
->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >x : number | true
 >  : ^^^^^^^^^^^^^

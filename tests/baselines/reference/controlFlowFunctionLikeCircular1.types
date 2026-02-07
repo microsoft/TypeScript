@@ -136,7 +136,7 @@ function test(arg: string | number) {
   if (typeof arg === "string") {
 >typeof arg === "string" : boolean
 >                        : ^^^^^^^
->typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof arg : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^
@@ -178,7 +178,7 @@ function test(arg: string | number) {
   if (typeof arg === "string") {
 >typeof arg === "string" : boolean
 >                        : ^^^^^^^
->typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof arg : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^
@@ -220,7 +220,7 @@ function test(arg: string | number) {
   if (typeof arg === "string") {
 >typeof arg === "string" : boolean
 >                        : ^^^^^^^
->typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof arg : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^
@@ -264,7 +264,7 @@ function test(arg: string | number, whatever: any) {
   if (typeof arg === "string") {
 >typeof arg === "string" : boolean
 >                        : ^^^^^^^
->typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof arg : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^
@@ -316,7 +316,7 @@ function test(arg: string | number, whatever: any) {
   if (typeof arg === "string") {
 >typeof arg === "string" : boolean
 >                        : ^^^^^^^
->typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof arg : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^
@@ -372,7 +372,7 @@ function test(arg: string | number, whatever: any) {
   if (typeof arg === "string") {
 >typeof arg === "string" : boolean
 >                        : ^^^^^^^
->typeof arg : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof arg : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >arg : string | number
 >    : ^^^^^^^^^^^^^^^

@@ -139,11 +139,11 @@ function fail(s: Shapes) {
         if (s.kind === "circle") {
 >s.kind === "circle" : boolean
 >                    : ^^^^^^^
->s.kind : "square" | "circle"
+>s.kind : "circle" | "square"
 >       : ^^^^^^^^^^^^^^^^^^^
 >s : Shape
 >  : ^^^^^
->kind : "square" | "circle"
+>kind : "circle" | "square"
 >     : ^^^^^^^^^^^^^^^^^^^
 >"circle" : "circle"
 >         : ^^^^^^^^

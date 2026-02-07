@@ -1,5 +1,5 @@
 keyRemappingKeyofResult.ts(69,5): error TS2322: Type 'string' is not assignable to type 'keyof Remapped'.
-  Type '"whatever"' is not assignable to type 'unique symbol | "str" | DistributiveNonIndex<K>'.
+  Type '"whatever"' is not assignable to type '"str" | unique symbol | DistributiveNonIndex<K>'.
 
 
 ==== keyRemappingKeyofResult.ts (1 errors) ====
@@ -74,7 +74,7 @@ keyRemappingKeyofResult.ts(69,5): error TS2322: Type 'string' is not assignable 
         x = "whatever"; // error
         ~
 !!! error TS2322: Type 'string' is not assignable to type 'keyof Remapped'.
-!!! error TS2322:   Type '"whatever"' is not assignable to type 'unique symbol | "str" | DistributiveNonIndex<K>'.
+!!! error TS2322:   Type '"whatever"' is not assignable to type '"str" | unique symbol | DistributiveNonIndex<K>'.
     }
     
     export {};

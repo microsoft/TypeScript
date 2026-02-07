@@ -34,8 +34,8 @@ ex2(useCallback1((x) => {}));
 declare function ex3(callback: ((x: number) => void) | 5): void;
 >ex3 : (callback: ((x: number) => void) | 5) => void
 >    : ^        ^^                         ^^^^^    
->callback : ((x: number) => void) | 5
->         : ^^ ^^      ^^^^^    ^^^^^
+>callback : 5 | ((x: number) => void)
+>         : ^^^^^^ ^^      ^^^^^    ^
 >x : number
 >  : ^^^^^^
 

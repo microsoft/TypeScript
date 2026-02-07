@@ -79,7 +79,7 @@ var l = new c() || new m.c();
 >  : ^^^^^^^^^^
 
 var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number>() || (() => new c());
->x : g<string> | m.g<number> | (() => c)
+>x : m.g<number> | g<string> | (() => c)
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^
 >m : any
 >  : ^^^

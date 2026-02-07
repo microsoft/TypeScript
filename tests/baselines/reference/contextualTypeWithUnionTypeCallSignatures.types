@@ -42,7 +42,7 @@ interface IWithCallSignatures4 {
 
 // With no call signature | callSignatures
 var x: IWithNoCallSignatures | IWithCallSignatures = a => a.toString();
->x : IWithNoCallSignatures | IWithCallSignatures
+>x : IWithCallSignatures | IWithNoCallSignatures
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a => a.toString() : (a: number) => string
 >                  : ^ ^^^^^^^^^^^^^^^^^^^

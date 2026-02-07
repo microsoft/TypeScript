@@ -2339,7 +2339,7 @@ namespace TypeScript {
 >                                                                                                                                                                                                                                                                              : ^^^
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container &&                 ((!fgSym || fgSym.declAST.nodeType != NodeType.FuncDecl) && funcDecl.isAccessor()) : any
 >                                                                                                                                                                                                                         : ^^^
->!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container : false | 0 | Symbol
+>!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) &&                container : 0 | false | Symbol
 >                                                                                                                   : ^^^^^^^^^^^^^^^^^^
 >!funcDecl.accessorSymbol &&                 (funcDecl.fncFlags & FncFlags.ClassMethod) : number | false
 >                                                                                       : ^^^^^^^^^^^^^^

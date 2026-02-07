@@ -68,7 +68,7 @@ function f() {
 >  : ^^^^^^
 
     n&&b;
->n&&b : false | 0
+>n&&b : 0 | false
 >     : ^^^^^^^^^
 >n : number
 >  : ^^^^^^
@@ -116,7 +116,7 @@ function f() {
 >  : ^^^^^^
 
     s&&b;
->s&&b : false | ""
+>s&&b : "" | false
 >     : ^^^^^^^^^^
 >s : string
 >  : ^^^^^^
@@ -276,7 +276,7 @@ function f() {
 >  : ^^^
 
     e&&i;
->e&&i : I | E.Red
+>e&&i : E.Red | I
 >     : ^^^^^^^^^
 >e : E
 >  : ^

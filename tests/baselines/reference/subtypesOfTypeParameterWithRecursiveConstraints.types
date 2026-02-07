@@ -21,9 +21,9 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 
     // ok
     var r1 = true ? t : u;
->r1 : U | T
+>r1 : T | U
 >   : ^^^^^
->true ? t : u : U | T
+>true ? t : u : T | U
 >             : ^^^^^
 >true : true
 >     : ^^^^
@@ -33,9 +33,9 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >  : ^
 
     var r1 = true ? u : t;
->r1 : U | T
+>r1 : T | U
 >   : ^^^^^
->true ? u : t : U | T
+>true ? u : t : T | U
 >             : ^^^^^
 >true : true
 >     : ^^^^
@@ -154,9 +154,9 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 
     // ok
     var r6 = true ? v : new Foo<T>();
->r6 : Foo<T> | V
+>r6 : V | Foo<T>
 >   : ^^^^^^^^^^
->true ? v : new Foo<T>() : Foo<T> | V
+>true ? v : new Foo<T>() : V | Foo<T>
 >                        : ^^^^^^^^^^
 >true : true
 >     : ^^^^
@@ -168,9 +168,9 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >    : ^^^^^^^^^^
 
     var r6 = true ? new Foo<T>() : v;
->r6 : Foo<T> | V
+>r6 : V | Foo<T>
 >   : ^^^^^^^^^^
->true ? new Foo<T>() : v : Foo<T> | V
+>true ? new Foo<T>() : v : V | Foo<T>
 >                        : ^^^^^^^^^^
 >true : true
 >     : ^^^^
@@ -242,9 +242,9 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 
     // ok
     var r9 = true ? v : new Foo<U>();
->r9 : Foo<U> | V
+>r9 : V | Foo<U>
 >   : ^^^^^^^^^^
->true ? v : new Foo<U>() : Foo<U> | V
+>true ? v : new Foo<U>() : V | Foo<U>
 >                        : ^^^^^^^^^^
 >true : true
 >     : ^^^^
@@ -256,9 +256,9 @@ function f<T extends Foo<U>, U extends Foo<T>, V extends Foo<V>>(t: T, u: U, v: 
 >    : ^^^^^^^^^^
 
     var r9 = true ? new Foo<U>() : v;
->r9 : Foo<U> | V
+>r9 : V | Foo<U>
 >   : ^^^^^^^^^^
->true ? new Foo<U>() : v : Foo<U> | V
+>true ? new Foo<U>() : v : V | Foo<U>
 >                        : ^^^^^^^^^^
 >true : true
 >     : ^^^^

@@ -114,7 +114,7 @@ export function MainButton(hyphenProps: HyphenProps): JSX.Element;
 export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >           : ^^^           ^^           ^^^           ^^^         ^^         ^^^           ^^^           ^^           ^^^           ^^^
->props : ButtonProps | LinkProps | HyphenProps
+>props : ButtonProps | HyphenProps | LinkProps
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >JSX : any
 >    : ^^^
@@ -124,7 +124,7 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 >          : ^^^^^^^^^
 >props as LinkProps : LinkProps
 >                   : ^^^^^^^^^
->props : ButtonProps | LinkProps | HyphenProps
+>props : ButtonProps | HyphenProps | LinkProps
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     if(linkProps.to) {
@@ -144,7 +144,7 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 >     : ^^^
 >_buildMainLink : any
 >               : ^^^
->props : ButtonProps | LinkProps | HyphenProps
+>props : ButtonProps | HyphenProps | LinkProps
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
 
@@ -157,7 +157,7 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 >     : ^^^
 >_buildMainButton : any
 >                 : ^^^
->props : ButtonProps | LinkProps | HyphenProps
+>props : ButtonProps | HyphenProps | LinkProps
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 

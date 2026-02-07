@@ -42,7 +42,7 @@ x = "";
 >   : ^^
 
 cond && (x = 0);
->cond && (x = 0) : false | 0
+>cond && (x = 0) : 0 | false
 >                : ^^^^^^^^^
 >cond : boolean
 >     : ^^^^^^^

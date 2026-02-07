@@ -22,7 +22,7 @@ function f(a, _b, c, ___, d,e___, _f) {
 
 
 function f2({_a, __b}) {
->f2 : ({ _a, __b }: { _a: any; __b: any; }) => void
+>f2 : ({ _a, __b }: { __b: any; _a: any; }) => void
 >   : ^           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_a : any
 >   : ^^^

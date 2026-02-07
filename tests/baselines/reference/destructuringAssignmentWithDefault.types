@@ -143,9 +143,9 @@ function f2(options?: [string?, number?]) {
 >   : ^^^^^^^^^^^^^^^^^^
 >(options || {})[0] : string | undefined
 >                   : ^^^^^^^^^^^^^^^^^^
->(options || {}) : [(string | undefined)?, (number | undefined)?] | {}
+>(options || {}) : {} | [(string | undefined)?, (number | undefined)?]
 >                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->options || {} : [(string | undefined)?, (number | undefined)?] | {}
+>options || {} : {} | [(string | undefined)?, (number | undefined)?]
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >options : [(string | undefined)?, (number | undefined)?] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -267,9 +267,9 @@ function f4(options?: [string, number]) {
 >   : ^^^^^^^^^^^^^^^^^^
 >(options || {})[0] : string | undefined
 >                   : ^^^^^^^^^^^^^^^^^^
->(options || {}) : [string, number] | {}
+>(options || {}) : {} | [string, number]
 >                : ^^^^^^^^^^^^^^^^^^^^^
->options || {} : [string, number] | {}
+>options || {} : {} | [string, number]
 >              : ^^^^^^^^^^^^^^^^^^^^^
 >options : [string, number] | undefined
 >        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^

@@ -49,10 +49,10 @@ destructuringParameterDeclaration2.ts(56,9): error TS7031: Binding element 'a' i
 destructuringParameterDeclaration2.ts(56,12): error TS7031: Binding element 'b' implicitly has an 'any' type.
 destructuringParameterDeclaration2.ts(56,15): error TS7031: Binding element 'c' implicitly has an 'any' type.
 destructuringParameterDeclaration2.ts(57,5): error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
-  Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
+  Type '({ x, y, c }: { c: any; x: any; y: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
     Types of parameters '__0' and '__0' are incompatible.
-      Type '{ x: any; y: any; z: any; } | undefined' is not assignable to type '{ x: any; y: any; c: any; }'.
-        Type 'undefined' is not assignable to type '{ x: any; y: any; c: any; }'.
+      Type '{ x: any; y: any; z: any; } | undefined' is not assignable to type '{ c: any; x: any; y: any; }'.
+        Type 'undefined' is not assignable to type '{ c: any; x: any; y: any; }'.
 destructuringParameterDeclaration2.ts(57,9): error TS7031: Binding element 'x' implicitly has an 'any' type.
 destructuringParameterDeclaration2.ts(57,12): error TS7031: Binding element 'y' implicitly has an 'any' type.
 destructuringParameterDeclaration2.ts(57,15): error TS7031: Binding element 'c' implicitly has an 'any' type.
@@ -226,10 +226,10 @@ destructuringParameterDeclaration2.ts(65,34): error TS7031: Binding element 'num
         d4({x, y, c}) { }
         ~~
 !!! error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
-!!! error TS2416:   Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
+!!! error TS2416:   Type '({ x, y, c }: { c: any; x: any; y: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
 !!! error TS2416:     Types of parameters '__0' and '__0' are incompatible.
-!!! error TS2416:       Type '{ x: any; y: any; z: any; } | undefined' is not assignable to type '{ x: any; y: any; c: any; }'.
-!!! error TS2416:         Type 'undefined' is not assignable to type '{ x: any; y: any; c: any; }'.
+!!! error TS2416:       Type '{ x: any; y: any; z: any; } | undefined' is not assignable to type '{ c: any; x: any; y: any; }'.
+!!! error TS2416:         Type 'undefined' is not assignable to type '{ c: any; x: any; y: any; }'.
             ~
 !!! error TS7031: Binding element 'x' implicitly has an 'any' type.
                ~

@@ -2639,7 +2639,7 @@ Type Count: 2,500
 >            : ^^^^^^
 >(monthsByDays[zdt.daysInMonth] || []).concat(zdt) : Temporal.ZonedDateTime[]
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^
->(monthsByDays[zdt.daysInMonth] || []).concat : { (...items: ConcatArray<Temporal.ZonedDateTime>[]): Temporal.ZonedDateTime[]; (...items: (Temporal.ZonedDateTime | ConcatArray<Temporal.ZonedDateTime>)[]): Temporal.ZonedDateTime[]; }
+>(monthsByDays[zdt.daysInMonth] || []).concat : { (...items: ConcatArray<Temporal.ZonedDateTime>[]): Temporal.ZonedDateTime[]; (...items: (ConcatArray<Temporal.ZonedDateTime> | Temporal.ZonedDateTime)[]): Temporal.ZonedDateTime[]; }
 >                                             : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(monthsByDays[zdt.daysInMonth] || []) : Temporal.ZonedDateTime[]
 >                                      : ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -2657,7 +2657,7 @@ Type Count: 2,500
 >            : ^^^^^^
 >[] : never[]
 >   : ^^^^^^^
->concat : { (...items: ConcatArray<Temporal.ZonedDateTime>[]): Temporal.ZonedDateTime[]; (...items: (Temporal.ZonedDateTime | ConcatArray<Temporal.ZonedDateTime>)[]): Temporal.ZonedDateTime[]; }
+>concat : { (...items: ConcatArray<Temporal.ZonedDateTime>[]): Temporal.ZonedDateTime[]; (...items: (ConcatArray<Temporal.ZonedDateTime> | Temporal.ZonedDateTime)[]): Temporal.ZonedDateTime[]; }
 >       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >zdt : Temporal.ZonedDateTime
 >    : ^^^^^^^^^^^^^^^^^^^^^^
@@ -5493,7 +5493,7 @@ Type Count: 2,500
 >            : ^^^^^^
 >(monthsByDays[date.daysInMonth] || []).concat(date) : Temporal.PlainDate[]
 >                                                    : ^^^^^^^^^^^^^^^^^^^^
->(monthsByDays[date.daysInMonth] || []).concat : { (...items: ConcatArray<Temporal.PlainDate>[]): Temporal.PlainDate[]; (...items: (Temporal.PlainDate | ConcatArray<Temporal.PlainDate>)[]): Temporal.PlainDate[]; }
+>(monthsByDays[date.daysInMonth] || []).concat : { (...items: ConcatArray<Temporal.PlainDate>[]): Temporal.PlainDate[]; (...items: (ConcatArray<Temporal.PlainDate> | Temporal.PlainDate)[]): Temporal.PlainDate[]; }
 >                                              : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(monthsByDays[date.daysInMonth] || []) : Temporal.PlainDate[]
 >                                       : ^^^^^^^^^^^^^^^^^^^^
@@ -5511,7 +5511,7 @@ Type Count: 2,500
 >            : ^^^^^^
 >[] : never[]
 >   : ^^^^^^^
->concat : { (...items: ConcatArray<Temporal.PlainDate>[]): Temporal.PlainDate[]; (...items: (Temporal.PlainDate | ConcatArray<Temporal.PlainDate>)[]): Temporal.PlainDate[]; }
+>concat : { (...items: ConcatArray<Temporal.PlainDate>[]): Temporal.PlainDate[]; (...items: (ConcatArray<Temporal.PlainDate> | Temporal.PlainDate)[]): Temporal.PlainDate[]; }
 >       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >date : Temporal.PlainDate
 >     : ^^^^^^^^^^^^^^^^^^
@@ -9327,7 +9327,7 @@ Type Count: 2,500
 >            : ^^^^^^
 >(monthsByDays[dt.daysInMonth] || []).concat(dt) : Temporal.PlainDateTime[]
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^
->(monthsByDays[dt.daysInMonth] || []).concat : { (...items: ConcatArray<Temporal.PlainDateTime>[]): Temporal.PlainDateTime[]; (...items: (Temporal.PlainDateTime | ConcatArray<Temporal.PlainDateTime>)[]): Temporal.PlainDateTime[]; }
+>(monthsByDays[dt.daysInMonth] || []).concat : { (...items: ConcatArray<Temporal.PlainDateTime>[]): Temporal.PlainDateTime[]; (...items: (ConcatArray<Temporal.PlainDateTime> | Temporal.PlainDateTime)[]): Temporal.PlainDateTime[]; }
 >                                            : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(monthsByDays[dt.daysInMonth] || []) : Temporal.PlainDateTime[]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -9345,7 +9345,7 @@ Type Count: 2,500
 >            : ^^^^^^
 >[] : never[]
 >   : ^^^^^^^
->concat : { (...items: ConcatArray<Temporal.PlainDateTime>[]): Temporal.PlainDateTime[]; (...items: (Temporal.PlainDateTime | ConcatArray<Temporal.PlainDateTime>)[]): Temporal.PlainDateTime[]; }
+>concat : { (...items: ConcatArray<Temporal.PlainDateTime>[]): Temporal.PlainDateTime[]; (...items: (ConcatArray<Temporal.PlainDateTime> | Temporal.PlainDateTime)[]): Temporal.PlainDateTime[]; }
 >       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dt : Temporal.PlainDateTime
 >   : ^^^^^^^^^^^^^^^^^^^^^^
@@ -11313,7 +11313,7 @@ Type Count: 2,500
 >            : ^^^^^^
 >(monthsByDays[ym.daysInMonth] || []).concat(ym) : Temporal.PlainYearMonth[]
 >                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^
->(monthsByDays[ym.daysInMonth] || []).concat : { (...items: ConcatArray<Temporal.PlainYearMonth>[]): Temporal.PlainYearMonth[]; (...items: (Temporal.PlainYearMonth | ConcatArray<Temporal.PlainYearMonth>)[]): Temporal.PlainYearMonth[]; }
+>(monthsByDays[ym.daysInMonth] || []).concat : { (...items: ConcatArray<Temporal.PlainYearMonth>[]): Temporal.PlainYearMonth[]; (...items: (ConcatArray<Temporal.PlainYearMonth> | Temporal.PlainYearMonth)[]): Temporal.PlainYearMonth[]; }
 >                                            : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(monthsByDays[ym.daysInMonth] || []) : Temporal.PlainYearMonth[]
 >                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -11331,7 +11331,7 @@ Type Count: 2,500
 >            : ^^^^^^
 >[] : never[]
 >   : ^^^^^^^
->concat : { (...items: ConcatArray<Temporal.PlainYearMonth>[]): Temporal.PlainYearMonth[]; (...items: (Temporal.PlainYearMonth | ConcatArray<Temporal.PlainYearMonth>)[]): Temporal.PlainYearMonth[]; }
+>concat : { (...items: ConcatArray<Temporal.PlainYearMonth>[]): Temporal.PlainYearMonth[]; (...items: (ConcatArray<Temporal.PlainYearMonth> | Temporal.PlainYearMonth)[]): Temporal.PlainYearMonth[]; }
 >       : ^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >ym : Temporal.PlainYearMonth
 >   : ^^^^^^^^^^^^^^^^^^^^^^^

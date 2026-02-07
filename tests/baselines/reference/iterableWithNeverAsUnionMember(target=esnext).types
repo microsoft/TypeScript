@@ -74,8 +74,8 @@ type Circle = Shape & { kind: "circle" };
 function doStuffWithCircle(arg: Circle | [Circle, (newValue: Circle) => void]) {
 >doStuffWithCircle : (arg: Circle | [Circle, (newValue: Circle) => void]) => void
 >                  : ^   ^^                                             ^^^^^^^^^
->arg : ({ kind: "circle"; radius: number; } & { kind: "circle"; }) | [{ kind: "circle"; radius: number; } & { kind: "circle"; }, (newValue: Circle) => void]
->    : ^^^^^^^^^        ^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^        ^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^        ^^      ^^^^^    ^
+>arg : [{ kind: "circle"; radius: number; } & { kind: "circle"; }, (newValue: Circle) => void] | ({ kind: "circle"; radius: number; } & { kind: "circle"; })
+>    : ^^^^^^^^^        ^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^        ^^      ^^^^^    ^^^^^^^^^^^^^        ^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^
 >newValue : { kind: "circle"; radius: number; } & { kind: "circle"; }
 >         : ^^^^^^^^        ^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^
 
@@ -88,8 +88,8 @@ function doStuffWithCircle(arg: Circle | [Circle, (newValue: Circle) => void]) {
 >      : ^^^^^^^^^^^^^^^^
 >isArray : (arg: any) => arg is any[]
 >        : ^   ^^   ^^^^^            
->arg : ({ kind: "circle"; radius: number; } & { kind: "circle"; }) | [{ kind: "circle"; radius: number; } & { kind: "circle"; }, (newValue: Circle) => void]
->    : ^^^^^^^^^        ^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^^^^^^^^^^^        ^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^        ^^      ^^^^^    ^
+>arg : [{ kind: "circle"; radius: number; } & { kind: "circle"; }, (newValue: Circle) => void] | ({ kind: "circle"; radius: number; } & { kind: "circle"; })
+>    : ^^^^^^^^^        ^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^^^        ^^      ^^^^^    ^^^^^^^^^^^^^        ^^^^^^^^^^      ^^^^^^^^^^^^^^        ^^^^
 
     let [value, setValue] = arg; // ok
 >value : { kind: "circle"; radius: number; } & { kind: "circle"; }

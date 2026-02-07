@@ -383,9 +383,9 @@ namespace GH12052 {
 >undefined : Symbol(undefined)
 
     good.type = getAxisType();
->good.type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27), Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32))
+>good.type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32), Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27))
 >good : Symbol(good, Decl(assignmentCompatWithDiscriminatedUnion.ts, 139, 9))
->type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27), Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32))
+>type : Symbol(type, Decl(assignmentCompatWithDiscriminatedUnion.ts, 125, 32), Decl(assignmentCompatWithDiscriminatedUnion.ts, 123, 27))
 >getAxisType : Symbol(getAxisType, Decl(assignmentCompatWithDiscriminatedUnion.ts, 128, 46))
 }
 

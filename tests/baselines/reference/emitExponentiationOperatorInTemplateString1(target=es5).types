@@ -91,7 +91,7 @@ var s;
 `${typeof (t1 ** t2 ** t1) }`;
 >`${typeof (t1 ** t2 ** t1) }` : string
 >                              : ^^^^^^
->typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (t1 ** t2 ** t1) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t1 ** t2 ** t1) : number
 >                 : ^^^^^^
@@ -113,7 +113,7 @@ var s;
 >                            : ^^^^^^
 >1 : 1
 >  : ^
->typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (t1 ** t2 ** t1) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t1 ** t2 ** t1) : number
 >                 : ^^^^^^
@@ -251,7 +251,7 @@ var s;
 `${typeof (t1 ** t2 ** t1)}${typeof (t1 ** t2 ** t1)}`;
 >`${typeof (t1 ** t2 ** t1)}${typeof (t1 ** t2 ** t1)}` : string
 >                                                       : ^^^^^^
->typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (t1 ** t2 ** t1) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t1 ** t2 ** t1) : number
 >                 : ^^^^^^
@@ -265,7 +265,7 @@ var s;
 >   : ^^^^^^
 >t1 : number
 >   : ^^^^^^
->typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (t1 ** t2 ** t1) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t1 ** t2 ** t1) : number
 >                 : ^^^^^^
@@ -403,7 +403,7 @@ var s;
 `${typeof (t1 ** t2 ** t1) } hello world ${typeof (t1 ** t2 ** t1) }`;
 >`${typeof (t1 ** t2 ** t1) } hello world ${typeof (t1 ** t2 ** t1) }` : string
 >                                                                      : ^^^^^^
->typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (t1 ** t2 ** t1) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t1 ** t2 ** t1) : number
 >                 : ^^^^^^
@@ -417,7 +417,7 @@ var s;
 >   : ^^^^^^
 >t1 : number
 >   : ^^^^^^
->typeof (t1 ** t2 ** t1) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (t1 ** t2 ** t1) : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >(t1 ** t2 ** t1) : number
 >                 : ^^^^^^

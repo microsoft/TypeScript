@@ -105,7 +105,7 @@ type WebpackPluginFunction = (this: MyCompiler, compiler: MyCompiler) => void;
 
 interface Optimization {
   minimizer?: (WebpackPluginInstance | WebpackPluginFunction)[];
->minimizer : (WebpackPluginInstance | WebpackPluginFunction)[] | undefined
+>minimizer : (WebpackPluginFunction | WebpackPluginInstance)[] | undefined
 >          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 declare const A: <T, P extends keyof T>(

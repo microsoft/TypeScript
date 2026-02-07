@@ -87,13 +87,13 @@ export function createReactSingleSelect<
 >      : ^^^^^
 
                 value={props.value}
->value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
+>value : Option<ExtractValueType<WrappedProps>> | ExtractValueType<WrappedProps> | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->props.value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
+>props.value : Option<ExtractValueType<WrappedProps>> | ExtractValueType<WrappedProps> | undefined
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >props : Omit<Omit<WrappedProps, "multi">, keyof Omit<WrappedProps, "multi"> & keyof Props<ExtractValueType<WrappedProps_1>>> & Props<ExtractValueType<WrappedProps>> & { children?: React.ReactNode; }
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->value : ExtractValueType<WrappedProps> | Option<ExtractValueType<WrappedProps>> | undefined
+>value : Option<ExtractValueType<WrappedProps>> | ExtractValueType<WrappedProps> | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
                 onChange={(value) => {
@@ -1182,7 +1182,7 @@ export interface ReactSelectProps<TValue = OptionValues> extends React.Props<Rea
      * initial field value
      */
     value?: Option<TValue> | Options<TValue> | string | string[] | number | number[] | boolean;
->value : string | number | boolean | Option<TValue> | Options<TValue> | string[] | number[] | undefined
+>value : string | number | boolean | string[] | number[] | Option<TValue> | Options<TValue> | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     /**

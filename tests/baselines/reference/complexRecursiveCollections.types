@@ -63,7 +63,7 @@ interface Collection<K, V> {
 >       : ^^^^^^^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
->reduction : V | R
+>reduction : R | V
 >          : ^^^^^
 >value : V
 >      : ^
@@ -153,7 +153,7 @@ declare namespace Immutable {
 >        : ^^   ^^               ^^        ^^                                                       ^^    ^^^                      ^^^^^   ^^^^^^^^^^^^^
 >key : string | number
 >    : ^^^^^^^^^^^^^^^
->sequence : Collection.Keyed<string, any> | Collection.Indexed<any>
+>sequence : Collection.Indexed<any> | Collection.Keyed<string, any>
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
@@ -357,7 +357,7 @@ declare namespace Immutable {
     merge(...collections: Array<Collection.Indexed<T> | Array<T>>): this;
 >merge : (...collections: Array<Collection.Indexed<T> | Array<T>>) => this
 >      : ^^^^           ^^                                       ^^^^^    
->collections : (Collection.Indexed<T> | T[])[]
+>collections : (T[] | Collection.Indexed<T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
@@ -373,7 +373,7 @@ declare namespace Immutable {
 >       : ^
 >key : number
 >    : ^^^^^^
->collections : (Collection.Indexed<T> | T[])[]
+>collections : (T[] | Collection.Indexed<T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
@@ -381,7 +381,7 @@ declare namespace Immutable {
     mergeDeep(...collections: Array<Collection.Indexed<T> | Array<T>>): this;
 >mergeDeep : (...collections: Array<Collection.Indexed<T> | Array<T>>) => this
 >          : ^^^^           ^^                                       ^^^^^    
->collections : (Collection.Indexed<T> | T[])[]
+>collections : (T[] | Collection.Indexed<T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
@@ -397,7 +397,7 @@ declare namespace Immutable {
 >       : ^
 >key : number
 >    : ^^^^^^
->collections : (Collection.Indexed<T> | T[])[]
+>collections : (T[] | Collection.Indexed<T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >Collection : any
 >           : ^^^
@@ -1109,25 +1109,25 @@ declare namespace Immutable {
     union(...collections: Array<Collection<any, T> | Array<T>>): this;
 >union : (...collections: Array<Collection<any, T> | Array<T>>) => this
 >      : ^^^^           ^^                                    ^^^^^    
->collections : (Collection<any, T> | T[])[]
+>collections : (T[] | Collection<any, T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     merge(...collections: Array<Collection<any, T> | Array<T>>): this;
 >merge : (...collections: Array<Collection<any, T> | Array<T>>) => this
 >      : ^^^^           ^^                                    ^^^^^    
->collections : (Collection<any, T> | T[])[]
+>collections : (T[] | Collection<any, T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     intersect(...collections: Array<Collection<any, T> | Array<T>>): this;
 >intersect : (...collections: Array<Collection<any, T> | Array<T>>) => this
 >          : ^^^^           ^^                                    ^^^^^    
->collections : (Collection<any, T> | T[])[]
+>collections : (T[] | Collection<any, T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     subtract(...collections: Array<Collection<any, T> | Array<T>>): this;
 >subtract : (...collections: Array<Collection<any, T> | Array<T>>) => this
 >         : ^^^^           ^^                                    ^^^^^    
->collections : (Collection<any, T> | T[])[]
+>collections : (T[] | Collection<any, T>)[]
 >            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
     // Transient changes
@@ -1560,11 +1560,11 @@ declare namespace Immutable {
 
     export interface Class<T extends Object> {
       (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
->values : Partial<T> | Iterable<[string, any]> | undefined
+>values : Iterable<[string, any]> | Partial<T> | undefined
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
       new (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
->values : Partial<T> | Iterable<[string, any]> | undefined
+>values : Iterable<[string, any]> | Partial<T> | undefined
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     }
     export interface Instance<T extends Object> {
@@ -3360,7 +3360,7 @@ declare namespace Immutable {
 >       : ^^^^^^^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
->reduction : V | R
+>reduction : R | V
 >          : ^^^^^
 >value : V
 >      : ^
@@ -3392,7 +3392,7 @@ declare namespace Immutable {
 >            : ^^^^^^^^       ^^                                                     ^^                ^^   ^^       ^^^   ^^^   ^^^ ^^       ^^                                                     ^^^ ^^^
 >reducer : (reduction: V | R, value: V, key: K, iter: this) => R
 >        : ^         ^^     ^^     ^^ ^^   ^^ ^^    ^^    ^^^^^ 
->reduction : V | R
+>reduction : R | V
 >          : ^^^^^
 >value : V
 >      : ^

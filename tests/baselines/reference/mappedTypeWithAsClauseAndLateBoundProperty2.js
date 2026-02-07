@@ -62,13 +62,10 @@ export declare const thing: {
     findIndex: (predicate: (value: number, index: number, obj: number[]) => unknown, thisArg?: any) => number;
     fill: (value: number, start?: number, end?: number) => number[];
     copyWithin: (target: number, start: number, end?: number) => number[];
+    [Symbol.iterator]: () => ArrayIterator<number>;
     entries: () => ArrayIterator<[number, number]>;
     keys: () => ArrayIterator<number>;
     values: () => ArrayIterator<number>;
-    includes: (searchElement: number, fromIndex?: number) => boolean;
-    flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This | undefined) => U[];
-    flat: <A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D>[];
-    [Symbol.iterator]: () => ArrayIterator<number>;
     readonly [Symbol.unscopables]: {
         [x: number]: boolean | undefined;
         length?: boolean | undefined;
@@ -97,13 +94,16 @@ export declare const thing: {
         findIndex?: boolean | undefined;
         fill?: boolean | undefined;
         copyWithin?: boolean | undefined;
+        [Symbol.iterator]?: boolean | undefined;
         entries?: boolean | undefined;
         keys?: boolean | undefined;
         values?: boolean | undefined;
+        readonly [Symbol.unscopables]?: boolean | undefined;
         includes?: boolean | undefined;
         flatMap?: boolean | undefined;
         flat?: boolean | undefined;
-        [Symbol.iterator]?: boolean | undefined;
-        readonly [Symbol.unscopables]?: boolean | undefined;
     };
+    includes: (searchElement: number, fromIndex?: number) => boolean;
+    flatMap: <U, This = undefined>(callback: (this: This, value: number, index: number, array: number[]) => U | readonly U[], thisArg?: This | undefined) => U[];
+    flat: <A, D extends number = 1>(this: A, depth?: D | undefined) => FlatArray<A, D>[];
 };

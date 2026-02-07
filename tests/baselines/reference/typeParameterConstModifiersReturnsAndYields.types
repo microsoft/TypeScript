@@ -447,9 +447,9 @@ function outer1<const T>(cb: () => T) {
 >       : ^^^^^^^ ^^   ^^       ^^^^^^^^^^^^^^
 }
 const nestedResult1 = outer1(() => 1)(() => "foo");
->nestedResult1 : (1 | "foo")[]
+>nestedResult1 : ("foo" | 1)[]
 >              : ^^^^^^^^^^^^^
->outer1(() => 1)(() => "foo") : (1 | "foo")[]
+>outer1(() => 1)(() => "foo") : ("foo" | 1)[]
 >                             : ^^^^^^^^^^^^^
 >outer1(() => 1) : <const U>(cb2: () => U) => (1 | U)[]
 >                : ^^^^^^^ ^^   ^^^^^^^^^^^^^^^^^^^^^^^
