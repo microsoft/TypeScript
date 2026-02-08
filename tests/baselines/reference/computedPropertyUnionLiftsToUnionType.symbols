@@ -1,0 +1,112 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyUnionLiftsToUnionType.ts] ////
+
+=== computedPropertyUnionLiftsToUnionType.ts ===
+declare var ab: 'a' | 'b';
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+
+declare var cd: 'c' | 'd';
+>cd : Symbol(cd, Decl(computedPropertyUnionLiftsToUnionType.ts, 1, 11))
+
+declare var onetwo: 1 | 2;
+>onetwo : Symbol(onetwo, Decl(computedPropertyUnionLiftsToUnionType.ts, 2, 11))
+
+enum Alphabet {
+>Alphabet : Symbol(Alphabet, Decl(computedPropertyUnionLiftsToUnionType.ts, 2, 26))
+
+    Aleph,
+>Aleph : Symbol(Alphabet.Aleph, Decl(computedPropertyUnionLiftsToUnionType.ts, 3, 15))
+
+    Bet,
+>Bet : Symbol(Alphabet.Bet, Decl(computedPropertyUnionLiftsToUnionType.ts, 4, 10))
+}
+declare var alphabet: Alphabet;
+>alphabet : Symbol(alphabet, Decl(computedPropertyUnionLiftsToUnionType.ts, 7, 11))
+>Alphabet : Symbol(Alphabet, Decl(computedPropertyUnionLiftsToUnionType.ts, 2, 26))
+
+// Basic: union literal key lifts to union of object types
+const x: { a: string } | { b: string } = { [ab]: 'hi' }
+>x : Symbol(x, Decl(computedPropertyUnionLiftsToUnionType.ts, 10, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 10, 10))
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 10, 26))
+>[ab] : Symbol([ab], Decl(computedPropertyUnionLiftsToUnionType.ts, 10, 42))
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+
+// Multiple unions create cross-product
+const y: { a: string, m: number, c: string }
+>y : Symbol(y, Decl(computedPropertyUnionLiftsToUnionType.ts, 13, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 13, 10))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 13, 21))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 13, 32))
+
+    | { a: string, m: number, d: string }
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 14, 7))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 14, 18))
+>d : Symbol(d, Decl(computedPropertyUnionLiftsToUnionType.ts, 14, 29))
+
+    | { b: string, m: number, c: string }
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 15, 7))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 15, 18))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 15, 29))
+
+    | { b: string, m: number, d: string } = { [ab]: 'hi', m: 1, [cd]: 'there' }
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 7))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 18))
+>d : Symbol(d, Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 29))
+>[ab] : Symbol([ab], Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 45))
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 57))
+>[cd] : Symbol([cd], Decl(computedPropertyUnionLiftsToUnionType.ts, 16, 63))
+>cd : Symbol(cd, Decl(computedPropertyUnionLiftsToUnionType.ts, 1, 11))
+
+// Union + spread
+const s: { a: string, c: string } | { b: string, c: string } = { [ab]: 'hi', ...{ c: 'no' }}
+>s : Symbol(s, Decl(computedPropertyUnionLiftsToUnionType.ts, 19, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 19, 10))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 19, 21))
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 19, 37))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 19, 48))
+>[ab] : Symbol([ab], Decl(computedPropertyUnionLiftsToUnionType.ts, 19, 64))
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>c : Symbol(c, Decl(computedPropertyUnionLiftsToUnionType.ts, 19, 81))
+
+// Number literal union
+const n: { "1": string } | { "2": string } = { [onetwo]: 'hi' }
+>n : Symbol(n, Decl(computedPropertyUnionLiftsToUnionType.ts, 22, 5))
+>"1" : Symbol("1", Decl(computedPropertyUnionLiftsToUnionType.ts, 22, 10))
+>"2" : Symbol("2", Decl(computedPropertyUnionLiftsToUnionType.ts, 22, 28))
+>[onetwo] : Symbol([onetwo], Decl(computedPropertyUnionLiftsToUnionType.ts, 22, 46))
+>onetwo : Symbol(onetwo, Decl(computedPropertyUnionLiftsToUnionType.ts, 2, 11))
+
+// Enum literal union
+const e: { "0": string } | { "1": string } = { [alphabet]: 'hi' }
+>e : Symbol(e, Decl(computedPropertyUnionLiftsToUnionType.ts, 25, 5))
+>"0" : Symbol("0", Decl(computedPropertyUnionLiftsToUnionType.ts, 25, 10))
+>"1" : Symbol("1", Decl(computedPropertyUnionLiftsToUnionType.ts, 25, 28))
+>[alphabet] : Symbol([alphabet], Decl(computedPropertyUnionLiftsToUnionType.ts, 25, 46))
+>alphabet : Symbol(alphabet, Decl(computedPropertyUnionLiftsToUnionType.ts, 7, 11))
+
+// Soundness check: accessing non-existent property should be error
+const obj = { [ab]: 1 }
+>obj : Symbol(obj, Decl(computedPropertyUnionLiftsToUnionType.ts, 28, 5))
+>[ab] : Symbol([ab], Decl(computedPropertyUnionLiftsToUnionType.ts, 28, 13))
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+
+// obj should be { a: number } | { b: number }, not { a: number; b: number }
+// So accessing both .a and .b should require a type guard
+
+// Methods and getters alongside union computed property
+const m: { a: string, m(): number, p: number } | { b: string, m(): number, p: number } =
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 5))
+>a : Symbol(a, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 10))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 21))
+>p : Symbol(p, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 34))
+>b : Symbol(b, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 50))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 61))
+>p : Symbol(p, Decl(computedPropertyUnionLiftsToUnionType.ts, 33, 74))
+
+    { [ab]: 'hi', m() { return 1 }, get p() { return 2 } }
+>[ab] : Symbol([ab], Decl(computedPropertyUnionLiftsToUnionType.ts, 34, 5))
+>ab : Symbol(ab, Decl(computedPropertyUnionLiftsToUnionType.ts, 0, 11))
+>m : Symbol(m, Decl(computedPropertyUnionLiftsToUnionType.ts, 34, 17))
+>p : Symbol(p, Decl(computedPropertyUnionLiftsToUnionType.ts, 34, 35))
+

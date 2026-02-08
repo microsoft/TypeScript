@@ -33581,6 +33581,52 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                     }
                 }
                 objectFlags |= getObjectFlags(type) & ObjectFlags.PropagatingFlags;
+
+                // When a computed property name has a union literal type (e.g., key: 'a' | 'b'),
+                // lift to a union of object types: { a: V } | { b: V }
+                // This is sound because at runtime { [key]: value } creates exactly ONE property.
+                // See: https://github.com/microsoft/TypeScript/issues/13948
+                if (
+                    computedNameType &&
+                    (computedNameType.flags & TypeFlags.Union) &&
+                    every((computedNameType as UnionType).types, isTypeUsableAsPropertyName)
+                ) {
+                    // Flush any accumulated properties into the spread
+                    if (propertiesArray.length > 0) {
+                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, objectFlags, inConstContext);
+                        propertiesArray = [];
+                        propertiesTable = createSymbolTable();
+                        hasComputedStringProperty = false;
+                        hasComputedNumberProperty = false;
+                        hasComputedSymbolProperty = false;
+                    }
+                    // Create one object type per union member, then union them
+                    const memberTypes: Type[] = [];
+                    for (const literalType of (computedNameType as UnionType).types) {
+                        const propName = getPropertyNameFromType(literalType as StringLiteralType | NumberLiteralType | UniqueESSymbolType);
+                        const prop = createSymbol(SymbolFlags.Property | member.flags, propName, checkFlags | CheckFlags.Late);
+                        prop.links.nameType = literalType;
+                        prop.declarations = member.declarations;
+                        prop.parent = member.parent;
+                        if (member.valueDeclaration) {
+                            prop.valueDeclaration = member.valueDeclaration;
+                        }
+                        prop.links.type = type;
+                        prop.links.target = member;
+
+                        const singlePropTable = createSymbolTable();
+                        singlePropTable.set(propName, prop);
+                        const singleObjType = createAnonymousType(node.symbol, singlePropTable, emptyArray, emptyArray, emptyArray);
+                        singleObjType.objectFlags |= objectFlags | ObjectFlags.ObjectLiteral | ObjectFlags.ContainsObjectOrArrayLiteral;
+                        memberTypes.push(singleObjType);
+                    }
+                    if (memberTypes.length > 0) {
+                        spread = getSpreadType(spread, getUnionType(memberTypes), node.symbol, objectFlags, inConstContext);
+                    }
+                    offset = propertiesArray.length;
+                    continue;
+                }
+
                 const nameType = computedNameType && isTypeUsableAsPropertyName(computedNameType) ? computedNameType : undefined;
                 const prop = nameType ?
                     createSymbol(SymbolFlags.Property | member.flags, getPropertyNameFromType(nameType), checkFlags | CheckFlags.Late) :

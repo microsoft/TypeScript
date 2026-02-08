@@ -1,0 +1,213 @@
+//// [tests/cases/conformance/es6/computedProperties/computedPropertyUnionLiftsToUnionType.ts] ////
+
+=== computedPropertyUnionLiftsToUnionType.ts ===
+declare var ab: 'a' | 'b';
+>ab : "a" | "b"
+>   : ^^^^^^^^^
+
+declare var cd: 'c' | 'd';
+>cd : "c" | "d"
+>   : ^^^^^^^^^
+
+declare var onetwo: 1 | 2;
+>onetwo : 1 | 2
+>       : ^^^^^
+
+enum Alphabet {
+>Alphabet : Alphabet
+>         : ^^^^^^^^
+
+    Aleph,
+>Aleph : Alphabet.Aleph
+>      : ^^^^^^^^^^^^^^
+
+    Bet,
+>Bet : Alphabet.Bet
+>    : ^^^^^^^^^^^^
+}
+declare var alphabet: Alphabet;
+>alphabet : Alphabet
+>         : ^^^^^^^^
+
+// Basic: union literal key lifts to union of object types
+const x: { a: string } | { b: string } = { [ab]: 'hi' }
+>x : { a: string; } | { b: string; }
+>  : ^^^^^      ^^^^^^^^^^^      ^^^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>{ [ab]: 'hi' } : { a: string; } | { b: string; }
+>               : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ab] : string
+>     : ^^^^^^
+>ab : "a" | "b"
+>   : ^^^^^^^^^
+>'hi' : "hi"
+>     : ^^^^
+
+// Multiple unions create cross-product
+const y: { a: string, m: number, c: string }
+>y : { a: string; m: number; c: string; } | { a: string; m: number; d: string; } | { b: string; m: number; c: string; } | { b: string; m: number; d: string; }
+>  : ^^^^^      ^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^^^      ^^^
+>a : string
+>  : ^^^^^^
+>m : number
+>  : ^^^^^^
+>c : string
+>  : ^^^^^^
+
+    | { a: string, m: number, d: string }
+>a : string
+>  : ^^^^^^
+>m : number
+>  : ^^^^^^
+>d : string
+>  : ^^^^^^
+
+    | { b: string, m: number, c: string }
+>b : string
+>  : ^^^^^^
+>m : number
+>  : ^^^^^^
+>c : string
+>  : ^^^^^^
+
+    | { b: string, m: number, d: string } = { [ab]: 'hi', m: 1, [cd]: 'there' }
+>b : string
+>  : ^^^^^^
+>m : number
+>  : ^^^^^^
+>d : string
+>  : ^^^^^^
+>{ [ab]: 'hi', m: 1, [cd]: 'there' } : { c: string; m: number; a: string; } | { d: string; m: number; a: string; } | { c: string; m: number; b: string; } | { d: string; m: number; b: string; }
+>                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ab] : string
+>     : ^^^^^^
+>ab : "a" | "b"
+>   : ^^^^^^^^^
+>'hi' : "hi"
+>     : ^^^^
+>m : number
+>  : ^^^^^^
+>1 : 1
+>  : ^
+>[cd] : string
+>     : ^^^^^^
+>cd : "c" | "d"
+>   : ^^^^^^^^^
+>'there' : "there"
+>        : ^^^^^^^
+
+// Union + spread
+const s: { a: string, c: string } | { b: string, c: string } = { [ab]: 'hi', ...{ c: 'no' }}
+>s : { a: string; c: string; } | { b: string; c: string; }
+>  : ^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^      ^^^
+>a : string
+>  : ^^^^^^
+>c : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>c : string
+>  : ^^^^^^
+>{ [ab]: 'hi', ...{ c: 'no' }} : { c: string; a: string; } | { c: string; b: string; }
+>                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ab] : string
+>     : ^^^^^^
+>ab : "a" | "b"
+>   : ^^^^^^^^^
+>'hi' : "hi"
+>     : ^^^^
+>{ c: 'no' } : { c: string; }
+>            : ^^^^^^^^^^^^^^
+>c : string
+>  : ^^^^^^
+>'no' : "no"
+>     : ^^^^
+
+// Number literal union
+const n: { "1": string } | { "2": string } = { [onetwo]: 'hi' }
+>n : { "1": string; } | { "2": string; }
+>  : ^^^^^^^      ^^^^^^^^^^^^^      ^^^
+>"1" : string
+>    : ^^^^^^
+>"2" : string
+>    : ^^^^^^
+>{ [onetwo]: 'hi' } : { 1: string; } | { 2: string; }
+>                   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[onetwo] : string
+>         : ^^^^^^
+>onetwo : 1 | 2
+>       : ^^^^^
+>'hi' : "hi"
+>     : ^^^^
+
+// Enum literal union
+const e: { "0": string } | { "1": string } = { [alphabet]: 'hi' }
+>e : { "0": string; } | { "1": string; }
+>  : ^^^^^^^      ^^^^^^^^^^^^^      ^^^
+>"0" : string
+>    : ^^^^^^
+>"1" : string
+>    : ^^^^^^
+>{ [alphabet]: 'hi' } : { 0: string; } | { 1: string; }
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[alphabet] : string
+>           : ^^^^^^
+>alphabet : Alphabet
+>         : ^^^^^^^^
+>'hi' : "hi"
+>     : ^^^^
+
+// Soundness check: accessing non-existent property should be error
+const obj = { [ab]: 1 }
+>obj : { a: number; } | { b: number; }
+>    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ [ab]: 1 } : { a: number; } | { b: number; }
+>            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ab] : number
+>     : ^^^^^^
+>ab : "a" | "b"
+>   : ^^^^^^^^^
+>1 : 1
+>  : ^
+
+// obj should be { a: number } | { b: number }, not { a: number; b: number }
+// So accessing both .a and .b should require a type guard
+
+// Methods and getters alongside union computed property
+const m: { a: string, m(): number, p: number } | { b: string, m(): number, p: number } =
+>m : { a: string; m(): number; p: number; } | { b: string; m(): number; p: number; }
+>  : ^^^^^      ^^^^^^^      ^^^^^      ^^^^^^^^^^^      ^^^^^^^      ^^^^^      ^^^
+>a : string
+>  : ^^^^^^
+>m : () => number
+>  : ^^^^^^      
+>p : number
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>m : () => number
+>  : ^^^^^^      
+>p : number
+>  : ^^^^^^
+
+    { [ab]: 'hi', m() { return 1 }, get p() { return 2 } }
+>{ [ab]: 'hi', m() { return 1 }, get p() { return 2 } } : { m(): number; p: number; a: string; } | { m(): number; p: number; b: string; }
+>                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[ab] : string
+>     : ^^^^^^
+>ab : "a" | "b"
+>   : ^^^^^^^^^
+>'hi' : "hi"
+>     : ^^^^
+>m : () => number
+>  : ^^^^^^^^^^^^
+>1 : 1
+>  : ^
+>p : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+
