@@ -241,6 +241,11 @@ export class CompilationResult {
     }
 }
 
+function getProgramErrors(program: ts.Program, captureSuggestions?: boolean) {
+    const preEmitErrors = ts.getPreEmitDiagnostics(program);
+    return captureSuggestions ? ts.concatenate(preEmitErrors, ts.flatMap(program.getSourceFiles(), f => program.getSuggestionDiagnostics(f))) : preEmitErrors;
+}
+
 export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | undefined, compilerOptions: ts.CompilerOptions, typeScriptVersion?: string, captureSuggestions?: boolean): CompilationResult {
     if (compilerOptions.project || !rootFiles || rootFiles.length === 0) {
         const project = readProject(host.parseConfigHost, compilerOptions.project, compilerOptions);
@@ -264,18 +269,13 @@ export function compileFiles(host: fakes.CompilerHost, rootFiles: string[] | und
     // pre-emit/post-emit error comparison requires declaration emit twice, which can be slow. If it's unlikely to flag any error consistency issues
     // and if the test is running `skipLibCheck` - an indicator that we want the tets to run quickly - skip the before/after error comparison, too
     const skipErrorComparison = ts.length(rootFiles) >= 100 || (!!compilerOptions.skipLibCheck && !!compilerOptions.declaration);
-    const preProgram = !skipErrorComparison ? ts.createProgram({ rootNames: rootFiles || [], options: { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host, typeScriptVersion }) : undefined;
-    let preErrors = preProgram && ts.getPreEmitDiagnostics(preProgram);
-    if (preProgram && captureSuggestions) {
-        preErrors = ts.concatenate(preErrors, ts.flatMap(preProgram.getSourceFiles(), f => preProgram.getSuggestionDiagnostics(f)));
-    }
+    let preProgram = !skipErrorComparison ? ts.createProgram({ rootNames: rootFiles || [], options: { ...compilerOptions, configFile: compilerOptions.configFile, traceResolution: false }, host, typeScriptVersion }) : undefined;
+    const preErrors = preProgram && getProgramErrors(preProgram, captureSuggestions);
+    preProgram = undefined; // free memory early
 
     const program = ts.createProgram({ rootNames: rootFiles || [], options: compilerOptions, host, typeScriptVersion });
     const emitResult = program.emit();
-    let postErrors = ts.getPreEmitDiagnostics(program);
-    if (captureSuggestions) {
-        postErrors = ts.concatenate(postErrors, ts.flatMap(program.getSourceFiles(), f => program.getSuggestionDiagnostics(f)));
-    }
+    const postErrors = getProgramErrors(program, captureSuggestions);
     const longerErrors = ts.length(preErrors) > postErrors.length ? preErrors : postErrors;
     const shorterErrors = longerErrors === preErrors ? postErrors : preErrors;
     const errors = preErrors && (preErrors.length !== postErrors.length) ? [
