@@ -28027,7 +28027,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         // We only construct maps for unions with many non-primitive constituents.
         if (
             types.length < 10 || getObjectFlags(unionType) & ObjectFlags.PrimitiveUnion ||
-            countWhere(types, t => !!(t.flags & (TypeFlags.Object | TypeFlags.InstantiableNonPrimitive))) < 10
+            countWhere(types, t => !!(t.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive))) < 10
         ) {
             return undefined;
         }
@@ -28035,7 +28035,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // The candidate key property name is the name of the first property with a unit type in one of the
             // constituent types.
             const keyPropertyName = forEach(types, t =>
-                t.flags & (TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ?
+                t.flags & (TypeFlags.Object | TypeFlags.Intersection | TypeFlags.InstantiableNonPrimitive) ?
                     forEach(getPropertiesOfType(t), p => isUnitType(getTypeOfSymbol(p)) ? p.escapedName : undefined) :
                     undefined);
             const mapByKeyProperty = keyPropertyName && mapTypesByKeyProperty(types, keyPropertyName);
