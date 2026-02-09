@@ -41,6 +41,12 @@ const (
 	ContainerFlagsIsThisContainer                                  ContainerFlags = 1 << 8
 )
 
+type ExpandoAssignmentInfo struct {
+	node                *ast.Node
+	container           *ast.Node
+	blockScopeContainer *ast.Node
+}
+
 type Binder struct {
 	file            *ast.SourceFile
 	bindFunc        func(*ast.Node) bool
@@ -73,6 +79,7 @@ type Binder struct {
 	flowNodePool            core.Pool[ast.FlowNode]
 	flowListPool            core.Pool[ast.FlowList]
 	singleDeclarationsPool  core.Pool[*ast.Node]
+	expandoAssignments      []ExpandoAssignmentInfo
 }
 
 func (b *Binder) options() core.SourceFileAffectingCompilerOptions {
@@ -123,6 +130,7 @@ func bindSourceFile(file *ast.SourceFile) {
 		b.inStrictMode = b.options().BindInStrictMode && !file.IsDeclarationFile || ast.IsExternalModule(file)
 		b.unreachableFlow = b.newFlowNode(ast.FlowFlagsUnreachable)
 		b.bind(file.AsNode())
+		b.bindDeferredExpandoAssignments()
 		file.SymbolCount = b.symbolCount
 		file.ClassifiableNames = b.classifiableNames
 	})
@@ -1011,6 +1019,22 @@ func addLateBoundAssignmentDeclarationToSymbol(node *ast.Node, symbol *ast.Symbo
 }
 
 func (b *Binder) bindExpandoPropertyAssignment(node *ast.Node) {
+	b.expandoAssignments = append(b.expandoAssignments, ExpandoAssignmentInfo{
+		node:                node,
+		container:           b.container,
+		blockScopeContainer: b.blockScopeContainer,
+	})
+}
+
+func (b *Binder) bindDeferredExpandoAssignments() {
+	for _, info := range b.expandoAssignments {
+		b.container = info.container
+		b.blockScopeContainer = info.blockScopeContainer
+		b.bindDeferredExpandoAssignment(info.node)
+	}
+}
+
+func (b *Binder) bindDeferredExpandoAssignment(node *ast.Node) {
 	parent := getParentOfPropertyAssignment(node)
 	symbol := b.lookupEntity(parent, b.blockScopeContainer)
 	if symbol == nil {
@@ -1021,7 +1045,11 @@ func (b *Binder) bindExpandoPropertyAssignment(node *ast.Node) {
 			b.bindAnonymousDeclaration(node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.InternalSymbolNameComputed)
 			addLateBoundAssignmentDeclarationToSymbol(node, symbol)
 		} else {
-			b.declareSymbol(ast.GetExports(symbol), symbol, node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsPropertyExcludes)
+			// We declare expandos only when there are no non-expando declarations for that name.
+			exports := ast.GetExports(symbol)
+			if existing := exports[b.getDeclarationName(node)]; existing == nil || existing.Flags&ast.SymbolFlagsAssignment != 0 {
+				b.declareSymbol(exports, symbol, node, ast.SymbolFlagsProperty|ast.SymbolFlagsAssignment, ast.SymbolFlagsPropertyExcludes)
+			}
 		}
 	}
 }

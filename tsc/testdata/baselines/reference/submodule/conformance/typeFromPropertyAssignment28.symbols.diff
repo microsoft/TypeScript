@@ -12,13 +12,16 @@
  >p : Symbol(C.p, Decl(a.js, 1, 25))
 
  // Property assignment does nothing.
-@@= skipped -11, +11 lines =@@
+@@= skipped -10, +10 lines =@@
+ // and that only works on classes with no superclass.
  // (Object.defineProperty isn't recognised as a JS special assignment right now.)
  C.prototype = { q: 2 };
- >C.prototype : Symbol(C.prototype, Decl(a.js, 1, 41))
+->C.prototype : Symbol(C.prototype, Decl(a.js, 1, 41))
 ->C : Symbol(C, Decl(a.js, 0, 0), Decl(a.js, 1, 41))
+->prototype : Symbol(C.prototype, Decl(a.js, 1, 41))
++>C.prototype : Symbol(C.prototype)
 +>C : Symbol(C, Decl(a.js, 0, 0))
- >prototype : Symbol(C.prototype, Decl(a.js, 1, 41))
++>prototype : Symbol(C.prototype)
  >q : Symbol(q, Decl(a.js, 6, 15))
 
  const c = new C()
