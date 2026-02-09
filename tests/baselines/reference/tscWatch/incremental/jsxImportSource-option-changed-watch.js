@@ -272,7 +272,10 @@ node_modules/preact/jsx-runtime/index.d.ts
   Imported via "preact/jsx-runtime" from file 'index.tsx' with packageId 'preact/jsx-runtime/index.d.ts@0.0.1' to import 'jsx' and 'jsxs' factory functions
 index.tsx
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in index.tsx[90m:1[0m
+
+ Watching for file changes.
 
 
 

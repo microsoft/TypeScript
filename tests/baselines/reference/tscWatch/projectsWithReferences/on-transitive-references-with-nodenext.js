@@ -350,7 +350,10 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:8[0m
+
+ Watching for file changes.
 
 
 
@@ -627,7 +630,10 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:8[0m
+
+ Watching for file changes.
 
 
 
@@ -803,7 +809,10 @@ nrefs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:8[0m
+
+ Watching for file changes.
 
 
 
@@ -1022,7 +1031,10 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:8[0m
+
+ Watching for file changes.
 
 
 
@@ -1226,7 +1238,10 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:8[0m
+
+ Watching for file changes.
 
 
 
@@ -1418,7 +1433,10 @@ b.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:8[0m
+
+ Watching for file changes.
 
 
 
@@ -1599,7 +1617,10 @@ b.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: tsconfig.c.json[90m:8[0m
+
+ Watching for file changes.
 
 
 
@@ -1789,7 +1810,10 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:8[0m
+
+ Watching for file changes.
 
 
 
@@ -1969,7 +1993,13 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  tsconfig.b.json[90m:17[0m
+     1  tsconfig.c.json[90m:8[0m
+ Watching for file changes.
 
 
 
@@ -2152,7 +2182,10 @@ refs/a.d.ts
 c.ts
   Part of 'files' list in tsconfig.json
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:8[0m
+
+ Watching for file changes.
 
 
 

@@ -48,7 +48,10 @@ Output::
 [7m1[0m let compiler = new Compiler(); for (let i = 0; j < 5; i++) {}
 [7m [0m [91m                                               ~[0m
 
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: index.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 

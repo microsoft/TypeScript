@@ -280,7 +280,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:6[0m
+
+ Watching for file changes.
 
 
 

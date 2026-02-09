@@ -70,7 +70,10 @@ link.ts
   Matched by default include pattern '**/*'
 b.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in b.ts[90m:2[0m
+
+ Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -199,7 +202,10 @@ link.ts
   Matched by default include pattern '**/*'
 b.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in b.ts[90m:2[0m
+
+ Watching for file changes.
 
 
 

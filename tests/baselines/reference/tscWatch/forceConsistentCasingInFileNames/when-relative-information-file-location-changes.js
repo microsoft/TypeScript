@@ -84,7 +84,13 @@ moduleA.ts
   Matched by default include pattern '**/*'
 moduleB.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 4 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 4 errors in 2 files.
+
+Errors  Files
+     2  moduleA.ts[90m:1[0m
+     2  moduleB.ts[90m:1[0m
+ Watching for file changes.
 
 
 
@@ -220,7 +226,13 @@ moduleA.ts
   Matched by default include pattern '**/*'
 moduleB.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 4 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 4 errors in 2 files.
+
+Errors  Files
+     2  moduleA.ts[90m:2[0m
+     2  moduleB.ts[90m:1[0m
+ Watching for file changes.
 
 
 

@@ -36,7 +36,10 @@ Output::
     [7m [0m [96m~[0m
     The parser expected to find a '}' to match the '{' token here.
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:1[0m
+
+ Watching for file changes.
 
 
 

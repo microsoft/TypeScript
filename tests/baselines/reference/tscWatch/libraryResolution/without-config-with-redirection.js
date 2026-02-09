@@ -447,7 +447,10 @@ project1/index.ts
   Root file specified for compilation
 project1/file2.ts
   Root file specified for compilation
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error.
+
+ Watching for file changes.
 
 
 

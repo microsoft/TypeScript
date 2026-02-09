@@ -42,7 +42,10 @@ Output::
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in a.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -445,7 +448,10 @@ Output::
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in a.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -585,7 +591,10 @@ Output::
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in a.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -719,7 +728,10 @@ Output::
     [7m [0m [96m      ~[0m
     Add a type annotation to the variable a.
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in a.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 

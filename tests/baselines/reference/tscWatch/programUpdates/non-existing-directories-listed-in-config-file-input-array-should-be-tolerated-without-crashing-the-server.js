@@ -31,7 +31,10 @@ Output::
 
 [91merror[0m[90m TS18003: [0mNo inputs were found in config file '/user/username/workspace/solution/projects/project/tsconfig.json'. Specified 'include' paths were '["app/*","test/**/*","something"]' and 'exclude' paths were '[]'.
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error.
+
+ Watching for file changes.
 
 
 

@@ -68,7 +68,10 @@ FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 25
 [7m3[0m     "module": "none",
 [7m [0m [91m              ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in project2/tsconfig.json[90m:3[0m
+
+ Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/project2 1 undefined Wild card directory
@@ -238,7 +241,10 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/projects/proj
 [7m3[0m     "module": "none",
 [7m [0m [91m              ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in project2/tsconfig.json[90m:3[0m
+
+ Watching for file changes.
 
 
 

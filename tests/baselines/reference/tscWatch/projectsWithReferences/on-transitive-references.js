@@ -287,7 +287,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:6[0m
+
+ Watching for file changes.
 
 
 
@@ -502,7 +505,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:6[0m
+
+ Watching for file changes.
 
 
 
@@ -643,7 +649,10 @@ nrefs/a.d.ts
   Imported via "@ref/a" from file 'c.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:6[0m
+
+ Watching for file changes.
 
 
 
@@ -809,7 +818,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:6[0m
+
+ Watching for file changes.
 
 
 
@@ -959,7 +971,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:6[0m
+
+ Watching for file changes.
 
 
 
@@ -1106,7 +1121,10 @@ b.d.ts
   File is output of project reference source 'b.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:6[0m
+
+ Watching for file changes.
 
 
 
@@ -1242,7 +1260,10 @@ b.ts
   Imported via './b' from file 'c.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: tsconfig.c.json[90m:6[0m
+
+ Watching for file changes.
 
 
 
@@ -1383,7 +1404,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:6[0m
+
+ Watching for file changes.
 
 
 
@@ -1516,7 +1540,13 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  tsconfig.b.json[90m:15[0m
+     1  tsconfig.c.json[90m:6[0m
+ Watching for file changes.
 
 
 
@@ -1650,7 +1680,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c.ts'
 c.ts
   Part of 'files' list in tsconfig.json
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.c.json[90m:6[0m
+
+ Watching for file changes.
 
 
 

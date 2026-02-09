@@ -373,7 +373,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /home/src/projects/project/tscon
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 DirectoryWatcher:: Triggered with /home/src/projects/project/tsconfig.tsbuildinfo.readable.baseline.txt :: WatchInfo: /home/src/projects/project 0 undefined Failed Lookup Locations
 Scheduling invalidateFailedLookup, Cancelled earlier one
@@ -702,7 +705,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -859,7 +865,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -1026,7 +1035,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -1172,7 +1184,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -1311,7 +1326,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -1605,7 +1623,10 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /home/src/projects/node_modu
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -1969,7 +1990,10 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -2290,7 +2314,10 @@ FileWatcher:: Close:: WatchInfo: /home/src/projects/project/node_modules/foo2/in
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -2610,7 +2637,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -2767,7 +2797,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -2934,7 +2967,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -3080,7 +3116,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 [7m2[0m   "compilerOptions": {
 [7m [0m [91m  ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 

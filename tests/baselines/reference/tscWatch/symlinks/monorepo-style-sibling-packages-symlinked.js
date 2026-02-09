@@ -164,7 +164,10 @@ FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/pa
   Default library for target 'es2016'
 packages/package2/src/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in packages/package2/src/index.ts[90m:1[0m
+
+ Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2 1 undefined Wild card directory
@@ -531,7 +534,10 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modu
   Default library for target 'es2016'
 packages/package2/src/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in packages/package2/src/index.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 

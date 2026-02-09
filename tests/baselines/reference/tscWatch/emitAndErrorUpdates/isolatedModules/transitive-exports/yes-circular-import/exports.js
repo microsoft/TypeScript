@@ -75,7 +75,10 @@ Output::
 [7m6[0m     "baseUrl": "."
 [7m [0m [91m    ~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:6[0m
+
+ Watching for file changes.
 
 
 
@@ -206,7 +209,10 @@ Output::
 [7m6[0m     "baseUrl": "."
 [7m [0m [91m    ~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:6[0m
+
+ Watching for file changes.
 
 
 
@@ -273,7 +279,10 @@ Output::
 [7m6[0m     "baseUrl": "."
 [7m [0m [91m    ~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:6[0m
+
+ Watching for file changes.
 
 
 
@@ -340,7 +349,10 @@ Output::
 [7m6[0m     "baseUrl": "."
 [7m [0m [91m    ~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:6[0m
+
+ Watching for file changes.
 
 
 

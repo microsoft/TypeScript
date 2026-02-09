@@ -27,7 +27,10 @@ Output::
   The file is in the program because:
     Entry point of type library 'node' specified in compilerOptions
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error.
+
+ Watching for file changes.
 
 
 

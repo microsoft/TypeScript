@@ -37,7 +37,10 @@ Output::
 [7m2[0m export var x = Foo();
 [7m [0m [91m               ~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: referenceFile1.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -122,7 +125,10 @@ Output::
 [7m2[0m export var x = Foo();export var yy = Foo();
 [7m [0m [91m                                     ~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 3 errors in the same file, starting at: referenceFile1.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -199,7 +205,10 @@ Output::
 [7m2[0m export var x = Foo();export var yy = Foo();
 [7m [0m [91m                                     ~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: referenceFile1.ts[90m:2[0m
+
+ Watching for file changes.
 
 
 

@@ -48,7 +48,10 @@ Output::
 [7m1[0m export const App = () => <div propA={true}></div>;
 [7m [0m [91m                                           ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 3 errors in the same file, starting at: index.tsx[90m:1[0m
+
+ Watching for file changes.
 
 
 

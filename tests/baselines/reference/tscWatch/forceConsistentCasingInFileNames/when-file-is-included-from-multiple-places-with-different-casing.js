@@ -303,7 +303,14 @@ src/anotherFile.ts
   Matched by default include pattern '**/*'
 src/oneMore.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 7 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 7 errors in 3 files.
+
+Errors  Files
+     3  src/anotherFile.ts[90m:2[0m
+     2  src/oneMore.ts[90m:2[0m
+     2  src/Struct.d.ts[90m:2[0m
+ Watching for file changes.
 
 
 
@@ -669,7 +676,14 @@ src/anotherFile.ts
   Matched by default include pattern '**/*'
 src/oneMore.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 7 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 7 errors in 3 files.
+
+Errors  Files
+     3  src/anotherFile.ts[90m:2[0m
+     2  src/oneMore.ts[90m:2[0m
+     2  src/Struct.d.ts[90m:2[0m
+ Watching for file changes.
 
 
 
@@ -935,7 +949,14 @@ src/anotherFile.ts
   Matched by default include pattern '**/*'
 src/oneMore.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 6 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 6 errors in 3 files.
+
+Errors  Files
+     3  src/anotherFile.ts[90m:2[0m
+     2  src/oneMore.ts[90m:2[0m
+     1  src/Struct.d.ts[90m:2[0m
+ Watching for file changes.
 
 
 

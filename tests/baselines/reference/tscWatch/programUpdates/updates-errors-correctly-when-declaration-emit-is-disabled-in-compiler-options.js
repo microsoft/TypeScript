@@ -116,7 +116,10 @@ Output::
 [7m2[0m test(4, 5);
 [7m [0m [91m     ~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in a.ts[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -236,7 +239,13 @@ Output::
 [7m2[0m     return x + y / 5;
 [7m [0m [91m               ~[0m
 
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  a.ts[90m:2[0m
+     1  b.ts[90m:2[0m
+ Watching for file changes.
 
 
 

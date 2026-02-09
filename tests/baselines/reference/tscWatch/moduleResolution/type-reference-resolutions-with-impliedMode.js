@@ -110,7 +110,10 @@ node_modules/@types/pkg/import.d.ts
   File is CommonJS module because 'node_modules/@types/pkg/package.json' does not have field "type"
 index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in index.ts[90m:2[0m
+
+ Watching for file changes.
 
 
 

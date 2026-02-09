@@ -120,7 +120,10 @@ project1/index.ts
   Matched by default include pattern '**/*'
 project1/utils.d.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: project1/file2.ts[90m:1[0m
+
+ Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/workspace/projects/project1 1 undefined Wild card directory
@@ -375,7 +378,10 @@ project1/index.ts
   Matched by default include pattern '**/*'
 project1/utils.d.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: project1/file2.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -570,7 +576,10 @@ project1/index.ts
   Matched by default include pattern '**/*'
 project1/utils.d.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: project1/file2.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -771,7 +780,10 @@ project1/index.ts
   Matched by default include pattern '**/*'
 project1/utils.d.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in project1/file2.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 

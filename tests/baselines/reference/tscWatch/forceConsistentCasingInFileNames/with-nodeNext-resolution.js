@@ -101,7 +101,10 @@ node_modules/@types/yargs/index.d.mts
   Imported via "yargs" from file 'src/bin.ts' with packageId 'yargs/index.d.mts@17.0.12'
 src/bin.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in tsconfig.json[90m:2[0m
+
+ Watching for file changes.
 
 
 

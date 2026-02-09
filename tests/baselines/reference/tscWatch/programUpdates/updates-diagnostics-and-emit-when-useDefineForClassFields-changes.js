@@ -36,7 +36,10 @@ Output::
 [7m2[0m class D extends C { prop = 1; }
 [7m [0m [91m                    ~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in a.ts[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -120,7 +123,10 @@ Output::
 [7m2[0m class D extends C { prop = 1; }
 [7m [0m [91m                    ~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in a.ts[90m:2[0m
+
+ Watching for file changes.
 
 
 

@@ -63,7 +63,13 @@ FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 25
 [7m6[0m     "outFile": "outFile.js"
 [7m [0m [91m    ~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 3 errors in 2 files.
+
+Errors  Files
+     1  b.ts[90m:1[0m
+     2  tsconfig.json[90m:5[0m
+ Watching for file changes.
 
 
 

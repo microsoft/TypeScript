@@ -83,7 +83,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 [7m1[0m import { myapp } from "@myapp/ts-types";
 [7m [0m [91m                      ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in lib/app.ts[90m:1[0m
+
+ Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -276,7 +279,10 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 [7m1[0m import { myapp } from "@myapp/ts-types";
 [7m [0m [91m                      ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in lib/app.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -403,7 +409,10 @@ Directory '/node_modules' does not exist, skipping all lookups in it.
 [7m1[0m import { myapp } from "@myapp/ts-types";
 [7m [0m [91m                      ~~~~~~~~~~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in lib/app.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 

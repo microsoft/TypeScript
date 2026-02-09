@@ -49,7 +49,10 @@ Elapsed:: *ms DirectoryWatcher:: Triggered with /user/username/projects/myprojec
 [7m1[0m import { aNumber } from "./a.js";
 [7m [0m [91m                        ~~~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in b.ts[90m:1[0m
+
+ Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -140,7 +143,10 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/a.js 250 unde
 [7m1[0m export const aNumber: number = "string"
 [7m [0m [91m                      ~~~~~~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in a.js[90m:1[0m
+
+ Watching for file changes.
 
 
 

@@ -52,7 +52,10 @@ Output::
 [7m4[0m ;
 [7m [0m [91m~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in src/main.ts[90m:4[0m
+
+ Watching for file changes.
 
 
 
@@ -387,7 +390,10 @@ Output::
 [7m2[0m const a: string = 10;
 [7m [0m [91m      ~[0m
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in src/main.ts[90m:2[0m
+
+ Watching for file changes.
 
 
 

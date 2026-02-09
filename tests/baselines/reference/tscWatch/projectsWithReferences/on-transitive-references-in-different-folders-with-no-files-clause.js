@@ -281,7 +281,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in c/tsconfig.json[90m:3[0m
+
+ Watching for file changes.
 
 
 
@@ -503,7 +506,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in c/tsconfig.json[90m:3[0m
+
+ Watching for file changes.
 
 
 
@@ -649,7 +655,10 @@ nrefs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in c/tsconfig.json[90m:3[0m
+
+ Watching for file changes.
 
 
 
@@ -826,7 +835,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in c/tsconfig.json[90m:3[0m
+
+ Watching for file changes.
 
 
 
@@ -981,7 +993,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in c/tsconfig.json[90m:3[0m
+
+ Watching for file changes.
 
 
 
@@ -1133,7 +1148,10 @@ b/index.d.ts
   File is output of project reference source 'b/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in c/tsconfig.json[90m:3[0m
+
+ Watching for file changes.
 
 
 
@@ -1279,7 +1297,10 @@ b/index.ts
   Imported via '../b' from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: c/tsconfig.json[90m:3[0m
+
+ Watching for file changes.
 
 
 
@@ -1432,7 +1453,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in c/tsconfig.json[90m:3[0m
+
+ Watching for file changes.
 
 
 
@@ -1578,7 +1602,13 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  b/tsconfig.json[90m:12[0m
+     1  c/tsconfig.json[90m:3[0m
+ Watching for file changes.
 
 
 
@@ -1722,7 +1752,10 @@ refs/a.d.ts
   Imported via "@ref/a" from file 'c/index.ts'
 c/index.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in c/tsconfig.json[90m:3[0m
+
+ Watching for file changes.
 
 
 

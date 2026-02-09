@@ -45,7 +45,10 @@ Output::
     [7m [0m [96m      ~~~~~~[0m
     File is entry point of type library specified here.
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error.
+
+ Watching for file changes.
 
 
 

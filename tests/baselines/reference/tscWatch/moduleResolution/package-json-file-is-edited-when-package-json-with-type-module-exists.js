@@ -88,7 +88,10 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in src/fileA.ts[90m:1[0m
+
+ Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src 1 undefined Wild card directory
@@ -244,7 +247,10 @@ File '/package.json' does not exist according to earlier cached lookups.
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' does not have field "type"
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in src/fileA.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -395,7 +401,10 @@ Elapsed:: *ms DirectoryWatcher:: Close:: WatchInfo: /user/username/projects/mypr
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is ECMAScript module because 'package.json' has field "type" with value "module"
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in src/fileA.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -554,7 +563,10 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undef
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in src/fileA.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -696,7 +708,10 @@ FileWatcher:: Close:: WatchInfo: /user/username/projects/package.json 2000 undef
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' does not have field "type"
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in src/fileA.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 
@@ -834,7 +849,10 @@ FileWatcher:: Added:: WatchInfo: /user/username/projects/package.json 2000 undef
 src/fileA.ts
   Matched by default include pattern '**/*'
   File is CommonJS module because 'package.json' was not found
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in src/fileA.ts[90m:1[0m
+
+ Watching for file changes.
 
 
 

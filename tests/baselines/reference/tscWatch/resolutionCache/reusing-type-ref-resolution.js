@@ -186,7 +186,13 @@ node_modules/pkg2/index.d.ts
   Type library referenced via 'pkg2' from file 'fileWithTypeRefs.ts'
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 3 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 3 errors in 2 files.
+
+Errors  Files
+     1  fileWithImports.ts[90m:2[0m
+     2  fileWithTypeRefs.ts[90m:2[0m
+ Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /users/username/projects/project 1 undefined Wild card directory
@@ -547,7 +553,10 @@ node_modules/pkg2/index.d.ts
   Type library referenced via 'pkg2' from file 'fileWithTypeRefs.ts'
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: fileWithTypeRefs.ts[90m:2[0m
+
+ Watching for file changes.
 
 
 
@@ -893,7 +902,10 @@ node_modules/pkg3/index.d.ts
   Type library referenced via 'pkg3' from file 'fileWithTypeRefs.ts'
 fileWithTypeRefs.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error in fileWithTypeRefs.ts[90m:3[0m
+
+ Watching for file changes.
 
 
 

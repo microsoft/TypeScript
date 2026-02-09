@@ -73,7 +73,10 @@ link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
+
+ Watching for file changes.
 
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
@@ -225,7 +228,10 @@ link/a.ts
   Imported via "./link/a" from file 'b.ts'
 b.ts
   Matched by default include pattern '**/*'
-[[90mHH:MM:SS AM[0m] Found 2 errors. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 2 errors in the same file, starting at: tsconfig.json[90m:4[0m
+
+ Watching for file changes.
 
 
 

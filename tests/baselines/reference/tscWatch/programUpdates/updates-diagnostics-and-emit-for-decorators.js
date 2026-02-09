@@ -40,7 +40,10 @@ Output::
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'ClassDecoratorContext'.
 
-[[90mHH:MM:SS AM[0m] Found 1 error. Watching for file changes.
+[[90mHH:MM:SS AM[0m] 
+Found 1 error.
+
+ Watching for file changes.
 
 
 

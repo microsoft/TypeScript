@@ -263,6 +263,14 @@ export function getWatchErrorSummaryDiagnosticMessage(errorCount: number): Diagn
         Diagnostics.Found_0_errors_Watching_for_file_changes;
 }
 
+export function getWatchErrorSummaryDiagnostic(errorCount: number, filesInError: (ReportFileInError | undefined)[], newLine: string, host: HasCurrentDirectory, options: CompilerOptions): Diagnostic {
+    if (errorCount === 0) {
+        return createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, 0);
+    }
+    const errorSummary = getErrorSummaryText(errorCount, filesInError, newLine, host);
+    return createCompilerDiagnostic(Diagnostics._0_Watching_for_file_changes, errorSummary);
+}
+
 function prettyPathForFileError(error: ReportFileInError, cwd: string) {
     const line = formatColorAndReset(":" + error.line, ForegroundColorEscapeSequences.Grey);
     if (pathIsAbsolute(error.fileName) && pathIsAbsolute(cwd)) {
@@ -293,7 +301,7 @@ export function getErrorSummaryText(
     else {
         messageAndArgs = distinctFileNamesWithLines.length === 0 ? [Diagnostics.Found_0_errors, errorCount] :
             distinctFileNamesWithLines.length === 1 ? [Diagnostics.Found_0_errors_in_the_same_file_starting_at_Colon_1, errorCount, firstFileReference] :
-            [Diagnostics.Found_0_errors_in_1_files, errorCount, distinctFileNamesWithLines.length];
+                [Diagnostics.Found_0_errors_in_1_files, errorCount, distinctFileNamesWithLines.length];
     }
 
     const d = createCompilerDiagnostic(...messageAndArgs);
@@ -524,8 +532,8 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
                         Diagnostics.Output_from_referenced_project_0_included_because_1_specified :
                         Diagnostics.Source_from_referenced_project_0_included_because_1_specified :
                     isOutput ?
-                    Diagnostics.Output_from_referenced_project_0_included_because_module_is_specified_as_none :
-                    Diagnostics.Source_from_referenced_project_0_included_because_module_is_specified_as_none,
+                        Diagnostics.Output_from_referenced_project_0_included_because_module_is_specified_as_none :
+                        Diagnostics.Source_from_referenced_project_0_included_because_module_is_specified_as_none,
                 toFileName(referencedResolvedRef.sourceFile.fileName, fileNameConvertor),
                 options.outFile ? "--outFile" : "--out",
             );
@@ -535,8 +543,8 @@ export function fileIncludeReasonToDiagnostics(program: Program, reason: FileInc
                     [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
                     [Diagnostics.Entry_point_of_type_library_0_specified_in_compilerOptions, reason.typeReference] :
                 reason.packageId ?
-                [Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
-                [Diagnostics.Entry_point_for_implicit_type_library_0, reason.typeReference];
+                    [Diagnostics.Entry_point_for_implicit_type_library_0_with_packageId_1, reason.typeReference, packageIdToString(reason.packageId)] :
+                    [Diagnostics.Entry_point_for_implicit_type_library_0, reason.typeReference];
 
             return chainDiagnosticMessages(/*details*/ undefined, ...messageAndArgs);
         }
@@ -880,9 +888,9 @@ function createWatchCompilerHost<T extends BuilderProgram = EmitAndSemanticDiagn
             builderProgram,
             reportDiagnostic,
             write,
-            errorCount =>
+            (errorCount, filesInError) =>
                 result.onWatchStatusChange!(
-                    createCompilerDiagnostic(getWatchErrorSummaryDiagnosticMessage(errorCount), errorCount),
+                    getWatchErrorSummaryDiagnostic(errorCount, filesInError, newLine, result, compilerOptions),
                     newLine,
                     compilerOptions,
                     errorCount,
