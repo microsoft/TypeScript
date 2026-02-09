@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 declare namespace server {
     interface Server extends Object { }

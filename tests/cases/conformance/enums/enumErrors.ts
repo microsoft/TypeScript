@@ -1,3 +1,4 @@
+// @target: es2015
 // Enum named with PredefinedTypes
 enum any { }
 enum number { }

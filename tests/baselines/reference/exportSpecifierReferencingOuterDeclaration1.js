@@ -8,3 +8,4 @@ declare module "m" {
 }
 
 //// [exportSpecifierReferencingOuterDeclaration1.js]
+"use strict";

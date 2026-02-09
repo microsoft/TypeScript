@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////var strOrNum: string | number;
 ////namespace m {
 ////    var nonExportedStrOrNum: string | number;

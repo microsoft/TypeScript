@@ -11,6 +11,7 @@ namespace M {
 }
 
 //// [declareAlreadySeen.js]
+"use strict";
 var M;
 (function (M) {
 })(M || (M = {}));

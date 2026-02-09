@@ -1,0 +1,95 @@
+genericTypeAliases.ts(26,5): error TS2454: Variable 'y' is used before being assigned.
+genericTypeAliases.ts(54,1): error TS2454: Variable 'p' is used before being assigned.
+genericTypeAliases.ts(55,1): error TS2454: Variable 'p' is used before being assigned.
+genericTypeAliases.ts(56,1): error TS2454: Variable 'p' is used before being assigned.
+genericTypeAliases.ts(61,12): error TS2454: Variable 'x' is used before being assigned.
+genericTypeAliases.ts(67,12): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== genericTypeAliases.ts (6 errors) ====
+    type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
+    
+    var tree: Tree<number> = {
+        left: {
+            left: 0,
+            right: {
+                left: 1,
+                right: 2
+            },
+        },
+        right: 3
+    };
+    
+    type Lazy<T> = T | (() => T);
+    
+    var ls: Lazy<string>;
+    ls = "eager";
+    ls = () => "lazy";
+    
+    type Foo<T> = T | { x: Foo<T> };
+    type Bar<U> = U | { x: Bar<U> };
+    
+    // Deeply instantiated generics
+    var x: Foo<string>;
+    var y: Bar<string>;
+    x = y;
+        ~
+!!! error TS2454: Variable 'y' is used before being assigned.
+    y = x;
+    
+    x = "string";
+    x = { x: "hello" };
+    x = { x: { x: "world" } };
+    
+    var z: Foo<number>;
+    z = 42;
+    z = { x: 42 };
+    z = { x: { x: 42 } };
+    
+    type Strange<T> = string;  // Type parameter not used
+    var s: Strange<number>;
+    s = "hello";
+    
+    interface AB<A, B> {
+        a: A;
+        b: B;
+    }
+    
+    type Pair<T> = AB<T, T>;
+    
+    interface TaggedPair<T> extends Pair<T> {
+        tag: string;
+    }
+    
+    var p: TaggedPair<number>;
+    p.a = 1;
+    ~
+!!! error TS2454: Variable 'p' is used before being assigned.
+    p.b = 2;
+    ~
+!!! error TS2454: Variable 'p' is used before being assigned.
+    p.tag = "test";
+    ~
+!!! error TS2454: Variable 'p' is used before being assigned.
+    
+    function f<A>() {
+        type Foo<T> = T | { x: Foo<T> };
+        var x: Foo<A[]>;
+        return x;
+               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    }
+    
+    function g<B>() {
+        type Bar<U> = U | { x: Bar<U> };
+        var x: Bar<B[]>;
+        return x;
+               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+    }
+    
+    // Deeply instantiated generics
+    var a = f<string>();
+    var b = g<string>();
+    a = b;
+    

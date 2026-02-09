@@ -39,7 +39,8 @@ Output::
 //// [/home/src/tslibs/TS/Lib/lib.es2015.d.ts] *Lib*
 
 //// [/home/src/workspaces/project/b.js]
-var b = 10;
+"use strict";
+const b = 10;
 
 
 //// [/home/src/workspaces/project/b.d.ts]
@@ -144,9 +145,13 @@ Output::
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Boolean'.
 
+[91merror[0m[90m TS2318: [0mCannot find global type 'CallableFunction'.
+
 [91merror[0m[90m TS2318: [0mCannot find global type 'Function'.
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'IArguments'.
+
+[91merror[0m[90m TS2318: [0mCannot find global type 'NewableFunction'.
 
 [91merror[0m[90m TS2318: [0mCannot find global type 'Number'.
 
@@ -162,7 +167,7 @@ Output::
 [7m [0m [91m    ~~~~~[0m
 
 
-Found 9 errors in the same file, starting at: tsconfig.json[90m:5[0m
+Found 11 errors in the same file, starting at: tsconfig.json[90m:5[0m
 
 
 

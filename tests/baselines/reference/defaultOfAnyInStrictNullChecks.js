@@ -13,11 +13,12 @@ function foo() {
 
 
 //// [defaultOfAnyInStrictNullChecks.js]
+"use strict";
 // Regression test for #8295
 function foo() {
     try {
     }
     catch (e) {
-        var s = e.message;
+        let s = e.message;
     }
 }

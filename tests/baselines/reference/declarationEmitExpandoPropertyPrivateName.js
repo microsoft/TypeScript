@@ -19,7 +19,7 @@ function f() { return null; }
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.q = q;
-var a_1 = require("./a");
+const a_1 = require("./a");
 function q() { }
 q.val = (0, a_1.f)();
 

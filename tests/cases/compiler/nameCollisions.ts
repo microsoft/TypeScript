@@ -1,3 +1,4 @@
+// @target: es2015
 namespace T {
     var x = 2;
 

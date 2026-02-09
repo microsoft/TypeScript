@@ -49,17 +49,15 @@ else {
 }
 
 //// [typeGuardOfFormExpr1OrExpr2.js]
+"use strict";
 var str;
 var bool;
 var num;
 var strOrNum;
 var strOrNumOrBool;
 var numOrBool;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var c;
 var cOrBool;
 var strOrNumOrBoolOrC;

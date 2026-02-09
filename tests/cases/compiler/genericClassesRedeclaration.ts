@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace TypeScript {
     interface IIndexable<T> {
         [s: string]: T;

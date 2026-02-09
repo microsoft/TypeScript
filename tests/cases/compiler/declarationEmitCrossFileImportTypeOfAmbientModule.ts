@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @filename: types/component.d.ts
 declare module '@namespace/component' {

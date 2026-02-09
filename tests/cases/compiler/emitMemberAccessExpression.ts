@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: emitMemberAccessExpression_file1.ts
 /// <reference path="emitMemberAccessExpression_file3.ts" />
 "use strict";

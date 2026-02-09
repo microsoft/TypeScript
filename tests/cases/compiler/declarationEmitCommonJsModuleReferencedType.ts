@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 // @filename: r/node_modules/foo/node_modules/nested/index.d.ts
 export interface NestedProps {}

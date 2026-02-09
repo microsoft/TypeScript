@@ -9,8 +9,8 @@ interface Foo {
 >  : ^^^^^^
 
     optionalMethod?(a: number): string;
->optionalMethod : (a: number) => string
->               : ^ ^^      ^^^^^      
+>optionalMethod : ((a: number) => string) | undefined
+>               : ^^ ^^      ^^^^^      ^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
@@ -19,8 +19,8 @@ interface Foo {
 >         : ^^^^^^
 
     optionalProperty?: string;
->optionalProperty : string
->                 : ^^^^^^
+>optionalProperty : string | undefined
+>                 : ^^^^^^^^^^^^^^^^^^
 }
 
 class Foo {
@@ -58,18 +58,18 @@ class Bar extends Foo {
 >    : ^^^
 
     method(a: number) {
->method : (a: number) => string
->       : ^ ^^      ^^^^^^^^^^^
+>method : (a: number) => string | undefined
+>       : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 
         return this.optionalProperty;
->this.optionalProperty : string
->                      : ^^^^^^
+>this.optionalProperty : string | undefined
+>                      : ^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->optionalProperty : string
->                 : ^^^^^^
+>optionalProperty : string | undefined
+>                 : ^^^^^^^^^^^^^^^^^^
     }
 }
 
@@ -83,26 +83,26 @@ var bar = new Bar();
 >    : ^^^^^^^^^^
 
 bar.method(0);
->bar.method(0) : string
->              : ^^^^^^
->bar.method : (a: number) => string
->           : ^ ^^      ^^^^^^^^^^^
+>bar.method(0) : string | undefined
+>              : ^^^^^^^^^^^^^^^^^^
+>bar.method : (a: number) => string | undefined
+>           : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >bar : Bar
 >    : ^^^
->method : (a: number) => string
->       : ^ ^^      ^^^^^^^^^^^
+>method : (a: number) => string | undefined
+>       : ^ ^^      ^^^^^^^^^^^^^^^^^^^^^^^
 >0 : 0
 >  : ^
 
 bar.optionalMethod(1);
 >bar.optionalMethod(1) : string
 >                      : ^^^^^^
->bar.optionalMethod : (a: number) => string
->                   : ^ ^^      ^^^^^      
+>bar.optionalMethod : ((a: number) => string) | undefined
+>                   : ^^ ^^      ^^^^^      ^^^^^^^^^^^^^
 >bar : Bar
 >    : ^^^
->optionalMethod : (a: number) => string
->               : ^ ^^      ^^^^^      
+>optionalMethod : ((a: number) => string) | undefined
+>               : ^^ ^^      ^^^^^      ^^^^^^^^^^^^^
 >1 : 1
 >  : ^
 
@@ -115,12 +115,12 @@ bar.property;
 >         : ^^^^^^
 
 bar.optionalProperty;
->bar.optionalProperty : string
->                     : ^^^^^^
+>bar.optionalProperty : string | undefined
+>                     : ^^^^^^^^^^^^^^^^^^
 >bar : Bar
 >    : ^^^
->optionalProperty : string
->                 : ^^^^^^
+>optionalProperty : string | undefined
+>                 : ^^^^^^^^^^^^^^^^^^
 
 bar.additionalProperty;
 >bar.additionalProperty : string

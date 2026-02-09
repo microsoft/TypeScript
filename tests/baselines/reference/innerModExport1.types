@@ -54,12 +54,12 @@ namespace Outer {
 }
 
 Outer.ExportFunc();
->Outer.ExportFunc() : number
->                   : ^^^^^^
->Outer.ExportFunc : () => number
->                 : ^^^^^^^^^^^^
+>Outer.ExportFunc() : any
+>                   : ^^^
+>Outer.ExportFunc : any
+>                 : ^^^
 >Outer : typeof Outer
 >      : ^^^^^^^^^^^^
->ExportFunc : () => number
->           : ^^^^^^^^^^^^
+>ExportFunc : any
+>           : ^^^
 

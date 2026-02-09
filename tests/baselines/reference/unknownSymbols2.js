@@ -33,6 +33,7 @@ namespace M {
 }
 
 //// [unknownSymbols2.js]
+"use strict";
 var M;
 (function (M) {
     var x;
@@ -52,9 +53,9 @@ var M;
         default:
             break;
     }
-    var a = function () { return asdf; };
-    var b = function (asdf) { return qwerty; };
-    var N;
+    var a = () => asdf;
+    var b = (asdf) => { return qwerty; };
+    let N;
     (function (N) {
         var x = 1;
     })(N || (N = {}));

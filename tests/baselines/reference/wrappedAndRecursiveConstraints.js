@@ -19,16 +19,16 @@ var c = new C(y);
 var r = c.foo(y);
 
 //// [wrappedAndRecursiveConstraints.js]
+"use strict";
 // no errors expected
-var C = /** @class */ (function () {
-    function C(data) {
+class C {
+    constructor(data) {
         this.data = data;
     }
-    C.prototype.foo = function (x) {
+    foo(x) {
         return x;
-    };
-    return C;
-}());
+    }
+}
 var y = {};
 var c = new C(y);
 var r = c.foo(y);

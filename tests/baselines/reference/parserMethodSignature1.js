@@ -6,3 +6,4 @@ interface I {
 }
 
 //// [parserMethodSignature1.js]
+"use strict";

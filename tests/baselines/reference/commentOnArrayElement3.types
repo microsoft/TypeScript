@@ -2,10 +2,10 @@
 
 === commentOnArrayElement3.ts ===
 const array = [
->array : number[]
->      : ^^^^^^^^
->[    /* element 1*/    1    /* end of element 1 */,    2    /* end of element 2 */, ,    /* extra comment */] : number[]
->                                                                                                              : ^^^^^^^^
+>array : (number | undefined)[]
+>      : ^^^^^^^^^^^^^^^^^^^^^^
+>[    /* element 1*/    1    /* end of element 1 */,    2    /* end of element 2 */, ,    /* extra comment */] : (number | undefined)[]
+>                                                                                                              : ^^^^^^^^^^^^^^^^^^^^^^
 
     /* element 1*/
     1
@@ -18,8 +18,5 @@ const array = [
 >  : ^
 
     /* end of element 2 */, ,
-> : undefined
-> : ^^^^^^^^^
-
     /* extra comment */
 ];

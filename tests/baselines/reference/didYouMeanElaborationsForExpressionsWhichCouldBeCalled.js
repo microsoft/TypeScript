@@ -31,11 +31,9 @@ foo({
 
 
 //// [didYouMeanElaborationsForExpressionsWhichCouldBeCalled.js]
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
+"use strict";
+class Bar {
+}
 foo({
     x: Bar,
     y: Date

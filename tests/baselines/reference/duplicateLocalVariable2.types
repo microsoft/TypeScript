@@ -10,8 +10,8 @@ export class TestCase {
 >     : ^^^^^^
 >test : () => boolean
 >     : ^^^^^^       
->errorMessageRegEx : string
->                  : ^^^^^^
+>errorMessageRegEx : string | undefined
+>                  : ^^^^^^^^^^^^^^^^^^
     }
 }
 export class TestRunner { 
@@ -136,8 +136,8 @@ export var tests: TestRunner = (function () {
             var bytes = [];
 >bytes : any[]
 >      : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
             for (var i = 0; i < 14; i++) {
 >i : string

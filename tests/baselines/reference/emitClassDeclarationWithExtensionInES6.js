@@ -26,6 +26,7 @@ class D extends C {
 
 
 //// [emitClassDeclarationWithExtensionInES6.js]
+"use strict";
 class B {
     baz(a, y = 10) { }
 }

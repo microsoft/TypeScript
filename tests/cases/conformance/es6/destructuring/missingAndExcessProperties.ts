@@ -1,3 +1,4 @@
+// @target: es2015
 // Missing properties
 function f1() {
     var { x, y } = {};

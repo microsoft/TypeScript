@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // @strictFunctionTypes: false
 // under non-strict-function-types, all the below should work

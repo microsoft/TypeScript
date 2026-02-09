@@ -16,6 +16,7 @@ namespace X {
 }
 
 //// [moduleImport.js]
+"use strict";
 var A;
 (function (A) {
     var B;

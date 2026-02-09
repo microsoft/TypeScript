@@ -27,11 +27,11 @@ describe("unittests:: tsserver:: getEditsForFileRename::", () => {
         };
         const tsconfig: File = {
             path: "/home/src/projects/project/tsconfig.json",
-            content: "{}",
+            content: `{ "compilerOptions": { "module": "commonjs" } }`,
         };
 
         const host = TestServerHost.createServerHost([userTs, newTs, tsconfig]);
-        const options: ts.CompilerOptions = {};
+        const options: ts.CompilerOptions = { module: ts.ModuleKind.CommonJS };
         const moduleResolutionCache = ts.createModuleResolutionCache(host.getCurrentDirectory(), ts.createGetCanonicalFileName(host.useCaseSensitiveFileNames), options);
         const lsHost: ts.LanguageServiceHost = {
             getCompilationSettings: () => options,

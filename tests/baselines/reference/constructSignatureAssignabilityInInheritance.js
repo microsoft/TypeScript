@@ -74,6 +74,7 @@ namespace MemberWithConstructSignature {
 }
 
 //// [constructSignatureAssignabilityInInheritance.js]
+"use strict";
 // Checking basic subtype relations with construct signatures
 var MemberWithConstructSignature;
 (function (MemberWithConstructSignature) {

@@ -1,4 +1,6 @@
-﻿declare var Factory: any
+﻿// @strict: false
+// @target: es2015
+declare var Factory: any
 
 class Base {
     constructor(c) { }

@@ -22,6 +22,7 @@ async function main() {
 
 
 //// [awaitUnionPromise.js]
+"use strict";
 // https://github.com/Microsoft/TypeScript/issues/18186
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }

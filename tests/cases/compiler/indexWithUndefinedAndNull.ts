@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: false
 interface N {
     [n: number]: string;

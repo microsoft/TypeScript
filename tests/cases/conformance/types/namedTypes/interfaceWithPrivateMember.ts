@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnusedLabels: true
 
 // interfaces do not permit private members, these are errors

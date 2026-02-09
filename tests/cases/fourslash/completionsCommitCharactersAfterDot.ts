@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @lib: es5
+
 //// declare const obj: { banana: 1 };
 //// const x = obj./*1*/
 //// declare module obj./*2*/ {}

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // @filename: foo.d.ts
 export = Foo;

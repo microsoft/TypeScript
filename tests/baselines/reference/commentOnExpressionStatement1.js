@@ -4,4 +4,5 @@
 1 + 1; // Comment.
 
 //// [commentOnExpressionStatement1.js]
+"use strict";
 1 + 1; // Comment.

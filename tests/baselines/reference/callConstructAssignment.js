@@ -9,5 +9,6 @@ foo = bar; // error
 bar = foo; // error
 
 //// [callConstructAssignment.js]
+"use strict";
 foo = bar; // error
 bar = foo; // error

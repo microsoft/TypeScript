@@ -1,6 +1,8 @@
 //// [tests/cases/conformance/jsx/tsxGenericAttributesType7.tsx] ////
 
 //// [file.tsx]
+/// <reference path="/.lib/react.d.ts" />
+
 import React = require('react');
 
 declare function Component<T>(props: T) : JSX.Element;
@@ -14,11 +16,12 @@ const decorator1 = function <U extends {x: string}>(props: U) {
 
 //// [file.jsx]
 "use strict";
+/// <reference path="/.lib/react.d.ts" />
 Object.defineProperty(exports, "__esModule", { value: true });
-var React = require("react");
-var decorator = function (props) {
+const React = require("react");
+const decorator = function (props) {
     return <Component {...props}/>;
 };
-var decorator1 = function (props) {
+const decorator1 = function (props) {
     return <Component {...props} x="hi"/>;
 };

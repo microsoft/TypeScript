@@ -1,3 +1,4 @@
+// @target: es2015
 function M() {
     class C<X> {
         f<T>() {

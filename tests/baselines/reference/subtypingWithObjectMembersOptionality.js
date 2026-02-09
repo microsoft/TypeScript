@@ -76,6 +76,7 @@ namespace TwoLevels {
 }
 
 //// [subtypingWithObjectMembersOptionality.js]
+"use strict";
 // Derived member is not optional but base member is, should be ok
 // object literal case
 var a;

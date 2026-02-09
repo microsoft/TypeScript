@@ -77,6 +77,7 @@ new unionWithAbstractSignature('hello');
 
 
 //// [unionTypeConstructSignatures.js]
+"use strict";
 numOrDate = new unionOfDifferentReturnType(10);
 strOrBoolean = new unionOfDifferentReturnType("hello"); // error
 new unionOfDifferentReturnType1(true); // error in type of parameter

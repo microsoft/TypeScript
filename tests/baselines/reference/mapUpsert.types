@@ -1,0 +1,312 @@
+//// [tests/cases/compiler/mapUpsert.ts] ////
+
+=== mapUpsert.ts ===
+declare const map: Map<string, number>;
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+
+declare const mapR: ReadonlyMap<string, number>;
+>mapR : ReadonlyMap<string, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+declare const mapW: WeakMap<object, number>;
+>mapW : WeakMap<object, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+
+// OK
+map.getOrInsert("key", 123);
+>map.getOrInsert("key", 123) : number
+>                            : ^^^^^^
+>map.getOrInsert : (key: string, defaultValue: number) => number
+>                : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>getOrInsert : (key: string, defaultValue: number) => number
+>            : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>"key" : "key"
+>      : ^^^^^
+>123 : 123
+>    : ^^^
+
+map.getOrInsertComputed("key", () => 123);
+>map.getOrInsertComputed("key", () => 123) : number
+>                                          : ^^^^^^
+>map.getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>                        : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>                    : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"key" : "key"
+>      : ^^^^^
+>() => 123 : () => number
+>          : ^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+
+map.getOrInsertComputed("key", (key: string) => 123);
+>map.getOrInsertComputed("key", (key: string) => 123) : number
+>                                                     : ^^^^^^
+>map.getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>                        : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>                    : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"key" : "key"
+>      : ^^^^^
+>(key: string) => 123 : (key: string) => number
+>                     : ^   ^^      ^^^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>123 : 123
+>    : ^^^
+
+mapW.getOrInsert({}, 123);
+>mapW.getOrInsert({}, 123) : number
+>                          : ^^^^^^
+>mapW.getOrInsert : (key: object, defaultValue: number) => number
+>                 : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>mapW : WeakMap<object, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>getOrInsert : (key: object, defaultValue: number) => number
+>            : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>123 : 123
+>    : ^^^
+
+mapW.getOrInsertComputed({}, () => 123);
+>mapW.getOrInsertComputed({}, () => 123) : number
+>                                        : ^^^^^^
+>mapW.getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>                         : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapW : WeakMap<object, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>                    : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>() => 123 : () => number
+>          : ^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+
+mapW.getOrInsertComputed({}, (key: object) => 123);
+>mapW.getOrInsertComputed({}, (key: object) => 123) : number
+>                                                   : ^^^^^^
+>mapW.getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>                         : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapW : WeakMap<object, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>                    : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>(key: object) => 123 : (key: object) => number
+>                     : ^   ^^      ^^^^^^^^^^^
+>key : object
+>    : ^^^^^^
+>123 : 123
+>    : ^^^
+
+// Errors
+map.getOrInsert("key");
+>map.getOrInsert("key") : number
+>                       : ^^^^^^
+>map.getOrInsert : (key: string, defaultValue: number) => number
+>                : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>getOrInsert : (key: string, defaultValue: number) => number
+>            : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>"key" : "key"
+>      : ^^^^^
+
+map.getOrInsert("key", "value");
+>map.getOrInsert("key", "value") : number
+>                                : ^^^^^^
+>map.getOrInsert : (key: string, defaultValue: number) => number
+>                : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>getOrInsert : (key: string, defaultValue: number) => number
+>            : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>"key" : "key"
+>      : ^^^^^
+>"value" : "value"
+>        : ^^^^^^^
+
+map.getOrInsert("key", () => 123);
+>map.getOrInsert("key", () => 123) : number
+>                                  : ^^^^^^
+>map.getOrInsert : (key: string, defaultValue: number) => number
+>                : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>getOrInsert : (key: string, defaultValue: number) => number
+>            : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>"key" : "key"
+>      : ^^^^^
+>() => 123 : () => number
+>          : ^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+
+map.getOrInsertComputed("key");
+>map.getOrInsertComputed("key") : number
+>                               : ^^^^^^
+>map.getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>                        : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>                    : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"key" : "key"
+>      : ^^^^^
+
+map.getOrInsertComputed("key", 123);
+>map.getOrInsertComputed("key", 123) : number
+>                                    : ^^^^^^
+>map.getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>                        : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>                    : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"key" : "key"
+>      : ^^^^^
+>123 : 123
+>    : ^^^
+
+map.getOrInsertComputed("key", () => "value");
+>map.getOrInsertComputed("key", () => "value") : number
+>                                              : ^^^^^^
+>map.getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>                        : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>map : Map<string, number>
+>    : ^^^^^^^^^^^^^^^^^^^
+>getOrInsertComputed : (key: string, callback: (key: string) => number) => number
+>                    : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"key" : "key"
+>      : ^^^^^
+>() => "value" : () => string
+>              : ^^^^^^^^^^^^
+>"value" : "value"
+>        : ^^^^^^^
+
+mapW.getOrInsert({});
+>mapW.getOrInsert({}) : number
+>                     : ^^^^^^
+>mapW.getOrInsert : (key: object, defaultValue: number) => number
+>                 : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>mapW : WeakMap<object, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>getOrInsert : (key: object, defaultValue: number) => number
+>            : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+mapW.getOrInsert({}, "value");
+>mapW.getOrInsert({}, "value") : number
+>                              : ^^^^^^
+>mapW.getOrInsert : (key: object, defaultValue: number) => number
+>                 : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>mapW : WeakMap<object, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>getOrInsert : (key: object, defaultValue: number) => number
+>            : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>"value" : "value"
+>        : ^^^^^^^
+
+mapW.getOrInsert({}, () => 123);
+>mapW.getOrInsert({}, () => 123) : number
+>                                : ^^^^^^
+>mapW.getOrInsert : (key: object, defaultValue: number) => number
+>                 : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>mapW : WeakMap<object, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>getOrInsert : (key: object, defaultValue: number) => number
+>            : ^   ^^^^^^^^^^            ^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>() => 123 : () => number
+>          : ^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+
+mapW.getOrInsertComputed({});
+>mapW.getOrInsertComputed({}) : number
+>                             : ^^^^^^
+>mapW.getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>                         : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapW : WeakMap<object, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>                    : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+
+mapW.getOrInsertComputed({}, 123);
+>mapW.getOrInsertComputed({}, 123) : number
+>                                  : ^^^^^^
+>mapW.getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>                         : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapW : WeakMap<object, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>                    : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>123 : 123
+>    : ^^^
+
+mapW.getOrInsertComputed({}, () => "value");
+>mapW.getOrInsertComputed({}, () => "value") : number
+>                                            : ^^^^^^
+>mapW.getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>                         : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>mapW : WeakMap<object, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
+>getOrInsertComputed : (key: object, callback: (key: object) => number) => number
+>                    : ^   ^^^^^^^^^^        ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>{} : {}
+>   : ^^
+>() => "value" : () => string
+>              : ^^^^^^^^^^^^
+>"value" : "value"
+>        : ^^^^^^^
+
+// Not present on readonly interface
+mapR.getOrInsert("key", 123);
+>mapR.getOrInsert("key", 123) : any
+>                             : ^^^
+>mapR.getOrInsert : any
+>                 : ^^^
+>mapR : ReadonlyMap<string, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getOrInsert : any
+>            : ^^^
+>"key" : "key"
+>      : ^^^^^
+>123 : 123
+>    : ^^^
+
+mapR.getOrInsertComputed("key", () => 123);
+>mapR.getOrInsertComputed("key", () => 123) : any
+>                                           : ^^^
+>mapR.getOrInsertComputed : any
+>                         : ^^^
+>mapR : ReadonlyMap<string, number>
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>getOrInsertComputed : any
+>                    : ^^^
+>"key" : "key"
+>      : ^^^^^
+>() => 123 : () => number
+>          : ^^^^^^^^^^^^
+>123 : 123
+>    : ^^^
+

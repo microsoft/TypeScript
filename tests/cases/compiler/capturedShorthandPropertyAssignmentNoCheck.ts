@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 
 const fns = [];
 for (const value of [1, 2, 3]) {

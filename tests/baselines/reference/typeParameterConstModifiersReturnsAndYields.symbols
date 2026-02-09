@@ -21,7 +21,7 @@ const result2 = test1(() => `a${Math.random()}`);
 >result2 : Symbol(result2, Decl(typeParameterConstModifiersReturnsAndYields.ts, 5, 5))
 >test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
 const result3 = test1(() => 'a');
@@ -59,7 +59,7 @@ const result10 = test1(() => { return `a${Math.random()}`; });
 >result10 : Symbol(result10, Decl(typeParameterConstModifiersReturnsAndYields.ts, 14, 5))
 >test1 : Symbol(test1, Decl(typeParameterConstModifiersReturnsAndYields.ts, 0, 20))
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.float16.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 
 const result11 = test1(() => { return 'a'; });

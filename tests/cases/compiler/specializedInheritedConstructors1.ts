@@ -1,3 +1,4 @@
+// @target: es2015
 interface ViewOptions<TModel> {
     model: TModel;
 }

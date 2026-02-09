@@ -9,5 +9,7 @@ var x = `abc${ x => x }def`;
 >x => x : (x: any) => any
 >       : ^ ^^^^^^^^^^^^^
 >x : any
+>  : ^^^
 >x : any
+>  : ^^^
 

@@ -22,6 +22,7 @@
 //// {
 ////   "compilerOptions": {
 ////       "module": "node16",
+////       "lib": ["es5"],
 ////       "strict": true,
 ////       "outDir": "./out",
 //// 

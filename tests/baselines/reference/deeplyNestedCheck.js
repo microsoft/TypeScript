@@ -57,8 +57,9 @@ const a2: string[][][][][][][][][][] = [[[[[[[[[[42]]]]]]]]]];
 
 
 //// [deeplyNestedCheck.js]
+"use strict";
 // Repro from #14794
-var x = {
+const x = {
     b: [
         {
             c: {
@@ -86,5 +87,5 @@ var x = {
     ],
 };
 // Repro from 34619
-var a1 = [[[[[42]]]]];
-var a2 = [[[[[[[[[[42]]]]]]]]]];
+const a1 = [[[[[42]]]]];
+const a2 = [[[[[[[[[[42]]]]]]]]]];

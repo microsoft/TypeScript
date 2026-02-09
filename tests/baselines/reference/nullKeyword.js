@@ -4,4 +4,5 @@
 null.foo;
 
 //// [nullKeyword.js]
+"use strict";
 null.foo;

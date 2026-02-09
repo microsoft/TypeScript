@@ -4,5 +4,6 @@
 a = () => { } || a
 
 //// [parserArrowFunctionExpression2.js]
-a = function () { };
+"use strict";
+a = () => { };
  || a;

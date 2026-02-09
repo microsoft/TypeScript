@@ -16,20 +16,14 @@ var c: C;
 var r = c.x(''); // string
 
 //// [accessorsAreNotContextuallyTyped.js]
+"use strict";
 // accessors are not contextually typed
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    set x(v) {
     }
-    Object.defineProperty(C.prototype, "x", {
-        get: function () {
-            return function (x) { return ""; };
-        },
-        set: function (v) {
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return C;
-}());
+    get x() {
+        return (x) => "";
+    }
+}
 var c;
 var r = c.x(''); // string

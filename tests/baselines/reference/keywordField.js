@@ -13,6 +13,7 @@ var q = a["if"];
 
 
 //// [keywordField.js]
+"use strict";
 var obj = {};
 obj.if = 1;
 var a = { if: "test" };

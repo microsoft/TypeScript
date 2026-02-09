@@ -1,3 +1,4 @@
+// @target: es2015
 declare module "fs" {
     var x: string;
 }

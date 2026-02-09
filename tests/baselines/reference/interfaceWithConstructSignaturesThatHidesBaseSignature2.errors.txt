@@ -1,0 +1,16 @@
+interfaceWithConstructSignaturesThatHidesBaseSignature2.ts(10,13): error TS2454: Variable 'd' is used before being assigned.
+
+
+==== interfaceWithConstructSignaturesThatHidesBaseSignature2.ts (1 errors) ====
+    interface Foo {
+        new (): { a: number; b: number };
+    }
+    
+    interface Derived extends Foo {
+        new (): { a: number }; // constructors not checked for conformance like a call signature is
+    }
+    
+    var d: Derived;
+    var r = new d();
+                ~
+!!! error TS2454: Variable 'd' is used before being assigned.

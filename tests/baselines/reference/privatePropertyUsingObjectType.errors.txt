@@ -1,13 +1,25 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+privatePropertyUsingObjectType.ts(2,13): error TS2564: Property '_filterProviders' has no initializer and is not definitely assigned in the constructor.
+privatePropertyUsingObjectType.ts(3,13): error TS2564: Property '_filterProviders2' has no initializer and is not definitely assigned in the constructor.
+privatePropertyUsingObjectType.ts(4,13): error TS2564: Property '_filterProviders3' has no initializer and is not definitely assigned in the constructor.
+privatePropertyUsingObjectType.ts(5,13): error TS2564: Property '_filterProviders4' has no initializer and is not definitely assigned in the constructor.
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== privatePropertyUsingObjectType.ts (0 errors) ====
+==== privatePropertyUsingObjectType.ts (4 errors) ====
     export class FilterManager {
         private _filterProviders: { index: IFilterProvider; };
+                ~~~~~~~~~~~~~~~~
+!!! error TS2564: Property '_filterProviders' has no initializer and is not definitely assigned in the constructor.
         private _filterProviders2: { [index: number]: IFilterProvider; };
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property '_filterProviders2' has no initializer and is not definitely assigned in the constructor.
         private _filterProviders3: { (index: number): IFilterProvider; };
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property '_filterProviders3' has no initializer and is not definitely assigned in the constructor.
         private _filterProviders4: (index: number) => IFilterProvider;
+                ~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property '_filterProviders4' has no initializer and is not definitely assigned in the constructor.
     }
     export interface IFilterProvider {
     }

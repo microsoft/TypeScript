@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 // Check that `any` is a strict supertype of `unknown`

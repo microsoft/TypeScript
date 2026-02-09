@@ -1,3 +1,4 @@
+// @target: es2015
 function f<X>(arg: X) {
     type Cond1 = X extends [infer A] ? A : never;
     type Cond2 = X extends [infer A] ? A : never;

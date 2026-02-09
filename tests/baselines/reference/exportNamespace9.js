@@ -39,12 +39,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = 1;
+const A = 1;
 exports.A = A;
 //// [d.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var c_1 = require("./c");
+const c_1 = require("./c");
 c_1.A; // Ok
 //// [e.js]
 "use strict";
@@ -72,5 +72,5 @@ __exportStar(require("./e"), exports);
 //// [g.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var f_1 = require("./f");
+const f_1 = require("./f");
 f_1.A;

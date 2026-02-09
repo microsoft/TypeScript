@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 declare namespace M {
     // Error because body is not ambient and this overload is

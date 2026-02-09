@@ -1,6 +1,6 @@
 // @strict: false
 // @lib: es5
-// @target: es5
+// @target: es5, es2015
 let parent = true;
 const parent2 = true;
 declare function use(a: any);

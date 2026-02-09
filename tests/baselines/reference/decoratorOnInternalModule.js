@@ -9,3 +9,4 @@ namespace M {
 }
 
 //// [decoratorOnInternalModule.js]
+"use strict";

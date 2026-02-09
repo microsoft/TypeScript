@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 declare let x: number | string | boolean

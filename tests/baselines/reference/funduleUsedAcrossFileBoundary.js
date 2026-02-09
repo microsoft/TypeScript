@@ -15,7 +15,9 @@ function promiseWithCancellation<T>(promise: Q.Promise<T>) {
 }
 
 //// [funduleUsedAcrossFileBoundary_file1.js]
+"use strict";
 //// [funduleUsedAcrossFileBoundary_file2.js]
+"use strict";
 function promiseWithCancellation(promise) {
     var deferred = Q.defer(); // used to be an error
 }

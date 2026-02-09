@@ -11,8 +11,8 @@ interface Base {
     a2: new (x?: number) => number;
 >a2 : new (x?: number) => number
 >   : ^^^^^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a3: new (x: number) => number;
 >a3 : new (x: number) => number
@@ -25,16 +25,16 @@ interface Base {
 >   : ^^^^^ ^^      ^^ ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a5: new (x?: number, y?: number) => number;
 >a5 : new (x?: number, y?: number) => number
 >   : ^^^^^ ^^^      ^^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
->y : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a6: new (x: number, y: number) => number;
 >a6 : new (x: number, y: number) => number
@@ -127,8 +127,8 @@ declare var a: new () => number;
 declare var a2: new (x?: number) => number; 
 >a2 : new (x?: number) => number
 >   : ^^^^^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a2 = b.a; // ok
 >a2 = b.a : new () => number
@@ -285,8 +285,8 @@ declare var a4: new (x: number, y?: number) => number;
 >   : ^^^^^ ^^      ^^ ^^^      ^^^^^      
 >x : number
 >  : ^^^^^^
->y : number
->  : ^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a4 = b.a; // ok
 >a4 = b.a : new () => number
@@ -363,10 +363,10 @@ declare var a4: new (x: number, y?: number) => number;
 declare var a5: new (x?: number, y?: number) => number;
 >a5 : new (x?: number, y?: number) => number
 >   : ^^^^^ ^^^      ^^ ^^^      ^^^^^      
->x : number
->  : ^^^^^^
->y : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>y : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     a5 = b.a; // ok
 >a5 = b.a : new () => number

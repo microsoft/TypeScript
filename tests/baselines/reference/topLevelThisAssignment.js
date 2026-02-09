@@ -11,6 +11,7 @@ a;
 
 
 //// [output.js]
+"use strict";
 this.a = 10;
 this.a;
 a;

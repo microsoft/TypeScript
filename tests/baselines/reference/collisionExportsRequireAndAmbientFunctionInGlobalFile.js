@@ -14,6 +14,7 @@ namespace m4 {
 }
 
 //// [collisionExportsRequireAndAmbientFunctionInGlobalFile.js]
+"use strict";
 var m4;
 (function (m4) {
     var a = 10;

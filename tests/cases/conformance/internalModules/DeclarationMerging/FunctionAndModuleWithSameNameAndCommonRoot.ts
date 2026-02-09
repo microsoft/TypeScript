@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: function.ts
 namespace A {
     export function Point() {

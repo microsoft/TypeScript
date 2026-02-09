@@ -1,0 +1,42 @@
+index.js(11,14): error TS2322: Type 'null' is not assignable to type 'string | undefined'.
+index.js(14,14): error TS2322: Type 'null' is not assignable to type 'string'.
+index.js(17,14): error TS2322: Type 'null' is not assignable to type '(arg0: string, arg1: number) => object'.
+index.js(20,14): error TS2322: Type 'null' is not assignable to type 'new (arg1: string, arg2: number) => object'.
+index.js(23,14): error TS2322: Type 'null' is not assignable to type '{ [x: string]: number; }'.
+
+
+==== index.js (5 errors) ====
+    /** @type {?} */
+    export const a = null;
+    
+    /** @type {*} */
+    export const b = null;
+    
+    /** @type {string?} */
+    export const c = null;
+    
+    /** @type {string=} */
+    export const d = null;
+                 ~
+!!! error TS2322: Type 'null' is not assignable to type 'string | undefined'.
+    
+    /** @type {string!} */
+    export const e = null;
+                 ~
+!!! error TS2322: Type 'null' is not assignable to type 'string'.
+    
+    /** @type {function(string, number): object} */
+    export const f = null;
+                 ~
+!!! error TS2322: Type 'null' is not assignable to type '(arg0: string, arg1: number) => object'.
+    
+    /** @type {function(new: object, string, number)} */
+    export const g = null;
+                 ~
+!!! error TS2322: Type 'null' is not assignable to type 'new (arg1: string, arg2: number) => object'.
+    
+    /** @type {Object.<string, number>} */
+    export const h = null;
+                 ~
+!!! error TS2322: Type 'null' is not assignable to type '{ [x: string]: number; }'.
+    

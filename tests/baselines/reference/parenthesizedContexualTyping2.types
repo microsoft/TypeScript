@@ -312,10 +312,10 @@ var i = fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x 
 >                                                                                           : ^^
 >fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
 >    : ^^^ ^^ ^^        ^^ ^^ ^^^ ^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^ ^^^
->(Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined) : (x: <T>(p: T) => T) => any
->                                                                                  : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
->Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined : (x: <T>(p: T) => T) => any
->                                                                                : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
+>(Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => undefined)
+>                                                                                  : ^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^^
+>Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x => undefined : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => undefined)
+>                                                                                : ^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^^
 >Math.random() < 0.5 : boolean
 >                    : ^^^^^^^
 >Math.random() : number
@@ -340,8 +340,8 @@ var i = fun((Math.random() < 0.5 ? x => { x<number>(undefined); return x; } : x 
 >          : ^^^^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
->x => undefined : (x: <T>(p: T) => T) => any
->               : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
+>x => undefined : (x: <T>(p: T) => T) => undefined
+>               : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
@@ -356,10 +356,10 @@ var j = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >                                                                                               : ^^
 >fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
 >    : ^^^ ^^ ^^        ^^ ^^ ^^^ ^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^ ^^^
->(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : (x: <T>(p: T) => T) => any
->                                                                                      : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
->Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : (x: <T>(p: T) => T) => any
->                                                                                    : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
+>(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => undefined)
+>                                                                                      : ^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^^
+>Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => undefined)
+>                                                                                    : ^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^^
 >Math.random() < 0.5 : boolean
 >                    : ^^^^^^^
 >Math.random() : number
@@ -386,10 +386,10 @@ var j = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >          : ^^^^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
->(x => undefined) : (x: <T>(p: T) => T) => any
->                 : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
->x => undefined : (x: <T>(p: T) => T) => any
->               : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
+>(x => undefined) : (x: <T>(p: T) => T) => undefined
+>                 : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^
+>x => undefined : (x: <T>(p: T) => T) => undefined
+>               : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
@@ -404,10 +404,10 @@ var k = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >                                                                                                                                         : ^^
 >fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
 >    : ^^^ ^^ ^^        ^^ ^^ ^^^ ^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^ ^^^
->(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : (x: <T>(p: T) => T) => any
->                                                                                      : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
->Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : (x: <T>(p: T) => T) => any
->                                                                                    : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
+>(Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined)) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => undefined)
+>                                                                                      : ^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^^
+>Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : (x => undefined) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => undefined)
+>                                                                                    : ^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^^
 >Math.random() < 0.5 : boolean
 >                    : ^^^^^^^
 >Math.random() : number
@@ -434,26 +434,26 @@ var k = fun((Math.random() < 0.5 ? (x => { x<number>(undefined); return x; }) : 
 >          : ^^^^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
->(x => undefined) : (x: <T>(p: T) => T) => any
->                 : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
->x => undefined : (x: <T>(p: T) => T) => any
->               : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
+>(x => undefined) : (x: <T>(p: T) => T) => undefined
+>                 : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^
+>x => undefined : (x: <T>(p: T) => T) => undefined
+>               : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
->x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
->                                         : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ 
->x : <T>(p: T) => T
->  : ^ ^^ ^^ ^^^^^ 
->x<number>(undefined) : number
->                     : ^^^^^^
->x : <T>(p: T) => T
->  : ^ ^^ ^^ ^^^^^ 
+>x => { x<number>(undefined); return x; } : (x: any) => any
+>                                         : ^ ^^^^^^^^^^^^^
+>x : any
+>  : ^^^
+>x<number>(undefined) : any
+>                     : ^^^
+>x : any
+>  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->x : <T>(p: T) => T
->  : ^ ^^ ^^ ^^^^^ 
+>x : any
+>  : ^^^
 >10 : 10
 >   : ^^
 
@@ -464,12 +464,12 @@ var l = fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; }))
 >                                                                                                                                                  : ^^
 >fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
 >    : ^^^ ^^ ^^        ^^ ^^ ^^^ ^^^ ^^ ^^        ^^ ^^        ^^ ^^ ^^^ ^^^
->((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))) : (x: <T>(p: T) => T) => any
->                                                                                            : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
->(Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined))) : (x: <T>(p: T) => T) => any
->                                                                                          : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
->Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)) : (x: <T>(p: T) => T) => any
->                                                                                        : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
+>((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)))) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => undefined)
+>                                                                                            : ^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^^
+>(Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined))) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => undefined)
+>                                                                                          : ^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^^
+>Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; })) : ((x => undefined)) : ((x: <T>(p: T) => T) => <T>(p: T) => T) | ((x: <T>(p: T) => T) => undefined)
+>                                                                                        : ^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^^
 >Math.random() < 0.5 : boolean
 >                    : ^^^^^^^
 >Math.random() : number
@@ -498,32 +498,32 @@ var l = fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; }))
 >          : ^^^^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
->((x => undefined)) : (x: <T>(p: T) => T) => any
->                   : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
->(x => undefined) : (x: <T>(p: T) => T) => any
->                 : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
->x => undefined : (x: <T>(p: T) => T) => any
->               : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^
+>((x => undefined)) : (x: <T>(p: T) => T) => undefined
+>                   : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^
+>(x => undefined) : (x: <T>(p: T) => T) => undefined
+>                 : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^
+>x => undefined : (x: <T>(p: T) => T) => undefined
+>               : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^^^^^^^^^
 >x : <T>(p: T) => T
 >  : ^ ^^ ^^ ^^^^^ 
 >undefined : undefined
 >          : ^^^^^^^^^
->((x => { x<number>(undefined); return x; })) : (x: <T>(p: T) => T) => <T>(p: T) => T
->                                             : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ 
->(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
->                                           : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ 
->x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
->                                         : ^ ^^^ ^^ ^^ ^^^^^ ^^^^^^ ^^ ^^ ^^^^^ 
->x : <T>(p: T) => T
->  : ^ ^^ ^^ ^^^^^ 
->x<number>(undefined) : number
->                     : ^^^^^^
->x : <T>(p: T) => T
->  : ^ ^^ ^^ ^^^^^ 
+>((x => { x<number>(undefined); return x; })) : (x: any) => any
+>                                             : ^ ^^^^^^^^^^^^^
+>(x => { x<number>(undefined); return x; }) : (x: any) => any
+>                                           : ^ ^^^^^^^^^^^^^
+>x => { x<number>(undefined); return x; } : (x: any) => any
+>                                         : ^ ^^^^^^^^^^^^^
+>x : any
+>  : ^^^
+>x<number>(undefined) : any
+>                     : ^^^
+>x : any
+>  : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->x : <T>(p: T) => T
->  : ^ ^^ ^^ ^^^^^ 
+>x : any
+>  : ^^^
 >10 : 10
 >   : ^^
 
@@ -576,12 +576,12 @@ type ObjType = { x: (p: number) => string; y: (p: string) => number };
 var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 >obj1 : ObjType
 >     : ^^^^^^^
->{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
->                                                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->x : (x: number) => any
->  : ^ ^^^^^^^^^^^^^^^^
->x => (x, undefined) : (x: number) => any
->                    : ^ ^^^^^^^^^^^^^^^^
+>{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => undefined; y: (y: string) => undefined; }
+>                                                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : (x: number) => undefined
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^
+>x => (x, undefined) : (x: number) => undefined
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >(x, undefined) : undefined
@@ -592,10 +592,10 @@ var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 >  : ^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->y : (y: string) => any
->  : ^ ^^^^^^^^^^^^^^^^
->y => (y, undefined) : (y: string) => any
->                    : ^ ^^^^^^^^^^^^^^^^
+>y : (y: string) => undefined
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^
+>y => (y, undefined) : (y: string) => undefined
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^
 >y : string
 >  : ^^^^^^
 >(y, undefined) : undefined
@@ -610,14 +610,14 @@ var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
 >obj2 : ObjType
 >     : ^^^^^^^
->({ x: x => (x, undefined), y: y => (y, undefined) }) : { x: (x: number) => any; y: (y: string) => any; }
->                                                     : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
->                                                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^
->x : (x: number) => any
->  : ^ ^^^^^^^^^^^^^^^^
->x => (x, undefined) : (x: number) => any
->                    : ^ ^^^^^^^^^^^^^^^^
+>({ x: x => (x, undefined), y: y => (y, undefined) }) : { x: (x: number) => undefined; y: (y: string) => undefined; }
+>                                                     : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => undefined; y: (y: string) => undefined; }
+>                                                   : ^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : (x: number) => undefined
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^
+>x => (x, undefined) : (x: number) => undefined
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^
 >x : number
 >  : ^^^^^^
 >(x, undefined) : undefined
@@ -628,10 +628,10 @@ var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
 >  : ^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
->y : (y: string) => any
->  : ^ ^^^^^^^^^^^^^^^^
->y => (y, undefined) : (y: string) => any
->                    : ^ ^^^^^^^^^^^^^^^^
+>y : (y: string) => undefined
+>  : ^ ^^^^^^^^^^^^^^^^^^^^^^
+>y => (y, undefined) : (y: string) => undefined
+>                    : ^ ^^^^^^^^^^^^^^^^^^^^^^
 >y : string
 >  : ^^^^^^
 >(y, undefined) : undefined

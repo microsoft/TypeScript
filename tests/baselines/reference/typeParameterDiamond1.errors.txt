@@ -1,0 +1,25 @@
+typeParameterDiamond1.ts(8,19): error TS2454: Variable 'middle' is used before being assigned.
+typeParameterDiamond1.ts(9,22): error TS2454: Variable 'bottom' is used before being assigned.
+typeParameterDiamond1.ts(10,19): error TS2454: Variable 'bottom' is used before being assigned.
+
+
+==== typeParameterDiamond1.ts (3 errors) ====
+    function diamondTop<Top>() {
+        function diamondMiddle<T extends Top, U extends Top>() {
+            function diamondBottom<Bottom extends T | U>() {
+                var top: Top;
+                var middle: T | U;
+                var bottom: Bottom;
+    
+                top = middle;
+                      ~~~~~~
+!!! error TS2454: Variable 'middle' is used before being assigned.
+                middle = bottom;
+                         ~~~~~~
+!!! error TS2454: Variable 'bottom' is used before being assigned.
+                top = bottom;
+                      ~~~~~~
+!!! error TS2454: Variable 'bottom' is used before being assigned.
+            }
+        }
+    }

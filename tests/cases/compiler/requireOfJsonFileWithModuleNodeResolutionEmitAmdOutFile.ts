@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: amd
 // @moduleResolution: bundler
 // @outFile: out/output.js

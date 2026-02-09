@@ -1,7 +1,7 @@
 /// <reference path="../fourslash.ts" />
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// { "compilerOptions": { "noLib": true } }
+//// { "compilerOptions": { "noLib": true, "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/someModule.ts
 //// export const someModule = 0;

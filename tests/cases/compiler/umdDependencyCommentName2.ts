@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: umd
 ///<amd-dependency path='bar' name='b'/>
 ///<amd-dependency path='foo'/>

@@ -13,6 +13,7 @@ class D extends B<number> {
 }
 
 //// [emitClassDeclarationWithExtensionAndTypeArgumentInES6.js]
+"use strict";
 class B {
     constructor(a) { }
 }

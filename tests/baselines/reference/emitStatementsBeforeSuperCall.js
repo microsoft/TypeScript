@@ -24,6 +24,7 @@ class Test extends Base {
 
 
 //// [emitStatementsBeforeSuperCall.js]
+"use strict";
 class Base {
 }
 class Sub extends Base {

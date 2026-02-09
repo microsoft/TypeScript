@@ -70,31 +70,20 @@ const obj6 = {
 
 //// [spreadUnionPropOverride.js]
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var _a;
-var things = [];
+const things = [];
 function find(id) {
-    return things.find(function (thing) { return thing.id === id; });
+    return things.find(thing => thing.id === id);
 }
-fun(__assign({ id: 'foo' }, (_a = find('foo')) !== null && _a !== void 0 ? _a : {
+fun(Object.assign({ id: 'foo' }, (_a = find('foo')) !== null && _a !== void 0 ? _a : {
     label: 'Foo',
 }));
 // Should not error when spreading a union where one type doesn't have the property
-var obj1 = __assign({ x: 1 }, (Math.random() > 0.5 ? { y: 2 } : { y: 2, x: 3 })); // OK - x might be overwritten
+const obj1 = Object.assign({ x: 1 }, (Math.random() > 0.5 ? { y: 2 } : { y: 2, x: 3 })); // OK - x might be overwritten
 // Should error when the property is in all constituents
-var obj2 = __assign({ x: 1 }, (Math.random() > 0.5 ? { x: 2, y: 3 } : { x: 4, z: 5 })); // Error - x is always overwritten
-var obj3 = __assign({ b: 42 }, partial); // OK - b is optional in Partial1 and missing in Partial2
+const obj2 = Object.assign({ x: 1 }, (Math.random() > 0.5 ? { x: 2, y: 3 } : { x: 4, z: 5 })); // Error - x is always overwritten
+const obj3 = Object.assign({ b: 42 }, partial); // OK - b is optional in Partial1 and missing in Partial2
 // Should error when property is required in all types
-var obj4 = __assign({ a: "test" }, partial); // Error - a is required in both types
-var obj5 = __assign({ id: "123" }, abc); // OK - id is only in A
-var obj6 = __assign({ name: "test" }, abc); // Error - name is in all types
+const obj4 = Object.assign({ a: "test" }, partial); // Error - a is required in both types
+const obj5 = Object.assign({ id: "123" }, abc); // OK - id is only in A
+const obj6 = Object.assign({ name: "test" }, abc); // Error - name is in all types

@@ -3,6 +3,7 @@
 // @Filename: /home/src/workspaces/project/tsconfig.base.json
 //// {
 ////   "compilerOptions": {
+////     "lib": ["es5"],
 ////     "module": "commonjs",
 ////     "baseUrl": ".",
 ////     "paths": {

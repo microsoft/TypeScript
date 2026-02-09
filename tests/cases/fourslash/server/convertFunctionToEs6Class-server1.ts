@@ -1,8 +1,9 @@
-// @allowNonTsExtensions: true
-// @Filename: test123.js
-
 /// <reference path="../fourslash.ts" />
 
+// @lib: es5
+// @allowNonTsExtensions: true
+
+// @Filename: test123.js
 //// // Comment
 //// function fn() {
 ////     this.baz = 10;

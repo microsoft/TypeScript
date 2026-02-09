@@ -16,7 +16,7 @@
 //     prop: string | undefined;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | (property) SubClass.prop: string
+// | (property) SubClass.prop: string | undefined
 // | Base.prop
 // | SubClass.prop
 // | @inheritdoc SubClass.prop
@@ -76,6 +76,22 @@
         },
         {
           "text": "string",
+          "kind": "keyword"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
           "kind": "keyword"
         }
       ],

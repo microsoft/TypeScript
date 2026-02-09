@@ -1,3 +1,4 @@
+// @target: es2015
 // Repro from #30685
 
 type Reducer<S> = (state: S) => S;

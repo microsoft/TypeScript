@@ -39,6 +39,7 @@ var a3 = f3([true, false]);  // boolean[]
 
 
 //// [unionTypeCallSignatures2.js]
+"use strict";
 var f1;
 var n1 = f1(42); // number
 var s1 = f1("abc"); // boolean | string | number

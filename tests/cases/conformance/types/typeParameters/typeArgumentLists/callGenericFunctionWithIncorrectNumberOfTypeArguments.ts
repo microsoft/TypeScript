@@ -1,3 +1,4 @@
+// @target: es2015
 // type parameter lists must exactly match type argument lists
 // all of these invocations are errors
 

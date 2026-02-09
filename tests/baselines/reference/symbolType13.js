@@ -9,6 +9,7 @@ for (x in s) { }
 for (var y in s) { }
 
 //// [symbolType13.js]
+"use strict";
 var s = Symbol();
 var x;
 for (s in {}) { }

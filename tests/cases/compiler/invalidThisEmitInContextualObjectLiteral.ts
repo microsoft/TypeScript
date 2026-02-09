@@ -1,3 +1,4 @@
+// @target: es2015
 interface IDef {
 	p1: (e:string) => void;
 	p2: () => (n: number) => any;

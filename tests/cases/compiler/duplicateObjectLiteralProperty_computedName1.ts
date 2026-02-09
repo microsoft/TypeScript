@@ -1,3 +1,4 @@
+// @target: es2015
 const t1 = {
     1: 1,
     [1]: 0 // duplicate

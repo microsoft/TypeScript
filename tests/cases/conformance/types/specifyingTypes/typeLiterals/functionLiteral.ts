@@ -1,3 +1,4 @@
+// @target: es2015
 // basic valid forms of function literals
 
 var x = () => 1;

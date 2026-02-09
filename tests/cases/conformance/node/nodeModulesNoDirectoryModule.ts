@@ -1,3 +1,4 @@
+// @target: es2022
 // @noUncheckedSideEffectImports: true
 // @strict: true
 // @module: node16

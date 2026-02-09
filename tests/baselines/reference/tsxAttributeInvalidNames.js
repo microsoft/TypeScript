@@ -14,6 +14,7 @@ declare namespace JSX {
 <test2 -data={32} />;
 
 //// [file.jsx]
+"use strict";
 // Invalid names
 <test1 />;
 32;

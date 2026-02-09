@@ -31,11 +31,12 @@ namespace otherRoot {
 }
 
 //// [part1.js]
+"use strict";
 var Root;
 (function (Root) {
-    var A;
+    let A;
     (function (A) {
-        var Utils;
+        let Utils;
         (function (Utils) {
             function mirror(p) {
                 return { x: p.y, y: p.x };
@@ -45,21 +46,21 @@ var Root;
     })(A = Root.A || (Root.A = {}));
 })(Root || (Root = {}));
 //// [part2.js]
+"use strict";
 var otherRoot;
 (function (otherRoot) {
-    var A;
+    let A;
     (function (A) {
         // have to be fully qualified since in different root
         A.Origin = { x: 0, y: 0 };
-        var Utils;
+        let Utils;
         (function (Utils) {
-            var Plane = /** @class */ (function () {
-                function Plane(tl, br) {
+            class Plane {
+                constructor(tl, br) {
                     this.tl = tl;
                     this.br = br;
                 }
-                return Plane;
-            }());
+            }
             Utils.Plane = Plane;
         })(Utils = A.Utils || (A.Utils = {}));
     })(A = otherRoot.A || (otherRoot.A = {}));

@@ -1,3 +1,4 @@
+// @target: es2015
 function createInstance<T>(ctor: new (s: string) => T): T {
     return new ctor(42); //should be an error
 }

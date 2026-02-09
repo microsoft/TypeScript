@@ -114,8 +114,8 @@ function uniqueID_54790(
 >               : ^  ^^                  ^^       ^^                          ^^^^^      
 
   id: string | undefined,
->id : string
->   : ^^^^^^
+>id : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 
   seenIDs: { [key: string]: string }
 >seenIDs : { [key: string]: string; }
@@ -127,16 +127,16 @@ function uniqueID_54790(
   if (id === undefined) {
 >id === undefined : boolean
 >                 : ^^^^^^^
->id : string
->   : ^^^^^^
+>id : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 
     id = "1";
 >id = "1" : "1"
 >         : ^^^
->id : string
->   : ^^^^^^
+>id : string | undefined
+>   : ^^^^^^^^^^^^^^^^^^
 >"1" : "1"
 >    : ^^^
   }

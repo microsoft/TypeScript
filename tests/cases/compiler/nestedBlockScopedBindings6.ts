@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function a0() {
     for (let x of [1]) {

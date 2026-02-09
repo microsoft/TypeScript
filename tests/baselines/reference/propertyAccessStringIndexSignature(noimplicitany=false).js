@@ -15,6 +15,7 @@ empty["that's ok"];
 
 
 //// [propertyAccessStringIndexSignature.js]
+"use strict";
 ;
 flags.b;
 flags.f;

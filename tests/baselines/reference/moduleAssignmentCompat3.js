@@ -17,6 +17,7 @@ b = a;
 
 
 //// [moduleAssignmentCompat3.js]
+"use strict";
 var A;
 (function (A) {
     A.x = 1;

@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 function generic<T>(t: T) {
     var o: object = t; // expect error

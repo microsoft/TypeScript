@@ -6,5 +6,6 @@ function f() {}
 
 
 //// [parseThrowsTag.js]
+"use strict";
 /** @throws {Error} comment */
 function f() { }

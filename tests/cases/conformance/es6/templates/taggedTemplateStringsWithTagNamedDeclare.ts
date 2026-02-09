@@ -1,4 +1,5 @@
-﻿
+﻿// @target: es2015
+
 
 function declare(x: any, ...ys: any[]) {
 }

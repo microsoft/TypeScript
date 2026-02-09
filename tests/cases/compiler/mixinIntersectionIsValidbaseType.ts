@@ -1,3 +1,4 @@
+// @target: es2015
 export type Constructor<T extends object = object> = new (...args: any[]) => T;
 
 export interface Initable {

@@ -11,9 +11,9 @@ class Foo {
 
 
 //// [invokingNonGenericMethodWithTypeArguments2.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
+"use strict";
+class Foo {
+    constructor() {
         this.foo();
     }
-    return Foo;
-}());
+}

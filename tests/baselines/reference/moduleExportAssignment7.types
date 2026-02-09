@@ -95,8 +95,8 @@ function jstypes(a, b, c, d, e, f, g) {
 >  : ^^^^^^^^^^^^
 >e : () => number
 >  : ^^^^^^^^^^^^
->f : import("mod").buz
->  : ^^^^^^^^^^^^^^^^^
+>f : import("./mod").buz
+>  : ^^^^^^^^^^^^^^^^^^^
 >g : string
 >  : ^^^^^^
 
@@ -139,8 +139,8 @@ function jstypes(a, b, c, d, e, f, g) {
 >  : ^^^^^^^^^^^^
 >f() : number
 >    : ^^^^^^
->f : import("mod").buz
->  : ^^^^^^^^^^^^^^^^^
+>f : import("./mod").buz
+>  : ^^^^^^^^^^^^^^^^^^^
 >g.length : number
 >         : ^^^^^^
 >g : string
@@ -251,8 +251,8 @@ function types(
 >  : ^^^
 
     f: import('./mod').buz,
->f : import("mod").buz
->  : ^^^^^^^^^^^^^^^^^
+>f : import("./mod").buz
+>  : ^^^^^^^^^^^^^^^^^^^
 
     g: import('./mod').literal,
 >g : any
@@ -298,8 +298,8 @@ function types(
 >  : ^^^
 >f() : number
 >    : ^^^^^^
->f : import("mod").buz
->  : ^^^^^^^^^^^^^^^^^
+>f : import("./mod").buz
+>  : ^^^^^^^^^^^^^^^^^^^
 >g.length : any
 >         : ^^^
 >g : any

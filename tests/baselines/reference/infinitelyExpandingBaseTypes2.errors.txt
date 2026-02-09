@@ -1,0 +1,19 @@
+infinitelyExpandingBaseTypes2.ts(12,20): error TS2454: Variable 'a' is used before being assigned.
+
+
+==== infinitelyExpandingBaseTypes2.ts (1 errors) ====
+    interface A<T>
+    {
+       x : A<()=>T>
+    }
+     
+    interface B<T>
+    {
+       x : B<()=>T>
+    }
+     
+    var a: A<string>
+    var b: B<string> = a
+                       ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    

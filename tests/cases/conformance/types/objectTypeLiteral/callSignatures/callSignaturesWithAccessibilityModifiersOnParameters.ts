@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Call signature parameters do not allow accessibility modifiers
 

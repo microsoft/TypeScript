@@ -1,0 +1,117 @@
+mergeThreeInterfaces.ts(17,10): error TS2454: Variable 'a' is used before being assigned.
+mergeThreeInterfaces.ts(18,10): error TS2454: Variable 'a' is used before being assigned.
+mergeThreeInterfaces.ts(19,10): error TS2454: Variable 'a' is used before being assigned.
+mergeThreeInterfaces.ts(35,10): error TS2454: Variable 'b' is used before being assigned.
+mergeThreeInterfaces.ts(36,10): error TS2454: Variable 'b' is used before being assigned.
+mergeThreeInterfaces.ts(37,10): error TS2454: Variable 'b' is used before being assigned.
+mergeThreeInterfaces.ts(54,14): error TS2454: Variable 'a' is used before being assigned.
+mergeThreeInterfaces.ts(56,14): error TS2454: Variable 'a' is used before being assigned.
+mergeThreeInterfaces.ts(58,14): error TS2454: Variable 'a' is used before being assigned.
+mergeThreeInterfaces.ts(73,14): error TS2454: Variable 'b' is used before being assigned.
+mergeThreeInterfaces.ts(75,14): error TS2454: Variable 'b' is used before being assigned.
+mergeThreeInterfaces.ts(77,14): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== mergeThreeInterfaces.ts (12 errors) ====
+    // interfaces with the same root module should merge
+    
+    // basic case
+    interface A {
+        foo: string;
+    }
+    
+    interface A {
+        bar: number;
+    }
+    
+    interface A {
+        baz: boolean;
+    }
+    
+    var a: A;
+    var r1 = a.foo
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r2 = a.bar;
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    var r3 = a.baz;
+             ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+    // basic generic case
+    interface B<T> {
+        foo: T;
+    }
+    
+    interface B<T> {
+        bar: T;
+    }
+    
+    interface B<T> {
+        baz: T;
+    }
+    
+    var b: B<string>;
+    var r4 = b.foo
+             ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var r5 = b.bar;
+             ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var r6 = b.baz;
+             ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    // basic non-generic and generic case inside a module
+    namespace M {
+        interface A {
+            foo: string;
+        }
+    
+        interface A {
+            bar: number;
+        }
+    
+        interface A {
+            baz: boolean;
+        }
+    
+        var a: A;
+        var r1 = a.foo;
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        // BUG 856491
+        var r2 = a.bar; // any, should be number
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+        // BUG 856491
+        var r3 = a.baz; // any, should be boolean
+                 ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+    
+        interface B<T> {
+            foo: T;
+        }
+    
+        interface B<T> {
+            bar: T;
+        }
+    
+        interface B<T> {
+            baz: T;
+        }
+    
+        var b: B<string>;
+        var r4 = b.foo
+                 ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+        // BUG 856491
+        var r5 = b.bar; // any, should be number
+                 ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+        // BUG 856491
+        var r6 = b.baz; // any, should be boolean
+                 ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    }

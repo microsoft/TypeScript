@@ -1,3 +1,4 @@
+// @target: es2015
 // all the following should be valid
 function fn1(): number { return 1; }
 function fn2(): string { return ''; }

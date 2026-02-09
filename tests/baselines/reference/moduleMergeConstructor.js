@@ -64,10 +64,9 @@ define(["require", "exports", "foo"], function (require, exports, foo) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     foo = __importStar(foo);
-    var Test = /** @class */ (function () {
-        function Test() {
+    class Test {
+        constructor() {
             this.bar = new foo.Foo();
         }
-        return Test;
-    }());
+    }
 });

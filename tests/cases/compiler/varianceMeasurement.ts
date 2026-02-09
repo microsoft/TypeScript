@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 // The type below should be invariant in T but is measured as covariant because

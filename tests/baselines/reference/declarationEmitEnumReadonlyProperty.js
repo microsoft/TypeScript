@@ -13,18 +13,18 @@ class C {
 let x: E.A = new C().type;
 
 //// [declarationEmitEnumReadonlyProperty.js]
+"use strict";
 var E;
 (function (E) {
     E["A"] = "a";
     E["B"] = "b";
 })(E || (E = {}));
-var C = /** @class */ (function () {
-    function C() {
+class C {
+    constructor() {
         this.type = E.A;
     }
-    return C;
-}());
-var x = new C().type;
+}
+let x = new C().type;
 
 
 //// [declarationEmitEnumReadonlyProperty.d.ts]

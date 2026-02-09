@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 type Either<L, A> = Left<L, A> | Right<L, A>;
 

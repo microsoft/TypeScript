@@ -4,4 +4,5 @@
 (foo()) = bar;
 
 //// [parserAssignmentExpression1.js]
+"use strict";
 (foo()) = bar;

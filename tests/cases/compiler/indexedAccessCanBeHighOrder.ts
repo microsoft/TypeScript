@@ -1,3 +1,4 @@
+// @target: es2015
 declare function get<U, Y extends keyof U>(x: U, y: Y): U[Y];
 declare function find<T, K extends keyof T>(o: T[K]): [T, K];
 

@@ -1,3 +1,4 @@
+// @target: es5, es2015
 // @strict: false
 //super property access in constructor of class with no base type
 //super property access in instance member function of class with no base type

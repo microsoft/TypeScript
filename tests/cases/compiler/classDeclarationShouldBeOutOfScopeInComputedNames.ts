@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es6
 class A {
     static readonly p1 = Symbol();

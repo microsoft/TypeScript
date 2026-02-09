@@ -1,3 +1,4 @@
+// @target: es2015
 let stringOrNumber: string | number;
 
 if (typeof stringOrNumber === "number") {

@@ -1,3 +1,4 @@
+// @target: es2015
 // Derived member is optional but base member is not, should be an error
 
 interface Base { foo: string; }

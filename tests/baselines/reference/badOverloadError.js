@@ -7,6 +7,7 @@ function method() {
 
 
 //// [badOverloadError.js]
+"use strict";
 function method() {
     var dictionary = {};
 }

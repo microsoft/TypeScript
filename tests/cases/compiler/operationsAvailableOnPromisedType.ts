@@ -1,3 +1,4 @@
+// @target: es5, es2015
 async function fn(
     a: number,
     b: Promise<number>,

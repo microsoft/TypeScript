@@ -23,4 +23,5 @@ var a: {
 }
 
 //// [identicalCallSignatures.js]
+"use strict";
 var a;

@@ -8,3 +8,4 @@
     }
 
 //// [ambientStatement1.js]
+"use strict";

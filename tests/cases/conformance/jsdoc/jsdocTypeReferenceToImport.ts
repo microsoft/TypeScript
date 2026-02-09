@@ -1,3 +1,4 @@
+// @target: es2015
 // #34802
 // @Filename: jsdocTypeReferenceToImport.js
 // @noEmit: true

@@ -1,3 +1,4 @@
+// @target: es2015
 // @Filename: file1.ts
 export namespace App {
     export namespace Services {

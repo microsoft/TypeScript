@@ -1,3 +1,4 @@
+// @target: es2015
 // https://github.com/Microsoft/TypeScript/issues/29006
 export interface A { type: 'a' }
 export interface B { type: 'b' }

@@ -1,0 +1,14 @@
+/app.ts(2,5): error TS2322: Type 'undefined' is not assignable to type 'Error2'.
+
+
+==== /node_modules/@types/node/index.d.ts (0 errors) ====
+    interface Error2 {
+        stack2: string;
+    }
+    
+==== /app.ts (1 errors) ====
+    function foo(): Error2 {
+        return undefined;
+        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Error2'.
+    }

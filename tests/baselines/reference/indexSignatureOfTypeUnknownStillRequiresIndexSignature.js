@@ -13,6 +13,7 @@ f(stooges); // Should throw
 
 
 //// [indexSignatureOfTypeUnknownStillRequiresIndexSignature.js]
+"use strict";
 var stooges = [
     { name: "moe", age: 40 },
     { name: "larry", age: 50 },

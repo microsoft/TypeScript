@@ -7,3 +7,4 @@ interface HTMLElement {
 
 
 //// [libdtsFix.js]
+"use strict";

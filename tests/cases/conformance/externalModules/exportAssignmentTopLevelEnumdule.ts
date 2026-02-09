@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: amd
 // @Filename: foo_0.ts
 enum foo {

@@ -9,6 +9,7 @@ x = b; // error
 
 
 //// [stringIndexerAssignments1.js]
+"use strict";
 var x;
 x = a;
 x = b; // error

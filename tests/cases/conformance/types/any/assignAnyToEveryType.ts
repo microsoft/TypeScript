@@ -1,3 +1,4 @@
+// @target: es2015
 // all of these are valid
 
 var x: any;

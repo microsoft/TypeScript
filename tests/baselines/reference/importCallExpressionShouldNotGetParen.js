@@ -12,6 +12,7 @@ import("./locales/" + localeName + ".js").then(bar => {
 
 
 //// [importCallExpressionShouldNotGetParen.js]
+"use strict";
 const localeName = "zh-CN";
 import(`./locales/${localeName}.js`).then(bar => {
     let x = bar;

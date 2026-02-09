@@ -1,3 +1,4 @@
+// @target: es2015
 class Foo extends Bar {
     m1() {
         return super.m1();

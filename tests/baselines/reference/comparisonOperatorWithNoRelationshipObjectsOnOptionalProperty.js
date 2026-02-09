@@ -45,6 +45,7 @@ var rh1 = a !== b;
 var rh2 = b !== a;
 
 //// [comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.js]
+"use strict";
 // operator <
 var ra1 = a < b;
 var ra2 = b < a;

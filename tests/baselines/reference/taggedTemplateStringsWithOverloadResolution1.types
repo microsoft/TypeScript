@@ -53,8 +53,8 @@ var a = foo([]);             // number
 >        : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >    : ^^^    ^^                    ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^       ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^  ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 var b = foo([], 1);          // string
 >b : never
@@ -63,8 +63,8 @@ var b = foo([], 1);          // string
 >           : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >    : ^^^    ^^                    ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^       ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^  ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >1 : 1
 >  : ^
 
@@ -75,8 +75,8 @@ var c = foo([], 1, 2);       // boolean
 >              : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >    : ^^^    ^^                    ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^       ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^  ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2
@@ -89,8 +89,8 @@ var d = foo([], 1, true);    // boolean (with error)
 >                 : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >    : ^^^    ^^                    ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^       ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^  ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >1 : 1
 >  : ^
 >true : true
@@ -103,8 +103,8 @@ var e = foo([], 1, "2");     // {}
 >                : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >    : ^^^    ^^                    ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^       ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^  ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >1 : 1
 >  : ^
 >"2" : "2"
@@ -117,8 +117,8 @@ var f = foo([], 1, 2, 3);    // any (with error)
 >                 : ^^^^^
 >foo : { (strs: TemplateStringsArray): number; (strs: TemplateStringsArray, x: number): string; (strs: TemplateStringsArray, x: number, y: number): boolean; (strs: TemplateStringsArray, x: number, y: string): {}; }
 >    : ^^^    ^^                    ^^^      ^^^    ^^                    ^^ ^^      ^^^      ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^       ^^^    ^^                    ^^ ^^      ^^ ^^      ^^^  ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 >1 : 1
 >  : ^
 >2 : 2

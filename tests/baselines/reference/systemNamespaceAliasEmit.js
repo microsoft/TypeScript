@@ -21,7 +21,7 @@ System.register([], function (exports_1, context_1) {
         setters: [],
         execute: function () {
             (function (ns) {
-                var value = 1;
+                const value = 1;
             })(ns || (exports_1("FooBar", exports_1("ns", ns = {}))));
             (function (AnEnum) {
                 AnEnum[AnEnum["ONE"] = 0] = "ONE";

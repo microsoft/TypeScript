@@ -21,6 +21,7 @@ resultIsString = (STRING, NUMBER);
 
 
 //// [commaOperatorInvalidAssignmentType.js]
+"use strict";
 //Expect errors when the results type is different form the second operand
 resultIsBoolean = (BOOLEAN, STRING);
 resultIsBoolean = (BOOLEAN, NUMBER);

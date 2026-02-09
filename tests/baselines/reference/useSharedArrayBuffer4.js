@@ -8,6 +8,7 @@ var len = foge.byteLength;
 var species = SharedArrayBuffer[Symbol.species];
 
 //// [useSharedArrayBuffer4.js]
+"use strict";
 var foge = new SharedArrayBuffer(1024);
 var bar = foge.slice(1, 10);
 var stringTag = foge[Symbol.toStringTag];

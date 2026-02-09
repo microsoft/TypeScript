@@ -1,3 +1,4 @@
+// @target: es2015
 const keywordA = 'a';
 const keywordB = 'b';
 

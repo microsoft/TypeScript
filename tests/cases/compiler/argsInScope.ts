@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     P(ii:number, j:number, k:number) {
        for (var i = 0; i < arguments.length; i++) {

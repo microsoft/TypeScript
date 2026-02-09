@@ -1,3 +1,4 @@
+// @target: es2015
 async function func() {
     if (true) {
         continue;

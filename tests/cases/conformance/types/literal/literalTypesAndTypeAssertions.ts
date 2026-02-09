@@ -1,3 +1,4 @@
+// @target: es2015
 const obj = {
     a: "foo" as "foo",
     b: <"foo">"foo",

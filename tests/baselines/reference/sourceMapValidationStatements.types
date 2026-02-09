@@ -158,8 +158,8 @@ function f() {
 >       : ^^^^^^
 
     } catch (e) {
->e : any
->  : ^^^
+>e : unknown
+>  : ^^^^^^^
 
         if (obj.z < 10) {
 >obj.z < 10 : boolean
@@ -207,14 +207,14 @@ function f() {
 >      : ^^^^^^^^^^^^^^^^
 
     } catch (e1) {
->e1 : any
->   : ^^^
+>e1 : unknown
+>   : ^^^^^^^
 
         var b = e1;
->b : any
->  : ^^^
->e1 : any
->   : ^^^
+>b : unknown
+>  : ^^^^^^^
+>e1 : unknown
+>   : ^^^^^^^
 
     } finally {
         y = 70;
@@ -330,12 +330,12 @@ function f() {
 >  : ^
 
     x = y;
->x = y : any
->      : ^^^
+>x = y : number
+>      : ^^^^^^
 >x : number
 >  : ^^^^^^
->y : any
->  : ^^^
+>y : number
+>  : ^^^^^^
 
     var z = (x == 1) ? x + 1 : x - 1;
 >z : number

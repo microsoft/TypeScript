@@ -5,4 +5,5 @@ declare var foo: boolean;
 foo.toBAZ();
 
 //// [propertyAccess3.js]
+"use strict";
 foo.toBAZ();

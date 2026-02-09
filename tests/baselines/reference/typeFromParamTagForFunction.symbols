@@ -26,7 +26,7 @@ exports.A = function () {
 const { A } = require("./a-ext");
 >A : Symbol(A, Decl(a.js, 0, 7))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
->"./a-ext" : Symbol("a-ext", Decl(a-ext.js, 0, 0))
+>"./a-ext" : Symbol("./a-ext", Decl(a-ext.js, 0, 0))
 
 /** @param {A} p */
 function a(p) { p.x; }
@@ -54,7 +54,7 @@ exports.B = class {
 const { B } = require("./b-ext");
 >B : Symbol(B, Decl(b.js, 0, 7))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
->"./b-ext" : Symbol("b-ext", Decl(b-ext.js, 0, 0))
+>"./b-ext" : Symbol("./b-ext", Decl(b-ext.js, 0, 0))
 
 /** @param {B} p */
 function b(p) { p.x; }
@@ -78,7 +78,7 @@ export function C() {
 const { C } = require("./c-ext");
 >C : Symbol(C, Decl(c.js, 0, 7))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
->"./c-ext" : Symbol("c-ext", Decl(c-ext.js, 0, 0))
+>"./c-ext" : Symbol("./c-ext", Decl(c-ext.js, 0, 0))
 
 /** @param {C} p */
 function c(p) { p.x; }
@@ -103,7 +103,7 @@ export var D = function() {
 const { D } = require("./d-ext");
 >D : Symbol(D, Decl(d.js, 0, 7))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
->"./d-ext" : Symbol("d-ext", Decl(d-ext.js, 0, 0))
+>"./d-ext" : Symbol("./d-ext", Decl(d-ext.js, 0, 0))
 
 /** @param {D} p */
 function d(p) { p.x; }
@@ -129,7 +129,7 @@ export class E {
 const { E } = require("./e-ext");
 >E : Symbol(E, Decl(e.js, 0, 7))
 >require : Symbol(require, Decl(node.d.ts, 0, 0))
->"./e-ext" : Symbol("e-ext", Decl(e-ext.js, 0, 0))
+>"./e-ext" : Symbol("./e-ext", Decl(e-ext.js, 0, 0))
 
 /** @param {E} p */
 function e(p) { p.x; }

@@ -1,0 +1,20 @@
+error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+
+
+!!! error TS5107: Option 'target=ES5' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+==== index1.js (0 errors) ====
+    /**
+     * const doc comment
+     */
+    const x = (a) => {
+        return '';
+    };
+    
+    /**
+     * function doc comment
+     */
+    function b() {
+        return 0;
+    }
+    
+    module.exports = {x, b}

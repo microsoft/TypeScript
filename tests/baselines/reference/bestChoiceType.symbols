@@ -9,7 +9,9 @@
 >match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(bestChoiceType.ts, 2, 26))
+>s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(bestChoiceType.ts, 2, 26))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
 // Similar cases
 
@@ -31,7 +33,9 @@ function f1() {
 >y : Symbol(y, Decl(bestChoiceType.ts, 8, 7))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(bestChoiceType.ts, 9, 18))
+>s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(bestChoiceType.ts, 9, 18))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 }
 
 function f2() {
@@ -53,6 +57,8 @@ function f2() {
 >y : Symbol(y, Decl(bestChoiceType.ts, 14, 7))
 >map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(bestChoiceType.ts, 15, 18))
+>s.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(bestChoiceType.ts, 15, 18))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 }
 

@@ -1,3 +1,4 @@
+// @target: es2015
 class C1 {
     [index: string]: string
     one!: string;

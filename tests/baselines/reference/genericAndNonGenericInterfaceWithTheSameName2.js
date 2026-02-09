@@ -30,4 +30,5 @@ namespace N {
 }
 
 //// [genericAndNonGenericInterfaceWithTheSameName2.js]
+"use strict";
 // generic and non-generic interfaces with the same name do not merge

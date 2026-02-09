@@ -6,6 +6,7 @@ var v: {
 }
 
 //// [computedPropertyNamesDeclarationEmit4_ES6.js]
+"use strict";
 var v;
 
 

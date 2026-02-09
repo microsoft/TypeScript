@@ -163,8 +163,8 @@ namespace tessst {
 >       : ^
 
                     return result;
->result : U
->       : ^
+>result : NonNullable<U>
+>       : ^^^^^^^^^^^^^^
                 }
             }
         }
@@ -304,8 +304,8 @@ class ListWrapper {
 >      : ^^^
 
     if (!array) return null;
->!array : boolean
->       : ^^^^^^^
+>!array : false
+>       : ^^^^^
 >array : T[]
 >      : ^^^
 
@@ -330,8 +330,8 @@ class ListWrapper {
     if (!array || array.length == 0) return null;
 >!array || array.length == 0 : boolean
 >                            : ^^^^^^^
->!array : boolean
->       : ^^^^^^^
+>!array : false
+>       : ^^^^^
 >array : T[]
 >      : ^^^
 >array.length == 0 : boolean
@@ -468,8 +468,8 @@ class ListWrapper {
     return tessst.funkyFor(array, t => t.toString()) ? a.reverse() : a;
 >tessst.funkyFor(array, t => t.toString()) ? a.reverse() : a : T[]
 >                                                            : ^^^
->tessst.funkyFor(array, t => t.toString()) : string
->                                          : ^^^^^^
+>tessst.funkyFor(array, t => t.toString()) : any
+>                                          : ^^^
 >tessst.funkyFor : <T_1, U>(array: T_1[], callback: (element: T_1, index: number) => U) => U
 >                : ^^^^^^ ^^     ^^     ^^        ^^                                  ^^^^^ 
 >tessst : typeof tessst
@@ -478,18 +478,18 @@ class ListWrapper {
 >         : ^^^^^^ ^^     ^^     ^^        ^^                                  ^^^^^ 
 >array : T[]
 >      : ^^^
->t => t.toString() : (t: T) => string
->                  : ^ ^^^^^^^^^^^^^^
+>t => t.toString() : (t: T) => any
+>                  : ^ ^^^^^^^^^^^
 >t : T
 >  : ^
->t.toString() : string
->             : ^^^^^^
->t.toString : () => string
->           : ^^^^^^      
+>t.toString() : any
+>             : ^^^
+>t.toString : any
+>           : ^^^
 >t : T
 >  : ^
->toString : () => string
->         : ^^^^^^      
+>toString : any
+>         : ^^^
 >a.reverse() : T[]
 >            : ^^^
 >a.reverse : () => T[]
@@ -764,6 +764,7 @@ class ListWrapper {
 >list : any[]
 >     : ^^^^^
 >value : any
+>      : ^^^
 >start : number
 >      : ^^^^^^
 >0 : 0
@@ -781,6 +782,7 @@ class ListWrapper {
 >fill : { (value: any, start?: number, end?: number): any[]; (value: any, start: number, end: number): void; }
 >     : ^^^     ^^^^^^^     ^^^      ^^   ^^^      ^^^^^^^^^^^     ^^   ^^     ^^      ^^   ^^      ^^^    ^^^
 >value : any
+>      : ^^^
 >start : number
 >      : ^^^^^^
 >end === null ? list.length : end : number
@@ -852,11 +854,13 @@ class ListWrapper {
 >a[i] !== b[i] : boolean
 >              : ^^^^^^^
 >a[i] : any
+>     : ^^^
 >a : any[]
 >  : ^^^^^
 >i : number
 >  : ^^^^^^
 >b[i] : any
+>     : ^^^
 >b : any[]
 >  : ^^^^^
 >i : number
@@ -895,8 +899,8 @@ class ListWrapper {
 >      : ^     ^^^      ^^   ^^^      ^^^^^^^^
 >from : number
 >     : ^^^^^^
->to === null ? undefined : to : number
->                             : ^^^^^^
+>to === null ? undefined : to : number | undefined
+>                             : ^^^^^^^^^^^^^^^^^^
 >to === null : boolean
 >            : ^^^^^^^
 >to : number
@@ -941,8 +945,8 @@ class ListWrapper {
 >            : ^^^^^^^^^^^^^^^^^^
 >l : T[]
 >  : ^^^
->compareFn : (a: T, b: T) => number
->          : ^ ^^ ^^ ^^ ^^^^^      
+>compareFn : ((a: T, b: T) => number) | undefined
+>          : ^^ ^^ ^^ ^^ ^^^^^      ^^^^^^^^^^^^^
 >a : T
 >  : ^
 >b : T
@@ -953,31 +957,31 @@ class ListWrapper {
 >                     : ^^^^^^^
 >isPresent : <T_1>(compareFn?: (a: T_1, b: T_1) => number) => boolean
 >          : ^^^^^^         ^^^                          ^^^^^       
->compareFn : (a: T, b: T) => number
->          : ^ ^^ ^^ ^^ ^^^^^      
+>compareFn : ((a: T, b: T) => number) | undefined
+>          : ^^ ^^ ^^ ^^ ^^^^^      ^^^^^^^^^^^^^
 
       l.sort(compareFn);
 >l.sort(compareFn) : T[]
 >                  : ^^^
->l.sort : (compareFn?: (a: T, b: T) => number) => T[]
->       : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^
+>l.sort : (compareFn?: ((a: T, b: T) => number) | undefined) => T[]
+>       : ^         ^^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^
 >l : T[]
 >  : ^^^
->sort : (compareFn?: (a: T, b: T) => number) => T[]
->     : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^
->compareFn : (a: T, b: T) => number
->          : ^ ^^ ^^ ^^ ^^^^^      
+>sort : (compareFn?: ((a: T, b: T) => number) | undefined) => T[]
+>     : ^         ^^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^
+>compareFn : ((a: T, b: T) => number) | undefined
+>          : ^^ ^^ ^^ ^^ ^^^^^      ^^^^^^^^^^^^^
 
     } else {
       l.sort();
 >l.sort() : T[]
 >         : ^^^
->l.sort : (compareFn?: (a: T, b: T) => number) => T[]
->       : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^
+>l.sort : (compareFn?: ((a: T, b: T) => number) | undefined) => T[]
+>       : ^         ^^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^
 >l : T[]
 >  : ^^^
->sort : (compareFn?: (a: T, b: T) => number) => T[]
->     : ^         ^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^
+>sort : (compareFn?: ((a: T, b: T) => number) | undefined) => T[]
+>     : ^         ^^^^^ ^^^^^ ^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^
     }
   }
   static toString<T>(dit: typeof ListWrapper, l: T[]): string { return l.toString(); }
@@ -1166,12 +1170,13 @@ declare function isBlank(x: any): boolean;
 >isBlank : (x: any) => boolean
 >        : ^ ^^   ^^^^^       
 >x : any
+>  : ^^^
 
 declare function isPresent<T>(compareFn?: (a: T, b: T) => number): boolean;
 >isPresent : <T>(compareFn?: (a: T, b: T) => number) => boolean
 >          : ^ ^^         ^^^                      ^^^^^       
->compareFn : (a: T, b: T) => number
->          : ^ ^^ ^^ ^^ ^^^^^      
+>compareFn : ((a: T, b: T) => number) | undefined
+>          : ^^ ^^ ^^ ^^ ^^^^^      ^^^^^^^^^^^^^
 >a : T
 >  : ^
 >b : T
@@ -1182,6 +1187,7 @@ interface Array<T> {
 >fill : { (value: T, start?: number, end?: number): this; (value: any, start: number, end: number): void; }
 >     : ^^^     ^^ ^^     ^^^      ^^   ^^^      ^^^    ^^^     ^^   ^^     ^^      ^^   ^^      ^^^    ^^^
 >value : any
+>      : ^^^
 >start : number
 >      : ^^^^^^
 >end : number

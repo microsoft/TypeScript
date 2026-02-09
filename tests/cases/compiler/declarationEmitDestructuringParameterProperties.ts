@@ -1,4 +1,6 @@
-﻿// @declaration: true
+﻿// @module: commonjs
+// @target: es2015
+// @declaration: true
 class C1 {
     constructor(public [x, y, z]: string[]) {
     }

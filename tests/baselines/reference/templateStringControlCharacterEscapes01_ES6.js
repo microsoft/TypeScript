@@ -4,4 +4,5 @@
 var x = `\0\x00\u0000 0 00 0000`;
 
 //// [templateStringControlCharacterEscapes01_ES6.js]
+"use strict";
 var x = `\0\x00\u0000 0 00 0000`;

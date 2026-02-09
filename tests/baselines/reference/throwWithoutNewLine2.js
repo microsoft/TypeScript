@@ -5,5 +5,6 @@ throw
 a;
 
 //// [throwWithoutNewLine2.js]
+"use strict";
 throw ;
 a;

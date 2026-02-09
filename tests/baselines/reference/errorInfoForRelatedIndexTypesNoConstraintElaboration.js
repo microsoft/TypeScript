@@ -11,13 +11,11 @@ class I<T1 extends keyof JSX.IntrinsicElements, T2 extends keyof JSX.IntrinsicEl
 }
 
 //// [errorInfoForRelatedIndexTypesNoConstraintElaboration.js]
-/// <reference path="react16.d.ts" />
-var I = /** @class */ (function () {
-    function I() {
+"use strict";
+/// <reference path="/.lib/react16.d.ts" />
+class I {
+    M() {
+        let c1 = {};
+        const c2 = c1;
     }
-    I.prototype.M = function () {
-        var c1 = {};
-        var c2 = c1;
-    };
-    return I;
-}());
+}

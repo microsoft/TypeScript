@@ -23,6 +23,7 @@ arr = t1; // ok with or without strict
 
 
 //// [strictTupleLength.js]
+"use strict";
 var len0 = t0.length;
 var len1 = t1.length;
 var len2 = t2.length;

@@ -1,4 +1,5 @@
-﻿// @target: ES6
+﻿// @strict: false
+// @target: ES6
 
 function CreateTypedArrayTypes() {
     var typedArrays = [];

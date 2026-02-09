@@ -7,4 +7,5 @@ namespace TypeModule2 {
 
 
 //// [parserUnfinishedTypeNameBeforeKeyword1.js]
+"use strict";
 var x;

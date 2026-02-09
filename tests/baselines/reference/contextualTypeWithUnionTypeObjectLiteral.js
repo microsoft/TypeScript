@@ -62,6 +62,7 @@ var i11Ori21: I11 | I21 = { // Like i1 and i2 both
 };
 
 //// [contextualTypeWithUnionTypeObjectLiteral.js]
+"use strict";
 var strOrNumber = str || num;
 var objStrOrNum1 = objStr || objNum;
 var objStrOrNum2 = objStr || objNum;
@@ -94,17 +95,17 @@ var objStrOrNum8 = {
 var i11Ori21 = i11;
 var i11Ori21 = i21;
 var i11Ori21 = {
-    commonMethodDifferentReturnType: function (a, b) {
+    commonMethodDifferentReturnType: (a, b) => {
         var z = a.charAt(b);
         return z;
     },
 };
 var i11Ori21 = {
-    commonMethodDifferentReturnType: function (a, b) {
+    commonMethodDifferentReturnType: (a, b) => {
         var z = a.charCodeAt(b);
         return z;
     },
 };
 var i11Ori21 = {
-    commonMethodDifferentReturnType: function (a, b) { return strOrNumber; },
+    commonMethodDifferentReturnType: (a, b) => strOrNumber,
 };

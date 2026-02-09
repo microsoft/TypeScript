@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     1: number;
     1.0: number;

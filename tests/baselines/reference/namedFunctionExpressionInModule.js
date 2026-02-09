@@ -9,6 +9,7 @@ namespace Variables{
 
 
 //// [namedFunctionExpressionInModule.js]
+"use strict";
 var Variables;
 (function (Variables) {
     var x = function bar(a, b, c) {

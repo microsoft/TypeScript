@@ -1,3 +1,4 @@
+// @target: es2015
 let Foo = class {
     constructor() {
         this.bar++;

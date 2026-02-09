@@ -34,10 +34,7 @@
     }
 
 //// [parserModule1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.CompilerDiagnostics = void 0;
-var CompilerDiagnostics;
+export var CompilerDiagnostics;
 (function (CompilerDiagnostics) {
     CompilerDiagnostics.debug = false;
     CompilerDiagnostics.diagnosticWriter = null;
@@ -62,4 +59,4 @@ var CompilerDiagnostics;
         }
     }
     CompilerDiagnostics.assert = assert;
-})(CompilerDiagnostics || (exports.CompilerDiagnostics = CompilerDiagnostics = {}));
+})(CompilerDiagnostics || (CompilerDiagnostics = {}));

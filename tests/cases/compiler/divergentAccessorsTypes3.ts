@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 
 class One {
   get prop1(): string { return ""; }

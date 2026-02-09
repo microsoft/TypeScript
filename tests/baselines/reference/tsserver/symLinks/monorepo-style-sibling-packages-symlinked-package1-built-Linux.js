@@ -84,22 +84,22 @@ interface Array<T> { length: number; [n: number]: T; }
 interface ReadonlyArray<T> {}
 declare const console: { log(msg: any): void; };
 
-//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 34
+//// [/home/src/tslibs/TS/Lib/lib.es2016.full.d.ts] *Lib* Inode:: 35
 
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 126
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 133
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 127
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 134
 export type FooType = "foo";
 export type BarType = "bar";
 
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 128
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] Inode:: 135
 {"root":["./src/index.ts"],"version":"FakeTSVersion"}
 
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 129
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] Inode:: 136
 {
   "root": [
     "./src/index.ts"
@@ -191,14 +191,6 @@ Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/package1 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Failed Lookup Locations
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
 Info seq  [hh:mm:ss:mss] FileWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package1/package.json 2000 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: File location affecting resolution
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/package2/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/packages/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/project/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
-Info seq  [hh:mm:ss:mss] Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /home/src/projects/node_modules/@types 1 undefined Project: /home/src/projects/project/packages/package2/tsconfig.json WatchType: Type roots
 Info seq  [hh:mm:ss:mss] Finishing updateGraphWorker: Project: /home/src/projects/project/packages/package2/tsconfig.json projectStateVersion: 1 projectProgramVersion: 0 structureChanged: true structureIsReused:: Not Elapsed:: *ms
 Info seq  [hh:mm:ss:mss] Project '/home/src/projects/project/packages/package2/tsconfig.json' (Configured)
 Info seq  [hh:mm:ss:mss] 	Files (3)
@@ -309,17 +301,9 @@ Info seq  [hh:mm:ss:mss] response:
 After request
 
 PolledWatches::
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types: *new*
-  {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules: *new*
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types: *new*
   {"pollingInterval":500}
 
 FsWatches::
@@ -330,9 +314,9 @@ FsWatches::
 /home/src/projects/project/packages/package1: *new*
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":125}
+  {"inode":132}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":127}
+  {"inode":134}
 /home/src/projects/project/packages/package1/package.json: *new*
   {"inode":7}
 /home/src/projects/project/packages/package1/src: *new*
@@ -346,7 +330,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json: *new*
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts: *new*
-  {"inode":34}
+  {"inode":35}
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *new*
@@ -499,21 +483,13 @@ Before running Timeout callback:: count: 3
 //// [/home/src/projects/project/packages/package1/dist/index.d.ts] deleted
 
 PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package1/dist: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -536,13 +512,13 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":34}
+  {"inode":35}
 
 FsWatches *deleted*::
 /home/src/projects/project/packages/package1/dist:
-  {"inode":125}
+  {"inode":132}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":127}
+  {"inode":134}
 
 Timeout callback:: count: 3
 2: /home/src/projects/project/packages/package2/tsconfig.json *new*
@@ -678,19 +654,11 @@ After running Timeout callback:: count: 1
 PolledWatches::
 /home/src/projects/node_modules: *new*
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
   {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -717,7 +685,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":34}
+  {"inode":35}
 
 Timeout callback:: count: 1
 9: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
@@ -983,14 +951,14 @@ Info seq  [hh:mm:ss:mss] FileWatcher:: Triggered with /home/src/projects/project
 Info seq  [hh:mm:ss:mss] Elapsed:: *ms FileWatcher:: Triggered with /home/src/projects/project/packages/package1/dist/index.d.ts 0:: WatchInfo: /home/src/projects/project/packages/package1/dist/index.d.ts 500 undefined WatchType: Closed Script info
 Before running Timeout callback:: count: 1
 14: timerToUpdateChildWatches
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 128
-//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 129
-//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 131
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo] file written with same contents Inode:: 135
+//// [/home/src/projects/project/packages/package1/tsconfig.tsbuildinfo.readable.baseline.txt] file written with same contents Inode:: 136
+//// [/home/src/projects/project/packages/package1/dist/index.js] Inode:: 138
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 
 
-//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 132
+//// [/home/src/projects/project/packages/package1/dist/index.d.ts] Inode:: 139
 export type FooType = "foo";
 export type BarType = "bar";
 
@@ -999,17 +967,9 @@ export type BarType = "bar";
 PolledWatches::
 /home/src/projects/node_modules:
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules:
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -1024,7 +984,7 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist/index.d.ts: *new*
-  {"inode":132}
+  {"inode":139}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1038,7 +998,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":34}
+  {"inode":35}
 
 Timeout callback:: count: 1
 14: timerToUpdateChildWatches *new*
@@ -1069,17 +1029,9 @@ After running Timeout callback:: count: 1
 PolledWatches::
 /home/src/projects/node_modules:
   {"pollingInterval":500}
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules:
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
 
 FsWatches::
@@ -1090,9 +1042,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist: *new*
-  {"inode":130}
+  {"inode":137}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":132}
+  {"inode":139}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1106,7 +1058,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":34}
+  {"inode":35}
 
 Timeout callback:: count: 1
 16: /home/src/projects/project/packages/package2/tsconfig.jsonFailedLookupInvalidation *new*
@@ -1210,17 +1162,9 @@ Info seq  [hh:mm:ss:mss] event:
 After running Timeout callback:: count: 0
 
 PolledWatches::
-/home/src/projects/node_modules/@types:
-  {"pollingInterval":500}
-/home/src/projects/project/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/node_modules:
   {"pollingInterval":500}
-/home/src/projects/project/packages/node_modules/@types:
-  {"pollingInterval":500}
 /home/src/projects/project/packages/package2/node_modules:
-  {"pollingInterval":500}
-/home/src/projects/project/packages/package2/node_modules/@types:
   {"pollingInterval":500}
 
 PolledWatches *deleted*::
@@ -1235,9 +1179,9 @@ FsWatches::
 /home/src/projects/project/packages/package1:
   {"inode":6}
 /home/src/projects/project/packages/package1/dist:
-  {"inode":130}
+  {"inode":137}
 /home/src/projects/project/packages/package1/dist/index.d.ts:
-  {"inode":132}
+  {"inode":139}
 /home/src/projects/project/packages/package1/package.json:
   {"inode":7}
 /home/src/projects/project/packages/package1/src:
@@ -1251,7 +1195,7 @@ FsWatches::
 /home/src/projects/project/packages/package2/tsconfig.json:
   {"inode":13}
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
-  {"inode":34}
+  {"inode":35}
 
 Projects::
 /home/src/projects/project/packages/package2/tsconfig.json (Configured) *changed*

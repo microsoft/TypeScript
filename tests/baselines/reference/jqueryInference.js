@@ -17,5 +17,6 @@ var p2: MyPromise<boolean, any>;
 
 
 //// [jqueryInference.js]
+"use strict";
 var p2 = shouldBeIdentity(p1);
 var p2;

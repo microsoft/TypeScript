@@ -8,16 +8,16 @@ export var config: {}
 === test.js ===
 /** @param {import('./ex')} a */
 function demo(a) {
->demo : (a: typeof import("ex")) => void
->     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->a : typeof import("ex")
->  : ^^^^^^^^^^^^^^^^^^^
+>demo : (a: typeof import("./ex")) => void
+>     : ^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>a : typeof import("./ex")
+>  : ^^^^^^^^^^^^^^^^^^^^^
 
     a.config
 >a.config : {}
 >         : ^^
->a : typeof import("ex")
->  : ^^^^^^^^^^^^^^^^^^^
+>a : typeof import("./ex")
+>  : ^^^^^^^^^^^^^^^^^^^^^
 >config : {}
 >       : ^^
 }

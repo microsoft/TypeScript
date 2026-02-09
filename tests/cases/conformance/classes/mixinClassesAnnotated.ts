@@ -1,3 +1,4 @@
+// @target: es2015
 // @declaration: true
 
 type Constructor<T> = new(...args: any[]) => T;

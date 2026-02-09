@@ -15,3 +15,4 @@ type Bar<T> =
     : never
 
 //// [substitutionTypeForIndexedAccessType2.js]
+"use strict";

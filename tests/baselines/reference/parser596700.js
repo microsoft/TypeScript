@@ -4,4 +4,5 @@
 var regex2 = /[a-z/]$/i;
 
 //// [parser596700.js]
+"use strict";
 var regex2 = /[a-z/]$/i;

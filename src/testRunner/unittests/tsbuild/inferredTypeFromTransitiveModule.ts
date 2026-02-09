@@ -50,7 +50,7 @@ describe("unittests:: tsbuild:: inferredTypeFromTransitiveModule::", () => {
             `,
             "/home/src/workspaces/project/tsconfig.json": jsonToReadableText({
                 compilerOptions: {
-                    target: "es5",
+                    target: "es2015",
                     declaration: true,
                     outDir: "obj",
                     incremental: true,

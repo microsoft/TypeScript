@@ -1,3 +1,4 @@
+// @target: es2015
 // keyof T is a literal contextual type
 
 function foo<T extends { a: string, b: string }>() {

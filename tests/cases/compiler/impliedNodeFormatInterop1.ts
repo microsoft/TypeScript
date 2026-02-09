@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: es2020
 // @moduleResolution: bundler
 // @esModuleInterop: true

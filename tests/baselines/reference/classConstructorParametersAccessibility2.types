@@ -6,20 +6,20 @@ class C1 {
 >   : ^^
 
     constructor(public x?: number) { }
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 declare var c1: C1;
 >c1 : C1
 >   : ^^
 
 c1.x // OK
->c1.x : number
->     : ^^^^^^
+>c1.x : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >c1 : C1
 >   : ^^
->x : number
->  : ^^^^^^
+>x : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 
 class C2 {
@@ -27,20 +27,20 @@ class C2 {
 >   : ^^
 
     constructor(private p?: number) { }
->p : number
->  : ^^^^^^
+>p : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 declare var c2: C2;
 >c2 : C2
 >   : ^^
 
 c2.p // private, error
->c2.p : number
->     : ^^^^^^
+>c2.p : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >c2 : C2
 >   : ^^
->p : number
->  : ^^^^^^
+>p : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 
 class C3 {
@@ -48,20 +48,20 @@ class C3 {
 >   : ^^
 
     constructor(protected p?: number) { }
->p : number
->  : ^^^^^^
+>p : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 }
 declare var c3: C3;
 >c3 : C3
 >   : ^^
 
 c3.p // protected, error
->c3.p : number
->     : ^^^^^^
+>c3.p : number | undefined
+>     : ^^^^^^^^^^^^^^^^^^
 >c3 : C3
 >   : ^^
->p : number
->  : ^^^^^^
+>p : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 class Derived extends C3 {
 >Derived : Derived
@@ -82,12 +82,12 @@ class Derived extends C3 {
 >  : ^^^^^^
 
         this.p; // OK
->this.p : number
->       : ^^^^^^
+>this.p : number | undefined
+>       : ^^^^^^^^^^^^^^^^^^
 >this : this
 >     : ^^^^
->p : number
->  : ^^^^^^
+>p : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
     }
 }
 

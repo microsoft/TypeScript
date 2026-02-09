@@ -1,3 +1,4 @@
+// @target: es2015
 // @checkJs: true
 // @noEmit: true
 // @Filename: bug24024.js

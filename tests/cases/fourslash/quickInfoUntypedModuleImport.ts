@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
+
 // @Filename: node_modules/foo/index.js
 //// /*index*/{}
 

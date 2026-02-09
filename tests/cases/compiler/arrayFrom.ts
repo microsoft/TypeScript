@@ -1,3 +1,4 @@
+// @target: es2015
 // @lib: es2015
 
 // Tests fix for #20432, ensures Array.from accepts all valid inputs

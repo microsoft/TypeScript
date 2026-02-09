@@ -1,3 +1,4 @@
+// @target: es2015
 // objects with call signatures should be permitted where function types are expected
 // no errors expected below
 

@@ -48,6 +48,7 @@ namespace M3 {
 }
 
 //// [nonInstantiatedModule.js]
+"use strict";
 var M;
 (function (M) {
     M.a = 1;
@@ -61,7 +62,7 @@ var a2;
 var a2 = m.a;
 var M2;
 (function (M2) {
-    var Point;
+    let Point;
     (function (Point) {
         function Origin() {
             return { x: 0, y: 0 };
@@ -75,10 +76,7 @@ var p2;
 var p2;
 var M3;
 (function (M3) {
-    var Utils = /** @class */ (function () {
-        function Utils() {
-        }
-        return Utils;
-    }());
+    class Utils {
+    }
     M3.Utils = Utils;
 })(M3 || (M3 = {}));

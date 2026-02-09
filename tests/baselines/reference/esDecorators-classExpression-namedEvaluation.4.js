@@ -21,6 +21,7 @@ declare let dec: any, obj: any;
 
 
 //// [esDecorators-classExpression-namedEvaluation.4.js]
+"use strict";
 // 8.6.3 RS: IteratorBindingInitialization
 //  SingleNameBinding : BindingIdentifier Initializer?
 {

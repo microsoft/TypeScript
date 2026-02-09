@@ -1,3 +1,4 @@
+// @target: es2015
 interface Numbers1 {
     1: string;
 }

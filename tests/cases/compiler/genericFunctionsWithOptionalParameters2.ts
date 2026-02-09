@@ -1,3 +1,4 @@
+// @target: es2015
 interface Utils {
    fold<T, S>(c: Array<T>, folder?: (s: S, t: T) => T, init?: S): T;
 }

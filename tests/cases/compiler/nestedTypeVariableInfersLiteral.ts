@@ -1,3 +1,4 @@
+// @target: es2015
 // https://github.com/Microsoft/TypeScript/issues/19632
 declare function direct<A extends string>(a: A | A[]): Record<A, string>
 declare function nested<A extends string>(a: { fields: A }): Record<A, string>

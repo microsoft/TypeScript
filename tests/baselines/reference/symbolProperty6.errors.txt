@@ -1,0 +1,14 @@
+symbolProperty6.ts(3,5): error TS2564: Property '[Symbol.unscopables]' has no initializer and is not definitely assigned in the constructor.
+
+
+==== symbolProperty6.ts (1 errors) ====
+    class C {
+        [Symbol.iterator] = 0;
+        [Symbol.unscopables]: number;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property '[Symbol.unscopables]' has no initializer and is not definitely assigned in the constructor.
+        [Symbol.toPrimitive]() { }
+        get [Symbol.toStringTag]() {
+            return 0;
+        }
+    }

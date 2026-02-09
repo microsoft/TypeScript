@@ -5,5 +5,6 @@
 <foo data/>
 
 //// [reactNamespaceMissingDeclaration.js]
+"use strict";
 // Error myReactLib not declared
 myReactLib.createElement("foo", { data: true });

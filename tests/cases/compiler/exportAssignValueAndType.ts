@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 declare namespace http {
 	export interface Server { openPort: number; }

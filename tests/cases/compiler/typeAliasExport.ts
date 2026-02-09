@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 declare module "a" {
   export default undefined

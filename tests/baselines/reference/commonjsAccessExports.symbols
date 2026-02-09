@@ -8,7 +8,7 @@ exports.x = 0;
 
 exports.x;
 >exports.x : Symbol(x, Decl(a.js, 0, 0))
->exports : Symbol("/a", Decl(a.js, 0, 0))
+>exports : Symbol("./a", Decl(a.js, 0, 0))
 >x : Symbol(x, Decl(a.js, 0, 0))
 
 // Works nested
@@ -29,6 +29,6 @@ exports.x;
 const instance = new exports.Cls();
 >instance : Symbol(instance, Decl(a.js, 11, 5))
 >exports.Cls : Symbol(Cls, Decl(a.js, 4, 1))
->exports : Symbol("/a", Decl(a.js, 0, 0))
+>exports : Symbol("./a", Decl(a.js, 0, 0))
 >Cls : Symbol(Cls, Decl(a.js, 4, 1))
 

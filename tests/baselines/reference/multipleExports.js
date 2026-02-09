@@ -21,7 +21,7 @@ var M;
 (function (M) {
     M.v = 0;
 })(M || (exports.M = M = {}));
-var x = 0;
+const x = 0;
 (function (M) {
     M.v;
 })(M || (exports.M = M = {}));

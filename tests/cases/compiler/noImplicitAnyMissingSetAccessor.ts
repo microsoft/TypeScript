@@ -1,5 +1,5 @@
 ﻿// @noImplicitAny: true
-// @target: es5
+// @target: es5, es2015
 
 abstract class Parent
 {

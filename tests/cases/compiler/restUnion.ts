@@ -1,3 +1,4 @@
+// @target: es2015
 var union: { a: number, c: boolean } | { a: string, b: string };
 
 var rest1: { c: boolean } | { b: string };

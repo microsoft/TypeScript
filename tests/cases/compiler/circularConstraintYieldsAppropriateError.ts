@@ -1,3 +1,4 @@
+// @target: es2015
 // https://github.com/Microsoft/TypeScript/issues/16861
 class BaseType<T> {
     bar: T

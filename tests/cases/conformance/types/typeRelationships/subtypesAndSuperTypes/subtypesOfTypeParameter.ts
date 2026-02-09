@@ -1,3 +1,4 @@
+// @target: es2015
 // checking whether other types are subtypes of type parameters
 
 class C3<T> {

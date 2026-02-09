@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Derived member is not optional but base member is, should be ok
 

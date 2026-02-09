@@ -22,12 +22,12 @@ function f(param: string | number) {
 
     // global vars in function declaration
     num =  typeof var1 === "string" && var1.length; // string
->num =  typeof var1 === "string" && var1.length : number
->                                               : ^^^^^^
+>num =  typeof var1 === "string" && var1.length : number | false
+>                                               : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -49,12 +49,12 @@ function f(param: string | number) {
 >     : ^^^^^^^^^^^^^^^
 
     num = typeof var2 === "string" && var2.length; // string
->num = typeof var2 === "string" && var2.length : number
->                                              : ^^^^^^
+>num = typeof var2 === "string" && var2.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var2 === "string" && var2.length : number
->                                        : ^^^^^^
+>typeof var2 === "string" && var2.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -72,12 +72,12 @@ function f(param: string | number) {
 
     // parameters in function declaration
     num = typeof param === "string" && param.length; // string
->num = typeof param === "string" && param.length : number
->                                                : ^^^^^^
+>num = typeof param === "string" && param.length : number | false
+>                                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param === "string" && param.length : number
->                                          : ^^^^^^
+>typeof param === "string" && param.length : number | false
+>                                          : ^^^^^^^^^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
 >typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -112,12 +112,12 @@ function f1(param: string | number) {
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
->                                              : ^^^^^^
+>num = typeof var1 === "string" && var1.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -135,12 +135,12 @@ function f1(param: string | number) {
 
         // variables from outer function declaration
         num = typeof var2 === "string" && var2.length; // string
->num = typeof var2 === "string" && var2.length : number
->                                              : ^^^^^^
+>num = typeof var2 === "string" && var2.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var2 === "string" && var2.length : number
->                                        : ^^^^^^
+>typeof var2 === "string" && var2.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -158,12 +158,12 @@ function f1(param: string | number) {
 
         // parameters in outer declaration
         num = typeof param === "string" && param.length; // string
->num = typeof param === "string" && param.length : number
->                                                : ^^^^^^
+>num = typeof param === "string" && param.length : number | false
+>                                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param === "string" && param.length : number
->                                          : ^^^^^^
+>typeof param === "string" && param.length : number | false
+>                                          : ^^^^^^^^^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
 >typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -185,12 +185,12 @@ function f1(param: string | number) {
 >     : ^^^^^^^^^^^^^^^
 
         num = typeof var3 === "string" && var3.length; // string
->num = typeof var3 === "string" && var3.length : number
->                                              : ^^^^^^
+>num = typeof var3 === "string" && var3.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var3 === "string" && var3.length : number
->                                        : ^^^^^^
+>typeof var3 === "string" && var3.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var3 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -207,12 +207,12 @@ function f1(param: string | number) {
 >       : ^^^^^^
 
         num = typeof param1 === "string" && param1.length; // string
->num = typeof param1 === "string" && param1.length : number
->                                                  : ^^^^^^
+>num = typeof param1 === "string" && param1.length : number | false
+>                                                  : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param1 === "string" && param1.length : number
->                                            : ^^^^^^
+>typeof param1 === "string" && param1.length : number | false
+>                                            : ^^^^^^^^^^^^^^
 >typeof param1 === "string" : boolean
 >                           : ^^^^^^^
 >typeof param1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -254,12 +254,12 @@ function f2(param: string | number) {
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
->                                              : ^^^^^^
+>num = typeof var1 === "string" && var1.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -277,12 +277,12 @@ function f2(param: string | number) {
 
         // variables from outer function declaration
         num = typeof var2 === "string" && var2.length; // string
->num = typeof var2 === "string" && var2.length : number
->                                              : ^^^^^^
+>num = typeof var2 === "string" && var2.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var2 === "string" && var2.length : number
->                                        : ^^^^^^
+>typeof var2 === "string" && var2.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -300,12 +300,12 @@ function f2(param: string | number) {
 
         // parameters in outer declaration
         num = typeof param === "string" && param.length; // string
->num = typeof param === "string" && param.length : number
->                                                : ^^^^^^
+>num = typeof param === "string" && param.length : number | false
+>                                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param === "string" && param.length : number
->                                          : ^^^^^^
+>typeof param === "string" && param.length : number | false
+>                                          : ^^^^^^^^^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
 >typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -327,12 +327,12 @@ function f2(param: string | number) {
 >     : ^^^^^^^^^^^^^^^
 
         num = typeof var3 === "string" && var3.length; // string
->num = typeof var3 === "string" && var3.length : number
->                                              : ^^^^^^
+>num = typeof var3 === "string" && var3.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var3 === "string" && var3.length : number
->                                        : ^^^^^^
+>typeof var3 === "string" && var3.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var3 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -349,12 +349,12 @@ function f2(param: string | number) {
 >       : ^^^^^^
 
         num = typeof param1 === "string" && param1.length; // string
->num = typeof param1 === "string" && param1.length : number
->                                                  : ^^^^^^
+>num = typeof param1 === "string" && param1.length : number | false
+>                                                  : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param1 === "string" && param1.length : number
->                                            : ^^^^^^
+>typeof param1 === "string" && param1.length : number | false
+>                                            : ^^^^^^^^^^^^^^
 >typeof param1 === "string" : boolean
 >                           : ^^^^^^^
 >typeof param1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -401,12 +401,12 @@ function f3(param: string | number) {
 
         // global vars in function declaration
         num = typeof var1 === "string" && var1.length; // string
->num = typeof var1 === "string" && var1.length : number
->                                              : ^^^^^^
+>num = typeof var1 === "string" && var1.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var1 === "string" && var1.length : number
->                                        : ^^^^^^
+>typeof var1 === "string" && var1.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var1 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -424,12 +424,12 @@ function f3(param: string | number) {
 
         // variables from outer function declaration
         num = typeof var2 === "string" && var2.length; // string
->num = typeof var2 === "string" && var2.length : number
->                                              : ^^^^^^
+>num = typeof var2 === "string" && var2.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var2 === "string" && var2.length : number
->                                        : ^^^^^^
+>typeof var2 === "string" && var2.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var2 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -447,12 +447,12 @@ function f3(param: string | number) {
 
         // parameters in outer declaration
         num = typeof param === "string" && param.length; // string
->num = typeof param === "string" && param.length : number
->                                                : ^^^^^^
+>num = typeof param === "string" && param.length : number | false
+>                                                : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param === "string" && param.length : number
->                                          : ^^^^^^
+>typeof param === "string" && param.length : number | false
+>                                          : ^^^^^^^^^^^^^^
 >typeof param === "string" : boolean
 >                          : ^^^^^^^
 >typeof param : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -474,12 +474,12 @@ function f3(param: string | number) {
 >     : ^^^^^^^^^^^^^^^
 
         num = typeof var3 === "string" && var3.length; // string
->num = typeof var3 === "string" && var3.length : number
->                                              : ^^^^^^
+>num = typeof var3 === "string" && var3.length : number | false
+>                                              : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof var3 === "string" && var3.length : number
->                                        : ^^^^^^
+>typeof var3 === "string" && var3.length : number | false
+>                                        : ^^^^^^^^^^^^^^
 >typeof var3 === "string" : boolean
 >                         : ^^^^^^^
 >typeof var3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -496,12 +496,12 @@ function f3(param: string | number) {
 >       : ^^^^^^
 
         num = typeof param1 === "string" && param1.length; // string
->num = typeof param1 === "string" && param1.length : number
->                                                  : ^^^^^^
+>num = typeof param1 === "string" && param1.length : number | false
+>                                                  : ^^^^^^^^^^^^^^
 >num : number
 >    : ^^^^^^
->typeof param1 === "string" && param1.length : number
->                                            : ^^^^^^
+>typeof param1 === "string" && param1.length : number | false
+>                                            : ^^^^^^^^^^^^^^
 >typeof param1 === "string" : boolean
 >                           : ^^^^^^^
 >typeof param1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
@@ -542,12 +542,12 @@ function f4() {
 >     : ^^^^^^^^^^^^^^^
 }
 strOrNum = typeof f4() === "string" && f4(); // string | number 
->strOrNum = typeof f4() === "string" && f4() : string | number
->                                            : ^^^^^^^^^^^^^^^
+>strOrNum = typeof f4() === "string" && f4() : string | number | false
+>                                            : ^^^^^^^^^^^^^^^^^^^^^^^
 >strOrNum : string | number
 >         : ^^^^^^^^^^^^^^^
->typeof f4() === "string" && f4() : string | number
->                                 : ^^^^^^^^^^^^^^^
+>typeof f4() === "string" && f4() : string | number | false
+>                                 : ^^^^^^^^^^^^^^^^^^^^^^^
 >typeof f4() === "string" : boolean
 >                         : ^^^^^^^
 >typeof f4() : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"

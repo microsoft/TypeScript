@@ -4,8 +4,8 @@
 const r: any[] = [];
 >r : any[]
 >  : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 export function register(data: any) {
 >register : (data: any) => void
@@ -40,6 +40,6 @@ register("ok");
 export * from "./register";
 export * from "./data1";
 export * as aliased from "./data1";
->aliased : typeof import("data1")
->        : ^^^^^^^^^^^^^^^^^^^^^^
+>aliased : typeof import("./data1")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
 

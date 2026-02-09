@@ -13,7 +13,7 @@ const result = getInterfaceFromString({ type: 'two' });
 //// [primitiveUnionDetection.js]
 "use strict";
 // Repro from #46624
-var result = getInterfaceFromString({ type: 'two' });
+const result = getInterfaceFromString({ type: 'two' });
 
 
 //// [primitiveUnionDetection.d.ts]

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 function f10(x : { kind: false, a: string } | { kind: true, b: string } | { kind: string, c: string }) {

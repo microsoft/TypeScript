@@ -61,16 +61,16 @@ if (typeof a === 'number') {
 }
 
 declare var b: object | null;
->b : object
->  : ^^^^^^
+>b : object | null
+>  : ^^^^^^^^^^^^^
 
 if (typeof b === 'object') {
 >typeof b === 'object' : boolean
 >                      : ^^^^^^^
 >typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->b : object
->  : ^^^^^^
+>b : object | null
+>  : ^^^^^^^^^^^^^
 >'object' : "object"
 >         : ^^^^^^^^
 
@@ -79,8 +79,8 @@ if (typeof b === 'object') {
 >             : ^^^^^^
 >b.toString : () => string
 >           : ^^^^^^      
->b : object
->  : ^^^^^^
+>b : object | null
+>  : ^^^^^^^^^^^^^
 >toString : () => string
 >         : ^^^^^^      
 

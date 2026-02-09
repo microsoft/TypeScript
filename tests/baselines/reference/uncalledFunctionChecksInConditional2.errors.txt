@@ -1,9 +1,13 @@
 uncalledFunctionChecksInConditional2.ts(20,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 uncalledFunctionChecksInConditional2.ts(30,7): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
 uncalledFunctionChecksInConditional2.ts(49,5): error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
+uncalledFunctionChecksInConditional2.ts(51,13): error TS7006: Parameter 'tag' implicitly has an 'any' type.
+uncalledFunctionChecksInConditional2.ts(52,16): error TS7006: Parameter 'name' implicitly has an 'any' type.
+uncalledFunctionChecksInConditional2.ts(52,22): error TS7006: Parameter 'startTag' implicitly has an 'any' type.
+uncalledFunctionChecksInConditional2.ts(52,32): error TS7006: Parameter 'endTag' implicitly has an 'any' type.
 
 
-==== uncalledFunctionChecksInConditional2.ts (3 errors) ====
+==== uncalledFunctionChecksInConditional2.ts (7 errors) ====
     {
       const perf = window.performance
     
@@ -61,7 +65,15 @@ uncalledFunctionChecksInConditional2.ts(49,5): error TS2774: This condition will
 !!! error TS2774: This condition will always return true since this function is always defined. Did you mean to call it instead?
       ) {
         mark = (tag) => perf.mark(tag)
+                ~~~
+!!! error TS7006: Parameter 'tag' implicitly has an 'any' type.
         measure = (name, startTag, endTag) => {
+                   ~~~~
+!!! error TS7006: Parameter 'name' implicitly has an 'any' type.
+                         ~~~~~~~~
+!!! error TS7006: Parameter 'startTag' implicitly has an 'any' type.
+                                   ~~~~~~
+!!! error TS7006: Parameter 'endTag' implicitly has an 'any' type.
           perf.measure(name, startTag, endTag)
           perf.clearMarks(startTag)
           perf.clearMarks(endTag)

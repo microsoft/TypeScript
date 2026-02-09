@@ -15,5 +15,6 @@ M.Function("yo");
 
 
 //// [constructorOverloads4.js]
+"use strict";
 (new M.Function("return 5"))();
 M.Function("yo");

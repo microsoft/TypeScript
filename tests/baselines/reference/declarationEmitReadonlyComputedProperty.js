@@ -27,28 +27,16 @@ exports.SYMBOL = void 0;
 exports.createInstance = createInstance;
 exports.SYMBOL = Symbol();
 function createInstance() {
-    var _a;
-    return _a = {},
-        _a[exports.SYMBOL] = '',
-        _a;
+    return {
+        [exports.SYMBOL]: ''
+    };
 }
 //// [index.js]
 "use strict";
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.spread = void 0;
-var bug_1 = require("./bug");
-exports.spread = __assign({}, (0, bug_1.createInstance)());
+const bug_1 = require("./bug");
+exports.spread = Object.assign({}, (0, bug_1.createInstance)());
 
 
 //// [bug.d.ts]

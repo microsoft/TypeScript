@@ -1,3 +1,4 @@
+// @target: es2015
 
 type AMappedType<T> = { [KeyType in keyof T]: number };
 

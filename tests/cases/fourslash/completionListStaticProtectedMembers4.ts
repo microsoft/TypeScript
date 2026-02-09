@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 ////class Base {
 ////    private static privateMethod() { }
 ////    private static privateProperty;

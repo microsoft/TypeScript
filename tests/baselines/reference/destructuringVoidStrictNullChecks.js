@@ -6,4 +6,5 @@ const {} = v;
 
 
 //// [destructuringVoidStrictNullChecks.js]
-var _a = v;
+"use strict";
+const {} = v;

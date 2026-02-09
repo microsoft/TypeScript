@@ -1,0 +1,72 @@
+===================================================================
+JsFile: ES5For-of3.js
+mapUrl: ES5For-of3.js.map
+sourceRoot: 
+sources: ES5For-of3.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:ES5For-of3.js
+sourceFile:ES5For-of3.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>for (var v of ['a', 'b', 'c'])
+1 >
+2 >^^^^^
+3 >     ^^^^
+4 >         ^
+5 >          ^^^^
+6 >              ^
+7 >               ^^^
+8 >                  ^^
+9 >                    ^^^
+10>                       ^^
+11>                         ^^^
+12>                            ^
+1 >
+2 >for (
+3 >     var 
+4 >         v
+5 >           of 
+6 >              [
+7 >               'a'
+8 >                  , 
+9 >                    'b'
+10>                       , 
+11>                         'c'
+12>                            ]
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 6) Source(1, 6) + SourceIndex(0)
+3 >Emitted(2, 10) Source(1, 10) + SourceIndex(0)
+4 >Emitted(2, 11) Source(1, 11) + SourceIndex(0)
+5 >Emitted(2, 15) Source(1, 15) + SourceIndex(0)
+6 >Emitted(2, 16) Source(1, 16) + SourceIndex(0)
+7 >Emitted(2, 19) Source(1, 19) + SourceIndex(0)
+8 >Emitted(2, 21) Source(1, 21) + SourceIndex(0)
+9 >Emitted(2, 24) Source(1, 24) + SourceIndex(0)
+10>Emitted(2, 26) Source(1, 26) + SourceIndex(0)
+11>Emitted(2, 29) Source(1, 29) + SourceIndex(0)
+12>Emitted(2, 30) Source(1, 30) + SourceIndex(0)
+---
+>>>    var x = v;
+1 >^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^
+6 >             ^
+7 >              ^^^^^^^^^^^^^^^^^^^^^^^->
+1 >)
+  >    
+2 >    var 
+3 >        x
+4 >          = 
+5 >            v
+6 >             ;
+1 >Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 9) Source(2, 9) + SourceIndex(0)
+3 >Emitted(3, 10) Source(2, 10) + SourceIndex(0)
+4 >Emitted(3, 13) Source(2, 13) + SourceIndex(0)
+5 >Emitted(3, 14) Source(2, 14) + SourceIndex(0)
+6 >Emitted(3, 15) Source(2, 15) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=ES5For-of3.js.map

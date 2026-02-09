@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // ArrowFormalParameters => AssignmentExpression is equivalent to ArrowFormalParameters => { return AssignmentExpression; }
 var a = (p: string) => p.length;

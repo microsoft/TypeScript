@@ -17,6 +17,7 @@ function f5(): string {
 }
 
 //// [functionReturn.js]
+"use strict";
 function f0() { }
 function f1() {
     var n = f0();

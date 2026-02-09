@@ -23,14 +23,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 function fn(sliceIndex) {
     return null;
 }
-exports.default = { fn: fn };
+exports.default = { fn };
 //// [reexport.js]
 "use strict";
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var types_1 = __importDefault(require("./types"));
+const types_1 = __importDefault(require("./types"));
 exports.default = { test: types_1.default };
 
 

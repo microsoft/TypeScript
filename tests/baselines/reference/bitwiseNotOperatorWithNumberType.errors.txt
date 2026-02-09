@@ -1,0 +1,71 @@
+bitwiseNotOperatorWithNumberType.ts(8,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+bitwiseNotOperatorWithNumberType.ts(18,24): error TS2454: Variable 'NUMBER' is used before being assigned.
+bitwiseNotOperatorWithNumberType.ts(32,26): error TS2454: Variable 'NUMBER' is used before being assigned.
+bitwiseNotOperatorWithNumberType.ts(32,35): error TS2454: Variable 'NUMBER' is used before being assigned.
+bitwiseNotOperatorWithNumberType.ts(35,26): error TS2454: Variable 'NUMBER' is used before being assigned.
+bitwiseNotOperatorWithNumberType.ts(36,28): error TS2454: Variable 'NUMBER' is used before being assigned.
+bitwiseNotOperatorWithNumberType.ts(36,37): error TS2454: Variable 'NUMBER' is used before being assigned.
+bitwiseNotOperatorWithNumberType.ts(39,2): error TS2454: Variable 'NUMBER' is used before being assigned.
+
+
+==== bitwiseNotOperatorWithNumberType.ts (8 errors) ====
+    // ~ operator on number type
+    var NUMBER: number;
+    var NUMBER1: number[] = [1, 2];
+    
+    function foo(): number { return 1; }
+    
+    class A {
+        public a: number;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        static foo() { return 1; }
+    }
+    namespace M {
+        export var n: number;
+    }
+    
+    var objA = new A();
+    
+    // number type var
+    var ResultIsNumber1 = ~NUMBER;
+                           ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+    var ResultIsNumber2 = ~NUMBER1;
+    
+    // number type literal
+    var ResultIsNumber3 = ~1;
+    var ResultIsNumber4 = ~{ x: 1, y: 2};
+    var ResultIsNumber5 = ~{ x: 1, y: (n: number) => { return n; } };
+    
+    // number type expressions
+    var ResultIsNumber6 = ~objA.a;
+    var ResultIsNumber7 = ~M.n;
+    var ResultIsNumber8 = ~NUMBER1[0];
+    var ResultIsNumber9 = ~foo();
+    var ResultIsNumber10 = ~A.foo();
+    var ResultIsNumber11 = ~(NUMBER + NUMBER);
+                             ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+                                      ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+    
+    // multiple ~ operators
+    var ResultIsNumber12 = ~~NUMBER;
+                             ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+    var ResultIsNumber13 = ~~~(NUMBER + NUMBER);
+                               ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+                                        ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+    
+    // miss assignment operators
+    ~NUMBER;
+     ~~~~~~
+!!! error TS2454: Variable 'NUMBER' is used before being assigned.
+    ~NUMBER1;
+    ~foo();
+    ~objA.a;
+    ~M.n;
+    ~objA.a, M.n;

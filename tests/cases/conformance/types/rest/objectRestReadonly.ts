@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // #23734
 type ObjType = {

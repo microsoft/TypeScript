@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // number unless otherwise specified
 var n1 = n1++;

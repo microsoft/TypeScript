@@ -53,11 +53,7 @@ CreatingProgramWith::
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/b.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/Xy/a.ts 250 undefined Source file
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/link/a.ts 250 undefined Source file
-FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.d.ts 250 undefined Source file
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
+FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts 250 undefined Source file
 [96mtsconfig.json[0m:[93m4[0m:[93m5[0m - [91merror[0m[90m TS5101: [0mOption 'outFile' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
 
 [7m4[0m     "outFile": "out.js",
@@ -68,8 +64,8 @@ Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node
 [7m5[0m     "module": "system"
 [7m [0m [91m              ~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -82,6 +78,8 @@ b.ts
 DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject 1 undefined Wild card directory
 
+
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 
 //// [/user/username/projects/myproject/out.js]
 System.register("Xy/a", [], function (exports_1, context_1) {
@@ -130,14 +128,8 @@ System.register("b", ["Xy/a", "link/a"], function (exports_3, context_3) {
 
 
 
-PolledWatches::
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/myproject/Xy/a.ts: *new*
   {}
@@ -168,7 +160,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/Xy/a.ts
 /user/username/projects/myproject/link/a.ts
 /user/username/projects/myproject/b.ts
@@ -224,8 +216,8 @@ CreatingProgramWith::
 [7m5[0m     "module": "system"
 [7m [0m [91m              ~~~~~~~~[0m
 
-../../../../home/src/tslibs/TS/Lib/lib.d.ts
-  Default library for target 'es5'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+  Default library for target 'es2025'
 Xy/a.ts
   Imported via "./Xy/a" from file 'b.ts'
   Matched by default include pattern '**/*'
@@ -245,7 +237,7 @@ System.register("Xy/a", [], function (exports_1, context_1) {
     var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
-        execute: function () {// some comment
+        execute: function () {
             exports_1("a", a = 1);
             exports_1("b", b = 2);
         }
@@ -258,7 +250,7 @@ System.register("link/a", [], function (exports_2, context_2) {
     var __moduleName = context_2 && context_2.id;
     return {
         setters: [],
-        execute: function () {// some comment
+        execute: function () {
             exports_2("a", a = 1);
             exports_2("b", b = 2);
         }
@@ -303,7 +295,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/myproject/Xy/a.ts
 /user/username/projects/myproject/link/a.ts
 /user/username/projects/myproject/b.ts

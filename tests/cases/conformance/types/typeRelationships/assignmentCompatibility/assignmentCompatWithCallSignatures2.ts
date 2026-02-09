@@ -1,3 +1,4 @@
+// @target: es2015
 // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
 
 interface T {

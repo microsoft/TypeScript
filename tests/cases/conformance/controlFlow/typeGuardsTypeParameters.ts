@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 
 // Type guards involving type parameters produce intersection types

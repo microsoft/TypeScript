@@ -29,6 +29,7 @@ declare var Obj3: Obj3;
 
 
 //// [file.jsx]
+"use strict";
 <Obj1 />; // Error, return type is not an object type
 <Obj2 />; // Error, return type is not an object type
 <Obj3 x={42}/>; // OK

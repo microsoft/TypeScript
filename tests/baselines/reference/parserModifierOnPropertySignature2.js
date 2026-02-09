@@ -8,3 +8,4 @@ interface Foo{
 
 
 //// [parserModifierOnPropertySignature2.js]
+"use strict";

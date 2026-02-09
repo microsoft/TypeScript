@@ -1,3 +1,4 @@
+// @target: es2015
 // @outFile: foo.js
 // @Filename: c.ts
 let foo: typeof C;

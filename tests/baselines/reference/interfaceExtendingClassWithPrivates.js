@@ -18,10 +18,8 @@ var r = i.y;
 var r2 = i.x; // error
 
 //// [interfaceExtendingClassWithPrivates.js]
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
+"use strict";
+class Foo {
+}
 var r = i.y;
 var r2 = i.x; // error

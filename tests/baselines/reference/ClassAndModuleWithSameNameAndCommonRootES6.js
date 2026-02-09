@@ -41,6 +41,7 @@ var a: { id: string };
 
 
 //// [class.js]
+"use strict";
 var X;
 (function (X) {
     var Y;
@@ -55,6 +56,7 @@ var X;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 //// [module.js]
+"use strict";
 var X;
 (function (X) {
     var Y;
@@ -66,10 +68,12 @@ var X;
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));
 //// [test.js]
+"use strict";
 //var cl: { x: number; y: number; }
 var cl = new X.Y.Point(1, 1);
 var cl = X.Y.Point.Origin; // error not expected here same as bug 83996 ?
 //// [simple.js]
+"use strict";
 class A {
 }
 (function (A) {

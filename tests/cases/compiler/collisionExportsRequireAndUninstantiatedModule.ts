@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 export namespace require { // no error 
     export interface I {

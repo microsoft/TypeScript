@@ -1,3 +1,4 @@
+// @target: es2015
 interface IPromise<T> {
     then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise<TResult>;
 }

@@ -13,16 +13,16 @@ let obj: Data = true;
 
 === 1.ts ===
 let v = "str" || true;
->v : string | boolean
->  : ^^^^^^^^^^^^^^^^
->"str" || true : true | "str"
->              : ^^^^^^^^^^^^
+>v : string
+>  : ^^^^^^
+>"str" || true : "str"
+>              : ^^^^^
 >"str" : "str"
 >      : ^^^^^
 >true : true
 >     : ^^^^
 
 export { v }
->v : string | boolean
->  : ^^^^^^^^^^^^^^^^
+>v : string
+>  : ^^^^^^
 

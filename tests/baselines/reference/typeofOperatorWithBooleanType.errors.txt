@@ -1,7 +1,8 @@
+typeofOperatorWithBooleanType.ts(7,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
 typeofOperatorWithBooleanType.ts(36,1): error TS2695: Left side of comma operator is unused and has no side effects.
 
 
-==== typeofOperatorWithBooleanType.ts (1 errors) ====
+==== typeofOperatorWithBooleanType.ts (2 errors) ====
     // typeof  operator on boolean type
     declare var BOOLEAN: boolean;
     
@@ -9,6 +10,8 @@ typeofOperatorWithBooleanType.ts(36,1): error TS2695: Left side of comma operato
     
     class A {
         public a: boolean;
+               ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
         static foo() { return false; }
     }
     namespace M {

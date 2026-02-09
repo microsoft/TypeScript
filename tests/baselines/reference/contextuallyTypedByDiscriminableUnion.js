@@ -36,6 +36,7 @@ invoke({
 
 
 //// [contextuallyTypedByDiscriminableUnion.js]
+"use strict";
 function invoke(item) {
     if (item.kind === "a") {
         item.method("");
@@ -46,14 +47,14 @@ function invoke(item) {
 }
 invoke({
     kind: "a",
-    method: function (a) {
+    method(a) {
         return +a;
     }
 });
-var kind = "a";
+const kind = "a";
 invoke({
-    kind: kind,
-    method: function (a) {
+    kind,
+    method(a) {
         return +a;
     }
 });

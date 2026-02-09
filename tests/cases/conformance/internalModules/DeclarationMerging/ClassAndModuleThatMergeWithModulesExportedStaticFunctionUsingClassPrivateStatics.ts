@@ -1,3 +1,4 @@
+// @target: es2015
 class clodule<T> {
     id: string;
     value: T;

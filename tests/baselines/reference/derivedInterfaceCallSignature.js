@@ -30,4 +30,5 @@ declare var area: D3SvgArea;
 area.interpolate('two')('one');
 
 //// [derivedInterfaceCallSignature.js]
+"use strict";
 area.interpolate('two')('one');

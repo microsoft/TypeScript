@@ -1,3 +1,4 @@
+// @target: es2015
 var a: number = null;
 var b: boolean = null;
 var c: string = null;

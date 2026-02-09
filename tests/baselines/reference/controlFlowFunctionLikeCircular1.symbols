@@ -1,0 +1,223 @@
+//// [tests/cases/compiler/controlFlowFunctionLikeCircular1.ts] ////
+
+=== controlFlowFunctionLikeCircular_1.ts ===
+unionOfDifferentReturnType1(true);
+>unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(controlFlowFunctionLikeCircular_1.ts, 1, 5))
+
+const unionOfDifferentReturnType1: { (a: any): number; } | { (a: number): typeof Date; };
+>unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(controlFlowFunctionLikeCircular_1.ts, 1, 5))
+>a : Symbol(a, Decl(controlFlowFunctionLikeCircular_1.ts, 1, 38))
+>a : Symbol(a, Decl(controlFlowFunctionLikeCircular_1.ts, 1, 62))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+
+=== controlFlowFunctionLikeCircular_2.ts ===
+unionOfDifferentReturnType1(true);
+>unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(controlFlowFunctionLikeCircular_1.ts, 1, 5))
+
+const unionOfDifferentReturnType1 = Math.random() ? (a: any) => 1 : (a: number) => ({}) as typeof Date;
+>unionOfDifferentReturnType1 : Symbol(unionOfDifferentReturnType1, Decl(controlFlowFunctionLikeCircular_2.ts, 1, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowFunctionLikeCircular_2.ts, 1, 53))
+>a : Symbol(a, Decl(controlFlowFunctionLikeCircular_2.ts, 1, 69))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+
+=== controlFlowFunctionLikeCircular_3.ts ===
+function test(arg: () => string) {
+>test : Symbol(test, Decl(controlFlowFunctionLikeCircular_3.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_4.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_5.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_6.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_7.ts, 0, 0) ... and 3 more)
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_3.ts, 0, 14))
+
+  fn();
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_3.ts, 2, 7))
+
+  const fn: typeof fn = Math.random() ? arg : (): (() => arg) => {};
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_3.ts, 2, 7))
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_3.ts, 2, 7))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_3.ts, 0, 14))
+>arg : Symbol(arg)
+}
+
+=== controlFlowFunctionLikeCircular_4.ts ===
+function test(arg: () => string) {
+>test : Symbol(test, Decl(controlFlowFunctionLikeCircular_3.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_4.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_5.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_6.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_7.ts, 0, 0) ... and 3 more)
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_4.ts, 0, 14))
+
+  fn();
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_4.ts, 2, 7))
+
+  const fn = Math.random() ? arg : (): (() => arg) => {};
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_4.ts, 2, 7))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_4.ts, 0, 14))
+>arg : Symbol(arg)
+}
+
+=== controlFlowFunctionLikeCircular_5.ts ===
+function test(arg: string | number) {
+>test : Symbol(test, Decl(controlFlowFunctionLikeCircular_3.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_4.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_5.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_6.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_7.ts, 0, 0) ... and 3 more)
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_5.ts, 0, 14))
+
+  if (typeof arg === "string") {
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_5.ts, 0, 14))
+
+    fn();
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_5.ts, 3, 9))
+
+    const fn: () => typeof arg = () => arg;
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_5.ts, 3, 9))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_5.ts, 0, 14))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_5.ts, 0, 14))
+
+    return fn;
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_5.ts, 3, 9))
+  }
+  return undefined;
+>undefined : Symbol(undefined)
+}
+
+=== controlFlowFunctionLikeCircular_6.ts ===
+function test(arg: string | number) {
+>test : Symbol(test, Decl(controlFlowFunctionLikeCircular_3.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_4.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_5.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_6.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_7.ts, 0, 0) ... and 3 more)
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_6.ts, 0, 14))
+
+  if (typeof arg === "string") {
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_6.ts, 0, 14))
+
+    fn();
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_6.ts, 3, 9))
+
+    const fn = (): typeof arg => arg;
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_6.ts, 3, 9))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_6.ts, 0, 14))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_6.ts, 0, 14))
+
+    return fn;
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_6.ts, 3, 9))
+  }
+  return undefined;
+>undefined : Symbol(undefined)
+}
+
+=== controlFlowFunctionLikeCircular_7.ts ===
+function test(arg: string | number) {
+>test : Symbol(test, Decl(controlFlowFunctionLikeCircular_3.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_4.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_5.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_6.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_7.ts, 0, 0) ... and 3 more)
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_7.ts, 0, 14))
+
+  if (typeof arg === "string") {
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_7.ts, 0, 14))
+
+    fn();
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_7.ts, 3, 9))
+
+    const fn: { (): typeof arg } = () => arg;
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_7.ts, 3, 9))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_7.ts, 0, 14))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_7.ts, 0, 14))
+
+    return fn;
+>fn : Symbol(fn, Decl(controlFlowFunctionLikeCircular_7.ts, 3, 9))
+  }
+  return undefined;
+>undefined : Symbol(undefined)
+}
+
+=== controlFlowFunctionLikeCircular_8.ts ===
+function test(arg: string | number, whatever: any) {
+>test : Symbol(test, Decl(controlFlowFunctionLikeCircular_3.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_4.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_5.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_6.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_7.ts, 0, 0) ... and 3 more)
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_8.ts, 0, 14))
+>whatever : Symbol(whatever, Decl(controlFlowFunctionLikeCircular_8.ts, 0, 35))
+
+  if (typeof arg === "string") {
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_8.ts, 0, 14))
+
+    b();
+>b : Symbol(b, Decl(controlFlowFunctionLikeCircular_8.ts, 5, 9))
+
+    type First = typeof arg;
+>First : Symbol(First, Decl(controlFlowFunctionLikeCircular_8.ts, 2, 8))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_8.ts, 0, 14))
+
+    type Test = (arg: unknown) => arg is First;
+>Test : Symbol(Test, Decl(controlFlowFunctionLikeCircular_8.ts, 3, 28))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_8.ts, 4, 17))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_8.ts, 4, 17))
+>First : Symbol(First, Decl(controlFlowFunctionLikeCircular_8.ts, 2, 8))
+
+    const b: Test = whatever;
+>b : Symbol(b, Decl(controlFlowFunctionLikeCircular_8.ts, 5, 9))
+>Test : Symbol(Test, Decl(controlFlowFunctionLikeCircular_8.ts, 3, 28))
+>whatever : Symbol(whatever, Decl(controlFlowFunctionLikeCircular_8.ts, 0, 35))
+
+    return b;
+>b : Symbol(b, Decl(controlFlowFunctionLikeCircular_8.ts, 5, 9))
+  }
+  return undefined;
+>undefined : Symbol(undefined)
+}
+
+=== controlFlowFunctionLikeCircular_9.ts ===
+function test(arg: string | number, whatever: any) {
+>test : Symbol(test, Decl(controlFlowFunctionLikeCircular_3.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_4.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_5.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_6.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_7.ts, 0, 0) ... and 3 more)
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_9.ts, 0, 14))
+>whatever : Symbol(whatever, Decl(controlFlowFunctionLikeCircular_9.ts, 0, 35))
+
+  if (typeof arg === "string") {
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_9.ts, 0, 14))
+
+    o.x();
+>o.x : Symbol(x, Decl(controlFlowFunctionLikeCircular_9.ts, 3, 45))
+>o : Symbol(o, Decl(controlFlowFunctionLikeCircular_9.ts, 3, 9))
+>x : Symbol(x, Decl(controlFlowFunctionLikeCircular_9.ts, 3, 45))
+
+    const o: { [k: string]: () => typeof arg; x: (() => typeof Date) | (() => void) } = whatever
+>o : Symbol(o, Decl(controlFlowFunctionLikeCircular_9.ts, 3, 9))
+>k : Symbol(k, Decl(controlFlowFunctionLikeCircular_9.ts, 3, 16))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_9.ts, 0, 14))
+>x : Symbol(x, Decl(controlFlowFunctionLikeCircular_9.ts, 3, 45))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 1 more)
+>whatever : Symbol(whatever, Decl(controlFlowFunctionLikeCircular_9.ts, 0, 35))
+
+    return o.x;
+>o.x : Symbol(x, Decl(controlFlowFunctionLikeCircular_9.ts, 3, 45))
+>o : Symbol(o, Decl(controlFlowFunctionLikeCircular_9.ts, 3, 9))
+>x : Symbol(x, Decl(controlFlowFunctionLikeCircular_9.ts, 3, 45))
+  }
+  return undefined;
+>undefined : Symbol(undefined)
+}
+
+=== controlFlowFunctionLikeCircular_10.ts ===
+function test(arg: string | number, whatever: any) {
+>test : Symbol(test, Decl(controlFlowFunctionLikeCircular_3.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_4.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_5.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_6.ts, 0, 0), Decl(controlFlowFunctionLikeCircular_7.ts, 0, 0) ... and 3 more)
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_10.ts, 0, 14))
+>whatever : Symbol(whatever, Decl(controlFlowFunctionLikeCircular_10.ts, 0, 35))
+
+  if (typeof arg === "string") {
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_10.ts, 0, 14))
+
+    o.foo();
+>o.foo : Symbol(__index, Decl(controlFlowFunctionLikeCircular_10.ts, 3, 14))
+>o : Symbol(o, Decl(controlFlowFunctionLikeCircular_10.ts, 3, 9))
+>foo : Symbol(__index, Decl(controlFlowFunctionLikeCircular_10.ts, 3, 14))
+
+    const o: { [k: string]: () => typeof arg } = whatever
+>o : Symbol(o, Decl(controlFlowFunctionLikeCircular_10.ts, 3, 9))
+>k : Symbol(k, Decl(controlFlowFunctionLikeCircular_10.ts, 3, 16))
+>arg : Symbol(arg, Decl(controlFlowFunctionLikeCircular_10.ts, 0, 14))
+>whatever : Symbol(whatever, Decl(controlFlowFunctionLikeCircular_10.ts, 0, 35))
+
+    return o.foo;
+>o.foo : Symbol(__index, Decl(controlFlowFunctionLikeCircular_10.ts, 3, 14))
+>o : Symbol(o, Decl(controlFlowFunctionLikeCircular_10.ts, 3, 9))
+>foo : Symbol(__index, Decl(controlFlowFunctionLikeCircular_10.ts, 3, 14))
+  }
+  return undefined;
+>undefined : Symbol(undefined)
+}
+

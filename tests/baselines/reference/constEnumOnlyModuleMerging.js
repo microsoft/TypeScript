@@ -16,6 +16,7 @@ namespace B {
 }
 
 //// [constEnumOnlyModuleMerging.js]
+"use strict";
 var Outer;
 (function (Outer) {
     Outer.x = 1;

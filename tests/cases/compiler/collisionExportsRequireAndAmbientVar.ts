@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: commonjs
 //@filename: collisionExportsRequireAndAmbientVar_externalmodule.ts
 export declare var exports: number;

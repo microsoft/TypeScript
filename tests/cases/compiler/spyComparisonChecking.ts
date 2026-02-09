@@ -1,3 +1,4 @@
+// @target: es2015
 interface Spy {
     (...params: any[]): any;
 

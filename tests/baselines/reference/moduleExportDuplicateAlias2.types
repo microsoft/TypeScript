@@ -4,8 +4,8 @@
 const { apply } = require('./moduleExportAliasDuplicateAlias')
 >apply : () => void
 >      : ^^^^^^^^^^
->require('./moduleExportAliasDuplicateAlias') : typeof import("moduleExportAliasDuplicateAlias")
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require('./moduleExportAliasDuplicateAlias') : typeof import("./moduleExportAliasDuplicateAlias")
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

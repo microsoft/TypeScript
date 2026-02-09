@@ -8,6 +8,7 @@ const x = (a: any[]) => (
 
 
 //// [parenthesizedArrowExpressionASI.js]
-var x = function (a) { return (
+"use strict";
+const x = (a) => 
 // comment
-undefined); };
+undefined;

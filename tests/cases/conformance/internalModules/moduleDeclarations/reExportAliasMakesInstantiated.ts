@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 declare namespace pack1 {
   const test1: string;
   export { test1 };

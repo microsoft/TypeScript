@@ -1,3 +1,4 @@
+// @target: es2015
 
 
 declare var foo:{ ( ):void; }

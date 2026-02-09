@@ -1,3 +1,4 @@
+// @target: es2015
 //@module: amd
 // @Filename: ambientExternalModuleWithInternalImportDeclaration_0.ts
 declare module 'M' {

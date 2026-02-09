@@ -3,14 +3,14 @@
 // import("./other.json", {});
 //                         ^
 // | ----------------------------------------------------------------------
-// | (property) ImportCallOptions.with?: ImportAttributes
-// | (property) ImportCallOptions.assert?: ImportAssertions
+// | (property) ImportCallOptions.with?: ImportAttributes | undefined
+// | (property) ImportCallOptions.assert?: ImportAssertions | undefined
 // | ----------------------------------------------------------------------
 // import("./other.json", { wi});
 //                          ^^
 // | ----------------------------------------------------------------------
-// | (property) ImportCallOptions.with?: ImportAttributes
-// | (property) ImportCallOptions.assert?: ImportAssertions
+// | (property) ImportCallOptions.with?: ImportAttributes | undefined
+// | (property) ImportCallOptions.assert?: ImportAssertions | undefined
 // | ----------------------------------------------------------------------
 
 [
@@ -75,6 +75,22 @@
             {
               "text": "ImportAttributes",
               "kind": "interfaceName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "undefined",
+              "kind": "keyword"
             }
           ],
           "documentation": []
@@ -128,6 +144,22 @@
             {
               "text": "ImportAssertions",
               "kind": "interfaceName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "undefined",
+              "kind": "keyword"
             }
           ],
           "documentation": [],
@@ -210,6 +242,22 @@
             {
               "text": "ImportAttributes",
               "kind": "interfaceName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "undefined",
+              "kind": "keyword"
             }
           ],
           "documentation": []
@@ -263,6 +311,22 @@
             {
               "text": "ImportAssertions",
               "kind": "interfaceName"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "|",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "undefined",
+              "kind": "keyword"
             }
           ],
           "documentation": [],

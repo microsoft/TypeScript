@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // valid uses of arrays of function types
 

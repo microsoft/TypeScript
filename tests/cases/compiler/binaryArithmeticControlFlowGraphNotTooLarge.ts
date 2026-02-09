@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 // Repro from #29926 (expanded 10x for good measure)

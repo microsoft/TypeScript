@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @strict: false
 ////namespace M {
 ////    export namespace A {
 ////        var o;

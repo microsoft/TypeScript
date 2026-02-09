@@ -23,6 +23,7 @@ var v1 = stringMapToArray(stringMap);  // Ok
 
 
 //// [indexSignatureTypeInference.js]
+"use strict";
 var v1;
 var v1 = numberMapToArray(numberMap); // Ok
 var v1 = numberMapToArray(stringMap); // Ok

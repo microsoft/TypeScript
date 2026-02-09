@@ -6,9 +6,7 @@ class C {
 }
 
 //// [classWithSemicolonClassElement1.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
+"use strict";
+class C {
     ;
-    return C;
-}());
+}

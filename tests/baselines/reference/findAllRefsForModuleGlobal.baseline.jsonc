@@ -14,7 +14,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/node_modules/foo/index\"",
+    "name": "module \"foo\"",
     "displayParts": [
      {
       "text": "module",
@@ -25,7 +25,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/node_modules/foo/index\"",
+      "text": "\"foo\"",
       "kind": "stringLiteral"
      }
     ]

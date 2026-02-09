@@ -38,11 +38,9 @@ else {
 }
 
 //// [typeGuardOfFormTypeOfEqualEqualHasNoEffect.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 ;
 // typeof x == s has not effect on typeguard
 if (typeof strOrNum == "string") {

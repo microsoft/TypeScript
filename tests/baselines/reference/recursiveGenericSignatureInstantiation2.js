@@ -4,3 +4,4 @@
 
 
 //// [recursiveGenericSignatureInstantiation2.js]
+"use strict";

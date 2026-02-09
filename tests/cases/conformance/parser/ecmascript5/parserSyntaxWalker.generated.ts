@@ -1,4 +1,5 @@
-﻿//declare module "fs" {
+﻿// @target: es2015
+//declare module "fs" {
 //    export class File {
 //        constructor(filename: string);
 //        public ReadAllText(): string;

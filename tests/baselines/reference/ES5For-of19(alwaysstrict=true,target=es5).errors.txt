@@ -1,0 +1,15 @@
+ES5For-of19.ts(3,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
+
+
+==== ES5For-of19.ts (1 errors) ====
+    for (let v of []) {
+        v;
+        function foo() {
+                 ~~~
+!!! error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES5'.
+            for (const v of []) {
+                v;
+            }
+        }
+    }
+    

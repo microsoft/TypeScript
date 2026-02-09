@@ -1,0 +1,166 @@
+typeGuardsInModule.ts(11,5): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInModule.ts(15,16): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInModule.ts(19,9): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+typeGuardsInModule.ts(19,15): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInModule.ts(24,16): error TS2454: Variable 'var3' is used before being assigned.
+typeGuardsInModule.ts(28,20): error TS2454: Variable 'var3' is used before being assigned.
+typeGuardsInModule.ts(37,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInModule.ts(40,9): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInModule.ts(43,9): error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+  Type 'boolean' is not assignable to type 'string | number'.
+typeGuardsInModule.ts(47,20): error TS2454: Variable 'var4' is used before being assigned.
+typeGuardsInModule.ts(51,13): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+typeGuardsInModule.ts(51,19): error TS2454: Variable 'var4' is used before being assigned.
+typeGuardsInModule.ts(56,20): error TS2454: Variable 'var5' is used before being assigned.
+typeGuardsInModule.ts(60,24): error TS2454: Variable 'var5' is used before being assigned.
+typeGuardsInModule.ts(67,5): error TS2322: Type 'number | false' is not assignable to type 'number'.
+  Type 'boolean' is not assignable to type 'number'.
+typeGuardsInModule.ts(71,16): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInModule.ts(75,9): error TS2322: Type 'string | number' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+typeGuardsInModule.ts(75,15): error TS2454: Variable 'var2' is used before being assigned.
+typeGuardsInModule.ts(80,16): error TS2454: Variable 'var3' is used before being assigned.
+typeGuardsInModule.ts(84,20): error TS2454: Variable 'var3' is used before being assigned.
+
+
+==== typeGuardsInModule.ts (20 errors) ====
+    // Note that type guards affect types of variables and parameters only and 
+    // have no effect on members of objects such as properties. 
+    
+    // variables in global
+    var num: number;
+    var strOrNum: string | number;
+    var var1: string | number;
+    // Inside module
+    namespace m1 {
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+        ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+    
+        // variables in module declaration
+        var var2: string | number;
+        if (typeof var2 === "string") {
+                   ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
+            num = var2.length; // string
+        }
+        else {
+            num = var2; // number
+            ~~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+                  ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
+        }
+    
+        // exported variable in the module
+        export var var3: string | number;
+        if (typeof var3 === "string") {
+                   ~~~~
+!!! error TS2454: Variable 'var3' is used before being assigned.
+            strOrNum = var3; // string | number
+        }
+        else {
+            strOrNum = var3; // string | number
+                       ~~~~
+!!! error TS2454: Variable 'var3' is used before being assigned.
+        }
+    }
+    // local module
+    namespace m2 {
+        var var2: string | number;
+        export var var3: string | number;
+        namespace m3 {
+            // global vars in function declaration
+            num = typeof var1 === "string" && var1.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+    
+            // local variables from outer module declaration
+            num = typeof var2 === "string" && var2.length; // string
+            ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+    
+            // exported variable from outer the module
+            strOrNum = typeof var3 === "string" && var3; // string | number
+            ~~~~~~~~
+!!! error TS2322: Type 'string | false' is not assignable to type 'string | number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'string | number'.
+    
+            // variables in module declaration
+            var var4: string | number;
+            if (typeof var4 === "string") {
+                       ~~~~
+!!! error TS2454: Variable 'var4' is used before being assigned.
+                num = var4.length; // string
+            }
+            else {
+                num = var4; // number
+                ~~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+                      ~~~~
+!!! error TS2454: Variable 'var4' is used before being assigned.
+            }
+    
+            // exported variable in the module
+            export var var5: string | number;
+            if (typeof var5 === "string") {
+                       ~~~~
+!!! error TS2454: Variable 'var5' is used before being assigned.
+                strOrNum = var5; // string | number
+            }
+            else {
+                strOrNum = var5; // string | number
+                           ~~~~
+!!! error TS2454: Variable 'var5' is used before being assigned.
+            }
+        }
+    }
+    // Dotted module
+    namespace m3.m4 {
+        // global vars in function declaration
+        num = typeof var1 === "string" && var1.length; // string
+        ~~~
+!!! error TS2322: Type 'number | false' is not assignable to type 'number'.
+!!! error TS2322:   Type 'boolean' is not assignable to type 'number'.
+    
+        // variables in module declaration
+        var var2: string | number;
+        if (typeof var2 === "string") {
+                   ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
+            num = var2.length; // string
+        }
+        else {
+            num = var2; // number
+            ~~~
+!!! error TS2322: Type 'string | number' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+                  ~~~~
+!!! error TS2454: Variable 'var2' is used before being assigned.
+        }
+    
+        // exported variable in the module
+        export var var3: string | number;
+        if (typeof var3 === "string") {
+                   ~~~~
+!!! error TS2454: Variable 'var3' is used before being assigned.
+            strOrNum = var3; // string | number
+        }
+        else {
+            strOrNum = var3; // string | number
+                       ~~~~
+!!! error TS2454: Variable 'var3' is used before being assigned.
+        }
+    }
+    

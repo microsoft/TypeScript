@@ -37,32 +37,20 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/user/username/projects/project/a.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.C = void 0;
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-exports.C = C;
+export class C {
+}
 
 
 //// [/user/username/projects/project/b.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
-
-PolledWatches::
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/username/projects/project/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/username/projects/project/a.ts: *new*
   {}
@@ -86,17 +74,17 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/project/a.ts
 /user/username/projects/project/b.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/project/a.ts
 /user/username/projects/project/b.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/username/projects/project/a.ts (used version)
 /user/username/projects/project/b.ts (used version)
 
@@ -156,7 +144,7 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/username/projects/project/a.ts
 /user/username/projects/project/b.ts
 

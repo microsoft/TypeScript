@@ -180,6 +180,7 @@ this.spaaaaace = 4;
 
 
 //// [typeOfThisGeneral.js]
+"use strict";
 class MyTestClass {
     constructor() {
         this.someFunc = () => {

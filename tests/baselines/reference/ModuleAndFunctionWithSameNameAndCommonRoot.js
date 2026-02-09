@@ -30,14 +30,16 @@ namespace B {
 
 
 //// [module.js]
+"use strict";
 var A;
 (function (A) {
-    var Point;
+    let Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = A.Point || (A.Point = {}));
 })(A || (A = {}));
 //// [function.js]
+"use strict";
 var A;
 (function (A) {
     // duplicate identifier error
@@ -47,9 +49,10 @@ var A;
     A.Point = Point;
 })(A || (A = {}));
 //// [simple.js]
+"use strict";
 var B;
 (function (B) {
-    var Point;
+    let Point;
     (function (Point) {
         Point.Origin = { x: 0, y: 0 };
     })(Point = B.Point || (B.Point = {}));

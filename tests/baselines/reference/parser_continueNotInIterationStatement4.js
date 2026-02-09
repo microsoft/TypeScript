@@ -10,8 +10,9 @@ while (true){
 
 
 //// [parser_continueNotInIterationStatement4.js]
+"use strict";
 TWO: while (true) {
-    var x = function () {
+    var x = () => {
         continue TWO;
     };
 }

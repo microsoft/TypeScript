@@ -32,11 +32,8 @@ new types.A(); // Error
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.A = void 0;
-var A = /** @class */ (function () {
-    function A() {
-    }
-    return A;
-}());
+class A {
+}
 exports.A = A;
 //// [b.js]
 "use strict";
@@ -76,7 +73,7 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
-var types = __importStar(require("./a"));
+const types = __importStar(require("./a"));
 module.exports = types;
 //// [d.js]
 "use strict";

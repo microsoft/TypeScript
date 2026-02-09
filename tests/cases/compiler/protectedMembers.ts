@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Class with protected members
 class C1 {

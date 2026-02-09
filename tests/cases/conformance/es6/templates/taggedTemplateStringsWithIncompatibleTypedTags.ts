@@ -1,4 +1,5 @@
-﻿interface I {
+﻿// @target: es2015
+interface I {
     (stringParts: TemplateStringsArray, ...rest: boolean[]): I;
     g: I;
     h: I;

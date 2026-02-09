@@ -35,8 +35,8 @@ exports.customSymbol2 = Symbol("custom");
 >                                         : ^^^^^^^^^^^^^
 >exports.customSymbol2 : unique symbol
 >                      : ^^^^^^^^^^^^^
->exports : typeof import("file")
->        : ^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./file")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^
 >customSymbol2 : unique symbol
 >              : ^^^^^^^^^^^^^
 >Symbol("custom") : unique symbol

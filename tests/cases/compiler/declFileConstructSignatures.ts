@@ -1,5 +1,5 @@
 // @strict: false
-// @target: ES5
+// @target: ES5, ES2015
 // @declaration: true
 // @removeComments: false
 // @module: commonjs

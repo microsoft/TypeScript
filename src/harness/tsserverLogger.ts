@@ -1,5 +1,8 @@
 import * as ts from "./_namespaces/ts.js";
-import { Compiler } from "./harnessIO.js";
+import {
+    IO,
+    libFolder,
+} from "./harnessIO.js";
 
 export const HarnessLSCouldNotResolveModule = "HarnessLanguageService:: Could not resolve module";
 
@@ -142,11 +145,25 @@ function sanitizeHarnessLSException(s: string) {
     return s;
 }
 
+const libFileTextReplacements = ts.memoize(() => {
+    const replacements: { text: string; jsonText: string; replacement: string; }[] = [];
+    // Read all lib files from built/local
+    const libFiles = IO.listFiles(libFolder, /^lib.*\.d\.ts$/);
+    for (const libPath of libFiles) {
+        const content = IO.readFile(libPath);
+        if (content) {
+            const fileName = ts.getBaseFileName(libPath);
+            replacements.push({ text: content, jsonText: JSON.stringify(content), replacement: `${fileName}-Text` });
+        }
+    }
+    return replacements;
+});
+
 export function sanitizeLibFileText(s: string): string {
-    Compiler.libFileNameSourceFileMap?.forEach((lib, fileName) => {
-        s = replaceAll(s, lib.stringified, `${fileName}-Text`);
-        s = replaceAll(s, lib.file.text, `${fileName}-Text`);
-    });
+    for (const { text, jsonText, replacement } of libFileTextReplacements()) {
+        s = replaceAll(s, jsonText, replacement);
+        s = replaceAll(s, text, replacement);
+    }
     return s;
 }
 

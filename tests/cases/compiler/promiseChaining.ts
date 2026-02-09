@@ -1,3 +1,4 @@
+// @target: es2015
 class Chain<T> {
     constructor(public value: T) { }
     then<S>(cb: (x: T) => S): Chain<S> {

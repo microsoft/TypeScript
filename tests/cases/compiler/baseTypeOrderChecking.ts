@@ -1,3 +1,4 @@
+// @target: es2015
 var someVariable: Class4<Class2>;
 
  

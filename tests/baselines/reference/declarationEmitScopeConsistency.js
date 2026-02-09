@@ -14,13 +14,13 @@ export const g = f;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.f = void 0;
-var f = function (x) { return x; };
+const f = (x) => x;
 exports.f = f;
 //// [b.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.g = void 0;
-var a_1 = require("./a");
+const a_1 = require("./a");
 exports.g = a_1.f;
 
 

@@ -9,14 +9,12 @@ namespace M {
 }
 
 //// [parserErrorRecovery_ClassElement2.js]
+"use strict";
 var M;
 (function (M) {
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
-    var E;
+    class C {
+    }
+    let E;
     (function (E) {
     })(E || (E = {}));
 })(M || (M = {}));

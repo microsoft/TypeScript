@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function f1(x:any) {return x;}
 

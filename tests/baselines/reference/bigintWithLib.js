@@ -64,6 +64,7 @@ new Intl.NumberFormat("fr").format(bigintVal);
 
 
 //// [bigintWithLib.js]
+"use strict";
 // Test BigInt functions
 let bigintVal = BigInt(123);
 bigintVal = BigInt("456");

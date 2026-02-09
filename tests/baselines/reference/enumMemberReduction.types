@@ -67,14 +67,14 @@ enum MyStringEnumWithEmpty {
 export function fn(optionalEnum: MyEnum | undefined) {
 >fn : (optionalEnum: MyEnum | undefined) => MyEnum
 >   : ^            ^^                  ^^^^^^^^^^^
->optionalEnum : MyEnum
->             : ^^^^^^
+>optionalEnum : MyEnum | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 
   return optionalEnum ?? MyEnum.A;
 >optionalEnum ?? MyEnum.A : MyEnum
 >                         : ^^^^^^
->optionalEnum : MyEnum
->             : ^^^^^^
+>optionalEnum : MyEnum | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >MyEnum.A : MyEnum.A
 >         : ^^^^^^^^
 >MyEnum : typeof MyEnum
@@ -86,14 +86,14 @@ export function fn(optionalEnum: MyEnum | undefined) {
 export function fn2(optionalEnum: MyEnum | undefined) {
 >fn2 : (optionalEnum: MyEnum | undefined) => MyEnum.B | MyEnum.C
 >    : ^            ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^
->optionalEnum : MyEnum
->             : ^^^^^^
+>optionalEnum : MyEnum | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 
   return optionalEnum || MyEnum.B;
 >optionalEnum || MyEnum.B : MyEnum.B | MyEnum.C
 >                         : ^^^^^^^^^^^^^^^^^^^
->optionalEnum : MyEnum
->             : ^^^^^^
+>optionalEnum : MyEnum | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >MyEnum.B : MyEnum.B
 >         : ^^^^^^^^
 >MyEnum : typeof MyEnum
@@ -105,14 +105,14 @@ export function fn2(optionalEnum: MyEnum | undefined) {
 export function fn3(optionalEnum?: MyEnum) {
 >fn3 : (optionalEnum?: MyEnum) => MyEnum
 >    : ^            ^^^      ^^^^^^^^^^^
->optionalEnum : MyEnum
->             : ^^^^^^
+>optionalEnum : MyEnum | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 
   return optionalEnum ?? MyEnum.A;
 >optionalEnum ?? MyEnum.A : MyEnum
 >                         : ^^^^^^
->optionalEnum : MyEnum
->             : ^^^^^^
+>optionalEnum : MyEnum | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >MyEnum.A : MyEnum.A
 >         : ^^^^^^^^
 >MyEnum : typeof MyEnum
@@ -124,14 +124,14 @@ export function fn3(optionalEnum?: MyEnum) {
 export function fn4(optionalEnum?: MyEnum) {
 >fn4 : (optionalEnum?: MyEnum) => MyEnum.B | MyEnum.C
 >    : ^            ^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
->optionalEnum : MyEnum
->             : ^^^^^^
+>optionalEnum : MyEnum | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 
   return optionalEnum || MyEnum.B;
 >optionalEnum || MyEnum.B : MyEnum.B | MyEnum.C
 >                         : ^^^^^^^^^^^^^^^^^^^
->optionalEnum : MyEnum
->             : ^^^^^^
+>optionalEnum : MyEnum | undefined
+>             : ^^^^^^^^^^^^^^^^^^
 >MyEnum.B : MyEnum.B
 >         : ^^^^^^^^
 >MyEnum : typeof MyEnum
@@ -143,14 +143,14 @@ export function fn4(optionalEnum?: MyEnum) {
 export function fn5(optionalEnum?: MyStringEnum) {
 >fn5 : (optionalEnum?: MyStringEnum) => MyStringEnum
 >    : ^            ^^^            ^^^^^^^^^^^^^^^^^
->optionalEnum : MyStringEnum
->             : ^^^^^^^^^^^^
+>optionalEnum : MyStringEnum | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^
 
   return optionalEnum || MyStringEnum.B;
 >optionalEnum || MyStringEnum.B : MyStringEnum
 >                               : ^^^^^^^^^^^^
->optionalEnum : MyStringEnum
->             : ^^^^^^^^^^^^
+>optionalEnum : MyStringEnum | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^
 >MyStringEnum.B : MyStringEnum.B
 >               : ^^^^^^^^^^^^^^
 >MyStringEnum : typeof MyStringEnum
@@ -162,14 +162,14 @@ export function fn5(optionalEnum?: MyStringEnum) {
 export function fn6(optionalEnum?: MyStringEnumWithEmpty) {
 >fn6 : (optionalEnum?: MyStringEnumWithEmpty) => MyStringEnumWithEmpty.B | MyStringEnumWithEmpty.C
 >    : ^            ^^^                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->optionalEnum : MyStringEnumWithEmpty
->             : ^^^^^^^^^^^^^^^^^^^^^
+>optionalEnum : MyStringEnumWithEmpty | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   return optionalEnum || MyStringEnumWithEmpty.B;
 >optionalEnum || MyStringEnumWithEmpty.B : MyStringEnumWithEmpty.B | MyStringEnumWithEmpty.C
 >                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->optionalEnum : MyStringEnumWithEmpty
->             : ^^^^^^^^^^^^^^^^^^^^^
+>optionalEnum : MyStringEnumWithEmpty | undefined
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >MyStringEnumWithEmpty.B : MyStringEnumWithEmpty.B
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^
 >MyStringEnumWithEmpty : typeof MyStringEnumWithEmpty

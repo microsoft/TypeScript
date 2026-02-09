@@ -1,3 +1,4 @@
+// @target: es2015
 /// <reference path="/.lib/react16.d.ts" />
 import * as React from "react";
 

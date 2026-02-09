@@ -1,0 +1,9 @@
+parserSymbolProperty5.ts(2,5): error TS2564: Property '[Symbol.toPrimitive]' has no initializer and is not definitely assigned in the constructor.
+
+
+==== parserSymbolProperty5.ts (1 errors) ====
+    class C {
+        [Symbol.toPrimitive]: string;
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property '[Symbol.toPrimitive]' has no initializer and is not definitely assigned in the constructor.
+    }
