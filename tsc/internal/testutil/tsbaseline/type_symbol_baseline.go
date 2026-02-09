@@ -398,7 +398,7 @@ func (walker *typeWriterWalker) writeTypeOrSymbol(node *ast.Node, isSymbolWalk b
 			}
 
 			// !!! TODO: port underline printer, memoize
-			writer := printer.NewTextWriter("")
+			writer := printer.NewTextWriter("", 0)
 			printer := printer.NewPrinter(printer.PrinterOptions{RemoveComments: true}, printer.PrintHandlers{}, ctx)
 			printer.Write(typeNode, walker.currentSourceFile, writer, nil)
 			typeString = writer.String()

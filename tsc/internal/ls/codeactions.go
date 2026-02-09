@@ -3,10 +3,12 @@ package ls
 import (
 	"context"
 	"slices"
+	"strings"
 
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 )
 
@@ -53,6 +55,18 @@ func (l *LanguageService) ProvideCodeActions(ctx context.Context, params *lsprot
 
 	var actions []lsproto.CommandOrCodeAction
 
+	// Handle source actions (like organize imports)
+	if params.Context != nil && params.Context.Only != nil {
+		for _, kind := range *params.Context.Only {
+			// Get all matching organize imports actions for the requested kind
+			matchingKinds := getOrganizeImportsActionsForKind(kind)
+			for _, matchingKind := range matchingKinds {
+				organizeAction := l.createOrganizeImportsAction(ctx, program, file, matchingKind)
+				actions = append(actions, *organizeAction)
+			}
+		}
+	}
+
 	// Process diagnostics in the context to generate quick fixes
 	if params.Context != nil && params.Context.Diagnostics != nil {
 		for _, diag := range params.Context.Diagnostics {
@@ -94,6 +108,80 @@ func (l *LanguageService) ProvideCodeActions(ctx context.Context, params *lsprot
 	}
 
 	return lsproto.CommandOrCodeActionArrayOrNull{CommandOrCodeActionArray: &actions}, nil
+}
+
+// getOrganizeImportsActionTitle returns the appropriate title for the given organize imports kind
+func getOrganizeImportsActionTitle(kind lsproto.CodeActionKind) string {
+	switch kind {
+	case lsproto.CodeActionKindSourceRemoveUnusedImports:
+		return "Remove Unused Imports"
+	case lsproto.CodeActionKindSourceSortImports:
+		return "Sort Imports"
+	default:
+		return "Organize Imports"
+	}
+}
+
+// getOrganizeImportsActionsForKind returns the organize imports code action kinds that should be
+// returned for the given requested kind.
+func getOrganizeImportsActionsForKind(requestedKind lsproto.CodeActionKind) []lsproto.CodeActionKind {
+	organizeImportsKinds := []lsproto.CodeActionKind{
+		lsproto.CodeActionKindSourceOrganizeImports,
+		lsproto.CodeActionKindSourceRemoveUnusedImports,
+		lsproto.CodeActionKindSourceSortImports,
+	}
+
+	var result []lsproto.CodeActionKind
+	for _, organizeKind := range organizeImportsKinds {
+		if strings.HasPrefix(string(organizeKind), string(requestedKind)) {
+			result = append(result, organizeKind)
+		}
+	}
+
+	if slices.Contains(result, requestedKind) {
+		return []lsproto.CodeActionKind{requestedKind}
+	}
+
+	return result
+}
+
+// createOrganizeImportsAction creates the organize imports code action
+func (l *LanguageService) createOrganizeImportsAction(
+	ctx context.Context,
+	program *compiler.Program,
+	file *ast.SourceFile,
+	kind lsproto.CodeActionKind,
+) *lsproto.CommandOrCodeAction {
+	title := getOrganizeImportsActionTitle(kind)
+	changes := l.OrganizeImports(
+		ctx,
+		file,
+		program,
+		kind,
+	)
+	if len(changes) == 0 {
+		return &lsproto.CommandOrCodeAction{
+			CodeAction: &lsproto.CodeAction{
+				Title: title,
+				Kind:  &kind,
+				Edit:  &lsproto.WorkspaceEdit{Changes: &map[lsproto.DocumentUri][]*lsproto.TextEdit{}},
+			},
+		}
+	}
+
+	lspChanges := make(map[lsproto.DocumentUri][]*lsproto.TextEdit)
+	for fileName, edits := range changes {
+		fileURI := lsconv.FileNameToDocumentURI(fileName)
+		lspChanges[fileURI] = edits
+	}
+
+	return &lsproto.CommandOrCodeAction{
+		CodeAction: &lsproto.CodeAction{
+			Title: title,
+			Kind:  &kind,
+			Edit:  &lsproto.WorkspaceEdit{Changes: &lspChanges},
+		},
+	}
 }
 
 // containsErrorCode checks if the error code is in the list

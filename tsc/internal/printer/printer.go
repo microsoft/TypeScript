@@ -501,7 +501,7 @@ func (p *Printer) getLeadingLineTerminatorCount(parentNode *ast.Node, firstChild
 		}
 
 		if firstChild == nil {
-			return core.IfElse(parentNode == nil || p.currentSourceFile != nil && rangeIsOnSingleLine(parentNode.Loc, p.currentSourceFile), 0, 1)
+			return core.IfElse(parentNode == nil || p.currentSourceFile != nil && RangeIsOnSingleLine(parentNode.Loc, p.currentSourceFile), 0, 1)
 		}
 		if p.nextListElementPos > 0 && firstChild.Pos() == p.nextListElementPos {
 			// If this child starts at the beginning of a list item in a parent list, its leading
@@ -596,7 +596,7 @@ func (p *Printer) getClosingLineTerminatorCount(parentNode *ast.Node, lastChild 
 			return 1
 		}
 		if lastChild == nil {
-			return core.IfElse(parentNode == nil || p.currentSourceFile != nil && rangeIsOnSingleLine(parentNode.Loc, p.currentSourceFile), 0, 1)
+			return core.IfElse(parentNode == nil || p.currentSourceFile != nil && RangeIsOnSingleLine(parentNode.Loc, p.currentSourceFile), 0, 1)
 		}
 		if p.currentSourceFile != nil && parentNode != nil && !ast.PositionIsSynthesized(parentNode.Pos()) && !ast.NodeIsSynthesized(lastChild) && (lastChild.Parent == nil || lastChild.Parent == parentNode) {
 			if p.Options.PreserveSourceNewlines {
@@ -636,7 +636,7 @@ func (p *Printer) writeCommentRange(comment ast.CommentRange) {
 
 func (p *Printer) writeCommentRangeWorker(text string, lineMap []core.TextPos, kind ast.Kind, loc core.TextRange) {
 	if kind == ast.KindMultiLineCommentTrivia {
-		indentSize := len(getIndentString(1))
+		indentSize := GetDefaultIndentSize()
 		firstLine := scanner.ComputeLineOfPosition(lineMap, loc.Pos())
 		lineCount := len(lineMap)
 		firstCommentLineIndent := -1
@@ -676,7 +676,7 @@ func (p *Printer) writeCommentRangeWorker(text string, lineMap []core.TextPos, k
 				spacesToEmit := currentWriterIndentSpacing - firstCommentLineIndent + calculateIndent(text, pos, nextLineStart)
 				if spacesToEmit > 0 {
 					numberOfSingleSpacesToEmit := spacesToEmit % indentSize
-					indentSizeSpaceString := getIndentString((spacesToEmit - numberOfSingleSpacesToEmit) / indentSize)
+					indentSizeSpaceString := getIndentString((spacesToEmit-numberOfSingleSpacesToEmit)/indentSize, indentSize)
 
 					// Write indent size string ( in eg 1: = "", 2: "" , 3: string with 8 spaces 4: string with 12 spaces
 					p.writer.RawWrite(indentSizeSpaceString)
@@ -762,7 +762,7 @@ func (p *Printer) shouldEmitBlockFunctionBodyOnSingleLine(body *ast.Block) bool 
 		return false
 	}
 
-	if !ast.NodeIsSynthesized(body.AsNode()) && p.currentSourceFile != nil && !rangeIsOnSingleLine(body.Loc, p.currentSourceFile) {
+	if !ast.NodeIsSynthesized(body.AsNode()) && p.currentSourceFile != nil && !RangeIsOnSingleLine(body.Loc, p.currentSourceFile) {
 		return false
 	}
 
@@ -4317,6 +4317,9 @@ func (p *Printer) emitJSDocNode(node *ast.Node) {
 //
 
 func (p *Printer) emitShebangIfNeeded(node *ast.SourceFile) {
+	if ast.NodeIsSynthesized(node.AsNode()) {
+		return
+	}
 	shebang := scanner.GetShebang(node.Text())
 	if shebang != "" {
 		p.writeComment(shebang)
@@ -4429,7 +4432,7 @@ func (p *Printer) emitDirective(kind string, refs []*ast.FileReference) {
 
 func (p *Printer) emitList(emit func(p *Printer, node *ast.Node), parentNode *ast.Node, children *ast.NodeList, format ListFormat) {
 	if p.shouldEmitOnMultipleLines(parentNode) {
-		format |= LFPreferNewLine
+		format |= LFPreferNewLine | LFIndented
 	}
 
 	p.emitListRange(emit, parentNode, children, format, -1 /*start*/, -1 /*count*/)
@@ -4479,7 +4482,7 @@ func (p *Printer) emitListRange(emit func(p *Printer, node *ast.Node), parentNod
 
 	if isEmpty {
 		// Write a line terminator if the parent node was multi-line
-		if format&LFMultiLine != 0 && !(p.Options.PreserveSourceNewlines && (parentNode == nil || p.currentSourceFile != nil && rangeIsOnSingleLine(parentNode.Loc, p.currentSourceFile))) {
+		if format&LFMultiLine != 0 && !(p.Options.PreserveSourceNewlines && (parentNode == nil || p.currentSourceFile != nil && RangeIsOnSingleLine(parentNode.Loc, p.currentSourceFile))) {
 			p.writeLine()
 		} else if format&LFSpaceBetweenBraces != 0 && format&LFNoSpaceIfEmpty == 0 {
 			p.writeSpace()
@@ -4742,7 +4745,7 @@ func (p *Printer) emitListItems(
 func (p *Printer) Emit(node *ast.Node, sourceFile *ast.SourceFile) string {
 	// ensure a reusable writer
 	if p.ownWriter == nil {
-		p.ownWriter = NewTextWriter(p.Options.NewLine.GetNewLineCharacter())
+		p.ownWriter = NewTextWriter(p.Options.NewLine.GetNewLineCharacter(), 0)
 	}
 
 	p.Write(node, sourceFile, p.ownWriter, nil /*sourceMapGenerator*/)

@@ -5,6 +5,7 @@ import (
 
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
+	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 )
 
@@ -123,9 +124,9 @@ func (settings *FormatCodeSettings) Set(name string, value any) bool {
 	case "baseindentsize":
 		settings.BaseIndentSize = parseIntWithDefault(value, 0)
 	case "indentsize":
-		settings.IndentSize = parseIntWithDefault(value, 4)
+		settings.IndentSize = parseIntWithDefault(value, printer.GetDefaultIndentSize())
 	case "tabsize":
-		settings.TabSize = parseIntWithDefault(value, 4)
+		settings.TabSize = parseIntWithDefault(value, printer.GetDefaultIndentSize())
 	case "newlinecharacter":
 		settings.NewLineCharacter = core.GetNewLineKind(tsoptions.ParseString(value)).GetNewLineCharacter()
 	case "converttabstospaces":
@@ -191,8 +192,8 @@ func (settings *FormatCodeSettings) Copy() *FormatCodeSettings {
 func GetDefaultFormatCodeSettings() *FormatCodeSettings {
 	return &FormatCodeSettings{
 		EditorSettings: EditorSettings{
-			IndentSize:             4,
-			TabSize:                4,
+			IndentSize:             printer.GetDefaultIndentSize(),
+			TabSize:                printer.GetDefaultIndentSize(),
 			NewLineCharacter:       "\n",
 			ConvertTabsToSpaces:    true,
 			IndentStyle:            IndentStyleSmart,

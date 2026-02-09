@@ -175,6 +175,14 @@ func (c *Checker) GetJsxNamespace(location *ast.Node) string {
 	return c.getJsxNamespace(location)
 }
 
+func (c *Checker) GetJsxFragmentFactory(location *ast.Node) string {
+	entity := c.getJsxFragmentFactoryEntity(location)
+	if entity != nil {
+		return ast.GetFirstIdentifier(entity).Text()
+	}
+	return ""
+}
+
 func (c *Checker) ResolveName(name string, location *ast.Node, meaning ast.SymbolFlags, excludeGlobals bool) *ast.Symbol {
 	return c.resolveName(location, name, meaning, nil, true, excludeGlobals)
 }

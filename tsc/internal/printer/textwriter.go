@@ -13,6 +13,7 @@ var _ EmitTextWriter = &textWriter{}
 
 type textWriter struct {
 	newLine                 string
+	indentSize              int
 	builder                 strings.Builder
 	lastWritten             string
 	indent                  int
@@ -23,7 +24,7 @@ type textWriter struct {
 }
 
 func (w *textWriter) Clear() {
-	*w = textWriter{newLine: w.newLine, lineStart: true}
+	*w = textWriter{newLine: w.newLine, indentSize: w.indentSize, lineStart: true}
 }
 
 func (w *textWriter) DecreaseIndent() {
@@ -32,7 +33,7 @@ func (w *textWriter) DecreaseIndent() {
 
 func (w *textWriter) GetColumn() int {
 	if w.lineStart {
-		return w.indent * 4
+		return w.indent * w.indentSize
 	}
 	return w.builder.Len() - w.linePos
 }
@@ -104,22 +105,25 @@ func (w *textWriter) updateLineCountAndPosFor(s string) {
 	w.lineStart = false
 }
 
-func getIndentString(indent int) string {
-	switch indent {
-	case 0:
+const defaultIndentSize = 4
+
+// GetDefaultIndentSize returns the default indent size (4 spaces) used when no specific indent size is configured.
+func GetDefaultIndentSize() int {
+	return defaultIndentSize
+}
+
+func getIndentString(indent int, indentSize int) string {
+	if indent == 0 {
 		return ""
-	case 1:
-		return "    "
-	default:
-		// TODO: This is cached in tsc - should it be cached here?
-		return strings.Repeat("    ", indent)
 	}
+	// TODO: This is cached in tsc - should it be cached here?
+	return strings.Repeat(" ", indent*indentSize)
 }
 
 func (w *textWriter) writeText(s string) {
 	if s != "" {
 		if w.lineStart {
-			w.builder.WriteString(getIndentString(w.indent))
+			w.builder.WriteString(getIndentString(w.indent, w.indentSize))
 			w.lineStart = false
 		}
 		w.builder.WriteString(s)
@@ -203,9 +207,13 @@ func (w *textWriter) WriteTrailingSemicolon(text string) {
 	w.Write(text)
 }
 
-func NewTextWriter(newLine string) EmitTextWriter {
+func NewTextWriter(newLine string, indentSize int) EmitTextWriter {
+	if indentSize <= 0 {
+		indentSize = 4
+	}
 	var w textWriter
 	w.newLine = newLine
+	w.indentSize = indentSize
 	w.Clear()
 	return &w
 }

@@ -19,9 +19,13 @@ type triviaPositionKey interface { // *astNode | *ast.NodeList
 	End() int
 }
 
-func NewChangeTrackerWriter(newline string) *ChangeTrackerWriter {
+func NewChangeTrackerWriter(newline string, indentSize int) *ChangeTrackerWriter {
+	// TODO: Callers passing -1 should pass actual indent options once indent-related formatting is ported.
+	if indentSize < 0 {
+		indentSize = defaultIndentSize
+	}
 	ctw := &ChangeTrackerWriter{
-		textWriter:            textWriter{newLine: newline},
+		textWriter:            textWriter{newLine: newline, indentSize: indentSize},
 		lastNonTriviaPosition: 0,
 		pos:                   map[triviaPositionKey]int{},
 		end:                   map[triviaPositionKey]int{},

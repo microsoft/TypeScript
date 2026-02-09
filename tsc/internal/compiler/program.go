@@ -1409,7 +1409,7 @@ func (p *Program) Emit(ctx context.Context, options EmitOptions) *EmitResult {
 	newLine := p.Options().NewLine.GetNewLineCharacter()
 	writerPool := &sync.Pool{
 		New: func() any {
-			return printer.NewTextWriter(newLine)
+			return printer.NewTextWriter(newLine, 0)
 		},
 	}
 	wg := core.NewWorkGroup(p.SingleThreaded())

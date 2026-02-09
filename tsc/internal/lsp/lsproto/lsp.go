@@ -232,3 +232,8 @@ func PreferredMarkupKind(formats []MarkupKind) MarkupKind {
 	}
 	return MarkupKindPlainText
 }
+
+const (
+	CodeActionKindSourceRemoveUnusedImports CodeActionKind = "source.removeUnusedImports"
+	CodeActionKindSourceSortImports         CodeActionKind = "source.sortImports"
+)
