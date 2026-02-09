@@ -1,0 +1,703 @@
+//// [tests/cases/compiler/keyRemappingKeyofResult3.ts] ////
+
+=== keyRemappingKeyofResult3.ts ===
+type AcceptA<T extends "a"> = T;
+>AcceptA : T
+>        : ^
+
+type AcceptAB<T extends "a" | "b"> = T;
+>AcceptAB : T
+>         : ^
+
+type AcceptString<T extends string> = T;
+>AcceptString : T
+>             : ^
+
+type Prefixed1<T> = { [K in keyof T as `pre_${K & string}`]: T[K] };
+>Prefixed1 : Prefixed1<T>
+>          : ^^^^^^^^^^^^
+
+function test1<T>(k: keyof Prefixed1<T>) {
+>test1 : <T>(k: keyof Prefixed1<T>) => void
+>      : ^ ^^ ^^                  ^^^^^^^^^
+>k : keyof Prefixed1<T>
+>  : ^^^^^^^^^^^^^^^^^^
+
+  const a: `pre_${string}` = k; // ok
+>a : `pre_${string}`
+>  : ^^^^^^^^^^^^^^^
+>k : keyof Prefixed1<T>
+>  : ^^^^^^^^^^^^^^^^^^
+
+  const b: `pre_a` | `pre_a` = k; // error
+>b : "pre_a"
+>  : ^^^^^^^
+>k : keyof Prefixed1<T>
+>  : ^^^^^^^^^^^^^^^^^^
+}
+
+type RemapA<T> = { [K in keyof T as `x_${K & string}`]: T[K] };
+>RemapA : RemapA<T>
+>       : ^^^^^^^^^
+
+type RemapB<T> = { [K in keyof T as `x_${K & string}`]: number };
+>RemapB : RemapB<T>
+>       : ^^^^^^^^^
+
+function test2<T>(ka: keyof RemapA<T>, kb: keyof RemapB<T>) {
+>test2 : <T>(ka: keyof RemapA<T>, kb: keyof RemapB<T>) => void
+>      : ^ ^^  ^^               ^^  ^^               ^^^^^^^^^
+>ka : keyof RemapA<T>
+>   : ^^^^^^^^^^^^^^^
+>kb : keyof RemapB<T>
+>   : ^^^^^^^^^^^^^^^
+
+  let a: keyof RemapA<T> = kb; // ok
+>a : keyof RemapA<T>
+>  : ^^^^^^^^^^^^^^^
+>kb : keyof RemapB<T>
+>   : ^^^^^^^^^^^^^^^
+
+  let b: keyof RemapB<T> = ka; // ok
+>b : keyof RemapB<T>
+>  : ^^^^^^^^^^^^^^^
+>ka : keyof RemapA<T>
+>   : ^^^^^^^^^^^^^^^
+}
+
+type Prefixed2<K extends string> = { [P in K as `p_${P}`]: any };
+>Prefixed2 : Prefixed2<K>
+>          : ^^^^^^^^^^^^
+
+function test3<K extends string>(k: keyof Prefixed2<K>) {
+>test3 : <K extends string>(k: keyof Prefixed2<K>) => void
+>      : ^ ^^^^^^^^^      ^^ ^^                  ^^^^^^^^^
+>k : keyof Prefixed2<K>
+>  : ^^^^^^^^^^^^^^^^^^
+
+  const a: `p_${string}` = k; // ok
+>a : `p_${string}`
+>  : ^^^^^^^^^^^^^
+>k : keyof Prefixed2<K>
+>  : ^^^^^^^^^^^^^^^^^^
+
+  const b: `p_a` | `p_b` = k; // error
+>b : "p_a" | "p_b"
+>  : ^^^^^^^^^^^^^
+>k : keyof Prefixed2<K>
+>  : ^^^^^^^^^^^^^^^^^^
+}
+
+type Prefixed3<K extends string> = { [P in K as `p_${P}`]: any };
+>Prefixed3 : Prefixed3<K>
+>          : ^^^^^^^^^^^^
+
+function test4<K extends "a" | "b">(k: keyof Prefixed2<K>) {
+>test4 : <K extends "a" | "b">(k: keyof Prefixed2<K>) => void
+>      : ^ ^^^^^^^^^         ^^ ^^                  ^^^^^^^^^
+>k : keyof Prefixed2<K>
+>  : ^^^^^^^^^^^^^^^^^^
+
+  const a: `p_${string}` = k; // ok
+>a : `p_${string}`
+>  : ^^^^^^^^^^^^^
+>k : "p_a" | "p_b"
+>  : ^^^^^^^^^^^^^
+
+  const b: `p_a` | `p_b` = k; // ok
+>b : "p_a" | "p_b"
+>  : ^^^^^^^^^^^^^
+>k : "p_a" | "p_b"
+>  : ^^^^^^^^^^^^^
+
+  const c: `p_a` = k; // error
+>c : "p_a"
+>  : ^^^^^
+>k : "p_a" | "p_b"
+>  : ^^^^^^^^^^^^^
+}
+
+type OmitMapped<T, E extends keyof T> = {
+>OmitMapped : OmitMapped<T, E>
+>           : ^^^^^^^^^^^^^^^^
+
+  [K in keyof T as Exclude<K, E>]: T[K];
+};
+
+function test5<T, E extends keyof T>(k: keyof OmitMapped<T, E>) {
+>test5 : <T, E extends keyof T>(k: keyof OmitMapped<T, E>) => void
+>      : ^ ^^ ^^^^^^^^^       ^^ ^^                      ^^^^^^^^^
+>k : keyof OmitMapped<T, E>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+
+  const x: Exclude<keyof T, E> = k; // ok
+>x : Exclude<keyof T, E>
+>  : ^^^^^^^^^^^^^^^^^^^
+>k : keyof OmitMapped<T, E>
+>  : ^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type Uppercased<T> = { [K in keyof T as Uppercase<K & string>]: T[K] };
+>Uppercased : Uppercased<T>
+>           : ^^^^^^^^^^^^^
+
+function test6<T>(k: keyof Uppercased<T>) {
+>test6 : <T>(k: keyof Uppercased<T>) => void
+>      : ^ ^^ ^^                   ^^^^^^^^^
+>k : keyof Uppercased<T>
+>  : ^^^^^^^^^^^^^^^^^^^
+
+  const a: Uppercase<string> = k; // ok
+>a : Uppercase<string>
+>  : ^^^^^^^^^^^^^^^^^
+>k : keyof Uppercased<T>
+>  : ^^^^^^^^^^^^^^^^^^^
+}
+
+type Base1 = { a: 1; b: 2 };
+>Base1 : Base1
+>      : ^^^^^
+>a : 1
+>  : ^
+>b : 2
+>  : ^
+
+type Constrained1<T extends Base1> = {
+>Constrained1 : Constrained1<T>
+>             : ^^^^^^^^^^^^^^^
+
+  [K in keyof T as `c_${K & string}`]: T[K];
+};
+type Constrained2<T extends Base1> = {
+>Constrained2 : Constrained2<T>
+>             : ^^^^^^^^^^^^^^^
+
+  [K in keyof T as `c_${K & string}`]: boolean;
+};
+
+function test7<T extends Base1>(
+>test7 : <T extends Base1>(k1: keyof Constrained1<T>, k2: keyof Constrained2<T>) => void
+>      : ^ ^^^^^^^^^     ^^  ^^                     ^^  ^^                     ^^^^^^^^^
+
+  k1: keyof Constrained1<T>,
+>k1 : keyof Constrained1<T>
+>   : ^^^^^^^^^^^^^^^^^^^^^
+
+  k2: keyof Constrained2<T>,
+>k2 : keyof Constrained2<T>
+>   : ^^^^^^^^^^^^^^^^^^^^^
+
+) {
+  let a: keyof Constrained1<T> = k2; // ok
+>a : keyof Constrained1<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>k2 : keyof Constrained2<T>
+>   : ^^^^^^^^^^^^^^^^^^^^^
+
+  let b: keyof Constrained2<T> = k1; // ok
+>b : keyof Constrained2<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^
+>k1 : keyof Constrained1<T>
+>   : ^^^^^^^^^^^^^^^^^^^^^
+}
+
+function test8<T extends Base1>(k: keyof Constrained1<T>) {
+>test8 : <T extends Base1>(k: keyof Constrained1<T>) => void
+>      : ^ ^^^^^^^^^     ^^ ^^                     ^^^^^^^^^
+>k : keyof Constrained1<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+  const a: "c_a" | "c_b" = k; // error
+>a : "c_a" | "c_b"
+>  : ^^^^^^^^^^^^^
+>k : keyof Constrained1<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^
+
+  const b: `c_${string}` = k; // ok
+>b : `c_${string}`
+>  : ^^^^^^^^^^^^^
+>k : keyof Constrained1<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^
+}
+
+type StringPropsOnly<T> = {
+>StringPropsOnly : StringPropsOnly<T>
+>                : ^^^^^^^^^^^^^^^^^^
+
+  [P in keyof T as T[P] extends string ? P : never]: any;
+};
+
+function test9<T>(k: Extract<keyof StringPropsOnly<T>, string>) {
+>test9 : <T>(k: Extract<keyof StringPropsOnly<T>, string>) => void
+>      : ^ ^^ ^^                                         ^^^^^^^^^
+>k : Extract<keyof StringPropsOnly<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s: string = k; // ok
+>s : string
+>  : ^^^^^^
+>k : Extract<keyof StringPropsOnly<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : Extract<keyof StringPropsOnly<T>, string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : Extract<keyof StringPropsOnly<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type AllKeysMapped<T> = { [P in keyof T as P]: any };
+>AllKeysMapped : AllKeysMapped<T>
+>              : ^^^^^^^^^^^^^^^^
+
+function test10<T>(k: Extract<keyof AllKeysMapped<T>, string>) {
+>test10 : <T>(k: Extract<keyof AllKeysMapped<T>, string>) => void
+>       : ^ ^^ ^^                                       ^^^^^^^^^
+>k : Extract<keyof AllKeysMapped<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s: string = k; // ok
+>s : string
+>  : ^^^^^^
+>k : Extract<keyof AllKeysMapped<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : Extract<keyof AllKeysMapped<T>, string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : Extract<keyof AllKeysMapped<T>, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function test11<T>(k: keyof StringPropsOnly<T>) {
+>test11 : <T>(k: keyof StringPropsOnly<T>) => void
+>       : ^ ^^ ^^                        ^^^^^^^^^
+>k : keyof StringPropsOnly<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s: string = k; // error
+>s : string
+>  : ^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result = AcceptString<typeof k>; // error
+>Result : keyof StringPropsOnly<T>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof StringPropsOnly<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function test12<T>(k: string & keyof StringPropsOnly<T>) {
+>test12 : <T>(k: string & keyof StringPropsOnly<T>) => void
+>       : ^ ^^ ^^                                 ^^^^^^^^^
+>k : string & keyof StringPropsOnly<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s: string = k; // ok
+>s : string
+>  : ^^^^^^
+>k : string
+>  : ^^^^^^
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : string & keyof StringPropsOnly<T>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : string & keyof StringPropsOnly<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type FilterByLiteralValue<T, V> = {
+>FilterByLiteralValue : FilterByLiteralValue<T, V>
+>                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [P in keyof T as T[P] extends V ? P : never]: any;
+};
+
+function test13<T extends Base1>(k: keyof FilterByLiteralValue<T, 1>) {
+>test13 : <T extends Base1>(k: keyof FilterByLiteralValue<T, 1>) => void
+>       : ^ ^^^^^^^^^     ^^ ^^                                ^^^^^^^^^
+>k : keyof FilterByLiteralValue<T, 1>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s: string = k; // error
+>s : string
+>  : ^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result = AcceptString<typeof k>; // error
+>Result : keyof FilterByLiteralValue<T, 1>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof FilterByLiteralValue<T, 1>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type Base2 = { x: string; y: number };
+>Base2 : Base2
+>      : ^^^^^
+>x : string
+>  : ^^^^^^
+>y : number
+>  : ^^^^^^
+
+type FilterByStringValue<T> = {
+>FilterByStringValue : FilterByStringValue<T>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^
+
+  [P in keyof T as T[P] extends string ? P : never]: any;
+};
+
+function test14<T extends Base2>(k: keyof FilterByStringValue<T>) {
+>test14 : <T extends Base2>(k: keyof FilterByStringValue<T>) => void
+>       : ^ ^^^^^^^^^     ^^ ^^                            ^^^^^^^^^
+>k : keyof FilterByStringValue<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s: string = k; // error
+>s : string
+>  : ^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s2: "x" = k; // error
+>s2 : "x"
+>   : ^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result1 = AcceptString<typeof k>; // error
+>Result1 : keyof FilterByStringValue<T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof FilterByStringValue<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result2 = AcceptAB<typeof k>; // error
+>Result2 : keyof FilterByStringValue<T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof FilterByStringValue<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result3 = AcceptA<typeof k>; // error
+>Result3 : keyof FilterByStringValue<T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof FilterByStringValue<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type RemapC<T> = { [P in keyof T as T[P] extends string ? P : never]: T[P] };
+>RemapC : RemapC<T>
+>       : ^^^^^^^^^
+
+type RemapD<T> = { [P in keyof T as T[P] extends string ? P : never]: number };
+>RemapD : RemapD<T>
+>       : ^^^^^^^^^
+
+function test15<T extends Base2>(ka: keyof RemapC<T>, kb: keyof RemapD<T>) {
+>test15 : <T extends Base2>(ka: keyof RemapC<T>, kb: keyof RemapD<T>) => void
+>       : ^ ^^^^^^^^^     ^^  ^^               ^^  ^^               ^^^^^^^^^
+>ka : keyof RemapC<T>
+>   : ^^^^^^^^^^^^^^^
+>kb : keyof RemapD<T>
+>   : ^^^^^^^^^^^^^^^
+
+  let a: keyof RemapC<T> = kb; // ok
+>a : keyof RemapC<T>
+>  : ^^^^^^^^^^^^^^^
+>kb : keyof RemapD<T>
+>   : ^^^^^^^^^^^^^^^
+
+  let b: keyof RemapD<T> = ka; // ok
+>b : keyof RemapD<T>
+>  : ^^^^^^^^^^^^^^^
+>ka : keyof RemapC<T>
+>   : ^^^^^^^^^^^^^^^
+}
+
+type Base3 = { a: string; b: string; c: string };
+>Base3 : Base3
+>      : ^^^^^
+>a : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>c : string
+>  : ^^^^^^
+
+type AlwaysNever<T> = { [P in keyof T as 1 extends string ? P : never]: any };
+>AlwaysNever : AlwaysNever<T>
+>            : ^^^^^^^^^^^^^^
+
+function test16<T extends Base3>(k: keyof AlwaysNever<T>) {
+>test16 : <T extends Base3>(k: keyof AlwaysNever<T>) => void
+>       : ^ ^^^^^^^^^     ^^ ^^                    ^^^^^^^^^
+>k : keyof AlwaysNever<T>
+>  : ^^^^^^^^^^^^^^^^^^^^
+
+  const s: string = k; // ok
+>s : string
+>  : ^^^^^^
+>k : keyof AlwaysNever<T>
+>  : ^^^^^^^^^^^^^^^^^^^^
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : keyof AlwaysNever<T>
+>       : ^^^^^^^^^^^^^^^^^^^^
+>k : keyof AlwaysNever<T>
+>  : ^^^^^^^^^^^^^^^^^^^^
+}
+
+type Base4 = { a: string; b: number };
+>Base4 : Base4
+>      : ^^^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+
+type PickByType<T, V> = { [P in keyof T as T[P] extends V ? P : never]: T[P] };
+>PickByType : PickByType<T, V>
+>           : ^^^^^^^^^^^^^^^^
+
+function test17<T extends Base4>(k: keyof PickByType<T, string>) {
+>test17 : <T extends Base4>(k: keyof PickByType<T, string>) => void
+>       : ^ ^^^^^^^^^     ^^ ^^                           ^^^^^^^^^
+>k : keyof PickByType<T, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s: string = k; // error
+>s : string
+>  : ^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s2: typeof k = "a"; // error (checks against a deferred conditional type)
+>s2 : keyof PickByType<T, string>
+>   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof PickByType<T, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"a" : "a"
+>    : ^^^
+
+  const s3: "a" = k; // error
+>s3 : "a"
+>   : ^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result = AcceptString<typeof k>; // error
+>Result : keyof PickByType<T, string>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof PickByType<T, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result2 = AcceptAB<typeof k>; // error
+>Result2 : keyof PickByType<T, string>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof PickByType<T, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result3 = AcceptA<typeof k>; // error
+>Result3 : keyof PickByType<T, string>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof PickByType<T, string>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+function test18<T extends { a: string; b: number }>(o: {
+>test18 : <T extends { a: string; b: number; }>(o: { [P in keyof T as T[P] extends string ? P : never]: any; }) => void
+>       : ^ ^^^^^^^^^                         ^^ ^^                                                           ^^^^^^^^^
+>a : string
+>  : ^^^^^^
+>b : number
+>  : ^^^^^^
+>o : { [P in keyof T as T[P] extends string ? P : never]: any; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  [P in keyof T as T[P] extends string ? P : never]: any;
+}) {
+  type Result = AcceptString<keyof typeof o>; // error
+>Result : keyof { [P in keyof T as T[P] extends string ? P : never]: any; }
+>       : ^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>o : { [P in keyof T as T[P] extends string ? P : never]: any; }
+>  : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type Inner<T> = { [P in keyof T as P extends string ? P : never]: T[P] };
+>Inner : Inner<T>
+>      : ^^^^^^^^
+
+type Outer<T> = {
+>Outer : Outer<T>
+>      : ^^^^^^^^
+
+  [P in keyof Inner<T> as P extends `a${string}` ? P : never]: any;
+};
+
+function test19<T extends { apple: 1; apricot: 2; banana: 3 }>(
+>test19 : <T extends { apple: 1; apricot: 2; banana: 3; }>(k: keyof Outer<T>) => void
+>       : ^ ^^^^^^^^^                                    ^^ ^^              ^^^^^^^^^
+>apple : 1
+>      : ^
+>apricot : 2
+>        : ^
+>banana : 3
+>       : ^
+
+  k: keyof Outer<T>,
+>k : keyof Outer<T>
+>  : ^^^^^^^^^^^^^^
+
+) {
+  const s: string = k; // ok
+>s : string
+>  : ^^^^^^
+>k : keyof Outer<T>
+>  : ^^^^^^^^^^^^^^
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : keyof Outer<T>
+>       : ^^^^^^^^^^^^^^
+>k : keyof Outer<T>
+>  : ^^^^^^^^^^^^^^
+}
+
+type Prefixed4<T> = {
+>Prefixed4 : Prefixed4<T>
+>          : ^^^^^^^^^^^^
+
+  [P in keyof T as P extends string ? `mapped_${P}` : never]: any;
+};
+
+function test20<T extends { [key: string]: number; specific: 1 }>(
+>test20 : <T extends { [key: string]: number; specific: 1; }>(k: keyof Prefixed4<T>) => void
+>       : ^ ^^^^^^^^^                                       ^^ ^^                  ^^^^^^^^^
+>key : string
+>    : ^^^^^^
+>specific : 1
+>         : ^
+
+  k: keyof Prefixed4<T>,
+>k : keyof Prefixed4<T>
+>  : ^^^^^^^^^^^^^^^^^^
+
+) {
+  const s: string = k; // ok
+>s : string
+>  : ^^^^^^
+>k : keyof Prefixed4<T>
+>  : ^^^^^^^^^^^^^^^^^^
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : keyof Prefixed4<T>
+>       : ^^^^^^^^^^^^^^^^^^
+>k : keyof Prefixed4<T>
+>  : ^^^^^^^^^^^^^^^^^^
+}
+
+type Base5 = { a: string; b: number | string };
+>Base5 : Base5
+>      : ^^^^^
+>a : string
+>  : ^^^^^^
+>b : string | number
+>  : ^^^^^^^^^^^^^^^
+
+function test21<T extends Base5>(k: keyof StringPropsOnly<T>) {
+>test21 : <T extends Base5>(k: keyof StringPropsOnly<T>) => void
+>       : ^ ^^^^^^^^^     ^^ ^^                        ^^^^^^^^^
+>k : keyof StringPropsOnly<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s: string = k; // error
+>s : string
+>  : ^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s1: "a" = k; // error
+>s1 : "a"
+>   : ^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s2: "a" | "b" = k; // error
+>s2 : "a" | "b"
+>   : ^^^^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result = AcceptString<typeof k>; // error
+>Result : keyof StringPropsOnly<T>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof StringPropsOnly<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result2 = AcceptAB<typeof k>; // error
+>Result2 : keyof StringPropsOnly<T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof StringPropsOnly<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result3 = AcceptA<typeof k>; // error
+>Result3 : keyof StringPropsOnly<T>
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^
+>k : keyof StringPropsOnly<T>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+}
+
+type ValueIs1<T> = { [P in keyof T as T[P] extends 1 ? P : never]: any };
+>ValueIs1 : ValueIs1<T>
+>         : ^^^^^^^^^^^
+
+type Base6 = { [key: string]: number; a: 1 };
+>Base6 : Base6
+>      : ^^^^^
+>key : string
+>    : ^^^^^^
+>a : 1
+>  : ^
+
+function test22<T extends Base6>(k: keyof ValueIs1<T>) {
+>test22 : <T extends Base6>(k: keyof ValueIs1<T>) => void
+>       : ^ ^^^^^^^^^     ^^ ^^                 ^^^^^^^^^
+>k : keyof ValueIs1<T>
+>  : ^^^^^^^^^^^^^^^^^
+
+  const s: string = k; // error
+>s : string
+>  : ^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s1: "a" = k; // error
+>s1 : "a"
+>   : ^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  const s2: "a" | "b" = k; // error
+>s2 : "a" | "b"
+>   : ^^^^^^^^^
+>k : string | number | symbol
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^
+
+  type Result = AcceptString<typeof k>; // error
+>Result : keyof ValueIs1<T>
+>       : ^^^^^^^^^^^^^^^^^
+>k : keyof ValueIs1<T>
+>  : ^^^^^^^^^^^^^^^^^
+
+  type Result2 = AcceptAB<typeof k>; // error
+>Result2 : keyof ValueIs1<T>
+>        : ^^^^^^^^^^^^^^^^^
+>k : keyof ValueIs1<T>
+>  : ^^^^^^^^^^^^^^^^^
+
+  type Result3 = AcceptA<typeof k>; // error
+>Result3 : keyof ValueIs1<T>
+>        : ^^^^^^^^^^^^^^^^^
+>k : keyof ValueIs1<T>
+>  : ^^^^^^^^^^^^^^^^^
+}
+

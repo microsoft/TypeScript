@@ -15299,7 +15299,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             const constraint = getResolvedBaseConstraint(type as InstantiableType | UnionOrIntersectionType);
             return constraint !== noConstraintType && constraint !== circularConstraintType ? constraint : undefined;
         }
-        return type.flags & TypeFlags.Index ? stringNumberSymbolType : undefined;
+        if (type.flags & TypeFlags.Index) {
+            if (isGenericMappedType((type as IndexType).type)) {
+                const nameType = getNameTypeFromMappedType((type as IndexType).type as MappedType);
+                if (nameType) {
+                    return getBaseConstraintOfType(nameType);
+                }
+            }
+            return stringNumberSymbolType;
+        }
+        return undefined;
     }
 
     /**

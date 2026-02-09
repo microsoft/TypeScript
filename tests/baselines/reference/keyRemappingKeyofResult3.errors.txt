@@ -1,0 +1,489 @@
+keyRemappingKeyofResult3.ts(9,9): error TS2322: Type 'keyof Prefixed1<T>' is not assignable to type '"pre_a"'.
+  Type '`pre_${K & string}`' is not assignable to type '"pre_a"'.
+    Type '`pre_${string}`' is not assignable to type '"pre_a"'.
+keyRemappingKeyofResult3.ts(24,9): error TS2322: Type '`p_${K}`' is not assignable to type '"p_a" | "p_b"'.
+  Type '`p_${string}`' is not assignable to type '"p_a" | "p_b"'.
+keyRemappingKeyofResult3.ts(32,9): error TS2322: Type '"p_a" | "p_b"' is not assignable to type '"p_a"'.
+  Type '"p_b"' is not assignable to type '"p_a"'.
+keyRemappingKeyofResult3.ts(66,9): error TS2322: Type 'keyof Constrained1<T>' is not assignable to type '"c_a" | "c_b"'.
+  Type '`c_${K & string}`' is not assignable to type '"c_a" | "c_b"'.
+    Type '`c_${string}`' is not assignable to type '"c_a" | "c_b"'.
+keyRemappingKeyofResult3.ts(87,9): error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(88,30): error TS2344: Type 'keyof StringPropsOnly<T>' does not satisfy the constraint 'string'.
+  Type 'T[P] extends string ? P : never' is not assignable to type 'string'.
+    Type 'P' is not assignable to type 'string'.
+      Type 'keyof T' is not assignable to type 'string'.
+        Type 'string | number | symbol' is not assignable to type 'string'.
+          Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(101,9): error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(102,30): error TS2344: Type 'keyof FilterByLiteralValue<T, 1>' does not satisfy the constraint 'string'.
+  Type 'T[P] extends 1 ? P : never' is not assignable to type 'string'.
+    Type 'P' is not assignable to type 'string'.
+      Type 'keyof T' is not assignable to type 'string'.
+        Type 'string | number | symbol' is not assignable to type 'string'.
+          Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(112,9): error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(113,9): error TS2322: Type 'string | number | symbol' is not assignable to type '"x"'.
+  Type 'string' is not assignable to type '"x"'.
+keyRemappingKeyofResult3.ts(114,31): error TS2344: Type 'keyof FilterByStringValue<T>' does not satisfy the constraint 'string'.
+  Type 'T[P] extends string ? P : never' is not assignable to type 'string'.
+    Type 'P' is not assignable to type 'string'.
+      Type 'keyof T' is not assignable to type 'string'.
+        Type 'string | number | symbol' is not assignable to type 'string'.
+          Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(115,27): error TS2344: Type 'keyof FilterByStringValue<T>' does not satisfy the constraint '"a" | "b"'.
+  Type 'T[P] extends string ? P : never' is not assignable to type '"a" | "b"'.
+    Type 'P' is not assignable to type '"a" | "b"'.
+      Type 'keyof T' is not assignable to type '"a" | "b"'.
+        Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+          Type 'string' is not assignable to type '"a" | "b"'.
+keyRemappingKeyofResult3.ts(116,26): error TS2344: Type 'keyof FilterByStringValue<T>' does not satisfy the constraint '"a"'.
+  Type 'T[P] extends string ? P : never' is not assignable to type '"a"'.
+    Type 'P' is not assignable to type '"a"'.
+      Type 'keyof T' is not assignable to type '"a"'.
+        Type 'string | number | symbol' is not assignable to type '"a"'.
+          Type 'string' is not assignable to type '"a"'.
+keyRemappingKeyofResult3.ts(141,9): error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(142,9): error TS2322: Type 'string' is not assignable to type 'keyof PickByType<T, string>'.
+  Type '"a"' is not assignable to type '(T[P] extends string ? P : never) | (T["a"] extends string ? "a" : never) | (T["b"] extends string ? "b" : never)'.
+keyRemappingKeyofResult3.ts(143,9): error TS2322: Type 'string | number | symbol' is not assignable to type '"a"'.
+  Type 'string' is not assignable to type '"a"'.
+keyRemappingKeyofResult3.ts(145,30): error TS2344: Type 'keyof PickByType<T, string>' does not satisfy the constraint 'string'.
+  Type 'T[P] extends string ? P : never' is not assignable to type 'string'.
+    Type 'P' is not assignable to type 'string'.
+      Type 'keyof T' is not assignable to type 'string'.
+        Type 'string | number | symbol' is not assignable to type 'string'.
+          Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(146,27): error TS2344: Type 'keyof PickByType<T, string>' does not satisfy the constraint '"a" | "b"'.
+  Type 'T[P] extends string ? P : never' is not assignable to type '"a" | "b"'.
+    Type 'P' is not assignable to type '"a" | "b"'.
+      Type 'keyof T' is not assignable to type '"a" | "b"'.
+        Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+          Type 'string' is not assignable to type '"a" | "b"'.
+keyRemappingKeyofResult3.ts(147,26): error TS2344: Type 'keyof PickByType<T, string>' does not satisfy the constraint '"a"'.
+  Type 'T[P] extends string ? P : never' is not assignable to type '"a"'.
+    Type 'P' is not assignable to type '"a"'.
+      Type 'keyof T' is not assignable to type '"a"'.
+        Type 'string | number | symbol' is not assignable to type '"a"'.
+          Type 'string' is not assignable to type '"a"'.
+keyRemappingKeyofResult3.ts(153,30): error TS2344: Type 'keyof { [P in keyof T as T[P] extends string ? P : never]: any; }' does not satisfy the constraint 'string'.
+  Type 'T[P] extends string ? P : never' is not assignable to type 'string'.
+    Type 'P' is not assignable to type 'string'.
+      Type 'keyof T' is not assignable to type 'string'.
+        Type 'string | number | symbol' is not assignable to type 'string'.
+          Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(182,9): error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(183,9): error TS2322: Type 'string | number | symbol' is not assignable to type '"a"'.
+  Type 'string' is not assignable to type '"a"'.
+keyRemappingKeyofResult3.ts(184,9): error TS2322: Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+  Type 'string' is not assignable to type '"a" | "b"'.
+keyRemappingKeyofResult3.ts(185,30): error TS2344: Type 'keyof StringPropsOnly<T>' does not satisfy the constraint 'string'.
+  Type 'T[P] extends string ? P : never' is not assignable to type 'string'.
+    Type 'P' is not assignable to type 'string'.
+      Type 'keyof T' is not assignable to type 'string'.
+        Type 'string | number | symbol' is not assignable to type 'string'.
+          Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(186,27): error TS2344: Type 'keyof StringPropsOnly<T>' does not satisfy the constraint '"a" | "b"'.
+  Type 'T[P] extends string ? P : never' is not assignable to type '"a" | "b"'.
+    Type 'P' is not assignable to type '"a" | "b"'.
+      Type 'keyof T' is not assignable to type '"a" | "b"'.
+        Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+          Type 'string' is not assignable to type '"a" | "b"'.
+keyRemappingKeyofResult3.ts(187,26): error TS2344: Type 'keyof StringPropsOnly<T>' does not satisfy the constraint '"a"'.
+  Type 'T[P] extends string ? P : never' is not assignable to type '"a"'.
+    Type 'P' is not assignable to type '"a"'.
+      Type 'keyof T' is not assignable to type '"a"'.
+        Type 'string | number | symbol' is not assignable to type '"a"'.
+          Type 'string' is not assignable to type '"a"'.
+keyRemappingKeyofResult3.ts(195,9): error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(196,9): error TS2322: Type 'string | number | symbol' is not assignable to type '"a"'.
+  Type 'string' is not assignable to type '"a"'.
+keyRemappingKeyofResult3.ts(197,9): error TS2322: Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+  Type 'string' is not assignable to type '"a" | "b"'.
+keyRemappingKeyofResult3.ts(198,30): error TS2344: Type 'keyof ValueIs1<T>' does not satisfy the constraint 'string'.
+  Type 'T[P] extends 1 ? P : never' is not assignable to type 'string'.
+    Type 'P' is not assignable to type 'string'.
+      Type 'keyof T' is not assignable to type 'string'.
+        Type 'string | number | symbol' is not assignable to type 'string'.
+          Type 'number' is not assignable to type 'string'.
+keyRemappingKeyofResult3.ts(199,27): error TS2344: Type 'keyof ValueIs1<T>' does not satisfy the constraint '"a" | "b"'.
+  Type 'T[P] extends 1 ? P : never' is not assignable to type '"a" | "b"'.
+    Type 'P' is not assignable to type '"a" | "b"'.
+      Type 'keyof T' is not assignable to type '"a" | "b"'.
+        Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+          Type 'string' is not assignable to type '"a" | "b"'.
+keyRemappingKeyofResult3.ts(200,26): error TS2344: Type 'keyof ValueIs1<T>' does not satisfy the constraint '"a"'.
+  Type 'T[P] extends 1 ? P : never' is not assignable to type '"a"'.
+    Type 'P' is not assignable to type '"a"'.
+      Type 'keyof T' is not assignable to type '"a"'.
+        Type 'string | number | symbol' is not assignable to type '"a"'.
+          Type 'string' is not assignable to type '"a"'.
+
+
+==== keyRemappingKeyofResult3.ts (32 errors) ====
+    type AcceptA<T extends "a"> = T;
+    type AcceptAB<T extends "a" | "b"> = T;
+    type AcceptString<T extends string> = T;
+    
+    type Prefixed1<T> = { [K in keyof T as `pre_${K & string}`]: T[K] };
+    
+    function test1<T>(k: keyof Prefixed1<T>) {
+      const a: `pre_${string}` = k; // ok
+      const b: `pre_a` | `pre_a` = k; // error
+            ~
+!!! error TS2322: Type 'keyof Prefixed1<T>' is not assignable to type '"pre_a"'.
+!!! error TS2322:   Type '`pre_${K & string}`' is not assignable to type '"pre_a"'.
+!!! error TS2322:     Type '`pre_${string}`' is not assignable to type '"pre_a"'.
+    }
+    
+    type RemapA<T> = { [K in keyof T as `x_${K & string}`]: T[K] };
+    type RemapB<T> = { [K in keyof T as `x_${K & string}`]: number };
+    
+    function test2<T>(ka: keyof RemapA<T>, kb: keyof RemapB<T>) {
+      let a: keyof RemapA<T> = kb; // ok
+      let b: keyof RemapB<T> = ka; // ok
+    }
+    
+    type Prefixed2<K extends string> = { [P in K as `p_${P}`]: any };
+    
+    function test3<K extends string>(k: keyof Prefixed2<K>) {
+      const a: `p_${string}` = k; // ok
+      const b: `p_a` | `p_b` = k; // error
+            ~
+!!! error TS2322: Type '`p_${K}`' is not assignable to type '"p_a" | "p_b"'.
+!!! error TS2322:   Type '`p_${string}`' is not assignable to type '"p_a" | "p_b"'.
+    }
+    
+    type Prefixed3<K extends string> = { [P in K as `p_${P}`]: any };
+    
+    function test4<K extends "a" | "b">(k: keyof Prefixed2<K>) {
+      const a: `p_${string}` = k; // ok
+      const b: `p_a` | `p_b` = k; // ok
+      const c: `p_a` = k; // error
+            ~
+!!! error TS2322: Type '"p_a" | "p_b"' is not assignable to type '"p_a"'.
+!!! error TS2322:   Type '"p_b"' is not assignable to type '"p_a"'.
+    }
+    
+    type OmitMapped<T, E extends keyof T> = {
+      [K in keyof T as Exclude<K, E>]: T[K];
+    };
+    
+    function test5<T, E extends keyof T>(k: keyof OmitMapped<T, E>) {
+      const x: Exclude<keyof T, E> = k; // ok
+    }
+    
+    type Uppercased<T> = { [K in keyof T as Uppercase<K & string>]: T[K] };
+    
+    function test6<T>(k: keyof Uppercased<T>) {
+      const a: Uppercase<string> = k; // ok
+    }
+    
+    type Base1 = { a: 1; b: 2 };
+    type Constrained1<T extends Base1> = {
+      [K in keyof T as `c_${K & string}`]: T[K];
+    };
+    type Constrained2<T extends Base1> = {
+      [K in keyof T as `c_${K & string}`]: boolean;
+    };
+    
+    function test7<T extends Base1>(
+      k1: keyof Constrained1<T>,
+      k2: keyof Constrained2<T>,
+    ) {
+      let a: keyof Constrained1<T> = k2; // ok
+      let b: keyof Constrained2<T> = k1; // ok
+    }
+    
+    function test8<T extends Base1>(k: keyof Constrained1<T>) {
+      const a: "c_a" | "c_b" = k; // error
+            ~
+!!! error TS2322: Type 'keyof Constrained1<T>' is not assignable to type '"c_a" | "c_b"'.
+!!! error TS2322:   Type '`c_${K & string}`' is not assignable to type '"c_a" | "c_b"'.
+!!! error TS2322:     Type '`c_${string}`' is not assignable to type '"c_a" | "c_b"'.
+      const b: `c_${string}` = k; // ok
+    }
+    
+    type StringPropsOnly<T> = {
+      [P in keyof T as T[P] extends string ? P : never]: any;
+    };
+    
+    function test9<T>(k: Extract<keyof StringPropsOnly<T>, string>) {
+      const s: string = k; // ok
+      type Result = AcceptString<typeof k>; // ok
+    }
+    
+    type AllKeysMapped<T> = { [P in keyof T as P]: any };
+    
+    function test10<T>(k: Extract<keyof AllKeysMapped<T>, string>) {
+      const s: string = k; // ok
+      type Result = AcceptString<typeof k>; // ok
+    }
+    
+    function test11<T>(k: keyof StringPropsOnly<T>) {
+      const s: string = k; // error
+            ~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+      type Result = AcceptString<typeof k>; // error
+                                 ~~~~~~~~
+!!! error TS2344: Type 'keyof StringPropsOnly<T>' does not satisfy the constraint 'string'.
+!!! error TS2344:   Type 'T[P] extends string ? P : never' is not assignable to type 'string'.
+!!! error TS2344:     Type 'P' is not assignable to type 'string'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type 'string'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2344:           Type 'number' is not assignable to type 'string'.
+    }
+    
+    function test12<T>(k: string & keyof StringPropsOnly<T>) {
+      const s: string = k; // ok
+      type Result = AcceptString<typeof k>; // ok
+    }
+    
+    type FilterByLiteralValue<T, V> = {
+      [P in keyof T as T[P] extends V ? P : never]: any;
+    };
+    
+    function test13<T extends Base1>(k: keyof FilterByLiteralValue<T, 1>) {
+      const s: string = k; // error
+            ~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+      type Result = AcceptString<typeof k>; // error
+                                 ~~~~~~~~
+!!! error TS2344: Type 'keyof FilterByLiteralValue<T, 1>' does not satisfy the constraint 'string'.
+!!! error TS2344:   Type 'T[P] extends 1 ? P : never' is not assignable to type 'string'.
+!!! error TS2344:     Type 'P' is not assignable to type 'string'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type 'string'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2344:           Type 'number' is not assignable to type 'string'.
+    }
+    
+    type Base2 = { x: string; y: number };
+    
+    type FilterByStringValue<T> = {
+      [P in keyof T as T[P] extends string ? P : never]: any;
+    };
+    
+    function test14<T extends Base2>(k: keyof FilterByStringValue<T>) {
+      const s: string = k; // error
+            ~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+      const s2: "x" = k; // error
+            ~~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type '"x"'.
+!!! error TS2322:   Type 'string' is not assignable to type '"x"'.
+      type Result1 = AcceptString<typeof k>; // error
+                                  ~~~~~~~~
+!!! error TS2344: Type 'keyof FilterByStringValue<T>' does not satisfy the constraint 'string'.
+!!! error TS2344:   Type 'T[P] extends string ? P : never' is not assignable to type 'string'.
+!!! error TS2344:     Type 'P' is not assignable to type 'string'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type 'string'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2344:           Type 'number' is not assignable to type 'string'.
+      type Result2 = AcceptAB<typeof k>; // error
+                              ~~~~~~~~
+!!! error TS2344: Type 'keyof FilterByStringValue<T>' does not satisfy the constraint '"a" | "b"'.
+!!! error TS2344:   Type 'T[P] extends string ? P : never' is not assignable to type '"a" | "b"'.
+!!! error TS2344:     Type 'P' is not assignable to type '"a" | "b"'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type '"a" | "b"'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+!!! error TS2344:           Type 'string' is not assignable to type '"a" | "b"'.
+      type Result3 = AcceptA<typeof k>; // error
+                             ~~~~~~~~
+!!! error TS2344: Type 'keyof FilterByStringValue<T>' does not satisfy the constraint '"a"'.
+!!! error TS2344:   Type 'T[P] extends string ? P : never' is not assignable to type '"a"'.
+!!! error TS2344:     Type 'P' is not assignable to type '"a"'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type '"a"'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type '"a"'.
+!!! error TS2344:           Type 'string' is not assignable to type '"a"'.
+    }
+    
+    type RemapC<T> = { [P in keyof T as T[P] extends string ? P : never]: T[P] };
+    type RemapD<T> = { [P in keyof T as T[P] extends string ? P : never]: number };
+    
+    function test15<T extends Base2>(ka: keyof RemapC<T>, kb: keyof RemapD<T>) {
+      let a: keyof RemapC<T> = kb; // ok
+      let b: keyof RemapD<T> = ka; // ok
+    }
+    
+    type Base3 = { a: string; b: string; c: string };
+    
+    type AlwaysNever<T> = { [P in keyof T as 1 extends string ? P : never]: any };
+    
+    function test16<T extends Base3>(k: keyof AlwaysNever<T>) {
+      const s: string = k; // ok
+      type Result = AcceptString<typeof k>; // ok
+    }
+    
+    type Base4 = { a: string; b: number };
+    
+    type PickByType<T, V> = { [P in keyof T as T[P] extends V ? P : never]: T[P] };
+    
+    function test17<T extends Base4>(k: keyof PickByType<T, string>) {
+      const s: string = k; // error
+            ~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+      const s2: typeof k = "a"; // error (checks against a deferred conditional type)
+            ~~
+!!! error TS2322: Type 'string' is not assignable to type 'keyof PickByType<T, string>'.
+!!! error TS2322:   Type '"a"' is not assignable to type '(T[P] extends string ? P : never) | (T["a"] extends string ? "a" : never) | (T["b"] extends string ? "b" : never)'.
+      const s3: "a" = k; // error
+            ~~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type '"a"'.
+!!! error TS2322:   Type 'string' is not assignable to type '"a"'.
+    
+      type Result = AcceptString<typeof k>; // error
+                                 ~~~~~~~~
+!!! error TS2344: Type 'keyof PickByType<T, string>' does not satisfy the constraint 'string'.
+!!! error TS2344:   Type 'T[P] extends string ? P : never' is not assignable to type 'string'.
+!!! error TS2344:     Type 'P' is not assignable to type 'string'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type 'string'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2344:           Type 'number' is not assignable to type 'string'.
+      type Result2 = AcceptAB<typeof k>; // error
+                              ~~~~~~~~
+!!! error TS2344: Type 'keyof PickByType<T, string>' does not satisfy the constraint '"a" | "b"'.
+!!! error TS2344:   Type 'T[P] extends string ? P : never' is not assignable to type '"a" | "b"'.
+!!! error TS2344:     Type 'P' is not assignable to type '"a" | "b"'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type '"a" | "b"'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+!!! error TS2344:           Type 'string' is not assignable to type '"a" | "b"'.
+      type Result3 = AcceptA<typeof k>; // error
+                             ~~~~~~~~
+!!! error TS2344: Type 'keyof PickByType<T, string>' does not satisfy the constraint '"a"'.
+!!! error TS2344:   Type 'T[P] extends string ? P : never' is not assignable to type '"a"'.
+!!! error TS2344:     Type 'P' is not assignable to type '"a"'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type '"a"'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type '"a"'.
+!!! error TS2344:           Type 'string' is not assignable to type '"a"'.
+    }
+    
+    function test18<T extends { a: string; b: number }>(o: {
+      [P in keyof T as T[P] extends string ? P : never]: any;
+    }) {
+      type Result = AcceptString<keyof typeof o>; // error
+                                 ~~~~~~~~~~~~~~
+!!! error TS2344: Type 'keyof { [P in keyof T as T[P] extends string ? P : never]: any; }' does not satisfy the constraint 'string'.
+!!! error TS2344:   Type 'T[P] extends string ? P : never' is not assignable to type 'string'.
+!!! error TS2344:     Type 'P' is not assignable to type 'string'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type 'string'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2344:           Type 'number' is not assignable to type 'string'.
+    }
+    
+    type Inner<T> = { [P in keyof T as P extends string ? P : never]: T[P] };
+    type Outer<T> = {
+      [P in keyof Inner<T> as P extends `a${string}` ? P : never]: any;
+    };
+    
+    function test19<T extends { apple: 1; apricot: 2; banana: 3 }>(
+      k: keyof Outer<T>,
+    ) {
+      const s: string = k; // ok
+      type Result = AcceptString<typeof k>; // ok
+    }
+    
+    type Prefixed4<T> = {
+      [P in keyof T as P extends string ? `mapped_${P}` : never]: any;
+    };
+    
+    function test20<T extends { [key: string]: number; specific: 1 }>(
+      k: keyof Prefixed4<T>,
+    ) {
+      const s: string = k; // ok
+      type Result = AcceptString<typeof k>; // ok
+    }
+    
+    type Base5 = { a: string; b: number | string };
+    
+    function test21<T extends Base5>(k: keyof StringPropsOnly<T>) {
+      const s: string = k; // error
+            ~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+      const s1: "a" = k; // error
+            ~~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type '"a"'.
+!!! error TS2322:   Type 'string' is not assignable to type '"a"'.
+      const s2: "a" | "b" = k; // error
+            ~~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+!!! error TS2322:   Type 'string' is not assignable to type '"a" | "b"'.
+      type Result = AcceptString<typeof k>; // error
+                                 ~~~~~~~~
+!!! error TS2344: Type 'keyof StringPropsOnly<T>' does not satisfy the constraint 'string'.
+!!! error TS2344:   Type 'T[P] extends string ? P : never' is not assignable to type 'string'.
+!!! error TS2344:     Type 'P' is not assignable to type 'string'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type 'string'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2344:           Type 'number' is not assignable to type 'string'.
+      type Result2 = AcceptAB<typeof k>; // error
+                              ~~~~~~~~
+!!! error TS2344: Type 'keyof StringPropsOnly<T>' does not satisfy the constraint '"a" | "b"'.
+!!! error TS2344:   Type 'T[P] extends string ? P : never' is not assignable to type '"a" | "b"'.
+!!! error TS2344:     Type 'P' is not assignable to type '"a" | "b"'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type '"a" | "b"'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+!!! error TS2344:           Type 'string' is not assignable to type '"a" | "b"'.
+      type Result3 = AcceptA<typeof k>; // error
+                             ~~~~~~~~
+!!! error TS2344: Type 'keyof StringPropsOnly<T>' does not satisfy the constraint '"a"'.
+!!! error TS2344:   Type 'T[P] extends string ? P : never' is not assignable to type '"a"'.
+!!! error TS2344:     Type 'P' is not assignable to type '"a"'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type '"a"'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type '"a"'.
+!!! error TS2344:           Type 'string' is not assignable to type '"a"'.
+    }
+    
+    type ValueIs1<T> = { [P in keyof T as T[P] extends 1 ? P : never]: any };
+    
+    type Base6 = { [key: string]: number; a: 1 };
+    
+    function test22<T extends Base6>(k: keyof ValueIs1<T>) {
+      const s: string = k; // error
+            ~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2322:   Type 'number' is not assignable to type 'string'.
+      const s1: "a" = k; // error
+            ~~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type '"a"'.
+!!! error TS2322:   Type 'string' is not assignable to type '"a"'.
+      const s2: "a" | "b" = k; // error
+            ~~
+!!! error TS2322: Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+!!! error TS2322:   Type 'string' is not assignable to type '"a" | "b"'.
+      type Result = AcceptString<typeof k>; // error
+                                 ~~~~~~~~
+!!! error TS2344: Type 'keyof ValueIs1<T>' does not satisfy the constraint 'string'.
+!!! error TS2344:   Type 'T[P] extends 1 ? P : never' is not assignable to type 'string'.
+!!! error TS2344:     Type 'P' is not assignable to type 'string'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type 'string'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type 'string'.
+!!! error TS2344:           Type 'number' is not assignable to type 'string'.
+      type Result2 = AcceptAB<typeof k>; // error
+                              ~~~~~~~~
+!!! error TS2344: Type 'keyof ValueIs1<T>' does not satisfy the constraint '"a" | "b"'.
+!!! error TS2344:   Type 'T[P] extends 1 ? P : never' is not assignable to type '"a" | "b"'.
+!!! error TS2344:     Type 'P' is not assignable to type '"a" | "b"'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type '"a" | "b"'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type '"a" | "b"'.
+!!! error TS2344:           Type 'string' is not assignable to type '"a" | "b"'.
+      type Result3 = AcceptA<typeof k>; // error
+                             ~~~~~~~~
+!!! error TS2344: Type 'keyof ValueIs1<T>' does not satisfy the constraint '"a"'.
+!!! error TS2344:   Type 'T[P] extends 1 ? P : never' is not assignable to type '"a"'.
+!!! error TS2344:     Type 'P' is not assignable to type '"a"'.
+!!! error TS2344:       Type 'keyof T' is not assignable to type '"a"'.
+!!! error TS2344:         Type 'string | number | symbol' is not assignable to type '"a"'.
+!!! error TS2344:           Type 'string' is not assignable to type '"a"'.
+    }
+    

@@ -1,0 +1,760 @@
+//// [tests/cases/compiler/keyRemappingKeyofResult3.ts] ////
+
+=== keyRemappingKeyofResult3.ts ===
+type AcceptA<T extends "a"> = T;
+>AcceptA : Symbol(AcceptA, Decl(keyRemappingKeyofResult3.ts, 0, 0))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 0, 13))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 0, 13))
+
+type AcceptAB<T extends "a" | "b"> = T;
+>AcceptAB : Symbol(AcceptAB, Decl(keyRemappingKeyofResult3.ts, 0, 32))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 1, 14))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 1, 14))
+
+type AcceptString<T extends string> = T;
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 2, 18))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 2, 18))
+
+type Prefixed1<T> = { [K in keyof T as `pre_${K & string}`]: T[K] };
+>Prefixed1 : Symbol(Prefixed1, Decl(keyRemappingKeyofResult3.ts, 2, 40))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 4, 15))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 4, 23))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 4, 15))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 4, 23))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 4, 15))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 4, 23))
+
+function test1<T>(k: keyof Prefixed1<T>) {
+>test1 : Symbol(test1, Decl(keyRemappingKeyofResult3.ts, 4, 68))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 6, 15))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 6, 18))
+>Prefixed1 : Symbol(Prefixed1, Decl(keyRemappingKeyofResult3.ts, 2, 40))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 6, 15))
+
+  const a: `pre_${string}` = k; // ok
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 7, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 6, 18))
+
+  const b: `pre_a` | `pre_a` = k; // error
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 8, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 6, 18))
+}
+
+type RemapA<T> = { [K in keyof T as `x_${K & string}`]: T[K] };
+>RemapA : Symbol(RemapA, Decl(keyRemappingKeyofResult3.ts, 9, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 11, 12))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 11, 20))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 11, 12))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 11, 20))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 11, 12))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 11, 20))
+
+type RemapB<T> = { [K in keyof T as `x_${K & string}`]: number };
+>RemapB : Symbol(RemapB, Decl(keyRemappingKeyofResult3.ts, 11, 63))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 12, 12))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 12, 20))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 12, 12))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 12, 20))
+
+function test2<T>(ka: keyof RemapA<T>, kb: keyof RemapB<T>) {
+>test2 : Symbol(test2, Decl(keyRemappingKeyofResult3.ts, 12, 65))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 14, 15))
+>ka : Symbol(ka, Decl(keyRemappingKeyofResult3.ts, 14, 18))
+>RemapA : Symbol(RemapA, Decl(keyRemappingKeyofResult3.ts, 9, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 14, 15))
+>kb : Symbol(kb, Decl(keyRemappingKeyofResult3.ts, 14, 38))
+>RemapB : Symbol(RemapB, Decl(keyRemappingKeyofResult3.ts, 11, 63))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 14, 15))
+
+  let a: keyof RemapA<T> = kb; // ok
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 15, 5))
+>RemapA : Symbol(RemapA, Decl(keyRemappingKeyofResult3.ts, 9, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 14, 15))
+>kb : Symbol(kb, Decl(keyRemappingKeyofResult3.ts, 14, 38))
+
+  let b: keyof RemapB<T> = ka; // ok
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 16, 5))
+>RemapB : Symbol(RemapB, Decl(keyRemappingKeyofResult3.ts, 11, 63))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 14, 15))
+>ka : Symbol(ka, Decl(keyRemappingKeyofResult3.ts, 14, 18))
+}
+
+type Prefixed2<K extends string> = { [P in K as `p_${P}`]: any };
+>Prefixed2 : Symbol(Prefixed2, Decl(keyRemappingKeyofResult3.ts, 17, 1))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 19, 15))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 19, 38))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 19, 15))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 19, 38))
+
+function test3<K extends string>(k: keyof Prefixed2<K>) {
+>test3 : Symbol(test3, Decl(keyRemappingKeyofResult3.ts, 19, 65))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 21, 15))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 21, 33))
+>Prefixed2 : Symbol(Prefixed2, Decl(keyRemappingKeyofResult3.ts, 17, 1))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 21, 15))
+
+  const a: `p_${string}` = k; // ok
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 22, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 21, 33))
+
+  const b: `p_a` | `p_b` = k; // error
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 23, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 21, 33))
+}
+
+type Prefixed3<K extends string> = { [P in K as `p_${P}`]: any };
+>Prefixed3 : Symbol(Prefixed3, Decl(keyRemappingKeyofResult3.ts, 24, 1))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 26, 15))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 26, 38))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 26, 15))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 26, 38))
+
+function test4<K extends "a" | "b">(k: keyof Prefixed2<K>) {
+>test4 : Symbol(test4, Decl(keyRemappingKeyofResult3.ts, 26, 65))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 28, 15))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 28, 36))
+>Prefixed2 : Symbol(Prefixed2, Decl(keyRemappingKeyofResult3.ts, 17, 1))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 28, 15))
+
+  const a: `p_${string}` = k; // ok
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 29, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 28, 36))
+
+  const b: `p_a` | `p_b` = k; // ok
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 30, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 28, 36))
+
+  const c: `p_a` = k; // error
+>c : Symbol(c, Decl(keyRemappingKeyofResult3.ts, 31, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 28, 36))
+}
+
+type OmitMapped<T, E extends keyof T> = {
+>OmitMapped : Symbol(OmitMapped, Decl(keyRemappingKeyofResult3.ts, 32, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 34, 16))
+>E : Symbol(E, Decl(keyRemappingKeyofResult3.ts, 34, 18))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 34, 16))
+
+  [K in keyof T as Exclude<K, E>]: T[K];
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 35, 3))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 34, 16))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 35, 3))
+>E : Symbol(E, Decl(keyRemappingKeyofResult3.ts, 34, 18))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 34, 16))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 35, 3))
+
+};
+
+function test5<T, E extends keyof T>(k: keyof OmitMapped<T, E>) {
+>test5 : Symbol(test5, Decl(keyRemappingKeyofResult3.ts, 36, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 38, 15))
+>E : Symbol(E, Decl(keyRemappingKeyofResult3.ts, 38, 17))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 38, 15))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 38, 37))
+>OmitMapped : Symbol(OmitMapped, Decl(keyRemappingKeyofResult3.ts, 32, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 38, 15))
+>E : Symbol(E, Decl(keyRemappingKeyofResult3.ts, 38, 17))
+
+  const x: Exclude<keyof T, E> = k; // ok
+>x : Symbol(x, Decl(keyRemappingKeyofResult3.ts, 39, 7))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 38, 15))
+>E : Symbol(E, Decl(keyRemappingKeyofResult3.ts, 38, 17))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 38, 37))
+}
+
+type Uppercased<T> = { [K in keyof T as Uppercase<K & string>]: T[K] };
+>Uppercased : Symbol(Uppercased, Decl(keyRemappingKeyofResult3.ts, 40, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 42, 16))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 42, 24))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 42, 16))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 42, 24))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 42, 16))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 42, 24))
+
+function test6<T>(k: keyof Uppercased<T>) {
+>test6 : Symbol(test6, Decl(keyRemappingKeyofResult3.ts, 42, 71))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 44, 15))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 44, 18))
+>Uppercased : Symbol(Uppercased, Decl(keyRemappingKeyofResult3.ts, 40, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 44, 15))
+
+  const a: Uppercase<string> = k; // ok
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 45, 7))
+>Uppercase : Symbol(Uppercase, Decl(lib.es5.d.ts, --, --))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 44, 18))
+}
+
+type Base1 = { a: 1; b: 2 };
+>Base1 : Symbol(Base1, Decl(keyRemappingKeyofResult3.ts, 46, 1))
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 48, 14))
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 48, 20))
+
+type Constrained1<T extends Base1> = {
+>Constrained1 : Symbol(Constrained1, Decl(keyRemappingKeyofResult3.ts, 48, 28))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 49, 18))
+>Base1 : Symbol(Base1, Decl(keyRemappingKeyofResult3.ts, 46, 1))
+
+  [K in keyof T as `c_${K & string}`]: T[K];
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 50, 3))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 49, 18))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 50, 3))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 49, 18))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 50, 3))
+
+};
+type Constrained2<T extends Base1> = {
+>Constrained2 : Symbol(Constrained2, Decl(keyRemappingKeyofResult3.ts, 51, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 52, 18))
+>Base1 : Symbol(Base1, Decl(keyRemappingKeyofResult3.ts, 46, 1))
+
+  [K in keyof T as `c_${K & string}`]: boolean;
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 53, 3))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 52, 18))
+>K : Symbol(K, Decl(keyRemappingKeyofResult3.ts, 53, 3))
+
+};
+
+function test7<T extends Base1>(
+>test7 : Symbol(test7, Decl(keyRemappingKeyofResult3.ts, 54, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 56, 15))
+>Base1 : Symbol(Base1, Decl(keyRemappingKeyofResult3.ts, 46, 1))
+
+  k1: keyof Constrained1<T>,
+>k1 : Symbol(k1, Decl(keyRemappingKeyofResult3.ts, 56, 32))
+>Constrained1 : Symbol(Constrained1, Decl(keyRemappingKeyofResult3.ts, 48, 28))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 56, 15))
+
+  k2: keyof Constrained2<T>,
+>k2 : Symbol(k2, Decl(keyRemappingKeyofResult3.ts, 57, 28))
+>Constrained2 : Symbol(Constrained2, Decl(keyRemappingKeyofResult3.ts, 51, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 56, 15))
+
+) {
+  let a: keyof Constrained1<T> = k2; // ok
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 60, 5))
+>Constrained1 : Symbol(Constrained1, Decl(keyRemappingKeyofResult3.ts, 48, 28))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 56, 15))
+>k2 : Symbol(k2, Decl(keyRemappingKeyofResult3.ts, 57, 28))
+
+  let b: keyof Constrained2<T> = k1; // ok
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 61, 5))
+>Constrained2 : Symbol(Constrained2, Decl(keyRemappingKeyofResult3.ts, 51, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 56, 15))
+>k1 : Symbol(k1, Decl(keyRemappingKeyofResult3.ts, 56, 32))
+}
+
+function test8<T extends Base1>(k: keyof Constrained1<T>) {
+>test8 : Symbol(test8, Decl(keyRemappingKeyofResult3.ts, 62, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 64, 15))
+>Base1 : Symbol(Base1, Decl(keyRemappingKeyofResult3.ts, 46, 1))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 64, 32))
+>Constrained1 : Symbol(Constrained1, Decl(keyRemappingKeyofResult3.ts, 48, 28))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 64, 15))
+
+  const a: "c_a" | "c_b" = k; // error
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 65, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 64, 32))
+
+  const b: `c_${string}` = k; // ok
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 66, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 64, 32))
+}
+
+type StringPropsOnly<T> = {
+>StringPropsOnly : Symbol(StringPropsOnly, Decl(keyRemappingKeyofResult3.ts, 67, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 69, 21))
+
+  [P in keyof T as T[P] extends string ? P : never]: any;
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 70, 3))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 69, 21))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 69, 21))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 70, 3))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 70, 3))
+
+};
+
+function test9<T>(k: Extract<keyof StringPropsOnly<T>, string>) {
+>test9 : Symbol(test9, Decl(keyRemappingKeyofResult3.ts, 71, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 73, 15))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 73, 18))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>StringPropsOnly : Symbol(StringPropsOnly, Decl(keyRemappingKeyofResult3.ts, 67, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 73, 15))
+
+  const s: string = k; // ok
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 74, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 73, 18))
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 74, 22))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 73, 18))
+}
+
+type AllKeysMapped<T> = { [P in keyof T as P]: any };
+>AllKeysMapped : Symbol(AllKeysMapped, Decl(keyRemappingKeyofResult3.ts, 76, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 78, 19))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 78, 27))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 78, 19))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 78, 27))
+
+function test10<T>(k: Extract<keyof AllKeysMapped<T>, string>) {
+>test10 : Symbol(test10, Decl(keyRemappingKeyofResult3.ts, 78, 53))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 80, 16))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 80, 19))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>AllKeysMapped : Symbol(AllKeysMapped, Decl(keyRemappingKeyofResult3.ts, 76, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 80, 16))
+
+  const s: string = k; // ok
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 81, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 80, 19))
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 81, 22))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 80, 19))
+}
+
+function test11<T>(k: keyof StringPropsOnly<T>) {
+>test11 : Symbol(test11, Decl(keyRemappingKeyofResult3.ts, 83, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 85, 16))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 85, 19))
+>StringPropsOnly : Symbol(StringPropsOnly, Decl(keyRemappingKeyofResult3.ts, 67, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 85, 16))
+
+  const s: string = k; // error
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 86, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 85, 19))
+
+  type Result = AcceptString<typeof k>; // error
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 86, 22))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 85, 19))
+}
+
+function test12<T>(k: string & keyof StringPropsOnly<T>) {
+>test12 : Symbol(test12, Decl(keyRemappingKeyofResult3.ts, 88, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 90, 16))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 90, 19))
+>StringPropsOnly : Symbol(StringPropsOnly, Decl(keyRemappingKeyofResult3.ts, 67, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 90, 16))
+
+  const s: string = k; // ok
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 91, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 90, 19))
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 91, 22))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 90, 19))
+}
+
+type FilterByLiteralValue<T, V> = {
+>FilterByLiteralValue : Symbol(FilterByLiteralValue, Decl(keyRemappingKeyofResult3.ts, 93, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 95, 26))
+>V : Symbol(V, Decl(keyRemappingKeyofResult3.ts, 95, 28))
+
+  [P in keyof T as T[P] extends V ? P : never]: any;
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 96, 3))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 95, 26))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 95, 26))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 96, 3))
+>V : Symbol(V, Decl(keyRemappingKeyofResult3.ts, 95, 28))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 96, 3))
+
+};
+
+function test13<T extends Base1>(k: keyof FilterByLiteralValue<T, 1>) {
+>test13 : Symbol(test13, Decl(keyRemappingKeyofResult3.ts, 97, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 99, 16))
+>Base1 : Symbol(Base1, Decl(keyRemappingKeyofResult3.ts, 46, 1))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 99, 33))
+>FilterByLiteralValue : Symbol(FilterByLiteralValue, Decl(keyRemappingKeyofResult3.ts, 93, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 99, 16))
+
+  const s: string = k; // error
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 100, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 99, 33))
+
+  type Result = AcceptString<typeof k>; // error
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 100, 22))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 99, 33))
+}
+
+type Base2 = { x: string; y: number };
+>Base2 : Symbol(Base2, Decl(keyRemappingKeyofResult3.ts, 102, 1))
+>x : Symbol(x, Decl(keyRemappingKeyofResult3.ts, 104, 14))
+>y : Symbol(y, Decl(keyRemappingKeyofResult3.ts, 104, 25))
+
+type FilterByStringValue<T> = {
+>FilterByStringValue : Symbol(FilterByStringValue, Decl(keyRemappingKeyofResult3.ts, 104, 38))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 106, 25))
+
+  [P in keyof T as T[P] extends string ? P : never]: any;
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 107, 3))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 106, 25))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 106, 25))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 107, 3))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 107, 3))
+
+};
+
+function test14<T extends Base2>(k: keyof FilterByStringValue<T>) {
+>test14 : Symbol(test14, Decl(keyRemappingKeyofResult3.ts, 108, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 110, 16))
+>Base2 : Symbol(Base2, Decl(keyRemappingKeyofResult3.ts, 102, 1))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 110, 33))
+>FilterByStringValue : Symbol(FilterByStringValue, Decl(keyRemappingKeyofResult3.ts, 104, 38))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 110, 16))
+
+  const s: string = k; // error
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 111, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 110, 33))
+
+  const s2: "x" = k; // error
+>s2 : Symbol(s2, Decl(keyRemappingKeyofResult3.ts, 112, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 110, 33))
+
+  type Result1 = AcceptString<typeof k>; // error
+>Result1 : Symbol(Result1, Decl(keyRemappingKeyofResult3.ts, 112, 20))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 110, 33))
+
+  type Result2 = AcceptAB<typeof k>; // error
+>Result2 : Symbol(Result2, Decl(keyRemappingKeyofResult3.ts, 113, 40))
+>AcceptAB : Symbol(AcceptAB, Decl(keyRemappingKeyofResult3.ts, 0, 32))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 110, 33))
+
+  type Result3 = AcceptA<typeof k>; // error
+>Result3 : Symbol(Result3, Decl(keyRemappingKeyofResult3.ts, 114, 36))
+>AcceptA : Symbol(AcceptA, Decl(keyRemappingKeyofResult3.ts, 0, 0))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 110, 33))
+}
+
+type RemapC<T> = { [P in keyof T as T[P] extends string ? P : never]: T[P] };
+>RemapC : Symbol(RemapC, Decl(keyRemappingKeyofResult3.ts, 116, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 118, 12))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 118, 20))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 118, 12))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 118, 12))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 118, 20))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 118, 20))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 118, 12))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 118, 20))
+
+type RemapD<T> = { [P in keyof T as T[P] extends string ? P : never]: number };
+>RemapD : Symbol(RemapD, Decl(keyRemappingKeyofResult3.ts, 118, 77))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 119, 12))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 119, 20))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 119, 12))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 119, 12))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 119, 20))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 119, 20))
+
+function test15<T extends Base2>(ka: keyof RemapC<T>, kb: keyof RemapD<T>) {
+>test15 : Symbol(test15, Decl(keyRemappingKeyofResult3.ts, 119, 79))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 121, 16))
+>Base2 : Symbol(Base2, Decl(keyRemappingKeyofResult3.ts, 102, 1))
+>ka : Symbol(ka, Decl(keyRemappingKeyofResult3.ts, 121, 33))
+>RemapC : Symbol(RemapC, Decl(keyRemappingKeyofResult3.ts, 116, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 121, 16))
+>kb : Symbol(kb, Decl(keyRemappingKeyofResult3.ts, 121, 53))
+>RemapD : Symbol(RemapD, Decl(keyRemappingKeyofResult3.ts, 118, 77))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 121, 16))
+
+  let a: keyof RemapC<T> = kb; // ok
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 122, 5))
+>RemapC : Symbol(RemapC, Decl(keyRemappingKeyofResult3.ts, 116, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 121, 16))
+>kb : Symbol(kb, Decl(keyRemappingKeyofResult3.ts, 121, 53))
+
+  let b: keyof RemapD<T> = ka; // ok
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 123, 5))
+>RemapD : Symbol(RemapD, Decl(keyRemappingKeyofResult3.ts, 118, 77))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 121, 16))
+>ka : Symbol(ka, Decl(keyRemappingKeyofResult3.ts, 121, 33))
+}
+
+type Base3 = { a: string; b: string; c: string };
+>Base3 : Symbol(Base3, Decl(keyRemappingKeyofResult3.ts, 124, 1))
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 126, 14))
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 126, 25))
+>c : Symbol(c, Decl(keyRemappingKeyofResult3.ts, 126, 36))
+
+type AlwaysNever<T> = { [P in keyof T as 1 extends string ? P : never]: any };
+>AlwaysNever : Symbol(AlwaysNever, Decl(keyRemappingKeyofResult3.ts, 126, 49))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 128, 17))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 128, 25))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 128, 17))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 128, 25))
+
+function test16<T extends Base3>(k: keyof AlwaysNever<T>) {
+>test16 : Symbol(test16, Decl(keyRemappingKeyofResult3.ts, 128, 78))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 130, 16))
+>Base3 : Symbol(Base3, Decl(keyRemappingKeyofResult3.ts, 124, 1))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 130, 33))
+>AlwaysNever : Symbol(AlwaysNever, Decl(keyRemappingKeyofResult3.ts, 126, 49))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 130, 16))
+
+  const s: string = k; // ok
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 131, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 130, 33))
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 131, 22))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 130, 33))
+}
+
+type Base4 = { a: string; b: number };
+>Base4 : Symbol(Base4, Decl(keyRemappingKeyofResult3.ts, 133, 1))
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 135, 14))
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 135, 25))
+
+type PickByType<T, V> = { [P in keyof T as T[P] extends V ? P : never]: T[P] };
+>PickByType : Symbol(PickByType, Decl(keyRemappingKeyofResult3.ts, 135, 38))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 137, 16))
+>V : Symbol(V, Decl(keyRemappingKeyofResult3.ts, 137, 18))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 137, 27))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 137, 16))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 137, 16))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 137, 27))
+>V : Symbol(V, Decl(keyRemappingKeyofResult3.ts, 137, 18))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 137, 27))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 137, 16))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 137, 27))
+
+function test17<T extends Base4>(k: keyof PickByType<T, string>) {
+>test17 : Symbol(test17, Decl(keyRemappingKeyofResult3.ts, 137, 79))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 139, 16))
+>Base4 : Symbol(Base4, Decl(keyRemappingKeyofResult3.ts, 133, 1))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 139, 33))
+>PickByType : Symbol(PickByType, Decl(keyRemappingKeyofResult3.ts, 135, 38))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 139, 16))
+
+  const s: string = k; // error
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 140, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 139, 33))
+
+  const s2: typeof k = "a"; // error (checks against a deferred conditional type)
+>s2 : Symbol(s2, Decl(keyRemappingKeyofResult3.ts, 141, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 139, 33))
+
+  const s3: "a" = k; // error
+>s3 : Symbol(s3, Decl(keyRemappingKeyofResult3.ts, 142, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 139, 33))
+
+  type Result = AcceptString<typeof k>; // error
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 142, 20))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 139, 33))
+
+  type Result2 = AcceptAB<typeof k>; // error
+>Result2 : Symbol(Result2, Decl(keyRemappingKeyofResult3.ts, 144, 39))
+>AcceptAB : Symbol(AcceptAB, Decl(keyRemappingKeyofResult3.ts, 0, 32))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 139, 33))
+
+  type Result3 = AcceptA<typeof k>; // error
+>Result3 : Symbol(Result3, Decl(keyRemappingKeyofResult3.ts, 145, 36))
+>AcceptA : Symbol(AcceptA, Decl(keyRemappingKeyofResult3.ts, 0, 0))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 139, 33))
+}
+
+function test18<T extends { a: string; b: number }>(o: {
+>test18 : Symbol(test18, Decl(keyRemappingKeyofResult3.ts, 147, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 149, 16))
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 149, 27))
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 149, 38))
+>o : Symbol(o, Decl(keyRemappingKeyofResult3.ts, 149, 52))
+
+  [P in keyof T as T[P] extends string ? P : never]: any;
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 150, 3))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 149, 16))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 149, 16))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 150, 3))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 150, 3))
+
+}) {
+  type Result = AcceptString<keyof typeof o>; // error
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 151, 4))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>o : Symbol(o, Decl(keyRemappingKeyofResult3.ts, 149, 52))
+}
+
+type Inner<T> = { [P in keyof T as P extends string ? P : never]: T[P] };
+>Inner : Symbol(Inner, Decl(keyRemappingKeyofResult3.ts, 153, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 155, 11))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 155, 19))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 155, 11))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 155, 19))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 155, 19))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 155, 11))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 155, 19))
+
+type Outer<T> = {
+>Outer : Symbol(Outer, Decl(keyRemappingKeyofResult3.ts, 155, 73))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 156, 11))
+
+  [P in keyof Inner<T> as P extends `a${string}` ? P : never]: any;
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 157, 3))
+>Inner : Symbol(Inner, Decl(keyRemappingKeyofResult3.ts, 153, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 156, 11))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 157, 3))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 157, 3))
+
+};
+
+function test19<T extends { apple: 1; apricot: 2; banana: 3 }>(
+>test19 : Symbol(test19, Decl(keyRemappingKeyofResult3.ts, 158, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 160, 16))
+>apple : Symbol(apple, Decl(keyRemappingKeyofResult3.ts, 160, 27))
+>apricot : Symbol(apricot, Decl(keyRemappingKeyofResult3.ts, 160, 37))
+>banana : Symbol(banana, Decl(keyRemappingKeyofResult3.ts, 160, 49))
+
+  k: keyof Outer<T>,
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 160, 63))
+>Outer : Symbol(Outer, Decl(keyRemappingKeyofResult3.ts, 155, 73))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 160, 16))
+
+) {
+  const s: string = k; // ok
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 163, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 160, 63))
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 163, 22))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 160, 63))
+}
+
+type Prefixed4<T> = {
+>Prefixed4 : Symbol(Prefixed4, Decl(keyRemappingKeyofResult3.ts, 165, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 167, 15))
+
+  [P in keyof T as P extends string ? `mapped_${P}` : never]: any;
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 168, 3))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 167, 15))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 168, 3))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 168, 3))
+
+};
+
+function test20<T extends { [key: string]: number; specific: 1 }>(
+>test20 : Symbol(test20, Decl(keyRemappingKeyofResult3.ts, 169, 2))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 171, 16))
+>key : Symbol(key, Decl(keyRemappingKeyofResult3.ts, 171, 29))
+>specific : Symbol(specific, Decl(keyRemappingKeyofResult3.ts, 171, 50))
+
+  k: keyof Prefixed4<T>,
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 171, 66))
+>Prefixed4 : Symbol(Prefixed4, Decl(keyRemappingKeyofResult3.ts, 165, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 171, 16))
+
+) {
+  const s: string = k; // ok
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 174, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 171, 66))
+
+  type Result = AcceptString<typeof k>; // ok
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 174, 22))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 171, 66))
+}
+
+type Base5 = { a: string; b: number | string };
+>Base5 : Symbol(Base5, Decl(keyRemappingKeyofResult3.ts, 176, 1))
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 178, 14))
+>b : Symbol(b, Decl(keyRemappingKeyofResult3.ts, 178, 25))
+
+function test21<T extends Base5>(k: keyof StringPropsOnly<T>) {
+>test21 : Symbol(test21, Decl(keyRemappingKeyofResult3.ts, 178, 47))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 180, 16))
+>Base5 : Symbol(Base5, Decl(keyRemappingKeyofResult3.ts, 176, 1))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 180, 33))
+>StringPropsOnly : Symbol(StringPropsOnly, Decl(keyRemappingKeyofResult3.ts, 67, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 180, 16))
+
+  const s: string = k; // error
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 181, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 180, 33))
+
+  const s1: "a" = k; // error
+>s1 : Symbol(s1, Decl(keyRemappingKeyofResult3.ts, 182, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 180, 33))
+
+  const s2: "a" | "b" = k; // error
+>s2 : Symbol(s2, Decl(keyRemappingKeyofResult3.ts, 183, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 180, 33))
+
+  type Result = AcceptString<typeof k>; // error
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 183, 26))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 180, 33))
+
+  type Result2 = AcceptAB<typeof k>; // error
+>Result2 : Symbol(Result2, Decl(keyRemappingKeyofResult3.ts, 184, 39))
+>AcceptAB : Symbol(AcceptAB, Decl(keyRemappingKeyofResult3.ts, 0, 32))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 180, 33))
+
+  type Result3 = AcceptA<typeof k>; // error
+>Result3 : Symbol(Result3, Decl(keyRemappingKeyofResult3.ts, 185, 36))
+>AcceptA : Symbol(AcceptA, Decl(keyRemappingKeyofResult3.ts, 0, 0))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 180, 33))
+}
+
+type ValueIs1<T> = { [P in keyof T as T[P] extends 1 ? P : never]: any };
+>ValueIs1 : Symbol(ValueIs1, Decl(keyRemappingKeyofResult3.ts, 187, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 189, 14))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 189, 22))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 189, 14))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 189, 14))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 189, 22))
+>P : Symbol(P, Decl(keyRemappingKeyofResult3.ts, 189, 22))
+
+type Base6 = { [key: string]: number; a: 1 };
+>Base6 : Symbol(Base6, Decl(keyRemappingKeyofResult3.ts, 189, 73))
+>key : Symbol(key, Decl(keyRemappingKeyofResult3.ts, 191, 16))
+>a : Symbol(a, Decl(keyRemappingKeyofResult3.ts, 191, 37))
+
+function test22<T extends Base6>(k: keyof ValueIs1<T>) {
+>test22 : Symbol(test22, Decl(keyRemappingKeyofResult3.ts, 191, 45))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 193, 16))
+>Base6 : Symbol(Base6, Decl(keyRemappingKeyofResult3.ts, 189, 73))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 193, 33))
+>ValueIs1 : Symbol(ValueIs1, Decl(keyRemappingKeyofResult3.ts, 187, 1))
+>T : Symbol(T, Decl(keyRemappingKeyofResult3.ts, 193, 16))
+
+  const s: string = k; // error
+>s : Symbol(s, Decl(keyRemappingKeyofResult3.ts, 194, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 193, 33))
+
+  const s1: "a" = k; // error
+>s1 : Symbol(s1, Decl(keyRemappingKeyofResult3.ts, 195, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 193, 33))
+
+  const s2: "a" | "b" = k; // error
+>s2 : Symbol(s2, Decl(keyRemappingKeyofResult3.ts, 196, 7))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 193, 33))
+
+  type Result = AcceptString<typeof k>; // error
+>Result : Symbol(Result, Decl(keyRemappingKeyofResult3.ts, 196, 26))
+>AcceptString : Symbol(AcceptString, Decl(keyRemappingKeyofResult3.ts, 1, 39))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 193, 33))
+
+  type Result2 = AcceptAB<typeof k>; // error
+>Result2 : Symbol(Result2, Decl(keyRemappingKeyofResult3.ts, 197, 39))
+>AcceptAB : Symbol(AcceptAB, Decl(keyRemappingKeyofResult3.ts, 0, 32))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 193, 33))
+
+  type Result3 = AcceptA<typeof k>; // error
+>Result3 : Symbol(Result3, Decl(keyRemappingKeyofResult3.ts, 198, 36))
+>AcceptA : Symbol(AcceptA, Decl(keyRemappingKeyofResult3.ts, 0, 0))
+>k : Symbol(k, Decl(keyRemappingKeyofResult3.ts, 193, 33))
+}
+
