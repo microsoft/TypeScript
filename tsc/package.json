@@ -15,9 +15,9 @@
         "chokidar": "^5.0.0",
         "dprint": "^0.51.1",
         "execa": "^9.6.1",
-        "glob": "^13.0.0",
+        "glob": "^13.0.1",
         "hereby": "^1.11.1",
-        "p-limit": "^7.2.0",
+        "p-limit": "^7.3.0",
         "picocolors": "^1.1.1",
         "tmp": "^0.2.5",
         "typescript": "^5.9.3",
@@ -39,9 +39,9 @@
         "./_extension",
         "./_packages/*"
     ],
-    "packageManager": "npm@11.8.0+sha512.9f5f6c25e5be44629d907a3c482739c614b090a8505057d9685cd273e12c6172e34aa215d2d97bd9a0d8415bb356f7eb6f2b06c1d690b0d2cdcb9f09d7410149",
+    "packageManager": "npm@11.9.0+sha512.04166853ddba142ca98f86fb57b1258a7c6c59ccb82acb3cf141b77a315898acaaed47395e74f7e0c7b69c486008e68be6a6381ef1aee5a23dd82e0e61decd68",
     "volta": {
         "node": "22.22.0",
-        "npm": "11.8.0"
+        "npm": "11.9.0"
     }
 }
