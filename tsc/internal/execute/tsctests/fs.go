@@ -3,10 +3,11 @@ package tsctests
 import (
 	"fmt"
 
-	"github.com/go-json-experiment/json"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/execute/incremental"
+	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/typescript-go/internal/testutil/fsbaselineutil"
 	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
@@ -69,7 +70,11 @@ func (f *testFs) writeFileHandlingBuildInfo(path string, data string, writeByteO
 				data = string(newData)
 			}
 			// Write readable build info version
-			if err := f.WriteFile(path+".readable.baseline.txt", toReadableBuildInfo(&buildInfo, data), false); err != nil {
+			if err := f.WriteFile(
+				path+".readable.baseline.txt",
+				toReadableBuildInfo(&buildInfo, fsbaselineutil.SanitizeInternalSymbolName(data)),
+				false,
+			); err != nil {
 				return fmt.Errorf("testFs.WriteFile: failed to write readable build info: %w", err)
 			}
 		} else {

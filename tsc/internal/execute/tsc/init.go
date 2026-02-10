@@ -10,7 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
-	"github.com/microsoft/typescript-go/internal/jsonutil"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -66,7 +66,7 @@ func generateTSConfig(options *collections.OrderedMap[string, any], locale local
 			}
 		}
 
-		b, err := jsonutil.MarshalIndent(value, "", "")
+		b, err := json.MarshalIndent(value, "", "")
 		if err != nil {
 			panic(fmt.Sprintf("should not happen: %v", err))
 		}

@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/go-json-experiment/json"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )

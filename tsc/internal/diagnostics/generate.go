@@ -22,8 +22,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/go-json-experiment/json"
 	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/repo"
 	"golang.org/x/text/language"
 )
@@ -186,7 +186,7 @@ func generateLocalizations(knownKeys map[string]bool, locDir string) *bytes.Buff
 	buf.WriteString("\t\"strings\"\n")
 	buf.WriteString("\t\"sync\"\n")
 	buf.WriteString("\t\"golang.org/x/text/language\"\n")
-	buf.WriteString("\t\"github.com/go-json-experiment/json\"\n")
+	buf.WriteString("\t\"github.com/microsoft/typescript-go/internal/json\"\n")
 	buf.WriteString(")\n")
 
 	// Remove and recreate the loc directory for a clean state

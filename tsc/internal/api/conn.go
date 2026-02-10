@@ -4,8 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/go-json-experiment/json"
-	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/json"
 )
 
 var (
@@ -16,9 +15,9 @@ var (
 // Handler processes incoming API requests and notifications.
 type Handler interface {
 	// HandleRequest handles an incoming request and returns a result or error.
-	HandleRequest(ctx context.Context, method string, params jsontext.Value) (any, error)
+	HandleRequest(ctx context.Context, method string, params json.Value) (any, error)
 	// HandleNotification handles an incoming notification.
-	HandleNotification(ctx context.Context, method string, params jsontext.Value) error
+	HandleNotification(ctx context.Context, method string, params json.Value) error
 }
 
 // Conn represents a bidirectional connection for API communication.
@@ -28,14 +27,14 @@ type Conn interface {
 	Run(ctx context.Context) error
 
 	// Call sends a request to the client and waits for a response.
-	Call(ctx context.Context, method string, params any) (jsontext.Value, error)
+	Call(ctx context.Context, method string, params any) (json.Value, error)
 
 	// Notify sends a notification to the client (no response expected).
 	Notify(ctx context.Context, method string, params any) error
 }
 
 // UnmarshalParams is a helper to unmarshal params into a typed struct.
-func UnmarshalParams[T any](params jsontext.Value) (*T, error) {
+func UnmarshalParams[T any](params json.Value) (*T, error) {
 	if len(params) == 0 {
 		return nil, nil
 	}

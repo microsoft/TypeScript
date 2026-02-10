@@ -4,11 +4,10 @@ import (
 	"fmt"
 	"iter"
 
-	"github.com/go-json-experiment/json"
-	"github.com/go-json-experiment/json/jsontext"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/diagnostics"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -223,7 +222,7 @@ func (b *BuildInfoDiagnosticsOfFile) MarshalJSON() ([]byte, error) {
 }
 
 func (b *BuildInfoDiagnosticsOfFile) UnmarshalJSON(data []byte) error {
-	var fileIdAndDiagnostics []jsontext.Value
+	var fileIdAndDiagnostics []json.Value
 	if err := json.Unmarshal(data, &fileIdAndDiagnostics); err != nil {
 		return fmt.Errorf("invalid BuildInfoDiagnosticsOfFile: %s", data)
 	}

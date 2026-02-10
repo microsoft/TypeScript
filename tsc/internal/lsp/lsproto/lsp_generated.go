@@ -6,8 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/go-json-experiment/json"
-	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/json"
 )
 
 // Meta model version 3.17.0
@@ -39,7 +38,7 @@ func (s *ImplementationParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*ImplementationParams)(nil)
 
-func (s *ImplementationParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ImplementationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -118,7 +117,7 @@ func (s Location) GetLocation() Location {
 
 var _ json.UnmarshalerFrom = (*Location)(nil)
 
-func (s *Location) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *Location) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		missingRange
@@ -186,7 +185,7 @@ type ImplementationRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*ImplementationRegistrationOptions)(nil)
 
-func (s *ImplementationRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ImplementationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -264,7 +263,7 @@ func (s *TypeDefinitionParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*TypeDefinitionParams)(nil)
 
-func (s *TypeDefinitionParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TypeDefinitionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -340,7 +339,7 @@ type TypeDefinitionRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*TypeDefinitionRegistrationOptions)(nil)
 
-func (s *TypeDefinitionRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TypeDefinitionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -405,7 +404,7 @@ type WorkspaceFolder struct {
 
 var _ json.UnmarshalerFrom = (*WorkspaceFolder)(nil)
 
-func (s *WorkspaceFolder) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkspaceFolder) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		missingName
@@ -467,7 +466,7 @@ type DidChangeWorkspaceFoldersParams struct {
 
 var _ json.UnmarshalerFrom = (*DidChangeWorkspaceFoldersParams)(nil)
 
-func (s *DidChangeWorkspaceFoldersParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidChangeWorkspaceFoldersParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingEvent uint = 1 << iota
 		_missingLast
@@ -519,7 +518,7 @@ type ConfigurationParams struct {
 
 var _ json.UnmarshalerFrom = (*ConfigurationParams)(nil)
 
-func (s *ConfigurationParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ConfigurationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingItems uint = 1 << iota
 		_missingLast
@@ -583,7 +582,7 @@ func (s *DocumentColorParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*DocumentColorParams)(nil)
 
-func (s *DocumentColorParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentColorParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		_missingLast
@@ -647,7 +646,7 @@ type ColorInformation struct {
 
 var _ json.UnmarshalerFrom = (*ColorInformation)(nil)
 
-func (s *ColorInformation) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ColorInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		missingColor
@@ -715,7 +714,7 @@ type DocumentColorRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*DocumentColorRegistrationOptions)(nil)
 
-func (s *DocumentColorRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentColorRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -793,7 +792,7 @@ func (s *ColorPresentationParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*ColorPresentationParams)(nil)
 
-func (s *ColorPresentationParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ColorPresentationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingColor
@@ -882,7 +881,7 @@ type ColorPresentation struct {
 
 var _ json.UnmarshalerFrom = (*ColorPresentation)(nil)
 
-func (s *ColorPresentation) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ColorPresentation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingLabel uint = 1 << iota
 		_missingLast
@@ -948,7 +947,7 @@ type TextDocumentRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentRegistrationOptions)(nil)
 
-func (s *TextDocumentRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -1012,7 +1011,7 @@ func (s *FoldingRangeParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*FoldingRangeParams)(nil)
 
-func (s *FoldingRangeParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FoldingRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		_missingLast
@@ -1097,7 +1096,7 @@ type FoldingRange struct {
 
 var _ json.UnmarshalerFrom = (*FoldingRange)(nil)
 
-func (s *FoldingRange) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FoldingRange) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingStartLine uint = 1 << iota
 		missingEndLine
@@ -1181,7 +1180,7 @@ type FoldingRangeRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*FoldingRangeRegistrationOptions)(nil)
 
-func (s *FoldingRangeRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FoldingRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -1259,7 +1258,7 @@ func (s *DeclarationParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*DeclarationParams)(nil)
 
-func (s *DeclarationParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DeclarationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -1335,7 +1334,7 @@ type DeclarationRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*DeclarationRegistrationOptions)(nil)
 
-func (s *DeclarationRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DeclarationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -1410,7 +1409,7 @@ func (s *SelectionRangeParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*SelectionRangeParams)(nil)
 
-func (s *SelectionRangeParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SelectionRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPositions
@@ -1484,7 +1483,7 @@ type SelectionRange struct {
 
 var _ json.UnmarshalerFrom = (*SelectionRange)(nil)
 
-func (s *SelectionRange) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SelectionRange) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		_missingLast
@@ -1547,7 +1546,7 @@ type SelectionRangeRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*SelectionRangeRegistrationOptions)(nil)
 
-func (s *SelectionRangeRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SelectionRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -1607,7 +1606,7 @@ type WorkDoneProgressCreateParams struct {
 
 var _ json.UnmarshalerFrom = (*WorkDoneProgressCreateParams)(nil)
 
-func (s *WorkDoneProgressCreateParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkDoneProgressCreateParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingToken uint = 1 << iota
 		_missingLast
@@ -1659,7 +1658,7 @@ type WorkDoneProgressCancelParams struct {
 
 var _ json.UnmarshalerFrom = (*WorkDoneProgressCancelParams)(nil)
 
-func (s *WorkDoneProgressCancelParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkDoneProgressCancelParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingToken uint = 1 << iota
 		_missingLast
@@ -1728,7 +1727,7 @@ func (s *CallHierarchyPrepareParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*CallHierarchyPrepareParams)(nil)
 
-func (s *CallHierarchyPrepareParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CallHierarchyPrepareParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -1827,7 +1826,7 @@ func (s CallHierarchyItem) GetLocation() Location {
 
 var _ json.UnmarshalerFrom = (*CallHierarchyItem)(nil)
 
-func (s *CallHierarchyItem) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CallHierarchyItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingName uint = 1 << iota
 		missingKind
@@ -1937,7 +1936,7 @@ type CallHierarchyRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*CallHierarchyRegistrationOptions)(nil)
 
-func (s *CallHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CallHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -2006,7 +2005,7 @@ type CallHierarchyIncomingCallsParams struct {
 
 var _ json.UnmarshalerFrom = (*CallHierarchyIncomingCallsParams)(nil)
 
-func (s *CallHierarchyIncomingCallsParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CallHierarchyIncomingCallsParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingItem uint = 1 << iota
 		_missingLast
@@ -2073,7 +2072,7 @@ type CallHierarchyIncomingCall struct {
 
 var _ json.UnmarshalerFrom = (*CallHierarchyIncomingCall)(nil)
 
-func (s *CallHierarchyIncomingCall) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CallHierarchyIncomingCall) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingFrom uint = 1 << iota
 		missingFromRanges
@@ -2143,7 +2142,7 @@ type CallHierarchyOutgoingCallsParams struct {
 
 var _ json.UnmarshalerFrom = (*CallHierarchyOutgoingCallsParams)(nil)
 
-func (s *CallHierarchyOutgoingCallsParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CallHierarchyOutgoingCallsParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingItem uint = 1 << iota
 		_missingLast
@@ -2211,7 +2210,7 @@ type CallHierarchyOutgoingCall struct {
 
 var _ json.UnmarshalerFrom = (*CallHierarchyOutgoingCall)(nil)
 
-func (s *CallHierarchyOutgoingCall) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CallHierarchyOutgoingCall) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTo uint = 1 << iota
 		missingFromRanges
@@ -2284,7 +2283,7 @@ func (s *SemanticTokensParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*SemanticTokensParams)(nil)
 
-func (s *SemanticTokensParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokensParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		_missingLast
@@ -2351,7 +2350,7 @@ type SemanticTokens struct {
 
 var _ json.UnmarshalerFrom = (*SemanticTokens)(nil)
 
-func (s *SemanticTokens) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokens) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingData uint = 1 << iota
 		_missingLast
@@ -2407,7 +2406,7 @@ type SemanticTokensPartialResult struct {
 
 var _ json.UnmarshalerFrom = (*SemanticTokensPartialResult)(nil)
 
-func (s *SemanticTokensPartialResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokensPartialResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingData uint = 1 << iota
 		_missingLast
@@ -2477,7 +2476,7 @@ type SemanticTokensRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*SemanticTokensRegistrationOptions)(nil)
 
-func (s *SemanticTokensRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokensRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		missingLegend
@@ -2570,7 +2569,7 @@ func (s *SemanticTokensDeltaParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*SemanticTokensDeltaParams)(nil)
 
-func (s *SemanticTokensDeltaParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokensDeltaParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPreviousResultId
@@ -2642,7 +2641,7 @@ type SemanticTokensDelta struct {
 
 var _ json.UnmarshalerFrom = (*SemanticTokensDelta)(nil)
 
-func (s *SemanticTokensDelta) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokensDelta) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingEdits uint = 1 << iota
 		_missingLast
@@ -2698,7 +2697,7 @@ type SemanticTokensDeltaPartialResult struct {
 
 var _ json.UnmarshalerFrom = (*SemanticTokensDeltaPartialResult)(nil)
 
-func (s *SemanticTokensDeltaPartialResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokensDeltaPartialResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingEdits uint = 1 << iota
 		_missingLast
@@ -2765,7 +2764,7 @@ func (s *SemanticTokensRangeParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*SemanticTokensRangeParams)(nil)
 
-func (s *SemanticTokensRangeParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokensRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingRange
@@ -2854,7 +2853,7 @@ type ShowDocumentParams struct {
 
 var _ json.UnmarshalerFrom = (*ShowDocumentParams)(nil)
 
-func (s *ShowDocumentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ShowDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		_missingLast
@@ -2921,7 +2920,7 @@ type ShowDocumentResult struct {
 
 var _ json.UnmarshalerFrom = (*ShowDocumentResult)(nil)
 
-func (s *ShowDocumentResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ShowDocumentResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingSuccess uint = 1 << iota
 		_missingLast
@@ -2987,7 +2986,7 @@ func (s *LinkedEditingRangeParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*LinkedEditingRangeParams)(nil)
 
-func (s *LinkedEditingRangeParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *LinkedEditingRangeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -3061,7 +3060,7 @@ type LinkedEditingRanges struct {
 
 var _ json.UnmarshalerFrom = (*LinkedEditingRanges)(nil)
 
-func (s *LinkedEditingRanges) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *LinkedEditingRanges) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRanges uint = 1 << iota
 		_missingLast
@@ -3124,7 +3123,7 @@ type LinkedEditingRangeRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*LinkedEditingRangeRegistrationOptions)(nil)
 
-func (s *LinkedEditingRangeRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *LinkedEditingRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -3188,7 +3187,7 @@ type CreateFilesParams struct {
 
 var _ json.UnmarshalerFrom = (*CreateFilesParams)(nil)
 
-func (s *CreateFilesParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CreateFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingFiles uint = 1 << iota
 		_missingLast
@@ -3280,7 +3279,7 @@ type FileOperationRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*FileOperationRegistrationOptions)(nil)
 
-func (s *FileOperationRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FileOperationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingFilters uint = 1 << iota
 		_missingLast
@@ -3337,7 +3336,7 @@ type RenameFilesParams struct {
 
 var _ json.UnmarshalerFrom = (*RenameFilesParams)(nil)
 
-func (s *RenameFilesParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *RenameFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingFiles uint = 1 << iota
 		_missingLast
@@ -3393,7 +3392,7 @@ type DeleteFilesParams struct {
 
 var _ json.UnmarshalerFrom = (*DeleteFilesParams)(nil)
 
-func (s *DeleteFilesParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DeleteFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingFiles uint = 1 << iota
 		_missingLast
@@ -3463,7 +3462,7 @@ func (s *MonikerParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*MonikerParams)(nil)
 
-func (s *MonikerParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *MonikerParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -3545,7 +3544,7 @@ type Moniker struct {
 
 var _ json.UnmarshalerFrom = (*Moniker)(nil)
 
-func (s *Moniker) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *Moniker) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingScheme uint = 1 << iota
 		missingIdentifier
@@ -3622,7 +3621,7 @@ type MonikerRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*MonikerRegistrationOptions)(nil)
 
-func (s *MonikerRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *MonikerRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -3695,7 +3694,7 @@ func (s *TypeHierarchyPrepareParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*TypeHierarchyPrepareParams)(nil)
 
-func (s *TypeHierarchyPrepareParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TypeHierarchyPrepareParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -3795,7 +3794,7 @@ func (s TypeHierarchyItem) GetLocation() Location {
 
 var _ json.UnmarshalerFrom = (*TypeHierarchyItem)(nil)
 
-func (s *TypeHierarchyItem) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TypeHierarchyItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingName uint = 1 << iota
 		missingKind
@@ -3905,7 +3904,7 @@ type TypeHierarchyRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*TypeHierarchyRegistrationOptions)(nil)
 
-func (s *TypeHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TypeHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -3974,7 +3973,7 @@ type TypeHierarchySupertypesParams struct {
 
 var _ json.UnmarshalerFrom = (*TypeHierarchySupertypesParams)(nil)
 
-func (s *TypeHierarchySupertypesParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TypeHierarchySupertypesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingItem uint = 1 << iota
 		_missingLast
@@ -4043,7 +4042,7 @@ type TypeHierarchySubtypesParams struct {
 
 var _ json.UnmarshalerFrom = (*TypeHierarchySubtypesParams)(nil)
 
-func (s *TypeHierarchySubtypesParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TypeHierarchySubtypesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingItem uint = 1 << iota
 		_missingLast
@@ -4120,7 +4119,7 @@ func (s *InlineValueParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*InlineValueParams)(nil)
 
-func (s *InlineValueParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlineValueParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingRange
@@ -4204,7 +4203,7 @@ type InlineValueRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*InlineValueRegistrationOptions)(nil)
 
-func (s *InlineValueRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlineValueRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -4277,7 +4276,7 @@ func (s *InlayHintParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*InlayHintParams)(nil)
 
-func (s *InlayHintParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlayHintParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingRange
@@ -4386,7 +4385,7 @@ type InlayHint struct {
 
 var _ json.UnmarshalerFrom = (*InlayHint)(nil)
 
-func (s *InlayHint) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlayHint) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingPosition uint = 1 << iota
 		missingLabel
@@ -4485,7 +4484,7 @@ type InlayHintRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*InlayHintRegistrationOptions)(nil)
 
-func (s *InlayHintRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlayHintRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -4569,7 +4568,7 @@ func (s *DocumentDiagnosticParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*DocumentDiagnosticParams)(nil)
 
-func (s *DocumentDiagnosticParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentDiagnosticParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		_missingLast
@@ -4639,7 +4638,7 @@ type DocumentDiagnosticReportPartialResult struct {
 
 var _ json.UnmarshalerFrom = (*DocumentDiagnosticReportPartialResult)(nil)
 
-func (s *DocumentDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRelatedDocuments uint = 1 << iota
 		_missingLast
@@ -4693,7 +4692,7 @@ type DiagnosticServerCancellationData struct {
 
 var _ json.UnmarshalerFrom = (*DiagnosticServerCancellationData)(nil)
 
-func (s *DiagnosticServerCancellationData) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DiagnosticServerCancellationData) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRetriggerRequest uint = 1 << iota
 		_missingLast
@@ -4768,7 +4767,7 @@ type DiagnosticRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*DiagnosticRegistrationOptions)(nil)
 
-func (s *DiagnosticRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DiagnosticRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		missingInterFileDependencies
@@ -4864,7 +4863,7 @@ type WorkspaceDiagnosticParams struct {
 
 var _ json.UnmarshalerFrom = (*WorkspaceDiagnosticParams)(nil)
 
-func (s *WorkspaceDiagnosticParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkspaceDiagnosticParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingPreviousResultIds uint = 1 << iota
 		_missingLast
@@ -4930,7 +4929,7 @@ type WorkspaceDiagnosticReport struct {
 
 var _ json.UnmarshalerFrom = (*WorkspaceDiagnosticReport)(nil)
 
-func (s *WorkspaceDiagnosticReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkspaceDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingItems uint = 1 << iota
 		_missingLast
@@ -4984,7 +4983,7 @@ type WorkspaceDiagnosticReportPartialResult struct {
 
 var _ json.UnmarshalerFrom = (*WorkspaceDiagnosticReportPartialResult)(nil)
 
-func (s *WorkspaceDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkspaceDiagnosticReportPartialResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingItems uint = 1 << iota
 		_missingLast
@@ -5043,7 +5042,7 @@ type DidOpenNotebookDocumentParams struct {
 
 var _ json.UnmarshalerFrom = (*DidOpenNotebookDocumentParams)(nil)
 
-func (s *DidOpenNotebookDocumentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidOpenNotebookDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingNotebookDocument uint = 1 << iota
 		missingCellTextDocuments
@@ -5115,7 +5114,7 @@ type NotebookDocumentSyncRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentSyncRegistrationOptions)(nil)
 
-func (s *NotebookDocumentSyncRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocumentSyncRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingNotebookSelector uint = 1 << iota
 		_missingLast
@@ -5196,7 +5195,7 @@ type DidChangeNotebookDocumentParams struct {
 
 var _ json.UnmarshalerFrom = (*DidChangeNotebookDocumentParams)(nil)
 
-func (s *DidChangeNotebookDocumentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidChangeNotebookDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingNotebookDocument uint = 1 << iota
 		missingChange
@@ -5260,7 +5259,7 @@ type DidSaveNotebookDocumentParams struct {
 
 var _ json.UnmarshalerFrom = (*DidSaveNotebookDocumentParams)(nil)
 
-func (s *DidSaveNotebookDocumentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidSaveNotebookDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingNotebookDocument uint = 1 << iota
 		_missingLast
@@ -5319,7 +5318,7 @@ type DidCloseNotebookDocumentParams struct {
 
 var _ json.UnmarshalerFrom = (*DidCloseNotebookDocumentParams)(nil)
 
-func (s *DidCloseNotebookDocumentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidCloseNotebookDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingNotebookDocument uint = 1 << iota
 		missingCellTextDocuments
@@ -5403,7 +5402,7 @@ func (s *InlineCompletionParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*InlineCompletionParams)(nil)
 
-func (s *InlineCompletionParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlineCompletionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -5482,7 +5481,7 @@ type InlineCompletionList struct {
 
 var _ json.UnmarshalerFrom = (*InlineCompletionList)(nil)
 
-func (s *InlineCompletionList) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlineCompletionList) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingItems uint = 1 << iota
 		_missingLast
@@ -5548,7 +5547,7 @@ type InlineCompletionItem struct {
 
 var _ json.UnmarshalerFrom = (*InlineCompletionItem)(nil)
 
-func (s *InlineCompletionItem) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlineCompletionItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingInsertText uint = 1 << iota
 		_missingLast
@@ -5624,7 +5623,7 @@ type InlineCompletionRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*InlineCompletionRegistrationOptions)(nil)
 
-func (s *InlineCompletionRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlineCompletionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -5689,7 +5688,7 @@ type TextDocumentContentParams struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentContentParams)(nil)
 
-func (s *TextDocumentContentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentContentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		_missingLast
@@ -5749,7 +5748,7 @@ type TextDocumentContentResult struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentContentResult)(nil)
 
-func (s *TextDocumentContentResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentContentResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingText uint = 1 << iota
 		_missingLast
@@ -5810,7 +5809,7 @@ type TextDocumentContentRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentContentRegistrationOptions)(nil)
 
-func (s *TextDocumentContentRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentContentRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingSchemes uint = 1 << iota
 		_missingLast
@@ -5871,7 +5870,7 @@ type TextDocumentContentRefreshParams struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentContentRefreshParams)(nil)
 
-func (s *TextDocumentContentRefreshParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentContentRefreshParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		_missingLast
@@ -5922,7 +5921,7 @@ type RegistrationParams struct {
 
 var _ json.UnmarshalerFrom = (*RegistrationParams)(nil)
 
-func (s *RegistrationParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *RegistrationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRegistrations uint = 1 << iota
 		_missingLast
@@ -5973,7 +5972,7 @@ type UnregistrationParams struct {
 
 var _ json.UnmarshalerFrom = (*UnregistrationParams)(nil)
 
-func (s *UnregistrationParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *UnregistrationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUnregisterations uint = 1 << iota
 		_missingLast
@@ -6078,7 +6077,7 @@ type InitializeParams struct {
 
 var _ json.UnmarshalerFrom = (*InitializeParams)(nil)
 
-func (s *InitializeParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InitializeParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingProcessId uint = 1 << iota
 		missingRootUri
@@ -6182,7 +6181,7 @@ type InitializeResult struct {
 
 var _ json.UnmarshalerFrom = (*InitializeResult)(nil)
 
-func (s *InitializeResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InitializeResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingCapabilities uint = 1 << iota
 		_missingLast
@@ -6243,7 +6242,7 @@ type InitializeError struct {
 
 var _ json.UnmarshalerFrom = (*InitializeError)(nil)
 
-func (s *InitializeError) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InitializeError) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRetry uint = 1 << iota
 		_missingLast
@@ -6298,7 +6297,7 @@ type DidChangeConfigurationParams struct {
 
 var _ json.UnmarshalerFrom = (*DidChangeConfigurationParams)(nil)
 
-func (s *DidChangeConfigurationParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidChangeConfigurationParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingSettings uint = 1 << iota
 		_missingLast
@@ -6358,7 +6357,7 @@ type ShowMessageParams struct {
 
 var _ json.UnmarshalerFrom = (*ShowMessageParams)(nil)
 
-func (s *ShowMessageParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ShowMessageParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingType uint = 1 << iota
 		missingMessage
@@ -6425,7 +6424,7 @@ type ShowMessageRequestParams struct {
 
 var _ json.UnmarshalerFrom = (*ShowMessageRequestParams)(nil)
 
-func (s *ShowMessageRequestParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ShowMessageRequestParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingType uint = 1 << iota
 		missingMessage
@@ -6490,7 +6489,7 @@ type MessageActionItem struct {
 
 var _ json.UnmarshalerFrom = (*MessageActionItem)(nil)
 
-func (s *MessageActionItem) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *MessageActionItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTitle uint = 1 << iota
 		_missingLast
@@ -6546,7 +6545,7 @@ type LogMessageParams struct {
 
 var _ json.UnmarshalerFrom = (*LogMessageParams)(nil)
 
-func (s *LogMessageParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *LogMessageParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingType uint = 1 << iota
 		missingMessage
@@ -6608,7 +6607,7 @@ type DidOpenTextDocumentParams struct {
 
 var _ json.UnmarshalerFrom = (*DidOpenTextDocumentParams)(nil)
 
-func (s *DidOpenTextDocumentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidOpenTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		_missingLast
@@ -6676,7 +6675,7 @@ type DidChangeTextDocumentParams struct {
 
 var _ json.UnmarshalerFrom = (*DidChangeTextDocumentParams)(nil)
 
-func (s *DidChangeTextDocumentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidChangeTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingContentChanges
@@ -6742,7 +6741,7 @@ type TextDocumentChangeRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentChangeRegistrationOptions)(nil)
 
-func (s *TextDocumentChangeRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentChangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		missingSyncKind
@@ -6808,7 +6807,7 @@ func (s *DidCloseTextDocumentParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*DidCloseTextDocumentParams)(nil)
 
-func (s *DidCloseTextDocumentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidCloseTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		_missingLast
@@ -6869,7 +6868,7 @@ func (s *DidSaveTextDocumentParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*DidSaveTextDocumentParams)(nil)
 
-func (s *DidSaveTextDocumentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidSaveTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		_missingLast
@@ -6930,7 +6929,7 @@ type TextDocumentSaveRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentSaveRegistrationOptions)(nil)
 
-func (s *TextDocumentSaveRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentSaveRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -6994,7 +6993,7 @@ func (s *WillSaveTextDocumentParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*WillSaveTextDocumentParams)(nil)
 
-func (s *WillSaveTextDocumentParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WillSaveTextDocumentParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingReason
@@ -7061,7 +7060,7 @@ type TextEdit struct {
 
 var _ json.UnmarshalerFrom = (*TextEdit)(nil)
 
-func (s *TextEdit) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		missingNewText
@@ -7123,7 +7122,7 @@ type DidChangeWatchedFilesParams struct {
 
 var _ json.UnmarshalerFrom = (*DidChangeWatchedFilesParams)(nil)
 
-func (s *DidChangeWatchedFilesParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidChangeWatchedFilesParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingChanges uint = 1 << iota
 		_missingLast
@@ -7176,7 +7175,7 @@ type DidChangeWatchedFilesRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*DidChangeWatchedFilesRegistrationOptions)(nil)
 
-func (s *DidChangeWatchedFilesRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DidChangeWatchedFilesRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingWatchers uint = 1 << iota
 		_missingLast
@@ -7237,7 +7236,7 @@ type PublishDiagnosticsParams struct {
 
 var _ json.UnmarshalerFrom = (*PublishDiagnosticsParams)(nil)
 
-func (s *PublishDiagnosticsParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *PublishDiagnosticsParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		missingDiagnostics
@@ -7325,7 +7324,7 @@ func (s *CompletionParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*CompletionParams)(nil)
 
-func (s *CompletionParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CompletionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -7534,7 +7533,7 @@ type CompletionItem struct {
 
 var _ json.UnmarshalerFrom = (*CompletionItem)(nil)
 
-func (s *CompletionItem) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CompletionItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingLabel uint = 1 << iota
 		_missingLast
@@ -7702,7 +7701,7 @@ type CompletionList struct {
 
 var _ json.UnmarshalerFrom = (*CompletionList)(nil)
 
-func (s *CompletionList) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CompletionList) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingIsIncomplete uint = 1 << iota
 		missingItems
@@ -7805,7 +7804,7 @@ type CompletionRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*CompletionRegistrationOptions)(nil)
 
-func (s *CompletionRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CompletionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -7892,7 +7891,7 @@ func (s *HoverParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*HoverParams)(nil)
 
-func (s *HoverParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *HoverParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -7962,7 +7961,7 @@ type Hover struct {
 
 var _ json.UnmarshalerFrom = (*Hover)(nil)
 
-func (s *Hover) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *Hover) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingContents uint = 1 << iota
 		_missingLast
@@ -8022,7 +8021,7 @@ type HoverRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*HoverRegistrationOptions)(nil)
 
-func (s *HoverRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *HoverRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -8099,7 +8098,7 @@ func (s *SignatureHelpParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*SignatureHelpParams)(nil)
 
-func (s *SignatureHelpParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SignatureHelpParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -8200,7 +8199,7 @@ type SignatureHelp struct {
 
 var _ json.UnmarshalerFrom = (*SignatureHelp)(nil)
 
-func (s *SignatureHelp) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SignatureHelp) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingSignatures uint = 1 << iota
 		_missingLast
@@ -8275,7 +8274,7 @@ type SignatureHelpRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*SignatureHelpRegistrationOptions)(nil)
 
-func (s *SignatureHelpRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SignatureHelpRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -8358,7 +8357,7 @@ func (s *DefinitionParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*DefinitionParams)(nil)
 
-func (s *DefinitionParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DefinitionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -8431,7 +8430,7 @@ type DefinitionRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*DefinitionRegistrationOptions)(nil)
 
-func (s *DefinitionRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DefinitionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -8508,7 +8507,7 @@ func (s *ReferenceParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*ReferenceParams)(nil)
 
-func (s *ReferenceParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ReferenceParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -8590,7 +8589,7 @@ type ReferenceRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*ReferenceRegistrationOptions)(nil)
 
-func (s *ReferenceRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ReferenceRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -8665,7 +8664,7 @@ func (s *DocumentHighlightParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*DocumentHighlightParams)(nil)
 
-func (s *DocumentHighlightParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentHighlightParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -8740,7 +8739,7 @@ type DocumentHighlight struct {
 
 var _ json.UnmarshalerFrom = (*DocumentHighlight)(nil)
 
-func (s *DocumentHighlight) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentHighlight) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		_missingLast
@@ -8800,7 +8799,7 @@ type DocumentHighlightRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*DocumentHighlightRegistrationOptions)(nil)
 
-func (s *DocumentHighlightRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentHighlightRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -8868,7 +8867,7 @@ func (s *DocumentSymbolParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*DocumentSymbolParams)(nil)
 
-func (s *DocumentSymbolParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentSymbolParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		_missingLast
@@ -8960,7 +8959,7 @@ type SymbolInformation struct {
 
 var _ json.UnmarshalerFrom = (*SymbolInformation)(nil)
 
-func (s *SymbolInformation) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SymbolInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingName uint = 1 << iota
 		missingKind
@@ -9075,7 +9074,7 @@ type DocumentSymbol struct {
 
 var _ json.UnmarshalerFrom = (*DocumentSymbol)(nil)
 
-func (s *DocumentSymbol) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentSymbol) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingName uint = 1 << iota
 		missingKind
@@ -9180,7 +9179,7 @@ type DocumentSymbolRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*DocumentSymbolRegistrationOptions)(nil)
 
-func (s *DocumentSymbolRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentSymbolRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -9258,7 +9257,7 @@ func (s *CodeActionParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*CodeActionParams)(nil)
 
-func (s *CodeActionParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeActionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingRange
@@ -9354,7 +9353,7 @@ type Command struct {
 
 var _ json.UnmarshalerFrom = (*Command)(nil)
 
-func (s *Command) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *Command) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTitle uint = 1 << iota
 		missingCommand
@@ -9480,7 +9479,7 @@ type CodeAction struct {
 
 var _ json.UnmarshalerFrom = (*CodeAction)(nil)
 
-func (s *CodeAction) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeAction) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTitle uint = 1 << iota
 		_missingLast
@@ -9598,7 +9597,7 @@ type CodeActionRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*CodeActionRegistrationOptions)(nil)
 
-func (s *CodeActionRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeActionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -9681,7 +9680,7 @@ type WorkspaceSymbolParams struct {
 
 var _ json.UnmarshalerFrom = (*WorkspaceSymbolParams)(nil)
 
-func (s *WorkspaceSymbolParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkspaceSymbolParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingQuery uint = 1 << iota
 		_missingLast
@@ -9771,7 +9770,7 @@ type WorkspaceSymbol struct {
 
 var _ json.UnmarshalerFrom = (*WorkspaceSymbol)(nil)
 
-func (s *WorkspaceSymbol) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkspaceSymbol) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingName uint = 1 << iota
 		missingKind
@@ -9876,7 +9875,7 @@ func (s *CodeLensParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*CodeLensParams)(nil)
 
-func (s *CodeLensParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeLensParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		_missingLast
@@ -9948,7 +9947,7 @@ type CodeLens struct {
 
 var _ json.UnmarshalerFrom = (*CodeLens)(nil)
 
-func (s *CodeLens) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeLens) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		_missingLast
@@ -10015,7 +10014,7 @@ type CodeLensRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*CodeLensRegistrationOptions)(nil)
 
-func (s *CodeLensRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeLensRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -10087,7 +10086,7 @@ func (s *DocumentLinkParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*DocumentLinkParams)(nil)
 
-func (s *DocumentLinkParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentLinkParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		_missingLast
@@ -10165,7 +10164,7 @@ type DocumentLink struct {
 
 var _ json.UnmarshalerFrom = (*DocumentLink)(nil)
 
-func (s *DocumentLink) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentLink) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		_missingLast
@@ -10236,7 +10235,7 @@ type DocumentLinkRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*DocumentLinkRegistrationOptions)(nil)
 
-func (s *DocumentLinkRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentLinkRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -10307,7 +10306,7 @@ func (s *DocumentFormattingParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*DocumentFormattingParams)(nil)
 
-func (s *DocumentFormattingParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingOptions
@@ -10376,7 +10375,7 @@ type DocumentFormattingRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*DocumentFormattingRegistrationOptions)(nil)
 
-func (s *DocumentFormattingRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentFormattingRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -10446,7 +10445,7 @@ func (s *DocumentRangeFormattingParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*DocumentRangeFormattingParams)(nil)
 
-func (s *DocumentRangeFormattingParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentRangeFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingRange
@@ -10531,7 +10530,7 @@ type DocumentRangeFormattingRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*DocumentRangeFormattingRegistrationOptions)(nil)
 
-func (s *DocumentRangeFormattingRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentRangeFormattingRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -10609,7 +10608,7 @@ func (s *DocumentRangesFormattingParams) TextDocumentURI() DocumentUri {
 
 var _ json.UnmarshalerFrom = (*DocumentRangesFormattingParams)(nil)
 
-func (s *DocumentRangesFormattingParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentRangesFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingRanges
@@ -10706,7 +10705,7 @@ func (s *DocumentOnTypeFormattingParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*DocumentOnTypeFormattingParams)(nil)
 
-func (s *DocumentOnTypeFormattingParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentOnTypeFormattingParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -10793,7 +10792,7 @@ type DocumentOnTypeFormattingRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*DocumentOnTypeFormattingRegistrationOptions)(nil)
 
-func (s *DocumentOnTypeFormattingRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentOnTypeFormattingRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		missingFirstTriggerCharacter
@@ -10878,7 +10877,7 @@ func (s *RenameParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*RenameParams)(nil)
 
-func (s *RenameParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *RenameParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -10961,7 +10960,7 @@ type RenameRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*RenameRegistrationOptions)(nil)
 
-func (s *RenameRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *RenameRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -11035,7 +11034,7 @@ func (s *PrepareRenameParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*PrepareRenameParams)(nil)
 
-func (s *PrepareRenameParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *PrepareRenameParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -11107,7 +11106,7 @@ type ExecuteCommandParams struct {
 
 var _ json.UnmarshalerFrom = (*ExecuteCommandParams)(nil)
 
-func (s *ExecuteCommandParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ExecuteCommandParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingCommand uint = 1 << iota
 		_missingLast
@@ -11170,7 +11169,7 @@ type ExecuteCommandRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*ExecuteCommandRegistrationOptions)(nil)
 
-func (s *ExecuteCommandRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ExecuteCommandRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingCommands uint = 1 << iota
 		_missingLast
@@ -11239,7 +11238,7 @@ type ApplyWorkspaceEditParams struct {
 
 var _ json.UnmarshalerFrom = (*ApplyWorkspaceEditParams)(nil)
 
-func (s *ApplyWorkspaceEditParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ApplyWorkspaceEditParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingEdit uint = 1 << iota
 		_missingLast
@@ -11312,7 +11311,7 @@ type ApplyWorkspaceEditResult struct {
 
 var _ json.UnmarshalerFrom = (*ApplyWorkspaceEditResult)(nil)
 
-func (s *ApplyWorkspaceEditResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ApplyWorkspaceEditResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingApplied uint = 1 << iota
 		_missingLast
@@ -11397,7 +11396,7 @@ type WorkDoneProgressBegin struct {
 
 var _ json.UnmarshalerFrom = (*WorkDoneProgressBegin)(nil)
 
-func (s *WorkDoneProgressBegin) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkDoneProgressBegin) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingTitle
@@ -11490,7 +11489,7 @@ type WorkDoneProgressReport struct {
 
 var _ json.UnmarshalerFrom = (*WorkDoneProgressReport)(nil)
 
-func (s *WorkDoneProgressReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkDoneProgressReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		_missingLast
@@ -11557,7 +11556,7 @@ type WorkDoneProgressEnd struct {
 
 var _ json.UnmarshalerFrom = (*WorkDoneProgressEnd)(nil)
 
-func (s *WorkDoneProgressEnd) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkDoneProgressEnd) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		_missingLast
@@ -11612,7 +11611,7 @@ type SetTraceParams struct {
 
 var _ json.UnmarshalerFrom = (*SetTraceParams)(nil)
 
-func (s *SetTraceParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SetTraceParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingValue uint = 1 << iota
 		_missingLast
@@ -11665,7 +11664,7 @@ type LogTraceParams struct {
 
 var _ json.UnmarshalerFrom = (*LogTraceParams)(nil)
 
-func (s *LogTraceParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *LogTraceParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingMessage uint = 1 << iota
 		_missingLast
@@ -11721,7 +11720,7 @@ type CancelParams struct {
 
 var _ json.UnmarshalerFrom = (*CancelParams)(nil)
 
-func (s *CancelParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CancelParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingId uint = 1 << iota
 		_missingLast
@@ -11776,7 +11775,7 @@ type ProgressParams struct {
 
 var _ json.UnmarshalerFrom = (*ProgressParams)(nil)
 
-func (s *ProgressParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ProgressParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingToken uint = 1 << iota
 		missingValue
@@ -11850,7 +11849,7 @@ func (s *TextDocumentPositionParams) TextDocumentPosition() Position {
 
 var _ json.UnmarshalerFrom = (*TextDocumentPositionParams)(nil)
 
-func (s *TextDocumentPositionParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentPositionParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingPosition
@@ -11946,7 +11945,7 @@ func (s LocationLink) GetLocation() Location {
 
 var _ json.UnmarshalerFrom = (*LocationLink)(nil)
 
-func (s *LocationLink) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *LocationLink) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTargetUri uint = 1 << iota
 		missingTargetRange
@@ -12036,7 +12035,7 @@ type Range struct {
 
 var _ json.UnmarshalerFrom = (*Range)(nil)
 
-func (s *Range) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *Range) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingStart uint = 1 << iota
 		missingEnd
@@ -12117,7 +12116,7 @@ type WorkspaceFoldersChangeEvent struct {
 
 var _ json.UnmarshalerFrom = (*WorkspaceFoldersChangeEvent)(nil)
 
-func (s *WorkspaceFoldersChangeEvent) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkspaceFoldersChangeEvent) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingAdded uint = 1 << iota
 		missingRemoved
@@ -12187,7 +12186,7 @@ type TextDocumentIdentifier struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentIdentifier)(nil)
 
-func (s *TextDocumentIdentifier) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		_missingLast
@@ -12249,7 +12248,7 @@ type Color struct {
 
 var _ json.UnmarshalerFrom = (*Color)(nil)
 
-func (s *Color) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *Color) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRed uint = 1 << iota
 		missingGreen
@@ -12373,7 +12372,7 @@ type Position struct {
 
 var _ json.UnmarshalerFrom = (*Position)(nil)
 
-func (s *Position) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *Position) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingLine uint = 1 << iota
 		missingCharacter
@@ -12455,7 +12454,7 @@ type SemanticTokensOptions struct {
 
 var _ json.UnmarshalerFrom = (*SemanticTokensOptions)(nil)
 
-func (s *SemanticTokensOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokensOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingLegend uint = 1 << iota
 		_missingLast
@@ -12526,7 +12525,7 @@ type SemanticTokensEdit struct {
 
 var _ json.UnmarshalerFrom = (*SemanticTokensEdit)(nil)
 
-func (s *SemanticTokensEdit) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokensEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingStart uint = 1 << iota
 		missingDeleteCount
@@ -12598,7 +12597,7 @@ type FileCreate struct {
 
 var _ json.UnmarshalerFrom = (*FileCreate)(nil)
 
-func (s *FileCreate) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FileCreate) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		_missingLast
@@ -12663,7 +12662,7 @@ type TextDocumentEdit struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentEdit)(nil)
 
-func (s *TextDocumentEdit) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTextDocument uint = 1 << iota
 		missingEdits
@@ -12736,7 +12735,7 @@ type CreateFile struct {
 
 var _ json.UnmarshalerFrom = (*CreateFile)(nil)
 
-func (s *CreateFile) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CreateFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingUri
@@ -12820,7 +12819,7 @@ type RenameFile struct {
 
 var _ json.UnmarshalerFrom = (*RenameFile)(nil)
 
-func (s *RenameFile) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *RenameFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingOldUri
@@ -12910,7 +12909,7 @@ type DeleteFile struct {
 
 var _ json.UnmarshalerFrom = (*DeleteFile)(nil)
 
-func (s *DeleteFile) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DeleteFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingUri
@@ -12991,7 +12990,7 @@ type ChangeAnnotation struct {
 
 var _ json.UnmarshalerFrom = (*ChangeAnnotation)(nil)
 
-func (s *ChangeAnnotation) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ChangeAnnotation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingLabel uint = 1 << iota
 		_missingLast
@@ -13058,7 +13057,7 @@ type FileOperationFilter struct {
 
 var _ json.UnmarshalerFrom = (*FileOperationFilter)(nil)
 
-func (s *FileOperationFilter) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FileOperationFilter) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingPattern uint = 1 << iota
 		_missingLast
@@ -13120,7 +13119,7 @@ type FileRename struct {
 
 var _ json.UnmarshalerFrom = (*FileRename)(nil)
 
-func (s *FileRename) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FileRename) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingOldUri uint = 1 << iota
 		missingNewUri
@@ -13184,7 +13183,7 @@ type FileDelete struct {
 
 var _ json.UnmarshalerFrom = (*FileDelete)(nil)
 
-func (s *FileDelete) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FileDelete) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		_missingLast
@@ -13252,7 +13251,7 @@ type InlineValueContext struct {
 
 var _ json.UnmarshalerFrom = (*InlineValueContext)(nil)
 
-func (s *InlineValueContext) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlineValueContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingFrameId uint = 1 << iota
 		missingStoppedLocation
@@ -13319,7 +13318,7 @@ type InlineValueText struct {
 
 var _ json.UnmarshalerFrom = (*InlineValueText)(nil)
 
-func (s *InlineValueText) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlineValueText) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		missingText
@@ -13392,7 +13391,7 @@ type InlineValueVariableLookup struct {
 
 var _ json.UnmarshalerFrom = (*InlineValueVariableLookup)(nil)
 
-func (s *InlineValueVariableLookup) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlineValueVariableLookup) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		missingCaseSensitiveLookup
@@ -13466,7 +13465,7 @@ type InlineValueEvaluatableExpression struct {
 
 var _ json.UnmarshalerFrom = (*InlineValueEvaluatableExpression)(nil)
 
-func (s *InlineValueEvaluatableExpression) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlineValueEvaluatableExpression) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		_missingLast
@@ -13557,7 +13556,7 @@ type InlayHintLabelPart struct {
 
 var _ json.UnmarshalerFrom = (*InlayHintLabelPart)(nil)
 
-func (s *InlayHintLabelPart) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlayHintLabelPart) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingValue uint = 1 << iota
 		_missingLast
@@ -13648,7 +13647,7 @@ type MarkupContent struct {
 
 var _ json.UnmarshalerFrom = (*MarkupContent)(nil)
 
-func (s *MarkupContent) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *MarkupContent) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingValue
@@ -13740,7 +13739,7 @@ type RelatedFullDocumentDiagnosticReport struct {
 
 var _ json.UnmarshalerFrom = (*RelatedFullDocumentDiagnosticReport)(nil)
 
-func (s *RelatedFullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *RelatedFullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingItems
@@ -13828,7 +13827,7 @@ type RelatedUnchangedDocumentDiagnosticReport struct {
 
 var _ json.UnmarshalerFrom = (*RelatedUnchangedDocumentDiagnosticReport)(nil)
 
-func (s *RelatedUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *RelatedUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingResultId
@@ -13904,7 +13903,7 @@ type FullDocumentDiagnosticReport struct {
 
 var _ json.UnmarshalerFrom = (*FullDocumentDiagnosticReport)(nil)
 
-func (s *FullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingItems
@@ -13980,7 +13979,7 @@ type UnchangedDocumentDiagnosticReport struct {
 
 var _ json.UnmarshalerFrom = (*UnchangedDocumentDiagnosticReport)(nil)
 
-func (s *UnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *UnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingResultId
@@ -14056,7 +14055,7 @@ type DiagnosticOptions struct {
 
 var _ json.UnmarshalerFrom = (*DiagnosticOptions)(nil)
 
-func (s *DiagnosticOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DiagnosticOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingInterFileDependencies uint = 1 << iota
 		missingWorkspaceDiagnostics
@@ -14132,7 +14131,7 @@ type PreviousResultId struct {
 
 var _ json.UnmarshalerFrom = (*PreviousResultId)(nil)
 
-func (s *PreviousResultId) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *PreviousResultId) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		missingValue
@@ -14212,7 +14211,7 @@ type NotebookDocument struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocument)(nil)
 
-func (s *NotebookDocument) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocument) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		missingNotebookType
@@ -14307,7 +14306,7 @@ type TextDocumentItem struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentItem)(nil)
 
-func (s *TextDocumentItem) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentItem) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		missingLanguageId
@@ -14403,7 +14402,7 @@ type NotebookDocumentSyncOptions struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentSyncOptions)(nil)
 
-func (s *NotebookDocumentSyncOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocumentSyncOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingNotebookSelector uint = 1 << iota
 		_missingLast
@@ -14465,7 +14464,7 @@ type VersionedNotebookDocumentIdentifier struct {
 
 var _ json.UnmarshalerFrom = (*VersionedNotebookDocumentIdentifier)(nil)
 
-func (s *VersionedNotebookDocumentIdentifier) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *VersionedNotebookDocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingVersion uint = 1 << iota
 		missingUri
@@ -14542,7 +14541,7 @@ type NotebookDocumentIdentifier struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentIdentifier)(nil)
 
-func (s *NotebookDocumentIdentifier) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		_missingLast
@@ -14602,7 +14601,7 @@ type InlineCompletionContext struct {
 
 var _ json.UnmarshalerFrom = (*InlineCompletionContext)(nil)
 
-func (s *InlineCompletionContext) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InlineCompletionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTriggerKind uint = 1 << iota
 		_missingLast
@@ -14672,7 +14671,7 @@ type StringValue struct {
 
 var _ json.UnmarshalerFrom = (*StringValue)(nil)
 
-func (s *StringValue) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *StringValue) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingValue
@@ -14747,7 +14746,7 @@ type TextDocumentContentOptions struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentContentOptions)(nil)
 
-func (s *TextDocumentContentOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentContentOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingSchemes uint = 1 << iota
 		_missingLast
@@ -14807,7 +14806,7 @@ type Registration struct {
 
 var _ json.UnmarshalerFrom = (*Registration)(nil)
 
-func (s *Registration) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *Registration) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingId uint = 1 << iota
 		missingMethod
@@ -14877,7 +14876,7 @@ type Unregistration struct {
 
 var _ json.UnmarshalerFrom = (*Unregistration)(nil)
 
-func (s *Unregistration) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *Unregistration) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingId uint = 1 << iota
 		missingMethod
@@ -15102,7 +15101,7 @@ type ServerInfo struct {
 
 var _ json.UnmarshalerFrom = (*ServerInfo)(nil)
 
-func (s *ServerInfo) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ServerInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingName uint = 1 << iota
 		_missingLast
@@ -15162,7 +15161,7 @@ type VersionedTextDocumentIdentifier struct {
 
 var _ json.UnmarshalerFrom = (*VersionedTextDocumentIdentifier)(nil)
 
-func (s *VersionedTextDocumentIdentifier) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *VersionedTextDocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		missingVersion
@@ -15233,7 +15232,7 @@ type FileEvent struct {
 
 var _ json.UnmarshalerFrom = (*FileEvent)(nil)
 
-func (s *FileEvent) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FileEvent) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		missingType
@@ -15301,7 +15300,7 @@ type FileSystemWatcher struct {
 
 var _ json.UnmarshalerFrom = (*FileSystemWatcher)(nil)
 
-func (s *FileSystemWatcher) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FileSystemWatcher) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingGlobPattern uint = 1 << iota
 		_missingLast
@@ -15396,7 +15395,7 @@ type Diagnostic struct {
 
 var _ json.UnmarshalerFrom = (*Diagnostic)(nil)
 
-func (s *Diagnostic) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *Diagnostic) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		missingMessage
@@ -15490,7 +15489,7 @@ type CompletionContext struct {
 
 var _ json.UnmarshalerFrom = (*CompletionContext)(nil)
 
-func (s *CompletionContext) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CompletionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTriggerKind uint = 1 << iota
 		_missingLast
@@ -15568,7 +15567,7 @@ type InsertReplaceEdit struct {
 
 var _ json.UnmarshalerFrom = (*InsertReplaceEdit)(nil)
 
-func (s *InsertReplaceEdit) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InsertReplaceEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingNewText uint = 1 << iota
 		missingInsert
@@ -15800,7 +15799,7 @@ type SignatureHelpContext struct {
 
 var _ json.UnmarshalerFrom = (*SignatureHelpContext)(nil)
 
-func (s *SignatureHelpContext) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SignatureHelpContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTriggerKind uint = 1 << iota
 		missingIsRetrigger
@@ -15893,7 +15892,7 @@ type SignatureInformation struct {
 
 var _ json.UnmarshalerFrom = (*SignatureInformation)(nil)
 
-func (s *SignatureInformation) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SignatureInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingLabel uint = 1 << iota
 		_missingLast
@@ -15980,7 +15979,7 @@ type ReferenceContext struct {
 
 var _ json.UnmarshalerFrom = (*ReferenceContext)(nil)
 
-func (s *ReferenceContext) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ReferenceContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingIncludeDeclaration uint = 1 << iota
 		_missingLast
@@ -16057,7 +16056,7 @@ type BaseSymbolInformation struct {
 
 var _ json.UnmarshalerFrom = (*BaseSymbolInformation)(nil)
 
-func (s *BaseSymbolInformation) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *BaseSymbolInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingName uint = 1 << iota
 		missingKind
@@ -16154,7 +16153,7 @@ type CodeActionContext struct {
 
 var _ json.UnmarshalerFrom = (*CodeActionContext)(nil)
 
-func (s *CodeActionContext) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeActionContext) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDiagnostics uint = 1 << iota
 		_missingLast
@@ -16219,7 +16218,7 @@ type CodeActionDisabled struct {
 
 var _ json.UnmarshalerFrom = (*CodeActionDisabled)(nil)
 
-func (s *CodeActionDisabled) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeActionDisabled) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingReason uint = 1 << iota
 		_missingLast
@@ -16308,7 +16307,7 @@ type LocationUriOnly struct {
 
 var _ json.UnmarshalerFrom = (*LocationUriOnly)(nil)
 
-func (s *LocationUriOnly) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *LocationUriOnly) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		_missingLast
@@ -16406,7 +16405,7 @@ type FormattingOptions struct {
 
 var _ json.UnmarshalerFrom = (*FormattingOptions)(nil)
 
-func (s *FormattingOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTabSize uint = 1 << iota
 		missingInsertSpaces
@@ -16500,7 +16499,7 @@ type DocumentOnTypeFormattingOptions struct {
 
 var _ json.UnmarshalerFrom = (*DocumentOnTypeFormattingOptions)(nil)
 
-func (s *DocumentOnTypeFormattingOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DocumentOnTypeFormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingFirstTriggerCharacter uint = 1 << iota
 		_missingLast
@@ -16568,7 +16567,7 @@ type PrepareRenamePlaceholder struct {
 
 var _ json.UnmarshalerFrom = (*PrepareRenamePlaceholder)(nil)
 
-func (s *PrepareRenamePlaceholder) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *PrepareRenamePlaceholder) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		missingPlaceholder
@@ -16629,7 +16628,7 @@ type PrepareRenameDefaultBehavior struct {
 
 var _ json.UnmarshalerFrom = (*PrepareRenameDefaultBehavior)(nil)
 
-func (s *PrepareRenameDefaultBehavior) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *PrepareRenameDefaultBehavior) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDefaultBehavior uint = 1 << iota
 		_missingLast
@@ -16684,7 +16683,7 @@ type ExecuteCommandOptions struct {
 
 var _ json.UnmarshalerFrom = (*ExecuteCommandOptions)(nil)
 
-func (s *ExecuteCommandOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ExecuteCommandOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingCommands uint = 1 << iota
 		_missingLast
@@ -16754,7 +16753,7 @@ type SemanticTokensLegend struct {
 
 var _ json.UnmarshalerFrom = (*SemanticTokensLegend)(nil)
 
-func (s *SemanticTokensLegend) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokensLegend) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingTokenTypes uint = 1 << iota
 		missingTokenModifiers
@@ -16831,7 +16830,7 @@ type OptionalVersionedTextDocumentIdentifier struct {
 
 var _ json.UnmarshalerFrom = (*OptionalVersionedTextDocumentIdentifier)(nil)
 
-func (s *OptionalVersionedTextDocumentIdentifier) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *OptionalVersionedTextDocumentIdentifier) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingUri uint = 1 << iota
 		missingVersion
@@ -16903,7 +16902,7 @@ type AnnotatedTextEdit struct {
 
 var _ json.UnmarshalerFrom = (*AnnotatedTextEdit)(nil)
 
-func (s *AnnotatedTextEdit) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *AnnotatedTextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		missingNewText
@@ -16984,7 +16983,7 @@ type SnippetTextEdit struct {
 
 var _ json.UnmarshalerFrom = (*SnippetTextEdit)(nil)
 
-func (s *SnippetTextEdit) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SnippetTextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		missingSnippet
@@ -17055,7 +17054,7 @@ type ResourceOperation struct {
 
 var _ json.UnmarshalerFrom = (*ResourceOperation)(nil)
 
-func (s *ResourceOperation) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ResourceOperation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		_missingLast
@@ -17156,7 +17155,7 @@ type FileOperationPattern struct {
 
 var _ json.UnmarshalerFrom = (*FileOperationPattern)(nil)
 
-func (s *FileOperationPattern) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *FileOperationPattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingGlob uint = 1 << iota
 		_missingLast
@@ -17234,7 +17233,7 @@ type WorkspaceFullDocumentDiagnosticReport struct {
 
 var _ json.UnmarshalerFrom = (*WorkspaceFullDocumentDiagnosticReport)(nil)
 
-func (s *WorkspaceFullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkspaceFullDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingItems
@@ -17334,7 +17333,7 @@ type WorkspaceUnchangedDocumentDiagnosticReport struct {
 
 var _ json.UnmarshalerFrom = (*WorkspaceUnchangedDocumentDiagnosticReport)(nil)
 
-func (s *WorkspaceUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *WorkspaceUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingResultId
@@ -17433,7 +17432,7 @@ type NotebookCell struct {
 
 var _ json.UnmarshalerFrom = (*NotebookCell)(nil)
 
-func (s *NotebookCell) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookCell) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingDocument
@@ -17508,7 +17507,7 @@ type NotebookDocumentFilterWithNotebook struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentFilterWithNotebook)(nil)
 
-func (s *NotebookDocumentFilterWithNotebook) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocumentFilterWithNotebook) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingNotebook uint = 1 << iota
 		_missingLast
@@ -17570,7 +17569,7 @@ type NotebookDocumentFilterWithCells struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentFilterWithCells)(nil)
 
-func (s *NotebookDocumentFilterWithCells) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocumentFilterWithCells) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingCells uint = 1 << iota
 		_missingLast
@@ -17650,7 +17649,7 @@ type SelectedCompletionInfo struct {
 
 var _ json.UnmarshalerFrom = (*SelectedCompletionInfo)(nil)
 
-func (s *SelectedCompletionInfo) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SelectedCompletionInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		missingText
@@ -17719,7 +17718,7 @@ type ClientInfo struct {
 
 var _ json.UnmarshalerFrom = (*ClientInfo)(nil)
 
-func (s *ClientInfo) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ClientInfo) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingName uint = 1 << iota
 		_missingLast
@@ -17850,7 +17849,7 @@ type TextDocumentContentChangePartial struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentContentChangePartial)(nil)
 
-func (s *TextDocumentContentChangePartial) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentContentChangePartial) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRange uint = 1 << iota
 		missingText
@@ -17916,7 +17915,7 @@ type TextDocumentContentChangeWholeDocument struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentContentChangeWholeDocument)(nil)
 
-func (s *TextDocumentContentChangeWholeDocument) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentContentChangeWholeDocument) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingText uint = 1 << iota
 		_missingLast
@@ -17971,7 +17970,7 @@ type CodeDescription struct {
 
 var _ json.UnmarshalerFrom = (*CodeDescription)(nil)
 
-func (s *CodeDescription) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeDescription) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingHref uint = 1 << iota
 		_missingLast
@@ -18029,7 +18028,7 @@ type DiagnosticRelatedInformation struct {
 
 var _ json.UnmarshalerFrom = (*DiagnosticRelatedInformation)(nil)
 
-func (s *DiagnosticRelatedInformation) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *DiagnosticRelatedInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingLocation uint = 1 << iota
 		missingMessage
@@ -18094,7 +18093,7 @@ type EditRangeWithInsertReplace struct {
 
 var _ json.UnmarshalerFrom = (*EditRangeWithInsertReplace)(nil)
 
-func (s *EditRangeWithInsertReplace) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *EditRangeWithInsertReplace) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingInsert uint = 1 << iota
 		missingReplace
@@ -18169,7 +18168,7 @@ type MarkedStringWithLanguage struct {
 
 var _ json.UnmarshalerFrom = (*MarkedStringWithLanguage)(nil)
 
-func (s *MarkedStringWithLanguage) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *MarkedStringWithLanguage) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingLanguage uint = 1 << iota
 		missingValue
@@ -18247,7 +18246,7 @@ type ParameterInformation struct {
 
 var _ json.UnmarshalerFrom = (*ParameterInformation)(nil)
 
-func (s *ParameterInformation) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ParameterInformation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingLabel uint = 1 << iota
 		_missingLast
@@ -18317,7 +18316,7 @@ type CodeActionKindDocumentation struct {
 
 var _ json.UnmarshalerFrom = (*CodeActionKindDocumentation)(nil)
 
-func (s *CodeActionKindDocumentation) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeActionKindDocumentation) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingCommand
@@ -18391,7 +18390,7 @@ type NotebookCellTextDocumentFilter struct {
 
 var _ json.UnmarshalerFrom = (*NotebookCellTextDocumentFilter)(nil)
 
-func (s *NotebookCellTextDocumentFilter) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookCellTextDocumentFilter) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingNotebook uint = 1 << iota
 		_missingLast
@@ -18461,7 +18460,7 @@ type ExecutionSummary struct {
 
 var _ json.UnmarshalerFrom = (*ExecutionSummary)(nil)
 
-func (s *ExecutionSummary) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ExecutionSummary) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingExecutionOrder uint = 1 << iota
 		_missingLast
@@ -18517,7 +18516,7 @@ type NotebookCellLanguage struct {
 
 var _ json.UnmarshalerFrom = (*NotebookCellLanguage)(nil)
 
-func (s *NotebookCellLanguage) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookCellLanguage) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingLanguage uint = 1 << iota
 		_missingLast
@@ -18578,7 +18577,7 @@ type NotebookDocumentCellChangeStructure struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentCellChangeStructure)(nil)
 
-func (s *NotebookDocumentCellChangeStructure) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocumentCellChangeStructure) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingArray uint = 1 << iota
 		_missingLast
@@ -18642,7 +18641,7 @@ type NotebookDocumentCellContentChanges struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentCellContentChanges)(nil)
 
-func (s *NotebookDocumentCellContentChanges) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocumentCellContentChanges) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocument uint = 1 << iota
 		missingChanges
@@ -18924,7 +18923,7 @@ type NotebookDocumentClientCapabilities struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentClientCapabilities)(nil)
 
-func (s *NotebookDocumentClientCapabilities) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocumentClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingSynchronization uint = 1 << iota
 		_missingLast
@@ -19088,7 +19087,7 @@ type RelativePattern struct {
 
 var _ json.UnmarshalerFrom = (*RelativePattern)(nil)
 
-func (s *RelativePattern) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *RelativePattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingBaseUri uint = 1 << iota
 		missingPattern
@@ -19162,7 +19161,7 @@ type TextDocumentFilterLanguage struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentFilterLanguage)(nil)
 
-func (s *TextDocumentFilterLanguage) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentFilterLanguage) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingLanguage uint = 1 << iota
 		_missingLast
@@ -19235,7 +19234,7 @@ type TextDocumentFilterScheme struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentFilterScheme)(nil)
 
-func (s *TextDocumentFilterScheme) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentFilterScheme) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingScheme uint = 1 << iota
 		_missingLast
@@ -19308,7 +19307,7 @@ type TextDocumentFilterPattern struct {
 
 var _ json.UnmarshalerFrom = (*TextDocumentFilterPattern)(nil)
 
-func (s *TextDocumentFilterPattern) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *TextDocumentFilterPattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingPattern uint = 1 << iota
 		_missingLast
@@ -19377,7 +19376,7 @@ type NotebookDocumentFilterNotebookType struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentFilterNotebookType)(nil)
 
-func (s *NotebookDocumentFilterNotebookType) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocumentFilterNotebookType) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingNotebookType uint = 1 << iota
 		_missingLast
@@ -19446,7 +19445,7 @@ type NotebookDocumentFilterScheme struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentFilterScheme)(nil)
 
-func (s *NotebookDocumentFilterScheme) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocumentFilterScheme) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingScheme uint = 1 << iota
 		_missingLast
@@ -19515,7 +19514,7 @@ type NotebookDocumentFilterPattern struct {
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentFilterPattern)(nil)
 
-func (s *NotebookDocumentFilterPattern) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookDocumentFilterPattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingPattern uint = 1 << iota
 		_missingLast
@@ -19585,7 +19584,7 @@ type NotebookCellArrayChange struct {
 
 var _ json.UnmarshalerFrom = (*NotebookCellArrayChange)(nil)
 
-func (s *NotebookCellArrayChange) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *NotebookCellArrayChange) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingStart uint = 1 << iota
 		missingDeleteCount
@@ -20295,7 +20294,7 @@ type SemanticTokensClientCapabilities struct {
 
 var _ json.UnmarshalerFrom = (*SemanticTokensClientCapabilities)(nil)
 
-func (s *SemanticTokensClientCapabilities) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *SemanticTokensClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingRequests uint = 1 << iota
 		missingTokenTypes
@@ -20510,7 +20509,7 @@ type ShowDocumentClientCapabilities struct {
 
 var _ json.UnmarshalerFrom = (*ShowDocumentClientCapabilities)(nil)
 
-func (s *ShowDocumentClientCapabilities) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ShowDocumentClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingSupport uint = 1 << iota
 		_missingLast
@@ -20568,7 +20567,7 @@ type StaleRequestSupportOptions struct {
 
 var _ json.UnmarshalerFrom = (*StaleRequestSupportOptions)(nil)
 
-func (s *StaleRequestSupportOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *StaleRequestSupportOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingCancel uint = 1 << iota
 		missingRetryOnContentModified
@@ -20635,7 +20634,7 @@ type RegularExpressionsClientCapabilities struct {
 
 var _ json.UnmarshalerFrom = (*RegularExpressionsClientCapabilities)(nil)
 
-func (s *RegularExpressionsClientCapabilities) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *RegularExpressionsClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingEngine uint = 1 << iota
 		_missingLast
@@ -20703,7 +20702,7 @@ type MarkdownClientCapabilities struct {
 
 var _ json.UnmarshalerFrom = (*MarkdownClientCapabilities)(nil)
 
-func (s *MarkdownClientCapabilities) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *MarkdownClientCapabilities) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingParser uint = 1 << iota
 		_missingLast
@@ -20785,7 +20784,7 @@ type ClientSymbolTagOptions struct {
 
 var _ json.UnmarshalerFrom = (*ClientSymbolTagOptions)(nil)
 
-func (s *ClientSymbolTagOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ClientSymbolTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingValueSet uint = 1 << iota
 		_missingLast
@@ -20839,7 +20838,7 @@ type ClientSymbolResolveOptions struct {
 
 var _ json.UnmarshalerFrom = (*ClientSymbolResolveOptions)(nil)
 
-func (s *ClientSymbolResolveOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ClientSymbolResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingProperties uint = 1 << iota
 		_missingLast
@@ -21018,7 +21017,7 @@ type ClientCodeActionLiteralOptions struct {
 
 var _ json.UnmarshalerFrom = (*ClientCodeActionLiteralOptions)(nil)
 
-func (s *ClientCodeActionLiteralOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ClientCodeActionLiteralOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingCodeActionKind uint = 1 << iota
 		_missingLast
@@ -21071,7 +21070,7 @@ type ClientCodeActionResolveOptions struct {
 
 var _ json.UnmarshalerFrom = (*ClientCodeActionResolveOptions)(nil)
 
-func (s *ClientCodeActionResolveOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ClientCodeActionResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingProperties uint = 1 << iota
 		_missingLast
@@ -21124,7 +21123,7 @@ type CodeActionTagOptions struct {
 
 var _ json.UnmarshalerFrom = (*CodeActionTagOptions)(nil)
 
-func (s *CodeActionTagOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeActionTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingValueSet uint = 1 << iota
 		_missingLast
@@ -21177,7 +21176,7 @@ type ClientCodeLensResolveOptions struct {
 
 var _ json.UnmarshalerFrom = (*ClientCodeLensResolveOptions)(nil)
 
-func (s *ClientCodeLensResolveOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ClientCodeLensResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingProperties uint = 1 << iota
 		_missingLast
@@ -21283,7 +21282,7 @@ type ClientInlayHintResolveOptions struct {
 
 var _ json.UnmarshalerFrom = (*ClientInlayHintResolveOptions)(nil)
 
-func (s *ClientInlayHintResolveOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ClientInlayHintResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingProperties uint = 1 << iota
 		_missingLast
@@ -21344,7 +21343,7 @@ type CompletionItemTagOptions struct {
 
 var _ json.UnmarshalerFrom = (*CompletionItemTagOptions)(nil)
 
-func (s *CompletionItemTagOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CompletionItemTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingValueSet uint = 1 << iota
 		_missingLast
@@ -21397,7 +21396,7 @@ type ClientCompletionItemResolveOptions struct {
 
 var _ json.UnmarshalerFrom = (*ClientCompletionItemResolveOptions)(nil)
 
-func (s *ClientCompletionItemResolveOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ClientCompletionItemResolveOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingProperties uint = 1 << iota
 		_missingLast
@@ -21449,7 +21448,7 @@ type ClientCompletionItemInsertTextModeOptions struct {
 
 var _ json.UnmarshalerFrom = (*ClientCompletionItemInsertTextModeOptions)(nil)
 
-func (s *ClientCompletionItemInsertTextModeOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ClientCompletionItemInsertTextModeOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingValueSet uint = 1 << iota
 		_missingLast
@@ -21514,7 +21513,7 @@ type ClientCodeActionKindOptions struct {
 
 var _ json.UnmarshalerFrom = (*ClientCodeActionKindOptions)(nil)
 
-func (s *ClientCodeActionKindOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ClientCodeActionKindOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingValueSet uint = 1 << iota
 		_missingLast
@@ -21567,7 +21566,7 @@ type ClientDiagnosticsTagOptions struct {
 
 var _ json.UnmarshalerFrom = (*ClientDiagnosticsTagOptions)(nil)
 
-func (s *ClientDiagnosticsTagOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ClientDiagnosticsTagOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingValueSet uint = 1 << iota
 		_missingLast
@@ -21653,7 +21652,7 @@ type AutoImportFix struct {
 
 var _ json.UnmarshalerFrom = (*AutoImportFix)(nil)
 
-func (s *AutoImportFix) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *AutoImportFix) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingImportKind uint = 1 << iota
 		missingAddAsTypeOnly
@@ -21768,7 +21767,7 @@ type CodeLensData struct {
 
 var _ json.UnmarshalerFrom = (*CodeLensData)(nil)
 
-func (s *CodeLensData) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CodeLensData) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingKind uint = 1 << iota
 		missingUri
@@ -21830,7 +21829,7 @@ type CustomClosingTagCompletion struct {
 
 var _ json.UnmarshalerFrom = (*CustomClosingTagCompletion)(nil)
 
-func (s *CustomClosingTagCompletion) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *CustomClosingTagCompletion) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingNewText uint = 1 << iota
 		_missingLast
@@ -21889,7 +21888,7 @@ type RequestFailureTelemetryEvent struct {
 
 var _ json.UnmarshalerFrom = (*RequestFailureTelemetryEvent)(nil)
 
-func (s *RequestFailureTelemetryEvent) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *RequestFailureTelemetryEvent) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingEventName uint = 1 << iota
 		missingTelemetryPurpose
@@ -21966,7 +21965,7 @@ type RequestFailureTelemetryProperties struct {
 
 var _ json.UnmarshalerFrom = (*RequestFailureTelemetryProperties)(nil)
 
-func (s *RequestFailureTelemetryProperties) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *RequestFailureTelemetryProperties) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingErrorCode uint = 1 << iota
 		missingRequestMethod
@@ -22037,7 +22036,7 @@ type ProfileParams struct {
 
 var _ json.UnmarshalerFrom = (*ProfileParams)(nil)
 
-func (s *ProfileParams) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ProfileParams) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDir uint = 1 << iota
 		_missingLast
@@ -22090,7 +22089,7 @@ type ProfileResult struct {
 
 var _ json.UnmarshalerFrom = (*ProfileResult)(nil)
 
-func (s *ProfileResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ProfileResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingFile uint = 1 << iota
 		_missingLast
@@ -22152,7 +22151,7 @@ type InitializeAPISessionResult struct {
 
 var _ json.UnmarshalerFrom = (*InitializeAPISessionResult)(nil)
 
-func (s *InitializeAPISessionResult) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *InitializeAPISessionResult) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingSessionId uint = 1 << iota
 		missingPipe
@@ -22241,7 +22240,7 @@ type ColorPresentationRegistrationOptions struct {
 
 var _ json.UnmarshalerFrom = (*ColorPresentationRegistrationOptions)(nil)
 
-func (s *ColorPresentationRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (s *ColorPresentationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	const (
 		missingDocumentSelector uint = 1 << iota
 		_missingLast
@@ -24782,7 +24781,7 @@ type IntegerOrString struct {
 
 var _ json.MarshalerTo = (*IntegerOrString)(nil)
 
-func (o *IntegerOrString) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *IntegerOrString) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of IntegerOrString should be set", o.Integer != nil, o.String != nil)
 
 	if o.Integer != nil {
@@ -24796,7 +24795,7 @@ func (o *IntegerOrString) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*IntegerOrString)(nil)
 
-func (o *IntegerOrString) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *IntegerOrString) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = IntegerOrString{}
 
 	data, err := dec.ReadValue()
@@ -24822,18 +24821,18 @@ type DocumentSelectorOrNull struct {
 
 var _ json.MarshalerTo = (*DocumentSelectorOrNull)(nil)
 
-func (o *DocumentSelectorOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *DocumentSelectorOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of DocumentSelectorOrNull is set", o.DocumentSelector != nil)
 
 	if o.DocumentSelector != nil {
 		return json.MarshalEncode(enc, o.DocumentSelector)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*DocumentSelectorOrNull)(nil)
 
-func (o *DocumentSelectorOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *DocumentSelectorOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = DocumentSelectorOrNull{}
 
 	data, err := dec.ReadValue()
@@ -24859,7 +24858,7 @@ type BooleanOrEmptyObject struct {
 
 var _ json.MarshalerTo = (*BooleanOrEmptyObject)(nil)
 
-func (o *BooleanOrEmptyObject) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrEmptyObject) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrEmptyObject should be set", o.Boolean != nil, o.EmptyObject != nil)
 
 	if o.Boolean != nil {
@@ -24873,7 +24872,7 @@ func (o *BooleanOrEmptyObject) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*BooleanOrEmptyObject)(nil)
 
-func (o *BooleanOrEmptyObject) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrEmptyObject) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrEmptyObject{}
 
 	data, err := dec.ReadValue()
@@ -24900,7 +24899,7 @@ type BooleanOrSemanticTokensFullDelta struct {
 
 var _ json.MarshalerTo = (*BooleanOrSemanticTokensFullDelta)(nil)
 
-func (o *BooleanOrSemanticTokensFullDelta) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrSemanticTokensFullDelta) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrSemanticTokensFullDelta should be set", o.Boolean != nil, o.SemanticTokensFullDelta != nil)
 
 	if o.Boolean != nil {
@@ -24914,7 +24913,7 @@ func (o *BooleanOrSemanticTokensFullDelta) MarshalJSONTo(enc *jsontext.Encoder) 
 
 var _ json.UnmarshalerFrom = (*BooleanOrSemanticTokensFullDelta)(nil)
 
-func (o *BooleanOrSemanticTokensFullDelta) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrSemanticTokensFullDelta) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrSemanticTokensFullDelta{}
 
 	data, err := dec.ReadValue()
@@ -24943,7 +24942,7 @@ type TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile struct {
 
 var _ json.MarshalerTo = (*TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile)(nil)
 
-func (o *TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile should be set", o.TextDocumentEdit != nil, o.CreateFile != nil, o.RenameFile != nil, o.DeleteFile != nil)
 
 	if o.TextDocumentEdit != nil {
@@ -24963,7 +24962,7 @@ func (o *TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile) MarshalJSONTo(enc
 
 var _ json.UnmarshalerFrom = (*TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile)(nil)
 
-func (o *TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = TextDocumentEditOrCreateFileOrRenameFileOrDeleteFile{}
 
 	data, err := dec.ReadValue()
@@ -25000,7 +24999,7 @@ type StringOrInlayHintLabelParts struct {
 
 var _ json.MarshalerTo = (*StringOrInlayHintLabelParts)(nil)
 
-func (o *StringOrInlayHintLabelParts) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *StringOrInlayHintLabelParts) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of StringOrInlayHintLabelParts should be set", o.String != nil, o.InlayHintLabelParts != nil)
 
 	if o.String != nil {
@@ -25014,7 +25013,7 @@ func (o *StringOrInlayHintLabelParts) MarshalJSONTo(enc *jsontext.Encoder) error
 
 var _ json.UnmarshalerFrom = (*StringOrInlayHintLabelParts)(nil)
 
-func (o *StringOrInlayHintLabelParts) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringOrInlayHintLabelParts) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = StringOrInlayHintLabelParts{}
 
 	data, err := dec.ReadValue()
@@ -25041,7 +25040,7 @@ type StringOrMarkupContent struct {
 
 var _ json.MarshalerTo = (*StringOrMarkupContent)(nil)
 
-func (o *StringOrMarkupContent) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *StringOrMarkupContent) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of StringOrMarkupContent should be set", o.String != nil, o.MarkupContent != nil)
 
 	if o.String != nil {
@@ -25055,7 +25054,7 @@ func (o *StringOrMarkupContent) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*StringOrMarkupContent)(nil)
 
-func (o *StringOrMarkupContent) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringOrMarkupContent) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = StringOrMarkupContent{}
 
 	data, err := dec.ReadValue()
@@ -25082,7 +25081,7 @@ type FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport struct {
 
 var _ json.MarshalerTo = (*FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)(nil)
 
-func (o *FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport should be set", o.FullDocumentDiagnosticReport != nil, o.UnchangedDocumentDiagnosticReport != nil)
 
 	if o.FullDocumentDiagnosticReport != nil {
@@ -25096,7 +25095,7 @@ func (o *FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) Marsha
 
 var _ json.UnmarshalerFrom = (*FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)(nil)
 
-func (o *FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = FullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{}
 
 	data, err := dec.ReadValue()
@@ -25123,7 +25122,7 @@ type WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport st
 
 var _ json.MarshalerTo = (*WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)(nil)
 
-func (o *WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport should be set", o.FullDocumentDiagnosticReport != nil, o.UnchangedDocumentDiagnosticReport != nil)
 
 	if o.FullDocumentDiagnosticReport != nil {
@@ -25137,7 +25136,7 @@ func (o *WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticRepor
 
 var _ json.UnmarshalerFrom = (*WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)(nil)
 
-func (o *WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = WorkspaceFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{}
 
 	data, err := dec.ReadValue()
@@ -25164,7 +25163,7 @@ type NotebookDocumentFilterWithNotebookOrCells struct {
 
 var _ json.MarshalerTo = (*NotebookDocumentFilterWithNotebookOrCells)(nil)
 
-func (o *NotebookDocumentFilterWithNotebookOrCells) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *NotebookDocumentFilterWithNotebookOrCells) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of NotebookDocumentFilterWithNotebookOrCells should be set", o.Notebook != nil, o.Cells != nil)
 
 	if o.Notebook != nil {
@@ -25178,7 +25177,7 @@ func (o *NotebookDocumentFilterWithNotebookOrCells) MarshalJSONTo(enc *jsontext.
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentFilterWithNotebookOrCells)(nil)
 
-func (o *NotebookDocumentFilterWithNotebookOrCells) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *NotebookDocumentFilterWithNotebookOrCells) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = NotebookDocumentFilterWithNotebookOrCells{}
 
 	data, err := dec.ReadValue()
@@ -25205,7 +25204,7 @@ type StringOrStringValue struct {
 
 var _ json.MarshalerTo = (*StringOrStringValue)(nil)
 
-func (o *StringOrStringValue) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *StringOrStringValue) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of StringOrStringValue should be set", o.String != nil, o.StringValue != nil)
 
 	if o.String != nil {
@@ -25219,7 +25218,7 @@ func (o *StringOrStringValue) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*StringOrStringValue)(nil)
 
-func (o *StringOrStringValue) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringOrStringValue) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = StringOrStringValue{}
 
 	data, err := dec.ReadValue()
@@ -25245,18 +25244,18 @@ type IntegerOrNull struct {
 
 var _ json.MarshalerTo = (*IntegerOrNull)(nil)
 
-func (o *IntegerOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *IntegerOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of IntegerOrNull is set", o.Integer != nil)
 
 	if o.Integer != nil {
 		return json.MarshalEncode(enc, o.Integer)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*IntegerOrNull)(nil)
 
-func (o *IntegerOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *IntegerOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = IntegerOrNull{}
 
 	data, err := dec.ReadValue()
@@ -25281,18 +25280,18 @@ type StringOrNull struct {
 
 var _ json.MarshalerTo = (*StringOrNull)(nil)
 
-func (o *StringOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *StringOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of StringOrNull is set", o.String != nil)
 
 	if o.String != nil {
 		return json.MarshalEncode(enc, o.String)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*StringOrNull)(nil)
 
-func (o *StringOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = StringOrNull{}
 
 	data, err := dec.ReadValue()
@@ -25317,18 +25316,18 @@ type DocumentUriOrNull struct {
 
 var _ json.MarshalerTo = (*DocumentUriOrNull)(nil)
 
-func (o *DocumentUriOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *DocumentUriOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of DocumentUriOrNull is set", o.DocumentUri != nil)
 
 	if o.DocumentUri != nil {
 		return json.MarshalEncode(enc, o.DocumentUri)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*DocumentUriOrNull)(nil)
 
-func (o *DocumentUriOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *DocumentUriOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = DocumentUriOrNull{}
 
 	data, err := dec.ReadValue()
@@ -25353,18 +25352,18 @@ type WorkspaceFoldersOrNull struct {
 
 var _ json.MarshalerTo = (*WorkspaceFoldersOrNull)(nil)
 
-func (o *WorkspaceFoldersOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *WorkspaceFoldersOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of WorkspaceFoldersOrNull is set", o.WorkspaceFolders != nil)
 
 	if o.WorkspaceFolders != nil {
 		return json.MarshalEncode(enc, o.WorkspaceFolders)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*WorkspaceFoldersOrNull)(nil)
 
-func (o *WorkspaceFoldersOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *WorkspaceFoldersOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = WorkspaceFoldersOrNull{}
 
 	data, err := dec.ReadValue()
@@ -25390,7 +25389,7 @@ type StringOrStrings struct {
 
 var _ json.MarshalerTo = (*StringOrStrings)(nil)
 
-func (o *StringOrStrings) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *StringOrStrings) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of StringOrStrings should be set", o.String != nil, o.Strings != nil)
 
 	if o.String != nil {
@@ -25404,7 +25403,7 @@ func (o *StringOrStrings) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*StringOrStrings)(nil)
 
-func (o *StringOrStrings) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringOrStrings) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = StringOrStrings{}
 
 	data, err := dec.ReadValue()
@@ -25431,7 +25430,7 @@ type TextDocumentContentChangePartialOrWholeDocument struct {
 
 var _ json.MarshalerTo = (*TextDocumentContentChangePartialOrWholeDocument)(nil)
 
-func (o *TextDocumentContentChangePartialOrWholeDocument) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *TextDocumentContentChangePartialOrWholeDocument) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of TextDocumentContentChangePartialOrWholeDocument should be set", o.Partial != nil, o.WholeDocument != nil)
 
 	if o.Partial != nil {
@@ -25445,7 +25444,7 @@ func (o *TextDocumentContentChangePartialOrWholeDocument) MarshalJSONTo(enc *jso
 
 var _ json.UnmarshalerFrom = (*TextDocumentContentChangePartialOrWholeDocument)(nil)
 
-func (o *TextDocumentContentChangePartialOrWholeDocument) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *TextDocumentContentChangePartialOrWholeDocument) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = TextDocumentContentChangePartialOrWholeDocument{}
 
 	data, err := dec.ReadValue()
@@ -25472,7 +25471,7 @@ type TextEditOrInsertReplaceEdit struct {
 
 var _ json.MarshalerTo = (*TextEditOrInsertReplaceEdit)(nil)
 
-func (o *TextEditOrInsertReplaceEdit) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *TextEditOrInsertReplaceEdit) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of TextEditOrInsertReplaceEdit should be set", o.TextEdit != nil, o.InsertReplaceEdit != nil)
 
 	if o.TextEdit != nil {
@@ -25486,7 +25485,7 @@ func (o *TextEditOrInsertReplaceEdit) MarshalJSONTo(enc *jsontext.Encoder) error
 
 var _ json.UnmarshalerFrom = (*TextEditOrInsertReplaceEdit)(nil)
 
-func (o *TextEditOrInsertReplaceEdit) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *TextEditOrInsertReplaceEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = TextEditOrInsertReplaceEdit{}
 
 	data, err := dec.ReadValue()
@@ -25515,7 +25514,7 @@ type MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings struct {
 
 var _ json.MarshalerTo = (*MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings)(nil)
 
-func (o *MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings should be set", o.MarkupContent != nil, o.String != nil, o.MarkedStringWithLanguage != nil, o.MarkedStrings != nil)
 
 	if o.MarkupContent != nil {
@@ -25535,7 +25534,7 @@ func (o *MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings) Marshal
 
 var _ json.UnmarshalerFrom = (*MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings)(nil)
 
-func (o *MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = MarkupContentOrStringOrMarkedStringWithLanguageOrMarkedStrings{}
 
 	data, err := dec.ReadValue()
@@ -25571,18 +25570,18 @@ type UintegerOrNull struct {
 
 var _ json.MarshalerTo = (*UintegerOrNull)(nil)
 
-func (o *UintegerOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *UintegerOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of UintegerOrNull is set", o.Uinteger != nil)
 
 	if o.Uinteger != nil {
 		return json.MarshalEncode(enc, o.Uinteger)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*UintegerOrNull)(nil)
 
-func (o *UintegerOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *UintegerOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = UintegerOrNull{}
 
 	data, err := dec.ReadValue()
@@ -25608,7 +25607,7 @@ type LocationOrLocationUriOnly struct {
 
 var _ json.MarshalerTo = (*LocationOrLocationUriOnly)(nil)
 
-func (o *LocationOrLocationUriOnly) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *LocationOrLocationUriOnly) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of LocationOrLocationUriOnly should be set", o.Location != nil, o.LocationUriOnly != nil)
 
 	if o.Location != nil {
@@ -25622,7 +25621,7 @@ func (o *LocationOrLocationUriOnly) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*LocationOrLocationUriOnly)(nil)
 
-func (o *LocationOrLocationUriOnly) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *LocationOrLocationUriOnly) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = LocationOrLocationUriOnly{}
 
 	data, err := dec.ReadValue()
@@ -25650,7 +25649,7 @@ type TextEditOrAnnotatedTextEditOrSnippetTextEdit struct {
 
 var _ json.MarshalerTo = (*TextEditOrAnnotatedTextEditOrSnippetTextEdit)(nil)
 
-func (o *TextEditOrAnnotatedTextEditOrSnippetTextEdit) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *TextEditOrAnnotatedTextEditOrSnippetTextEdit) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of TextEditOrAnnotatedTextEditOrSnippetTextEdit should be set", o.TextEdit != nil, o.AnnotatedTextEdit != nil, o.SnippetTextEdit != nil)
 
 	if o.TextEdit != nil {
@@ -25667,7 +25666,7 @@ func (o *TextEditOrAnnotatedTextEditOrSnippetTextEdit) MarshalJSONTo(enc *jsonte
 
 var _ json.UnmarshalerFrom = (*TextEditOrAnnotatedTextEditOrSnippetTextEdit)(nil)
 
-func (o *TextEditOrAnnotatedTextEditOrSnippetTextEdit) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *TextEditOrAnnotatedTextEditOrSnippetTextEdit) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = TextEditOrAnnotatedTextEditOrSnippetTextEdit{}
 
 	data, err := dec.ReadValue()
@@ -25737,7 +25736,7 @@ type RegisterOptions struct {
 
 var _ json.MarshalerTo = (*RegisterOptions)(nil)
 
-func (o *RegisterOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *RegisterOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of RegisterOptions should be set", o.Implementation != nil, o.TypeDefinition != nil, o.DocumentColor != nil, o.ColorPresentation != nil, o.FoldingRange != nil, o.Declaration != nil, o.SelectionRange != nil, o.CallHierarchy != nil, o.SemanticTokens != nil, o.LinkedEditingRange != nil, o.FileOperation != nil, o.Moniker != nil, o.TypeHierarchy != nil, o.InlineValue != nil, o.InlayHint != nil, o.Diagnostic != nil, o.InlineCompletion != nil, o.TextDocumentContent != nil, o.TextDocument != nil, o.Completion != nil, o.Hover != nil, o.SignatureHelp != nil, o.Definition != nil, o.Reference != nil, o.DocumentHighlight != nil, o.DocumentSymbol != nil, o.CodeAction != nil, o.WorkspaceSymbol != nil, o.CodeLens != nil, o.DocumentLink != nil, o.DocumentFormatting != nil, o.DocumentRangeFormatting != nil, o.DocumentOnTypeFormatting != nil, o.Rename != nil, o.ExecuteCommand != nil, o.NotebookDocumentSync != nil, o.DidChangeConfiguration != nil, o.TextDocumentChange != nil, o.TextDocumentSave != nil, o.DidChangeWatchedFiles != nil)
 
 	if o.Implementation != nil {
@@ -25865,7 +25864,7 @@ func (o *RegisterOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*RegisterOptions)(nil)
 
-func (o *RegisterOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *RegisterOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = RegisterOptions{}
 
 	data, err := dec.ReadValue()
@@ -26082,7 +26081,7 @@ type TextDocumentSyncOptionsOrKind struct {
 
 var _ json.MarshalerTo = (*TextDocumentSyncOptionsOrKind)(nil)
 
-func (o *TextDocumentSyncOptionsOrKind) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *TextDocumentSyncOptionsOrKind) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of TextDocumentSyncOptionsOrKind should be set", o.Options != nil, o.Kind != nil)
 
 	if o.Options != nil {
@@ -26096,7 +26095,7 @@ func (o *TextDocumentSyncOptionsOrKind) MarshalJSONTo(enc *jsontext.Encoder) err
 
 var _ json.UnmarshalerFrom = (*TextDocumentSyncOptionsOrKind)(nil)
 
-func (o *TextDocumentSyncOptionsOrKind) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *TextDocumentSyncOptionsOrKind) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = TextDocumentSyncOptionsOrKind{}
 
 	data, err := dec.ReadValue()
@@ -26123,7 +26122,7 @@ type NotebookDocumentSyncOptionsOrRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*NotebookDocumentSyncOptionsOrRegistrationOptions)(nil)
 
-func (o *NotebookDocumentSyncOptionsOrRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *NotebookDocumentSyncOptionsOrRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of NotebookDocumentSyncOptionsOrRegistrationOptions should be set", o.Options != nil, o.RegistrationOptions != nil)
 
 	if o.Options != nil {
@@ -26137,7 +26136,7 @@ func (o *NotebookDocumentSyncOptionsOrRegistrationOptions) MarshalJSONTo(enc *js
 
 var _ json.UnmarshalerFrom = (*NotebookDocumentSyncOptionsOrRegistrationOptions)(nil)
 
-func (o *NotebookDocumentSyncOptionsOrRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *NotebookDocumentSyncOptionsOrRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = NotebookDocumentSyncOptionsOrRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -26164,7 +26163,7 @@ type BooleanOrHoverOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrHoverOptions)(nil)
 
-func (o *BooleanOrHoverOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrHoverOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrHoverOptions should be set", o.Boolean != nil, o.HoverOptions != nil)
 
 	if o.Boolean != nil {
@@ -26178,7 +26177,7 @@ func (o *BooleanOrHoverOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*BooleanOrHoverOptions)(nil)
 
-func (o *BooleanOrHoverOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrHoverOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrHoverOptions{}
 
 	data, err := dec.ReadValue()
@@ -26206,7 +26205,7 @@ type BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions)(nil)
 
-func (o *BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions should be set", o.Boolean != nil, o.DeclarationOptions != nil, o.DeclarationRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -26223,7 +26222,7 @@ func (o *BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions) MarshalJSO
 
 var _ json.UnmarshalerFrom = (*BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions)(nil)
 
-func (o *BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrDeclarationOptionsOrDeclarationRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -26255,7 +26254,7 @@ type BooleanOrDefinitionOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrDefinitionOptions)(nil)
 
-func (o *BooleanOrDefinitionOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrDefinitionOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrDefinitionOptions should be set", o.Boolean != nil, o.DefinitionOptions != nil)
 
 	if o.Boolean != nil {
@@ -26269,7 +26268,7 @@ func (o *BooleanOrDefinitionOptions) MarshalJSONTo(enc *jsontext.Encoder) error 
 
 var _ json.UnmarshalerFrom = (*BooleanOrDefinitionOptions)(nil)
 
-func (o *BooleanOrDefinitionOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrDefinitionOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrDefinitionOptions{}
 
 	data, err := dec.ReadValue()
@@ -26297,7 +26296,7 @@ type BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions)(nil)
 
-func (o *BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions should be set", o.Boolean != nil, o.TypeDefinitionOptions != nil, o.TypeDefinitionRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -26314,7 +26313,7 @@ func (o *BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions) Mars
 
 var _ json.UnmarshalerFrom = (*BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions)(nil)
 
-func (o *BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrTypeDefinitionOptionsOrTypeDefinitionRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -26347,7 +26346,7 @@ type BooleanOrImplementationOptionsOrImplementationRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrImplementationOptionsOrImplementationRegistrationOptions)(nil)
 
-func (o *BooleanOrImplementationOptionsOrImplementationRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrImplementationOptionsOrImplementationRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrImplementationOptionsOrImplementationRegistrationOptions should be set", o.Boolean != nil, o.ImplementationOptions != nil, o.ImplementationRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -26364,7 +26363,7 @@ func (o *BooleanOrImplementationOptionsOrImplementationRegistrationOptions) Mars
 
 var _ json.UnmarshalerFrom = (*BooleanOrImplementationOptionsOrImplementationRegistrationOptions)(nil)
 
-func (o *BooleanOrImplementationOptionsOrImplementationRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrImplementationOptionsOrImplementationRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrImplementationOptionsOrImplementationRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -26396,7 +26395,7 @@ type BooleanOrReferenceOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrReferenceOptions)(nil)
 
-func (o *BooleanOrReferenceOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrReferenceOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrReferenceOptions should be set", o.Boolean != nil, o.ReferenceOptions != nil)
 
 	if o.Boolean != nil {
@@ -26410,7 +26409,7 @@ func (o *BooleanOrReferenceOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*BooleanOrReferenceOptions)(nil)
 
-func (o *BooleanOrReferenceOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrReferenceOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrReferenceOptions{}
 
 	data, err := dec.ReadValue()
@@ -26437,7 +26436,7 @@ type BooleanOrDocumentHighlightOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrDocumentHighlightOptions)(nil)
 
-func (o *BooleanOrDocumentHighlightOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrDocumentHighlightOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrDocumentHighlightOptions should be set", o.Boolean != nil, o.DocumentHighlightOptions != nil)
 
 	if o.Boolean != nil {
@@ -26451,7 +26450,7 @@ func (o *BooleanOrDocumentHighlightOptions) MarshalJSONTo(enc *jsontext.Encoder)
 
 var _ json.UnmarshalerFrom = (*BooleanOrDocumentHighlightOptions)(nil)
 
-func (o *BooleanOrDocumentHighlightOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrDocumentHighlightOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrDocumentHighlightOptions{}
 
 	data, err := dec.ReadValue()
@@ -26478,7 +26477,7 @@ type BooleanOrDocumentSymbolOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrDocumentSymbolOptions)(nil)
 
-func (o *BooleanOrDocumentSymbolOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrDocumentSymbolOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrDocumentSymbolOptions should be set", o.Boolean != nil, o.DocumentSymbolOptions != nil)
 
 	if o.Boolean != nil {
@@ -26492,7 +26491,7 @@ func (o *BooleanOrDocumentSymbolOptions) MarshalJSONTo(enc *jsontext.Encoder) er
 
 var _ json.UnmarshalerFrom = (*BooleanOrDocumentSymbolOptions)(nil)
 
-func (o *BooleanOrDocumentSymbolOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrDocumentSymbolOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrDocumentSymbolOptions{}
 
 	data, err := dec.ReadValue()
@@ -26519,7 +26518,7 @@ type BooleanOrCodeActionOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrCodeActionOptions)(nil)
 
-func (o *BooleanOrCodeActionOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrCodeActionOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrCodeActionOptions should be set", o.Boolean != nil, o.CodeActionOptions != nil)
 
 	if o.Boolean != nil {
@@ -26533,7 +26532,7 @@ func (o *BooleanOrCodeActionOptions) MarshalJSONTo(enc *jsontext.Encoder) error 
 
 var _ json.UnmarshalerFrom = (*BooleanOrCodeActionOptions)(nil)
 
-func (o *BooleanOrCodeActionOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrCodeActionOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrCodeActionOptions{}
 
 	data, err := dec.ReadValue()
@@ -26561,7 +26560,7 @@ type BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions)(nil)
 
-func (o *BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions should be set", o.Boolean != nil, o.DocumentColorOptions != nil, o.DocumentColorRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -26578,7 +26577,7 @@ func (o *BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions) Marsha
 
 var _ json.UnmarshalerFrom = (*BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions)(nil)
 
-func (o *BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrDocumentColorOptionsOrDocumentColorRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -26610,7 +26609,7 @@ type BooleanOrWorkspaceSymbolOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrWorkspaceSymbolOptions)(nil)
 
-func (o *BooleanOrWorkspaceSymbolOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrWorkspaceSymbolOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrWorkspaceSymbolOptions should be set", o.Boolean != nil, o.WorkspaceSymbolOptions != nil)
 
 	if o.Boolean != nil {
@@ -26624,7 +26623,7 @@ func (o *BooleanOrWorkspaceSymbolOptions) MarshalJSONTo(enc *jsontext.Encoder) e
 
 var _ json.UnmarshalerFrom = (*BooleanOrWorkspaceSymbolOptions)(nil)
 
-func (o *BooleanOrWorkspaceSymbolOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrWorkspaceSymbolOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrWorkspaceSymbolOptions{}
 
 	data, err := dec.ReadValue()
@@ -26651,7 +26650,7 @@ type BooleanOrDocumentFormattingOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrDocumentFormattingOptions)(nil)
 
-func (o *BooleanOrDocumentFormattingOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrDocumentFormattingOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrDocumentFormattingOptions should be set", o.Boolean != nil, o.DocumentFormattingOptions != nil)
 
 	if o.Boolean != nil {
@@ -26665,7 +26664,7 @@ func (o *BooleanOrDocumentFormattingOptions) MarshalJSONTo(enc *jsontext.Encoder
 
 var _ json.UnmarshalerFrom = (*BooleanOrDocumentFormattingOptions)(nil)
 
-func (o *BooleanOrDocumentFormattingOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrDocumentFormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrDocumentFormattingOptions{}
 
 	data, err := dec.ReadValue()
@@ -26692,7 +26691,7 @@ type BooleanOrDocumentRangeFormattingOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrDocumentRangeFormattingOptions)(nil)
 
-func (o *BooleanOrDocumentRangeFormattingOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrDocumentRangeFormattingOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrDocumentRangeFormattingOptions should be set", o.Boolean != nil, o.DocumentRangeFormattingOptions != nil)
 
 	if o.Boolean != nil {
@@ -26706,7 +26705,7 @@ func (o *BooleanOrDocumentRangeFormattingOptions) MarshalJSONTo(enc *jsontext.En
 
 var _ json.UnmarshalerFrom = (*BooleanOrDocumentRangeFormattingOptions)(nil)
 
-func (o *BooleanOrDocumentRangeFormattingOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrDocumentRangeFormattingOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrDocumentRangeFormattingOptions{}
 
 	data, err := dec.ReadValue()
@@ -26733,7 +26732,7 @@ type BooleanOrRenameOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrRenameOptions)(nil)
 
-func (o *BooleanOrRenameOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrRenameOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrRenameOptions should be set", o.Boolean != nil, o.RenameOptions != nil)
 
 	if o.Boolean != nil {
@@ -26747,7 +26746,7 @@ func (o *BooleanOrRenameOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*BooleanOrRenameOptions)(nil)
 
-func (o *BooleanOrRenameOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrRenameOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrRenameOptions{}
 
 	data, err := dec.ReadValue()
@@ -26775,7 +26774,7 @@ type BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions)(nil)
 
-func (o *BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions should be set", o.Boolean != nil, o.FoldingRangeOptions != nil, o.FoldingRangeRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -26792,7 +26791,7 @@ func (o *BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions) MarshalJ
 
 var _ json.UnmarshalerFrom = (*BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions)(nil)
 
-func (o *BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrFoldingRangeOptionsOrFoldingRangeRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -26825,7 +26824,7 @@ type BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions)(nil)
 
-func (o *BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions should be set", o.Boolean != nil, o.SelectionRangeOptions != nil, o.SelectionRangeRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -26842,7 +26841,7 @@ func (o *BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions) Mars
 
 var _ json.UnmarshalerFrom = (*BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions)(nil)
 
-func (o *BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrSelectionRangeOptionsOrSelectionRangeRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -26875,7 +26874,7 @@ type BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions)(nil)
 
-func (o *BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions should be set", o.Boolean != nil, o.CallHierarchyOptions != nil, o.CallHierarchyRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -26892,7 +26891,7 @@ func (o *BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions) Marsha
 
 var _ json.UnmarshalerFrom = (*BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions)(nil)
 
-func (o *BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrCallHierarchyOptionsOrCallHierarchyRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -26925,7 +26924,7 @@ type BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptions s
 
 var _ json.MarshalerTo = (*BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptions)(nil)
 
-func (o *BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptions should be set", o.Boolean != nil, o.LinkedEditingRangeOptions != nil, o.LinkedEditingRangeRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -26942,7 +26941,7 @@ func (o *BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptio
 
 var _ json.UnmarshalerFrom = (*BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptions)(nil)
 
-func (o *BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrLinkedEditingRangeOptionsOrLinkedEditingRangeRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -26974,7 +26973,7 @@ type SemanticTokensOptionsOrRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*SemanticTokensOptionsOrRegistrationOptions)(nil)
 
-func (o *SemanticTokensOptionsOrRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *SemanticTokensOptionsOrRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of SemanticTokensOptionsOrRegistrationOptions should be set", o.Options != nil, o.RegistrationOptions != nil)
 
 	if o.Options != nil {
@@ -26988,7 +26987,7 @@ func (o *SemanticTokensOptionsOrRegistrationOptions) MarshalJSONTo(enc *jsontext
 
 var _ json.UnmarshalerFrom = (*SemanticTokensOptionsOrRegistrationOptions)(nil)
 
-func (o *SemanticTokensOptionsOrRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *SemanticTokensOptionsOrRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = SemanticTokensOptionsOrRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -27016,7 +27015,7 @@ type BooleanOrMonikerOptionsOrMonikerRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrMonikerOptionsOrMonikerRegistrationOptions)(nil)
 
-func (o *BooleanOrMonikerOptionsOrMonikerRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrMonikerOptionsOrMonikerRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrMonikerOptionsOrMonikerRegistrationOptions should be set", o.Boolean != nil, o.MonikerOptions != nil, o.MonikerRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -27033,7 +27032,7 @@ func (o *BooleanOrMonikerOptionsOrMonikerRegistrationOptions) MarshalJSONTo(enc 
 
 var _ json.UnmarshalerFrom = (*BooleanOrMonikerOptionsOrMonikerRegistrationOptions)(nil)
 
-func (o *BooleanOrMonikerOptionsOrMonikerRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrMonikerOptionsOrMonikerRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrMonikerOptionsOrMonikerRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -27066,7 +27065,7 @@ type BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions)(nil)
 
-func (o *BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions should be set", o.Boolean != nil, o.TypeHierarchyOptions != nil, o.TypeHierarchyRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -27083,7 +27082,7 @@ func (o *BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions) Marsha
 
 var _ json.UnmarshalerFrom = (*BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions)(nil)
 
-func (o *BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrTypeHierarchyOptionsOrTypeHierarchyRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -27116,7 +27115,7 @@ type BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions)(nil)
 
-func (o *BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions should be set", o.Boolean != nil, o.InlineValueOptions != nil, o.InlineValueRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -27133,7 +27132,7 @@ func (o *BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions) MarshalJSO
 
 var _ json.UnmarshalerFrom = (*BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions)(nil)
 
-func (o *BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrInlineValueOptionsOrInlineValueRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -27166,7 +27165,7 @@ type BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions)(nil)
 
-func (o *BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions should be set", o.Boolean != nil, o.InlayHintOptions != nil, o.InlayHintRegistrationOptions != nil)
 
 	if o.Boolean != nil {
@@ -27183,7 +27182,7 @@ func (o *BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions) MarshalJSONTo(
 
 var _ json.UnmarshalerFrom = (*BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions)(nil)
 
-func (o *BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrInlayHintOptionsOrInlayHintRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -27215,7 +27214,7 @@ type DiagnosticOptionsOrRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*DiagnosticOptionsOrRegistrationOptions)(nil)
 
-func (o *DiagnosticOptionsOrRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *DiagnosticOptionsOrRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of DiagnosticOptionsOrRegistrationOptions should be set", o.Options != nil, o.RegistrationOptions != nil)
 
 	if o.Options != nil {
@@ -27229,7 +27228,7 @@ func (o *DiagnosticOptionsOrRegistrationOptions) MarshalJSONTo(enc *jsontext.Enc
 
 var _ json.UnmarshalerFrom = (*DiagnosticOptionsOrRegistrationOptions)(nil)
 
-func (o *DiagnosticOptionsOrRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *DiagnosticOptionsOrRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = DiagnosticOptionsOrRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -27256,7 +27255,7 @@ type BooleanOrInlineCompletionOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrInlineCompletionOptions)(nil)
 
-func (o *BooleanOrInlineCompletionOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrInlineCompletionOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrInlineCompletionOptions should be set", o.Boolean != nil, o.InlineCompletionOptions != nil)
 
 	if o.Boolean != nil {
@@ -27270,7 +27269,7 @@ func (o *BooleanOrInlineCompletionOptions) MarshalJSONTo(enc *jsontext.Encoder) 
 
 var _ json.UnmarshalerFrom = (*BooleanOrInlineCompletionOptions)(nil)
 
-func (o *BooleanOrInlineCompletionOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrInlineCompletionOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrInlineCompletionOptions{}
 
 	data, err := dec.ReadValue()
@@ -27297,7 +27296,7 @@ type PatternOrRelativePattern struct {
 
 var _ json.MarshalerTo = (*PatternOrRelativePattern)(nil)
 
-func (o *PatternOrRelativePattern) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *PatternOrRelativePattern) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of PatternOrRelativePattern should be set", o.Pattern != nil, o.RelativePattern != nil)
 
 	if o.Pattern != nil {
@@ -27311,7 +27310,7 @@ func (o *PatternOrRelativePattern) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*PatternOrRelativePattern)(nil)
 
-func (o *PatternOrRelativePattern) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *PatternOrRelativePattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = PatternOrRelativePattern{}
 
 	data, err := dec.ReadValue()
@@ -27338,7 +27337,7 @@ type RangeOrEditRangeWithInsertReplace struct {
 
 var _ json.MarshalerTo = (*RangeOrEditRangeWithInsertReplace)(nil)
 
-func (o *RangeOrEditRangeWithInsertReplace) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *RangeOrEditRangeWithInsertReplace) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of RangeOrEditRangeWithInsertReplace should be set", o.Range != nil, o.EditRangeWithInsertReplace != nil)
 
 	if o.Range != nil {
@@ -27352,7 +27351,7 @@ func (o *RangeOrEditRangeWithInsertReplace) MarshalJSONTo(enc *jsontext.Encoder)
 
 var _ json.UnmarshalerFrom = (*RangeOrEditRangeWithInsertReplace)(nil)
 
-func (o *RangeOrEditRangeWithInsertReplace) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *RangeOrEditRangeWithInsertReplace) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = RangeOrEditRangeWithInsertReplace{}
 
 	data, err := dec.ReadValue()
@@ -27381,7 +27380,7 @@ type StringOrNotebookDocumentFilterNotebookTypeOrNotebookDocumentFilterSchemeOrN
 
 var _ json.MarshalerTo = (*StringOrNotebookDocumentFilterNotebookTypeOrNotebookDocumentFilterSchemeOrNotebookDocumentFilterPattern)(nil)
 
-func (o *StringOrNotebookDocumentFilterNotebookTypeOrNotebookDocumentFilterSchemeOrNotebookDocumentFilterPattern) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *StringOrNotebookDocumentFilterNotebookTypeOrNotebookDocumentFilterSchemeOrNotebookDocumentFilterPattern) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of StringOrNotebookDocumentFilterNotebookTypeOrNotebookDocumentFilterSchemeOrNotebookDocumentFilterPattern should be set", o.String != nil, o.NotebookDocumentFilterNotebookType != nil, o.NotebookDocumentFilterScheme != nil, o.NotebookDocumentFilterPattern != nil)
 
 	if o.String != nil {
@@ -27401,7 +27400,7 @@ func (o *StringOrNotebookDocumentFilterNotebookTypeOrNotebookDocumentFilterSchem
 
 var _ json.UnmarshalerFrom = (*StringOrNotebookDocumentFilterNotebookTypeOrNotebookDocumentFilterSchemeOrNotebookDocumentFilterPattern)(nil)
 
-func (o *StringOrNotebookDocumentFilterNotebookTypeOrNotebookDocumentFilterSchemeOrNotebookDocumentFilterPattern) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringOrNotebookDocumentFilterNotebookTypeOrNotebookDocumentFilterSchemeOrNotebookDocumentFilterPattern) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = StringOrNotebookDocumentFilterNotebookTypeOrNotebookDocumentFilterSchemeOrNotebookDocumentFilterPattern{}
 
 	data, err := dec.ReadValue()
@@ -27438,7 +27437,7 @@ type BooleanOrSaveOptions struct {
 
 var _ json.MarshalerTo = (*BooleanOrSaveOptions)(nil)
 
-func (o *BooleanOrSaveOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrSaveOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrSaveOptions should be set", o.Boolean != nil, o.SaveOptions != nil)
 
 	if o.Boolean != nil {
@@ -27452,7 +27451,7 @@ func (o *BooleanOrSaveOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*BooleanOrSaveOptions)(nil)
 
-func (o *BooleanOrSaveOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrSaveOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrSaveOptions{}
 
 	data, err := dec.ReadValue()
@@ -27479,7 +27478,7 @@ type TextDocumentContentOptionsOrRegistrationOptions struct {
 
 var _ json.MarshalerTo = (*TextDocumentContentOptionsOrRegistrationOptions)(nil)
 
-func (o *TextDocumentContentOptionsOrRegistrationOptions) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *TextDocumentContentOptionsOrRegistrationOptions) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of TextDocumentContentOptionsOrRegistrationOptions should be set", o.Options != nil, o.RegistrationOptions != nil)
 
 	if o.Options != nil {
@@ -27493,7 +27492,7 @@ func (o *TextDocumentContentOptionsOrRegistrationOptions) MarshalJSONTo(enc *jso
 
 var _ json.UnmarshalerFrom = (*TextDocumentContentOptionsOrRegistrationOptions)(nil)
 
-func (o *TextDocumentContentOptionsOrRegistrationOptions) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *TextDocumentContentOptionsOrRegistrationOptions) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = TextDocumentContentOptionsOrRegistrationOptions{}
 
 	data, err := dec.ReadValue()
@@ -27520,7 +27519,7 @@ type StringOrTuple struct {
 
 var _ json.MarshalerTo = (*StringOrTuple)(nil)
 
-func (o *StringOrTuple) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *StringOrTuple) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of StringOrTuple should be set", o.String != nil, o.Tuple != nil)
 
 	if o.String != nil {
@@ -27534,7 +27533,7 @@ func (o *StringOrTuple) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*StringOrTuple)(nil)
 
-func (o *StringOrTuple) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringOrTuple) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = StringOrTuple{}
 
 	data, err := dec.ReadValue()
@@ -27561,7 +27560,7 @@ type StringOrBoolean struct {
 
 var _ json.MarshalerTo = (*StringOrBoolean)(nil)
 
-func (o *StringOrBoolean) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *StringOrBoolean) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of StringOrBoolean should be set", o.String != nil, o.Boolean != nil)
 
 	if o.String != nil {
@@ -27575,7 +27574,7 @@ func (o *StringOrBoolean) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*StringOrBoolean)(nil)
 
-func (o *StringOrBoolean) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringOrBoolean) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = StringOrBoolean{}
 
 	data, err := dec.ReadValue()
@@ -27602,7 +27601,7 @@ type WorkspaceFolderOrURI struct {
 
 var _ json.MarshalerTo = (*WorkspaceFolderOrURI)(nil)
 
-func (o *WorkspaceFolderOrURI) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *WorkspaceFolderOrURI) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of WorkspaceFolderOrURI should be set", o.WorkspaceFolder != nil, o.URI != nil)
 
 	if o.WorkspaceFolder != nil {
@@ -27616,7 +27615,7 @@ func (o *WorkspaceFolderOrURI) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*WorkspaceFolderOrURI)(nil)
 
-func (o *WorkspaceFolderOrURI) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *WorkspaceFolderOrURI) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = WorkspaceFolderOrURI{}
 
 	data, err := dec.ReadValue()
@@ -27643,7 +27642,7 @@ type BooleanOrClientSemanticTokensRequestFullDelta struct {
 
 var _ json.MarshalerTo = (*BooleanOrClientSemanticTokensRequestFullDelta)(nil)
 
-func (o *BooleanOrClientSemanticTokensRequestFullDelta) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *BooleanOrClientSemanticTokensRequestFullDelta) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of BooleanOrClientSemanticTokensRequestFullDelta should be set", o.Boolean != nil, o.ClientSemanticTokensRequestFullDelta != nil)
 
 	if o.Boolean != nil {
@@ -27657,7 +27656,7 @@ func (o *BooleanOrClientSemanticTokensRequestFullDelta) MarshalJSONTo(enc *jsont
 
 var _ json.UnmarshalerFrom = (*BooleanOrClientSemanticTokensRequestFullDelta)(nil)
 
-func (o *BooleanOrClientSemanticTokensRequestFullDelta) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *BooleanOrClientSemanticTokensRequestFullDelta) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = BooleanOrClientSemanticTokensRequestFullDelta{}
 
 	data, err := dec.ReadValue()
@@ -27685,7 +27684,7 @@ type LocationOrLocationsOrDefinitionLinksOrNull struct {
 
 var _ json.MarshalerTo = (*LocationOrLocationsOrDefinitionLinksOrNull)(nil)
 
-func (o *LocationOrLocationsOrDefinitionLinksOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *LocationOrLocationsOrDefinitionLinksOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of LocationOrLocationsOrDefinitionLinksOrNull is set", o.Location != nil, o.Locations != nil, o.DefinitionLinks != nil)
 
 	if o.Location != nil {
@@ -27697,12 +27696,12 @@ func (o *LocationOrLocationsOrDefinitionLinksOrNull) MarshalJSONTo(enc *jsontext
 	if o.DefinitionLinks != nil {
 		return json.MarshalEncode(enc, o.DefinitionLinks)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*LocationOrLocationsOrDefinitionLinksOrNull)(nil)
 
-func (o *LocationOrLocationsOrDefinitionLinksOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *LocationOrLocationsOrDefinitionLinksOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = LocationOrLocationsOrDefinitionLinksOrNull{}
 
 	data, err := dec.ReadValue()
@@ -27741,18 +27740,18 @@ type FoldingRangesOrNull struct {
 
 var _ json.MarshalerTo = (*FoldingRangesOrNull)(nil)
 
-func (o *FoldingRangesOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *FoldingRangesOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of FoldingRangesOrNull is set", o.FoldingRanges != nil)
 
 	if o.FoldingRanges != nil {
 		return json.MarshalEncode(enc, o.FoldingRanges)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*FoldingRangesOrNull)(nil)
 
-func (o *FoldingRangesOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *FoldingRangesOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = FoldingRangesOrNull{}
 
 	data, err := dec.ReadValue()
@@ -27779,7 +27778,7 @@ type LocationOrLocationsOrDeclarationLinksOrNull struct {
 
 var _ json.MarshalerTo = (*LocationOrLocationsOrDeclarationLinksOrNull)(nil)
 
-func (o *LocationOrLocationsOrDeclarationLinksOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *LocationOrLocationsOrDeclarationLinksOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of LocationOrLocationsOrDeclarationLinksOrNull is set", o.Location != nil, o.Locations != nil, o.DeclarationLinks != nil)
 
 	if o.Location != nil {
@@ -27791,12 +27790,12 @@ func (o *LocationOrLocationsOrDeclarationLinksOrNull) MarshalJSONTo(enc *jsontex
 	if o.DeclarationLinks != nil {
 		return json.MarshalEncode(enc, o.DeclarationLinks)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*LocationOrLocationsOrDeclarationLinksOrNull)(nil)
 
-func (o *LocationOrLocationsOrDeclarationLinksOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *LocationOrLocationsOrDeclarationLinksOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = LocationOrLocationsOrDeclarationLinksOrNull{}
 
 	data, err := dec.ReadValue()
@@ -27835,18 +27834,18 @@ type SelectionRangesOrNull struct {
 
 var _ json.MarshalerTo = (*SelectionRangesOrNull)(nil)
 
-func (o *SelectionRangesOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *SelectionRangesOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of SelectionRangesOrNull is set", o.SelectionRanges != nil)
 
 	if o.SelectionRanges != nil {
 		return json.MarshalEncode(enc, o.SelectionRanges)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*SelectionRangesOrNull)(nil)
 
-func (o *SelectionRangesOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *SelectionRangesOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = SelectionRangesOrNull{}
 
 	data, err := dec.ReadValue()
@@ -27871,18 +27870,18 @@ type CallHierarchyItemsOrNull struct {
 
 var _ json.MarshalerTo = (*CallHierarchyItemsOrNull)(nil)
 
-func (o *CallHierarchyItemsOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *CallHierarchyItemsOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of CallHierarchyItemsOrNull is set", o.CallHierarchyItems != nil)
 
 	if o.CallHierarchyItems != nil {
 		return json.MarshalEncode(enc, o.CallHierarchyItems)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*CallHierarchyItemsOrNull)(nil)
 
-func (o *CallHierarchyItemsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *CallHierarchyItemsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = CallHierarchyItemsOrNull{}
 
 	data, err := dec.ReadValue()
@@ -27907,18 +27906,18 @@ type CallHierarchyIncomingCallsOrNull struct {
 
 var _ json.MarshalerTo = (*CallHierarchyIncomingCallsOrNull)(nil)
 
-func (o *CallHierarchyIncomingCallsOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *CallHierarchyIncomingCallsOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of CallHierarchyIncomingCallsOrNull is set", o.CallHierarchyIncomingCalls != nil)
 
 	if o.CallHierarchyIncomingCalls != nil {
 		return json.MarshalEncode(enc, o.CallHierarchyIncomingCalls)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*CallHierarchyIncomingCallsOrNull)(nil)
 
-func (o *CallHierarchyIncomingCallsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *CallHierarchyIncomingCallsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = CallHierarchyIncomingCallsOrNull{}
 
 	data, err := dec.ReadValue()
@@ -27943,18 +27942,18 @@ type CallHierarchyOutgoingCallsOrNull struct {
 
 var _ json.MarshalerTo = (*CallHierarchyOutgoingCallsOrNull)(nil)
 
-func (o *CallHierarchyOutgoingCallsOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *CallHierarchyOutgoingCallsOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of CallHierarchyOutgoingCallsOrNull is set", o.CallHierarchyOutgoingCalls != nil)
 
 	if o.CallHierarchyOutgoingCalls != nil {
 		return json.MarshalEncode(enc, o.CallHierarchyOutgoingCalls)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*CallHierarchyOutgoingCallsOrNull)(nil)
 
-func (o *CallHierarchyOutgoingCallsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *CallHierarchyOutgoingCallsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = CallHierarchyOutgoingCallsOrNull{}
 
 	data, err := dec.ReadValue()
@@ -27979,18 +27978,18 @@ type SemanticTokensOrNull struct {
 
 var _ json.MarshalerTo = (*SemanticTokensOrNull)(nil)
 
-func (o *SemanticTokensOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *SemanticTokensOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of SemanticTokensOrNull is set", o.SemanticTokens != nil)
 
 	if o.SemanticTokens != nil {
 		return json.MarshalEncode(enc, o.SemanticTokens)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*SemanticTokensOrNull)(nil)
 
-func (o *SemanticTokensOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *SemanticTokensOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = SemanticTokensOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28016,7 +28015,7 @@ type SemanticTokensOrSemanticTokensDeltaOrNull struct {
 
 var _ json.MarshalerTo = (*SemanticTokensOrSemanticTokensDeltaOrNull)(nil)
 
-func (o *SemanticTokensOrSemanticTokensDeltaOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *SemanticTokensOrSemanticTokensDeltaOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of SemanticTokensOrSemanticTokensDeltaOrNull is set", o.SemanticTokens != nil, o.SemanticTokensDelta != nil)
 
 	if o.SemanticTokens != nil {
@@ -28025,12 +28024,12 @@ func (o *SemanticTokensOrSemanticTokensDeltaOrNull) MarshalJSONTo(enc *jsontext.
 	if o.SemanticTokensDelta != nil {
 		return json.MarshalEncode(enc, o.SemanticTokensDelta)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*SemanticTokensOrSemanticTokensDeltaOrNull)(nil)
 
-func (o *SemanticTokensOrSemanticTokensDeltaOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *SemanticTokensOrSemanticTokensDeltaOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = SemanticTokensOrSemanticTokensDeltaOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28060,18 +28059,18 @@ type LinkedEditingRangesOrNull struct {
 
 var _ json.MarshalerTo = (*LinkedEditingRangesOrNull)(nil)
 
-func (o *LinkedEditingRangesOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *LinkedEditingRangesOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of LinkedEditingRangesOrNull is set", o.LinkedEditingRanges != nil)
 
 	if o.LinkedEditingRanges != nil {
 		return json.MarshalEncode(enc, o.LinkedEditingRanges)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*LinkedEditingRangesOrNull)(nil)
 
-func (o *LinkedEditingRangesOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *LinkedEditingRangesOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = LinkedEditingRangesOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28096,18 +28095,18 @@ type WorkspaceEditOrNull struct {
 
 var _ json.MarshalerTo = (*WorkspaceEditOrNull)(nil)
 
-func (o *WorkspaceEditOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *WorkspaceEditOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of WorkspaceEditOrNull is set", o.WorkspaceEdit != nil)
 
 	if o.WorkspaceEdit != nil {
 		return json.MarshalEncode(enc, o.WorkspaceEdit)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*WorkspaceEditOrNull)(nil)
 
-func (o *WorkspaceEditOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *WorkspaceEditOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = WorkspaceEditOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28132,18 +28131,18 @@ type MonikersOrNull struct {
 
 var _ json.MarshalerTo = (*MonikersOrNull)(nil)
 
-func (o *MonikersOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *MonikersOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of MonikersOrNull is set", o.Monikers != nil)
 
 	if o.Monikers != nil {
 		return json.MarshalEncode(enc, o.Monikers)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*MonikersOrNull)(nil)
 
-func (o *MonikersOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *MonikersOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = MonikersOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28168,18 +28167,18 @@ type TypeHierarchyItemsOrNull struct {
 
 var _ json.MarshalerTo = (*TypeHierarchyItemsOrNull)(nil)
 
-func (o *TypeHierarchyItemsOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *TypeHierarchyItemsOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of TypeHierarchyItemsOrNull is set", o.TypeHierarchyItems != nil)
 
 	if o.TypeHierarchyItems != nil {
 		return json.MarshalEncode(enc, o.TypeHierarchyItems)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*TypeHierarchyItemsOrNull)(nil)
 
-func (o *TypeHierarchyItemsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *TypeHierarchyItemsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = TypeHierarchyItemsOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28204,18 +28203,18 @@ type InlineValuesOrNull struct {
 
 var _ json.MarshalerTo = (*InlineValuesOrNull)(nil)
 
-func (o *InlineValuesOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *InlineValuesOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of InlineValuesOrNull is set", o.InlineValues != nil)
 
 	if o.InlineValues != nil {
 		return json.MarshalEncode(enc, o.InlineValues)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*InlineValuesOrNull)(nil)
 
-func (o *InlineValuesOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *InlineValuesOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = InlineValuesOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28240,18 +28239,18 @@ type InlayHintsOrNull struct {
 
 var _ json.MarshalerTo = (*InlayHintsOrNull)(nil)
 
-func (o *InlayHintsOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *InlayHintsOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of InlayHintsOrNull is set", o.InlayHints != nil)
 
 	if o.InlayHints != nil {
 		return json.MarshalEncode(enc, o.InlayHints)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*InlayHintsOrNull)(nil)
 
-func (o *InlayHintsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *InlayHintsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = InlayHintsOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28277,7 +28276,7 @@ type RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport stru
 
 var _ json.MarshalerTo = (*RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)(nil)
 
-func (o *RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport should be set", o.FullDocumentDiagnosticReport != nil, o.UnchangedDocumentDiagnosticReport != nil)
 
 	if o.FullDocumentDiagnosticReport != nil {
@@ -28291,7 +28290,7 @@ func (o *RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)
 
 var _ json.UnmarshalerFrom = (*RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport)(nil)
 
-func (o *RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = RelatedFullDocumentDiagnosticReportOrUnchangedDocumentDiagnosticReport{}
 
 	data, err := dec.ReadValue()
@@ -28318,7 +28317,7 @@ type InlineCompletionListOrItemsOrNull struct {
 
 var _ json.MarshalerTo = (*InlineCompletionListOrItemsOrNull)(nil)
 
-func (o *InlineCompletionListOrItemsOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *InlineCompletionListOrItemsOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of InlineCompletionListOrItemsOrNull is set", o.List != nil, o.Items != nil)
 
 	if o.List != nil {
@@ -28327,12 +28326,12 @@ func (o *InlineCompletionListOrItemsOrNull) MarshalJSONTo(enc *jsontext.Encoder)
 	if o.Items != nil {
 		return json.MarshalEncode(enc, o.Items)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*InlineCompletionListOrItemsOrNull)(nil)
 
-func (o *InlineCompletionListOrItemsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *InlineCompletionListOrItemsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = InlineCompletionListOrItemsOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28362,18 +28361,18 @@ type MessageActionItemOrNull struct {
 
 var _ json.MarshalerTo = (*MessageActionItemOrNull)(nil)
 
-func (o *MessageActionItemOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *MessageActionItemOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of MessageActionItemOrNull is set", o.MessageActionItem != nil)
 
 	if o.MessageActionItem != nil {
 		return json.MarshalEncode(enc, o.MessageActionItem)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*MessageActionItemOrNull)(nil)
 
-func (o *MessageActionItemOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *MessageActionItemOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = MessageActionItemOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28398,18 +28397,18 @@ type TextEditsOrNull struct {
 
 var _ json.MarshalerTo = (*TextEditsOrNull)(nil)
 
-func (o *TextEditsOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *TextEditsOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of TextEditsOrNull is set", o.TextEdits != nil)
 
 	if o.TextEdits != nil {
 		return json.MarshalEncode(enc, o.TextEdits)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*TextEditsOrNull)(nil)
 
-func (o *TextEditsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *TextEditsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = TextEditsOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28435,7 +28434,7 @@ type CompletionItemsOrListOrNull struct {
 
 var _ json.MarshalerTo = (*CompletionItemsOrListOrNull)(nil)
 
-func (o *CompletionItemsOrListOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *CompletionItemsOrListOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of CompletionItemsOrListOrNull is set", o.Items != nil, o.List != nil)
 
 	if o.Items != nil {
@@ -28444,12 +28443,12 @@ func (o *CompletionItemsOrListOrNull) MarshalJSONTo(enc *jsontext.Encoder) error
 	if o.List != nil {
 		return json.MarshalEncode(enc, o.List)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*CompletionItemsOrListOrNull)(nil)
 
-func (o *CompletionItemsOrListOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *CompletionItemsOrListOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = CompletionItemsOrListOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28479,18 +28478,18 @@ type HoverOrNull struct {
 
 var _ json.MarshalerTo = (*HoverOrNull)(nil)
 
-func (o *HoverOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *HoverOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of HoverOrNull is set", o.Hover != nil)
 
 	if o.Hover != nil {
 		return json.MarshalEncode(enc, o.Hover)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*HoverOrNull)(nil)
 
-func (o *HoverOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *HoverOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = HoverOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28515,18 +28514,18 @@ type SignatureHelpOrNull struct {
 
 var _ json.MarshalerTo = (*SignatureHelpOrNull)(nil)
 
-func (o *SignatureHelpOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *SignatureHelpOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of SignatureHelpOrNull is set", o.SignatureHelp != nil)
 
 	if o.SignatureHelp != nil {
 		return json.MarshalEncode(enc, o.SignatureHelp)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*SignatureHelpOrNull)(nil)
 
-func (o *SignatureHelpOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *SignatureHelpOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = SignatureHelpOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28551,18 +28550,18 @@ type LocationsOrNull struct {
 
 var _ json.MarshalerTo = (*LocationsOrNull)(nil)
 
-func (o *LocationsOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *LocationsOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of LocationsOrNull is set", o.Locations != nil)
 
 	if o.Locations != nil {
 		return json.MarshalEncode(enc, o.Locations)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*LocationsOrNull)(nil)
 
-func (o *LocationsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *LocationsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = LocationsOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28591,18 +28590,18 @@ type DocumentHighlightsOrNull struct {
 
 var _ json.MarshalerTo = (*DocumentHighlightsOrNull)(nil)
 
-func (o *DocumentHighlightsOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *DocumentHighlightsOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of DocumentHighlightsOrNull is set", o.DocumentHighlights != nil)
 
 	if o.DocumentHighlights != nil {
 		return json.MarshalEncode(enc, o.DocumentHighlights)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*DocumentHighlightsOrNull)(nil)
 
-func (o *DocumentHighlightsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *DocumentHighlightsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = DocumentHighlightsOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28628,7 +28627,7 @@ type SymbolInformationsOrDocumentSymbolsOrNull struct {
 
 var _ json.MarshalerTo = (*SymbolInformationsOrDocumentSymbolsOrNull)(nil)
 
-func (o *SymbolInformationsOrDocumentSymbolsOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *SymbolInformationsOrDocumentSymbolsOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of SymbolInformationsOrDocumentSymbolsOrNull is set", o.SymbolInformations != nil, o.DocumentSymbols != nil)
 
 	if o.SymbolInformations != nil {
@@ -28637,12 +28636,12 @@ func (o *SymbolInformationsOrDocumentSymbolsOrNull) MarshalJSONTo(enc *jsontext.
 	if o.DocumentSymbols != nil {
 		return json.MarshalEncode(enc, o.DocumentSymbols)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*SymbolInformationsOrDocumentSymbolsOrNull)(nil)
 
-func (o *SymbolInformationsOrDocumentSymbolsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *SymbolInformationsOrDocumentSymbolsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = SymbolInformationsOrDocumentSymbolsOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28673,7 +28672,7 @@ type CommandOrCodeAction struct {
 
 var _ json.MarshalerTo = (*CommandOrCodeAction)(nil)
 
-func (o *CommandOrCodeAction) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *CommandOrCodeAction) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of CommandOrCodeAction should be set", o.Command != nil, o.CodeAction != nil)
 
 	if o.Command != nil {
@@ -28687,7 +28686,7 @@ func (o *CommandOrCodeAction) MarshalJSONTo(enc *jsontext.Encoder) error {
 
 var _ json.UnmarshalerFrom = (*CommandOrCodeAction)(nil)
 
-func (o *CommandOrCodeAction) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *CommandOrCodeAction) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = CommandOrCodeAction{}
 
 	data, err := dec.ReadValue()
@@ -28713,18 +28712,18 @@ type CommandOrCodeActionArrayOrNull struct {
 
 var _ json.MarshalerTo = (*CommandOrCodeActionArrayOrNull)(nil)
 
-func (o *CommandOrCodeActionArrayOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *CommandOrCodeActionArrayOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of CommandOrCodeActionArrayOrNull is set", o.CommandOrCodeActionArray != nil)
 
 	if o.CommandOrCodeActionArray != nil {
 		return json.MarshalEncode(enc, o.CommandOrCodeActionArray)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*CommandOrCodeActionArrayOrNull)(nil)
 
-func (o *CommandOrCodeActionArrayOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *CommandOrCodeActionArrayOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = CommandOrCodeActionArrayOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28750,7 +28749,7 @@ type SymbolInformationsOrWorkspaceSymbolsOrNull struct {
 
 var _ json.MarshalerTo = (*SymbolInformationsOrWorkspaceSymbolsOrNull)(nil)
 
-func (o *SymbolInformationsOrWorkspaceSymbolsOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *SymbolInformationsOrWorkspaceSymbolsOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of SymbolInformationsOrWorkspaceSymbolsOrNull is set", o.SymbolInformations != nil, o.WorkspaceSymbols != nil)
 
 	if o.SymbolInformations != nil {
@@ -28759,12 +28758,12 @@ func (o *SymbolInformationsOrWorkspaceSymbolsOrNull) MarshalJSONTo(enc *jsontext
 	if o.WorkspaceSymbols != nil {
 		return json.MarshalEncode(enc, o.WorkspaceSymbols)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*SymbolInformationsOrWorkspaceSymbolsOrNull)(nil)
 
-func (o *SymbolInformationsOrWorkspaceSymbolsOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *SymbolInformationsOrWorkspaceSymbolsOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = SymbolInformationsOrWorkspaceSymbolsOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28794,18 +28793,18 @@ type CodeLensesOrNull struct {
 
 var _ json.MarshalerTo = (*CodeLensesOrNull)(nil)
 
-func (o *CodeLensesOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *CodeLensesOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of CodeLensesOrNull is set", o.CodeLenses != nil)
 
 	if o.CodeLenses != nil {
 		return json.MarshalEncode(enc, o.CodeLenses)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*CodeLensesOrNull)(nil)
 
-func (o *CodeLensesOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *CodeLensesOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = CodeLensesOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28830,18 +28829,18 @@ type DocumentLinksOrNull struct {
 
 var _ json.MarshalerTo = (*DocumentLinksOrNull)(nil)
 
-func (o *DocumentLinksOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *DocumentLinksOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of DocumentLinksOrNull is set", o.DocumentLinks != nil)
 
 	if o.DocumentLinks != nil {
 		return json.MarshalEncode(enc, o.DocumentLinks)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*DocumentLinksOrNull)(nil)
 
-func (o *DocumentLinksOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *DocumentLinksOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = DocumentLinksOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28868,7 +28867,7 @@ type RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull struct 
 
 var _ json.MarshalerTo = (*RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull)(nil)
 
-func (o *RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull is set", o.Range != nil, o.PrepareRenamePlaceholder != nil, o.PrepareRenameDefaultBehavior != nil)
 
 	if o.Range != nil {
@@ -28880,12 +28879,12 @@ func (o *RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull) Ma
 	if o.PrepareRenameDefaultBehavior != nil {
 		return json.MarshalEncode(enc, o.PrepareRenameDefaultBehavior)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull)(nil)
 
-func (o *RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = RangeOrPrepareRenamePlaceholderOrPrepareRenameDefaultBehaviorOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28920,18 +28919,18 @@ type LSPAnyOrNull struct {
 
 var _ json.MarshalerTo = (*LSPAnyOrNull)(nil)
 
-func (o *LSPAnyOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *LSPAnyOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of LSPAnyOrNull is set", o.LSPAny != nil)
 
 	if o.LSPAny != nil {
 		return json.MarshalEncode(enc, o.LSPAny)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*LSPAnyOrNull)(nil)
 
-func (o *LSPAnyOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *LSPAnyOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = LSPAnyOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28956,18 +28955,18 @@ type CustomClosingTagCompletionOrNull struct {
 
 var _ json.MarshalerTo = (*CustomClosingTagCompletionOrNull)(nil)
 
-func (o *CustomClosingTagCompletionOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *CustomClosingTagCompletionOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of CustomClosingTagCompletionOrNull is set", o.CustomClosingTagCompletion != nil)
 
 	if o.CustomClosingTagCompletion != nil {
 		return json.MarshalEncode(enc, o.CustomClosingTagCompletion)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*CustomClosingTagCompletionOrNull)(nil)
 
-func (o *CustomClosingTagCompletionOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *CustomClosingTagCompletionOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = CustomClosingTagCompletionOrNull{}
 
 	data, err := dec.ReadValue()
@@ -28992,18 +28991,18 @@ type RequestFailureTelemetryEventOrNull struct {
 
 var _ json.MarshalerTo = (*RequestFailureTelemetryEventOrNull)(nil)
 
-func (o *RequestFailureTelemetryEventOrNull) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *RequestFailureTelemetryEventOrNull) MarshalJSONTo(enc *json.Encoder) error {
 	assertAtMostOne("more than one element of RequestFailureTelemetryEventOrNull is set", o.RequestFailureTelemetryEvent != nil)
 
 	if o.RequestFailureTelemetryEvent != nil {
 		return json.MarshalEncode(enc, o.RequestFailureTelemetryEvent)
 	}
-	return enc.WriteToken(jsontext.Null)
+	return enc.WriteToken(json.Null)
 }
 
 var _ json.UnmarshalerFrom = (*RequestFailureTelemetryEventOrNull)(nil)
 
-func (o *RequestFailureTelemetryEventOrNull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *RequestFailureTelemetryEventOrNull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = RequestFailureTelemetryEventOrNull{}
 
 	data, err := dec.ReadValue()
@@ -29031,7 +29030,7 @@ type TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPat
 
 var _ json.MarshalerTo = (*TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter)(nil)
 
-func (o *TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter should be set", o.TextDocumentFilterLanguage != nil, o.TextDocumentFilterScheme != nil, o.TextDocumentFilterPattern != nil, o.NotebookCellTextDocumentFilter != nil)
 
 	if o.TextDocumentFilterLanguage != nil {
@@ -29051,7 +29050,7 @@ func (o *TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilte
 
 var _ json.UnmarshalerFrom = (*TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter)(nil)
 
-func (o *TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = TextDocumentFilterLanguageOrTextDocumentFilterSchemeOrTextDocumentFilterPatternOrNotebookCellTextDocumentFilter{}
 
 	data, err := dec.ReadValue()
@@ -29088,7 +29087,7 @@ type StringOrMarkedStringWithLanguage struct {
 
 var _ json.MarshalerTo = (*StringOrMarkedStringWithLanguage)(nil)
 
-func (o *StringOrMarkedStringWithLanguage) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *StringOrMarkedStringWithLanguage) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of StringOrMarkedStringWithLanguage should be set", o.String != nil, o.MarkedStringWithLanguage != nil)
 
 	if o.String != nil {
@@ -29102,7 +29101,7 @@ func (o *StringOrMarkedStringWithLanguage) MarshalJSONTo(enc *jsontext.Encoder) 
 
 var _ json.UnmarshalerFrom = (*StringOrMarkedStringWithLanguage)(nil)
 
-func (o *StringOrMarkedStringWithLanguage) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringOrMarkedStringWithLanguage) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = StringOrMarkedStringWithLanguage{}
 
 	data, err := dec.ReadValue()
@@ -29130,7 +29129,7 @@ type InlineValueTextOrVariableLookupOrEvaluatableExpression struct {
 
 var _ json.MarshalerTo = (*InlineValueTextOrVariableLookupOrEvaluatableExpression)(nil)
 
-func (o *InlineValueTextOrVariableLookupOrEvaluatableExpression) MarshalJSONTo(enc *jsontext.Encoder) error {
+func (o *InlineValueTextOrVariableLookupOrEvaluatableExpression) MarshalJSONTo(enc *json.Encoder) error {
 	assertOnlyOne("exactly one element of InlineValueTextOrVariableLookupOrEvaluatableExpression should be set", o.Text != nil, o.VariableLookup != nil, o.EvaluatableExpression != nil)
 
 	if o.Text != nil {
@@ -29147,7 +29146,7 @@ func (o *InlineValueTextOrVariableLookupOrEvaluatableExpression) MarshalJSONTo(e
 
 var _ json.UnmarshalerFrom = (*InlineValueTextOrVariableLookupOrEvaluatableExpression)(nil)
 
-func (o *InlineValueTextOrVariableLookupOrEvaluatableExpression) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *InlineValueTextOrVariableLookupOrEvaluatableExpression) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*o = InlineValueTextOrVariableLookupOrEvaluatableExpression{}
 
 	data, err := dec.ReadValue()
@@ -29179,13 +29178,13 @@ type StringLiteralBegin struct{}
 
 var _ json.MarshalerTo = StringLiteralBegin{}
 
-func (o StringLiteralBegin) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteValue(jsontext.Value(`"begin"`))
+func (o StringLiteralBegin) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"begin"`))
 }
 
 var _ json.UnmarshalerFrom = &StringLiteralBegin{}
 
-func (o *StringLiteralBegin) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringLiteralBegin) UnmarshalJSONFrom(dec *json.Decoder) error {
 	v, err := dec.ReadValue()
 	if err != nil {
 		return err
@@ -29201,13 +29200,13 @@ type StringLiteralReport struct{}
 
 var _ json.MarshalerTo = StringLiteralReport{}
 
-func (o StringLiteralReport) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteValue(jsontext.Value(`"report"`))
+func (o StringLiteralReport) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"report"`))
 }
 
 var _ json.UnmarshalerFrom = &StringLiteralReport{}
 
-func (o *StringLiteralReport) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringLiteralReport) UnmarshalJSONFrom(dec *json.Decoder) error {
 	v, err := dec.ReadValue()
 	if err != nil {
 		return err
@@ -29223,13 +29222,13 @@ type StringLiteralEnd struct{}
 
 var _ json.MarshalerTo = StringLiteralEnd{}
 
-func (o StringLiteralEnd) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteValue(jsontext.Value(`"end"`))
+func (o StringLiteralEnd) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"end"`))
 }
 
 var _ json.UnmarshalerFrom = &StringLiteralEnd{}
 
-func (o *StringLiteralEnd) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringLiteralEnd) UnmarshalJSONFrom(dec *json.Decoder) error {
 	v, err := dec.ReadValue()
 	if err != nil {
 		return err
@@ -29245,13 +29244,13 @@ type StringLiteralCreate struct{}
 
 var _ json.MarshalerTo = StringLiteralCreate{}
 
-func (o StringLiteralCreate) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteValue(jsontext.Value(`"create"`))
+func (o StringLiteralCreate) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"create"`))
 }
 
 var _ json.UnmarshalerFrom = &StringLiteralCreate{}
 
-func (o *StringLiteralCreate) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringLiteralCreate) UnmarshalJSONFrom(dec *json.Decoder) error {
 	v, err := dec.ReadValue()
 	if err != nil {
 		return err
@@ -29267,13 +29266,13 @@ type StringLiteralRename struct{}
 
 var _ json.MarshalerTo = StringLiteralRename{}
 
-func (o StringLiteralRename) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteValue(jsontext.Value(`"rename"`))
+func (o StringLiteralRename) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"rename"`))
 }
 
 var _ json.UnmarshalerFrom = &StringLiteralRename{}
 
-func (o *StringLiteralRename) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringLiteralRename) UnmarshalJSONFrom(dec *json.Decoder) error {
 	v, err := dec.ReadValue()
 	if err != nil {
 		return err
@@ -29289,13 +29288,13 @@ type StringLiteralDelete struct{}
 
 var _ json.MarshalerTo = StringLiteralDelete{}
 
-func (o StringLiteralDelete) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteValue(jsontext.Value(`"delete"`))
+func (o StringLiteralDelete) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"delete"`))
 }
 
 var _ json.UnmarshalerFrom = &StringLiteralDelete{}
 
-func (o *StringLiteralDelete) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringLiteralDelete) UnmarshalJSONFrom(dec *json.Decoder) error {
 	v, err := dec.ReadValue()
 	if err != nil {
 		return err
@@ -29311,13 +29310,13 @@ type StringLiteralFull struct{}
 
 var _ json.MarshalerTo = StringLiteralFull{}
 
-func (o StringLiteralFull) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteValue(jsontext.Value(`"full"`))
+func (o StringLiteralFull) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"full"`))
 }
 
 var _ json.UnmarshalerFrom = &StringLiteralFull{}
 
-func (o *StringLiteralFull) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringLiteralFull) UnmarshalJSONFrom(dec *json.Decoder) error {
 	v, err := dec.ReadValue()
 	if err != nil {
 		return err
@@ -29333,13 +29332,13 @@ type StringLiteralUnchanged struct{}
 
 var _ json.MarshalerTo = StringLiteralUnchanged{}
 
-func (o StringLiteralUnchanged) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteValue(jsontext.Value(`"unchanged"`))
+func (o StringLiteralUnchanged) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"unchanged"`))
 }
 
 var _ json.UnmarshalerFrom = &StringLiteralUnchanged{}
 
-func (o *StringLiteralUnchanged) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringLiteralUnchanged) UnmarshalJSONFrom(dec *json.Decoder) error {
 	v, err := dec.ReadValue()
 	if err != nil {
 		return err
@@ -29355,13 +29354,13 @@ type StringLiteralSnippet struct{}
 
 var _ json.MarshalerTo = StringLiteralSnippet{}
 
-func (o StringLiteralSnippet) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteValue(jsontext.Value(`"snippet"`))
+func (o StringLiteralSnippet) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"snippet"`))
 }
 
 var _ json.UnmarshalerFrom = &StringLiteralSnippet{}
 
-func (o *StringLiteralSnippet) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringLiteralSnippet) UnmarshalJSONFrom(dec *json.Decoder) error {
 	v, err := dec.ReadValue()
 	if err != nil {
 		return err
@@ -29377,13 +29376,13 @@ type StringLiteralLanguageServerErrorResponse struct{}
 
 var _ json.MarshalerTo = StringLiteralLanguageServerErrorResponse{}
 
-func (o StringLiteralLanguageServerErrorResponse) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteValue(jsontext.Value(`"languageServer.errorResponse"`))
+func (o StringLiteralLanguageServerErrorResponse) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"languageServer.errorResponse"`))
 }
 
 var _ json.UnmarshalerFrom = &StringLiteralLanguageServerErrorResponse{}
 
-func (o *StringLiteralLanguageServerErrorResponse) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringLiteralLanguageServerErrorResponse) UnmarshalJSONFrom(dec *json.Decoder) error {
 	v, err := dec.ReadValue()
 	if err != nil {
 		return err
@@ -29399,13 +29398,13 @@ type StringLiteralError struct{}
 
 var _ json.MarshalerTo = StringLiteralError{}
 
-func (o StringLiteralError) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteValue(jsontext.Value(`"error"`))
+func (o StringLiteralError) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteValue(json.Value(`"error"`))
 }
 
 var _ json.UnmarshalerFrom = &StringLiteralError{}
 
-func (o *StringLiteralError) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (o *StringLiteralError) UnmarshalJSONFrom(dec *json.Decoder) error {
 	v, err := dec.ReadValue()
 	if err != nil {
 		return err

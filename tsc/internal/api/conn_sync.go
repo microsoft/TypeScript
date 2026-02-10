@@ -8,7 +8,7 @@ import (
 	"runtime/debug"
 	"sync"
 
-	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/jsonrpc"
 )
 
@@ -115,7 +115,7 @@ func (c *SyncConn) handleNotification(ctx context.Context, msg *Message) {
 
 // Call sends a request to the client and waits for a response.
 // This method is safe to call from multiple goroutines - calls are serialized.
-func (c *SyncConn) Call(ctx context.Context, method string, params any) (jsontext.Value, error) {
+func (c *SyncConn) Call(ctx context.Context, method string, params any) (json.Value, error) {
 	// Serialize all Call operations. This is critical because:
 	// 1. The msgpack protocol uses method names as response IDs
 	// 2. The handler code (project internals) may spawn goroutines that call

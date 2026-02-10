@@ -1154,8 +1154,7 @@ function generateCode() {
     writeLine(`\t"fmt"`);
     writeLine(`\t"strings"`);
     writeLine("");
-    writeLine(`\t"github.com/go-json-experiment/json"`);
-    writeLine(`\t"github.com/go-json-experiment/json/jsontext"`);
+    writeLine(`\t"github.com/microsoft/typescript-go/internal/json"`);
     writeLine(`)`);
     writeLine("");
     writeLine("// Meta model version " + model.metaData.version);
@@ -1237,7 +1236,7 @@ function generateCode() {
             writeLine(`\tvar _ json.UnmarshalerFrom = (*${structure.name})(nil)`);
             writeLine("");
 
-            writeLine(`func (s *${structure.name}) UnmarshalJSONFrom(dec *jsontext.Decoder) error {`);
+            writeLine(`func (s *${structure.name}) UnmarshalJSONFrom(dec *json.Decoder) error {`);
             writeLine(`\tconst (`);
             for (let i = 0; i < requiredProps.length; i++) {
                 const prop = requiredProps[i];
@@ -1732,7 +1731,7 @@ function generateCode() {
         writeLine(`var _ json.MarshalerTo = (*${name})(nil)`);
         writeLine("");
 
-        writeLine(`func (o *${name}) MarshalJSONTo(enc *jsontext.Encoder) error {`);
+        writeLine(`func (o *${name}) MarshalJSONTo(enc *json.Encoder) error {`);
 
         // Determine if this union contained null (check if any member has containedNull = true)
         const unionContainedNull = members.some(member => member.containedNull);
@@ -1761,7 +1760,7 @@ function generateCode() {
 
         // If all fields are nil, marshal as null (only for unions that can contain null)
         if (unionContainedNull) {
-            writeLine(`\treturn enc.WriteToken(jsontext.Null)`);
+            writeLine(`\treturn enc.WriteToken(json.Null)`);
         }
         else {
             writeLine(`\tpanic("unreachable")`);
@@ -1773,7 +1772,7 @@ function generateCode() {
         writeLine(`var _ json.UnmarshalerFrom = (*${name})(nil)`);
         writeLine("");
 
-        writeLine(`func (o *${name}) UnmarshalJSONFrom(dec *jsontext.Decoder) error {`);
+        writeLine(`func (o *${name}) UnmarshalJSONFrom(dec *json.Decoder) error {`);
         writeLine(`\t*o = ${name}{}`);
         writeLine("");
 
@@ -1824,15 +1823,15 @@ function generateCode() {
         writeLine(`var _ json.MarshalerTo = ${name}{}`);
         writeLine("");
 
-        writeLine(`func (o ${name}) MarshalJSONTo(enc *jsontext.Encoder) error {`);
-        writeLine(`\treturn enc.WriteValue(jsontext.Value(\`${jsonValue}\`))`);
+        writeLine(`func (o ${name}) MarshalJSONTo(enc *json.Encoder) error {`);
+        writeLine(`\treturn enc.WriteValue(json.Value(\`${jsonValue}\`))`);
         writeLine(`}`);
         writeLine("");
 
         writeLine(`var _ json.UnmarshalerFrom = &${name}{}`);
         writeLine("");
 
-        writeLine(`func (o *${name}) UnmarshalJSONFrom(dec *jsontext.Decoder) error {`);
+        writeLine(`func (o *${name}) UnmarshalJSONFrom(dec *json.Decoder) error {`);
         writeLine(`\tv, err := dec.ReadValue();`);
         writeLine(`\tif err != nil {`);
         writeLine(`\t\treturn err`);

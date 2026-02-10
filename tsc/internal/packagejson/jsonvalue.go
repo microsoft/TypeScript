@@ -3,9 +3,8 @@ package packagejson
 import (
 	"fmt"
 
-	"github.com/go-json-experiment/json"
-	"github.com/go-json-experiment/json/jsontext"
 	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/typescript-go/internal/json"
 )
 
 type JSONValueType int8
@@ -86,7 +85,7 @@ func (v JSONValue) AsString() string {
 
 var _ json.UnmarshalerFrom = (*JSONValue)(nil)
 
-func (v *JSONValue) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (v *JSONValue) UnmarshalJSONFrom(dec *json.Decoder) error {
 	return unmarshalJSONValueV2[JSONValue](v, dec)
 }
 
@@ -123,9 +122,9 @@ func unmarshalJSONValue[T any](v *JSONValue, data []byte) error {
 	return nil
 }
 
-func unmarshalJSONValueV2[T any](v *JSONValue, dec *jsontext.Decoder) error {
+func unmarshalJSONValueV2[T any](v *JSONValue, dec *json.Decoder) error {
 	switch dec.PeekKind() {
-	case 'n': // jsontext.Null.Kind()
+	case 'n': // json.Null.Kind()
 		if _, err := dec.ReadToken(); err != nil {
 			return err
 		}
@@ -142,7 +141,7 @@ func unmarshalJSONValueV2[T any](v *JSONValue, dec *jsontext.Decoder) error {
 			return err
 		}
 		var elements []T
-		for dec.PeekKind() != jsontext.EndArray.Kind() {
+		for dec.PeekKind() != json.EndArray.Kind() {
 			var element T
 			if err := json.UnmarshalDecode(dec, &element); err != nil {
 				return err
@@ -161,7 +160,7 @@ func unmarshalJSONValueV2[T any](v *JSONValue, dec *jsontext.Decoder) error {
 		}
 		v.Type = JSONValueTypeObject
 		v.Value = &object
-	case 't', 'f': // jsontext.True.Kind(), jsontext.False.Kind()
+	case 't', 'f': // json.True.Kind(), json.False.Kind()
 		v.Type = JSONValueTypeBoolean
 		if err := json.UnmarshalDecode(dec, &v.Value); err != nil {
 			return err

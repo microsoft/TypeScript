@@ -1,0 +1,39 @@
+// === SignatureHelp ===
+=== /signatureHelpAnonymousType.ts ===
+// const comparers: Array<(a: any, b: any) => boolean> = [];
+// 
+// comparers.push((a, b) => true);
+//                   ^
+// | ----------------------------------------------------------------------
+// | þtype(a: any, **b: any**): boolean
+// | ----------------------------------------------------------------------
+[
+  {
+    "marker": {
+      "Position": 77,
+      "LSPosition": {
+        "line": 2,
+        "character": 18
+      },
+      "Name": "",
+      "Data": {}
+    },
+    "item": {
+      "signatures": [
+        {
+          "label": "ï¿½type(a: any, b: any): boolean",
+          "parameters": [
+            {
+              "label": "a: any"
+            },
+            {
+              "label": "b: any"
+            }
+          ],
+          "activeParameter": 1
+        }
+      ],
+      "activeSignature": 0
+    }
+  }
+]

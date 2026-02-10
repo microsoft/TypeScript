@@ -14,12 +14,11 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/go-json-experiment/json"
 	"github.com/microsoft/typescript-go/internal/api"
 	"github.com/microsoft/typescript-go/internal/collections"
 	"github.com/microsoft/typescript-go/internal/core"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/jsonrpc"
-	"github.com/microsoft/typescript-go/internal/jsonutil"
 	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/ls"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
@@ -825,7 +824,7 @@ func (s *Server) handleInitialize(ctx context.Context, params *lsproto.Initializ
 	s.initializeParams = params
 	s.clientCapabilities = lsproto.ResolveClientCapabilities(params.Capabilities)
 
-	capabilitiesJSON, err := jsonutil.MarshalIndent(&s.clientCapabilities, "", "\t")
+	capabilitiesJSON, err := json.MarshalIndent(&s.clientCapabilities, "", "\t")
 	if err != nil {
 		return nil, err
 	}

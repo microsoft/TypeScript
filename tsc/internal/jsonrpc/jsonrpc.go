@@ -7,8 +7,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/go-json-experiment/json"
-	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/json"
 )
 
 // JSONRPCVersion represents the JSON-RPC version field, always "2.0".
@@ -141,8 +140,8 @@ type Message struct {
 	JSONRPC JSONRPCVersion `json:"jsonrpc"`
 	ID      *ID            `json:"id,omitzero"`
 	Method  string         `json:"method,omitzero"`
-	Params  jsontext.Value `json:"params,omitzero"`
-	Result  jsontext.Value `json:"result,omitzero"`
+	Params  json.Value     `json:"params,omitzero"`
+	Result  json.Value     `json:"result,omitzero"`
 	Error   *ResponseError `json:"error,omitzero"`
 }
 

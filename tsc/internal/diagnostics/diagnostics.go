@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 	"sync"
 
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/locale"
 	"golang.org/x/text/language"
 )
@@ -116,6 +118,11 @@ func Format(text string, args []string) string {
 	if len(args) == 0 {
 		return text
 	}
+
+	// Replace invalid UTF-8 with Unicode replacement character
+	args = core.SameMap(args, func(arg string) string {
+		return strings.ToValidUTF8(arg, "\uFFFD")
+	})
 
 	return placeholderRegexp.ReplaceAllStringFunc(text, func(match string) string {
 		index, err := strconv.ParseInt(match[1:len(match)-1], 10, 0)

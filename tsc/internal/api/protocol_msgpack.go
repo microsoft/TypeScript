@@ -6,8 +6,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/go-json-experiment/json"
-	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/jsonrpc"
 )
 
@@ -183,7 +182,7 @@ func (p *MessagePackProtocol) readBin() ([]byte, error) {
 // WriteRequest implements Protocol.
 func (p *MessagePackProtocol) WriteRequest(id *jsonrpc.ID, method string, params any) error {
 	// For msgpack protocol, requests from server are "Call" type
-	payload, err := json.Marshal(params, jsontext.AllowInvalidUTF8(true))
+	payload, err := json.Marshal(params)
 	if err != nil {
 		return err
 	}
@@ -210,7 +209,7 @@ func (p *MessagePackProtocol) WriteResponse(id *jsonrpc.ID, result any) error {
 	if raw, ok := result.(RawBinary); ok {
 		payload = []byte(raw)
 	} else {
-		payload, err = json.Marshal(result, jsontext.AllowInvalidUTF8(true))
+		payload, err = json.Marshal(result)
 		if err != nil {
 			return err
 		}

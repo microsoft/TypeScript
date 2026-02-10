@@ -6,9 +6,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/go-json-experiment/json"
-	"github.com/go-json-experiment/json/jsontext"
 	"github.com/microsoft/typescript-go/internal/bundled"
+	"github.com/microsoft/typescript-go/internal/json"
+
 	"github.com/microsoft/typescript-go/internal/jsonrpc"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -144,7 +144,7 @@ func ptrTo[T any](v T) *T {
 
 type requiredProp bool
 
-func (v *requiredProp) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (v *requiredProp) UnmarshalJSONFrom(dec *json.Decoder) error {
 	*v = true
 	return dec.SkipValue()
 }
@@ -162,9 +162,9 @@ func (info RequestInfo[Params, Resp]) UnmarshalResult(result any) (Resp, error) 
 		return r, nil
 	}
 
-	raw, ok := result.(jsontext.Value)
+	raw, ok := result.(json.Value)
 	if !ok {
-		return *new(Resp), fmt.Errorf("expected jsontext.Value, got %T", result)
+		return *new(Resp), fmt.Errorf("expected json.Value, got %T", result)
 	}
 
 	r, err := unmarshalResult(info.Method, raw)
@@ -196,7 +196,7 @@ func (info NotificationInfo[Params]) NewNotificationMessage(params Params) *Requ
 
 type Null struct{}
 
-func (Null) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
+func (Null) UnmarshalJSONFrom(dec *json.Decoder) error {
 	data, err := dec.ReadValue()
 	if err != nil {
 		return err
@@ -207,8 +207,8 @@ func (Null) UnmarshalJSONFrom(dec *jsontext.Decoder) error {
 	return nil
 }
 
-func (Null) MarshalJSONTo(enc *jsontext.Encoder) error {
-	return enc.WriteToken(jsontext.Null)
+func (Null) MarshalJSONTo(enc *json.Encoder) error {
+	return enc.WriteToken(json.Null)
 }
 
 type clientCapabilitiesKey struct{}

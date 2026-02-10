@@ -9,7 +9,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/jsonrpc"
 )
 
@@ -135,7 +135,7 @@ func (c *AsyncConn) handleNotification(ctx context.Context, msg *Message) {
 }
 
 // Call sends a request to the client and waits for a response.
-func (c *AsyncConn) Call(ctx context.Context, method string, params any) (jsontext.Value, error) {
+func (c *AsyncConn) Call(ctx context.Context, method string, params any) (json.Value, error) {
 	// Create unique request ID
 	id := jsonrpc.NewIDString(fmt.Sprintf("api%d", c.seq.Add(1)))
 

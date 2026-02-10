@@ -7,12 +7,12 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/go-json-experiment/json/jsontext"
 	"github.com/microsoft/typescript-go/internal/api/encoder"
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/checker"
 	"github.com/microsoft/typescript-go/internal/compiler"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/ls/lsconv"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
@@ -93,7 +93,7 @@ func (s *Session) ensureSnapshot() {
 }
 
 // HandleRequest implements Handler.
-func (s *Session) HandleRequest(ctx context.Context, method string, params jsontext.Value) (any, error) {
+func (s *Session) HandleRequest(ctx context.Context, method string, params json.Value) (any, error) {
 	// Handle simple methods that don't need param parsing
 	switch method {
 	case "echo":
@@ -145,7 +145,7 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params jsont
 }
 
 // HandleNotification implements Handler.
-func (s *Session) HandleNotification(ctx context.Context, method string, params jsontext.Value) error {
+func (s *Session) HandleNotification(ctx context.Context, method string, params json.Value) error {
 	// TODO: Implement notification handling
 	return nil
 }

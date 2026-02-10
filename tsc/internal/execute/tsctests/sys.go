@@ -435,6 +435,7 @@ func (o *outputSanitizer) addOutputLine(s string) {
 	s = strings.ReplaceAll(s, fmt.Sprintf("'%s'", core.Version()), fmt.Sprintf("'%s'", harnessutil.FakeTSVersion))
 	s = strings.ReplaceAll(s, englishVersion, fakeEnglishVersion)
 	s = strings.ReplaceAll(s, czechVersion, fakeCzechVersion)
+	s = fsbaselineutil.SanitizeInternalSymbolName(s)
 	o.outputLines = append(o.outputLines, s)
 }
 

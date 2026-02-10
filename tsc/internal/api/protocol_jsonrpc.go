@@ -3,8 +3,7 @@ package api
 import (
 	"io"
 
-	"github.com/go-json-experiment/json"
-	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/jsonrpc"
 )
 
@@ -47,7 +46,7 @@ func (p *JSONRPCProtocol) WriteRequest(id *jsonrpc.ID, method string, params any
 		Method: method,
 		Params: params,
 	}
-	data, err := json.Marshal(msg, jsontext.AllowInvalidUTF8(true))
+	data, err := json.Marshal(msg)
 	if err != nil {
 		return err
 	}
@@ -73,7 +72,7 @@ func (p *JSONRPCProtocol) WriteResponse(id *jsonrpc.ID, result any) error {
 		ID:     id,
 		Result: result,
 	}
-	data, err := json.Marshal(msg, jsontext.AllowInvalidUTF8(true))
+	data, err := json.Marshal(msg)
 	if err != nil {
 		return err
 	}

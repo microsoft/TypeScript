@@ -3,8 +3,7 @@ package lsproto
 import (
 	"fmt"
 
-	"github.com/go-json-experiment/json"
-	"github.com/go-json-experiment/json/jsontext"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/jsonrpc"
 )
 
@@ -35,10 +34,10 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 		JSONRPC jsonrpc.JSONRPCVersion `json:"jsonrpc"`
 		Method  Method                 `json:"method"`
 		ID      *jsonrpc.ID            `json:"id,omitzero"`
-		Params  jsontext.Value         `json:"params"`
+		Params  json.Value             `json:"params"`
 		// We don't have a method in the response, so we have no idea what to decode.
 		// Store the raw text and let the caller decode it.
-		Result jsontext.Value         `json:"result,omitzero"`
+		Result json.Value             `json:"result,omitzero"`
 		Error  *jsonrpc.ResponseError `json:"error,omitzero"`
 	}
 	if err := json.Unmarshal(data, &raw); err != nil {
@@ -105,7 +104,7 @@ func (r *RequestMessage) UnmarshalJSON(data []byte) error {
 		JSONRPC jsonrpc.JSONRPCVersion `json:"jsonrpc"`
 		ID      *jsonrpc.ID            `json:"id"`
 		Method  Method                 `json:"method"`
-		Params  jsontext.Value         `json:"params"`
+		Params  json.Value             `json:"params"`
 	}
 	if err := json.Unmarshal(data, &raw); err != nil {
 		return fmt.Errorf("%w: %w", ErrorCodeInvalidRequest, err)

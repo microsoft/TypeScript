@@ -5,8 +5,8 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/go-json-experiment/json"
 	"github.com/microsoft/typescript-go/internal/collections"
+	"github.com/microsoft/typescript-go/internal/json"
 	"gotest.tools/v3/assert"
 )
 

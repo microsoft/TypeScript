@@ -14,7 +14,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/execute/incremental"
 	"github.com/microsoft/typescript-go/internal/execute/tsc"
 	"github.com/microsoft/typescript-go/internal/format"
-	"github.com/microsoft/typescript-go/internal/jsonutil"
+	"github.com/microsoft/typescript-go/internal/json"
 	"github.com/microsoft/typescript-go/internal/locale"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/parser"
@@ -334,5 +334,5 @@ func performCompilation(
 
 func showConfig(sys tsc.System, config *core.CompilerOptions) {
 	// !!!
-	_ = jsonutil.MarshalIndentWrite(sys.Writer(), config, "", "    ")
+	_ = json.MarshalIndentWrite(sys.Writer(), config, "", "    ")
 }
