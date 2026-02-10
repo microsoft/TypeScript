@@ -8,7 +8,7 @@
 ->module : Symbol(export=, Decl(mod1.js, 0, 0))
 ->exports : Symbol(export=, Decl(mod1.js, 0, 0))
 +>module.exports : Symbol(C, Decl(mod1.js, 4, 18))
-+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
++>module : Symbol("./mod1", Decl(mod1.js, 0, 0))
 +>exports : Symbol(C, Decl(mod1.js, 4, 18))
  >C : Symbol(C, Decl(mod1.js, 4, 18))
 
@@ -37,14 +37,14 @@
  exports.C = function() {
  >exports.C : Symbol(C, Decl(mod3.js, 0, 0))
 ->exports : Symbol(C, Decl(mod3.js, 0, 0))
-+>exports : Symbol("mod3", Decl(mod3.js, 0, 0))
++>exports : Symbol("./mod3", Decl(mod3.js, 0, 0))
  >C : Symbol(C, Decl(mod3.js, 0, 0))
 
      this.p = 1
 ->this.p : Symbol(C.p, Decl(mod3.js, 5, 24))
 ->this : Symbol(C, Decl(mod3.js, 5, 11))
 ->p : Symbol(C.p, Decl(mod3.js, 5, 24))
-+>this : Symbol("mod3", Decl(mod3.js, 0, 0))
++>this : Symbol("./mod3", Decl(mod3.js, 0, 0))
  }
 
  === use.js ===

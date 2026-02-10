@@ -3,10 +3,10 @@
 === bug27025.js ===
 module.exports = window.nonprop;
 >module.exports : Symbol(unknown)
->module : Symbol("bug27025", Decl(bug27025.js, 0, 0))
+>module : Symbol("./bug27025", Decl(bug27025.js, 0, 0))
 >exports : Symbol(unknown)
 >window : Symbol(window, Decl(lib.dom.d.ts, --, --))
 
 exports.foo = bar;
->exports : Symbol("bug27025", Decl(bug27025.js, 0, 0))
+>exports : Symbol("./bug27025", Decl(bug27025.js, 0, 0))
 

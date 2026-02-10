@@ -1,22 +1,13 @@
 --- old.paramTagTypeResolution.symbols
 +++ new.paramTagTypeResolution.symbols
-@@= skipped -3, +3 lines =@@
- var f = require('./first');
- >f : Symbol(f, Decl(main.js, 0, 3))
- >require : Symbol(require)
-->'./first' : Symbol("./first", Decl(first.js, 0, 0))
-+>'./first' : Symbol("first", Decl(first.js, 0, 0))
-
- f(1, n => { })
- >f : Symbol(f, Decl(main.js, 0, 3))
-@@= skipped -12, +12 lines =@@
+@@= skipped -15, +15 lines =@@
   * @param {(t: T) => void} k
   */
  module.exports = function (x, k) { return k(x) }
 ->module.exports : Symbol(module.exports, Decl(first.js, 0, 0))
 ->module : Symbol(export=, Decl(first.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(first.js, 0, 0))
-+>module : Symbol("first", Decl(first.js, 0, 0))
++>module : Symbol("./first", Decl(first.js, 0, 0))
  >exports : Symbol(export=, Decl(first.js, 0, 0))
  >x : Symbol(x, Decl(first.js, 4, 27))
  >k : Symbol(k, Decl(first.js, 4, 29))

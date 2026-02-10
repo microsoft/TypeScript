@@ -6,15 +6,15 @@ const webpack = function (){
 >webpack : Symbol(webpack, Decl(bug24754.js, 1, 5))
 }
 exports = module.exports = webpack;
->exports : Symbol("bug24754", Decl(bug24754.js, 0, 0))
->module.exports : Symbol("bug24754", Decl(bug24754.js, 0, 0))
->module : Symbol("bug24754", Decl(bug24754.js, 0, 0))
->exports : Symbol("bug24754", Decl(bug24754.js, 0, 0))
+>exports : Symbol("./bug24754", Decl(bug24754.js, 0, 0))
+>module.exports : Symbol("./bug24754", Decl(bug24754.js, 0, 0))
+>module : Symbol("./bug24754", Decl(bug24754.js, 0, 0))
+>exports : Symbol("./bug24754", Decl(bug24754.js, 0, 0))
 >webpack : Symbol(webpack, Decl(bug24754.js, 1, 5))
 
 exports.version = 1001;
 >exports.version : Symbol(version, Decl(bug24754.js, 3, 35))
->exports : Symbol("bug24754", Decl(bug24754.js, 0, 0))
+>exports : Symbol("./bug24754", Decl(bug24754.js, 0, 0))
 >version : Symbol(version, Decl(bug24754.js, 3, 35))
 
 webpack.WebpackOptionsDefaulter = 1111;

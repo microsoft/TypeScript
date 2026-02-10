@@ -1,38 +1,24 @@
 --- old.jsdocTypeFromChainedAssignment2.types
 +++ new.jsdocTypeFromChainedAssignment2.types
-@@= skipped -39, +39 lines =@@
- exports.f = exports.g = function fg(n) {
- >exports.f = exports.g = function fg(n) {    return n + 1} : (n: number) => number
- >exports.f : (n: number) => number
-->exports : typeof import("./mod")
-+>exports : typeof import("mod")
- >f : (n: number) => number
- >exports.g = function fg(n) {    return n + 1} : (n: number) => number
- >exports.g : (n: number) => number
-->exports : typeof import("./mod")
-+>exports : typeof import("mod")
- >g : (n: number) => number
- >function fg(n) {    return n + 1} : (n: number) => number
- >fg : (n: number) => number
-@@= skipped -19, +19 lines =@@
+@@= skipped -58, +58 lines =@@
  module.exports.h = module.exports.i = function hi(mom) {
  >module.exports.h = module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
  >module.exports.h : (mom: string) => string
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("mod")
-+>module : { "\"mod\"": typeof import("mod"); }
-+>exports : typeof import("mod")
++>module.exports : typeof import("./mod")
++>module : { "\"mod\"": typeof import("./mod"); }
++>exports : typeof import("./mod")
  >h : (mom: string) => string
  >module.exports.i = function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
  >module.exports.i : (mom: string) => string
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }
 ->exports : typeof module.exports
-+>module.exports : typeof import("mod")
-+>module : { "\"mod\"": typeof import("mod"); }
-+>exports : typeof import("mod")
++>module.exports : typeof import("./mod")
++>module : { "\"mod\"": typeof import("./mod"); }
++>exports : typeof import("./mod")
  >i : (mom: string) => string
  >function hi(mom) {    return `hi, ${mom}!`;} : (mom: string) => string
  >hi : (mom: string) => string

@@ -13,9 +13,9 @@
 ->function() {    this.x = 1} : typeof MyClass
 +>module.exports.MyClass = function() {    this.x = 1} : () => void
 +>module.exports.MyClass : () => void
-+>module.exports : typeof import("jsDeclarationsExportAssignedConstructorFunction")
-+>module : { "\"jsDeclarationsExportAssignedConstructorFunction\"": typeof import("jsDeclarationsExportAssignedConstructorFunction"); }
-+>exports : typeof import("jsDeclarationsExportAssignedConstructorFunction")
++>module.exports : typeof import("./jsDeclarationsExportAssignedConstructorFunction")
++>module : { "\"jsDeclarationsExportAssignedConstructorFunction\"": typeof import("./jsDeclarationsExportAssignedConstructorFunction"); }
++>exports : typeof import("./jsDeclarationsExportAssignedConstructorFunction")
 +>MyClass : () => void
 +>function() {    this.x = 1} : () => void
 
@@ -23,7 +23,7 @@
  >this.x = 1 : 1
  >this.x : any
 ->this : this
-+>this : typeof import("jsDeclarationsExportAssignedConstructorFunction")
++>this : typeof import("./jsDeclarationsExportAssignedConstructorFunction")
  >x : any
  >1 : 1
  }
@@ -38,9 +38,9 @@
 ->prototype : { a: () => void; }
 +>module.exports.MyClass.prototype : any
 +>module.exports.MyClass : () => void
-+>module.exports : typeof import("jsDeclarationsExportAssignedConstructorFunction")
-+>module : { "\"jsDeclarationsExportAssignedConstructorFunction\"": typeof import("jsDeclarationsExportAssignedConstructorFunction"); }
-+>exports : typeof import("jsDeclarationsExportAssignedConstructorFunction")
++>module.exports : typeof import("./jsDeclarationsExportAssignedConstructorFunction")
++>module : { "\"jsDeclarationsExportAssignedConstructorFunction\"": typeof import("./jsDeclarationsExportAssignedConstructorFunction"); }
++>exports : typeof import("./jsDeclarationsExportAssignedConstructorFunction")
 +>MyClass : () => void
 +>prototype : any
  >{    a: function() {    }} : { a: () => void; }

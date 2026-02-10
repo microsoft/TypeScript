@@ -6,7 +6,7 @@ const { Thing, useThing, cbThing } = require("./index");
 >useThing : Symbol(useThing, Decl(usage.js, 0, 14))
 >cbThing : Symbol(cbThing, Decl(usage.js, 0, 24))
 >require : Symbol(require)
->"./index" : Symbol("index", Decl(index.js, 0, 0))
+>"./index" : Symbol("./index", Decl(index.js, 0, 0))
 
 useThing(Thing.a);
 >useThing : Symbol(useThing, Decl(usage.js, 0, 14))
@@ -58,7 +58,7 @@ const Thing = Object.freeze({
 
 exports.Thing = Thing;
 >exports.Thing : Symbol(Thing, Decl(index.js, 4, 3))
->exports : Symbol("index", Decl(index.js, 0, 0))
+>exports : Symbol(".", Decl(index.js, 0, 0))
 >Thing : Symbol(Thing, Decl(index.js, 4, 3))
 >Thing : Symbol(Thing, Decl(index.js, 1, 5))
 
@@ -71,7 +71,7 @@ function useThing(x) {}
 
 exports.useThing = useThing;
 >exports.useThing : Symbol(useThing, Decl(index.js, 11, 23))
->exports : Symbol("index", Decl(index.js, 0, 0))
+>exports : Symbol(".", Decl(index.js, 0, 0))
 >useThing : Symbol(useThing, Decl(index.js, 11, 23))
 >useThing : Symbol(useThing, Decl(index.js, 6, 22))
 
@@ -84,7 +84,7 @@ function cbThing(x) {}
 
 exports.cbThing = cbThing;
 >exports.cbThing : Symbol(cbThing, Decl(index.js, 18, 22))
->exports : Symbol("index", Decl(index.js, 0, 0))
+>exports : Symbol(".", Decl(index.js, 0, 0))
 >cbThing : Symbol(cbThing, Decl(index.js, 18, 22))
 >cbThing : Symbol(cbThing, Decl(index.js, 13, 28))
 

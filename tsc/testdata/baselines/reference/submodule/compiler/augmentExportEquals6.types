@@ -2,10 +2,10 @@
 
 === file1.ts ===
 class foo {}
->foo : import("file1.ts")
+>foo : import("./file1")
 
 namespace foo {
->foo : typeof import("file1.ts")
+>foo : typeof import("./file1")
 
     export class A {}
 >A : A
@@ -15,7 +15,7 @@ namespace foo {
 >a : any
 }
 export = foo;
->foo : import("file1.ts")
+>foo : import("./file1")
 
 === file2.ts ===
 import x = require("./file1"); 

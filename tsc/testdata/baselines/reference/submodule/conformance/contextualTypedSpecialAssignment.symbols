@@ -85,7 +85,7 @@ class Thing {
 /** @type {DoneStatus} */
 exports.x = {
 >exports.x : Symbol(x, Decl(test.js, 36, 1))
->exports : Symbol("test", Decl(test.js, 0, 0))
+>exports : Symbol("./test", Decl(test.js, 0, 0))
 >x : Symbol(x, Decl(test.js, 36, 1))
 
     status: "done",
@@ -97,15 +97,15 @@ exports.x = {
 }
 exports.x
 >exports.x : Symbol(x, Decl(test.js, 36, 1))
->exports : Symbol("test", Decl(test.js, 0, 0))
+>exports : Symbol("./test", Decl(test.js, 0, 0))
 >x : Symbol(x, Decl(test.js, 36, 1))
 
 /** @type {DoneStatus} */
 module.exports.y = {
 >module.exports.y : Symbol(y, Decl(test.js, 45, 9))
->module.exports : Symbol("test", Decl(test.js, 0, 0))
->module : Symbol("test", Decl(test.js, 0, 0))
->exports : Symbol("test", Decl(test.js, 0, 0))
+>module.exports : Symbol("./test", Decl(test.js, 0, 0))
+>module : Symbol("./test", Decl(test.js, 0, 0))
+>exports : Symbol("./test", Decl(test.js, 0, 0))
 >y : Symbol(y, Decl(test.js, 45, 9))
 
     status: "done",
@@ -117,9 +117,9 @@ module.exports.y = {
 }
 module.exports.y
 >module.exports.y : Symbol(y, Decl(test.js, 45, 9))
->module.exports : Symbol("test", Decl(test.js, 0, 0))
->module : Symbol("test", Decl(test.js, 0, 0))
->exports : Symbol("test", Decl(test.js, 0, 0))
+>module.exports : Symbol("./test", Decl(test.js, 0, 0))
+>module : Symbol("./test", Decl(test.js, 0, 0))
+>exports : Symbol("./test", Decl(test.js, 0, 0))
 >y : Symbol(y, Decl(test.js, 45, 9))
 
 // prototype-property assignment
@@ -164,7 +164,7 @@ F.prototype = {
 /** @type {{ status: 'done', m(n: number): void }} */
 module.exports = {
 >module.exports : Symbol(export=, Decl(mod.js, 0, 0))
->module : Symbol("mod", Decl(mod.js, 0, 0))
+>module : Symbol("./mod", Decl(mod.js, 0, 0))
 >exports : Symbol(export=, Decl(mod.js, 0, 0))
 
     status: "done",

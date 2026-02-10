@@ -1,15 +1,6 @@
 --- old.jsdocImportType2.symbols
 +++ new.jsdocImportType2.symbols
-@@= skipped -14, +14 lines =@@
- const D = require("./mod1");
- >D : Symbol(D, Decl(use.js, 6, 5))
- >require : Symbol(require, Decl(types.d.ts, 0, 0))
-->"./mod1" : Symbol("./mod1", Decl(mod1.js, 0, 0))
-+>"./mod1" : Symbol("mod1", Decl(mod1.js, 0, 0))
-
- /** @type {D} */
- var d;
-@@= skipped -26, +26 lines =@@
+@@= skipped -40, +40 lines =@@
  === mod1.js ===
  /// <reference path='./types.d.ts'/>
  module.exports = class Chunk {
@@ -17,7 +8,7 @@
 ->module : Symbol(export=, Decl(mod1.js, 0, 0))
 ->exports : Symbol(export=, Decl(mod1.js, 0, 0))
 +>module.exports : Symbol(Chunk, Decl(mod1.js, 1, 16))
-+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
++>module : Symbol("./mod1", Decl(mod1.js, 0, 0))
 +>exports : Symbol(Chunk, Decl(mod1.js, 1, 16))
  >Chunk : Symbol(Chunk, Decl(mod1.js, 1, 16))
 

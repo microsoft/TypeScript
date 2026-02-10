@@ -3,7 +3,7 @@
 === test.js ===
 const { apply } = require('./moduleExportAliasDuplicateAlias')
 >apply : "ok" | 1 | (() => void) | undefined
->require('./moduleExportAliasDuplicateAlias') : typeof import("moduleExportAliasDuplicateAlias")
+>require('./moduleExportAliasDuplicateAlias') : typeof import("./moduleExportAliasDuplicateAlias")
 >require : any
 >'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
 
@@ -18,14 +18,14 @@ const result = apply.toFixed()
 exports.apply = undefined;
 >exports.apply = undefined : undefined
 >exports.apply : "ok" | 1 | (() => void) | undefined
->exports : typeof import("moduleExportAliasDuplicateAlias")
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
 >apply : "ok" | 1 | (() => void) | undefined
 >undefined : undefined
 
 exports.apply = undefined;
 >exports.apply = undefined : undefined
 >exports.apply : "ok" | 1 | (() => void) | undefined
->exports : typeof import("moduleExportAliasDuplicateAlias")
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
 >apply : "ok" | 1 | (() => void) | undefined
 >undefined : undefined
 
@@ -35,20 +35,20 @@ function a() { }
 exports.apply = a;
 >exports.apply = a : () => void
 >exports.apply : "ok" | 1 | (() => void) | undefined
->exports : typeof import("moduleExportAliasDuplicateAlias")
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
 >apply : "ok" | 1 | (() => void) | undefined
 >a : () => void
 
 exports.apply()
 >exports.apply() : void
 >exports.apply : () => void
->exports : typeof import("moduleExportAliasDuplicateAlias")
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
 >apply : () => void
 
 exports.apply = 'ok'
 >exports.apply = 'ok' : "ok"
 >exports.apply : "ok" | 1 | (() => void) | undefined
->exports : typeof import("moduleExportAliasDuplicateAlias")
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
 >apply : "ok" | 1 | (() => void) | undefined
 >'ok' : "ok"
 
@@ -57,14 +57,14 @@ var OK = exports.apply.toUpperCase()
 >exports.apply.toUpperCase() : string
 >exports.apply.toUpperCase : () => string
 >exports.apply : "ok"
->exports : typeof import("moduleExportAliasDuplicateAlias")
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
 >apply : "ok"
 >toUpperCase : () => string
 
 exports.apply = 1
 >exports.apply = 1 : 1
 >exports.apply : "ok" | 1 | (() => void) | undefined
->exports : typeof import("moduleExportAliasDuplicateAlias")
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
 >apply : "ok" | 1 | (() => void) | undefined
 >1 : 1
 

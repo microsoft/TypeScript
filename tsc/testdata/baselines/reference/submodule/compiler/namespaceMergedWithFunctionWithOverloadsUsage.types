@@ -18,16 +18,16 @@ declare namespace Foo {
 }
 
 declare function Foo(opts?: Foo.Whatever): void;
->Foo : { (opts?: import("file").Whatever | undefined): void; (cb: Function, opts?: import("file").Whatever | undefined): void; }
->opts : import("file").Whatever | undefined
+>Foo : { (opts?: import("./file").Whatever | undefined): void; (cb: Function, opts?: import("./file").Whatever | undefined): void; }
+>opts : import("./file").Whatever | undefined
 >Foo : any
 
 declare function Foo(cb: Function, opts?: Foo.Whatever): void;
->Foo : { (opts?: import("file").Whatever | undefined): void; (cb: Function, opts?: import("file").Whatever | undefined): void; }
+>Foo : { (opts?: import("./file").Whatever | undefined): void; (cb: Function, opts?: import("./file").Whatever | undefined): void; }
 >cb : Function
->opts : import("file").Whatever | undefined
+>opts : import("./file").Whatever | undefined
 >Foo : any
 
 export = Foo;
->Foo : { (opts?: import("file").Whatever | undefined): void; (cb: Function, opts?: import("file").Whatever | undefined): void; }
+>Foo : { (opts?: import("./file").Whatever | undefined): void; (cb: Function, opts?: import("./file").Whatever | undefined): void; }
 

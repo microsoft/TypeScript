@@ -198,7 +198,7 @@ match(() => expected, (x = expected) => void 0);
 
 module.exports = x;
 >module.exports : Symbol(x, Decl(index.js, 0, 5))
->module : Symbol("index", Decl(index.js, 0, 0))
+>module : Symbol(".", Decl(index.js, 0, 0))
 >exports : Symbol(x, Decl(index.js, 0, 5))
 >x : Symbol(x, Decl(index.js, 0, 5))
 

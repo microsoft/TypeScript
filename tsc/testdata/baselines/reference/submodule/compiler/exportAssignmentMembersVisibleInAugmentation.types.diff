@@ -1,15 +1,6 @@
 --- old.exportAssignmentMembersVisibleInAugmentation.types
 +++ new.exportAssignmentMembersVisibleInAugmentation.types
-@@= skipped -1, +1 lines =@@
-
- === /node_modules/foo/index.d.ts ===
- export = foo;
-->foo : typeof import("foo")
-+>foo : typeof import("/a.ts")
-
- declare namespace foo {
-     export type T = number;
-@@= skipped -15, +15 lines =@@
+@@= skipped -16, +16 lines =@@
  >"foo" : typeof foo
 
      export function f(): T; // OK

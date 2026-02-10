@@ -194,60 +194,52 @@
 
  === mod1.js ===
  Object.defineProperty(exports, "thing", { value: 42, writable: true });
- >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -142, +142 lines =@@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
+ >exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 ->"thing" : Symbol(thing, Decl(mod1.js, 0, 0))
-+>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>"thing" : Symbol("thing", Decl(mod1.js, 0, 0))
  >value : Symbol(value, Decl(mod1.js, 0, 41))
  >writable : Symbol(writable, Decl(mod1.js, 0, 52))
 
-@@= skipped -150, +150 lines =@@
- >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -9, +9 lines =@@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
+ >exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 ->"readonlyProp" : Symbol(readonlyProp, Decl(mod1.js, 0, 71))
-+>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>"readonlyProp" : Symbol("readonlyProp", Decl(mod1.js, 0, 71))
  >value : Symbol(value, Decl(mod1.js, 1, 48))
  >writable : Symbol(writable, Decl(mod1.js, 1, 64))
 
 @@= skipped -9, +9 lines =@@
- >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
+ >exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 ->"rwAccessors" : Symbol(rwAccessors, Decl(mod1.js, 1, 84))
-+>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>"rwAccessors" : Symbol("rwAccessors", Decl(mod1.js, 1, 84))
  >get : Symbol(get, Decl(mod1.js, 2, 47))
  >set : Symbol(set, Decl(mod1.js, 2, 71))
  >_ : Symbol(_, Decl(mod1.js, 2, 76))
 @@= skipped -10, +10 lines =@@
- >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
+ >exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 ->"readonlyAccessor" : Symbol(readonlyAccessor, Decl(mod1.js, 2, 97))
-+>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>"readonlyAccessor" : Symbol("readonlyAccessor", Decl(mod1.js, 2, 97))
  >get : Symbol(get, Decl(mod1.js, 3, 52))
 
  Object.defineProperty(exports, "setonlyAccessor", {
- >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+@@= skipped -8, +8 lines =@@
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
-->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
+ >exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 ->"setonlyAccessor" : Symbol(setonlyAccessor, Decl(mod1.js, 3, 79))
-+>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>"setonlyAccessor" : Symbol("setonlyAccessor", Decl(mod1.js, 3, 79))
 
      /** @param {string} str */
      set(str) {
-@@= skipped -17, +17 lines =@@
+@@= skipped -8, +8 lines =@@
  >str : Symbol(str, Decl(mod1.js, 6, 8))
 
          this.rwAccessors = Number(str) 
@@ -263,9 +255,9 @@
 ->module : Symbol(module, Decl(mod2.js, 0, 22))
 ->exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
 ->"thing" : Symbol(thing, Decl(mod2.js, 0, 0))
-+>module.exports : Symbol("mod2", Decl(mod2.js, 0, 0))
-+>module : Symbol("mod2", Decl(mod2.js, 0, 0))
-+>exports : Symbol("mod2", Decl(mod2.js, 0, 0))
++>module.exports : Symbol("./mod2", Decl(mod2.js, 0, 0))
++>module : Symbol("./mod2", Decl(mod2.js, 0, 0))
++>exports : Symbol("./mod2", Decl(mod2.js, 0, 0))
 +>"thing" : Symbol("thing", Decl(mod2.js, 0, 0))
  >value : Symbol(value, Decl(mod2.js, 0, 48))
  >writable : Symbol(writable, Decl(mod2.js, 0, 62))
@@ -278,9 +270,9 @@
 ->module : Symbol(module, Decl(mod2.js, 0, 22))
 ->exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
 ->"readonlyProp" : Symbol(readonlyProp, Decl(mod2.js, 0, 81))
-+>module.exports : Symbol("mod2", Decl(mod2.js, 0, 0))
-+>module : Symbol("mod2", Decl(mod2.js, 0, 0))
-+>exports : Symbol("mod2", Decl(mod2.js, 0, 0))
++>module.exports : Symbol("./mod2", Decl(mod2.js, 0, 0))
++>module : Symbol("./mod2", Decl(mod2.js, 0, 0))
++>exports : Symbol("./mod2", Decl(mod2.js, 0, 0))
 +>"readonlyProp" : Symbol("readonlyProp", Decl(mod2.js, 0, 81))
  >value : Symbol(value, Decl(mod2.js, 1, 55))
  >writable : Symbol(writable, Decl(mod2.js, 1, 71))
@@ -293,9 +285,9 @@
 ->module : Symbol(module, Decl(mod2.js, 0, 22))
 ->exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
 ->"rwAccessors" : Symbol(rwAccessors, Decl(mod2.js, 1, 91))
-+>module.exports : Symbol("mod2", Decl(mod2.js, 0, 0))
-+>module : Symbol("mod2", Decl(mod2.js, 0, 0))
-+>exports : Symbol("mod2", Decl(mod2.js, 0, 0))
++>module.exports : Symbol("./mod2", Decl(mod2.js, 0, 0))
++>module : Symbol("./mod2", Decl(mod2.js, 0, 0))
++>exports : Symbol("./mod2", Decl(mod2.js, 0, 0))
 +>"rwAccessors" : Symbol("rwAccessors", Decl(mod2.js, 1, 91))
  >get : Symbol(get, Decl(mod2.js, 2, 54))
  >set : Symbol(set, Decl(mod2.js, 2, 78))
@@ -308,9 +300,9 @@
 ->module : Symbol(module, Decl(mod2.js, 0, 22))
 ->exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
 ->"readonlyAccessor" : Symbol(readonlyAccessor, Decl(mod2.js, 2, 104))
-+>module.exports : Symbol("mod2", Decl(mod2.js, 0, 0))
-+>module : Symbol("mod2", Decl(mod2.js, 0, 0))
-+>exports : Symbol("mod2", Decl(mod2.js, 0, 0))
++>module.exports : Symbol("./mod2", Decl(mod2.js, 0, 0))
++>module : Symbol("./mod2", Decl(mod2.js, 0, 0))
++>exports : Symbol("./mod2", Decl(mod2.js, 0, 0))
 +>"readonlyAccessor" : Symbol("readonlyAccessor", Decl(mod2.js, 2, 104))
  >get : Symbol(get, Decl(mod2.js, 3, 59))
 
@@ -322,9 +314,9 @@
 ->module : Symbol(module, Decl(mod2.js, 0, 22))
 ->exports : Symbol(module.exports, Decl(mod2.js, 0, 0))
 ->"setonlyAccessor" : Symbol(setonlyAccessor, Decl(mod2.js, 3, 86))
-+>module.exports : Symbol("mod2", Decl(mod2.js, 0, 0))
-+>module : Symbol("mod2", Decl(mod2.js, 0, 0))
-+>exports : Symbol("mod2", Decl(mod2.js, 0, 0))
++>module.exports : Symbol("./mod2", Decl(mod2.js, 0, 0))
++>module : Symbol("./mod2", Decl(mod2.js, 0, 0))
++>exports : Symbol("./mod2", Decl(mod2.js, 0, 0))
 +>"setonlyAccessor" : Symbol("setonlyAccessor", Decl(mod2.js, 3, 86))
 
      /** @param {string} str */

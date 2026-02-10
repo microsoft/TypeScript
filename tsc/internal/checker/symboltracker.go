@@ -2,7 +2,6 @@ package checker
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/modulespecifiers"
 	"github.com/microsoft/typescript-go/internal/nodebuilder"
 )
 
@@ -10,10 +9,9 @@ type SymbolTrackerImpl struct {
 	context            *NodeBuilderContext
 	inner              nodebuilder.SymbolTracker
 	DisableTrackSymbol bool
-	tchost             Host
 }
 
-func NewSymbolTrackerImpl(context *NodeBuilderContext, tracker nodebuilder.SymbolTracker, tchost Host) *SymbolTrackerImpl {
+func NewSymbolTrackerImpl(context *NodeBuilderContext, tracker nodebuilder.SymbolTracker) *SymbolTrackerImpl {
 	if tracker != nil {
 		for {
 			t, ok := tracker.(*SymbolTrackerImpl)
@@ -24,14 +22,7 @@ func NewSymbolTrackerImpl(context *NodeBuilderContext, tracker nodebuilder.Symbo
 		}
 	}
 
-	return &SymbolTrackerImpl{context, tracker, false, tchost}
-}
-
-func (this *SymbolTrackerImpl) GetModuleSpecifierGenerationHost() modulespecifiers.ModuleSpecifierGenerationHost {
-	if this.inner == nil {
-		return this.tchost
-	}
-	return this.inner.GetModuleSpecifierGenerationHost()
+	return &SymbolTrackerImpl{context, tracker, false}
 }
 
 func (this *SymbolTrackerImpl) TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags) bool {

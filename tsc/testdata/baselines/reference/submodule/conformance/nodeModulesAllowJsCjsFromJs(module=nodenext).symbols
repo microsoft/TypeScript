@@ -3,7 +3,7 @@
 === foo.cjs ===
 exports.foo = "foo"
 >exports.foo : Symbol(foo, Decl(foo.cjs, 0, 0))
->exports : Symbol("foo", Decl(foo.cjs, 0, 0))
+>exports : Symbol("./foo.cjs", Decl(foo.cjs, 0, 0))
 >foo : Symbol(foo, Decl(foo.cjs, 0, 0))
 
 === bar.ts ===

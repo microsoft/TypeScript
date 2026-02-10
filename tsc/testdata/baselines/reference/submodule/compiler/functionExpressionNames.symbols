@@ -3,7 +3,7 @@
 === b.js ===
 exports.E = function() {
 >exports.E : Symbol(E, Decl(b.js, 0, 0))
->exports : Symbol("b", Decl(b.js, 0, 0))
+>exports : Symbol("./b", Decl(b.js, 0, 0))
 >E : Symbol(E, Decl(b.js, 0, 0))
 
     this.e = 'exported'
@@ -11,7 +11,7 @@ exports.E = function() {
 var e = new exports.E();
 >e : Symbol(e, Decl(b.js, 3, 3))
 >exports.E : Symbol(E, Decl(b.js, 0, 0))
->exports : Symbol("b", Decl(b.js, 0, 0))
+>exports : Symbol("./b", Decl(b.js, 0, 0))
 >E : Symbol(E, Decl(b.js, 0, 0))
 
 var o = {

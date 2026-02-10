@@ -19,15 +19,14 @@
 ->c : () => number
 ->d : () => number
 ->e : () => number
-->f : import("./mod").buz
-->g : string
-+>jstypes : (a: any, b: any, c: any, d: any, e: any, f: import("mod").buz, g: any) => any
++>jstypes : (a: any, b: any, c: any, d: any, e: any, f: import("./mod").buz, g: any) => any
 +>a : any
 +>b : any
 +>c : any
 +>d : any
 +>e : any
-+>f : import("mod").buz
+ >f : import("./mod").buz
+->g : string
 +>g : any
 
      return a.x + b.y + c() + d() + e() + f() + g.length
@@ -68,11 +67,10 @@
 +>e() : any
 +>e : any
  >f() : number
-->f : import("./mod").buz
+ >f : import("./mod").buz
 ->g.length : number
 ->g : string
 ->length : number
-+>f : import("mod").buz
 +>g.length : any
 +>g : any
 +>length : any
@@ -93,28 +91,11 @@
  === index.ts ===
  function types(
 ->types : (a: import("./mod").Thing, b: import("./mod").AnotherThing, c: import("./mod").foo, d: import("./mod").qux, e: import("./mod").baz, f: import("./mod").buz, g: import("./mod").literal) => any
-+>types : (a: any, b: any, c: any, d: any, e: any, f: import("mod").buz, g: any) => any
++>types : (a: any, b: any, c: any, d: any, e: any, f: import("./mod").buz, g: any) => any
 
      a: import('./mod').Thing,
  >a : any
-@@= skipped -18, +18 lines =@@
- >e : any
-
-     f: import('./mod').buz,
-->f : import("./mod").buz
-+>f : import("mod").buz
-
-     g: import('./mod').literal,
- >g : any
-@@= skipped -26, +26 lines =@@
- >e() : any
- >e : any
- >f() : number
-->f : import("./mod").buz
-+>f : import("mod").buz
- >g.length : any
- >g : any
- >length : any
+@@= skipped -51, +51 lines =@@
  }
 
  function values(

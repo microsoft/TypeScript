@@ -4,14 +4,14 @@
 /** @enum {number} */
 exports.a = {};
 >exports.a : Symbol(a, Decl(enumTagOnExports.js, 0, 0))
->exports : Symbol("enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
+>exports : Symbol("./enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
 >a : Symbol(a, Decl(enumTagOnExports.js, 0, 0))
 
 /** @enum {string} */
 module.exports.b = {};
 >module.exports.b : Symbol(b, Decl(enumTagOnExports.js, 1, 15))
->module.exports : Symbol("enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
->module : Symbol("enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
->exports : Symbol("enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
+>module.exports : Symbol("./enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
+>module : Symbol("./enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
+>exports : Symbol("./enumTagOnExports", Decl(enumTagOnExports.js, 0, 0))
 >b : Symbol(b, Decl(enumTagOnExports.js, 1, 15))
 

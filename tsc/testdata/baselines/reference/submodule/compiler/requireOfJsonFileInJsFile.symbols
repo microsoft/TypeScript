@@ -22,7 +22,7 @@ json1.b; // No error (OK since that's the type annotation)
 const js0 = require("./js.js");
 >js0 : Symbol(js0, Decl(user.js, 7, 5))
 >require : Symbol(require)
->"./js.js" : Symbol("/js", Decl(js.js, 0, 0))
+>"./js.js" : Symbol("./js.js", Decl(js.js, 0, 0))
 
 json0.b; // Error (good)
 >json0 : Symbol(json0, Decl(user.js, 0, 5))
@@ -44,7 +44,7 @@ js1.b;
 === /js.js ===
 module.exports = { a: 0 };
 >module.exports : Symbol(export=, Decl(js.js, 0, 0))
->module : Symbol("/js", Decl(js.js, 0, 0))
+>module : Symbol("./js", Decl(js.js, 0, 0))
 >exports : Symbol(export=, Decl(js.js, 0, 0))
 >a : Symbol(a, Decl(js.js, 0, 18))
 

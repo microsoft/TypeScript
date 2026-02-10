@@ -26,7 +26,7 @@ class MainThreadTasks {
      * @param {TaskNode} y
      */
     constructor(x, y){}
->x : import("module").TaskGroup
+>x : import("./module.js").TaskGroup
 >y : TaskNode
 }
 

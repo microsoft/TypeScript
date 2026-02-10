@@ -90,11 +90,11 @@ const obj = { value: 42, writable: true };
 >true : true
 
 Object.defineProperty(exports, "thing", obj);
->Object.defineProperty(exports, "thing", obj) : typeof import("mod1")
+>Object.defineProperty(exports, "thing", obj) : typeof import("./mod1")
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->exports : typeof import("mod1")
+>exports : typeof import("./mod1")
 >"thing" : "thing"
 >obj : { value: number; writable: boolean; }
 
@@ -107,11 +107,11 @@ let str = /** @type {string} */("other");
 >"other" : "other"
 
 Object.defineProperty(exports, str, { value: 42, writable: true });
->Object.defineProperty(exports, str, { value: 42, writable: true }) : typeof import("mod1")
+>Object.defineProperty(exports, str, { value: 42, writable: true }) : typeof import("./mod1")
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->exports : typeof import("mod1")
+>exports : typeof import("./mod1")
 >str : string
 >{ value: 42, writable: true } : { value: number; writable: true; }
 >value : number
@@ -124,11 +124,11 @@ const propName = "prop"
 >"prop" : "prop"
 
 Object.defineProperty(exports, propName, { value: 42, writable: true });
->Object.defineProperty(exports, propName, { value: 42, writable: true }) : typeof import("mod1")
+>Object.defineProperty(exports, propName, { value: 42, writable: true }) : typeof import("./mod1")
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->exports : typeof import("mod1")
+>exports : typeof import("./mod1")
 >propName : "prop"
 >{ value: 42, writable: true } : { value: number; writable: true; }
 >value : number
@@ -138,20 +138,20 @@ Object.defineProperty(exports, propName, { value: 42, writable: true });
 
 
 Object.defineProperty(exports, "bad1", { });
->Object.defineProperty(exports, "bad1", { }) : typeof import("mod1")
+>Object.defineProperty(exports, "bad1", { }) : typeof import("./mod1")
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->exports : typeof import("mod1")
+>exports : typeof import("./mod1")
 >"bad1" : "bad1"
 >{ } : {}
 
 Object.defineProperty(exports, "bad2", { get() { return 12 }, value: "no" });
->Object.defineProperty(exports, "bad2", { get() { return 12 }, value: "no" }) : typeof import("mod1")
+>Object.defineProperty(exports, "bad2", { get() { return 12 }, value: "no" }) : typeof import("./mod1")
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->exports : typeof import("mod1")
+>exports : typeof import("./mod1")
 >"bad2" : "bad2"
 >{ get() { return 12 }, value: "no" } : { get(): number; value: string; }
 >get : () => number
@@ -160,11 +160,11 @@ Object.defineProperty(exports, "bad2", { get() { return 12 }, value: "no" });
 >"no" : "no"
 
 Object.defineProperty(exports, "bad3", { writable: true });
->Object.defineProperty(exports, "bad3", { writable: true }) : typeof import("mod1")
+>Object.defineProperty(exports, "bad3", { writable: true }) : typeof import("./mod1")
 >Object.defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
 >Object : ObjectConstructor
 >defineProperty : <T>(o: T, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>) => T
->exports : typeof import("mod1")
+>exports : typeof import("./mod1")
 >"bad3" : "bad3"
 >{ writable: true } : { writable: true; }
 >writable : true

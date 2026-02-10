@@ -4,7 +4,7 @@
 const { K } = require("./mod1");
 >K : Symbol(K, Decl(main.js, 0, 7))
 >require : Symbol(require)
->"./mod1" : Symbol("mod1", Decl(mod1.js, 0, 0))
+>"./mod1" : Symbol("./mod1", Decl(mod1.js, 0, 0))
 
 /** @param {K} k */
 function f(k) {
@@ -35,7 +35,7 @@ NS.K =class {
 }
 exports.K = NS.K;
 >exports.K : Symbol(K, Decl(mod1.js, 5, 1))
->exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+>exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 >K : Symbol(K, Decl(mod1.js, 5, 1))
 >NS.K : Symbol(K, Decl(mod1.js, 0, 11))
 >NS : Symbol(NS, Decl(mod1.js, 0, 3))

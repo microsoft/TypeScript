@@ -2,17 +2,17 @@
 
 === file1.ts ===
 function foo() {}
->foo : typeof import("file1.ts")
+>foo : typeof import("./file1")
 
 namespace foo {
->foo : typeof import("file1.ts")
+>foo : typeof import("./file1")
 
     export var v = 1;
 >v : number
 >1 : 1
 }
 export = foo;
->foo : typeof import("file1.ts")
+>foo : typeof import("./file1")
 
 === file2.ts ===
 import x = require("./file1"); 

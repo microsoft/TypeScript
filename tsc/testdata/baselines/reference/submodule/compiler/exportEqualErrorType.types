@@ -32,7 +32,7 @@ namespace server {
     }
 }
 declare var server: {
->server : { (): import("exportEqualErrorType_0").connectExport; foo: Date; }
+>server : { (): import("./exportEqualErrorType_0").connectExport; foo: Date; }
 
     (): server.connectExport;
 >server : any
@@ -42,5 +42,5 @@ declare var server: {
 
 };
 export = server;
->server : { (): import("exportEqualErrorType_0").connectExport; foo: Date; }
+>server : { (): import("./exportEqualErrorType_0").connectExport; foo: Date; }
  

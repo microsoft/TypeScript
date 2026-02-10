@@ -4,16 +4,16 @@
 // Based on a pattern from adonis
 exports.formatters = {}
 >exports.formatters : Symbol(formatters, Decl(mod.js, 0, 0))
->exports : Symbol("mod", Decl(mod.js, 0, 0))
+>exports : Symbol("./mod", Decl(mod.js, 0, 0))
 >formatters : Symbol(formatters, Decl(mod.js, 0, 0))
 
 === first.js ===
 exports = require('./mod')
->exports : Symbol("first", Decl(first.js, 0, 0))
+>exports : Symbol("./first", Decl(first.js, 0, 0))
 >require : Symbol(require)
 
 exports.formatters.j = function (v) {
->exports : Symbol("first", Decl(first.js, 0, 0))
+>exports : Symbol("./first", Decl(first.js, 0, 0))
 >v : Symbol(v, Decl(first.js, 1, 33))
 
     return v
@@ -21,11 +21,11 @@ exports.formatters.j = function (v) {
 }
 === second.js ===
 exports = require('./mod')
->exports : Symbol("second", Decl(second.js, 0, 0))
+>exports : Symbol("./second", Decl(second.js, 0, 0))
 >require : Symbol(require)
 
 exports.formatters.o = function (v) {
->exports : Symbol("second", Decl(second.js, 0, 0))
+>exports : Symbol("./second", Decl(second.js, 0, 0))
 >v : Symbol(v, Decl(second.js, 1, 33))
 
     return v

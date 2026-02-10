@@ -8,7 +8,7 @@
 ->module : Symbol(module, Decl(file.js, 0, 38))
 ->exports : Symbol(module.exports, Decl(file.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(file.js, 0, 38))
-+>module : Symbol("file", Decl(file.js, 0, 0))
++>module : Symbol("./file", Decl(file.js, 0, 0))
 +>exports : Symbol(export=, Decl(file.js, 0, 38))
 
      customSymbol,
@@ -20,5 +20,5 @@
 ->exports.customSymbol2 : Symbol(customSymbol2, Decl(file.js, 5, 2))
 ->exports : Symbol(customSymbol2, Decl(file.js, 5, 2))
 ->customSymbol2 : Symbol(customSymbol2, Decl(file.js, 5, 2))
-+>exports : Symbol("file", Decl(file.js, 0, 0))
++>exports : Symbol("./file", Decl(file.js, 0, 0))
  >Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))

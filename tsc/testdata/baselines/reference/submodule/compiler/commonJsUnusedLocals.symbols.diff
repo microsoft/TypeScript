@@ -5,5 +5,5 @@
  exports.y = 1;
  >exports.y : Symbol(y, Decl(a.js, 0, 12))
 ->exports : Symbol(y, Decl(a.js, 0, 12))
-+>exports : Symbol("/a", Decl(a.js, 0, 0))
++>exports : Symbol("./a", Decl(a.js, 0, 0))
  >y : Symbol(y, Decl(a.js, 0, 12))

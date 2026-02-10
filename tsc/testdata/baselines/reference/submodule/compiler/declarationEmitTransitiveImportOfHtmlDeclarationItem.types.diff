@@ -5,12 +5,12 @@
  === index.ts ===
  import { func } from "./reexporter";
 ->func : () => import("./foo.html").CustomHtmlRepresentationThing
-+>func : () => import("foo.d.html").CustomHtmlRepresentationThing
++>func : () => import("./foo.d.html").CustomHtmlRepresentationThing
 
  export const c = func();
 ->c : import("./foo.html").CustomHtmlRepresentationThing
 ->func() : import("./foo.html").CustomHtmlRepresentationThing
 ->func : () => import("./foo.html").CustomHtmlRepresentationThing
-+>c : import("foo.d.html").CustomHtmlRepresentationThing
-+>func() : import("foo.d.html").CustomHtmlRepresentationThing
-+>func : () => import("foo.d.html").CustomHtmlRepresentationThing
++>c : import("./foo.d.html").CustomHtmlRepresentationThing
++>func() : import("./foo.d.html").CustomHtmlRepresentationThing
++>func : () => import("./foo.d.html").CustomHtmlRepresentationThing

@@ -6,11 +6,11 @@ const { SomeClass, SomeClass: Another } = require('./lib');
 >SomeClass : Symbol(SomeClass, Decl(lib.js, 14, 8))
 >Another : Symbol(Another, Decl(main.js, 0, 18))
 >require : Symbol(require)
->'./lib' : Symbol("lib", Decl(lib.js, 0, 0))
+>'./lib' : Symbol("./lib", Decl(lib.js, 0, 0))
 
 module.exports = {
 >module.exports : Symbol(export=, Decl(main.js, 0, 59))
->module : Symbol("main", Decl(main.js, 0, 0))
+>module : Symbol("./main", Decl(main.js, 0, 0))
 >exports : Symbol(export=, Decl(main.js, 0, 59))
 
     SomeClass,
@@ -44,7 +44,7 @@ class SomeClass {
 
 module.exports = {
 >module.exports : Symbol(export=, Decl(lib.js, 11, 1))
->module : Symbol("lib", Decl(lib.js, 0, 0))
+>module : Symbol("./lib", Decl(lib.js, 0, 0))
 >exports : Symbol(export=, Decl(lib.js, 11, 1))
 
     bar,

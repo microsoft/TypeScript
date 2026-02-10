@@ -5,5 +5,5 @@
  exports.x = 0;
  >exports.x : Symbol(x, Decl(index.js, 0, 0))
 ->exports : Symbol(x, Decl(index.js, 0, 0))
-+>exports : Symbol("/node_modules/foo/index", Decl(index.js, 0, 0))
++>exports : Symbol("foo", Decl(index.js, 0, 0))
  >x : Symbol(x, Decl(index.js, 0, 0))

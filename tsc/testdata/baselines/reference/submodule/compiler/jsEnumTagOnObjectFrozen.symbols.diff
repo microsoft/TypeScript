@@ -1,15 +1,6 @@
 --- old.jsEnumTagOnObjectFrozen.symbols
 +++ new.jsEnumTagOnObjectFrozen.symbols
-@@= skipped -5, +5 lines =@@
- >useThing : Symbol(useThing, Decl(usage.js, 0, 14))
- >cbThing : Symbol(cbThing, Decl(usage.js, 0, 24))
- >require : Symbol(require)
-->"./index" : Symbol("./index", Decl(index.js, 0, 0))
-+>"./index" : Symbol("index", Decl(index.js, 0, 0))
-
- useThing(Thing.a);
- >useThing : Symbol(useThing, Decl(usage.js, 0, 14))
-@@= skipped -37, +37 lines =@@
+@@= skipped -42, +42 lines =@@
  === index.js ===
  /** @enum {string} */
  const Thing = Object.freeze({
@@ -23,7 +14,7 @@
  exports.Thing = Thing;
  >exports.Thing : Symbol(Thing, Decl(index.js, 4, 3))
 ->exports : Symbol(Thing, Decl(index.js, 4, 3))
-+>exports : Symbol("index", Decl(index.js, 0, 0))
++>exports : Symbol(".", Decl(index.js, 0, 0))
  >Thing : Symbol(Thing, Decl(index.js, 4, 3))
 ->Thing : Symbol(Thing, Decl(index.js, 1, 5), Decl(index.js, 0, 4))
 +>Thing : Symbol(Thing, Decl(index.js, 1, 5))
@@ -35,7 +26,7 @@
  exports.useThing = useThing;
  >exports.useThing : Symbol(useThing, Decl(index.js, 11, 23))
 ->exports : Symbol(useThing, Decl(index.js, 11, 23))
-+>exports : Symbol("index", Decl(index.js, 0, 0))
++>exports : Symbol(".", Decl(index.js, 0, 0))
  >useThing : Symbol(useThing, Decl(index.js, 11, 23))
  >useThing : Symbol(useThing, Decl(index.js, 6, 22))
 
@@ -44,6 +35,6 @@
  exports.cbThing = cbThing;
  >exports.cbThing : Symbol(cbThing, Decl(index.js, 18, 22))
 ->exports : Symbol(cbThing, Decl(index.js, 18, 22))
-+>exports : Symbol("index", Decl(index.js, 0, 0))
++>exports : Symbol(".", Decl(index.js, 0, 0))
  >cbThing : Symbol(cbThing, Decl(index.js, 18, 22))
  >cbThing : Symbol(cbThing, Decl(index.js, 13, 28))

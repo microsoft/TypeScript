@@ -3,12 +3,12 @@
 === mod.js ===
 exports.n = {};
 >exports.n : Symbol(n, Decl(mod.js, 0, 0))
->exports : Symbol("mod", Decl(mod.js, 0, 0))
+>exports : Symbol("./mod", Decl(mod.js, 0, 0))
 >n : Symbol(n, Decl(mod.js, 0, 0))
 
 exports.n.K = function () {
 >exports.n : Symbol(n, Decl(mod.js, 0, 0))
->exports : Symbol("mod", Decl(mod.js, 0, 0))
+>exports : Symbol("./mod", Decl(mod.js, 0, 0))
 >n : Symbol(n, Decl(mod.js, 0, 0))
 
     this.x = 10;
@@ -16,7 +16,7 @@ exports.n.K = function () {
 }
 exports.Classic = class {
 >exports.Classic : Symbol(Classic, Decl(mod.js, 3, 1))
->exports : Symbol("mod", Decl(mod.js, 0, 0))
+>exports : Symbol("./mod", Decl(mod.js, 0, 0))
 >Classic : Symbol(Classic, Decl(mod.js, 3, 1))
 
     constructor() {

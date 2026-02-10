@@ -7,9 +7,9 @@ import (
 )
 
 type NodeBuilder struct {
-	ctxStack  []*NodeBuilderContext
-	basicHost Host
-	impl      *NodeBuilderImpl
+	ctxStack []*NodeBuilderContext
+	host     Host
+	impl     *NodeBuilderImpl
 }
 
 // EmitContext implements NodeBuilderInterface.
@@ -20,6 +20,7 @@ func (b *NodeBuilder) EmitContext() *printer.EmitContext {
 func (b *NodeBuilder) enterContext(enclosingDeclaration *ast.Node, flags nodebuilder.Flags, internalFlags nodebuilder.InternalFlags, tracker nodebuilder.SymbolTracker) {
 	b.ctxStack = append(b.ctxStack, b.impl.ctx)
 	b.impl.ctx = &NodeBuilderContext{
+		host:                     b.host,
 		tracker:                  tracker,
 		flags:                    flags,
 		internalFlags:            internalFlags,
@@ -32,14 +33,7 @@ func (b *NodeBuilder) enterContext(enclosingDeclaration *ast.Node, flags nodebui
 		enclosingSymbolTypes:     make(map[ast.SymbolId]*Type),
 		remappedSymbolReferences: make(map[ast.SymbolId]*ast.Symbol),
 	}
-	// TODO: always provide this; see https://github.com/microsoft/typescript-go/pull/1588#pullrequestreview-3125218673
-	var moduleResolverHost Host
-	if tracker != nil {
-		moduleResolverHost = tracker.GetModuleSpecifierGenerationHost()
-	} else if internalFlags&nodebuilder.InternalFlagsDoNotIncludeSymbolChain != 0 {
-		moduleResolverHost = b.basicHost
-	}
-	tracker = NewSymbolTrackerImpl(b.impl.ctx, tracker, moduleResolverHost)
+	tracker = NewSymbolTrackerImpl(b.impl.ctx, tracker)
 	b.impl.ctx.tracker = tracker
 }
 
@@ -182,7 +176,7 @@ func NewNodeBuilder(ch *Checker, e *printer.EmitContext) *NodeBuilder {
 
 func NewNodeBuilderEx(ch *Checker, e *printer.EmitContext, idToSymbol map[*ast.IdentifierNode]*ast.Symbol) *NodeBuilder {
 	impl := newNodeBuilderImpl(ch, e, idToSymbol)
-	return &NodeBuilder{impl: impl, ctxStack: make([]*NodeBuilderContext, 0, 1), basicHost: ch.program}
+	return &NodeBuilder{impl: impl, ctxStack: make([]*NodeBuilderContext, 0, 1), host: ch.program}
 }
 
 func (c *Checker) getNodeBuilder() *NodeBuilder {

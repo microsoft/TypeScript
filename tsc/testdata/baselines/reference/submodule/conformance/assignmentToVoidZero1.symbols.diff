@@ -11,10 +11,10 @@
 ->exports : Symbol("./assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
 ->x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 31))
 +>exports.y : Symbol(y, Decl(assignmentToVoidZero1.js, 0, 0), Decl(assignmentToVoidZero1.js, 2, 14))
-+>exports : Symbol("assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
++>exports : Symbol("./assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
 +>y : Symbol(y, Decl(assignmentToVoidZero1.js, 0, 0), Decl(assignmentToVoidZero1.js, 2, 14))
 +>exports.x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 11), Decl(assignmentToVoidZero1.js, 1, 31))
-+>exports : Symbol("assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
++>exports : Symbol("./assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
 +>x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 11), Decl(assignmentToVoidZero1.js, 1, 31))
 
  exports.x = 1;
@@ -22,7 +22,7 @@
 ->exports : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 31))
 ->x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 31))
 +>exports.x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 11), Decl(assignmentToVoidZero1.js, 1, 31))
-+>exports : Symbol("assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
++>exports : Symbol("./assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
 +>x : Symbol(x, Decl(assignmentToVoidZero1.js, 1, 11), Decl(assignmentToVoidZero1.js, 1, 31))
 
  exports.y = 2;
@@ -30,5 +30,5 @@
 ->exports : Symbol(y, Decl(assignmentToVoidZero1.js, 2, 14))
 ->y : Symbol(y, Decl(assignmentToVoidZero1.js, 2, 14))
 +>exports.y : Symbol(y, Decl(assignmentToVoidZero1.js, 0, 0), Decl(assignmentToVoidZero1.js, 2, 14))
-+>exports : Symbol("assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
++>exports : Symbol("./assignmentToVoidZero1", Decl(assignmentToVoidZero1.js, 0, 0))
 +>y : Symbol(y, Decl(assignmentToVoidZero1.js, 0, 0), Decl(assignmentToVoidZero1.js, 2, 14))

@@ -1,11 +1,6 @@
 --- old.constructorFunctions2.symbols
 +++ new.constructorFunctions2.symbols
-@@= skipped -12, +12 lines =@@
- const A = require("./other");
- >A : Symbol(A, Decl(index.js, 0, 5))
- >require : Symbol(require, Decl(node.d.ts, 0, 0))
-->"./other" : Symbol("./other", Decl(other.js, 0, 0))
-+>"./other" : Symbol("other", Decl(other.js, 0, 0))
+@@= skipped -16, +16 lines =@@
 
  const a = new A().id;
  >a : Symbol(a, Decl(index.js, 1, 5))
@@ -55,6 +50,6 @@
 ->module : Symbol(export=, Decl(other.js, 0, 29))
 ->exports : Symbol(export=, Decl(other.js, 0, 29))
 +>module.exports : Symbol(A, Decl(other.js, 0, 0))
-+>module : Symbol("other", Decl(other.js, 0, 0))
++>module : Symbol("./other", Decl(other.js, 0, 0))
 +>exports : Symbol(A, Decl(other.js, 0, 0))
  >A : Symbol(A, Decl(other.js, 0, 0))

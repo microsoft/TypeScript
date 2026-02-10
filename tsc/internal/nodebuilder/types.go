@@ -3,13 +3,10 @@ package nodebuilder
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
-	"github.com/microsoft/typescript-go/internal/modulespecifiers"
 )
 
 // TODO: previously all symboltracker methods were optional, but now they're required.
 type SymbolTracker interface {
-	GetModuleSpecifierGenerationHost() modulespecifiers.ModuleSpecifierGenerationHost
-
 	TrackSymbol(symbol *ast.Symbol, enclosingDeclaration *ast.Node, meaning ast.SymbolFlags) bool
 	ReportInaccessibleThisError()
 	ReportPrivateInBaseOfClassExpression(propertyName string)

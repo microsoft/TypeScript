@@ -1,40 +1,19 @@
 --- old.moduleExportDuplicateAlias.symbols
 +++ new.moduleExportDuplicateAlias.symbols
-@@= skipped -3, +3 lines =@@
- const { apply } = require('./moduleExportAliasDuplicateAlias')
- >apply : Symbol(apply, Decl(test.js, 0, 7))
- >require : Symbol(require)
-->'./moduleExportAliasDuplicateAlias' : Symbol("./moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
-+>'./moduleExportAliasDuplicateAlias' : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
-
- apply()
- >apply : Symbol(apply, Decl(test.js, 0, 7))
-@@= skipped -8, +8 lines =@@
+@@= skipped -11, +11 lines =@@
  === moduleExportAliasDuplicateAlias.js ===
  exports.apply = undefined;
  >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
 ->exports : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
-+>exports : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
++>exports : Symbol("./moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
  >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
  >undefined : Symbol(undefined)
 
-@@= skipped -9, +9 lines =@@
-
- exports.apply()
- >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
-->exports : Symbol("./moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
-+>exports : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
- >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
+@@= skipped -14, +14 lines =@@
 
  exports.apply = a;
  >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
 ->exports : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
-+>exports : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
++>exports : Symbol("./moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
  >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
  >a : Symbol(a, Decl(moduleExportAliasDuplicateAlias.js, 0, 26))
-
- exports.apply()
- >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))
-->exports : Symbol("./moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
-+>exports : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
- >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 2, 15))

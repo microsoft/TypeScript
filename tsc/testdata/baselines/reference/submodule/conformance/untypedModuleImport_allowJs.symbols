@@ -10,7 +10,7 @@ foo.bar();
 === /node_modules/foo/index.js ===
 exports.default = { bar() { return 0; } }
 >exports.default : Symbol(default, Decl(index.js, 0, 0))
->exports : Symbol("/node_modules/foo/index", Decl(index.js, 0, 0))
+>exports : Symbol("foo", Decl(index.js, 0, 0))
 >default : Symbol(default, Decl(index.js, 0, 0))
 >bar : Symbol(bar, Decl(index.js, 0, 19))
 

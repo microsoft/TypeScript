@@ -1,15 +1,6 @@
 --- old.jsDeclarationsTypedefPropertyAndExportAssignment.symbols
 +++ new.jsDeclarationsTypedefPropertyAndExportAssignment.symbols
-@@= skipped -4, +4 lines =@@
- >taskGroups : Symbol(taskGroups, Decl(index.js, 0, 7))
- >taskNameToGroup : Symbol(taskNameToGroup, Decl(index.js, 0, 18))
- >require : Symbol(require)
-->'./module.js' : Symbol("./module.js", Decl(module.js, 0, 0))
-+>'./module.js' : Symbol("module", Decl(module.js, 0, 0))
-
- /** @typedef {import('./module.js').TaskGroup} TaskGroup */
-
-@@= skipped -25, +25 lines =@@
+@@= skipped -29, +29 lines =@@
  }
 
  module.exports = MainThreadTasks;
@@ -17,7 +8,7 @@
 ->module : Symbol(export=, Decl(index.js, 18, 1))
 ->exports : Symbol(export=, Decl(index.js, 18, 1))
 +>module.exports : Symbol(MainThreadTasks, Decl(index.js, 0, 61))
-+>module : Symbol("index", Decl(index.js, 0, 0))
++>module : Symbol("./index.js", Decl(index.js, 0, 0))
 +>exports : Symbol(MainThreadTasks, Decl(index.js, 0, 61))
  >MainThreadTasks : Symbol(MainThreadTasks, Decl(index.js, 0, 61))
 
@@ -30,7 +21,7 @@
 ->module : Symbol(module, Decl(module.js, 24, 27))
 ->exports : Symbol(module.exports, Decl(module.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(module.js, 24, 27))
-+>module : Symbol("module", Decl(module.js, 0, 0))
++>module : Symbol("./module", Decl(module.js, 0, 0))
 +>exports : Symbol(export=, Decl(module.js, 24, 27))
 
      taskGroups,

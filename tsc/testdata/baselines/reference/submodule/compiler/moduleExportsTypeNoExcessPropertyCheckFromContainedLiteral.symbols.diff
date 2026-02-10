@@ -1,17 +1,11 @@
 --- old.moduleExportsTypeNoExcessPropertyCheckFromContainedLiteral.symbols
 +++ new.moduleExportsTypeNoExcessPropertyCheckFromContainedLiteral.symbols
-@@= skipped -3, +3 lines =@@
- const eslintReact = require('./eslint-plugin-react.js');
- >eslintReact : Symbol(eslintReact, Decl(eslint.config.js, 0, 5))
- >require : Symbol(require)
-->'./eslint-plugin-react.js' : Symbol("./eslint-plugin-react.js", Decl(eslint-plugin-react.js, 0, 0))
-+>'./eslint-plugin-react.js' : Symbol("eslint-plugin-react", Decl(eslint-plugin-react.js, 0, 0))
-
+@@= skipped -8, +8 lines =@@
  const tseslint = require('./typescript-eslint.js');
  >tseslint : Symbol(tseslint, Decl(eslint.config.js, 1, 5))
  >require : Symbol(require)
 ->'./typescript-eslint.js' : Symbol(tseslint, Decl(typescript-eslint.js, 0, 0))
-+>'./typescript-eslint.js' : Symbol("typescript-eslint", Decl(typescript-eslint.js, 0, 0))
++>'./typescript-eslint.js' : Symbol("./typescript-eslint.js", Decl(typescript-eslint.js, 0, 0))
 
  tseslint.config(eslintReact)
 ->tseslint.config : Symbol(tseslint.config, Decl(typescript-eslint.js, 13, 18))
@@ -22,14 +16,14 @@
  >eslintReact : Symbol(eslintReact, Decl(eslint.config.js, 0, 5))
 
  === eslint-plugin-react.js ===
-@@= skipped -29, +29 lines =@@
+@@= skipped -24, +24 lines =@@
  }
 
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(eslint-plugin-react.js, 0, 0))
 ->module : Symbol(export=, Decl(eslint-plugin-react.js, 6, 1))
 +>module.exports : Symbol(export=, Decl(eslint-plugin-react.js, 6, 1))
-+>module : Symbol("eslint-plugin-react", Decl(eslint-plugin-react.js, 0, 0))
++>module : Symbol("./eslint-plugin-react", Decl(eslint-plugin-react.js, 0, 0))
  >exports : Symbol(export=, Decl(eslint-plugin-react.js, 6, 1))
 
    plugins: {
@@ -41,6 +35,6 @@
 ->module : Symbol(module, Decl(typescript-eslint.js, 11, 31))
 ->exports : Symbol(module.exports, Decl(typescript-eslint.js, 0, 0))
 +>module.exports : Symbol(export=, Decl(typescript-eslint.js, 11, 31))
-+>module : Symbol("typescript-eslint", Decl(typescript-eslint.js, 0, 0))
++>module : Symbol("./typescript-eslint", Decl(typescript-eslint.js, 0, 0))
 +>exports : Symbol(export=, Decl(typescript-eslint.js, 11, 31))
  >config : Symbol(config, Decl(typescript-eslint.js, 13, 18))

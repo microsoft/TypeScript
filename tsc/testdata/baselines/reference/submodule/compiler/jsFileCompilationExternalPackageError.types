@@ -24,7 +24,7 @@ var a = 10;
 exports.a = 10;
 >exports.a = 10 : 10
 >exports.a : 10
->exports : typeof import("node_modules/c")
+>exports : typeof import("c")
 >a : 10
 >10 : 10
 

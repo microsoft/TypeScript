@@ -7,7 +7,7 @@ import { esm } from "dep";
 const cjs = require("dep");
 >cjs : Symbol(cjs, Decl(main.js, 1, 5))
 >require : Symbol(require)
->"dep" : Symbol("/node_modules/dep/require", Decl(require.d.ts, 0, 0))
+>"dep" : Symbol("dep", Decl(require.d.ts, 0, 0))
 
 === /node_modules/dep/import.d.mts ===
 export const esm: "esm";

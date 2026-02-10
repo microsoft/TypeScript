@@ -843,7 +843,7 @@ export interface eI {
 >pa2 : any
 }
 export namespace eM {
->eM : typeof import("giant").eM
+>eM : typeof import("./giant").eM
 
     var V;
 >V : any

@@ -5,19 +5,19 @@
 (function() {
 exports.bigOak = 1
 >exports.bigOak : Symbol(bigOak, Decl(Eloquent.js, 1, 13))
->exports : Symbol("Eloquent", Decl(Eloquent.js, 0, 0))
+>exports : Symbol("./Eloquent", Decl(Eloquent.js, 0, 0))
 >bigOak : Symbol(bigOak, Decl(Eloquent.js, 1, 13))
 
 exports.everywhere = 2
 >exports.everywhere : Symbol(everywhere, Decl(Eloquent.js, 2, 18))
->exports : Symbol("Eloquent", Decl(Eloquent.js, 0, 0))
+>exports : Symbol("./Eloquent", Decl(Eloquent.js, 0, 0))
 >everywhere : Symbol(everywhere, Decl(Eloquent.js, 2, 18))
 
 module.exports = exports
->module.exports : Symbol("Eloquent", Decl(Eloquent.js, 0, 0))
->module : Symbol("Eloquent", Decl(Eloquent.js, 0, 0))
->exports : Symbol("Eloquent", Decl(Eloquent.js, 0, 0))
->exports : Symbol("Eloquent", Decl(Eloquent.js, 0, 0))
+>module.exports : Symbol("./Eloquent", Decl(Eloquent.js, 0, 0))
+>module : Symbol("./Eloquent", Decl(Eloquent.js, 0, 0))
+>exports : Symbol("./Eloquent", Decl(Eloquent.js, 0, 0))
+>exports : Symbol("./Eloquent", Decl(Eloquent.js, 0, 0))
 
 })()
 

@@ -26,29 +26,20 @@
  exports.a = { x: "x" };
  >exports.a : Symbol(a, Decl(mod1.js, 0, 0))
 ->exports : Symbol(a, Decl(mod1.js, 0, 0))
-+>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
++>exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
  >a : Symbol(a, Decl(mod1.js, 0, 0))
  >x : Symbol(x, Decl(mod1.js, 0, 13))
 
- exports["b"] = { x: "x" };
-->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
-+>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
- >"b" : Symbol("b", Decl(mod1.js, 0, 23))
- >x : Symbol(x, Decl(mod1.js, 1, 16))
-
- exports["default"] = { x: "x" };
-->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
-+>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
- >"default" : Symbol("default", Decl(mod1.js, 1, 26))
+@@= skipped -15, +15 lines =@@
  >x : Symbol(x, Decl(mod1.js, 2, 22))
 
  module.exports["c"] = { x: "x" };
 ->module.exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
 ->module : Symbol(module, Decl(mod1.js, 2, 32))
 ->exports : Symbol(module.exports, Decl(mod1.js, 0, 0))
-+>module.exports : Symbol("mod1", Decl(mod1.js, 0, 0))
-+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
-+>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
++>module.exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
++>module : Symbol("./mod1", Decl(mod1.js, 0, 0))
++>exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
  >"c" : Symbol("c", Decl(mod1.js, 2, 32))
  >x : Symbol(x, Decl(mod1.js, 3, 23))
 
@@ -56,8 +47,8 @@
 ->module : Symbol(module, Decl(mod1.js, 2, 32))
 ->"exports" : Symbol(module.exports, Decl(mod1.js, 0, 0))
 ->"d" : Symbol("d", Decl(mod1.js, 3, 33), Decl(mod1.js, 5, 18))
-+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
-+>"exports" : Symbol("mod1", Decl(mod1.js, 0, 0))
++>module : Symbol("./mod1", Decl(mod1.js, 0, 0))
++>"exports" : Symbol("./mod1", Decl(mod1.js, 0, 0))
 +>"d" : Symbol("d", Decl(mod1.js, 3, 33))
 
  module["exports"]["d"].e = 0;
@@ -66,6 +57,6 @@
 ->"exports" : Symbol(module.exports, Decl(mod1.js, 0, 0))
 ->"d" : Symbol("d", Decl(mod1.js, 3, 33), Decl(mod1.js, 5, 18))
 ->e : Symbol("d".e, Decl(mod1.js, 4, 28))
-+>module : Symbol("mod1", Decl(mod1.js, 0, 0))
-+>"exports" : Symbol("mod1", Decl(mod1.js, 0, 0))
++>module : Symbol("./mod1", Decl(mod1.js, 0, 0))
++>"exports" : Symbol("./mod1", Decl(mod1.js, 0, 0))
 +>"d" : Symbol("d", Decl(mod1.js, 3, 33))

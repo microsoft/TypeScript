@@ -4,7 +4,7 @@
 var mod = require('./mod')
 >mod : Symbol(mod, Decl(npm.js, 0, 3))
 >require : Symbol(require)
->'./mod' : Symbol("mod", Decl(mod.js, 0, 0))
+>'./mod' : Symbol("./mod", Decl(mod.js, 0, 0))
 
 mod() // should be callable from here too
 >mod : Symbol(mod, Decl(npm.js, 0, 3))
@@ -12,12 +12,12 @@ mod() // should be callable from here too
 === mod.js ===
 module.exports = function x() { }
 >module.exports : Symbol(export=, Decl(mod.js, 0, 0))
->module : Symbol("mod", Decl(mod.js, 0, 0))
+>module : Symbol("./mod", Decl(mod.js, 0, 0))
 >exports : Symbol(export=, Decl(mod.js, 0, 0))
 >x : Symbol(x, Decl(mod.js, 0, 16))
 
 module.exports() // should be callable
 >module.exports : Symbol(export=, Decl(mod.js, 0, 0))
->module : Symbol("mod", Decl(mod.js, 0, 0))
+>module : Symbol("./mod", Decl(mod.js, 0, 0))
 >exports : Symbol(export=, Decl(mod.js, 0, 0))
 
