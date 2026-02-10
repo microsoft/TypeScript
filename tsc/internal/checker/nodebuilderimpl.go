@@ -2358,6 +2358,9 @@ func (b *NodeBuilderImpl) createTypeNodesFromResolvedType(resolvedType *Structur
 			if getDeclarationModifierFlagsFromSymbol(propertySymbol)&(ast.ModifierFlagsPrivate|ast.ModifierFlagsProtected) != 0 {
 				b.ctx.tracker.ReportPrivateInBaseOfClassExpression(propertySymbol.Name)
 			}
+			if IsPrivateIdentifierSymbol(propertySymbol) {
+				b.ctx.tracker.ReportPrivateInBaseOfClassExpression(ast.SymbolName(propertySymbol))
+			}
 		}
 		if b.checkTruncationLength() && (i+2 < len(properties)-1) {
 			if b.ctx.flags&nodebuilder.FlagsNoTruncation != 0 {
