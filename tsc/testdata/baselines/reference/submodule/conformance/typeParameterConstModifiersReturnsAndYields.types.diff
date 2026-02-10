@@ -1,176 +1,6 @@
 --- old.typeParameterConstModifiersReturnsAndYields.types
 +++ new.typeParameterConstModifiersReturnsAndYields.types
-@@= skipped -29, +29 lines =@@
- >random : () => number
-
- const result3 = test1(() => 'a');
-->result3 : "a"
-->test1(() => 'a') : "a"
-+>result3 : string
-+>test1(() => 'a') : string
- >test1 : <const T>(create: () => T) => T
-->() => 'a' : () => "a"
-+>() => 'a' : () => string
- >'a' : "a"
-
- const result4 = test1(() => true);
-->result4 : true
-->test1(() => true) : true
-+>result4 : boolean
-+>test1(() => true) : boolean
- >test1 : <const T>(create: () => T) => T
-->() => true : () => true
-+>() => true : () => boolean
- >true : true
-
- const result5 = test1(() => 101n);
-->result5 : 101n
-->test1(() => 101n) : 101n
-+>result5 : bigint
-+>test1(() => 101n) : bigint
- >test1 : <const T>(create: () => T) => T
-->() => 101n : () => 101n
-+>() => 101n : () => bigint
- >101n : 101n
-
- const result6 = test1(() => false);
-->result6 : false
-->test1(() => false) : false
-+>result6 : boolean
-+>test1(() => false) : boolean
- >test1 : <const T>(create: () => T) => T
-->() => false : () => false
-+>() => false : () => boolean
- >false : false
-
- const result7 = test1(() => 11111);
-->result7 : 11111
-->test1(() => 11111) : 11111
-+>result7 : number
-+>test1(() => 11111) : number
- >test1 : <const T>(create: () => T) => T
-->() => 11111 : () => 11111
-+>() => 11111 : () => number
- >11111 : 11111
-
- const result8 = test1(() => E.Val);
-->result8 : E.Val
-->test1(() => E.Val) : E.Val
-+>result8 : E
-+>test1(() => E.Val) : E
- >test1 : <const T>(create: () => T) => T
-->() => E.Val : () => E.Val
-+>() => E.Val : () => E
- >E.Val : E.Val
- >E : typeof E
- >Val : E.Val
-@@= skipped -63, +63 lines =@@
- >random : () => number
-
- const result11 = test1(() => { return 'a'; });
-->result11 : "a"
-->test1(() => { return 'a'; }) : "a"
-+>result11 : string
-+>test1(() => { return 'a'; }) : string
- >test1 : <const T>(create: () => T) => T
-->() => { return 'a'; } : () => "a"
-+>() => { return 'a'; } : () => string
- >'a' : "a"
-
- const result12 = test1(() => { return true; });
-->result12 : true
-->test1(() => { return true; }) : true
-+>result12 : boolean
-+>test1(() => { return true; }) : boolean
- >test1 : <const T>(create: () => T) => T
-->() => { return true; } : () => true
-+>() => { return true; } : () => boolean
- >true : true
-
- const result13 = test1(() => { return 101n; });
-->result13 : 101n
-->test1(() => { return 101n; }) : 101n
-+>result13 : bigint
-+>test1(() => { return 101n; }) : bigint
- >test1 : <const T>(create: () => T) => T
-->() => { return 101n; } : () => 101n
-+>() => { return 101n; } : () => bigint
- >101n : 101n
-
- const result14 = test1(() => { return false; });
-->result14 : false
-->test1(() => { return false; }) : false
-+>result14 : boolean
-+>test1(() => { return false; }) : boolean
- >test1 : <const T>(create: () => T) => T
-->() => { return false; } : () => false
-+>() => { return false; } : () => boolean
- >false : false
-
- const result15 = test1(() => { return 11111; });
-->result15 : 11111
-->test1(() => { return 11111; }) : 11111
-+>result15 : number
-+>test1(() => { return 11111; }) : number
- >test1 : <const T>(create: () => T) => T
-->() => { return 11111; } : () => 11111
-+>() => { return 11111; } : () => number
- >11111 : 11111
-
- const result16 = test1(() => { return E.Val; });
-->result16 : E.Val
-->test1(() => { return E.Val; }) : E.Val
-+>result16 : E
-+>test1(() => { return E.Val; }) : E
- >test1 : <const T>(create: () => T) => T
-->() => { return E.Val; } : () => E.Val
-+>() => { return E.Val; } : () => E
- >E.Val : E.Val
- >E : typeof E
- >Val : E.Val
-
- const result17 = test1(async () => 'foo');
-->result17 : Promise<"foo">
-->test1(async () => 'foo') : Promise<"foo">
-+>result17 : Promise<string>
-+>test1(async () => 'foo') : Promise<string>
- >test1 : <const T>(create: () => T) => T
-->async () => 'foo' : () => Promise<"foo">
-+>async () => 'foo' : () => Promise<string>
- >'foo' : "foo"
-
- const result18 = test1(async () => { return 'foo'; });
-->result18 : Promise<"foo">
-->test1(async () => { return 'foo'; }) : Promise<"foo">
-+>result18 : Promise<string>
-+>test1(async () => { return 'foo'; }) : Promise<string>
- >test1 : <const T>(create: () => T) => T
-->async () => { return 'foo'; } : () => Promise<"foo">
-+>async () => { return 'foo'; } : () => Promise<string>
- >'foo' : "foo"
-
- declare function test2<const T>(create: () => Promise<T>): T;
-@@= skipped -62, +62 lines =@@
- >create : () => Promise<T>
-
- const result19 = test2(async () => 'foo');
-->result19 : "foo"
-->test2(async () => 'foo') : "foo"
-+>result19 : string
-+>test2(async () => 'foo') : string
- >test2 : <const T>(create: () => Promise<T>) => T
-->async () => 'foo' : () => Promise<"foo">
-+>async () => 'foo' : () => Promise<string>
- >'foo' : "foo"
-
- const result20 = test2(async () => { return 'foo'; });
-->result20 : "foo"
-->test2(async () => { return 'foo'; }) : "foo"
-+>result20 : string
-+>test2(async () => { return 'foo'; }) : string
- >test2 : <const T>(create: () => Promise<T>) => T
-->async () => { return 'foo'; } : () => Promise<"foo">
-+>async () => { return 'foo'; } : () => Promise<string>
+@@= skipped -168, +168 lines =@@
  >'foo' : "foo"
 
  declare function test3<const T, const R>(arg: () => Generator<T, R>): [T, R]
@@ -180,18 +10,14 @@
 +>arg : () => Generator<T, R, any>
 
  const result21 = test3(function*() {
-->result21 : [10, "1"]
-->test3(function*() {    yield 10;    return '1';}) : [10, "1"]
+ >result21 : [10, "1"]
+ >test3(function*() {    yield 10;    return '1';}) : [10, "1"]
 ->test3 : <const T, const R>(arg: () => Generator<T, R>) => [T, R]
-->function*() {    yield 10;    return '1';} : () => Generator<10, "1", any>
-+>result21 : [number, string]
-+>test3(function*() {    yield 10;    return '1';}) : [number, string]
 +>test3 : <const T, const R>(arg: () => Generator<T, R, any>) => [T, R]
-+>function*() {    yield 10;    return '1';} : () => Generator<number, string, any>
+ >function*() {    yield 10;    return '1';} : () => Generator<10, "1", any>
 
      yield 10;
- >yield 10 : any
-@@= skipped -33, +33 lines =@@
+@@= skipped -19, +19 lines =@@
  });
 
  declare function test4<const T, const R>(arg: () => AsyncGenerator<T, R>): [T, R]
@@ -201,107 +27,14 @@
 +>arg : () => AsyncGenerator<T, R, any>
 
  const result22 = test4(async function*() {
-->result22 : [10, "1"]
-->test4(async function*() {    yield 10;    return '1';}) : [10, "1"]
+ >result22 : [10, "1"]
+ >test4(async function*() {    yield 10;    return '1';}) : [10, "1"]
 ->test4 : <const T, const R>(arg: () => AsyncGenerator<T, R>) => [T, R]
-->async function*() {    yield 10;    return '1';} : () => AsyncGenerator<10, "1", any>
-+>result22 : [number, string]
-+>test4(async function*() {    yield 10;    return '1';}) : [number, string]
 +>test4 : <const T, const R>(arg: () => AsyncGenerator<T, R, any>) => [T, R]
-+>async function*() {    yield 10;    return '1';} : () => AsyncGenerator<number, string, any>
+ >async function*() {    yield 10;    return '1';} : () => AsyncGenerator<10, "1", any>
 
      yield 10;
- >yield 10 : any
-@@= skipped -40, +40 lines =@@
- >FileRouter : void
- >UploadThingServerHelper({  example: {    middleware: () => "someValue",    onUpload: (response) => {      const v: "someValue" = response.metadata;    },  },}) : void
- >UploadThingServerHelper : <const ValidRoutes>(route: { readonly [Route in keyof ValidRoutes]: { middleware: () => ValidRoutes[Route]; onUpload: (response: { metadata: ValidRoutes[Route]; }) => void; }; }) => void
-->{  example: {    middleware: () => "someValue",    onUpload: (response) => {      const v: "someValue" = response.metadata;    },  },} : { example: { middleware: () => "someValue"; onUpload: (response: { metadata: "someValue"; }) => void; }; }
-+>{  example: {    middleware: () => "someValue",    onUpload: (response) => {      const v: "someValue" = response.metadata;    },  },} : { example: { middleware: () => string; onUpload: (response: { metadata: string; }) => void; }; }
-
-   example: {
-->example : { middleware: () => "someValue"; onUpload: (response: { metadata: "someValue"; }) => void; }
-->{    middleware: () => "someValue",    onUpload: (response) => {      const v: "someValue" = response.metadata;    },  } : { middleware: () => "someValue"; onUpload: (response: { metadata: "someValue"; }) => void; }
-+>example : { middleware: () => string; onUpload: (response: { metadata: string; }) => void; }
-+>{    middleware: () => "someValue",    onUpload: (response) => {      const v: "someValue" = response.metadata;    },  } : { middleware: () => string; onUpload: (response: { metadata: string; }) => void; }
-
-     middleware: () => "someValue",
-->middleware : () => "someValue"
-->() => "someValue" : () => "someValue"
-+>middleware : () => string
-+>() => "someValue" : () => string
- >"someValue" : "someValue"
-
-     onUpload: (response) => {
-->onUpload : (response: { metadata: "someValue"; }) => void
-->(response) => {      const v: "someValue" = response.metadata;    } : (response: { metadata: "someValue"; }) => void
-->response : { metadata: "someValue"; }
-+>onUpload : (response: { metadata: string; }) => void
-+>(response) => {      const v: "someValue" = response.metadata;    } : (response: { metadata: string; }) => void
-+>response : { metadata: string; }
-
-       const v: "someValue" = response.metadata;
- >v : "someValue"
-->response.metadata : "someValue"
-->response : { metadata: "someValue"; }
-->metadata : "someValue"
-+>response.metadata : string
-+>response : { metadata: string; }
-+>metadata : string
-
-     },
-   },
-@@= skipped -45, +45 lines =@@
- >inner1 : <const U>(cb2: () => U) => (T | U)[]
- }
- const nestedResult1 = outer1(() => 1)(() => "foo");
-->nestedResult1 : ("foo" | 1)[]
-->outer1(() => 1)(() => "foo") : ("foo" | 1)[]
-->outer1(() => 1) : <const U>(cb2: () => U) => (1 | U)[]
-+>nestedResult1 : (string | number)[]
-+>outer1(() => 1)(() => "foo") : (string | number)[]
-+>outer1(() => 1) : <const U>(cb2: () => U) => (number | U)[]
- >outer1 : <const T>(cb: () => T) => <const U>(cb2: () => U) => (T | U)[]
-->() => 1 : () => 1
-+>() => 1 : () => number
- >1 : 1
-->() => "foo" : () => "foo"
-+>() => "foo" : () => string
- >"foo" : "foo"
-
- function outer2<T>(cb: () => T) {
-@@= skipped -28, +28 lines =@@
- >inner2 : <const U>(cb2: () => U) => (T | U)[]
- }
- const nestedResult2 = outer2(() => 1)(() => "foo");
-->nestedResult2 : (number | "foo")[]
-->outer2(() => 1)(() => "foo") : (number | "foo")[]
-+>nestedResult2 : (string | number)[]
-+>outer2(() => 1)(() => "foo") : (string | number)[]
- >outer2(() => 1) : <const U>(cb2: () => U) => (number | U)[]
- >outer2 : <T>(cb: () => T) => <const U>(cb2: () => U) => (T | U)[]
- >() => 1 : () => number
- >1 : 1
-->() => "foo" : () => "foo"
-+>() => "foo" : () => string
- >"foo" : "foo"
-
- function outer3<const T>(cb: () => T) {
-@@= skipped -28, +28 lines =@@
- >inner3 : <U>(cb2: () => U) => (T | U)[]
- }
- const nestedResult3 = outer3(() => 1)(() => "foo");
-->nestedResult3 : (string | 1)[]
-->outer3(() => 1)(() => "foo") : (string | 1)[]
-->outer3(() => 1) : <U>(cb2: () => U) => (1 | U)[]
-+>nestedResult3 : (string | number)[]
-+>outer3(() => 1)(() => "foo") : (string | number)[]
-+>outer3(() => 1) : <U>(cb2: () => U) => (number | U)[]
- >outer3 : <const T>(cb: () => T) => <U>(cb2: () => U) => (T | U)[]
-->() => 1 : () => 1
-+>() => 1 : () => number
- >1 : 1
- >() => "foo" : () => string
+@@= skipped -151, +151 lines =@@
  >"foo" : "foo"
 
  declare function overloaded1<const T>(cb: () => T): T;
@@ -315,27 +48,7 @@
  >cb : () => T
  >cb2 : () => U
 
- const overloadA = overloaded1(() => 42);
-->overloadA : 42
-->overloaded1(() => 42) : 42
-+>overloadA : number
-+>overloaded1(() => 42) : number
- >overloaded1 : { <const T>(cb: () => T): T; <const T, const U>(cb: () => T, cb2: () => U): [T, U]; }
-->() => 42 : () => 42
-+>() => 42 : () => number
- >42 : 42
-
- const overloadB = overloaded1(() => "hi", () => true);
-->overloadB : ["hi", true]
-->overloaded1(() => "hi", () => true) : ["hi", true]
-+>overloadB : [string, boolean]
-+>overloaded1(() => "hi", () => true) : [string, boolean]
- >overloaded1 : { <const T>(cb: () => T): T; <const T, const U>(cb: () => T, cb2: () => U): [T, U]; }
-->() => "hi" : () => "hi"
-+>() => "hi" : () => string
- >"hi" : "hi"
-->() => true : () => true
-+>() => true : () => boolean
+@@= skipped -25, +25 lines =@@
  >true : true
 
  declare function overloaded2<T>(cb: () => T): T;
@@ -349,19 +62,7 @@
  >cb : () => T
  >cb2 : () => U
 
-@@= skipped -51, +51 lines =@@
- >42 : 42
-
- const overloadD = overloaded2(() => "hi", () => true);
-->overloadD : [string, true]
-->overloaded2(() => "hi", () => true) : [string, true]
-+>overloadD : [string, boolean]
-+>overloaded2(() => "hi", () => true) : [string, boolean]
- >overloaded2 : { <T>(cb: () => T): T; <T, const U>(cb: () => T, cb2: () => U): [T, U]; }
- >() => "hi" : () => string
- >"hi" : "hi"
-->() => true : () => true
-+>() => true : () => boolean
+@@= skipped -25, +25 lines =@@
  >true : true
 
  declare function overloaded3<const T>(cb: () => T): T;
@@ -375,26 +76,7 @@
  >cb : () => T
  >cb2 : () => U
 
- const overloadE = overloaded3(() => 42);
-->overloadE : 42
-->overloaded3(() => 42) : 42
-+>overloadE : number
-+>overloaded3(() => 42) : number
- >overloaded3 : { <const T>(cb: () => T): T; <const T, U>(cb: () => T, cb2: () => U): [T, U]; }
-->() => 42 : () => 42
-+>() => 42 : () => number
- >42 : 42
-
- const overloadF = overloaded3(() => "hi", () => true);
-->overloadF : ["hi", boolean]
-->overloaded3(() => "hi", () => true) : ["hi", boolean]
-+>overloadF : [string, boolean]
-+>overloaded3(() => "hi", () => true) : [string, boolean]
- >overloaded3 : { <const T>(cb: () => T): T; <const T, U>(cb: () => T, cb2: () => U): [T, U]; }
-->() => "hi" : () => "hi"
-+>() => "hi" : () => string
- >"hi" : "hi"
- >() => true : () => boolean
+@@= skipped -25, +25 lines =@@
  >true : true
 
  declare function overloaded4<const T>(cb: () => T): T;
@@ -408,18 +90,7 @@
  >cb : () => T
  >cb2 : () => U
 
- const overloadG = overloaded4(() => 42);
-->overloadG : 42
-->overloaded4(() => 42) : 42
-+>overloadG : number
-+>overloaded4(() => 42) : number
- >overloaded4 : { <const T>(cb: () => T): T; <T, U>(cb: () => T, cb2: () => U): [T, U]; }
-->() => 42 : () => 42
-+>() => 42 : () => number
- >42 : 42
-
- const overloadH = overloaded4(() => "hi", () => true);
-@@= skipped -59, +59 lines =@@
+@@= skipped -25, +25 lines =@@
  >true : true
 
  declare function overloaded5<T>(cb: () => T): T;
@@ -432,18 +103,3 @@
 +>overloaded5 : { <T>(cb: () => T): T; <const T, U>(cb: () => T, cb2: () => U): [T, U]; }
  >cb : () => T
  >cb2 : () => U
-
-@@= skipped -16, +16 lines =@@
- >42 : 42
-
- const overloadJ = overloaded5(() => "hi", () => true);
-->overloadJ : ["hi", boolean]
-->overloaded5(() => "hi", () => true) : ["hi", boolean]
-+>overloadJ : [string, boolean]
-+>overloaded5(() => "hi", () => true) : [string, boolean]
- >overloaded5 : { <T>(cb: () => T): T; <const T, U>(cb: () => T, cb2: () => U): [T, U]; }
-->() => "hi" : () => "hi"
-+>() => "hi" : () => string
- >"hi" : "hi"
- >() => true : () => boolean
- >true : true
