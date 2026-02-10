@@ -1444,7 +1444,9 @@ func (p *Parser) parseVariableDeclarationList(inForStatementInitializer bool) *a
 	case ast.KindUsingKeyword:
 		flags = ast.NodeFlagsUsing
 	case ast.KindAwaitKeyword:
-		debug.Assert(p.isAwaitUsingDeclaration())
+		if !p.isAwaitUsingDeclaration() {
+			break
+		}
 		flags = ast.NodeFlagsAwaitUsing
 		p.nextToken()
 	default:
