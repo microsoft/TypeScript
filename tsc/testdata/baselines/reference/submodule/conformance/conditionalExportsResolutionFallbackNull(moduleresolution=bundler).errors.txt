@@ -1,8 +1,6 @@
-error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 /index.mts(1,16): error TS2307: Cannot find module 'dep' or its corresponding type declarations.
 
 
-!!! error TS5110: Option 'module' must be set to 'Node16' when option 'moduleResolution' is set to 'Node16'.
 ==== /node_modules/dep/package.json (0 errors) ====
     {
       "name": "dep",

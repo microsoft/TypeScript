@@ -1,4 +1,5 @@
 error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
+/index.mts(1,16): error TS2307: Cannot find module 'dep' or its corresponding type declarations.
 
 
 !!! error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResolution' is set to 'NodeNext'.
@@ -17,5 +18,7 @@ error TS5110: Option 'module' must be set to 'NodeNext' when option 'moduleResol
 ==== /node_modules/dep/dist/index.d.ts (0 errors) ====
     export {};
     
-==== /index.mts (0 errors) ====
+==== /index.mts (1 errors) ====
     import {} from "dep"; // Cannot find module 'dep'.
+                   ~~~~~
+!!! error TS2307: Cannot find module 'dep' or its corresponding type declarations.

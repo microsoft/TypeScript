@@ -742,7 +742,7 @@ func (r *resolutionState) loadModuleFromTargetExportOrImport(extensions extensio
 				}
 				subTarget, _ := target.AsObject().Get(condition)
 				if result := r.loadModuleFromTargetExportOrImport(extensions, moduleName, scope, isImports, subTarget, subpath, isPattern, key); !result.shouldContinueSearching() {
-					if r.tracer != nil {
+					if result.isResolved() && r.tracer != nil {
 						r.tracer.write(diagnostics.Resolved_under_condition_0, condition)
 					}
 					if r.tracer != nil {
@@ -779,7 +779,7 @@ func (r *resolutionState) loadModuleFromTargetExportOrImport(extensions extensio
 		if r.tracer != nil {
 			r.tracer.write(diagnostics.X_package_json_scope_0_explicitly_maps_specifier_1_to_null, scope.PackageDirectory, moduleName)
 		}
-		return continueSearching()
+		return unresolved()
 	}
 
 	if r.tracer != nil {
