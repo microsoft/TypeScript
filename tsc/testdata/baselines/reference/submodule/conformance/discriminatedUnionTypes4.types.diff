@@ -61,11 +61,3 @@
  >bark : string
 
        break;
-@@= skipped -8, +8 lines =@@
-       check(animal);
- >check(animal) : void
- >check : (p: never) => void
-->animal : never
-+>animal : Animal
-   }
- }

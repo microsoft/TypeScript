@@ -1112,7 +1112,9 @@ func (c *Checker) narrowTypeBySwitchOnDiscriminant(t *Type, data *ast.FlowSwitch
 		if t.flags&TypeFlagsUndefined == 0 {
 			u = c.getRegularTypeOfLiteralType(c.extractUnitType(t))
 		}
-		return !slices.Contains(switchTypes, u)
+		return !slices.ContainsFunc(switchTypes, func(st *Type) bool {
+			return isUnitType(st) && c.areTypesComparable(st, u)
+		})
 	})
 	if caseType.flags&TypeFlagsNever != 0 {
 		return defaultType

@@ -186,7 +186,7 @@ function action3(animal: Animal) {
       check(animal);
 >check(animal) : void
 >check : (p: never) => void
->animal : Animal
+>animal : never
   }
 }
 
