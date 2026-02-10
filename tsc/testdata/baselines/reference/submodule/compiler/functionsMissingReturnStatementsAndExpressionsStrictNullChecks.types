@@ -28,7 +28,7 @@ const f20: () => undefined = () => {
 
 const f21: () => undefined | number = () => {
 >f21 : () => number | undefined
->() => {    // Ok, contextual type for implicit return contains undefined} : () => void
+>() => {    // Ok, contextual type for implicit return contains undefined} : () => undefined
 
     // Ok, contextual type for implicit return contains undefined
 }
@@ -107,7 +107,7 @@ type FN = () => Promise<undefined> | undefined;
 
 const fn1: FN = () => {
 >fn1 : FN
->() => {    return;} : () => void
+>() => {    return;} : () => undefined
 
     return;
 };
@@ -121,7 +121,7 @@ const fn2: FN = async () => {
 
 const fn3: FN = () => {};
 >fn3 : FN
->() => {} : () => void
+>() => {} : () => undefined
 
 const fn4: FN = async () => {};
 >fn4 : FN

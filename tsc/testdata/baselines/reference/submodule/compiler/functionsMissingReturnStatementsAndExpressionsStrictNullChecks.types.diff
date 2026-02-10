@@ -14,12 +14,10 @@
 
  const f21: () => undefined | number = () => {
 ->f21 : () => undefined | number
-->() => {    // Ok, contextual type for implicit return contains undefined} : () => undefined
 +>f21 : () => number | undefined
-+>() => {    // Ok, contextual type for implicit return contains undefined} : () => void
+ >() => {    // Ok, contextual type for implicit return contains undefined} : () => undefined
 
      // Ok, contextual type for implicit return contains undefined
- }
 @@= skipped -20, +20 lines =@@
  }
 
@@ -29,21 +27,3 @@
 
      // Error, return type isn't just undefined
  }
-@@= skipped -60, +60 lines =@@
-
- const fn1: FN = () => {
- >fn1 : FN
-->() => {    return;} : () => undefined
-+>() => {    return;} : () => void
-
-     return;
- };
-@@= skipped -14, +14 lines =@@
-
- const fn3: FN = () => {};
- >fn3 : FN
-->() => {} : () => undefined
-+>() => {} : () => void
-
- const fn4: FN = async () => {};
- >fn4 : FN

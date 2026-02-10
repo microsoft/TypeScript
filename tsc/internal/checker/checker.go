@@ -19704,7 +19704,7 @@ func (c *Checker) getReturnTypeFromBody(fn *ast.Node, checkMode CheckMode) *Type
 			// For an async function, the return type will not be void/undefined, but rather a Promise for void/undefined.
 			contextualReturnType := c.getContextualReturnType(fn, ContextFlagsNone)
 			var returnType *Type
-			if contextualReturnType != nil && core.OrElse(c.unwrapReturnType(contextualReturnType, functionFlags), c.voidType).flags&TypeFlagsUndefined != 0 {
+			if contextualReturnType != nil && someType(core.OrElse(c.unwrapReturnType(contextualReturnType, functionFlags), c.voidType), func(t *Type) bool { return t.flags&TypeFlagsUndefined != 0 }) {
 				returnType = c.undefinedType
 			} else {
 				returnType = c.voidType
