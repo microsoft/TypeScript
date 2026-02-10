@@ -47,9 +47,11 @@ function _tcb1(this: { test: Test }) {
 >_t1 : Symbol(_t1, Decl(controlFlowAliasing2.ts, 16, 7))
 
     (((((this).test)).name));
+>(((this).test)).name : Symbol(TestA.name, Decl(controlFlowAliasing2.ts, 5, 12))
 >(this).test : Symbol(test, Decl(controlFlowAliasing2.ts, 14, 22))
 >this : Symbol(this, Decl(controlFlowAliasing2.ts, 14, 15))
 >test : Symbol(test, Decl(controlFlowAliasing2.ts, 14, 22))
+>name : Symbol(TestA.name, Decl(controlFlowAliasing2.ts, 5, 12))
   }
 
   // Same as above, without the parenthesis
@@ -112,9 +114,11 @@ function _tcb2(this: { test: Test }) {
 >_t1 : Symbol(_t1, Decl(controlFlowAliasing2.ts, 36, 7))
 
     (((((this).test)).name));
+>(((this).test)).name : Symbol(TestA.name, Decl(controlFlowAliasing2.ts, 5, 12))
 >(this).test : Symbol(test, Decl(controlFlowAliasing2.ts, 34, 22))
 >this : Symbol(this, Decl(controlFlowAliasing2.ts, 34, 15))
 >test : Symbol(test, Decl(controlFlowAliasing2.ts, 34, 22))
+>name : Symbol(TestA.name, Decl(controlFlowAliasing2.ts, 5, 12))
   }
 
   // Same as above, without the parenthesis
@@ -175,9 +179,11 @@ function _tcb3(this: { test: Test }) {
 >_t1 : Symbol(_t1, Decl(controlFlowAliasing2.ts, 55, 9))
 
     (((((this).test)).name));
+>(((this).test)).name : Symbol(TestA.name, Decl(controlFlowAliasing2.ts, 5, 12))
 >(this).test : Symbol(test, Decl(controlFlowAliasing2.ts, 54, 22))
 >this : Symbol(this, Decl(controlFlowAliasing2.ts, 54, 15))
 >test : Symbol(test, Decl(controlFlowAliasing2.ts, 54, 22))
+>name : Symbol(TestA.name, Decl(controlFlowAliasing2.ts, 5, 12))
   }
 
   // Same as above, without the parenthesis
@@ -236,9 +242,11 @@ function _tcb4(this: { test: Test }) {
 >_t1 : Symbol(_t1, Decl(controlFlowAliasing2.ts, 74, 9))
 
     (((((this).test)).name));
+>(((this).test)).name : Symbol(TestA.name, Decl(controlFlowAliasing2.ts, 5, 12))
 >(this).test : Symbol(test, Decl(controlFlowAliasing2.ts, 73, 22))
 >this : Symbol(this, Decl(controlFlowAliasing2.ts, 73, 15))
 >test : Symbol(test, Decl(controlFlowAliasing2.ts, 73, 22))
+>name : Symbol(TestA.name, Decl(controlFlowAliasing2.ts, 5, 12))
   }
 
   // Same as above, without the parenthesis

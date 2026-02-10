@@ -1442,21 +1442,27 @@ func (c *Checker) getCandidateDiscriminantPropertyAccess(f *FlowState, expr *ast
 		symbol := c.getResolvedSymbol(expr)
 		if c.isConstantVariable(symbol) {
 			declaration := symbol.ValueDeclaration
+			initializer := getCandidateVariableDeclarationInitializer(declaration)
 			// Given 'const x = obj.kind', allow 'x' as an alias for 'obj.kind'
-			if ast.IsVariableDeclaration(declaration) && declaration.Type() == nil {
-				if initializer := declaration.Initializer(); initializer != nil && ast.IsAccessExpression(initializer) && c.isMatchingReference(f.reference, initializer.Expression()) {
-					return initializer
-				}
+			if initializer != nil && ast.IsAccessExpression(initializer) && c.isMatchingReference(f.reference, initializer.Expression()) {
+				return initializer
 			}
 			// Given 'const { kind: x } = obj', allow 'x' as an alias for 'obj.kind'
 			if ast.IsBindingElement(declaration) && declaration.Initializer() == nil {
-				parent := declaration.Parent.Parent
-				if ast.IsVariableDeclaration(parent) && parent.Type() == nil {
-					if initializer := parent.Initializer(); initializer != nil && (ast.IsIdentifier(initializer) || ast.IsAccessExpression(initializer)) && c.isMatchingReference(f.reference, initializer) {
-						return declaration
-					}
+				initializer = getCandidateVariableDeclarationInitializer(declaration.Parent.Parent)
+				if initializer != nil && (ast.IsIdentifier(initializer) || ast.IsAccessExpression(initializer)) && c.isMatchingReference(f.reference, initializer) {
+					return declaration
 				}
 			}
+		}
+	}
+	return nil
+}
+
+func getCandidateVariableDeclarationInitializer(node *ast.Node) *ast.Node {
+	if ast.IsVariableDeclaration(node) && node.Type() == nil {
+		if initializer := node.Initializer(); initializer != nil {
+			return ast.SkipParentheses(initializer)
 		}
 	}
 	return nil

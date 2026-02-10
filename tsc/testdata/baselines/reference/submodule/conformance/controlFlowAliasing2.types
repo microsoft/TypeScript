@@ -47,16 +47,16 @@ function _tcb1(this: { test: Test }) {
 >"a" : "a"
 
     (((((this).test)).name));
->(((((this).test)).name)) : any
->((((this).test)).name) : any
->(((this).test)).name : any
->(((this).test)) : Test
->((this).test) : Test
->(this).test : Test
+>(((((this).test)).name)) : string
+>((((this).test)).name) : string
+>(((this).test)).name : string
+>(((this).test)) : TestA
+>((this).test) : TestA
+>(this).test : TestA
 >(this) : { test: Test; }
 >this : { test: Test; }
->test : Test
->name : any
+>test : TestA
+>name : string
   }
 
   // Same as above, without the parenthesis
@@ -134,16 +134,16 @@ function _tcb2(this: { test: Test }) {
 >_t1 : "a" | "b"
 
     (((((this).test)).name));
->(((((this).test)).name)) : any
->((((this).test)).name) : any
->(((this).test)).name : any
->(((this).test)) : Test
->((this).test) : Test
->(this).test : Test
+>(((((this).test)).name)) : string
+>((((this).test)).name) : string
+>(((this).test)).name : string
+>(((this).test)) : TestA
+>((this).test) : TestA
+>(this).test : TestA
 >(this) : { test: Test; }
 >this : { test: Test; }
->test : Test
->name : any
+>test : TestA
+>name : string
   }
 
   // Same as above, without the parenthesis
@@ -219,16 +219,16 @@ function _tcb3(this: { test: Test }) {
 >"a" : "a"
 
     (((((this).test)).name));
->(((((this).test)).name)) : any
->((((this).test)).name) : any
->(((this).test)).name : any
->(((this).test)) : Test
->((this).test) : Test
->(this).test : Test
+>(((((this).test)).name)) : string
+>((((this).test)).name) : string
+>(((this).test)).name : string
+>(((this).test)) : TestA
+>((this).test) : TestA
+>(this).test : TestA
 >(this) : { test: Test; }
 >this : { test: Test; }
->test : Test
->name : any
+>test : TestA
+>name : string
   }
 
   // Same as above, without the parenthesis
@@ -302,16 +302,16 @@ function _tcb4(this: { test: Test }) {
 >_t1 : "a" | "b"
 
     (((((this).test)).name));
->(((((this).test)).name)) : any
->((((this).test)).name) : any
->(((this).test)).name : any
->(((this).test)) : Test
->((this).test) : Test
->(this).test : Test
+>(((((this).test)).name)) : string
+>((((this).test)).name) : string
+>(((this).test)).name : string
+>(((this).test)) : TestA
+>((this).test) : TestA
+>(this).test : TestA
 >(this) : { test: Test; }
 >this : { test: Test; }
->test : Test
->name : any
+>test : TestA
+>name : string
   }
 
   // Same as above, without the parenthesis
