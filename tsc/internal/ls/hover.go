@@ -365,7 +365,8 @@ func getQuickInfoAndDeclarationAtLocation(c *checker.Checker, symbol *ast.Symbol
 		}
 		if flags&ast.SymbolFlagsModule != 0 {
 			writeNewLine()
-			b.WriteString(core.IfElse(symbol.ValueDeclaration != nil && ast.IsSourceFile(symbol.ValueDeclaration), "module ", "namespace "))
+			isModule := symbol.ValueDeclaration != nil && (ast.IsSourceFile(symbol.ValueDeclaration) || ast.IsAmbientModule(symbol.ValueDeclaration))
+			b.WriteString(core.IfElse(isModule, "module ", "namespace "))
 			b.WriteString(c.SymbolToStringEx(symbol, container, ast.SymbolFlagsNone, symbolFormatFlags))
 			setDeclaration(core.Find(symbol.Declarations, ast.IsModuleDeclaration))
 		}
