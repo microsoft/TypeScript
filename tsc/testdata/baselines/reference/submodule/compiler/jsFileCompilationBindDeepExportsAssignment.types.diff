@@ -4,7 +4,7 @@
  >exports.a.b.c : any
  >exports.a.b : any
  >exports.a : any
-->exports : typeof import("a")
+->exports : typeof import("./a")
 +>exports : any
  >a : any
  >b : any

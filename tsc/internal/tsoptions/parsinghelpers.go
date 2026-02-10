@@ -377,6 +377,8 @@ func parseCompilerOptions(key string, value any, allOptions *core.CompilerOption
 		allOptions.RootDirs = ParseStringArray(value)
 	case "removeComments":
 		allOptions.RemoveComments = ParseTristate(value)
+	case "stableTypeOrdering":
+		allOptions.StableTypeOrdering = ParseTristate(value)
 	case "strict":
 		allOptions.Strict = ParseTristate(value)
 	case "strictBindCallApply":

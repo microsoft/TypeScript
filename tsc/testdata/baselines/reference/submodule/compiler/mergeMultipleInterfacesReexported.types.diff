@@ -1,0 +1,20 @@
+--- old.mergeMultipleInterfacesReexported.types
++++ new.mergeMultipleInterfacesReexported.types
+@@= skipped -22, +22 lines =@@
+
+ === foo.ts ===
+ declare module './index' {
+->'./index' : typeof import(".")
++>'./index' : typeof import("index")
+
+     interface EventList {
+         p1: []
+@@= skipped -12, +12 lines =@@
+
+ === bar.ts ===
+ declare module './index' {
+->'./index' : typeof import(".")
++>'./index' : typeof import("index")
+
+     interface EventList {
+         p2: []

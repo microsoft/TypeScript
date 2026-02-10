@@ -1,0 +1,10 @@
+--- old.nodeModulesAllowJsCjsFromJs(module=node20).types
++++ new.nodeModulesAllowJsCjsFromJs(module=node20).types
+@@= skipped -3, +3 lines =@@
+ exports.foo = "foo"
+ >exports.foo = "foo" : "foo"
+ >exports.foo : "foo"
+->exports : typeof import("./foo.cjs")
++>exports : typeof import("foo")
+ >foo : "foo"
+ >"foo" : "foo"

@@ -30,14 +30,14 @@ Resolving in CJS mode with conditions 'import', 'types'.
 Loading module as file / folder, candidate module location '/home/src/workspaces/solution/child/child2', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/workspaces/solution/child/child2.ts' exists - use it as a name resolution result.
 ======== Module name '../child/child2' was successfully resolved to '/home/src/workspaces/solution/child/child2.ts'. ========
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-   Default library for target 'ES2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+   Default library for target 'ES2025'
 child/child2.ts
    Imported via "../child/child2" from file 'child/child.ts'
    Matched by default include pattern '**/*'
 child/child.ts
    Matched by default include pattern '**/*'
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -94,7 +94,7 @@ export function child2() {
 
 child/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/solution/child/child2.ts
 *refresh*    /home/src/workspaces/solution/child/child.ts
 Signatures::
@@ -130,8 +130,8 @@ Directory '/home/src/workspaces/solution/child/child2' does not exist, skipping 
 [7m1[0m import { child2 } from "../child/child2";
 [7m [0m [91m                       ~~~~~~~~~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-   Default library for target 'ES2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+   Default library for target 'ES2025'
 child/child.ts
    Matched by default include pattern '**/*'
 
@@ -157,6 +157,6 @@ Found 1 error in child/child.ts[90m:1[0m
 
 child/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/solution/child/child.ts
 Signatures::

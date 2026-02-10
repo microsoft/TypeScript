@@ -34,7 +34,7 @@
  const util = exports = module.exports = {}
 ->util : typeof module.exports
 ->exports = module.exports = {} : typeof module.exports
-->exports : typeof import("mod")
+->exports : typeof import("./mod")
 ->module.exports = {} : typeof module.exports
 ->module.exports : typeof module.exports
 ->module : { exports: typeof module.exports; }

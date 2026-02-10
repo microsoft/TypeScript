@@ -1,0 +1,26 @@
+--- old.umd8.types
++++ new.umd8.types
+@@= skipped -5, +5 lines =@@
+ >ff : typeof ff
+
+ declare let y: Foo; // OK in type position
+->y : import("./foo")
++>y : import("foo")
+
+ y.foo();
+ >y.foo() : number
+ >y.foo : () => number
+->y : import("./foo")
++>y : import("foo")
+ >foo : () => number
+
+ declare let z: Foo.SubThing; // OK in ns position
+@@= skipped -14, +14 lines =@@
+
+ let x: any = Foo; // Not OK in value position
+ >x : any
+->Foo : typeof import("./foo")
++>Foo : typeof import("foo")
+
+ === foo.d.ts ===
+ declare class Thing {

@@ -21,25 +21,26 @@ func _() {
 	_ = x[ScriptTargetES2022-9]
 	_ = x[ScriptTargetES2023-10]
 	_ = x[ScriptTargetES2024-11]
+	_ = x[ScriptTargetES2025-12]
 	_ = x[ScriptTargetESNext-99]
 	_ = x[ScriptTargetJSON-100]
 	_ = x[ScriptTargetLatest-99]
-	_ = x[ScriptTargetLatestStandard-11]
+	_ = x[ScriptTargetLatestStandard-12]
 }
 
 const (
-	_ScriptTarget_name_0 = "NoneES5ES2015ES2016ES2017ES2018ES2019ES2020ES2021ES2022ES2023ES2024"
+	_ScriptTarget_name_0 = "NoneES5ES2015ES2016ES2017ES2018ES2019ES2020ES2021ES2022ES2023ES2024ES2025"
 	_ScriptTarget_name_1 = "ESNextJSON"
 )
 
 var (
-	_ScriptTarget_index_0 = [...]uint8{0, 4, 7, 13, 19, 25, 31, 37, 43, 49, 55, 61, 67}
+	_ScriptTarget_index_0 = [...]uint8{0, 4, 7, 13, 19, 25, 31, 37, 43, 49, 55, 61, 67, 73}
 	_ScriptTarget_index_1 = [...]uint8{0, 6, 10}
 )
 
 func (i ScriptTarget) String() string {
 	switch {
-	case 0 <= i && i <= 11:
+	case 0 <= i && i <= 12:
 		return _ScriptTarget_name_0[_ScriptTarget_index_0[i]:_ScriptTarget_index_0[i+1]]
 	case 99 <= i && i <= 100:
 		i -= 99

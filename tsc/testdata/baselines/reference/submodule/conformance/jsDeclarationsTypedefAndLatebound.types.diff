@@ -4,7 +4,7 @@
       */
      addAll(iterable) {}
  >addAll : (iterable: LazySet) => void
-->iterable : import("LazySet")
+->iterable : import("./LazySet")
 +>iterable : LazySet
 
      [Symbol.iterator]() {}

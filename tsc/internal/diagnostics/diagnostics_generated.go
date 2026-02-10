@@ -3288,6 +3288,8 @@ var This_operation_can_be_simplified_This_shift_is_identical_to_0_1_2 = &Message
 
 var Enable_lib_replacement = &Message{code: 6808, category: CategoryMessage, key: "Enable_lib_replacement_6808", text: "Enable lib replacement."}
 
+var Ensure_types_are_ordered_stably_and_deterministically_across_compilations = &Message{code: 6809, category: CategoryMessage, key: "Ensure_types_are_ordered_stably_and_deterministically_across_compilations_6809", text: "Ensure types are ordered stably and deterministically across compilations."}
+
 var X_one_of_Colon = &Message{code: 6900, category: CategoryMessage, key: "one_of_Colon_6900", text: "one of:"}
 
 var X_one_or_more_Colon = &Message{code: 6901, category: CategoryMessage, key: "one_or_more_Colon_6901", text: "one or more:"}
@@ -7572,6 +7574,8 @@ func keyToMessage(key Key) *Message {
 		return This_operation_can_be_simplified_This_shift_is_identical_to_0_1_2
 	case "Enable_lib_replacement_6808":
 		return Enable_lib_replacement
+	case "Ensure_types_are_ordered_stably_and_deterministically_across_compilations_6809":
+		return Ensure_types_are_ordered_stably_and_deterministically_across_compilations
 	case "one_of_Colon_6900":
 		return X_one_of_Colon
 	case "one_or_more_Colon_6901":

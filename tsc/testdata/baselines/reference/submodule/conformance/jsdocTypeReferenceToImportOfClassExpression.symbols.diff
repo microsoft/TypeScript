@@ -1,6 +1,12 @@
 --- old.jsdocTypeReferenceToImportOfClassExpression.symbols
 +++ new.jsdocTypeReferenceToImportOfClassExpression.symbols
-@@= skipped -8, +8 lines =@@
+@@= skipped -3, +3 lines =@@
+ const MW = require("./MW");
+ >MW : Symbol(MW, Decl(MC.js, 0, 5))
+ >require : Symbol(require)
+->"./MW" : Symbol("./MW", Decl(MW.js, 0, 0))
++>"./MW" : Symbol("MW", Decl(MW.js, 0, 0))
+
  /** @typedef {number} Cictema */
 
  module.exports = class MC {
@@ -13,7 +19,7 @@
  >MC : Symbol(MC, Decl(MC.js, 4, 16))
 
    watch() {
-@@= skipped -35, +35 lines =@@
+@@= skipped -40, +40 lines =@@
  }
 
  module.exports = MW;

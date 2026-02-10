@@ -10,17 +10,29 @@
 
  === first.js ===
  exports = require('./mod')
- >exports : Symbol("first", Decl(first.js, 0, 0))
+->exports : Symbol("./first", Decl(first.js, 0, 0))
++>exports : Symbol("first", Decl(first.js, 0, 0))
  >require : Symbol(require)
-->'./mod' : Symbol("mod", Decl(mod.js, 0, 0))
+->'./mod' : Symbol("./mod", Decl(mod.js, 0, 0))
 
  exports.formatters.j = function (v) {
- >exports : Symbol("first", Decl(first.js, 0, 0))
-@@= skipped -20, +19 lines =@@
+->exports : Symbol("./first", Decl(first.js, 0, 0))
++>exports : Symbol("first", Decl(first.js, 0, 0))
+ >v : Symbol(v, Decl(first.js, 1, 33))
+
+     return v
+@@= skipped -18, +17 lines =@@
+ }
+ === second.js ===
  exports = require('./mod')
- >exports : Symbol("second", Decl(second.js, 0, 0))
+->exports : Symbol("./second", Decl(second.js, 0, 0))
++>exports : Symbol("second", Decl(second.js, 0, 0))
  >require : Symbol(require)
-->'./mod' : Symbol("mod", Decl(mod.js, 0, 0))
+->'./mod' : Symbol("./mod", Decl(mod.js, 0, 0))
 
  exports.formatters.o = function (v) {
- >exports : Symbol("second", Decl(second.js, 0, 0))
+->exports : Symbol("./second", Decl(second.js, 0, 0))
++>exports : Symbol("second", Decl(second.js, 0, 0))
+ >v : Symbol(v, Decl(second.js, 1, 33))
+
+     return v

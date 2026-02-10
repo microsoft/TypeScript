@@ -123,16 +123,30 @@
 
  export default <h></h>
  ><h></h> : predom.JSX.Element
-@@= skipped -14, +14 lines =@@
+@@= skipped -13, +13 lines =@@
+ >dom : () => dom.JSX.Element
 
  import prerendered, {MySFC, MyClass, tree} from "./component";
- >prerendered : import("renderer2").predom.JSX.Element
-->MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
+->prerendered : import("./renderer2").predom.JSX.Element
+->MySFC : (props: { x: number; y: number; children?: import("./renderer2").predom.JSX.Element[]; }) => import("./renderer2").predom.JSX.Element
++>prerendered : import("renderer2").predom.JSX.Element
 +>MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[] | undefined; }) => import("renderer2").predom.JSX.Element
  >MyClass : typeof MyClass
- >tree : import("renderer2").predom.JSX.Element
+->tree : import("./renderer2").predom.JSX.Element
++>tree : import("renderer2").predom.JSX.Element
 
-@@= skipped -16, +16 lines =@@
+ let elem = prerendered;
+->elem : import("./renderer2").predom.JSX.Element
+->prerendered : import("./renderer2").predom.JSX.Element
++>elem : import("renderer2").predom.JSX.Element
++>prerendered : import("renderer2").predom.JSX.Element
+
+ elem = <h></h>; // Expect assignability error here
+ >elem = <h></h> : dom.JSX.Element
+->elem : import("./renderer2").predom.JSX.Element
++>elem : import("renderer2").predom.JSX.Element
+ ><h></h> : dom.JSX.Element
+ >h : any
  >h : any
 
  const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
@@ -145,7 +159,7 @@
  >x : number
  >y : number
  >children : dom.JSX.Element[] | undefined
-@@= skipped -11, +11 lines =@@
+@@= skipped -28, +28 lines =@@
  ><p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p> : dom.JSX.Element
  >p : any
  >props.x : number
@@ -241,7 +255,7 @@
  const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
  >_brokenTree : dom.JSX.Element
  ><MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC> : dom.JSX.Element
-->MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
+->MySFC : (props: { x: number; y: number; children?: import("./renderer2").predom.JSX.Element[]; }) => import("./renderer2").predom.JSX.Element
 +>MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[] | undefined; }) => import("renderer2").predom.JSX.Element
  >x : number
  >1 : 1
@@ -250,7 +264,7 @@
  >5 : 5
  >y : number
  >6 : 6
-->MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[]; }) => import("renderer2").predom.JSX.Element
+->MySFC : (props: { x: number; y: number; children?: import("./renderer2").predom.JSX.Element[]; }) => import("./renderer2").predom.JSX.Element
 +>MySFC : (props: { x: number; y: number; children?: import("renderer2").predom.JSX.Element[] | undefined; }) => import("renderer2").predom.JSX.Element
 
  // Should fail, nondom isn't allowed as children of dom
@@ -263,7 +277,9 @@
  >1 : 1
  >y : number
  >2 : 2
- >tree : import("renderer2").predom.JSX.Element
- >tree : import("renderer2").predom.JSX.Element
+->tree : import("./renderer2").predom.JSX.Element
+->tree : import("./renderer2").predom.JSX.Element
 ->DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[]; }) => dom.JSX.Element
++>tree : import("renderer2").predom.JSX.Element
++>tree : import("renderer2").predom.JSX.Element
 +>DOMSFC : (props: { x: number; y: number; children?: dom.JSX.Element[] | undefined; }) => dom.JSX.Element

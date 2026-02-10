@@ -23,7 +23,7 @@ build starting at HH:MM:SS AM
 Found 1 error in a.ts[90m:1[0m
 
 build finished in d.ddds
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -49,7 +49,7 @@ declare const console: { log(msg: any): void; };
 
 tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/workspaces/project/a.ts
 Signatures::
 
@@ -65,7 +65,7 @@ build finished in d.ddds
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/project/a.ts
 Signatures::
 (computed .d.ts) /home/src/workspaces/project/a.ts

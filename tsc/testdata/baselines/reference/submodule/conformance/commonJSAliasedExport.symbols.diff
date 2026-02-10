@@ -1,6 +1,15 @@
 --- old.commonJSAliasedExport.symbols
 +++ new.commonJSAliasedExport.symbols
-@@= skipped -27, +27 lines =@@
+@@= skipped -3, +3 lines =@@
+ const { funky } = require('./commonJSAliasedExport');
+ >funky : Symbol(funky, Decl(bug43713.js, 0, 7))
+ >require : Symbol(require)
+->'./commonJSAliasedExport' : Symbol("./commonJSAliasedExport", Decl(commonJSAliasedExport.js, 0, 0))
++>'./commonJSAliasedExport' : Symbol("commonJSAliasedExport", Decl(commonJSAliasedExport.js, 0, 0))
+
+ /** @type {boolean} */
+ var diddy
+@@= skipped -24, +24 lines =@@
      return false;
  }
  module.exports = donkey;

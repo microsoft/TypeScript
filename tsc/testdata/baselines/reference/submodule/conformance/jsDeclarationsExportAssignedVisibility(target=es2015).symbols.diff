@@ -1,6 +1,15 @@
 --- old.jsDeclarationsExportAssignedVisibility(target=es2015).symbols
 +++ new.jsDeclarationsExportAssignedVisibility(target=es2015).symbols
-@@= skipped -18, +18 lines =@@
+@@= skipped -3, +3 lines =@@
+ const Obj = require("./obj");
+ >Obj : Symbol(Obj, Decl(index.js, 0, 5))
+ >require : Symbol(require)
+->"./obj" : Symbol("./obj", Decl(obj.js, 0, 0))
++>"./obj" : Symbol("obj", Decl(obj.js, 0, 0))
+
+ class Container {
+ >Container : Symbol(Container, Decl(index.js, 0, 29))
+@@= skipped -15, +15 lines =@@
  }
 
  module.exports = Container;

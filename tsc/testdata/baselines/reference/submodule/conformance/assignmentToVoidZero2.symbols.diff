@@ -9,8 +9,9 @@
  >j : Symbol(j, Decl(assignmentToVoidZero2.js, 0, 0))
 
  exports.k = void 0;
+->exports : Symbol("./assignmentToVoidZero2", Decl(assignmentToVoidZero2.js, 0, 0))
 +>exports.k : Symbol(k, Decl(assignmentToVoidZero2.js, 0, 14))
- >exports : Symbol("assignmentToVoidZero2", Decl(assignmentToVoidZero2.js, 0, 0))
++>exports : Symbol("assignmentToVoidZero2", Decl(assignmentToVoidZero2.js, 0, 0))
 +>k : Symbol(k, Decl(assignmentToVoidZero2.js, 0, 14))
 
  var o = {}

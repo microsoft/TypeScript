@@ -20,8 +20,8 @@ interface IFetchUserProps {
 >children : Symbol(IFetchUserProps.children, Decl(file.tsx, 8, 27))
 >user : Symbol(user, Decl(file.tsx, 9, 15))
 >IUser : Symbol(IUser, Decl(file.tsx, 2, 32))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 }
 
 class FetchUser extends React.Component<IFetchUserProps, any> {
@@ -65,9 +65,9 @@ function UserName() {
 >user : Symbol(user, Decl(file.tsx, 24, 13))
 
                 <h1>{ user.NAme }</h1>
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2412, 47))
 >user : Symbol(user, Decl(file.tsx, 24, 13))
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2412, 47))
 
             ) }
         </FetchUser>
@@ -89,22 +89,22 @@ function UserName1() {
 >user : Symbol(user, Decl(file.tsx, 37, 13))
 
                 <h1>{ user.Name }</h1>
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2412, 47))
 >user.Name : Symbol(IUser.Name, Decl(file.tsx, 4, 17))
 >user : Symbol(user, Decl(file.tsx, 37, 13))
 >Name : Symbol(IUser.Name, Decl(file.tsx, 4, 17))
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2412, 47))
 
             ) }
             { user => (
 >user : Symbol(user, Decl(file.tsx, 40, 13))
 
                 <h1>{ user.Name }</h1>
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2412, 47))
 >user.Name : Symbol(IUser.Name, Decl(file.tsx, 4, 17))
 >user : Symbol(user, Decl(file.tsx, 40, 13))
 >Name : Symbol(IUser.Name, Decl(file.tsx, 4, 17))
->h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2412, 47))
 
             ) }
         </FetchUser>

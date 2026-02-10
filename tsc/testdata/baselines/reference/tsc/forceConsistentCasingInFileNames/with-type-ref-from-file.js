@@ -25,14 +25,14 @@ File name '/user/username/projects/myproject/src/fileOne.d.ts' has a '.d.ts' ext
 File '/user/username/projects/myproject/src/fileOne.d.ts' exists - use it as a name resolution result.
 Resolving real path for '/user/username/projects/myproject/src/fileOne.d.ts', result '/user/username/projects/myproject/src/fileOne.d.ts'.
 ======== Type reference directive './fileOne.d.ts' was successfully resolved to '/user/username/projects/myproject/src/fileOne.d.ts', primary: false. ========
-../../../../home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
-   Default library for target 'ES2024'
+../../../../home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
+   Default library for target 'ES2025'
 src/fileOne.d.ts
    Type library referenced via './fileOne.d.ts' from file 'src/file2.d.ts'
    Matched by default include pattern '**/*'
 src/file2.d.ts
    Matched by default include pattern '**/*'
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

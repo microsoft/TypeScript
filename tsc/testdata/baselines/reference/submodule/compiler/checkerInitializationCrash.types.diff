@@ -1,0 +1,10 @@
+--- old.checkerInitializationCrash.types
++++ new.checkerInitializationCrash.types
+@@= skipped -58, +58 lines =@@
+
+ === /node_modules/preact/index.d.ts ===
+ export as namespace preact;
+->preact : typeof import("preact")
++>preact : typeof import("/node_modules/preact/index")
+
+ export interface VNode<P = {}> {}

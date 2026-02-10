@@ -5,3 +5,7 @@ new Map<string>();
 >new Map<string>() : Map<any, any>
 >Map : MapConstructor
 
+new WeakMap<object>();
+>new WeakMap<object>() : WeakMap<object, any>
+>WeakMap : WeakMapConstructor
+

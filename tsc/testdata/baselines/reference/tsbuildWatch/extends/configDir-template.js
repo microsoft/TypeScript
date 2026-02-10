@@ -60,8 +60,8 @@ Trying substitution '/home/src/projects/myproject/types/*', candidate module loc
 Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-   Default library for target 'ES2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+   Default library for target 'ES2025'
 types/sometype.ts
    Imported via "@myscope/sometype" from file 'main.ts'
 main.ts
@@ -96,7 +96,7 @@ export const y = 10;
 //// [/home/src/projects/myproject/outDir/types/sometype.js] *new* 
 export const x = 10;
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -122,7 +122,7 @@ declare const console: { log(msg: any): void; };
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/projects/myproject/types/sometype.ts
 *refresh*    /home/src/projects/myproject/main.ts
 Signatures::
@@ -159,8 +159,8 @@ Trying substitution '/home/src/projects/myproject/types/*', candidate module loc
 Loading module as file / folder, candidate module location '/home/src/projects/myproject/types/sometype', target file types: TypeScript, JavaScript, Declaration, JSON.
 File '/home/src/projects/myproject/types/sometype.ts' exists - use it as a name resolution result.
 ======== Module name '@myscope/sometype' was successfully resolved to '/home/src/projects/myproject/types/sometype.ts'. ========
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-   Default library for target 'ES2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+   Default library for target 'ES2025'
 types/sometype.ts
    Imported via "@myscope/sometype" from file 'main.ts'
 main.ts
@@ -176,7 +176,7 @@ main.ts
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/projects/myproject/types/sometype.ts
 *refresh*    /home/src/projects/myproject/main.ts
 Signatures::

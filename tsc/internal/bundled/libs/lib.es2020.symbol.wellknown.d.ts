@@ -35,5 +35,5 @@ interface RegExp {
      * containing the results of that search.
      * @param string A string to search within.
      */
-    [Symbol.matchAll](str: string): RegExpStringIterator<RegExpMatchArray>;
+    [Symbol.matchAll](str: string): RegExpStringIterator<RegExpExecArray>;
 }

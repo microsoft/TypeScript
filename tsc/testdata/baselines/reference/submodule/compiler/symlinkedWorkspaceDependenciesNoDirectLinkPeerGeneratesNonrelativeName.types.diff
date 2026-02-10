@@ -1,0 +1,15 @@
+--- old.symlinkedWorkspaceDependenciesNoDirectLinkPeerGeneratesNonrelativeName.types
++++ new.symlinkedWorkspaceDependenciesNoDirectLinkPeerGeneratesNonrelativeName.types
+@@= skipped -18, +18 lines =@@
+ >pkg : typeof pkg
+
+ export const a = pkg.invoke();
+->a : import("package-a").Foo
+->pkg.invoke() : import("package-a").Foo
+->pkg.invoke : () => import("package-a").Foo
++>a : import("workspace/packageA/index").Foo
++>pkg.invoke() : import("workspace/packageA/index").Foo
++>pkg.invoke : () => import("workspace/packageA/index").Foo
+ >pkg : typeof pkg
+->invoke : () => import("package-a").Foo
++>invoke : () => import("workspace/packageA/index").Foo

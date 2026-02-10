@@ -16,4 +16,5 @@
 +>module.exports : Symbol(export=, Decl(async.js, 0, 32))
 +>module : Symbol("async", Decl(async.js, 0, 0))
  >exports : Symbol(export=, Decl(async.js, 0, 32))
- >exports : Symbol("async", Decl(async.js, 0, 0))
+->exports : Symbol("./async", Decl(async.js, 0, 0))
++>exports : Symbol("async", Decl(async.js, 0, 0))

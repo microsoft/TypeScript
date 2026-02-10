@@ -1,0 +1,10 @@
+--- old.esModuleInteropImportCall.symbols
++++ new.esModuleInteropImportCall.symbols
+@@= skipped -12, +12 lines =@@
+ === index.ts ===
+ import("./foo").then(f => {
+ >import("./foo").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+->"./foo" : Symbol("./foo", Decl(foo.d.ts, 0, 0))
++>"./foo" : Symbol("foo", Decl(foo.d.ts, 0, 0))
+ >then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+ >f : Symbol(f, Decl(index.ts, 0, 21))

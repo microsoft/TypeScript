@@ -4,16 +4,25 @@
      var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
  >absoluteWorkspacePath : string
  >configuration.workspace.toAbsolutePath(configuration.server) : string
-->configuration.workspace.toAbsolutePath : (server: import("visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
+->configuration.workspace.toAbsolutePath : (server: import("./visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
+->configuration.workspace : import("./visibilityOfCrossModuleTypeUsage_server").IWorkspace
+->configuration : commands.IConfiguration
+->workspace : import("./visibilityOfCrossModuleTypeUsage_server").IWorkspace
+->toAbsolutePath : (server: import("./visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
+->configuration.server : import("./visibilityOfCrossModuleTypeUsage_server").IServer | undefined
+->configuration : commands.IConfiguration
+->server : import("./visibilityOfCrossModuleTypeUsage_server").IServer | undefined
 +>configuration.workspace.toAbsolutePath : (server: import("visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string | undefined) => string
- >configuration.workspace : import("visibilityOfCrossModuleTypeUsage_server").IWorkspace
- >configuration : commands.IConfiguration
- >workspace : import("visibilityOfCrossModuleTypeUsage_server").IWorkspace
-->toAbsolutePath : (server: import("visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
++>configuration.workspace : import("visibilityOfCrossModuleTypeUsage_server").IWorkspace
++>configuration : commands.IConfiguration
++>workspace : import("visibilityOfCrossModuleTypeUsage_server").IWorkspace
 +>toAbsolutePath : (server: import("visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string | undefined) => string
- >configuration.server : import("visibilityOfCrossModuleTypeUsage_server").IServer | undefined
- >configuration : commands.IConfiguration
- >server : import("visibilityOfCrossModuleTypeUsage_server").IServer | undefined
++>configuration.server : import("visibilityOfCrossModuleTypeUsage_server").IServer | undefined
++>configuration : commands.IConfiguration
++>server : import("visibilityOfCrossModuleTypeUsage_server").IServer | undefined
+ }
+ === visibilityOfCrossModuleTypeUsage_commands.ts ===
+ import fs = require('./visibilityOfCrossModuleTypeUsage_fs');
 @@= skipped -32, +32 lines =@@
 
  export interface IWorkspace {

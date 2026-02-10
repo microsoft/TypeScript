@@ -5,17 +5,24 @@
 
      copy(other: import("./b").Foo) {
 ->copy : (other: import("./b").Foo) => void
+->other : import("./b").Foo
 +>copy : (other: import("b").Foo) => void
- >other : import("b").Foo
++>other : import("b").Foo
 
          other.#x; // error
+ >other.#x : any
+->other : import("./b").Foo
++>other : import("b").Foo
+     }
+ }
+     
 @@= skipped -38, +38 lines =@@
 
  a.copy(b); // error
  >a.copy(b) : void
-->a.copy : (other: import("b").Foo) => void
+->a.copy : (other: import("./b").Foo) => void
 +>a.copy : (other: B) => void
  >a : A
-->copy : (other: import("b").Foo) => void
+->copy : (other: import("./b").Foo) => void
 +>copy : (other: B) => void
  >b : B

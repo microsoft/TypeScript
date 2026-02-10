@@ -173,6 +173,22 @@ var (
 	libs_lib_es2024_sharedmemory_d_ts string
 	//go:embed libs/lib.es2024.string.d.ts
 	libs_lib_es2024_string_d_ts string
+	//go:embed libs/lib.es2025.collection.d.ts
+	libs_lib_es2025_collection_d_ts string
+	//go:embed libs/lib.es2025.d.ts
+	libs_lib_es2025_d_ts string
+	//go:embed libs/lib.es2025.float16.d.ts
+	libs_lib_es2025_float16_d_ts string
+	//go:embed libs/lib.es2025.full.d.ts
+	libs_lib_es2025_full_d_ts string
+	//go:embed libs/lib.es2025.intl.d.ts
+	libs_lib_es2025_intl_d_ts string
+	//go:embed libs/lib.es2025.iterator.d.ts
+	libs_lib_es2025_iterator_d_ts string
+	//go:embed libs/lib.es2025.promise.d.ts
+	libs_lib_es2025_promise_d_ts string
+	//go:embed libs/lib.es2025.regexp.d.ts
+	libs_lib_es2025_regexp_d_ts string
 	//go:embed libs/lib.es5.d.ts
 	libs_lib_es5_d_ts string
 	//go:embed libs/lib.es6.d.ts
@@ -183,24 +199,22 @@ var (
 	libs_lib_esnext_collection_d_ts string
 	//go:embed libs/lib.esnext.d.ts
 	libs_lib_esnext_d_ts string
+	//go:embed libs/lib.esnext.date.d.ts
+	libs_lib_esnext_date_d_ts string
 	//go:embed libs/lib.esnext.decorators.d.ts
 	libs_lib_esnext_decorators_d_ts string
 	//go:embed libs/lib.esnext.disposable.d.ts
 	libs_lib_esnext_disposable_d_ts string
 	//go:embed libs/lib.esnext.error.d.ts
 	libs_lib_esnext_error_d_ts string
-	//go:embed libs/lib.esnext.float16.d.ts
-	libs_lib_esnext_float16_d_ts string
 	//go:embed libs/lib.esnext.full.d.ts
 	libs_lib_esnext_full_d_ts string
 	//go:embed libs/lib.esnext.intl.d.ts
 	libs_lib_esnext_intl_d_ts string
-	//go:embed libs/lib.esnext.iterator.d.ts
-	libs_lib_esnext_iterator_d_ts string
-	//go:embed libs/lib.esnext.promise.d.ts
-	libs_lib_esnext_promise_d_ts string
 	//go:embed libs/lib.esnext.sharedmemory.d.ts
 	libs_lib_esnext_sharedmemory_d_ts string
+	//go:embed libs/lib.esnext.temporal.d.ts
+	libs_lib_esnext_temporal_d_ts string
 	//go:embed libs/lib.esnext.typedarrays.d.ts
 	libs_lib_esnext_typedarrays_d_ts string
 	//go:embed libs/lib.scripthost.d.ts
@@ -297,20 +311,27 @@ var embeddedContents = map[string]string{
 	"libs/lib.es2024.regexp.d.ts":           libs_lib_es2024_regexp_d_ts,
 	"libs/lib.es2024.sharedmemory.d.ts":     libs_lib_es2024_sharedmemory_d_ts,
 	"libs/lib.es2024.string.d.ts":           libs_lib_es2024_string_d_ts,
+	"libs/lib.es2025.collection.d.ts":       libs_lib_es2025_collection_d_ts,
+	"libs/lib.es2025.d.ts":                  libs_lib_es2025_d_ts,
+	"libs/lib.es2025.float16.d.ts":          libs_lib_es2025_float16_d_ts,
+	"libs/lib.es2025.full.d.ts":             libs_lib_es2025_full_d_ts,
+	"libs/lib.es2025.intl.d.ts":             libs_lib_es2025_intl_d_ts,
+	"libs/lib.es2025.iterator.d.ts":         libs_lib_es2025_iterator_d_ts,
+	"libs/lib.es2025.promise.d.ts":          libs_lib_es2025_promise_d_ts,
+	"libs/lib.es2025.regexp.d.ts":           libs_lib_es2025_regexp_d_ts,
 	"libs/lib.es5.d.ts":                     libs_lib_es5_d_ts,
 	"libs/lib.es6.d.ts":                     libs_lib_es6_d_ts,
 	"libs/lib.esnext.array.d.ts":            libs_lib_esnext_array_d_ts,
 	"libs/lib.esnext.collection.d.ts":       libs_lib_esnext_collection_d_ts,
 	"libs/lib.esnext.d.ts":                  libs_lib_esnext_d_ts,
+	"libs/lib.esnext.date.d.ts":             libs_lib_esnext_date_d_ts,
 	"libs/lib.esnext.decorators.d.ts":       libs_lib_esnext_decorators_d_ts,
 	"libs/lib.esnext.disposable.d.ts":       libs_lib_esnext_disposable_d_ts,
 	"libs/lib.esnext.error.d.ts":            libs_lib_esnext_error_d_ts,
-	"libs/lib.esnext.float16.d.ts":          libs_lib_esnext_float16_d_ts,
 	"libs/lib.esnext.full.d.ts":             libs_lib_esnext_full_d_ts,
 	"libs/lib.esnext.intl.d.ts":             libs_lib_esnext_intl_d_ts,
-	"libs/lib.esnext.iterator.d.ts":         libs_lib_esnext_iterator_d_ts,
-	"libs/lib.esnext.promise.d.ts":          libs_lib_esnext_promise_d_ts,
 	"libs/lib.esnext.sharedmemory.d.ts":     libs_lib_esnext_sharedmemory_d_ts,
+	"libs/lib.esnext.temporal.d.ts":         libs_lib_esnext_temporal_d_ts,
 	"libs/lib.esnext.typedarrays.d.ts":      libs_lib_esnext_typedarrays_d_ts,
 	"libs/lib.scripthost.d.ts":              libs_lib_scripthost_d_ts,
 	"libs/lib.webworker.asynciterable.d.ts": libs_lib_webworker_asynciterable_d_ts,
@@ -401,20 +422,27 @@ var libsEntries = []fs.DirEntry{
 	&fileInfo{name: "lib.es2024.regexp.d.ts", size: int64(len(libs_lib_es2024_regexp_d_ts))},
 	&fileInfo{name: "lib.es2024.sharedmemory.d.ts", size: int64(len(libs_lib_es2024_sharedmemory_d_ts))},
 	&fileInfo{name: "lib.es2024.string.d.ts", size: int64(len(libs_lib_es2024_string_d_ts))},
+	&fileInfo{name: "lib.es2025.collection.d.ts", size: int64(len(libs_lib_es2025_collection_d_ts))},
+	&fileInfo{name: "lib.es2025.d.ts", size: int64(len(libs_lib_es2025_d_ts))},
+	&fileInfo{name: "lib.es2025.float16.d.ts", size: int64(len(libs_lib_es2025_float16_d_ts))},
+	&fileInfo{name: "lib.es2025.full.d.ts", size: int64(len(libs_lib_es2025_full_d_ts))},
+	&fileInfo{name: "lib.es2025.intl.d.ts", size: int64(len(libs_lib_es2025_intl_d_ts))},
+	&fileInfo{name: "lib.es2025.iterator.d.ts", size: int64(len(libs_lib_es2025_iterator_d_ts))},
+	&fileInfo{name: "lib.es2025.promise.d.ts", size: int64(len(libs_lib_es2025_promise_d_ts))},
+	&fileInfo{name: "lib.es2025.regexp.d.ts", size: int64(len(libs_lib_es2025_regexp_d_ts))},
 	&fileInfo{name: "lib.es5.d.ts", size: int64(len(libs_lib_es5_d_ts))},
 	&fileInfo{name: "lib.es6.d.ts", size: int64(len(libs_lib_es6_d_ts))},
 	&fileInfo{name: "lib.esnext.array.d.ts", size: int64(len(libs_lib_esnext_array_d_ts))},
 	&fileInfo{name: "lib.esnext.collection.d.ts", size: int64(len(libs_lib_esnext_collection_d_ts))},
 	&fileInfo{name: "lib.esnext.d.ts", size: int64(len(libs_lib_esnext_d_ts))},
+	&fileInfo{name: "lib.esnext.date.d.ts", size: int64(len(libs_lib_esnext_date_d_ts))},
 	&fileInfo{name: "lib.esnext.decorators.d.ts", size: int64(len(libs_lib_esnext_decorators_d_ts))},
 	&fileInfo{name: "lib.esnext.disposable.d.ts", size: int64(len(libs_lib_esnext_disposable_d_ts))},
 	&fileInfo{name: "lib.esnext.error.d.ts", size: int64(len(libs_lib_esnext_error_d_ts))},
-	&fileInfo{name: "lib.esnext.float16.d.ts", size: int64(len(libs_lib_esnext_float16_d_ts))},
 	&fileInfo{name: "lib.esnext.full.d.ts", size: int64(len(libs_lib_esnext_full_d_ts))},
 	&fileInfo{name: "lib.esnext.intl.d.ts", size: int64(len(libs_lib_esnext_intl_d_ts))},
-	&fileInfo{name: "lib.esnext.iterator.d.ts", size: int64(len(libs_lib_esnext_iterator_d_ts))},
-	&fileInfo{name: "lib.esnext.promise.d.ts", size: int64(len(libs_lib_esnext_promise_d_ts))},
 	&fileInfo{name: "lib.esnext.sharedmemory.d.ts", size: int64(len(libs_lib_esnext_sharedmemory_d_ts))},
+	&fileInfo{name: "lib.esnext.temporal.d.ts", size: int64(len(libs_lib_esnext_temporal_d_ts))},
 	&fileInfo{name: "lib.esnext.typedarrays.d.ts", size: int64(len(libs_lib_esnext_typedarrays_d_ts))},
 	&fileInfo{name: "lib.scripthost.d.ts", size: int64(len(libs_lib_scripthost_d_ts))},
 	&fileInfo{name: "lib.webworker.asynciterable.d.ts", size: int64(len(libs_lib_webworker_asynciterable_d_ts))},

@@ -53,7 +53,14 @@
  >x : Symbol(x, Decl(test.js, 36, 1))
 
      status: "done",
-@@= skipped -18, +18 lines =@@
+@@= skipped -12, +12 lines =@@
+ }
+ exports.x
+ >exports.x : Symbol(x, Decl(test.js, 36, 1))
+->exports : Symbol("./test", Decl(test.js, 0, 0))
++>exports : Symbol("test", Decl(test.js, 0, 0))
+ >x : Symbol(x, Decl(test.js, 36, 1))
+
  /** @type {DoneStatus} */
  module.exports.y = {
  >module.exports.y : Symbol(y, Decl(test.js, 45, 9))
@@ -66,7 +73,7 @@
  >y : Symbol(y, Decl(test.js, 45, 9))
 
      status: "done",
-@@= skipped -14, +14 lines =@@
+@@= skipped -20, +20 lines =@@
  }
  module.exports.y
  >module.exports.y : Symbol(y, Decl(test.js, 45, 9))

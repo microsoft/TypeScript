@@ -12,7 +12,8 @@ func TestTypeErrorAfterStringCompletionsInNestedCall2(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @strict: true
+	const content = `// @stableTypeOrdering: true
+// @strict: true
 
 type ActionFunction<
   TExpressionEvent extends { type: string },

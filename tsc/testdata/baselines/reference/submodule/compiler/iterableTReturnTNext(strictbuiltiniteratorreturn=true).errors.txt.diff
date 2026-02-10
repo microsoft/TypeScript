@@ -2,14 +2,14 @@
 +++ new.iterableTReturnTNext(strictbuiltiniteratorreturn=true).errors.txt
 @@= skipped -5, +5 lines =@@
        Type 'undefined' is not assignable to type 'number'.
- iterableTReturnTNext.ts(42,7): error TS2416: Property 'values' in type 'MyMap' is not assignable to the same property in base type 'Map<string, number>'.
+ iterableTReturnTNext.ts(44,7): error TS2416: Property 'values' in type 'MyMap' is not assignable to the same property in base type 'Map<string, number>'.
    Type '() => Generator<number, void, unknown>' is not assignable to type '() => MapIterator<number>'.
 -    Call signature return types 'Generator<number, void, unknown>' and 'MapIterator<number>' are incompatible.
 +    Type 'Generator<number, void, unknown>' is not assignable to type 'MapIterator<number>'.
        The types returned by 'next(...)' are incompatible between these types.
          Type 'IteratorResult<number, void>' is not assignable to type 'IteratorResult<number, undefined>'.
            Type 'IteratorReturnResult<void>' is not assignable to type 'IteratorResult<number, undefined>'.
-@@= skipped -62, +62 lines =@@
+@@= skipped -64, +64 lines =@@
            ~~~~~~
  !!! error TS2416: Property 'values' in type 'MyMap' is not assignable to the same property in base type 'Map<string, number>'.
  !!! error TS2416:   Type '() => Generator<number, void, unknown>' is not assignable to type '() => MapIterator<number>'.

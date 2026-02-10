@@ -31,10 +31,10 @@ const test = <ResizablePanel>
 >ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
 
   <div />
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
   <div />
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
 </ResizablePanel>
 >ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
@@ -44,13 +44,13 @@ const testErr = <ResizablePanel>
 >ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))
 
   <div />
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
   <div />
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
   <div />
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
 </ResizablePanel>
 >ResizablePanel : Symbol(ResizablePanel, Decl(checkJsxChildrenCanBeTupleType.tsx, 6, 1))

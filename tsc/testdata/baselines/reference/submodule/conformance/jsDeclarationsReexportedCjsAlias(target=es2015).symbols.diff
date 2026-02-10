@@ -1,7 +1,11 @@
 --- old.jsDeclarationsReexportedCjsAlias(target=es2015).symbols
 +++ new.jsDeclarationsReexportedCjsAlias(target=es2015).symbols
-@@= skipped -8, +8 lines =@@
- >'./lib' : Symbol("lib", Decl(lib.js, 0, 0))
+@@= skipped -5, +5 lines =@@
+ >SomeClass : Symbol(SomeClass, Decl(lib.js, 14, 8))
+ >Another : Symbol(Another, Decl(main.js, 0, 18))
+ >require : Symbol(require)
+->'./lib' : Symbol("./lib", Decl(lib.js, 0, 0))
++>'./lib' : Symbol("lib", Decl(lib.js, 0, 0))
 
  module.exports = {
 ->module.exports : Symbol(module.exports, Decl(main.js, 0, 0))
@@ -13,7 +17,7 @@
 
      SomeClass,
  >SomeClass : Symbol(SomeClass, Decl(main.js, 2, 18))
-@@= skipped -34, +34 lines =@@
+@@= skipped -37, +37 lines =@@
  }
 
  module.exports = {

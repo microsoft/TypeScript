@@ -1,6 +1,11 @@
 --- old.moduleExportDuplicateAlias3.symbols
 +++ new.moduleExportDuplicateAlias3.symbols
-@@= skipped -7, +7 lines =@@
+@@= skipped -3, +3 lines =@@
+ const { apply } = require('./moduleExportAliasDuplicateAlias')
+ >apply : Symbol(apply, Decl(test.js, 0, 7))
+ >require : Symbol(require)
+->'./moduleExportAliasDuplicateAlias' : Symbol("./moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
++>'./moduleExportAliasDuplicateAlias' : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
 
  const result = apply.toFixed()
  >result : Symbol(result, Decl(test.js, 1, 5))
@@ -23,7 +28,7 @@
  >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
  >undefined : Symbol(undefined)
 
-@@= skipped -22, +20 lines =@@
+@@= skipped -26, +24 lines =@@
 
  exports.apply = a;
  >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
@@ -32,7 +37,11 @@
  >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
  >a : Symbol(a, Decl(moduleExportAliasDuplicateAlias.js, 1, 26))
 
-@@= skipped -11, +11 lines =@@
+ exports.apply()
+ >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
+->exports : Symbol("./moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
++>exports : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
+ >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
 
  exports.apply = 'ok'
  >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
@@ -41,7 +50,13 @@
  >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
 
  var OK = exports.apply.toUpperCase()
-@@= skipped -13, +13 lines =@@
+ >OK : Symbol(OK, Decl(moduleExportAliasDuplicateAlias.js, 6, 3))
+ >exports.apply.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+ >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
+->exports : Symbol("./moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
++>exports : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
+ >apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))
+ >toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 
  exports.apply = 1
  >exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 0, 26), Decl(moduleExportAliasDuplicateAlias.js, 2, 16), Decl(moduleExportAliasDuplicateAlias.js, 4, 15), Decl(moduleExportAliasDuplicateAlias.js, 6, 36))

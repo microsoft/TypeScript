@@ -17,7 +17,7 @@ export function f2() {
     /** @type {Set<Foo>} */
     const foo = new Set([ 'a', 'b' ]);
 >foo : Symbol(foo, Decl(a.js, 6, 9))
->Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.collection.d.ts, --, --))
 
     return foo;
 >foo : Symbol(foo, Decl(a.js, 6, 9))
@@ -30,7 +30,7 @@ function f3() { return undefined; }
 /** @type {Set<Foo>} */
 export const foo = new Set([ 'a', 'b' ]);
 >foo : Symbol(foo, Decl(a.js, 13, 12))
->Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.collection.d.ts, --, --))
 
 /**
  * @returns {Foo}

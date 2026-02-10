@@ -252,8 +252,8 @@ Output::
     [7m3[0m import * as xs3 from "./Struct";
     [7m [0m [96m                     ~~~~~~~~~~[0m
 
-../../tslibs/TS/Lib/lib.es2024.full.d.ts
-   Default library for target 'ES2024'
+../../tslibs/TS/Lib/lib.es2025.full.d.ts
+   Default library for target 'ES2025'
 node_modules/fp-ts/lib/Struct.d.ts
    Imported via "fp-ts/lib/Struct" from file 'src/anotherFile.ts'
    Imported via "fp-ts/lib/struct" from file 'src/anotherFile.ts'
@@ -287,7 +287,7 @@ export {};
 //// [/home/src/projects/project/src/oneMore.js] *new* 
 export {};
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}

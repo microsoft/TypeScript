@@ -1,6 +1,17 @@
 --- old.lateBoundAssignmentDeclarationSupport1.symbols
 +++ new.lateBoundAssignmentDeclarationSupport1.symbols
-@@= skipped -35, +35 lines =@@
+@@= skipped -26, +26 lines =@@
+ >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport1.js, 2, 5))
+
+ exports[_sym] = "ok";
+->exports : Symbol("./lateBoundAssignmentDeclarationSupport1", Decl(lateBoundAssignmentDeclarationSupport1.js, 0, 0))
++>exports : Symbol("lateBoundAssignmentDeclarationSupport1", Decl(lateBoundAssignmentDeclarationSupport1.js, 0, 0))
+ >_sym : Symbol(_sym, Decl(lateBoundAssignmentDeclarationSupport1.js, 1, 5))
+
+ exports[_str] = "ok";
+->exports : Symbol("./lateBoundAssignmentDeclarationSupport1", Decl(lateBoundAssignmentDeclarationSupport1.js, 0, 0))
++>exports : Symbol("lateBoundAssignmentDeclarationSupport1", Decl(lateBoundAssignmentDeclarationSupport1.js, 0, 0))
+ >_str : Symbol(_str, Decl(lateBoundAssignmentDeclarationSupport1.js, 2, 5))
 
  exports.S = _sym;
  >exports.S : Symbol(S, Decl(lateBoundAssignmentDeclarationSupport1.js, 5, 21))

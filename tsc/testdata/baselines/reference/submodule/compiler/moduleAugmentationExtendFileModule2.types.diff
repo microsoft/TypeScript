@@ -1,6 +1,15 @@
 --- old.moduleAugmentationExtendFileModule2.types
 +++ new.moduleAugmentationExtendFileModule2.types
-@@= skipped -73, +73 lines =@@
+@@= skipped -15, +15 lines =@@
+ >function() { } : () => void
+
+ declare module "./observable" {
+->"./observable" : typeof import("./observable")
++>"./observable" : typeof import("observable")
+
+     interface Observable<T> {
+         map<U>(proj: (e:T) => U): Observable<U>
+@@= skipped -58, +58 lines =@@
  let z1 = Observable.someValue.toFixed();
  >z1 : string
  >Observable.someValue.toFixed() : string

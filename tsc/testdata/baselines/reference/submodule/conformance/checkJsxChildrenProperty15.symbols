@@ -9,8 +9,8 @@ import React = require('react');
 const Tag = (x: {}) => <div></div>;
 >Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
 >x : Symbol(x, Decl(file.tsx, 4, 13))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 
 // OK
 const k1 = <Tag />;
@@ -27,24 +27,24 @@ const k3 = <Tag children={<div></div>} />;
 >k3 : Symbol(k3, Decl(file.tsx, 11, 5))
 >Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
 >children : Symbol(children, Decl(file.tsx, 11, 15))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 
 const k4 = <Tag key="1"><div></div></Tag>;
 >k4 : Symbol(k4, Decl(file.tsx, 12, 5))
 >Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
 >key : Symbol(key, Decl(file.tsx, 12, 15))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 >Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
 
 const k5 = <Tag key="1"><div></div><div></div></Tag>;
 >k5 : Symbol(k5, Decl(file.tsx, 13, 5))
 >Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
 >key : Symbol(key, Decl(file.tsx, 13, 15))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 >Tag : Symbol(Tag, Decl(file.tsx, 4, 5))
 

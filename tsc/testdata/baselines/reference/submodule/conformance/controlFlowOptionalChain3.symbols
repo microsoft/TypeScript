@@ -59,7 +59,7 @@ function Test3({ foo }: { foo: Foo | undefined }) {
 
   return (
     <div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
       {foo?.bar === false && "foo"}
 >foo?.bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
@@ -72,7 +72,7 @@ function Test3({ foo }: { foo: Foo | undefined }) {
 >bar : Symbol(Foo.bar, Decl(controlFlowOptionalChain3.tsx, 6, 15))
 
     </div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
   );
 }

@@ -11,7 +11,8 @@ func TestBestCommonTypeObjectLiterals(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `var a = { name: 'bob', age: 18 };
+	const content = `// @stableTypeOrdering: true
+var a = { name: 'bob', age: 18 };
 var b = { name: 'jim', age: 20 };
 var /*1*/c = [a, b];
 var a1 = { name: 'bob', age: 18 };

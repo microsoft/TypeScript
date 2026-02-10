@@ -1,6 +1,15 @@
 --- old.moduleExportDuplicateAlias2.symbols
 +++ new.moduleExportDuplicateAlias2.symbols
-@@= skipped -11, +11 lines =@@
+@@= skipped -3, +3 lines =@@
+ const { apply } = require('./moduleExportAliasDuplicateAlias')
+ >apply : Symbol(apply, Decl(test.js, 0, 7))
+ >require : Symbol(require)
+->'./moduleExportAliasDuplicateAlias' : Symbol("./moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
++>'./moduleExportAliasDuplicateAlias' : Symbol("moduleExportAliasDuplicateAlias", Decl(moduleExportAliasDuplicateAlias.js, 0, 0))
+
+ apply()
+ >apply : Symbol(apply, Decl(test.js, 0, 7))
+@@= skipped -8, +8 lines =@@
  === moduleExportAliasDuplicateAlias.js ===
  module.exports.apply = undefined;
  >module.exports.apply : Symbol(apply, Decl(moduleExportAliasDuplicateAlias.js, 0, 0), Decl(moduleExportAliasDuplicateAlias.js, 1, 16), Decl(moduleExportAliasDuplicateAlias.js, 2, 25))

@@ -1,0 +1,10 @@
+--- old.esmModuleExports2(esmoduleinterop=true).types
++++ new.esmModuleExports2(esmoduleinterop=true).types
+@@= skipped -2, +2 lines =@@
+ === /importer-cjs.cjs ===
+ const Foo = require("./exporter.mjs");
+ >Foo : "oops"
+->require("./exporter.mjs") : typeof import("./exporter.mjs", { with: { "resolution-mode": "import" } })
++>require("./exporter.mjs") : typeof import("/exporter", { with: { "resolution-mode": "import" } })
+ >require : any
+ >"./exporter.mjs" : "./exporter.mjs"

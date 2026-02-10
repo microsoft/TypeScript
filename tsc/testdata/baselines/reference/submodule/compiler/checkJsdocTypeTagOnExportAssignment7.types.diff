@@ -4,9 +4,9 @@
 
  === b.js ===
  import a from "./a";
-->a : import("a").Foo
+->a : import("./a").Foo
 +>a : { a: number; b: number; c: number; }
 
  a;
-->a : import("a").Foo
+->a : import("./a").Foo
 +>a : { a: number; b: number; c: number; }

@@ -13,7 +13,7 @@
  >key : K
  >{                set: this.#refSet,                ref,            } : { set: Set<WeakRef<K>>; ref: WeakRef<K>; }
 
-@@= skipped -111, +111 lines =@@
+@@= skipped -184, +184 lines =@@
  >iterator : unique symbol
 
      *entries(): Generator<[key: K, value: V], void> {

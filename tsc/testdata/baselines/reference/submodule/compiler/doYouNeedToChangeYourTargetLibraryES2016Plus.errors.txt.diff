@@ -14,16 +14,22 @@
  doYouNeedToChangeYourTargetLibraryES2016Plus.ts(17,111): error TS2550: Property 'groups' does not exist on type 'RegExpExecArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
  doYouNeedToChangeYourTargetLibraryES2016Plus.ts(18,33): error TS2550: Property 'dotAll' does not exist on type 'RegExp'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
  doYouNeedToChangeYourTargetLibraryES2016Plus.ts(19,38): error TS2550: Property 'PluralRules' does not exist on type 'typeof Intl'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
-@@= skipped -31, +25 lines =@@
+@@= skipped -29, +23 lines =@@
+ doYouNeedToChangeYourTargetLibraryES2016Plus.ts(40,20): error TS2583: Cannot find name 'BigInt'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2020' or later.
+ doYouNeedToChangeYourTargetLibraryES2016Plus.ts(43,32): error TS2550: Property 'any' does not exist on type 'PromiseConstructor'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2021' or later.
  doYouNeedToChangeYourTargetLibraryES2016Plus.ts(44,33): error TS2550: Property 'replaceAll' does not exist on type '""'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2021' or later.
-
-
--==== doYouNeedToChangeYourTargetLibraryES2016Plus.ts (39 errors) ====
-+==== doYouNeedToChangeYourTargetLibraryES2016Plus.ts (33 errors) ====
+-doYouNeedToChangeYourTargetLibraryES2016Plus.ts(47,46): error TS2550: Property 'toTemporalInstant' does not exist on type 'Date'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
+-
+-
+-==== doYouNeedToChangeYourTargetLibraryES2016Plus.ts (40 errors) ====
++doYouNeedToChangeYourTargetLibraryES2016Plus.ts(47,46): error TS2339: Property 'toTemporalInstant' does not exist on type 'Date'.
++
++
++==== doYouNeedToChangeYourTargetLibraryES2016Plus.ts (34 errors) ====
      // es2016
      const testIncludes = ["hello"].includes("world");
                                     ~~~~~~~~
-@@= skipped -37, +37 lines =@@
+@@= skipped -40, +40 lines =@@
                                                       ~~~~~~~
  !!! error TS2550: Property 'finally' does not exist on type 'Promise<unknown>'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
      const testRegExpMatchArrayGroups = "2019-04-30".match(/(?<year>[0-9]{4})-(?<month>[0-9]{2})-(?<day>[0-9]{2})/g).groups;
@@ -45,3 +51,10 @@
                                                                                                                    ~~~~~~
  !!! error TS2550: Property 'groups' does not exist on type 'RegExpExecArray'. Do you need to change your target library? Try changing the 'lib' compiler option to 'es2018' or later.
      const testRegExpDotAll = /foo/g.dotAll;
+@@= skipped -90, +78 lines =@@
+     // esnext
+     const testDateToTemporalInstant = new Date().toTemporalInstant();
+                                                  ~~~~~~~~~~~~~~~~~
+-!!! error TS2550: Property 'toTemporalInstant' does not exist on type 'Date'. Do you need to change your target library? Try changing the 'lib' compiler option to 'esnext' or later.
++!!! error TS2339: Property 'toTemporalInstant' does not exist on type 'Date'.
+     

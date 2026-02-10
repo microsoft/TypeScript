@@ -1,6 +1,15 @@
 --- old.jsDeclarationsTypedefAndLatebound.symbols
 +++ new.jsDeclarationsTypedefAndLatebound.symbols
-@@= skipped -40, +40 lines =@@
+@@= skipped -3, +3 lines =@@
+ const LazySet = require("./LazySet");
+ >LazySet : Symbol(LazySet, Decl(index.js, 0, 5))
+ >require : Symbol(require)
+->"./LazySet" : Symbol("./LazySet", Decl(LazySet.js, 0, 0))
++>"./LazySet" : Symbol("LazySet", Decl(LazySet.js, 0, 0))
+
+ /** @type {LazySet} */
+ const stringSet = undefined;
+@@= skipped -37, +37 lines =@@
  }
 
  module.exports = LazySet;

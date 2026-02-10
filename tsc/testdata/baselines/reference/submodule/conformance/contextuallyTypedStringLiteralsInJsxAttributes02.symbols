@@ -41,23 +41,23 @@ export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 17, 1), Decl(file.tsx, 19, 66), Decl(file.tsx, 20, 62))
 >buttonProps : Symbol(buttonProps, Decl(file.tsx, 19, 27))
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 9, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 17, 1), Decl(file.tsx, 19, 66), Decl(file.tsx, 20, 62))
 >linkProps : Symbol(linkProps, Decl(file.tsx, 20, 27))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 13, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
 >MainButton : Symbol(MainButton, Decl(file.tsx, 17, 1), Decl(file.tsx, 19, 66), Decl(file.tsx, 20, 62))
 >props : Symbol(props, Decl(file.tsx, 21, 27))
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 9, 1))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 13, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
     const linkProps = props as LinkProps;
 >linkProps : Symbol(linkProps, Decl(file.tsx, 22, 9))
@@ -111,8 +111,8 @@ export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undef
 >NoOverload : Symbol(NoOverload, Decl(file.tsx, 33, 44))
 >buttonProps : Symbol(buttonProps, Decl(file.tsx, 35, 27))
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 9, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 >undefined : Symbol(undefined)
 
 const c1 = <NoOverload  {...{onClick: (k) => {log(k)}}} extra />;  // k has type any
@@ -128,8 +128,8 @@ export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefine
 >NoOverload1 : Symbol(NoOverload1, Decl(file.tsx, 36, 65))
 >linkProps : Symbol(linkProps, Decl(file.tsx, 38, 28))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 13, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 >undefined : Symbol(undefined)
 
 const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" | "contact"

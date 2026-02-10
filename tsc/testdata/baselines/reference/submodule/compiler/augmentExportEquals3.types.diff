@@ -1,0 +1,23 @@
+--- old.augmentExportEquals3.types
++++ new.augmentExportEquals3.types
+@@= skipped -1, +1 lines =@@
+
+ === file1.ts ===
+ function foo() {}
+->foo : typeof import("./file1")
++>foo : typeof import("file1.ts")
+
+ namespace foo {
+->foo : typeof import("./file1")
++>foo : typeof import("file1.ts")
+
+     export var v = 1;
+ >v : number
+ >1 : 1
+ }
+ export = foo;
+->foo : typeof import("./file1")
++>foo : typeof import("file1.ts")
+
+ === file2.ts ===
+ import x = require("./file1"); 

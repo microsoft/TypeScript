@@ -16,7 +16,7 @@
 
  === b.ts ===
  import {fn} from "./a";
-->fn : { o: (a?: (import("a").X | undefined)[]) => void; }
+->fn : { o: (a?: (import("./a").X | undefined)[]) => void; }
 +>fn : { o: (a?: (string | undefined)[] | undefined) => void; }
 
  export const m = {                        
@@ -25,10 +25,10 @@
 
 
  export const x = { p: fn }; 
-->x : { p: { o: (a?: (import("a").X | undefined)[]) => void; }; }
-->{ p: fn } : { p: { o: (a?: (import("a").X | undefined)[]) => void; }; }
-->p : { o: (a?: (import("a").X | undefined)[]) => void; }
-->fn : { o: (a?: (import("a").X | undefined)[]) => void; }
+->x : { p: { o: (a?: (import("./a").X | undefined)[]) => void; }; }
+->{ p: fn } : { p: { o: (a?: (import("./a").X | undefined)[]) => void; }; }
+->p : { o: (a?: (import("./a").X | undefined)[]) => void; }
+->fn : { o: (a?: (import("./a").X | undefined)[]) => void; }
 +>x : { p: { o: (a?: (string | undefined)[] | undefined) => void; }; }
 +>{ p: fn } : { p: { o: (a?: (string | undefined)[] | undefined) => void; }; }
 +>p : { o: (a?: (string | undefined)[] | undefined) => void; }

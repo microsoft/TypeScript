@@ -130,3 +130,49 @@ new Intl.NumberFormat('en-GB').format('+Infinity');
 >NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
 >format : Symbol(Intl.NumberFormat.format, Decl(lib.es5.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
 
+// Test approximatelySign part type
+const nf = new Intl.NumberFormat("en-US", {
+>nf : Symbol(nf, Decl(intlNumberFormatES2023.ts, 32, 5))
+>Intl.NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+>Intl : Symbol(Intl, Decl(lib.es5.d.ts, --, --), Decl(lib.es2016.intl.d.ts, --, --), Decl(lib.es2017.intl.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2019.intl.d.ts, --, --) ... and 5 more)
+>NumberFormat : Symbol(Intl.NumberFormat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2018.intl.d.ts, --, --), Decl(lib.es2020.bigint.d.ts, --, --), Decl(lib.es2023.intl.d.ts, --, --))
+
+  style: "currency",
+>style : Symbol(style, Decl(intlNumberFormatES2023.ts, 32, 43))
+
+  currency: "EUR",
+>currency : Symbol(currency, Decl(intlNumberFormatES2023.ts, 33, 20))
+
+  maximumFractionDigits: 0,
+>maximumFractionDigits : Symbol(maximumFractionDigits, Decl(intlNumberFormatES2023.ts, 34, 18))
+
+});
+
+const filtered = nf
+>filtered : Symbol(filtered, Decl(intlNumberFormatES2023.ts, 38, 5))
+>nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+>nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>nf  .formatRangeToParts(100, 100)  .filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>nf  .formatRangeToParts : Symbol(Intl.NumberFormat.formatRangeToParts, Decl(lib.es2023.intl.d.ts, --, --))
+>nf : Symbol(nf, Decl(intlNumberFormatES2023.ts, 32, 5))
+
+  .formatRangeToParts(100, 100)
+>formatRangeToParts : Symbol(Intl.NumberFormat.formatRangeToParts, Decl(lib.es2023.intl.d.ts, --, --))
+
+  .filter((part) => part.type !== "approximatelySign")
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>part : Symbol(part, Decl(intlNumberFormatES2023.ts, 40, 11))
+>part.type : Symbol(Intl.NumberRangeFormatPart.type, Decl(lib.es2023.intl.d.ts, --, --))
+>part : Symbol(part, Decl(intlNumberFormatES2023.ts, 40, 11))
+>type : Symbol(Intl.NumberRangeFormatPart.type, Decl(lib.es2023.intl.d.ts, --, --))
+
+  .map((part) => part.value)
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>part : Symbol(part, Decl(intlNumberFormatES2023.ts, 41, 8))
+>part.value : Symbol(Intl.NumberRangeFormatPart.value, Decl(lib.es2023.intl.d.ts, --, --))
+>part : Symbol(part, Decl(intlNumberFormatES2023.ts, 41, 8))
+>value : Symbol(Intl.NumberRangeFormatPart.value, Decl(lib.es2023.intl.d.ts, --, --))
+
+  .join("");
+>join : Symbol(Array.join, Decl(lib.es5.d.ts, --, --))
+

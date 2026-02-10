@@ -1,0 +1,25 @@
+--- old.augmentExportEquals5.types
++++ new.augmentExportEquals5.types
+@@= skipped -10, +10 lines =@@
+ >"express" : typeof import("express")
+
+     function e(): e.Express;
+->e : typeof import("express")
++>e : typeof import("express.d.ts")
+ >e : any
+
+     namespace e {
+->e : typeof import("express")
++>e : typeof import("express.d.ts")
+
+         interface IRoute {
+             all(...handler: RequestHandler[]): IRoute;
+@@= skipped -90, +90 lines =@@
+     }
+
+     export = e;
+->e : typeof import("express")
++>e : typeof import("express.d.ts")
+ }
+
+ === augmentation.ts ===

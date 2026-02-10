@@ -8,3 +8,22 @@
 +>initialize : (attributes?: T | undefined, options?: CombinedModelConstructorOptions<E, this> | undefined) => void
  >attributes : T | undefined
  >options : CombinedModelConstructorOptions<E, this> | undefined
+
+@@= skipped -29, +29 lines =@@
+
+ };
+ export as namespace Backbone;
+->Backbone : typeof import("backbone")
++>Backbone : typeof import("node_modules/backbone/index")
+
+ === node_modules/backbone-fetch-cache/index.d.ts ===
+ import * as Backbone from "backbone";
+@@= skipped -17, +17 lines =@@
+ }
+ export {};
+ export as namespace BackboneFetchCache;
+->BackboneFetchCache : typeof import("backbone-fetch-cache")
++>BackboneFetchCache : typeof import("node_modules/backbone-fetch-cache/index")
+
+ === index.ts ===
+ import * as Backbone from "backbone";

@@ -8,10 +8,10 @@ export const InlineUnicodeChar = () => {
 
     // This should work correctly - inline character with other content
     return <div><span>Warning: ⚠ Error</span></div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
->span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2609, 114))
->span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2609, 114))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2611, 114))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2611, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
 };
 
@@ -20,13 +20,13 @@ export const StandaloneUnicodeChar = () => {
 
     // This should reproduce the issue - unicode character on its own line
     return (<div><span>⚠</span>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
->span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2609, 114))
->span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2609, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2611, 114))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react16.d.ts, 2611, 114))
 
         ⚠
     </div>);
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
 };
 
@@ -35,13 +35,13 @@ export const MultipleUnicodeChars = () => {
 
     // Test multiple unicode characters
     return (<div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
         ⚠
         ⛔
         🚨
     </div>);
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 
 };
 

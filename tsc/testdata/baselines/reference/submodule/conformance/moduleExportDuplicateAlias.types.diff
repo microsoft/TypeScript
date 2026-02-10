@@ -1,13 +1,23 @@
 --- old.moduleExportDuplicateAlias.types
 +++ new.moduleExportDuplicateAlias.types
-@@= skipped -13, +13 lines =@@
+@@= skipped -2, +2 lines =@@
+ === test.js ===
+ const { apply } = require('./moduleExportAliasDuplicateAlias')
+ >apply : () => void
+->require('./moduleExportAliasDuplicateAlias') : typeof import("./moduleExportAliasDuplicateAlias")
++>require('./moduleExportAliasDuplicateAlias') : typeof import("moduleExportAliasDuplicateAlias")
+ >require : any
+ >'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
+
+@@= skipped -11, +11 lines =@@
  === moduleExportAliasDuplicateAlias.js ===
  exports.apply = undefined;
  >exports.apply = undefined : undefined
 ->exports.apply : any
-+>exports.apply : () => void
- >exports : typeof import("moduleExportAliasDuplicateAlias")
+->exports : typeof import("./moduleExportAliasDuplicateAlias")
 ->apply : any
++>exports.apply : () => void
++>exports : typeof import("moduleExportAliasDuplicateAlias")
 +>apply : () => void
  >undefined : undefined
 
@@ -17,19 +27,26 @@
  exports.apply()
 ->exports.apply() : any
 ->exports.apply : undefined
+->exports : typeof import("./moduleExportAliasDuplicateAlias")
+->apply : undefined
 +>exports.apply() : void
 +>exports.apply : () => void
- >exports : typeof import("moduleExportAliasDuplicateAlias")
-->apply : undefined
++>exports : typeof import("moduleExportAliasDuplicateAlias")
 +>apply : () => void
 
  exports.apply = a;
  >exports.apply = a : () => void
 ->exports.apply : any
-+>exports.apply : () => void
- >exports : typeof import("moduleExportAliasDuplicateAlias")
+->exports : typeof import("./moduleExportAliasDuplicateAlias")
 ->apply : any
++>exports.apply : () => void
++>exports : typeof import("moduleExportAliasDuplicateAlias")
 +>apply : () => void
  >a : () => void
 
  exports.apply()
+ >exports.apply() : void
+ >exports.apply : () => void
+->exports : typeof import("./moduleExportAliasDuplicateAlias")
++>exports : typeof import("moduleExportAliasDuplicateAlias")
+ >apply : () => void

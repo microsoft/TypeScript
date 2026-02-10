@@ -16,7 +16,14 @@
 
  };
 
-@@= skipped -20, +18 lines =@@
+@@= skipped -14, +12 lines =@@
+ const { A } = require("./a-ext");
+ >A : Symbol(A, Decl(a.js, 0, 7))
+ >require : Symbol(require, Decl(node.d.ts, 0, 0))
+->"./a-ext" : Symbol("./a-ext", Decl(a-ext.js, 0, 0))
++>"./a-ext" : Symbol("a-ext", Decl(a-ext.js, 0, 0))
+
+ /** @param {A} p */
  function a(p) { p.x; }
  >a : Symbol(a, Decl(a.js, 0, 33))
  >p : Symbol(p, Decl(a.js, 3, 11))
@@ -33,6 +40,13 @@
 
      constructor() {
 @@= skipped -28, +26 lines =@@
+ const { B } = require("./b-ext");
+ >B : Symbol(B, Decl(b.js, 0, 7))
+ >require : Symbol(require, Decl(node.d.ts, 0, 0))
+->"./b-ext" : Symbol("./b-ext", Decl(b-ext.js, 0, 0))
++>"./b-ext" : Symbol("b-ext", Decl(b-ext.js, 0, 0))
+
+ /** @param {B} p */
  function b(p) { p.x; }
  >b : Symbol(b, Decl(b.js, 0, 33))
  >p : Symbol(p, Decl(b.js, 3, 11))
@@ -51,7 +65,13 @@
  }
 
  === c.js ===
-@@= skipped -24, +19 lines =@@
+ const { C } = require("./c-ext");
+ >C : Symbol(C, Decl(c.js, 0, 7))
+ >require : Symbol(require, Decl(node.d.ts, 0, 0))
+->"./c-ext" : Symbol("./c-ext", Decl(c-ext.js, 0, 0))
++>"./c-ext" : Symbol("c-ext", Decl(c-ext.js, 0, 0))
+
+ /** @param {C} p */
  function c(p) { p.x; }
  >c : Symbol(c, Decl(c.js, 0, 33))
  >p : Symbol(p, Decl(c.js, 3, 11))
@@ -71,7 +91,13 @@
  };
 
  === d.js ===
-@@= skipped -25, +19 lines =@@
+ const { D } = require("./d-ext");
+ >D : Symbol(D, Decl(d.js, 0, 7))
+ >require : Symbol(require, Decl(node.d.ts, 0, 0))
+->"./d-ext" : Symbol("./d-ext", Decl(d-ext.js, 0, 0))
++>"./d-ext" : Symbol("d-ext", Decl(d-ext.js, 0, 0))
+
+ /** @param {D} p */
  function d(p) { p.x; }
  >d : Symbol(d, Decl(d.js, 0, 33))
  >p : Symbol(p, Decl(d.js, 3, 11))
@@ -81,7 +107,16 @@
 
  === e-ext.js ===
  export class E {
-@@= skipped -35, +33 lines =@@
+@@= skipped -75, +62 lines =@@
+ const { E } = require("./e-ext");
+ >E : Symbol(E, Decl(e.js, 0, 7))
+ >require : Symbol(require, Decl(node.d.ts, 0, 0))
+->"./e-ext" : Symbol("./e-ext", Decl(e-ext.js, 0, 0))
++>"./e-ext" : Symbol("e-ext", Decl(e-ext.js, 0, 0))
+
+ /** @param {E} p */
+ function e(p) { p.x; }
+@@= skipped -15, +15 lines =@@
  >F : Symbol(F, Decl(f.js, 0, 3))
 
      this.x = 1;

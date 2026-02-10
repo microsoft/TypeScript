@@ -1,20 +1,29 @@
 --- old.symlinkedWorkspaceDependenciesNoDirectLinkGeneratesDeepNonrelativeName.types
 +++ new.symlinkedWorkspaceDependenciesNoDirectLinkGeneratesDeepNonrelativeName.types
-@@= skipped -18, +18 lines =@@
- >create : () => import("workspace/packageA/foo").Foo
+@@= skipped -15, +15 lines =@@
+
+ === workspace/packageB/index.d.ts ===
+ import { create } from "package-a";
+->create : () => import("package-a/cls").Foo
++>create : () => import("workspace/packageA/foo").Foo
 
  export declare function invoke(): ReturnType<typeof create>;
 ->invoke : () => ReturnType<typeof create>
+->create : () => import("package-a/cls").Foo
 +>invoke : () => import("workspace/packageA/foo").Foo
- >create : () => import("workspace/packageA/foo").Foo
++>create : () => import("workspace/packageA/foo").Foo
 
  === workspace/packageC/index.ts ===
-@@= skipped -10, +10 lines =@@
+ import * as pkg from "package-b";
+ >pkg : typeof pkg
+
  export const a = pkg.invoke();
- >a : import("workspace/packageA/foo").Foo
- >pkg.invoke() : import("workspace/packageA/foo").Foo
-->pkg.invoke : () => ReturnType<typeof import("workspace/packageA/index").create>
+->a : import("package-a/cls").Foo
+->pkg.invoke() : import("package-a/cls").Foo
+->pkg.invoke : () => ReturnType<typeof import("package-a").create>
++>a : import("workspace/packageA/foo").Foo
++>pkg.invoke() : import("workspace/packageA/foo").Foo
 +>pkg.invoke : () => import("workspace/packageA/foo").Foo
  >pkg : typeof pkg
-->invoke : () => ReturnType<typeof import("workspace/packageA/index").create>
+->invoke : () => ReturnType<typeof import("package-a").create>
 +>invoke : () => import("workspace/packageA/foo").Foo

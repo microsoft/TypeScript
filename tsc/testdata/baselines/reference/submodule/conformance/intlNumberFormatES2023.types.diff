@@ -1,0 +1,18 @@
+--- old.intlNumberFormatES2023.types
++++ new.intlNumberFormatES2023.types
+@@= skipped -235, +235 lines =@@
+ const filtered = nf
+ >filtered : string
+ >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join("") : string
+->nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join : (separator?: string) => string
++>nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join : (separator?: string | undefined) => string
+ >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value) : string[]
+ >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map : <U>(callbackfn: (value: Intl.NumberRangeFormatPart, index: number, array: Intl.NumberRangeFormatPart[]) => U, thisArg?: any) => U[]
+ >nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign") : Intl.NumberRangeFormatPart[]
+@@= skipped -33, +33 lines =@@
+ >value : string
+
+   .join("");
+->join : (separator?: string) => string
++>join : (separator?: string | undefined) => string
+ >"" : ""

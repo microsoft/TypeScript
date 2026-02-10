@@ -8,16 +8,16 @@ import React = require('react')
 
 declare function OneThing(): JSX.Element;
 >OneThing : Symbol(OneThing, Decl(file.tsx, 2, 31), Decl(file.tsx, 3, 41))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >OneThing : Symbol(OneThing, Decl(file.tsx, 2, 31), Decl(file.tsx, 3, 41))
 >l : Symbol(l, Decl(file.tsx, 4, 26))
 >yy : Symbol(yy, Decl(file.tsx, 4, 30))
 >yy1 : Symbol(yy1, Decl(file.tsx, 4, 41))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 let obj = {
 >obj : Symbol(obj, Decl(file.tsx, 6, 3))
@@ -82,16 +82,16 @@ declare function TestingOneThing(j: {"extra-data": string}): JSX.Element;
 >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 20, 37), Decl(file.tsx, 22, 73))
 >j : Symbol(j, Decl(file.tsx, 22, 33))
 >"extra-data" : Symbol("extra-data", Decl(file.tsx, 22, 37))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Element;
 >TestingOneThing : Symbol(TestingOneThing, Decl(file.tsx, 20, 37), Decl(file.tsx, 22, 73))
 >n : Symbol(n, Decl(file.tsx, 23, 33))
 >yy : Symbol(yy, Decl(file.tsx, 23, 37))
 >direction : Symbol(direction, Decl(file.tsx, 23, 48))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 // Error
 const d1 = <TestingOneThing extra-data />
@@ -110,8 +110,8 @@ declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
 >a : Symbol(a, Decl(file.tsx, 29, 33))
 >y1 : Symbol(y1, Decl(file.tsx, 29, 37))
 >y2 : Symbol(y2, Decl(file.tsx, 29, 49))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
 >TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 27, 58), Decl(file.tsx, 29, 77), Decl(file.tsx, 30, 100))
@@ -119,10 +119,10 @@ declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Ele
 >y1 : Symbol(y1, Decl(file.tsx, 30, 37))
 >y2 : Symbol(y2, Decl(file.tsx, 30, 49))
 >children : Symbol(children, Decl(file.tsx, 30, 62))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
 >TestingOptional : Symbol(TestingOptional, Decl(file.tsx, 27, 58), Decl(file.tsx, 29, 77), Decl(file.tsx, 30, 100))
@@ -130,8 +130,8 @@ declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JS
 >y1 : Symbol(y1, Decl(file.tsx, 31, 37))
 >y2 : Symbol(y2, Decl(file.tsx, 31, 49))
 >y3 : Symbol(y3, Decl(file.tsx, 31, 62))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 // Error
 const e1 = <TestingOptional y1 y3="hello"/>

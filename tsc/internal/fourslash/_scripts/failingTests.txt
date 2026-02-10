@@ -423,6 +423,7 @@ TestLocalFunction
 TestMemberListInReopenedEnum
 TestMemberListInWithBlock
 TestMemberListOfExportedClass
+TestModuleReexportedIntoGlobalQuickInfo
 TestMultilineCommentBeforeOpenBrace
 TestMultiModuleFundule
 TestNgProxy1
@@ -471,6 +472,7 @@ TestQuickInfoFromContextualUnionType3
 TestQuickInfoFunctionKeyword
 TestQuickInfoGenerics
 TestQuickInfoGetterSetter
+TestQuickInfoImportNonunicodePath
 TestQuickInfoInInvalidIndexSignature
 TestQuickInfoInJsdocInTsFile1
 TestQuickInfoInOptionalChain

@@ -1,0 +1,11 @@
+--- old.declarationEmitForModuleImportingModuleAugmentationRetainsImport.types
++++ new.declarationEmitForModuleImportingModuleAugmentationRetainsImport.types
+@@= skipped -4, +4 lines =@@
+ >ParentThing : typeof ParentThing
+
+ declare module './parent' {
+->'./parent' : typeof import("./parent")
++>'./parent' : typeof import("parent")
+
+     interface ParentThing {
+         add: (a: number, b: number) => number;

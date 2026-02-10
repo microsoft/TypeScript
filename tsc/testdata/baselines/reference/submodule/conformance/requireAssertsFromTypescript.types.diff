@@ -5,8 +5,9 @@
  === 38379.js ===
  const { art } = require('./ex')
 ->art : (value: any, message?: string | Error) => asserts value
+->require('./ex') : typeof import("./ex")
 +>art : (value: any, message?: string | Error | undefined) => asserts value
- >require('./ex') : typeof import("ex")
++>require('./ex') : typeof import("ex")
  >require : any
  >'./ex' : "./ex"
 

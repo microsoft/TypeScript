@@ -99,6 +99,7 @@ type CompilerOptions struct {
 	RootDir                                   string                                    `json:"rootDir,omitzero"`
 	RootDirs                                  []string                                  `json:"rootDirs,omitzero"`
 	SkipLibCheck                              Tristate                                  `json:"skipLibCheck,omitzero"`
+	StableTypeOrdering                        Tristate                                  `json:"stableTypeOrdering,omitzero"`
 	Strict                                    Tristate                                  `json:"strict,omitzero"`
 	StrictBindCallApply                       Tristate                                  `json:"strictBindCallApply,omitzero"`
 	StrictBuiltinIteratorReturn               Tristate                                  `json:"strictBuiltinIteratorReturn,omitzero"`
@@ -525,10 +526,11 @@ const (
 	ScriptTargetES2022         ScriptTarget = 9
 	ScriptTargetES2023         ScriptTarget = 10
 	ScriptTargetES2024         ScriptTarget = 11
+	ScriptTargetES2025         ScriptTarget = 12
 	ScriptTargetESNext         ScriptTarget = 99
 	ScriptTargetJSON           ScriptTarget = 100
 	ScriptTargetLatest         ScriptTarget = ScriptTargetESNext
-	ScriptTargetLatestStandard ScriptTarget = ScriptTargetES2024
+	ScriptTargetLatestStandard ScriptTarget = ScriptTargetES2025
 )
 
 type JsxEmit int32

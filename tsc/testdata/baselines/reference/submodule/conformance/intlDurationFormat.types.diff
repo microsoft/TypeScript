@@ -1,0 +1,14 @@
+--- old.intlDurationFormat.types
++++ new.intlDurationFormat.types
+@@= skipped -4, +4 lines =@@
+ >new Intl.DurationFormat('en').format({  years: 1,  hours: 20,  minutes: 15,  seconds: 35}) : string
+ >new Intl.DurationFormat('en').format : (duration: Partial<Record<Intl.DurationFormatUnit, number>>) => string
+ >new Intl.DurationFormat('en') : Intl.DurationFormat
+->Intl.DurationFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions): Intl.DurationFormat; prototype: Intl.DurationFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.DurationFormatLocaleMatcher; }): Intl.UnicodeBCP47LocaleIdentifier[]; }
++>Intl.DurationFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions | undefined): Intl.DurationFormat; prototype: Intl.DurationFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.DurationFormatLocaleMatcher | undefined; } | undefined): string[]; }
+ >Intl : typeof Intl
+->DurationFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions): Intl.DurationFormat; prototype: Intl.DurationFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.DurationFormatLocaleMatcher; }): Intl.UnicodeBCP47LocaleIdentifier[]; }
++>DurationFormat : { new (locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions | undefined): Intl.DurationFormat; prototype: Intl.DurationFormat; supportedLocalesOf(locales?: Intl.LocalesArgument, options?: { localeMatcher?: Intl.DurationFormatLocaleMatcher | undefined; } | undefined): string[]; }
+ >'en' : "en"
+ >format : (duration: Partial<Record<Intl.DurationFormatUnit, number>>) => string
+ >{  years: 1,  hours: 20,  minutes: 15,  seconds: 35} : { years: number; hours: number; minutes: number; seconds: number; }

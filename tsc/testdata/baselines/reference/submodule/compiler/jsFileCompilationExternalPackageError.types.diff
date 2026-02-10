@@ -17,7 +17,14 @@
 
  === node_modules/b.ts ===
  var a = 10;
-@@= skipped -24, +24 lines =@@
+@@= skipped -18, +18 lines =@@
+ exports.a = 10;
+ >exports.a = 10 : 10
+ >exports.a : 10
+->exports : typeof import("c")
++>exports : typeof import("node_modules/c")
+ >a : 10
+ >10 : 10
 
  c = 10;
  >c = 10 : 10

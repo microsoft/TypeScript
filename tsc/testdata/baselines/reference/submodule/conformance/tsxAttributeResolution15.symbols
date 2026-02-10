@@ -16,8 +16,8 @@ class BigGreeter extends React.Component<{ }, {}> {
 >render : Symbol(BigGreeter.render, Decl(file.tsx, 4, 51))
 
         return <div>Default hi</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
     }
     greeting: string;
 >greeting : Symbol(BigGreeter.greeting, Decl(file.tsx, 7, 5))

@@ -50,8 +50,8 @@ class Button extends React.Component<ButtonProp, any> {
 >props : Symbol(React.Component.props, Decl(react.d.ts, 167, 37))
 
 				<div>Hello World</div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 
 				</InnerButton>);
 >InnerButton : Symbol(InnerButton, Decl(file.tsx, 26, 1))
@@ -77,8 +77,8 @@ class InnerButton extends React.Component<InnerButtonProp, any> {
 >render : Symbol(InnerButton.render, Decl(file.tsx, 28, 65))
 
 		return (<button>Hello</button>);
->button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2386, 43))
->button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2386, 43))
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2388, 43))
+>button : Symbol(JSX.IntrinsicElements.button, Decl(react.d.ts, 2388, 43))
 	}
 }
 

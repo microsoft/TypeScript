@@ -11,12 +11,12 @@
 
  === obj.js ===
  module.exports = class Obj {
-->module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof import("obj")
-->module.exports : typeof import("obj")
-->module : { exports: typeof import("obj"); }
-->exports : typeof import("obj")
-->class Obj {    constructor() {        this.x = 12;    }} : typeof import("obj")
-->Obj : typeof import("obj")
+->module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof import("./obj")
+->module.exports : typeof import("./obj")
+->module : { exports: typeof import("./obj"); }
+->exports : typeof import("./obj")
+->class Obj {    constructor() {        this.x = 12;    }} : typeof import("./obj")
+->Obj : typeof import("./obj")
 +>module.exports = class Obj {    constructor() {        this.x = 12;    }} : typeof Obj
 +>module.exports : typeof Obj
 +>module : { Obj: typeof Obj; }

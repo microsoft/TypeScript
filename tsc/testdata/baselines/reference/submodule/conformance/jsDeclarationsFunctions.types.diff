@@ -55,10 +55,10 @@
   * @param {{y: typeof b}} b
   */
  function g(a, b) {
-->g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void | ""
+->g : (a: { x: string; }, b: { y: typeof import(".").b; }) => void | ""
 +>g : (a: { x: string; }, b: { y: any; }) => any
  >a : { x: string; }
-->b : { y: typeof import("index").b; }
+->b : { y: typeof import(".").b; }
 +>b : { y: any; }
 
      return a.x && b.y();
@@ -68,9 +68,9 @@
  >a : { x: string; }
  >x : string
 ->b.y() : void
-->b.y : typeof import("index").b
-->b : { y: typeof import("index").b; }
-->y : typeof import("index").b
+->b.y : typeof import(".").b
+->b : { y: typeof import(".").b; }
+->y : typeof import(".").b
 +>b.y() : any
 +>b.y : { y: any; }
 +>b : { y: any; }
@@ -78,7 +78,7 @@
  }
 
  export { g };
-->g : (a: { x: string; }, b: { y: typeof import("index").b; }) => void | ""
+->g : (a: { x: string; }, b: { y: typeof import(".").b; }) => void | ""
 +>g : (a: { x: string; }, b: { y: any; }) => any
 
  /**
@@ -86,10 +86,10 @@
   * @param {{y: typeof b}} b
   */
  function hh(a, b) {
-->hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void | ""
+->hh : (a: { x: string; }, b: { y: typeof import(".").b; }) => void | ""
 +>hh : (a: { x: string; }, b: { y: any; }) => any
  >a : { x: string; }
-->b : { y: typeof import("index").b; }
+->b : { y: typeof import(".").b; }
 +>b : { y: any; }
 
      return a.x && b.y();
@@ -99,9 +99,9 @@
  >a : { x: string; }
  >x : string
 ->b.y() : void
-->b.y : typeof import("index").b
-->b : { y: typeof import("index").b; }
-->y : typeof import("index").b
+->b.y : typeof import(".").b
+->b : { y: typeof import(".").b; }
+->y : typeof import(".").b
 +>b.y() : any
 +>b.y : { y: any; }
 +>b : { y: any; }
@@ -109,8 +109,8 @@
  }
 
  export { hh as h };
-->hh : (a: { x: string; }, b: { y: typeof import("index").b; }) => void | ""
-->h : (a: { x: string; }, b: { y: typeof import("index").b; }) => void | ""
+->hh : (a: { x: string; }, b: { y: typeof import(".").b; }) => void | ""
+->h : (a: { x: string; }, b: { y: typeof import(".").b; }) => void | ""
 +>hh : (a: { x: string; }, b: { y: any; }) => any
 +>h : (a: { x: string; }, b: { y: any; }) => any
 

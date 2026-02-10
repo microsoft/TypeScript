@@ -35,6 +35,8 @@ class MyMap implements Map<string, number> {
     delete(key: string): boolean { return false; }
     forEach(callbackfn: (value: number, key: string, map: Map<string, number>) => void, thisArg?: any): void { }
     get(key: string): number | undefined { return undefined; }
+    getOrInsert(key: string, defaultValue: number): number { return Number.NaN; }
+    getOrInsertComputed(key: string, callback: (key: string) => number): number { return Number.NaN; }
     has(key: string): boolean { return false; }
     set(key: string, value: number): this { return this; }
     entries(): MapIterator<[string, number]> { throw new Error("Method not implemented."); }
@@ -67,6 +69,8 @@ class MyMap {
     delete(key) { return false; }
     forEach(callbackfn, thisArg) { }
     get(key) { return undefined; }
+    getOrInsert(key, defaultValue) { return Number.NaN; }
+    getOrInsertComputed(key, callback) { return Number.NaN; }
     has(key) { return false; }
     set(key, value) { return this; }
     entries() { throw new Error("Method not implemented."); }

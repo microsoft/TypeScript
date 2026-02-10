@@ -194,52 +194,60 @@
 
  === mod1.js ===
  Object.defineProperty(exports, "thing", { value: 42, writable: true });
-@@= skipped -142, +142 lines =@@
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
- >exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 ->"thing" : Symbol(thing, Decl(mod1.js, 0, 0))
++>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>"thing" : Symbol("thing", Decl(mod1.js, 0, 0))
  >value : Symbol(value, Decl(mod1.js, 0, 41))
  >writable : Symbol(writable, Decl(mod1.js, 0, 52))
 
-@@= skipped -9, +9 lines =@@
+@@= skipped -150, +150 lines =@@
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
- >exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 ->"readonlyProp" : Symbol(readonlyProp, Decl(mod1.js, 0, 71))
++>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>"readonlyProp" : Symbol("readonlyProp", Decl(mod1.js, 0, 71))
  >value : Symbol(value, Decl(mod1.js, 1, 48))
  >writable : Symbol(writable, Decl(mod1.js, 1, 64))
 
 @@= skipped -9, +9 lines =@@
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
- >exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 ->"rwAccessors" : Symbol(rwAccessors, Decl(mod1.js, 1, 84))
++>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>"rwAccessors" : Symbol("rwAccessors", Decl(mod1.js, 1, 84))
  >get : Symbol(get, Decl(mod1.js, 2, 47))
  >set : Symbol(set, Decl(mod1.js, 2, 71))
  >_ : Symbol(_, Decl(mod1.js, 2, 76))
 @@= skipped -10, +10 lines =@@
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
- >exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 ->"readonlyAccessor" : Symbol(readonlyAccessor, Decl(mod1.js, 2, 97))
++>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>"readonlyAccessor" : Symbol("readonlyAccessor", Decl(mod1.js, 2, 97))
  >get : Symbol(get, Decl(mod1.js, 3, 52))
 
  Object.defineProperty(exports, "setonlyAccessor", {
-@@= skipped -8, +8 lines =@@
+ >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
  >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
  >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
- >exports : Symbol("mod1", Decl(mod1.js, 0, 0))
+->exports : Symbol("./mod1", Decl(mod1.js, 0, 0))
 ->"setonlyAccessor" : Symbol(setonlyAccessor, Decl(mod1.js, 3, 79))
++>exports : Symbol("mod1", Decl(mod1.js, 0, 0))
 +>"setonlyAccessor" : Symbol("setonlyAccessor", Decl(mod1.js, 3, 79))
 
      /** @param {string} str */
      set(str) {
-@@= skipped -8, +8 lines =@@
+@@= skipped -17, +17 lines =@@
  >str : Symbol(str, Decl(mod1.js, 6, 8))
 
          this.rwAccessors = Number(str) 
@@ -336,7 +344,7 @@
 ->require("./mod1").thing : Symbol(thing, Decl(mod1.js, 0, 0))
 +>require("./mod1").thing : Symbol("thing", Decl(mod1.js, 0, 0))
  >require : Symbol(require)
-->"./mod1" : Symbol("mod1", Decl(mod1.js, 0, 0))
+->"./mod1" : Symbol("./mod1", Decl(mod1.js, 0, 0))
 ->thing : Symbol(thing, Decl(mod1.js, 0, 0))
 +>thing : Symbol("thing", Decl(mod1.js, 0, 0))
 
@@ -348,6 +356,6 @@
 ->require("./mod2").thing : Symbol(thing, Decl(mod2.js, 0, 0))
 +>require("./mod2").thing : Symbol("thing", Decl(mod2.js, 0, 0))
  >require : Symbol(require)
-->"./mod2" : Symbol("mod2", Decl(mod2.js, 0, 0))
+->"./mod2" : Symbol("./mod2", Decl(mod2.js, 0, 0))
 ->thing : Symbol(thing, Decl(mod2.js, 0, 0))
 +>thing : Symbol("thing", Decl(mod2.js, 0, 0))

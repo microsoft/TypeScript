@@ -264,4 +264,11 @@ const testStringReplaceAll = "".replaceAll();
 >replaceAll : any
 
 // esnext
+const testDateToTemporalInstant = new Date().toTemporalInstant();
+>testDateToTemporalInstant : any
+>new Date().toTemporalInstant() : any
+>new Date().toTemporalInstant : any
+>new Date() : Date
+>Date : DateConstructor
+>toTemporalInstant : any
 

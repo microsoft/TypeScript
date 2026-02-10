@@ -1,7 +1,11 @@
 --- old.ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.symbols
 +++ new.ensureNoCrashExportAssignmentDefineProperrtyPotentialMerge.symbols
-@@= skipped -6, +6 lines =@@
- >"./namespacer" : Symbol("namespacer", Decl(namespacer.js, 0, 0))
+@@= skipped -3, +3 lines =@@
+ const _item = require("./namespacer");
+ >_item : Symbol(_item, Decl(index.js, 0, 5))
+ >require : Symbol(require)
+->"./namespacer" : Symbol("./namespacer", Decl(namespacer.js, 0, 0))
++>"./namespacer" : Symbol("namespacer", Decl(namespacer.js, 0, 0))
 
  module.exports = 12;
 ->module.exports : Symbol(module.exports, Decl(index.js, 0, 0))
@@ -55,7 +59,7 @@
 +>B : Symbol(B, Decl(namespacer.js, 0, 5))
 +>NS : Symbol(NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
  >require : Symbol(require)
-->"./namespacey" : Symbol("namespacey", Decl(namespacey.js, 0, 0))
+->"./namespacey" : Symbol("./namespacey", Decl(namespacey.js, 0, 0))
 
  Object.defineProperty(B, "NS", { value: "why though", writable: true });
  >Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))

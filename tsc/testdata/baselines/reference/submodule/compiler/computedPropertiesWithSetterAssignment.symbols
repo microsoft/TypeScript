@@ -17,7 +17,7 @@ interface Foo {
 
     get k(): Set<string>;
 >k : Symbol(Foo.k, Decl(a.ts, 6, 15), Decl(a.ts, 7, 25))
->Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.collection.d.ts, --, --))
 
     set k(v: Iterable<string>);
 >k : Symbol(Foo.k, Decl(a.ts, 6, 15), Decl(a.ts, 7, 25))
@@ -27,7 +27,7 @@ interface Foo {
     get [k](): Set<string>;
 >[k] : Symbol(Foo[k], Decl(a.ts, 8, 31), Decl(a.ts, 10, 27))
 >k : Symbol(k, Decl(a.ts, 0, 5))
->Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.collection.d.ts, --, --))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.collection.d.ts, --, --))
 
     set [k](v: Iterable<string>);
 >[k] : Symbol(Foo[k], Decl(a.ts, 8, 31), Decl(a.ts, 10, 27))

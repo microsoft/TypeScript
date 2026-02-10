@@ -9,6 +9,12 @@
  >x : Symbol(x, Decl(a.js, 0, 0))
 
  exports.x;
+ >exports.x : Symbol(x, Decl(a.js, 0, 0))
+->exports : Symbol("./a", Decl(a.js, 0, 0))
++>exports : Symbol("/a", Decl(a.js, 0, 0))
+ >x : Symbol(x, Decl(a.js, 0, 0))
+
+ // Works nested
 @@= skipped -13, +13 lines =@@
      // 'exports' does not provide a contextual type to a function-class
      exports.Cls = function() {
@@ -26,3 +32,10 @@
 +>x : Symbol(x, Decl(a.js, 0, 0))
      }
  }
+
+ const instance = new exports.Cls();
+ >instance : Symbol(instance, Decl(a.js, 11, 5))
+ >exports.Cls : Symbol(Cls, Decl(a.js, 4, 1))
+->exports : Symbol("./a", Decl(a.js, 0, 0))
++>exports : Symbol("/a", Decl(a.js, 0, 0))
+ >Cls : Symbol(Cls, Decl(a.js, 4, 1))

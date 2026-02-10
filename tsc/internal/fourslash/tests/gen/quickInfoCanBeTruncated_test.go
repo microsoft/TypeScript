@@ -11,7 +11,8 @@ func TestQuickInfoCanBeTruncated(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `// @noLib: true
+	const content = `// @stableTypeOrdering: true
+// @noLib: true
 interface Foo {
   _0: 0;
   _1: 1;

@@ -11,14 +11,14 @@ export function MyComponent(props: { foo: string }) {
 >foo : Symbol(foo, Decl(b.tsx, 3, 36))
 
   return <div />;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 }
 
 let x = (
 >x : Symbol(x, Decl(b.tsx, 7, 3))
 
   <div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 
     {/*
    @ts-ignore */}
@@ -61,7 +61,7 @@ let x = (
 >foo : Symbol(foo, Decl(b.tsx, 33, 16))
 
   </div>
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 
 );
 

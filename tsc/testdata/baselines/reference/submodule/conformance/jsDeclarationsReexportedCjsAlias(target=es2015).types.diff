@@ -4,7 +4,7 @@
  >SomeClass : typeof SomeClass
  >SomeClass : any
  >Another : typeof SomeClass
-->require('./lib') : typeof import("lib")
+->require('./lib') : typeof import("./lib")
 +>require('./lib') : { bar: (a: string) => string; SomeClass: typeof SomeClass; }
  >require : any
  >'./lib' : "./lib"

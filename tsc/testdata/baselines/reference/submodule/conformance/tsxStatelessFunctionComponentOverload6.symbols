@@ -69,22 +69,22 @@ export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 30, 1), Decl(file.tsx, 32, 66), Decl(file.tsx, 33, 62), Decl(file.tsx, 34, 66))
 >buttonProps : Symbol(buttonProps, Decl(file.tsx, 32, 27))
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 9, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 30, 1), Decl(file.tsx, 32, 66), Decl(file.tsx, 33, 62), Decl(file.tsx, 34, 66))
 >linkProps : Symbol(linkProps, Decl(file.tsx, 33, 27))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 13, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 export function MainButton(hyphenProps: HyphenProps): JSX.Element;
 >MainButton : Symbol(MainButton, Decl(file.tsx, 30, 1), Decl(file.tsx, 32, 66), Decl(file.tsx, 33, 62), Decl(file.tsx, 34, 66))
 >hyphenProps : Symbol(hyphenProps, Decl(file.tsx, 34, 27))
 >HyphenProps : Symbol(HyphenProps, Decl(file.tsx, 17, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
 export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
 >MainButton : Symbol(MainButton, Decl(file.tsx, 30, 1), Decl(file.tsx, 32, 66), Decl(file.tsx, 33, 62), Decl(file.tsx, 34, 66))
@@ -92,8 +92,8 @@ export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.El
 >ButtonProps : Symbol(ButtonProps, Decl(file.tsx, 9, 1))
 >LinkProps : Symbol(LinkProps, Decl(file.tsx, 13, 1))
 >HyphenProps : Symbol(HyphenProps, Decl(file.tsx, 17, 1))
->JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
->Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
 
     const linkProps = props as LinkProps;
 >linkProps : Symbol(linkProps, Decl(file.tsx, 36, 9))

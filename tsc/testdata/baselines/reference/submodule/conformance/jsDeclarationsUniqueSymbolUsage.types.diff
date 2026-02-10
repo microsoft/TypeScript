@@ -5,7 +5,11 @@
   */
  export function b(value) {
 ->b : (value: import("./a").WithSymbol) => import("./a").WithSymbol
+->value : import("./a").WithSymbol
 +>b : (value: import("a").WithSymbol) => import("a").WithSymbol
- >value : import("a").WithSymbol
++>value : import("a").WithSymbol
 
      return value;
+->value : import("./a").WithSymbol
++>value : import("a").WithSymbol
+ }

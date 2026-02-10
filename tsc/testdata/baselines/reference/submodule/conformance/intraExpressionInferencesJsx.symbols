@@ -224,7 +224,7 @@ function Foo<T>(props: Props<T>) {
 >T : Symbol(T, Decl(intraExpressionInferencesJsx.tsx, 90, 13))
 
   return <div />;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2546, 114))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react16.d.ts, 2548, 114))
 }
 
 <Foo

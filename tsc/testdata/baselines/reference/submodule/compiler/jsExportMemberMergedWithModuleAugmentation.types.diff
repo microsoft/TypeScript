@@ -19,7 +19,7 @@
  >Abcde : typeof Abcde
 
  declare module "./test" {
-->"./test" : typeof import("/test")
+->"./test" : typeof import("./test")
 +>"./test" : any
 
    interface Abcde { b: string }

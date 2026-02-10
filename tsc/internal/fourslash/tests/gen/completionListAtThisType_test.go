@@ -12,7 +12,8 @@ func TestCompletionListAtThisType(t *testing.T) {
 	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
-	const content = `class Test {
+	const content = `// @stableTypeOrdering: true
+class Test {
     foo() {}
 
     bar() {

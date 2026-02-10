@@ -14,5 +14,6 @@
 ->exports.blah : Symbol(blah, Decl(bar.js, 0, 32))
 ->exports : Symbol(blah, Decl(bar.js, 0, 32))
 ->blah : Symbol(blah, Decl(bar.js, 0, 32))
+->exports : Symbol("./bar", Decl(bar.js, 0, 0))
 +>exports : Symbol("bar", Decl(bar.js, 0, 0))
- >exports : Symbol("bar", Decl(bar.js, 0, 0))
++>exports : Symbol("bar", Decl(bar.js, 0, 0))

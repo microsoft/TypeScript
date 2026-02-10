@@ -1,0 +1,15 @@
+//// [tests/cases/conformance/es2025/regExpEscape.ts] ////
+
+=== regExpEscape.ts ===
+const regExp = new RegExp(RegExp.escape("foo.bar"));
+>regExp : Symbol(regExp, Decl(regExpEscape.ts, 0, 5))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 3 more)
+>RegExp.escape : Symbol(RegExpConstructor.escape, Decl(lib.es2025.regexp.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.regexp.d.ts, --, --) ... and 3 more)
+>escape : Symbol(RegExpConstructor.escape, Decl(lib.es2025.regexp.d.ts, --, --))
+
+regExp.test("foo.bar");
+>regExp.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>regExp : Symbol(regExp, Decl(regExpEscape.ts, 0, 5))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+

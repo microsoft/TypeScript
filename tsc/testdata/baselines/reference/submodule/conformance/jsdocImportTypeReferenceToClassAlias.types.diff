@@ -18,13 +18,13 @@
  /** @param {X} c */
  function demo(c) {
 ->demo : (c: X) => void
-->c : import("mod1").C
+->c : import("./mod1").C
 +>demo : (c: any) => void
 +>c : any
 
      c.s
 ->c.s : () => void
-->c : import("mod1").C
+->c : import("./mod1").C
 ->s : () => void
 +>c.s : any
 +>c : any

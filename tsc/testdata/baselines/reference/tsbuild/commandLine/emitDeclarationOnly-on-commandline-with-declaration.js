@@ -48,7 +48,7 @@ Output::
 
 Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
-//// [/home/src/tslibs/TS/Lib/lib.es2024.full.d.ts] *Lib*
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
 interface Function {}
@@ -156,7 +156,7 @@ export declare const g = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -165,7 +165,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -205,7 +205,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -255,7 +255,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -264,7 +264,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -317,7 +317,7 @@ export declare const aaa = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -326,7 +326,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -403,7 +403,7 @@ export const g = b;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -412,7 +412,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -452,7 +452,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -513,7 +513,7 @@ const alocal = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -522,7 +522,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -572,7 +572,7 @@ Found 1 error in project2/src/tsconfig.json[90m:3[0m
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -581,7 +581,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -634,7 +634,7 @@ export declare const aaaaa = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -643,7 +643,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts
@@ -711,7 +711,7 @@ export const a2 = 10;
 
 project1/src/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*refresh*    /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *refresh*    /home/src/workspaces/solution/project1/src/a.ts
 *refresh*    /home/src/workspaces/solution/project1/src/b.ts
 *refresh*    /home/src/workspaces/solution/project1/src/c.ts
@@ -720,7 +720,7 @@ Signatures::
 
 project2/src/tsconfig.json::
 SemanticDiagnostics::
-*not cached* /home/src/tslibs/TS/Lib/lib.es2024.full.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/e.ts
 *not cached* /home/src/workspaces/solution/project1/src/a.d.ts
 *not cached* /home/src/workspaces/solution/project2/src/f.ts

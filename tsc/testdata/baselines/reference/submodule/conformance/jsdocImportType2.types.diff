@@ -4,12 +4,12 @@
  === mod1.js ===
  /// <reference path='./types.d.ts'/>
  module.exports = class Chunk {
-->module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("mod1")
-->module.exports : typeof import("mod1")
-->module : { exports: typeof import("mod1"); }
-->exports : typeof import("mod1")
-->class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("mod1")
-->Chunk : typeof import("mod1")
+->module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("./mod1")
+->module.exports : typeof import("./mod1")
+->module : { exports: typeof import("./mod1"); }
+->exports : typeof import("./mod1")
+->class Chunk {    constructor() {        this.chunk = 1;    }} : typeof import("./mod1")
+->Chunk : typeof import("./mod1")
 +>module.exports = class Chunk {    constructor() {        this.chunk = 1;    }} : typeof Chunk
 +>module.exports : typeof Chunk
 +>module : { Chunk: typeof Chunk; }

@@ -7,8 +7,8 @@ function EmptyPropSFC() {
 >EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
 
     return <div> Default Greeting </div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 }
 
 function Greet(x: {name: string}) {
@@ -17,18 +17,18 @@ function Greet(x: {name: string}) {
 >name : Symbol(name, Decl(file.tsx, 6, 19))
 
 	return <div>Hello, {x}</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 >x : Symbol(x, Decl(file.tsx, 6, 15))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 }
 function Meet({name = 'world'}) {
 >Meet : Symbol(Meet, Decl(file.tsx, 8, 1))
 >name : Symbol(name, Decl(file.tsx, 9, 15))
 
 	return <div>Hello, {name}</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 >name : Symbol(name, Decl(file.tsx, 9, 15))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 }
 function MeetAndGreet(k: {"prop-name": string}) {
 >MeetAndGreet : Symbol(MeetAndGreet, Decl(file.tsx, 11, 1))
@@ -36,8 +36,8 @@ function MeetAndGreet(k: {"prop-name": string}) {
 >"prop-name" : Symbol("prop-name", Decl(file.tsx, 12, 26))
 
 	return <div>Hi Hi</div>;
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
->div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
 }
 
 // OK

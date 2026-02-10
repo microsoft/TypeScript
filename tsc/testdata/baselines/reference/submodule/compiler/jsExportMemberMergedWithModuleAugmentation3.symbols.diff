@@ -20,7 +20,7 @@
 +>module : Symbol("/x", Decl(x.js, 0, 0))
  >exports : Symbol(export=, Decl(x.js, 0, 21))
  >require : Symbol(require)
-->"./y.js" : Symbol("/y", Decl(y.d.ts, 0, 0))
+->"./y.js" : Symbol("./y.js", Decl(y.d.ts, 0, 0))
 
  === /y.d.ts ===
  export declare type x = 1;

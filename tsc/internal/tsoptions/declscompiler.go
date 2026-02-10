@@ -631,6 +631,15 @@ var optionsForCompiler = []*CommandLineOption{
 		Description:             diagnostics.Ensure_use_strict_is_always_emitted,
 		DefaultValueDescription: true,
 	},
+	{
+		Name:                       "stableTypeOrdering",
+		Kind:                       CommandLineOptionTypeBoolean,
+		AffectsSemanticDiagnostics: true,
+		AffectsBuildInfo:           true,
+		Category:                   diagnostics.Type_Checking,
+		Description:                diagnostics.Ensure_types_are_ordered_stably_and_deterministically_across_compilations,
+		DefaultValueDescription:    true,
+	},
 
 	// Additional Checks
 	{

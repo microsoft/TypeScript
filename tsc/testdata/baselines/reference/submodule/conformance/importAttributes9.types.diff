@@ -1,0 +1,12 @@
+--- old.importAttributes9.types
++++ new.importAttributes9.types
+@@= skipped -25, +25 lines =@@
+ >f : () => Promise<void>
+
+     await import("./a", {
+->await import("./a", {        with: {            type: "not-json",        },    }) : typeof import("./a")
+->import("./a", {        with: {            type: "not-json",        },    }) : Promise<typeof import("./a")>
++>await import("./a", {        with: {            type: "not-json",        },    }) : typeof import("a")
++>import("./a", {        with: {            type: "not-json",        },    }) : Promise<typeof import("a")>
+ >"./a" : "./a"
+ >{        with: {            type: "not-json",        },    } : { with: { type: "not-json"; }; }
