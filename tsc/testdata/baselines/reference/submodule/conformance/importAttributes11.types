@@ -21,9 +21,5 @@ import a
 
 	from "./a.json"
 	with {type: "json"}
->{type: "json"} : { type: string; }
->type : string
->"json" : "json"
-
-> : any
+>type : any
 

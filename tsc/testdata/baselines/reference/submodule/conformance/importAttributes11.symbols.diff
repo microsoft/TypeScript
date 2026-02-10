@@ -12,9 +12,3 @@
 +=== b.mts ===
  declare global {
  >global : Symbol(global, Decl(b.mts, 0, 0))
-
-@@= skipped -20, +20 lines =@@
-
- 	from "./a.json"
- 	with {type: "json"}
-+>type : Symbol(type, Decl(b.mts, 8, 7))

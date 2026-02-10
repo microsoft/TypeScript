@@ -2376,7 +2376,7 @@ func (p *Parser) parseModuleExportName(disallowKeywords bool) (node *ast.Node, n
 }
 
 func (p *Parser) tryParseImportAttributes() *ast.Node {
-	if (p.token == ast.KindWithKeyword || p.token == ast.KindAssertKeyword) && !p.hasPrecedingLineBreak() {
+	if p.token == ast.KindWithKeyword || (p.token == ast.KindAssertKeyword && !p.hasPrecedingLineBreak()) {
 		return p.parseImportAttributes(p.token, false /*skipKeyword*/)
 	}
 	return nil

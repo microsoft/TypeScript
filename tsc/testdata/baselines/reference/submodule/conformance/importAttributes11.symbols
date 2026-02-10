@@ -21,5 +21,4 @@ import a
 
 	from "./a.json"
 	with {type: "json"}
->type : Symbol(type, Decl(b.mts, 8, 7))
 
