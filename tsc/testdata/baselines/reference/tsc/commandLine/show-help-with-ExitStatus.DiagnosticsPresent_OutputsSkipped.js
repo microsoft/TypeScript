@@ -151,7 +151,7 @@ tsc: The TypeScript Compiler - Version FakeTSVersion                            
 
                   type:  boolean
 
-               default:  false
+               default:  `false`, unless `checkJs` is set
 
 
 [94m              --checkJs  [39mEnable error reporting in type-checked JavaScript files.

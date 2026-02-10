@@ -368,7 +368,7 @@ var optionsForCompiler = []*CommandLineOption{
 		ShowInSimplifiedHelpView: true,
 		Category:                 diagnostics.JavaScript_Support,
 		Description:              diagnostics.Allow_JavaScript_files_to_be_a_part_of_your_program_Use_the_checkJs_option_to_get_errors_from_these_files,
-		DefaultValueDescription:  false,
+		DefaultValueDescription:  diagnostics.X_false_unless_checkJs_is_set,
 	},
 	{
 		Name:                       "checkJs",

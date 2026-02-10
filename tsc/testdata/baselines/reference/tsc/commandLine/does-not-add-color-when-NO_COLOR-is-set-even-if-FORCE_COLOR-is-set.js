@@ -111,7 +111,7 @@ default: undefined
 --allowJs
 Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.
 type: boolean
-default: false
+default: `false`, unless `checkJs` is set
 
 --checkJs
 Enable error reporting in type-checked JavaScript files.

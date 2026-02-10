@@ -117,7 +117,7 @@ default: undefined
 [94m--allowJs[39m
 Allow JavaScript files to be a part of your program. Use the 'checkJs' option to get errors from these files.
 type: boolean
-default: false
+default: `false`, unless `checkJs` is set
 
 [94m--checkJs[39m
 Enable error reporting in type-checked JavaScript files.
