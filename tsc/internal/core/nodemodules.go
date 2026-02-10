@@ -5,6 +5,7 @@ import (
 	"sync"
 )
 
+// require('module').builtinModules.filter(x => !x.match(/^(?:_|node:)/))
 var UnprefixedNodeCoreModules = map[string]bool{
 	"assert":              true,
 	"assert/strict":       true,
@@ -47,7 +48,6 @@ var UnprefixedNodeCoreModules = map[string]bool{
 	"stream/web":          true,
 	"string_decoder":      true,
 	"sys":                 true,
-	"test/mock_loader":    true,
 	"timers":              true,
 	"timers/promises":     true,
 	"tls":                 true,
@@ -63,7 +63,9 @@ var UnprefixedNodeCoreModules = map[string]bool{
 	"zlib":                true,
 }
 
+// require('module').builtinModules.filter(x => x.startsWith('node:'))
 var ExclusivelyPrefixedNodeCoreModules = map[string]bool{
+	"node:quic":           true,
 	"node:sea":            true,
 	"node:sqlite":         true,
 	"node:test":           true,
