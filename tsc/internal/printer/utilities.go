@@ -625,6 +625,16 @@ func isBinaryOperation(node *ast.Node, token ast.Kind) bool {
 		node.AsBinaryExpression().OperatorToken.Kind == token
 }
 
+func mixingBinaryOperatorsRequiresParentheses(a ast.Kind, b ast.Kind) bool {
+	if a == ast.KindQuestionQuestionToken {
+		return b == ast.KindAmpersandAmpersandToken || b == ast.KindBarBarToken
+	}
+	if b == ast.KindQuestionQuestionToken {
+		return a == ast.KindAmpersandAmpersandToken || a == ast.KindBarBarToken
+	}
+	return false
+}
+
 func isImmediatelyInvokedFunctionExpressionOrArrowFunction(node *ast.Expression) bool {
 	node = ast.SkipPartiallyEmittedExpressions(node)
 	if !ast.IsCallExpression(node) {

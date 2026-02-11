@@ -2517,3 +2517,71 @@ func TestPartiallyEmittedExpression(t *testing.T) {
     .expression
     .expression;`)
 }
+
+func TestParenthesizeBinaryExpressionMixingNullishCoalescing(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		title   string
+		innerOp ast.Kind
+		outerOp ast.Kind
+		side    string
+		output  string
+	}{
+		// inner ?? on left side of || or &&
+		{title: "BarBarWithLeftQuestionQuestion", innerOp: ast.KindQuestionQuestionToken, outerOp: ast.KindBarBarToken, side: "left", output: "(a ?? b) || c;"},
+		{title: "AmpersandAmpersandWithLeftQuestionQuestion", innerOp: ast.KindQuestionQuestionToken, outerOp: ast.KindAmpersandAmpersandToken, side: "left", output: "(a ?? b) && c;"},
+		// inner ?? on right side of || or &&
+		{title: "BarBarWithRightQuestionQuestion", innerOp: ast.KindQuestionQuestionToken, outerOp: ast.KindBarBarToken, side: "right", output: "a || (b ?? c);"},
+		{title: "AmpersandAmpersandWithRightQuestionQuestion", innerOp: ast.KindQuestionQuestionToken, outerOp: ast.KindAmpersandAmpersandToken, side: "right", output: "a && (b ?? c);"},
+		// inner || or && on left side of ??
+		{title: "QuestionQuestionWithLeftBarBar", innerOp: ast.KindBarBarToken, outerOp: ast.KindQuestionQuestionToken, side: "left", output: "(a || b) ?? c;"},
+		{title: "QuestionQuestionWithLeftAmpersandAmpersand", innerOp: ast.KindAmpersandAmpersandToken, outerOp: ast.KindQuestionQuestionToken, side: "left", output: "(a && b) ?? c;"},
+		// inner || or && on right side of ??
+		{title: "QuestionQuestionWithRightBarBar", innerOp: ast.KindBarBarToken, outerOp: ast.KindQuestionQuestionToken, side: "right", output: "a ?? (b || c);"},
+		{title: "QuestionQuestionWithRightAmpersandAmpersand", innerOp: ast.KindAmpersandAmpersandToken, outerOp: ast.KindQuestionQuestionToken, side: "right", output: "a ?? (b && c);"},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.title, func(t *testing.T) {
+			t.Parallel()
+			var factory ast.NodeFactory
+			innerExpr := factory.NewBinaryExpression(
+				nil, /*modifiers*/
+				factory.NewIdentifier("a"),
+				nil, /*typeNode*/
+				factory.NewToken(tt.innerOp),
+				factory.NewIdentifier("b"),
+			)
+			var outerExpr *ast.Node
+			if tt.side == "left" {
+				outerExpr = factory.NewBinaryExpression(
+					nil,       /*modifiers*/
+					innerExpr, /*left: (a innerOp b)*/
+					nil,       /*typeNode*/
+					factory.NewToken(tt.outerOp),
+					factory.NewIdentifier("c"),
+				)
+			} else {
+				outerExpr = factory.NewBinaryExpression(
+					nil, /*modifiers*/
+					factory.NewIdentifier("a"),
+					nil, /*typeNode*/
+					factory.NewToken(tt.outerOp),
+					innerExpr, /*right: (b innerOp c)*/
+				)
+				// adjust identifiers for right side
+				innerExpr.AsBinaryExpression().Left = factory.NewIdentifier("b")
+				innerExpr.AsBinaryExpression().Right = factory.NewIdentifier("c")
+			}
+			file := factory.NewSourceFile(ast.SourceFileParseOptions{FileName: "/file.ts", Path: "/file.ts"}, "", factory.NewNodeList(
+				[]*ast.Node{
+					factory.NewExpressionStatement(outerExpr),
+				},
+			), factory.NewToken(ast.KindEndOfFile))
+
+			parsetestutil.MarkSyntheticRecursive(file)
+			emittestutil.CheckEmit(t, nil, file.AsSourceFile(), tt.output)
+		})
+	}
+}
