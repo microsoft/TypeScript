@@ -17965,7 +17965,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 if (type.flags & TypeFlags.Any) {
                     addElement(type, ElementFlags.Rest, target.labeledElementDeclarations?.[i]);
                 }
-                else if (type.flags & TypeFlags.InstantiableNonPrimitive || isGenericMappedType(type)) {
+                else if (someContainedType(type, t => !!(t.flags & TypeFlags.InstantiableNonPrimitive) || isGenericMappedType(type))) {
                     // Generic variadic elements stay as they are.
                     addElement(type, ElementFlags.Variadic, target.labeledElementDeclarations?.[i]);
                 }
@@ -28513,6 +28513,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function everyType(type: Type, f: (t: Type) => boolean): boolean {
         return type.flags & TypeFlags.Union ? every((type as UnionType).types, f) : f(type);
+    }
+
+    function someContainedType(type: Type, f: (t: Type) => boolean): boolean {
+        return type.flags & TypeFlags.UnionOrIntersection ? some((type as UnionOrIntersectionType).types, f) : f(type);
     }
 
     function everyContainedType(type: Type, f: (t: Type) => boolean): boolean {
