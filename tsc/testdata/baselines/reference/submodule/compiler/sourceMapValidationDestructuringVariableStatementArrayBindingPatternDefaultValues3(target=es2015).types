@@ -293,7 +293,7 @@ let multiRobotAInfo: (string | string[])[];
 >numberB : number
 >-1 : -1
 >1 : 1
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >robotB : Robot
 
@@ -304,7 +304,7 @@ let multiRobotAInfo: (string | string[])[];
 >numberB : number
 >-1 : -1
 >1 : 1
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >getRobotB() : Robot
 >getRobotB : () => Robot
@@ -316,7 +316,7 @@ let multiRobotAInfo: (string | string[])[];
 >numberB : number
 >-1 : -1
 >1 : 1
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 ><Robot>[2, "trimmer", "trimming"] : Robot
 >[2, "trimmer", "trimming"] : [number, string, string]

@@ -1,11 +1,8 @@
 --- old.useObjectValuesAndEntries1(target=es2015).types
 +++ new.useObjectValuesAndEntries1(target=es2015).types
-@@= skipped -9, +9 lines =@@
- >2 : 2
-
+@@= skipped -11, +11 lines =@@
  for (var x of Object.values(o)) {
-->x : number
-+>x : any
+ >x : number
  >Object.values(o) : number[]
 ->Object.values : { <T>(o: { [s: string]: T; } | ArrayLike<T>): T[]; (o: {}): any[]; }
 +>Object.values : { <T>(o: ArrayLike<T> | { [s: string]: T; }): T[]; (o: {}): any[]; }
@@ -15,12 +12,7 @@
  >o : { a: number; b: number; }
 
      let y = x;
-->y : number
-->x : number
-+>y : any
-+>x : any
- }
-
+@@= skipped -13, +13 lines =@@
  var entries = Object.entries(o);                    // [string, number][]
  >entries : [string, number][]
  >Object.entries(o) : [string, number][]
@@ -72,7 +64,7 @@
  >{ a: true, b: 2 } : { a: true; b: number; }
  >a : true
  >true : true
-@@= skipped -59, +59 lines =@@
+@@= skipped -44, +44 lines =@@
  var values2 = Object.values({ a: true, b: 2 });     // (number|boolean)[]
  >values2 : (number | boolean)[]
  >Object.values({ a: true, b: 2 }) : (number | boolean)[]

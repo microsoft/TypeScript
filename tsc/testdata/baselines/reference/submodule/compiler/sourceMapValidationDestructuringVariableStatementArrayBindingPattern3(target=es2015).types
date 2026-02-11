@@ -216,7 +216,7 @@ let multiRobotAInfo: (string | [string, string])[];
 >[numberB, ...robotAInfo] = robotB : Robot
 >[numberB, ...robotAInfo] : [number, ...(string | number)[]]
 >numberB : number
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >robotB : Robot
 
@@ -224,7 +224,7 @@ let multiRobotAInfo: (string | [string, string])[];
 >[numberB, ...robotAInfo] = getRobotB() : Robot
 >[numberB, ...robotAInfo] : [number, ...(string | number)[]]
 >numberB : number
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >getRobotB() : Robot
 >getRobotB : () => Robot
@@ -233,7 +233,7 @@ let multiRobotAInfo: (string | [string, string])[];
 >[numberB, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"] : Robot
 >[numberB, ...robotAInfo] : [number, ...(string | number)[]]
 >numberB : number
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 ><Robot>[2, "trimmer", "trimming"] : Robot
 >[2, "trimmer", "trimming"] : [number, string, string]
@@ -244,14 +244,14 @@ let multiRobotAInfo: (string | [string, string])[];
 [...multiRobotAInfo] = multiRobotA;
 >[...multiRobotAInfo] = multiRobotA : MultiSkilledRobot
 >[...multiRobotAInfo] : (string | [string, string])[]
->...multiRobotAInfo : any
+>...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 >multiRobotA : MultiSkilledRobot
 
 [...multiRobotAInfo] = getMultiRobotB();
 >[...multiRobotAInfo] = getMultiRobotB() : MultiSkilledRobot
 >[...multiRobotAInfo] : (string | [string, string])[]
->...multiRobotAInfo : any
+>...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 >getMultiRobotB() : MultiSkilledRobot
 >getMultiRobotB : () => MultiSkilledRobot
@@ -259,7 +259,7 @@ let multiRobotAInfo: (string | [string, string])[];
 [...multiRobotAInfo] = ["trimmer", ["trimming", "edging"]];
 >[...multiRobotAInfo] = ["trimmer", ["trimming", "edging"]] : (string | [string, string])[]
 >[...multiRobotAInfo] : (string | [string, string])[]
->...multiRobotAInfo : any
+>...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 >["trimmer", ["trimming", "edging"]] : (string | [string, string])[]
 >"trimmer" : "trimmer"

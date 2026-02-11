@@ -6,7 +6,7 @@ declare function log(message?: any): void;
 >message : any
 
 for (const x of [1, 2, 3]) {
->x : any
+>x : number
 >[1, 2, 3] : number[]
 >1 : 1
 >2 : 2
@@ -15,20 +15,20 @@ for (const x of [1, 2, 3]) {
     log(x);
 >log(x) : void
 >log : (message?: any) => void
->x : any
+>x : number
 }
 
 declare const aString: string;
 >aString : string
 
 for (const x of aString) {
->x : any
+>x : string
 >aString : string
 
     log(x);
 >log(x) : void
 >log : (message?: any) => void
->x : any
+>x : string
 }
 
 declare const aNumber: number;

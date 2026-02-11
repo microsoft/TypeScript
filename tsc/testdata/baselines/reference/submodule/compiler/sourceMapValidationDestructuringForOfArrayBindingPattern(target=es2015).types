@@ -71,7 +71,7 @@ function getMultiRobots() {
 }
 
 for (let [, nameA] of robots) {
->nameA : any
+>nameA : string
 >robots : Robot[]
 
     console.log(nameA);
@@ -79,10 +79,10 @@ for (let [, nameA] of robots) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA : any
+>nameA : string
 }
 for (let [, nameA] of getRobots()) {
->nameA : any
+>nameA : string
 >getRobots() : Robot[]
 >getRobots : () => Robot[]
 
@@ -91,10 +91,10 @@ for (let [, nameA] of getRobots()) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA : any
+>nameA : string
 }
 for (let [, nameA] of [robotA, robotB]) {
->nameA : any
+>nameA : string
 >[robotA, robotB] : Robot[]
 >robotA : Robot
 >robotB : Robot
@@ -104,11 +104,11 @@ for (let [, nameA] of [robotA, robotB]) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA : any
+>nameA : string
 }
 for (let [, [primarySkillA, secondarySkillA]] of multiRobots) {
->primarySkillA : any
->secondarySkillA : any
+>primarySkillA : string
+>secondarySkillA : string
 >multiRobots : MultiSkilledRobot[]
 
     console.log(primarySkillA);
@@ -116,11 +116,11 @@ for (let [, [primarySkillA, secondarySkillA]] of multiRobots) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->primarySkillA : any
+>primarySkillA : string
 }
 for (let [, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
->primarySkillA : any
->secondarySkillA : any
+>primarySkillA : string
+>secondarySkillA : string
 >getMultiRobots() : MultiSkilledRobot[]
 >getMultiRobots : () => MultiSkilledRobot[]
 
@@ -129,11 +129,11 @@ for (let [, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->primarySkillA : any
+>primarySkillA : string
 }
 for (let [, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
->primarySkillA : any
->secondarySkillA : any
+>primarySkillA : string
+>secondarySkillA : string
 >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
 >multiRobotA : MultiSkilledRobot
 >multiRobotB : MultiSkilledRobot
@@ -143,11 +143,11 @@ for (let [, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->primarySkillA : any
+>primarySkillA : string
 }
 
 for (let [numberB] of robots) {
->numberB : any
+>numberB : number
 >robots : Robot[]
 
     console.log(numberB);
@@ -155,10 +155,10 @@ for (let [numberB] of robots) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberB : any
+>numberB : number
 }
 for (let [numberB] of getRobots()) {
->numberB : any
+>numberB : number
 >getRobots() : Robot[]
 >getRobots : () => Robot[]
 
@@ -167,10 +167,10 @@ for (let [numberB] of getRobots()) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberB : any
+>numberB : number
 }
 for (let [numberB] of [robotA, robotB]) {
->numberB : any
+>numberB : number
 >[robotA, robotB] : Robot[]
 >robotA : Robot
 >robotB : Robot
@@ -180,10 +180,10 @@ for (let [numberB] of [robotA, robotB]) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberB : any
+>numberB : number
 }
 for (let [nameB] of multiRobots) {
->nameB : any
+>nameB : string
 >multiRobots : MultiSkilledRobot[]
 
     console.log(nameB);
@@ -191,10 +191,10 @@ for (let [nameB] of multiRobots) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameB : any
+>nameB : string
 }
 for (let [nameB] of getMultiRobots()) {
->nameB : any
+>nameB : string
 >getMultiRobots() : MultiSkilledRobot[]
 >getMultiRobots : () => MultiSkilledRobot[]
 
@@ -203,10 +203,10 @@ for (let [nameB] of getMultiRobots()) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameB : any
+>nameB : string
 }
 for (let [nameB] of [multiRobotA, multiRobotB]) {
->nameB : any
+>nameB : string
 >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
 >multiRobotA : MultiSkilledRobot
 >multiRobotB : MultiSkilledRobot
@@ -216,13 +216,13 @@ for (let [nameB] of [multiRobotA, multiRobotB]) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameB : any
+>nameB : string
 }
 
 for (let [numberA2, nameA2, skillA2] of robots) {
->numberA2 : any
->nameA2 : any
->skillA2 : any
+>numberA2 : number
+>nameA2 : string
+>skillA2 : string
 >robots : Robot[]
 
     console.log(nameA2);
@@ -230,12 +230,12 @@ for (let [numberA2, nameA2, skillA2] of robots) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA2 : any
+>nameA2 : string
 }
 for (let [numberA2, nameA2, skillA2] of getRobots()) {
->numberA2 : any
->nameA2 : any
->skillA2 : any
+>numberA2 : number
+>nameA2 : string
+>skillA2 : string
 >getRobots() : Robot[]
 >getRobots : () => Robot[]
 
@@ -244,12 +244,12 @@ for (let [numberA2, nameA2, skillA2] of getRobots()) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA2 : any
+>nameA2 : string
 }
 for (let [numberA2, nameA2, skillA2] of [robotA, robotB]) {
->numberA2 : any
->nameA2 : any
->skillA2 : any
+>numberA2 : number
+>nameA2 : string
+>skillA2 : string
 >[robotA, robotB] : Robot[]
 >robotA : Robot
 >robotB : Robot
@@ -259,12 +259,12 @@ for (let [numberA2, nameA2, skillA2] of [robotA, robotB]) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameA2 : any
+>nameA2 : string
 }
 for (let [nameMA, [primarySkillA, secondarySkillA]] of multiRobots) {
->nameMA : any
->primarySkillA : any
->secondarySkillA : any
+>nameMA : string
+>primarySkillA : string
+>secondarySkillA : string
 >multiRobots : MultiSkilledRobot[]
 
     console.log(nameMA);
@@ -272,12 +272,12 @@ for (let [nameMA, [primarySkillA, secondarySkillA]] of multiRobots) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameMA : any
+>nameMA : string
 }
 for (let [nameMA, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
->nameMA : any
->primarySkillA : any
->secondarySkillA : any
+>nameMA : string
+>primarySkillA : string
+>secondarySkillA : string
 >getMultiRobots() : MultiSkilledRobot[]
 >getMultiRobots : () => MultiSkilledRobot[]
 
@@ -286,12 +286,12 @@ for (let [nameMA, [primarySkillA, secondarySkillA]] of getMultiRobots()) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameMA : any
+>nameMA : string
 }
 for (let [nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
->nameMA : any
->primarySkillA : any
->secondarySkillA : any
+>nameMA : string
+>primarySkillA : string
+>secondarySkillA : string
 >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
 >multiRobotA : MultiSkilledRobot
 >multiRobotB : MultiSkilledRobot
@@ -301,12 +301,12 @@ for (let [nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->nameMA : any
+>nameMA : string
 }
 
 for (let [numberA3, ...robotAInfo] of robots) {
->numberA3 : any
->robotAInfo : any
+>numberA3 : number
+>robotAInfo : [string, string]
 >robots : Robot[]
 
     console.log(numberA3);
@@ -314,11 +314,11 @@ for (let [numberA3, ...robotAInfo] of robots) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberA3 : any
+>numberA3 : number
 }
 for (let [numberA3, ...robotAInfo] of getRobots()) {
->numberA3 : any
->robotAInfo : any
+>numberA3 : number
+>robotAInfo : [string, string]
 >getRobots() : Robot[]
 >getRobots : () => Robot[]
 
@@ -327,11 +327,11 @@ for (let [numberA3, ...robotAInfo] of getRobots()) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberA3 : any
+>numberA3 : number
 }
 for (let [numberA3, ...robotAInfo] of [robotA, robotB]) {
->numberA3 : any
->robotAInfo : any
+>numberA3 : number
+>robotAInfo : [string, string]
 >[robotA, robotB] : Robot[]
 >robotA : Robot
 >robotB : Robot
@@ -341,10 +341,10 @@ for (let [numberA3, ...robotAInfo] of [robotA, robotB]) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->numberA3 : any
+>numberA3 : number
 }
 for (let [...multiRobotAInfo] of multiRobots) {
->multiRobotAInfo : any
+>multiRobotAInfo : [string, [string, string]]
 >multiRobots : MultiSkilledRobot[]
 
     console.log(multiRobotAInfo);
@@ -352,10 +352,10 @@ for (let [...multiRobotAInfo] of multiRobots) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->multiRobotAInfo : any
+>multiRobotAInfo : [string, [string, string]]
 }
 for (let [...multiRobotAInfo] of getMultiRobots()) {
->multiRobotAInfo : any
+>multiRobotAInfo : [string, [string, string]]
 >getMultiRobots() : MultiSkilledRobot[]
 >getMultiRobots : () => MultiSkilledRobot[]
 
@@ -364,10 +364,10 @@ for (let [...multiRobotAInfo] of getMultiRobots()) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->multiRobotAInfo : any
+>multiRobotAInfo : [string, [string, string]]
 }
 for (let [...multiRobotAInfo] of [multiRobotA, multiRobotB]) {
->multiRobotAInfo : any
+>multiRobotAInfo : [string, [string, string]]
 >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
 >multiRobotA : MultiSkilledRobot
 >multiRobotB : MultiSkilledRobot
@@ -377,5 +377,5 @@ for (let [...multiRobotAInfo] of [multiRobotA, multiRobotB]) {
 >console.log : (msg: any) => void
 >console : { log(msg: any): void; }
 >log : (msg: any) => void
->multiRobotAInfo : any
+>multiRobotAInfo : [string, [string, string]]
 }

@@ -12,51 +12,17 @@
 -error TS5053: Option 'lib' cannot be specified with option 'noLib'.
 -
 -
-+arrayIterationLibES5TargetDifferent.ts(3,17): error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
-+arrayIterationLibES5TargetDifferent.ts(9,17): error TS2488: Type 'string' must have a '[Symbol.iterator]()' method that returns an iterator.
-+arrayIterationLibES5TargetDifferent.ts(15,17): error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
-+arrayIterationLibES5TargetDifferent.ts(21,17): error TS2488: Type '{ foo: string; }' must have a '[Symbol.iterator]()' method that returns an iterator.
 +
 +
 +!!! error TS5053: Option 'lib' cannot be specified with option 'noLib'.
  !!! error TS2318: Cannot find global type 'Array'.
  !!! error TS2318: Cannot find global type 'Boolean'.
  !!! error TS2318: Cannot find global type 'CallableFunction'.
-@@= skipped -13, +17 lines =@@
+@@= skipped -13, +13 lines =@@
  !!! error TS2318: Cannot find global type 'Object'.
  !!! error TS2318: Cannot find global type 'RegExp'.
  !!! error TS2318: Cannot find global type 'String'.
 -!!! error TS5053: Option 'lib' cannot be specified with option 'noLib'.
--==== arrayIterationLibES5TargetDifferent.ts (0 errors) ====
-+==== arrayIterationLibES5TargetDifferent.ts (4 errors) ====
+ ==== arrayIterationLibES5TargetDifferent.ts (0 errors) ====
      declare function log(message?: any): void;
      
-     for (const x of [1, 2, 3]) {
-+                    ~~~~~~~~~
-+!!! error TS2488: Type '{}' must have a '[Symbol.iterator]()' method that returns an iterator.
-         log(x);
-     }
-     
-     declare const aString: string;
-     
-     for (const x of aString) {
-+                    ~~~~~~~
-+!!! error TS2488: Type 'string' must have a '[Symbol.iterator]()' method that returns an iterator.
-         log(x);
-     }
-     
-     declare const aNumber: number;
-     
-     for (const x of aNumber) {
-+                    ~~~~~~~
-+!!! error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
-         log(x);
-     }
-     
-     declare const anObject: { foo: string };
-     
-     for (const x of anObject) {
-+                    ~~~~~~~~
-+!!! error TS2488: Type '{ foo: string; }' must have a '[Symbol.iterator]()' method that returns an iterator.
-         log(x);
-     }

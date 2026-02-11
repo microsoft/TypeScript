@@ -22,13 +22,13 @@ declare const aString: string;
 >aString : string
 
 for (const x of aString) {
->x : any
+>x : string
 >aString : string
 
     log(x);
 >log(x) : void
 >log : (message?: any) => void
->x : any
+>x : string
 }
 
 declare const aNumber: number;

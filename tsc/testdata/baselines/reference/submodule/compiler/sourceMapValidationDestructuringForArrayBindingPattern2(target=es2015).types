@@ -526,7 +526,7 @@ for ([numberA3, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >[numberA3, ...robotAInfo] = robotA : Robot
 >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 : number
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >robotA : Robot
 >i = 0 : 0
@@ -550,7 +550,7 @@ for ([numberA3, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >[numberA3, ...robotAInfo] = getRobot() : Robot
 >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 : number
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >getRobot() : Robot
 >getRobot : () => Robot
@@ -575,7 +575,7 @@ for ([numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"], i = 0; i < 1
 >[numberA3, ...robotAInfo] = <Robot>[2, "trimmer", "trimming"] : Robot
 >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 : number
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 ><Robot>[2, "trimmer", "trimming"] : Robot
 >[2, "trimmer", "trimming"] : [number, string, string]
@@ -602,7 +602,7 @@ for ([...multiRobotAInfo] = multiRobotA, i = 0; i < 1; i++) {
 >[...multiRobotAInfo] = multiRobotA, i = 0 : 0
 >[...multiRobotAInfo] = multiRobotA : MultiSkilledRobot
 >[...multiRobotAInfo] : (string | [string, string])[]
->...multiRobotAInfo : any
+>...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 >multiRobotA : MultiSkilledRobot
 >i = 0 : 0
@@ -625,7 +625,7 @@ for ([...multiRobotAInfo] = getMultiRobot(), i = 0; i < 1; i++) {
 >[...multiRobotAInfo] = getMultiRobot(), i = 0 : 0
 >[...multiRobotAInfo] = getMultiRobot() : MultiSkilledRobot
 >[...multiRobotAInfo] : (string | [string, string])[]
->...multiRobotAInfo : any
+>...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 >getMultiRobot() : MultiSkilledRobot
 >getMultiRobot : () => MultiSkilledRobot
@@ -649,7 +649,7 @@ for ([...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"
 >[...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]], i = 0 : 0
 >[...multiRobotAInfo] = <MultiSkilledRobot>["trimmer", ["trimming", "edging"]] : MultiSkilledRobot
 >[...multiRobotAInfo] : (string | [string, string])[]
->...multiRobotAInfo : any
+>...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 ><MultiSkilledRobot>["trimmer", ["trimming", "edging"]] : MultiSkilledRobot
 >["trimmer", ["trimming", "edging"]] : [string, [string, string]]

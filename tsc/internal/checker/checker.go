@@ -5919,7 +5919,8 @@ func (c *Checker) getIteratedTypeOrElementType(use IterationUse, inputType *Type
 		return nil
 	}
 	// TODO: remove ScriptTargetES2015
-	uplevelIteration := c.languageVersion >= core.ScriptTargetES2015
+	iterableExists := c.getGlobalIterableType() != c.emptyGenericType
+	uplevelIteration := c.languageVersion >= core.ScriptTargetES2015 && iterableExists
 	downlevelIteration := !uplevelIteration && c.compilerOptions.DownlevelIteration == core.TSTrue
 	possibleOutOfBounds := c.compilerOptions.NoUncheckedIndexedAccess == core.TSTrue && use&IterationUsePossiblyOutOfBounds != 0
 	// Get the iterated type of an `Iterable<T>` or `IterableIterator<T>` only in ES2015

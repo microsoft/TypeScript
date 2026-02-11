@@ -351,7 +351,7 @@ for ([nameMA, [primarySkillA, secondarySkillA]] of [multiRobotA, multiRobotB]) {
 for ([numberA3, ...robotAInfo] of robots) {
 >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 : number
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >robots : Robot[]
 
@@ -365,7 +365,7 @@ for ([numberA3, ...robotAInfo] of robots) {
 for ([numberA3, ...robotAInfo] of getRobots()) {
 >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 : number
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >getRobots() : Robot[]
 >getRobots : () => Robot[]
@@ -380,7 +380,7 @@ for ([numberA3, ...robotAInfo] of getRobots()) {
 for ([numberA3, ...robotAInfo] of [robotA, robotB]) {
 >[numberA3, ...robotAInfo] : [number, ...(string | number)[]]
 >numberA3 : number
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >[robotA, robotB] : Robot[]
 >robotA : Robot
@@ -395,7 +395,7 @@ for ([numberA3, ...robotAInfo] of [robotA, robotB]) {
 }
 for ([...multiRobotAInfo] of multiRobots) {
 >[...multiRobotAInfo] : (string | [string, string])[]
->...multiRobotAInfo : any
+>...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 >multiRobots : MultiSkilledRobot[]
 
@@ -408,7 +408,7 @@ for ([...multiRobotAInfo] of multiRobots) {
 }
 for ([...multiRobotAInfo] of getMultiRobots()) {
 >[...multiRobotAInfo] : (string | [string, string])[]
->...multiRobotAInfo : any
+>...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 >getMultiRobots() : MultiSkilledRobot[]
 >getMultiRobots : () => MultiSkilledRobot[]
@@ -422,7 +422,7 @@ for ([...multiRobotAInfo] of getMultiRobots()) {
 }
 for ([...multiRobotAInfo] of [multiRobotA, multiRobotB]) {
 >[...multiRobotAInfo] : (string | [string, string])[]
->...multiRobotAInfo : any
+>...multiRobotAInfo : string | [string, string]
 >multiRobotAInfo : (string | [string, string])[]
 >[multiRobotA, multiRobotB] : MultiSkilledRobot[]
 >multiRobotA : MultiSkilledRobot

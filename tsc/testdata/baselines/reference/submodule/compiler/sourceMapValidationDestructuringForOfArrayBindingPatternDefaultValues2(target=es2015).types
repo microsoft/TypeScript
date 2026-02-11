@@ -486,7 +486,7 @@ for ([numberA3 = -1, ...robotAInfo] of robots) {
 >numberA3 : number
 >-1 : -1
 >1 : 1
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >robots : Robot[]
 
@@ -503,7 +503,7 @@ for ([numberA3 = -1, ...robotAInfo] of getRobots()) {
 >numberA3 : number
 >-1 : -1
 >1 : 1
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >getRobots() : Robot[]
 >getRobots : () => Robot[]
@@ -521,7 +521,7 @@ for ([numberA3 = -1, ...robotAInfo] of [robotA, robotB]) {
 >numberA3 : number
 >-1 : -1
 >1 : 1
->...robotAInfo : any
+>...robotAInfo : string | number
 >robotAInfo : (string | number)[]
 >[robotA, robotB] : Robot[]
 >robotA : Robot

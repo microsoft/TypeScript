@@ -1,42 +1,18 @@
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(32,35): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(35,35): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(38,35): error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(42,55): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(46,55): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(51,5): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(56,29): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(57,17): error TS2454: Variable 'nameA' is used before being assigned.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(59,29): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(60,17): error TS2454: Variable 'nameA' is used before being assigned.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(62,29): error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(63,17): error TS2454: Variable 'nameA' is used before being assigned.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(70,6): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(71,17): error TS2454: Variable 'primaryA' is used before being assigned.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(78,6): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(79,17): error TS2454: Variable 'primaryA' is used before being assigned.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(86,6): error TS2488: Type '{ name: string; skills: { primary: string; secondary: string; }; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(88,17): error TS2454: Variable 'primaryA' is used before being assigned.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(92,62): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(95,63): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(98,63): error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(107,6): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(116,6): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(125,6): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(130,49): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(131,17): error TS2454: Variable 'nameA' is used before being assigned.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(133,49): error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(134,17): error TS2454: Variable 'nameA' is used before being assigned.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(136,49): error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(137,17): error TS2454: Variable 'nameA' is used before being assigned.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(145,6): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(146,17): error TS2454: Variable 'nameA' is used before being assigned.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(154,6): error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(155,17): error TS2454: Variable 'nameA' is used before being assigned.
-sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(163,6): error TS2488: Type '{ name: string; skills: { primary: string; secondary: string; }; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
 sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,17): error TS2454: Variable 'nameA' is used before being assigned.
 
 
-==== sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts (36 errors) ====
+==== sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts (12 errors) ====
     declare var console: {
         log(msg: any): void;
     }
@@ -69,59 +45,40 @@ sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,1
     let name: string, primary: string, secondary: string, skill: string;
     
     for ({name: nameA = "noName" } of robots) {
-                                      ~~~~~~
-!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
     }
     for ({name: nameA = "noName" } of getRobots()) {
-                                      ~~~~~~~~~~~
-!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
     }
     for ({name: nameA = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
-                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
     }
     for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
         { primary: "nosKill", secondary: "noSkill" } } of multiRobots) {
-                                                          ~~~~~~~~~~~
-!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(primaryA);
     }
     for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
         { primary: "nosKill", secondary: "noSkill" } } of getMultiRobots()) {
-                                                          ~~~~~~~~~~~~~~~~
-!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(primaryA);
     }
     for ({ skills: { primary: primaryA = "primary", secondary: secondaryA = "secondary" } =
         { primary: "nosKill", secondary: "noSkill" } } of
         <MultiRobot[]>[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
             { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(primaryA);
     }
     
     for ({ name = "noName" } of robots) {
-                                ~~~~~~
-!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
                     ~~~~~
 !!! error TS2454: Variable 'nameA' is used before being assigned.
     }
     for ({ name = "noName" } of getRobots()) {
-                                ~~~~~~~~~~~
-!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
                     ~~~~~
 !!! error TS2454: Variable 'nameA' is used before being assigned.
     }
     for ({ name = "noName" } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
-                                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
                     ~~~~~
 !!! error TS2454: Variable 'nameA' is used before being assigned.
@@ -132,8 +89,6 @@ sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,1
             secondary = "secondary"
         } = { primary: "noSkill", secondary: "noSkill" }
     } of multiRobots) {
-         ~~~~~~~~~~~
-!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(primaryA);
                     ~~~~~~~~
 !!! error TS2454: Variable 'primaryA' is used before being assigned.
@@ -144,8 +99,6 @@ sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,1
             secondary = "secondary"
         } = { primary: "noSkill", secondary: "noSkill" }
     } of getMultiRobots()) {
-         ~~~~~~~~~~~~~~~~
-!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(primaryA);
                     ~~~~~~~~
 !!! error TS2454: Variable 'primaryA' is used before being assigned.
@@ -156,10 +109,7 @@ sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,1
             secondary = "secondary"
         } = { primary: "noSkill", secondary: "noSkill" }
     } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type '{ name: string; skills: { primary: string; secondary: string; }; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(primaryA);
                     ~~~~~~~~
 !!! error TS2454: Variable 'primaryA' is used before being assigned.
@@ -167,18 +117,12 @@ sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,1
     
     
     for ({name: nameA = "noName", skill: skillA = "noSkill" } of robots) {
-                                                                 ~~~~~~
-!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
     }
     for ({name: nameA = "noName", skill: skillA = "noSkill"  } of getRobots()) {
-                                                                  ~~~~~~~~~~~
-!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
     }
     for ({name: nameA = "noName", skill: skillA = "noSkill"  } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
-                                                                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
     }
     for ({
@@ -188,8 +132,6 @@ sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,1
             secondary: secondaryA = "secondary"
         } = { primary: "noSkill", secondary: "noSkill" }
     } of multiRobots) {
-         ~~~~~~~~~~~
-!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
     }
     for ({
@@ -199,8 +141,6 @@ sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,1
             secondary: secondaryA = "secondary"
         } = { primary: "noSkill", secondary: "noSkill" }
     } of getMultiRobots()) {
-         ~~~~~~~~~~~~~~~~
-!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
     }
     for ({
@@ -210,30 +150,21 @@ sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,1
             secondary: secondaryA = "secondary"
         } = { primary: "noSkill", secondary: "noSkill" }
     } of <MultiRobot[]>[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
     }
     
     for ({ name = "noName", skill  = "noSkill" } of robots) {
-                                                    ~~~~~~
-!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
                     ~~~~~
 !!! error TS2454: Variable 'nameA' is used before being assigned.
     }
     for ({ name = "noName", skill = "noSkill"  } of getRobots()) {
-                                                    ~~~~~~~~~~~
-!!! error TS2488: Type 'Robot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
                     ~~~~~
 !!! error TS2454: Variable 'nameA' is used before being assigned.
     }
     for ({ name = "noName", skill  = "noSkill" } of [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }]) {
-                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type '{ name: string; skill: string; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
                     ~~~~~
 !!! error TS2454: Variable 'nameA' is used before being assigned.
@@ -245,8 +176,6 @@ sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,1
             secondary = "secondary"
         } = { primary: "noSkill", secondary: "noSkill" }
     } of multiRobots) {
-         ~~~~~~~~~~~
-!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
                     ~~~~~
 !!! error TS2454: Variable 'nameA' is used before being assigned.
@@ -258,8 +187,6 @@ sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,1
             secondary = "secondary"
         } = { primary: "noSkill", secondary: "noSkill" }
     } of getMultiRobots()) {
-         ~~~~~~~~~~~~~~~~
-!!! error TS2488: Type 'MultiRobot[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
                     ~~~~~
 !!! error TS2454: Variable 'nameA' is used before being assigned.
@@ -271,10 +198,7 @@ sourceMapValidationDestructuringForOfObjectBindingPatternDefaultValues2.ts(165,1
             secondary = "secondary"
         } = { primary: "noSkill", secondary: "noSkill" }
     } of [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2488: Type '{ name: string; skills: { primary: string; secondary: string; }; }[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         console.log(nameA);
                     ~~~~~
 !!! error TS2454: Variable 'nameA' is used before being assigned.

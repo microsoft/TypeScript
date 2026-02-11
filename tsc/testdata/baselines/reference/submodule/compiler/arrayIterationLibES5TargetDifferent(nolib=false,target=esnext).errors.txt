@@ -1,23 +1,17 @@
-arrayIterationLibES5TargetDifferent.ts(3,17): error TS2488: Type 'number[]' must have a '[Symbol.iterator]()' method that returns an iterator.
-arrayIterationLibES5TargetDifferent.ts(9,17): error TS2488: Type 'string' must have a '[Symbol.iterator]()' method that returns an iterator.
-arrayIterationLibES5TargetDifferent.ts(15,17): error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
-arrayIterationLibES5TargetDifferent.ts(21,17): error TS2488: Type '{ foo: string; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+arrayIterationLibES5TargetDifferent.ts(15,17): error TS2495: Type 'number' is not an array type or a string type.
+arrayIterationLibES5TargetDifferent.ts(21,17): error TS2495: Type '{ foo: string; }' is not an array type or a string type.
 
 
-==== arrayIterationLibES5TargetDifferent.ts (4 errors) ====
+==== arrayIterationLibES5TargetDifferent.ts (2 errors) ====
     declare function log(message?: any): void;
     
     for (const x of [1, 2, 3]) {
-                    ~~~~~~~~~
-!!! error TS2488: Type 'number[]' must have a '[Symbol.iterator]()' method that returns an iterator.
         log(x);
     }
     
     declare const aString: string;
     
     for (const x of aString) {
-                    ~~~~~~~
-!!! error TS2488: Type 'string' must have a '[Symbol.iterator]()' method that returns an iterator.
         log(x);
     }
     
@@ -25,7 +19,7 @@ arrayIterationLibES5TargetDifferent.ts(21,17): error TS2488: Type '{ foo: string
     
     for (const x of aNumber) {
                     ~~~~~~~
-!!! error TS2488: Type 'number' must have a '[Symbol.iterator]()' method that returns an iterator.
+!!! error TS2495: Type 'number' is not an array type or a string type.
         log(x);
     }
     
@@ -33,6 +27,6 @@ arrayIterationLibES5TargetDifferent.ts(21,17): error TS2488: Type '{ foo: string
     
     for (const x of anObject) {
                     ~~~~~~~~
-!!! error TS2488: Type '{ foo: string; }' must have a '[Symbol.iterator]()' method that returns an iterator.
+!!! error TS2495: Type '{ foo: string; }' is not an array type or a string type.
         log(x);
     }
