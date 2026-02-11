@@ -1676,6 +1676,9 @@ func (c *Checker) checkGrammarVariableDeclarationList(declarationList *ast.Varia
 		if declarationList.Flags&ast.NodeFlagsAmbient != 0 {
 			return c.grammarErrorOnNode(declarationList.AsNode(), core.IfElse(blockScopeFlags == ast.NodeFlagsUsing, diagnostics.X_using_declarations_are_not_allowed_in_ambient_contexts, diagnostics.X_await_using_declarations_are_not_allowed_in_ambient_contexts))
 		}
+		if ast.IsVariableStatement(declarationList.Parent) && (ast.IsCaseClause(declarationList.Parent.Parent) || ast.IsDefaultClause(declarationList.Parent.Parent)) {
+			return c.grammarErrorOnNode(declarationList.AsNode(), core.IfElse(blockScopeFlags == ast.NodeFlagsUsing, diagnostics.X_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block, diagnostics.X_await_using_declarations_are_not_allowed_in_case_or_default_clauses_unless_contained_within_a_block))
+		}
 	}
 
 	if blockScopeFlags == ast.NodeFlagsAwaitUsing {
