@@ -245,6 +245,8 @@ func (s *Session) InitializeWithUserConfig(config *lsutil.UserConfig) {
 
 func (s *Session) DidOpenFile(ctx context.Context, uri lsproto.DocumentUri, version int32, content string, languageKind lsproto.LanguageKind) {
 	s.cancelDiagnosticsRefresh()
+	s.snapshotUpdateMu.Lock()
+	defer s.snapshotUpdateMu.Unlock()
 	s.pendingFileChangesMu.Lock()
 	s.pendingFileChanges = append(s.pendingFileChanges, FileChange{
 		Kind:         FileChangeKindOpen,
