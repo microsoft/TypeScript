@@ -21484,7 +21484,7 @@ func (c *Checker) fillMissingTypeArguments(typeArguments []*Type, typeParameters
 		return nil
 	}
 	numTypeArguments := len(typeArguments)
-	if isJavaScriptImplicitAny || (numTypeArguments >= minTypeArgumentCount && numTypeArguments < numTypeParameters) {
+	if isJavaScriptImplicitAny || numTypeArguments < numTypeParameters {
 		result := make([]*Type, numTypeParameters)
 		copy(result, typeArguments)
 		// Map invalid forward references in default types to the error type
@@ -22771,10 +22771,10 @@ func (c *Checker) createNormalizedTupleType(target *Type, elementTypes []*Type) 
 	}
 	if d.combinedFlags&ElementFlagsVariadic != 0 {
 		for i, e := range elementTypes {
-			if d.elementInfos[i].flags&ElementFlagsVariadic != 0 && e.flags&(TypeFlagsNever|TypeFlagsUnion) != 0 {
+			if i < len(d.elementInfos) && d.elementInfos[i].flags&ElementFlagsVariadic != 0 && e.flags&(TypeFlagsNever|TypeFlagsUnion) != 0 {
 				// Transform [A, ...(X | Y | Z)] into [A, ...X] | [A, ...Y] | [A, ...Z]
 				checkTypes := core.MapIndex(elementTypes, func(t *Type, i int) *Type {
-					if d.elementInfos[i].flags&ElementFlagsVariadic != 0 {
+					if i < len(d.elementInfos) && d.elementInfos[i].flags&ElementFlagsVariadic != 0 {
 						return t
 					}
 					return c.unknownType
@@ -22787,14 +22787,19 @@ func (c *Checker) createNormalizedTupleType(target *Type, elementTypes []*Type) 
 			}
 		}
 	}
-	// We have optional, rest, or variadic n that may need normalizing. Normalization ensures that all variadic
-	// n are generic and that the tuple type has one of the following layouts, disregarding variadic n:
-	// (1) Zero or more required n, followed by zero or more optional n, followed by zero or one rest element.
-	// (2) Zero or more required n, followed by a rest element, followed by zero or more required n.
-	// In either layout, zero or more generic variadic n may be present at any location.
+	// We have optional, rest, or variadic elements that may need normalizing. Normalization ensures that all variadic
+	// elements are generic and that the tuple type has one of the following layouts, disregarding variadic elements:
+	// (1) Zero or more required elements, followed by zero or more optional elements, followed by zero or one rest element.
+	// (2) Zero or more required elements, followed by a rest element, followed by zero or more required elements.
+	// In either layout, zero or more generic variadic elements may be present at any location.
+	// Note that the element types may contain an extra 'this' type argument that we want to ignore during normalization
+	// and then just append to the normalized element types.
 	n := &TupleNormalizer{}
-	if !n.normalize(c, elementTypes, d.elementInfos) {
+	if !n.normalize(c, elementTypes[:len(d.elementInfos)], d.elementInfos) {
 		return c.errorType
+	}
+	if len(elementTypes) > len(d.elementInfos) {
+		n.types = append(n.types, elementTypes[len(d.elementInfos)])
 	}
 	tupleTarget := c.getTupleTargetType(n.infos, d.readonly)
 	switch {
@@ -23515,7 +23520,6 @@ func (c *Checker) evaluateEntity(expr *ast.Node, location *ast.Node) evaluator.R
 				name := expr.AsElementAccessExpression().ArgumentExpression.Text()
 				member := rootSymbol.Exports[name]
 				if member != nil {
-					debug.Assert(ast.GetSourceFileOfNode(member.ValueDeclaration) == ast.GetSourceFileOfNode(rootSymbol.ValueDeclaration))
 					if location != nil {
 						return c.evaluateEnumMember(expr, member, location)
 					}

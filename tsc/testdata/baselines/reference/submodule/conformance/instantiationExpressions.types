@@ -18,8 +18,8 @@ function f1() {
 >f1 : () => void
 
     let f0 = fx<>;  // Error
->f0 : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
->fx<> : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>f0 : { (x: unknown): unknown; (x: unknown, n: number): unknown; (t: [unknown, unknown]): [unknown, unknown]; }
+>fx<> : { (x: unknown): unknown; (x: unknown, n: number): unknown; (t: [unknown, unknown]): [unknown, unknown]; }
 >fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
 
     let f1 = fx<string>;  // { (x: string): string; (x: string, n: number): string; }
@@ -39,7 +39,7 @@ function f1() {
 }
 
 type T10 = typeof fx<>;  // Error
->T10 : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
+>T10 : { (x: unknown): unknown; (x: unknown, n: number): unknown; (t: [unknown, unknown]): [unknown, unknown]; }
 >fx : { <T>(x: T): T; <T>(x: T, n: number): T; <T, U>(t: [T, U]): [T, U]; }
 
 type T11 = typeof fx<string>;  // { (x: string): string; (x: string, n: number): string; }
@@ -58,8 +58,8 @@ function f2() {
 >f2 : () => void
 
     const A0 = Array<>;  // Error
->A0 : { <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; from<T>(arrayLike: ArrayLike<T>): T[]; from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; from<T>(iterable: ArrayLike<T> | Iterable<T>): T[]; from<T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; of<T>(...items: T[]): T[]; readonly [Symbol.species]: ArrayConstructor; }
->Array<> : { <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; from<T>(arrayLike: ArrayLike<T>): T[]; from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; from<T>(iterable: ArrayLike<T> | Iterable<T>): T[]; from<T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; of<T>(...items: T[]): T[]; readonly [Symbol.species]: ArrayConstructor; }
+>A0 : { (arrayLength: number): unknown[]; (...items: unknown[]): unknown[]; new (arrayLength: number): unknown[]; new (...items: unknown[]): unknown[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; from<T>(arrayLike: ArrayLike<T>): T[]; from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; from<T>(iterable: ArrayLike<T> | Iterable<T>): T[]; from<T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; of<T>(...items: T[]): T[]; readonly [Symbol.species]: ArrayConstructor; }
+>Array<> : { (arrayLength: number): unknown[]; (...items: unknown[]): unknown[]; new (arrayLength: number): unknown[]; new (...items: unknown[]): unknown[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; from<T>(arrayLike: ArrayLike<T>): T[]; from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; from<T>(iterable: ArrayLike<T> | Iterable<T>): T[]; from<T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; of<T>(...items: T[]): T[]; readonly [Symbol.species]: ArrayConstructor; }
 >Array : ArrayConstructor
 
     const A1 = Array<string>;  // new (...) => string[]
@@ -74,7 +74,7 @@ function f2() {
 }
 
 type T20 = typeof Array<>;  // Error
->T20 : { <T>(arrayLength: number): T[]; <T>(...items: T[]): T[]; new <T>(arrayLength: number): T[]; new <T>(...items: T[]): T[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; from<T>(arrayLike: ArrayLike<T>): T[]; from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; from<T>(iterable: ArrayLike<T> | Iterable<T>): T[]; from<T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; of<T>(...items: T[]): T[]; readonly [Symbol.species]: ArrayConstructor; }
+>T20 : { (arrayLength: number): unknown[]; (...items: unknown[]): unknown[]; new (arrayLength: number): unknown[]; new (...items: unknown[]): unknown[]; isArray(arg: any): arg is any[]; readonly prototype: any[]; from<T>(arrayLike: ArrayLike<T>): T[]; from<T, U>(arrayLike: ArrayLike<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; from<T>(iterable: ArrayLike<T> | Iterable<T>): T[]; from<T, U>(iterable: ArrayLike<T> | Iterable<T>, mapfn: (v: T, k: number) => U, thisArg?: any): U[]; of<T>(...items: T[]): T[]; readonly [Symbol.species]: ArrayConstructor; }
 >Array : ArrayConstructor
 
 type T21 = typeof Array<string>;  // new (...) => string[]
