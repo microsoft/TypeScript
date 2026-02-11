@@ -394,7 +394,7 @@ func FindPrecedingTokenEx(sourceFile *ast.SourceFile, position int, startNode *a
 						}
 					}
 					if jsDoc != nil {
-						if !excludeJSDoc {
+						if !excludeJSDoc && position < jsDoc.End() {
 							return find(jsDoc)
 						} else {
 							return findRightmostValidToken(jsDoc.End(), sourceFile, n, position, excludeJSDoc)

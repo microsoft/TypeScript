@@ -1,4 +1,3 @@
-TestCompletionsAfterJSDoc
 TestFindReferencesBindingPatternInJsdocNoCrash1
 TestFindReferencesBindingPatternInJsdocNoCrash2
 TestFormatDocumentWithTrivia
