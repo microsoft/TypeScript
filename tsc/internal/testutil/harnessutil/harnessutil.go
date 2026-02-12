@@ -1178,3 +1178,31 @@ func GetConfigNameFromFileName(filename string) string {
 	}
 	return ""
 }
+
+func SkipUnsupportedCompilerOptions(t *testing.T, options *core.CompilerOptions) {
+	t.Helper()
+	switch options.Module {
+	case core.ModuleKindAMD, core.ModuleKindUMD, core.ModuleKindSystem:
+		t.Skipf("unsupported module kind %s", options.Module)
+	}
+	switch options.ModuleResolution {
+	case core.ModuleResolutionKindNode10, core.ModuleResolutionKindClassic:
+		t.Skipf("unsupported module resolution kind %d", options.ModuleResolution)
+	}
+	if options.ESModuleInterop.IsFalse() {
+		t.Skipf("esModuleInterop=false is unsupported")
+	}
+	if options.AllowSyntheticDefaultImports.IsFalse() {
+		t.Skipf("allowSyntheticDefaultImports=false is unsupported")
+	}
+	if options.BaseUrl != "" {
+		t.Skipf("unsupported baseUrl %s", options.BaseUrl)
+	}
+	if options.OutFile != "" {
+		t.Skipf("unsupported outFile %s", options.OutFile)
+	}
+	switch options.Target {
+	case core.ScriptTargetES3, core.ScriptTargetES5:
+		t.Skipf("unsupported target %s", options.Target)
+	}
+}

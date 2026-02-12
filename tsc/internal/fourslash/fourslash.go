@@ -206,32 +206,7 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		}
 	}
 
-	// Skip tests with deprecated/removed compiler options
-	if compilerOptions.BaseUrl != "" {
-		t.Skipf("Test uses deprecated 'baseUrl' option")
-	}
-	if compilerOptions.OutFile != "" {
-		t.Skipf("Test uses deprecated 'outFile' option")
-	}
-	if compilerOptions.Module == core.ModuleKindAMD {
-		t.Skipf("Test uses deprecated 'module: AMD' option")
-	}
-	if compilerOptions.Module == core.ModuleKindSystem {
-		t.Skipf("Test uses deprecated 'module: System' option")
-	}
-	if compilerOptions.Module == core.ModuleKindUMD {
-		t.Skipf("Test uses deprecated 'module: UMD' option")
-	}
-	if compilerOptions.ModuleResolution == core.ModuleResolutionKindClassic {
-		t.Skipf("Test uses deprecated 'moduleResolution: Classic' option")
-	}
-	if compilerOptions.AllowSyntheticDefaultImports == core.TSFalse {
-		t.Skipf("Test uses unsupported 'allowSyntheticDefaultImports: false' option")
-	}
-	switch compilerOptions.Target {
-	case core.ScriptTargetES3, core.ScriptTargetES5:
-		t.Skipf("Test uses unsupported target: %s", compilerOptions.Target.String())
-	}
+	harnessutil.SkipUnsupportedCompilerOptions(t, compilerOptions)
 
 	inputReader, inputWriter := newLSPPipe()
 	outputReader, outputWriter := newLSPPipe()
