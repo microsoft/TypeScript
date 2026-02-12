@@ -2169,6 +2169,39 @@ func (f *FourslashTest) VerifyOutliningSpans(t *testing.T, foldingRangeKind ...l
 	}
 }
 
+// FoldingRangeLineExpected represents expected start and end lines for a folding range.
+type FoldingRangeLineExpected struct {
+	StartLine uint32
+	EndLine   uint32
+}
+
+// VerifyFoldingRangeLines verifies folding ranges by comparing only start and end lines.
+// This is useful for testing with lineFoldingOnly where character positions are ignored.
+func (f *FourslashTest) VerifyFoldingRangeLines(t *testing.T, expected []FoldingRangeLineExpected) {
+	params := &lsproto.FoldingRangeParams{
+		TextDocument: lsproto.TextDocumentIdentifier{
+			Uri: lsconv.FileNameToDocumentURI(f.activeFilename),
+		},
+	}
+	result := sendRequest(t, f, lsproto.TextDocumentFoldingRangeInfo, params)
+	if result.FoldingRanges == nil {
+		t.Fatalf("Nil response received for folding range request")
+	}
+
+	actualRanges := *result.FoldingRanges
+	if len(actualRanges) != len(expected) {
+		t.Fatalf("verifyFoldingRangeLines failed - expected %d ranges, got %d", len(expected), len(actualRanges))
+	}
+
+	for i, exp := range expected {
+		got := actualRanges[i]
+		if got.StartLine != exp.StartLine || got.EndLine != exp.EndLine {
+			t.Errorf("verifyFoldingRangeLines failed - range %d: expected (startLine=%d, endLine=%d), got (startLine=%d, endLine=%d)",
+				i, exp.StartLine, exp.EndLine, got.StartLine, got.EndLine)
+		}
+	}
+}
+
 func (f *FourslashTest) VerifyBaselineHover(t *testing.T) {
 	markersAndItems := core.MapFiltered(f.Markers(), func(marker *Marker) (markerAndItem[*lsproto.Hover], bool) {
 		if marker.Name == nil {
