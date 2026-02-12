@@ -3940,6 +3940,41 @@ func TestTscProjectReferences(t *testing.T) {
 			commandLineArgs: []string{"--p", "app", "--pretty", "false"},
 		},
 		{
+			subScenario: "referenced project with esnext module disallows synthetic default imports",
+			files: FileMap{
+				"/home/src/workspaces/project/lib/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"composite": true,
+						"declaration": true,
+						"module": "esnext",
+						"moduleResolution": "bundler",
+						"rootDir": "src",
+						"outDir": "dist"
+					},
+					"include": ["src"]
+				}`),
+				"/home/src/workspaces/project/lib/src/utils.ts":    "export const test = () => 'test';",
+				"/home/src/workspaces/project/lib/dist/utils.d.ts": "export declare const test: () => string;",
+				"/home/src/workspaces/project/app/tsconfig.json": stringtestutil.Dedent(`
+				{
+					"compilerOptions": {
+						"module": "esnext",
+						"moduleResolution": "bundler"
+					},
+					"references": [
+						{ "path": "../lib" }
+					]
+				}`),
+				"/home/src/workspaces/project/app/index.ts": stringtestutil.Dedent(`
+					import TestSrc from '../lib/src/utils'; // Error
+					import TestDecl from '../lib/dist/utils'; // Error
+					console.log(TestSrc.test());
+					console.log(TestDecl.test());`),
+			},
+			commandLineArgs: []string{"--p", "app", "--pretty", "false"},
+		},
+		{
 			subScenario: "referencing ambient const enum from referenced project with preserveConstEnums",
 			files: FileMap{
 				"/home/src/workspaces/solution/utils/index.ts":   "export const enum E { A = 1 }",

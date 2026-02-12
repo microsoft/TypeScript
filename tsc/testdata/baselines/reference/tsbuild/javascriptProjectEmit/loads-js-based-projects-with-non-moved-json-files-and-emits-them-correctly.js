@@ -91,8 +91,17 @@ Output::
 [7m2[0m export = x;
 [7m [0m [91m~~~~~~~~~~~[0m
 
+[96msub-project/index.js[0m:[93m1[0m:[93m8[0m - [91merror[0m[90m TS1192: [0mModule '"/home/src/workspaces/solution/common/index"' has no default export.
 
-Found 2 errors in the same file, starting at: common/index.ts[90m:1[0m
+[7m1[0m import mod from '../common';
+[7m [0m [91m       ~~~[0m
+
+
+Found 3 errors in 2 files.
+
+Errors  Files
+     2  common/index.ts[90m:1[0m
+     1  sub-project/index.js[90m:1[0m
 
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
@@ -119,9 +128,7 @@ interface Symbol {
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/out/sub-project-2/index.d.ts] *new* 
 export declare function getVar(): {
-    key: {
-        val: number;
-    };
+    key: any;
 };
 
 //// [/home/src/workspaces/out/sub-project-2/index.js] *new* 
@@ -134,7 +141,7 @@ export function getVar() {
 }
 
 //// [/home/src/workspaces/out/sub-project-2/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","../sub-project/index.d.ts","../../solution/sub-project-2/index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"b13b16e08eb0717669fa55818828b2cb-export declare const m: {\n    val: number;\n};\n",{"version":"56ecb5738c72a131a1514873df723721-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}","signature":"f6a0b1edad82fddabb5c98ad5da1660d-export declare function getVar(): {\n    key: {\n        val: number;\n    };\n};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[3],"fileNames":["lib.es2025.full.d.ts","../sub-project/index.d.ts","../../solution/sub-project-2/index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"ce0233db1f3aabecabdb072a4f4c8d1e-export declare const m: any;\n",{"version":"56ecb5738c72a131a1514873df723721-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}","signature":"cb28999e3dc9364c7b77f755d2449d70-export declare function getVar(): {\n    key: any;\n};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/out/sub-project-2/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -166,18 +173,18 @@ export function getVar() {
     },
     {
       "fileName": "../sub-project/index.d.ts",
-      "version": "b13b16e08eb0717669fa55818828b2cb-export declare const m: {\n    val: number;\n};\n",
-      "signature": "b13b16e08eb0717669fa55818828b2cb-export declare const m: {\n    val: number;\n};\n",
+      "version": "ce0233db1f3aabecabdb072a4f4c8d1e-export declare const m: any;\n",
+      "signature": "ce0233db1f3aabecabdb072a4f4c8d1e-export declare const m: any;\n",
       "impliedNodeFormat": "CommonJS"
     },
     {
       "fileName": "../../solution/sub-project-2/index.js",
       "version": "56ecb5738c72a131a1514873df723721-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}",
-      "signature": "f6a0b1edad82fddabb5c98ad5da1660d-export declare function getVar(): {\n    key: {\n        val: number;\n    };\n};\n",
+      "signature": "cb28999e3dc9364c7b77f755d2449d70-export declare function getVar(): {\n    key: any;\n};\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "56ecb5738c72a131a1514873df723721-import { m } from '../sub-project/index';\n\nconst variable = {\n    key: m,\n};\n\nexport function getVar() {\n    return variable;\n}",
-        "signature": "f6a0b1edad82fddabb5c98ad5da1660d-export declare function getVar(): {\n    key: {\n        val: number;\n    };\n};\n",
+        "signature": "cb28999e3dc9364c7b77f755d2449d70-export declare function getVar(): {\n    key: any;\n};\n",
         "impliedNodeFormat": 1
       }
     }
@@ -203,19 +210,17 @@ export function getVar() {
     ]
   },
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1592
+  "size": 1546
 }
 //// [/home/src/workspaces/out/sub-project/index.d.ts] *new* 
-export declare const m: {
-    val: number;
-};
+export declare const m: any;
 
 //// [/home/src/workspaces/out/sub-project/index.js] *new* 
 import mod from '../common';
 export const m = mod;
 
 //// [/home/src/workspaces/out/sub-project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[4],"fileNames":["lib.es2025.full.d.ts","../../solution/common/obj.json","../../solution/common/index.d.ts","../../solution/sub-project/index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d47747c9a3b20f363d6de91e2bd8ed62-{\n    \"val\": 42,\n}"},"641f5162aeaa035322008b19df89c663-import x = require(\"./obj.json\");\nexport = x;\n",{"version":"4c69d0c670e9dc788b5e107f277aa8ab-import mod from '../common';\n\nexport const m = mod;","signature":"b13b16e08eb0717669fa55818828b2cb-export declare const m: {\n    val: number;\n};\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","root":[4],"fileNames":["lib.es2025.full.d.ts","../../solution/common/obj.json","../../solution/common/index.d.ts","../../solution/sub-project/index.js"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"d47747c9a3b20f363d6de91e2bd8ed62-{\n    \"val\": 42,\n}"},"641f5162aeaa035322008b19df89c663-import x = require(\"./obj.json\");\nexport = x;\n",{"version":"4c69d0c670e9dc788b5e107f277aa8ab-import mod from '../common';\n\nexport const m = mod;","signature":"ce0233db1f3aabecabdb072a4f4c8d1e-export declare const m: any;\n","impliedNodeFormat":1}],"fileIdsList":[[2],[3]],"options":{"allowJs":true,"checkJs":true,"composite":true,"declaration":true,"esModuleInterop":true,"outDir":"..","rootDir":"../../solution","skipLibCheck":true},"referencedMap":[[3,1],[4,2]],"semanticDiagnosticsPerFile":[[4,[{"pos":7,"end":10,"code":1192,"category":1,"messageKey":"Module_0_has_no_default_export_1192","messageArgs":["\"/home/src/workspaces/solution/common/index\""]}]]],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/out/sub-project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -264,11 +269,11 @@ export const m = mod;
     {
       "fileName": "../../solution/sub-project/index.js",
       "version": "4c69d0c670e9dc788b5e107f277aa8ab-import mod from '../common';\n\nexport const m = mod;",
-      "signature": "b13b16e08eb0717669fa55818828b2cb-export declare const m: {\n    val: number;\n};\n",
+      "signature": "ce0233db1f3aabecabdb072a4f4c8d1e-export declare const m: any;\n",
       "impliedNodeFormat": "CommonJS",
       "original": {
         "version": "4c69d0c670e9dc788b5e107f277aa8ab-import mod from '../common';\n\nexport const m = mod;",
-        "signature": "b13b16e08eb0717669fa55818828b2cb-export declare const m: {\n    val: number;\n};\n",
+        "signature": "ce0233db1f3aabecabdb072a4f4c8d1e-export declare const m: any;\n",
         "impliedNodeFormat": 1
       }
     }
@@ -299,8 +304,25 @@ export const m = mod;
       "../../solution/common/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "../../solution/sub-project/index.js",
+      [
+        {
+          "pos": 7,
+          "end": 10,
+          "code": 1192,
+          "category": 1,
+          "messageKey": "Module_0_has_no_default_export_1192",
+          "messageArgs": [
+            "\"/home/src/workspaces/solution/common/index\""
+          ]
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1595
+  "size": 1773
 }
 //// [/home/src/workspaces/solution/common/index.d.ts] *new* 
 import x = require("./obj.json");
