@@ -3969,7 +3969,7 @@ func HasContextSensitiveParameters(node *Node) bool {
 			// an implicit 'this' parameter which is subject to contextual typing.
 			parameter := core.FirstOrNil(node.Parameters())
 			if parameter == nil || !IsThisParameter(parameter) {
-				return true
+				return node.Flags&NodeFlagsContainsThis != 0
 			}
 		}
 	}

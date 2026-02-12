@@ -27,15 +27,15 @@ const result1 = inner1((arg) => arg);
 outer1({
 >outer1({  prop: inner1((arg) => arg),}) : void
 >outer1 : (arg: { prop: any; }) => void
->{  prop: inner1((arg) => arg),} : { prop: (arg: any) => any; }
+>{  prop: inner1((arg) => arg),} : { prop: (arg: string) => string; }
 
   prop: inner1((arg) => arg),
->prop : (arg: any) => any
->inner1((arg) => arg) : (arg: any) => any
+>prop : (arg: string) => string
+>inner1((arg) => arg) : (arg: string) => string
 >inner1 : <T extends (arg: string) => any>(arg: T) => T
->(arg) => arg : (arg: any) => any
->arg : any
->arg : any
+>(arg) => arg : (arg: string) => string
+>arg : string
+>arg : string
 
 });
 
@@ -70,15 +70,15 @@ const result2 = inner2((arg) => arg);
 outer1({
 >outer1({  prop: inner2((arg) => arg),}) : void
 >outer1 : (arg: { prop: any; }) => void
->{  prop: inner2((arg) => arg),} : { prop: (arg: any) => any; }
+>{  prop: inner2((arg) => arg),} : { prop: (arg: string) => string; }
 
   prop: inner2((arg) => arg),
->prop : (arg: any) => any
->inner2((arg) => arg) : (arg: any) => any
+>prop : (arg: string) => string
+>inner2((arg) => arg) : (arg: string) => string
 >inner2 : <T>(arg: T & ((arg: string) => any)) => T
->(arg) => arg : (arg: any) => any
->arg : any
->arg : any
+>(arg) => arg : (arg: string) => string
+>arg : string
+>arg : string
 
 });
 

@@ -190,9 +190,11 @@ Extension.create({
 >editor : Symbol(editor, Decl(thislessFunctionsNotContextSensitive3.ts, 26, 21))
 
         ...this.options.suggestion,
+>this.options.suggestion : Symbol(suggestion, Decl(thislessFunctionsNotContextSensitive3.ts, 52, 12))
 >this.options : Symbol(options, Decl(thislessFunctionsNotContextSensitive3.ts, 25, 34))
 >this : Symbol(this, Decl(thislessFunctionsNotContextSensitive3.ts, 25, 27))
 >options : Symbol(options, Decl(thislessFunctionsNotContextSensitive3.ts, 25, 34))
+>suggestion : Symbol(suggestion, Decl(thislessFunctionsNotContextSensitive3.ts, 52, 12))
 
       }),
     ];

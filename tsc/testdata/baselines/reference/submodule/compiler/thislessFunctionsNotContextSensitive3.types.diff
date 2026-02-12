@@ -20,65 +20,15 @@
  >options : Partial<Options> | undefined
  }
 
-@@= skipped -17, +17 lines =@@
- >options : SuggestionOptions
-
- Extension.create({
-->Extension.create({  name: "slash-command",  addOptions() {    return {      suggestion: {        char: "/",      } as SuggestionOptions,    };  },  addProseMirrorPlugins() {    return [      Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }),    ];  },}) : Extension<{ suggestion: SuggestionOptions; }>
-+>Extension.create({  name: "slash-command",  addOptions() {    return {      suggestion: {        char: "/",      } as SuggestionOptions,    };  },  addProseMirrorPlugins() {    return [      Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }),    ];  },}) : Extension<any>
- >Extension.create : <O = any>(config: Partial<ExtensionConfig<O>>) => Extension<O>
- >Extension : typeof Extension
- >create : <O = any>(config: Partial<ExtensionConfig<O>>) => Extension<O>
-->{  name: "slash-command",  addOptions() {    return {      suggestion: {        char: "/",      } as SuggestionOptions,    };  },  addProseMirrorPlugins() {    return [      Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }),    ];  },} : { name: string; addOptions(): { suggestion: SuggestionOptions; }; addProseMirrorPlugins(this: { options: { suggestion: SuggestionOptions; }; editor: Editor; }): Plugin[]; }
-+>{  name: "slash-command",  addOptions() {    return {      suggestion: {        char: "/",      } as SuggestionOptions,    };  },  addProseMirrorPlugins() {    return [      Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }),    ];  },} : { name: string; addOptions(this: { name: string; parent: (() => any) | undefined; }): { suggestion: SuggestionOptions; }; addProseMirrorPlugins(this: { options: any; editor: Editor; }): Plugin[]; }
-
-   name: "slash-command",
- >name : string
- >"slash-command" : "slash-command"
-
-   addOptions() {
-->addOptions : () => { suggestion: SuggestionOptions; }
-+>addOptions : (this: { name: string; parent: (() => any) | undefined; }) => { suggestion: SuggestionOptions; }
-
-     return {
- >{      suggestion: {        char: "/",      } as SuggestionOptions,    } : { suggestion: SuggestionOptions; }
-@@= skipped -29, +29 lines =@@
-     };
-   },
-   addProseMirrorPlugins() {
-->addProseMirrorPlugins : (this: { options: { suggestion: SuggestionOptions; }; editor: Editor; }) => Plugin[]
-+>addProseMirrorPlugins : (this: { options: any; editor: Editor; }) => Plugin[]
-
-     return [
- >[      Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }),    ] : Plugin[]
-@@= skipped -8, +8 lines =@@
+@@= skipped -54, +54 lines =@@
        Suggestion({
  >Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }) : Plugin
  >Suggestion : (options: SuggestionOptions) => Plugin
 ->{        editor: this.editor, // error        ...this.options.suggestion,      } : { editor: Editor; char?: string; }
-+>{        editor: this.editor, // error        ...this.options.suggestion,      } : any
++>{        editor: this.editor, // error        ...this.options.suggestion,      } : { editor: Editor; char?: string | undefined; }
 
          editor: this.editor, // error
  >editor : Editor
- >this.editor : Editor
-->this : { options: { suggestion: SuggestionOptions; }; editor: Editor; }
-+>this : { options: any; editor: Editor; }
- >editor : Editor
-
-         ...this.options.suggestion,
-->this.options.suggestion : SuggestionOptions
-->this.options : { suggestion: SuggestionOptions; }
-->this : { options: { suggestion: SuggestionOptions; }; editor: Editor; }
-->options : { suggestion: SuggestionOptions; }
-->suggestion : SuggestionOptions
-+>this.options.suggestion : any
-+>this.options : any
-+>this : { options: any; editor: Editor; }
-+>options : any
-+>suggestion : any
-
-       }),
-     ];
 @@= skipped -59, +59 lines =@@
        Suggestion({
  >Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }) : Plugin
@@ -88,44 +38,3 @@
 
          editor: this.editor, // error
  >editor : Editor
-@@= skipped -21, +21 lines =@@
- });
-
- const parentExtension = Extension.create({
-->parentExtension : Extension<{ parent: string; overwrite: string; }>
-->Extension.create({  name: "parentExtension",  addOptions() {    return { parent: "exists", overwrite: "parent" };  },}) : Extension<{ parent: string; overwrite: string; }>
-+>parentExtension : Extension<any>
-+>Extension.create({  name: "parentExtension",  addOptions() {    return { parent: "exists", overwrite: "parent" };  },}) : Extension<any>
- >Extension.create : <O = any>(config: Partial<ExtensionConfig<O>>) => Extension<O>
- >Extension : typeof Extension
- >create : <O = any>(config: Partial<ExtensionConfig<O>>) => Extension<O>
-->{  name: "parentExtension",  addOptions() {    return { parent: "exists", overwrite: "parent" };  },} : { name: string; addOptions(): { parent: string; overwrite: string; }; }
-+>{  name: "parentExtension",  addOptions() {    return { parent: "exists", overwrite: "parent" };  },} : { name: string; addOptions(this: { name: string; parent: (() => any) | undefined; }): { parent: string; overwrite: string; }; }
-
-   name: "parentExtension",
- >name : string
- >"parentExtension" : "parentExtension"
-
-   addOptions() {
-->addOptions : () => { parent: string; overwrite: string; }
-+>addOptions : (this: { name: string; parent: (() => any) | undefined; }) => { parent: string; overwrite: string; }
-
-     return { parent: "exists", overwrite: "parent" };
- >{ parent: "exists", overwrite: "parent" } : { parent: string; overwrite: string; }
-@@= skipped -25, +25 lines =@@
- });
-
- const childExtension = parentExtension.configure({
-->childExtension : Extension<{ parent: string; overwrite: string; }>
-->parentExtension.configure({  child: "exists-too", // error  overwrite: "child",}) : Extension<{ parent: string; overwrite: string; }>
-->parentExtension.configure : (options?: Partial<{ parent: string; overwrite: string; }> | undefined) => Extension<{ parent: string; overwrite: string; }>
-->parentExtension : Extension<{ parent: string; overwrite: string; }>
-->configure : (options?: Partial<{ parent: string; overwrite: string; }> | undefined) => Extension<{ parent: string; overwrite: string; }>
-+>childExtension : Extension<any>
-+>parentExtension.configure({  child: "exists-too", // error  overwrite: "child",}) : Extension<any>
-+>parentExtension.configure : (options?: Partial<any> | undefined) => Extension<any>
-+>parentExtension : Extension<any>
-+>configure : (options?: Partial<any> | undefined) => Extension<any>
- >{  child: "exists-too", // error  overwrite: "child",} : { child: string; overwrite: string; }
-
-   child: "exists-too", // error

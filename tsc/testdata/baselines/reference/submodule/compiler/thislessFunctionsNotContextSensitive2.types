@@ -24,10 +24,10 @@ declare function defineOptions<Context, Data>(
 ): [Context, Data];
 
 const result1 = defineOptions({
->result1 : [{ tag: string; value: number; }, unknown]
->defineOptions({  context: { tag: "A", value: 1 },  consume(_data) {},  produce() {    return 42;  },}) : [{ tag: string; value: number; }, unknown]
+>result1 : [{ tag: string; value: number; }, number]
+>defineOptions({  context: { tag: "A", value: 1 },  consume(_data) {},  produce() {    return 42;  },}) : [{ tag: string; value: number; }, number]
 >defineOptions : <Context, Data>(options: Options<Context, Data>) => [Context, Data]
->{  context: { tag: "A", value: 1 },  consume(_data) {},  produce() {    return 42;  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: unknown): void; produce(this: { tag: string; value: number; }): number; }
+>{  context: { tag: "A", value: 1 },  consume(_data) {},  produce() {    return 42;  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: number): void; produce(): number; }
 
   context: { tag: "A", value: 1 },
 >context : { tag: string; value: number; }
@@ -38,11 +38,11 @@ const result1 = defineOptions({
 >1 : 1
 
   consume(_data) {},
->consume : (this: { tag: string; value: number; }, _data: unknown) => void
->_data : unknown
+>consume : (this: { tag: string; value: number; }, _data: number) => void
+>_data : number
 
   produce() {
->produce : (this: { tag: string; value: number; }) => number
+>produce : () => number
 
     return 42;
 >42 : 42
@@ -105,10 +105,10 @@ const result3 = defineOptions({
 });
 
 const result4 = defineOptions({
->result4 : [{ tag: string; value: number; }, unknown]
->defineOptions({  context: { tag: "D", value: 4 },  consume(_data) {},  produce() {    class Local {      value = 'foo';      get() {        return this.value;      }    }    return new Local().get();;  },}) : [{ tag: string; value: number; }, unknown]
+>result4 : [{ tag: string; value: number; }, string]
+>defineOptions({  context: { tag: "D", value: 4 },  consume(_data) {},  produce() {    class Local {      value = 'foo';      get() {        return this.value;      }    }    return new Local().get();;  },}) : [{ tag: string; value: number; }, string]
 >defineOptions : <Context, Data>(options: Options<Context, Data>) => [Context, Data]
->{  context: { tag: "D", value: 4 },  consume(_data) {},  produce() {    class Local {      value = 'foo';      get() {        return this.value;      }    }    return new Local().get();;  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: unknown): void; produce(this: { tag: string; value: number; }): string; }
+>{  context: { tag: "D", value: 4 },  consume(_data) {},  produce() {    class Local {      value = 'foo';      get() {        return this.value;      }    }    return new Local().get();;  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: string): void; produce(): string; }
 
   context: { tag: "D", value: 4 },
 >context : { tag: string; value: number; }
@@ -119,11 +119,11 @@ const result4 = defineOptions({
 >4 : 4
 
   consume(_data) {},
->consume : (this: { tag: string; value: number; }, _data: unknown) => void
->_data : unknown
+>consume : (this: { tag: string; value: number; }, _data: string) => void
+>_data : string
 
   produce() {
->produce : (this: { tag: string; value: number; }) => string
+>produce : () => string
 
     class Local {
 >Local : Local
@@ -152,10 +152,10 @@ const result4 = defineOptions({
 });
 
 const result5 = defineOptions({
->result5 : [{ tag: string; value: number; }, unknown]
->defineOptions({  context: { tag: "E", value: 5 },  consume(_data) {},  produce() {    function inner() {      return this;    }    return inner();  },}) : [{ tag: string; value: number; }, unknown]
+>result5 : [{ tag: string; value: number; }, any]
+>defineOptions({  context: { tag: "E", value: 5 },  consume(_data) {},  produce() {    function inner() {      return this;    }    return inner();  },}) : [{ tag: string; value: number; }, any]
 >defineOptions : <Context, Data>(options: Options<Context, Data>) => [Context, Data]
->{  context: { tag: "E", value: 5 },  consume(_data) {},  produce() {    function inner() {      return this;    }    return inner();  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: unknown): void; produce(this: { tag: string; value: number; }): any; }
+>{  context: { tag: "E", value: 5 },  consume(_data) {},  produce() {    function inner() {      return this;    }    return inner();  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: any): void; produce(): any; }
 
   context: { tag: "E", value: 5 },
 >context : { tag: string; value: number; }
@@ -166,11 +166,11 @@ const result5 = defineOptions({
 >5 : 5
 
   consume(_data) {},
->consume : (this: { tag: string; value: number; }, _data: unknown) => void
->_data : unknown
+>consume : (this: { tag: string; value: number; }, _data: any) => void
+>_data : any
 
   produce() {
->produce : (this: { tag: string; value: number; }) => any
+>produce : () => any
 
     function inner() {
 >inner : () => any
@@ -289,10 +289,10 @@ const result8 = defineOptions({
 });
 
 const result9 = defineOptions({
->result9 : [{ tag: string; value: number; }, unknown]
->defineOptions({  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    const obj = {      value: 'foo',      get() {        return this.value;      },    };    return obj.get();  },}) : [{ tag: string; value: number; }, unknown]
+>result9 : [{ tag: string; value: number; }, string]
+>defineOptions({  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    const obj = {      value: 'foo',      get() {        return this.value;      },    };    return obj.get();  },}) : [{ tag: string; value: number; }, string]
 >defineOptions : <Context, Data>(options: Options<Context, Data>) => [Context, Data]
->{  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    const obj = {      value: 'foo',      get() {        return this.value;      },    };    return obj.get();  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: unknown): void; produce(this: { tag: string; value: number; }): string; }
+>{  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    const obj = {      value: 'foo',      get() {        return this.value;      },    };    return obj.get();  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: string): void; produce(): string; }
 
   context: { tag: "I", value: 9 },
 >context : { tag: string; value: number; }
@@ -303,11 +303,11 @@ const result9 = defineOptions({
 >9 : 9
 
   consume(_data) {},
->consume : (this: { tag: string; value: number; }, _data: unknown) => void
->_data : unknown
+>consume : (this: { tag: string; value: number; }, _data: string) => void
+>_data : string
 
   produce() {
->produce : (this: { tag: string; value: number; }) => string
+>produce : () => string
 
     const obj = {
 >obj : { value: string; get(): string; }
@@ -337,10 +337,10 @@ const result9 = defineOptions({
 });
 
 const result10 = defineOptions({
->result10 : [{ tag: string; value: number; }, unknown]
->defineOptions({  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    interface Foo {        prop: this;    }    return {} as Foo;  },}) : [{ tag: string; value: number; }, unknown]
+>result10 : [{ tag: string; value: number; }, Foo]
+>defineOptions({  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    interface Foo {        prop: this;    }    return {} as Foo;  },}) : [{ tag: string; value: number; }, Foo]
 >defineOptions : <Context, Data>(options: Options<Context, Data>) => [Context, Data]
->{  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    interface Foo {        prop: this;    }    return {} as Foo;  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: unknown): void; produce(this: { tag: string; value: number; }): Foo; }
+>{  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    interface Foo {        prop: this;    }    return {} as Foo;  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: Foo): void; produce(): Foo; }
 
   context: { tag: "I", value: 9 },
 >context : { tag: string; value: number; }
@@ -351,11 +351,11 @@ const result10 = defineOptions({
 >9 : 9
 
   consume(_data) {},
->consume : (this: { tag: string; value: number; }, _data: unknown) => void
->_data : unknown
+>consume : (this: { tag: string; value: number; }, _data: Foo) => void
+>_data : Foo
 
   produce() {
->produce : (this: { tag: string; value: number; }) => Foo
+>produce : () => Foo
 
     interface Foo {
         prop: this;
@@ -369,10 +369,10 @@ const result10 = defineOptions({
 });
 
 const result11 = defineOptions({
->result11 : [{ tag: string; value: number; }, unknown]
->defineOptions({  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    function fn(this: { prop: string }) {      return this.prop;    }    return fn;  },}) : [{ tag: string; value: number; }, unknown]
+>result11 : [{ tag: string; value: number; }, (this: { prop: string; }) => string]
+>defineOptions({  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    function fn(this: { prop: string }) {      return this.prop;    }    return fn;  },}) : [{ tag: string; value: number; }, (this: { prop: string; }) => string]
 >defineOptions : <Context, Data>(options: Options<Context, Data>) => [Context, Data]
->{  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    function fn(this: { prop: string }) {      return this.prop;    }    return fn;  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: unknown): void; produce(this: { tag: string; value: number; }): (this: { prop: string; }) => string; }
+>{  context: { tag: "I", value: 9 },  consume(_data) {},  produce() {    function fn(this: { prop: string }) {      return this.prop;    }    return fn;  },} : { context: { tag: string; value: number; }; consume(this: { tag: string; value: number; }, _data: (this: { prop: string; }) => string): void; produce(): (this: { prop: string; }) => string; }
 
   context: { tag: "I", value: 9 },
 >context : { tag: string; value: number; }
@@ -383,11 +383,11 @@ const result11 = defineOptions({
 >9 : 9
 
   consume(_data) {},
->consume : (this: { tag: string; value: number; }, _data: unknown) => void
->_data : unknown
+>consume : (this: { tag: string; value: number; }, _data: (this: { prop: string; }) => string) => void
+>_data : (this: { prop: string; }) => string
 
   produce() {
->produce : (this: { tag: string; value: number; }) => (this: { prop: string; }) => string
+>produce : () => (this: { prop: string; }) => string
 
     function fn(this: { prop: string }) {
 >fn : (this: { prop: string; }) => string

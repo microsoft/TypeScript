@@ -1,16 +1,9 @@
-thislessFunctionsNotContextSensitive1.ts(15,3): error TS2345: Argument of type 'true' is not assignable to parameter of type 'false'.
 thislessFunctionsNotContextSensitive1.ts(25,3): error TS2345: Argument of type 'false' is not assignable to parameter of type 'true'.
-thislessFunctionsNotContextSensitive1.ts(39,23): error TS2322: Type 'unknown' is not assignable to type 'number'.
-thislessFunctionsNotContextSensitive1.ts(46,23): error TS2322: Type 'unknown' is not assignable to type 'number'.
-thislessFunctionsNotContextSensitive1.ts(79,36): error TS18046: 'state.bar2' is of type 'unknown'.
-thislessFunctionsNotContextSensitive1.ts(95,5): error TS18046: 'methods' is of type 'unknown'.
 thislessFunctionsNotContextSensitive1.ts(143,13): error TS2345: Argument of type '"value"' is not assignable to parameter of type 'never'.
-thislessFunctionsNotContextSensitive1.ts(146,13): error TS2345: Argument of type '{ foo(): void; }[]' is not assignable to parameter of type 'never'.
-thislessFunctionsNotContextSensitive1.ts(163,3): error TS2322: Type 'string' is not assignable to type 'undefined'.
-thislessFunctionsNotContextSensitive1.ts(176,3): error TS2322: Type 'string' is not assignable to type 'undefined'.
+thislessFunctionsNotContextSensitive1.ts(176,3): error TS2820: Type '"$test6"' is not assignable to type 'ExtractFields<{ target: "$test6"; data1: { $test1: number; $test2: null; }; data2: { $test3: {}; $test4: () => void; $test5(): void; }; }> | undefined'. Did you mean '"$test1"'?
 
 
-==== thislessFunctionsNotContextSensitive1.ts (10 errors) ====
+==== thislessFunctionsNotContextSensitive1.ts (3 errors) ====
     // https://github.com/microsoft/TypeScript/issues/62204
     
     declare function TestConfig<const TConfig extends { a?: any; b?: any; c?: any }>(
@@ -26,8 +19,6 @@ thislessFunctionsNotContextSensitive1.ts(176,3): error TS2322: Type 'string' is 
         },
       },
       true,
-      ~~~~
-!!! error TS2345: Argument of type 'true' is not assignable to parameter of type 'false'.
     );
     
     TestConfig(
@@ -54,9 +45,6 @@ thislessFunctionsNotContextSensitive1.ts(176,3): error TS2322: Type 'string' is 
     
     defineOptions({
       resolve: (event) => event, // number
-                          ~~~~~
-!!! error TS2322: Type 'unknown' is not assignable to type 'number'.
-!!! related TS6502 thislessFunctionsNotContextSensitive1.ts:31:12: The expected type comes from the return type of this signature.
       subscribe() {
         return 123;
       },
@@ -64,9 +52,6 @@ thislessFunctionsNotContextSensitive1.ts(176,3): error TS2322: Type 'string' is 
     
     defineOptions({
       resolve: (event) => event, // number
-                          ~~~~~
-!!! error TS2322: Type 'unknown' is not assignable to type 'number'.
-!!! related TS6502 thislessFunctionsNotContextSensitive1.ts:31:12: The expected type comes from the return type of this signature.
       subscribe: function () {
         return 123;
       },
@@ -100,8 +85,6 @@ thislessFunctionsNotContextSensitive1.ts(176,3): error TS2322: Type 'string' is 
             return { bar2: 1 };
           },
           mutations: { inc: (state) => state.bar2++ },
-                                       ~~~~~~~~~~
-!!! error TS18046: 'state.bar2' is of type 'unknown'.
         },
       },
     });
@@ -118,8 +101,6 @@ thislessFunctionsNotContextSensitive1.ts(176,3): error TS2322: Type 'string' is 
     Component({
       attached(methods) {
         methods.bbb(); // ok
-        ~~~~~~~
-!!! error TS18046: 'methods' is of type 'unknown'.
       },
       methods: {
         bbb() {},
@@ -173,8 +154,6 @@ thislessFunctionsNotContextSensitive1.ts(176,3): error TS2322: Type 'string' is 
     doSomething(['v']); // ok
     doSomething([o]); // ok
     doSomething([{ foo() {} }]); // ok
-                ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ foo(): void; }[]' is not assignable to parameter of type 'never'.
     
     // https://github.com/microsoft/TypeScript/issues/55124
     type Values<T> = T[keyof T];
@@ -192,9 +171,6 @@ thislessFunctionsNotContextSensitive1.ts(176,3): error TS2322: Type 'string' is 
     
     test55124({
       target: "$test4", // ok
-      ~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'undefined'.
-!!! related TS6500 thislessFunctionsNotContextSensitive1.ts:155:3: The expected type comes from property 'target' which is declared here on type 'SetType<unknown>'
       data1: {
         $test1: 111,
         $test2: null,
@@ -209,8 +185,8 @@ thislessFunctionsNotContextSensitive1.ts(176,3): error TS2322: Type 'string' is 
     test55124({
       target: "$test6", // error
       ~~~~~~
-!!! error TS2322: Type 'string' is not assignable to type 'undefined'.
-!!! related TS6500 thislessFunctionsNotContextSensitive1.ts:155:3: The expected type comes from property 'target' which is declared here on type 'SetType<unknown>'
+!!! error TS2820: Type '"$test6"' is not assignable to type 'ExtractFields<{ target: "$test6"; data1: { $test1: number; $test2: null; }; data2: { $test3: {}; $test4: () => void; $test5(): void; }; }> | undefined'. Did you mean '"$test1"'?
+!!! related TS6500 thislessFunctionsNotContextSensitive1.ts:155:3: The expected type comes from property 'target' which is declared here on type 'SetType<{ target: "$test6"; data1: { $test1: number; $test2: null; }; data2: { $test3: {}; $test4: () => void; $test5(): void; }; }>'
       data1: {
         $test1: 111,
         $test2: null,

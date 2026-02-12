@@ -19850,10 +19850,10 @@ func mayReturnNever(fn *ast.Node) bool {
 
 func (c *Checker) checkAndAggregateYieldOperandTypes(fn *ast.Node, checkMode CheckMode) (yieldTypes []*Type, nextTypes []*Type) {
 	isAsync := (getFunctionFlags(fn) & FunctionFlagsAsync) != 0
-	forEachYieldExpression(fn.Body(), func(yieldExpr *ast.Node) {
+	forEachYieldExpression(fn.Body(), func(yieldExpr *ast.Node) bool {
 		yieldExprType := c.undefinedWideningType
 		if yieldExpr.Expression() != nil {
-			yieldExprType = c.checkExpressionEx(yieldExpr.Expression(), checkMode)
+			yieldExprType = c.checkExpressionEx(yieldExpr.Expression(), checkMode & ^CheckModeSkipGenericFunctions)
 		}
 		if yieldExpr.Expression() != nil && c.isConstContext(yieldExpr.Expression()) {
 			yieldExprType = c.getRegularTypeOfLiteralType(yieldExprType)
@@ -19869,6 +19869,7 @@ func (c *Checker) checkAndAggregateYieldOperandTypes(fn *ast.Node, checkMode Che
 		if nextType != nil {
 			nextTypes = core.AppendIfUnique(nextTypes, nextType)
 		}
+		return false
 	})
 	return yieldTypes, nextTypes
 }
@@ -29926,7 +29927,10 @@ func (c *Checker) instantiateContextualType(contextualType *Type, node *ast.Node
 			if contextFlags&ContextFlagsSignature != 0 && core.Some(inferenceContext.inferences, hasInferenceCandidatesOrDefault) {
 				// For contextual signatures we incorporate all inferences made so far, e.g. from return
 				// types as well as arguments to the left in a function call.
-				return c.instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper)
+				t := c.instantiateInstantiableTypes(contextualType, inferenceContext.nonFixingMapper)
+				if t.flags&TypeFlagsAnyOrUnknown == 0 {
+					return t
+				}
 			}
 			if inferenceContext.returnMapper != nil {
 				// For other purposes (e.g. determining whether to produce literal types) we only
@@ -29934,12 +29938,14 @@ func (c *Checker) instantiateContextualType(contextualType *Type, node *ast.Node
 				// the 'boolean' type from the contextual type such that contextually typed boolean
 				// literals actually end up widening to 'boolean' (see #48363).
 				t := c.instantiateInstantiableTypes(contextualType, inferenceContext.returnMapper)
-				if t.flags&TypeFlagsUnion != 0 && containsType(t.Types(), c.regularFalseType) && containsType(t.Types(), c.regularTrueType) {
-					return c.filterType(t, func(t *Type) bool {
-						return t != c.regularFalseType && t != c.regularTrueType
-					})
+				if t.flags&TypeFlagsAnyOrUnknown == 0 {
+					if t.flags&TypeFlagsUnion != 0 && containsType(t.Types(), c.regularFalseType) && containsType(t.Types(), c.regularTrueType) {
+						return c.filterType(t, func(t *Type) bool {
+							return t != c.regularFalseType && t != c.regularTrueType
+						})
+					}
+					return t
 				}
-				return t
 			}
 		}
 	}
@@ -30018,12 +30024,15 @@ func (c *Checker) isContextSensitive(node *ast.Node) bool {
 		// It is possible to that node.expression is undefined (e.g <div x={} />)
 		expression := node.Expression()
 		return expression != nil && c.isContextSensitive(expression)
+	case ast.KindYieldExpression:
+		expression := node.Expression()
+		return expression != nil && c.isContextSensitive(expression)
 	}
 	return false
 }
 
 func (c *Checker) isContextSensitiveFunctionLikeDeclaration(node *ast.Node) bool {
-	return ast.HasContextSensitiveParameters(node) || c.hasContextSensitiveReturnExpression(node)
+	return ast.HasContextSensitiveParameters(node) || c.hasContextSensitiveReturnExpression(node) || c.hasContextSensitiveYieldExpression(node)
 }
 
 func (c *Checker) hasContextSensitiveReturnExpression(node *ast.Node) bool {
@@ -30040,6 +30049,10 @@ func (c *Checker) hasContextSensitiveReturnExpression(node *ast.Node) bool {
 	return ast.ForEachReturnStatement(body, func(statement *ast.Node) bool {
 		return statement.Expression() != nil && c.isContextSensitive(statement.Expression())
 	})
+}
+
+func (c *Checker) hasContextSensitiveYieldExpression(node *ast.Node) bool {
+	return getFunctionFlags(node)&FunctionFlagsGenerator != 0 && node.Body() != nil && forEachYieldExpression(node.Body(), c.isContextSensitive)
 }
 
 func (c *Checker) pushInferenceContext(node *ast.Node, context *InferenceContext) {

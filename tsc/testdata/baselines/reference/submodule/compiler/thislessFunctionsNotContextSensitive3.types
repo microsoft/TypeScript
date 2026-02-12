@@ -91,18 +91,18 @@ declare function Suggestion(options: SuggestionOptions): Plugin;
 >options : SuggestionOptions
 
 Extension.create({
->Extension.create({  name: "slash-command",  addOptions() {    return {      suggestion: {        char: "/",      } as SuggestionOptions,    };  },  addProseMirrorPlugins() {    return [      Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }),    ];  },}) : Extension<any>
+>Extension.create({  name: "slash-command",  addOptions() {    return {      suggestion: {        char: "/",      } as SuggestionOptions,    };  },  addProseMirrorPlugins() {    return [      Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }),    ];  },}) : Extension<{ suggestion: SuggestionOptions; }>
 >Extension.create : <O = any>(config: Partial<ExtensionConfig<O>>) => Extension<O>
 >Extension : typeof Extension
 >create : <O = any>(config: Partial<ExtensionConfig<O>>) => Extension<O>
->{  name: "slash-command",  addOptions() {    return {      suggestion: {        char: "/",      } as SuggestionOptions,    };  },  addProseMirrorPlugins() {    return [      Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }),    ];  },} : { name: string; addOptions(this: { name: string; parent: (() => any) | undefined; }): { suggestion: SuggestionOptions; }; addProseMirrorPlugins(this: { options: any; editor: Editor; }): Plugin[]; }
+>{  name: "slash-command",  addOptions() {    return {      suggestion: {        char: "/",      } as SuggestionOptions,    };  },  addProseMirrorPlugins() {    return [      Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }),    ];  },} : { name: string; addOptions(): { suggestion: SuggestionOptions; }; addProseMirrorPlugins(this: { options: { suggestion: SuggestionOptions; }; editor: Editor; }): Plugin[]; }
 
   name: "slash-command",
 >name : string
 >"slash-command" : "slash-command"
 
   addOptions() {
->addOptions : (this: { name: string; parent: (() => any) | undefined; }) => { suggestion: SuggestionOptions; }
+>addOptions : () => { suggestion: SuggestionOptions; }
 
     return {
 >{      suggestion: {        char: "/",      } as SuggestionOptions,    } : { suggestion: SuggestionOptions; }
@@ -120,7 +120,7 @@ Extension.create({
     };
   },
   addProseMirrorPlugins() {
->addProseMirrorPlugins : (this: { options: any; editor: Editor; }) => Plugin[]
+>addProseMirrorPlugins : (this: { options: { suggestion: SuggestionOptions; }; editor: Editor; }) => Plugin[]
 
     return [
 >[      Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }),    ] : Plugin[]
@@ -128,20 +128,20 @@ Extension.create({
       Suggestion({
 >Suggestion({        editor: this.editor, // error        ...this.options.suggestion,      }) : Plugin
 >Suggestion : (options: SuggestionOptions) => Plugin
->{        editor: this.editor, // error        ...this.options.suggestion,      } : any
+>{        editor: this.editor, // error        ...this.options.suggestion,      } : { editor: Editor; char?: string | undefined; }
 
         editor: this.editor, // error
 >editor : Editor
 >this.editor : Editor
->this : { options: any; editor: Editor; }
+>this : { options: { suggestion: SuggestionOptions; }; editor: Editor; }
 >editor : Editor
 
         ...this.options.suggestion,
->this.options.suggestion : any
->this.options : any
->this : { options: any; editor: Editor; }
->options : any
->suggestion : any
+>this.options.suggestion : SuggestionOptions
+>this.options : { suggestion: SuggestionOptions; }
+>this : { options: { suggestion: SuggestionOptions; }; editor: Editor; }
+>options : { suggestion: SuggestionOptions; }
+>suggestion : SuggestionOptions
 
       }),
     ];
@@ -208,19 +208,19 @@ Extension.create({
 });
 
 const parentExtension = Extension.create({
->parentExtension : Extension<any>
->Extension.create({  name: "parentExtension",  addOptions() {    return { parent: "exists", overwrite: "parent" };  },}) : Extension<any>
+>parentExtension : Extension<{ parent: string; overwrite: string; }>
+>Extension.create({  name: "parentExtension",  addOptions() {    return { parent: "exists", overwrite: "parent" };  },}) : Extension<{ parent: string; overwrite: string; }>
 >Extension.create : <O = any>(config: Partial<ExtensionConfig<O>>) => Extension<O>
 >Extension : typeof Extension
 >create : <O = any>(config: Partial<ExtensionConfig<O>>) => Extension<O>
->{  name: "parentExtension",  addOptions() {    return { parent: "exists", overwrite: "parent" };  },} : { name: string; addOptions(this: { name: string; parent: (() => any) | undefined; }): { parent: string; overwrite: string; }; }
+>{  name: "parentExtension",  addOptions() {    return { parent: "exists", overwrite: "parent" };  },} : { name: string; addOptions(): { parent: string; overwrite: string; }; }
 
   name: "parentExtension",
 >name : string
 >"parentExtension" : "parentExtension"
 
   addOptions() {
->addOptions : (this: { name: string; parent: (() => any) | undefined; }) => { parent: string; overwrite: string; }
+>addOptions : () => { parent: string; overwrite: string; }
 
     return { parent: "exists", overwrite: "parent" };
 >{ parent: "exists", overwrite: "parent" } : { parent: string; overwrite: string; }
@@ -233,11 +233,11 @@ const parentExtension = Extension.create({
 });
 
 const childExtension = parentExtension.configure({
->childExtension : Extension<any>
->parentExtension.configure({  child: "exists-too", // error  overwrite: "child",}) : Extension<any>
->parentExtension.configure : (options?: Partial<any> | undefined) => Extension<any>
->parentExtension : Extension<any>
->configure : (options?: Partial<any> | undefined) => Extension<any>
+>childExtension : Extension<{ parent: string; overwrite: string; }>
+>parentExtension.configure({  child: "exists-too", // error  overwrite: "child",}) : Extension<{ parent: string; overwrite: string; }>
+>parentExtension.configure : (options?: Partial<{ parent: string; overwrite: string; }> | undefined) => Extension<{ parent: string; overwrite: string; }>
+>parentExtension : Extension<{ parent: string; overwrite: string; }>
+>configure : (options?: Partial<{ parent: string; overwrite: string; }> | undefined) => Extension<{ parent: string; overwrite: string; }>
 >{  child: "exists-too", // error  overwrite: "child",} : { child: string; overwrite: string; }
 
   child: "exists-too", // error

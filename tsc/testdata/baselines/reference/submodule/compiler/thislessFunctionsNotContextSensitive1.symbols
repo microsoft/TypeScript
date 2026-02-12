@@ -200,7 +200,9 @@ const store = createStore({
 >mutations : Symbol(mutations, Decl(thislessFunctionsNotContextSensitive1.ts, 77, 8))
 >inc : Symbol(inc, Decl(thislessFunctionsNotContextSensitive1.ts, 78, 18))
 >state : Symbol(state, Decl(thislessFunctionsNotContextSensitive1.ts, 78, 25))
+>state.bar2 : Symbol(bar2, Decl(thislessFunctionsNotContextSensitive1.ts, 76, 16))
 >state : Symbol(state, Decl(thislessFunctionsNotContextSensitive1.ts, 78, 25))
+>bar2 : Symbol(bar2, Decl(thislessFunctionsNotContextSensitive1.ts, 76, 16))
 
     },
   },
@@ -238,7 +240,9 @@ Component({
 >methods : Symbol(methods, Decl(thislessFunctionsNotContextSensitive1.ts, 93, 11))
 
     methods.bbb(); // ok
+>methods.bbb : Symbol(bbb, Decl(thislessFunctionsNotContextSensitive1.ts, 96, 12))
 >methods : Symbol(methods, Decl(thislessFunctionsNotContextSensitive1.ts, 93, 11))
+>bbb : Symbol(bbb, Decl(thislessFunctionsNotContextSensitive1.ts, 96, 12))
 
   },
   methods: {

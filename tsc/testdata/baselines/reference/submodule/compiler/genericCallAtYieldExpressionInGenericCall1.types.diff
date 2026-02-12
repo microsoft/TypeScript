@@ -79,18 +79,7 @@
  >args : readonly any[]
 
      };
-@@= skipped -27, +27 lines =@@
-
- // number
- const result1 = outer2(function* <T>(value: T) {
-->result1 : number
-->outer2(function* <T>(value: T) {  yield* inner3(value);}) : number
-+>result1 : any
-+>outer2(function* <T>(value: T) {  yield* inner3(value);}) : any
- >outer2 : <A, Y>(body: (value: A) => Generator<Y, any, any>) => Y
-->function* <T>(value: T) {  yield* inner3(value);} : <T>(value: T) => Generator<number, void, any>
-+>function* <T>(value: T) {  yield* inner3(value);} : <T>(value: T) => Generator<any, void, any>
- >value : T
+@@= skipped -35, +35 lines =@@
 
    yield* inner3(value);
  >yield* inner3(value) : T
@@ -101,7 +90,7 @@
  >value : T
 
  });
-@@= skipped -23, +23 lines =@@
+@@= skipped -15, +15 lines =@@
  >value : T
 
    const x = inner3(value);
@@ -120,13 +109,7 @@
 
  });
 
-@@= skipped -24, +24 lines =@@
- outer3(function* <T>(value: T) {
- >outer3(function* <T>(value: T) {  yield* inner3(value);}) : void
- >outer3 : <A>(body: (value: A) => Generator<never, unknown, unknown>) => void
-->function* <T>(value: T) {  yield* inner3(value);} : <T>(value: T) => Generator<number, void, any>
-+>function* <T>(value: T) {  yield* inner3(value);} : <T>(value: T) => Generator<any, void, unknown>
- >value : T
+@@= skipped -29, +29 lines =@@
 
    yield* inner3(value);
  >yield* inner3(value) : T
@@ -137,7 +120,7 @@
  >value : T
 
  });
-@@= skipped -19, +19 lines =@@
+@@= skipped -14, +14 lines =@@
  >value : T
 
    const x = inner3(value);
