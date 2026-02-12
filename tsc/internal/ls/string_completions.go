@@ -281,11 +281,13 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 				fromProperties: stringLiteralCompletionsForObjectLiteral(typeChecker, parent.Parent),
 			}
 		}
-		result := fromContextualType(checker.ContextFlagsCompletions, node, typeChecker)
-		if result != nil {
-			return &stringLiteralCompletions{
-				fromTypes: result,
-			}
+		if ast.FindAncestor(parent.Parent, ast.IsCallLikeExpression) != nil {
+			uniques := &collections.Set[string]{}
+			stringLiteralTypes := append(
+				getStringLiteralTypes(typeChecker.GetContextualType(node, checker.ContextFlagsNone), uniques, typeChecker),
+				getStringLiteralTypes(typeChecker.GetContextualType(node, checker.ContextFlagsCompletions), uniques, typeChecker)...,
+			)
+			return toStringLiteralCompletionsFromTypes(stringLiteralTypes)
 		}
 		return &stringLiteralCompletions{
 			fromTypes: fromContextualType(checker.ContextFlagsNone, node, typeChecker),
@@ -421,13 +423,26 @@ func (l *LanguageService) getStringLiteralCompletionEntries(
 func fromContextualType(contextFlags checker.ContextFlags, node *ast.Node, typeChecker *checker.Checker) *completionsFromTypes {
 	// Get completion for string literal from string literal type
 	// i.e. var x: "hi" | "hello" = "/*completion position*/"
-	types := getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags), nil, typeChecker)
+	return toCompletionsFromTypes(getStringLiteralTypes(getContextualTypeFromParent(node, typeChecker, contextFlags), nil, typeChecker))
+}
+
+func toCompletionsFromTypes(types []*checker.StringLiteralType) *completionsFromTypes {
 	if len(types) == 0 {
 		return nil
 	}
 	return &completionsFromTypes{
 		types:           types,
 		isNewIdentifier: false,
+	}
+}
+
+func toStringLiteralCompletionsFromTypes(types []*checker.StringLiteralType) *stringLiteralCompletions {
+	result := toCompletionsFromTypes(types)
+	if result == nil {
+		return nil
+	}
+	return &stringLiteralCompletions{
+		fromTypes: result,
 	}
 }
 
