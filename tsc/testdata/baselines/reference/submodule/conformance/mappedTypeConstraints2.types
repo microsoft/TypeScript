@@ -77,15 +77,15 @@ type Mapped5<K extends string> = {
 };
 
 function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
->f5 : <K extends string>(obj: Mapped5<K>, key: K extends `_${string}` ? K : never) => void
+>f5 : <K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) => void
 >obj : Mapped5<K>
->key : K extends `_${string}` ? K : never
+>key : keyof Mapped5<K>
 
   let s: `_${string}` = obj[key];
 >s : `_${string}`
->obj[key] : Mapped5<K>[K extends `_${string}` ? K : never]
+>obj[key] : Mapped5<K>[keyof Mapped5<K>]
 >obj : Mapped5<K>
->key : K extends `_${string}` ? K : never
+>key : keyof Mapped5<K>
 }
 
 // repro from #53066#issuecomment-1913384757
@@ -121,7 +121,7 @@ function f7<K extends string>(obj: Mapped7<K>, key: keyof Mapped7<K>) {
 
   let s: `_${string}` = obj[key];
 >s : `_${string}`
->obj[key] : string | number | symbol
+>obj[key] : Mapped7<K>[keyof Mapped7<K>]
 >obj : Mapped7<K>
 >key : keyof Mapped7<K>
 }

@@ -9,36 +9,7 @@
  >obj : Mapped4<K>
  >key : K
 
-@@= skipped -18, +18 lines =@@
- };
-
- function f5<K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) {
-->f5 : <K extends string>(obj: Mapped5<K>, key: keyof Mapped5<K>) => void
-+>f5 : <K extends string>(obj: Mapped5<K>, key: K extends `_${string}` ? K : never) => void
- >obj : Mapped5<K>
-->key : keyof Mapped5<K>
-+>key : K extends `_${string}` ? K : never
-
-   let s: `_${string}` = obj[key];
- >s : `_${string}`
-->obj[key] : Mapped5<K>[keyof Mapped5<K>]
-+>obj[key] : Mapped5<K>[K extends `_${string}` ? K : never]
- >obj : Mapped5<K>
-->key : keyof Mapped5<K>
-+>key : K extends `_${string}` ? K : never
- }
-
- // repro from #53066#issuecomment-1913384757
-@@= skipped -44, +44 lines =@@
-
-   let s: `_${string}` = obj[key];
- >s : `_${string}`
-->obj[key] : Mapped7<K>[keyof Mapped7<K>]
-+>obj[key] : string | number | symbol
- >obj : Mapped7<K>
- >key : keyof Mapped7<K>
- }
-@@= skipped -48, +48 lines =@@
+@@= skipped -110, +110 lines =@@
  >key : string
  >val : any
  >Object.entries(obj) : [string, any][]

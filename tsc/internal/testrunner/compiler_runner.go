@@ -84,9 +84,6 @@ func (r *CompilerBaselineRunner) EnumerateTestFiles() []string {
 }
 
 var skippedTests = []string{
-	// Broken until further porting work is done
-	"mappedTypeAsClauseRecursiveNoCrash1.ts",
-
 	// Flaky
 	"for-of29.ts",
 
