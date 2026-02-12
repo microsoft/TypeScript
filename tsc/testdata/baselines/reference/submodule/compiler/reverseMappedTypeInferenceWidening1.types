@@ -115,9 +115,9 @@ result2.booleanFlag; // boolean
 >booleanFlag : boolean
 
 result2.booleanFlagDefault; // boolean
->result2.booleanFlagDefault : never
+>result2.booleanFlagDefault : boolean
 >result2 : TypeFlag<{ booleanFlag: { type: BooleanConstructor; }; booleanFlagDefault: { type: BooleanConstructor; default: boolean; }; }>
->booleanFlagDefault : never
+>booleanFlagDefault : boolean
 
 declare function fn3<Options extends Flags>(
 >fn3 : <Options extends Flags>(options: Readonly<Options>) => Options

@@ -1024,7 +1024,7 @@ func (c *Checker) inferReverseMappedTypeWorker(source *Type, target *Type, const
 	templateType := c.getTemplateTypeFromMappedType(target)
 	inference := newInferenceInfo(typeParameter)
 	c.inferTypes([]*InferenceInfo{inference}, source, templateType, InferencePriorityNone, false)
-	return core.OrElse(c.getTypeFromInference(inference), c.unknownType)
+	return c.getWidenedType(core.OrElse(c.getTypeFromInference(inference), c.unknownType))
 }
 
 func (c *Checker) resolveReverseMappedTypeMembers(t *Type) {

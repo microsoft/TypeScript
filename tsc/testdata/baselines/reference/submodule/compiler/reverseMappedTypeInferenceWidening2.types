@@ -10,10 +10,10 @@ declare function test1<T extends Record<string, { prop: unknown }>>(arg: {
 }): T;
 
 const res1 = test1({
->res1 : Record<string, { prop: unknown; }>
->test1({  foo: {    prop: 1,    prop2: "",  },  bar: {    prop: true,    prop2: null,  },}) : Record<string, { prop: unknown; }>
+>res1 : { foo: { prop: number; prop2: string; }; bar: { prop: boolean; prop2: null; }; }
+>test1({  foo: {    prop: 1,    prop2: "",  },  bar: {    prop: true,    prop2: null,  },}) : { foo: { prop: number; prop2: string; }; bar: { prop: boolean; prop2: null; }; }
 >test1 : <T extends Record<string, { prop: unknown; }>>(arg: { [K in keyof T]: T[K]; }) => T
->{  foo: {    prop: 1,    prop2: "",  },  bar: {    prop: true,    prop2: null,  },} : { foo: { prop: number; prop2: string; }; bar: { prop: boolean; prop2: null; }; }
+>{  foo: {    prop: 1,    prop2: "",  },  bar: {    prop: true,    prop2: null,  },} : { foo: { prop: number; prop2: string; }; bar: { prop: true; prop2: null; }; }
 
   foo: {
 >foo : { prop: number; prop2: string; }
@@ -29,11 +29,11 @@ const res1 = test1({
 
   },
   bar: {
->bar : { prop: boolean; prop2: null; }
->{    prop: true,    prop2: null,  } : { prop: boolean; prop2: null; }
+>bar : { prop: true; prop2: null; }
+>{    prop: true,    prop2: null,  } : { prop: true; prop2: null; }
 
     prop: true,
->prop : boolean
+>prop : true
 >true : true
 
     prop2: null,
