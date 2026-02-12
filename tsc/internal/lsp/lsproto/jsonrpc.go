@@ -57,9 +57,6 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 	var err error
 	if len(raw.Params) > 0 {
 		params, err = unmarshalParams(raw.Method, raw.Params)
-		if err != nil {
-			return fmt.Errorf("%w: %w", ErrorCodeInvalidRequest, err)
-		}
 	}
 
 	if raw.ID == nil {
@@ -74,6 +71,9 @@ func (m *Message) UnmarshalJSON(data []byte) error {
 		Params: params,
 	}
 
+	if err != nil {
+		return fmt.Errorf("%w: %w", ErrorCodeInvalidParams, err)
+	}
 	return nil
 }
 
@@ -124,7 +124,7 @@ func (r *RequestMessage) UnmarshalJSON(data []byte) error {
 
 type ResponseMessage struct {
 	JSONRPC jsonrpc.JSONRPCVersion `json:"jsonrpc"`
-	ID      *jsonrpc.ID            `json:"id,omitzero"`
+	ID      *jsonrpc.ID            `json:"id"`
 	Result  any                    `json:"result,omitzero"`
 	Error   *jsonrpc.ResponseError `json:"error,omitzero"`
 }

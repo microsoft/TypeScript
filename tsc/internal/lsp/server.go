@@ -105,6 +105,9 @@ func (r *lspReader) Read() (*lsproto.Message, error) {
 
 	req := &lsproto.Message{}
 	if err := json.Unmarshal(data, req); err != nil {
+		if errors.Is(err, lsproto.ErrorCodeInvalidParams) {
+			return req, fmt.Errorf("%w: %w", lsproto.ErrorCodeInvalidParams, err)
+		}
 		return nil, fmt.Errorf("%w: %w", lsproto.ErrorCodeInvalidRequest, err)
 	}
 
@@ -334,8 +337,14 @@ func (s *Server) readLoop(ctx context.Context) error {
 		}
 		msg, err := s.read()
 		if err != nil {
-			if errors.Is(err, lsproto.ErrorCodeInvalidRequest) {
-				if err := s.sendError(nil, err); err != nil {
+			if errors.Is(err, lsproto.ErrorCodeInvalidRequest) || errors.Is(err, lsproto.ErrorCodeInvalidParams) {
+				var id *jsonrpc.ID
+				if errors.Is(err, lsproto.ErrorCodeInvalidParams) {
+					if msg != nil && msg.Kind == jsonrpc.MessageKindRequest {
+						id = msg.AsRequest().ID
+					}
+				}
+				if err := s.sendError(id, err); err != nil {
 					return err
 				}
 				continue
@@ -500,6 +509,12 @@ func (s *Server) sendResult(id *jsonrpc.ID, result any) error {
 }
 
 func (s *Server) sendError(id *jsonrpc.ID, err error) error {
+	// Do not send error response for notifications,
+	// except for parse errors which may occur before determining if the message is a request or notification.
+	if id == nil && !errors.Is(err, lsproto.ErrorCodeInvalidRequest) {
+		s.logger.Errorf("error handling notification: %s", err)
+		return nil
+	}
 	code := lsproto.ErrorCodeInternalError
 	if errCode, ok := errors.AsType[lsproto.ErrorCode](err); ok {
 		code = errCode
@@ -546,10 +561,7 @@ func (s *Server) handleRequestOrNotification(ctx context.Context, req *lsproto.R
 		return err
 	}
 	s.logger.Warn("unknown method '", req.Method, "'")
-	if req.ID != nil {
-		return s.sendError(req.ID, lsproto.ErrorCodeInvalidRequest)
-	}
-	return nil
+	return s.sendError(req.ID, lsproto.ErrorCodeInvalidRequest)
 }
 
 type handlerMap map[lsproto.Method]func(*Server, context.Context, *lsproto.RequestMessage) error
