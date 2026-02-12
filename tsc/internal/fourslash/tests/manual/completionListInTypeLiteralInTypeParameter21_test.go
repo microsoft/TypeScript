@@ -9,7 +9,6 @@ import (
 )
 
 func TestCompletionListInTypeLiteralInTypeParameter21(t *testing.T) {
-	fourslash.SkipIfFailing(t)
 	t.Parallel()
 	defer testutil.RecoverAndFail(t, "Panic on fourslash test")
 	const content = `class Foo<T extends ('one' | 2)[]> {}
@@ -25,7 +24,7 @@ Foo<[/*4*/]>;`
 	f.VerifyCompletions(t, "0", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &[]string{},
+			CommitCharacters: &DefaultCommitCharacters,
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
@@ -38,7 +37,7 @@ Foo<[/*4*/]>;`
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &[]string{},
+			CommitCharacters: &DefaultCommitCharacters,
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
@@ -51,7 +50,7 @@ Foo<[/*4*/]>;`
 	f.VerifyCompletions(t, "2", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &[]string{},
+			CommitCharacters: &DefaultCommitCharacters,
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
@@ -64,7 +63,7 @@ Foo<[/*4*/]>;`
 	f.VerifyCompletions(t, "3", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &[]string{},
+			CommitCharacters: &DefaultCommitCharacters,
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{
@@ -77,7 +76,7 @@ Foo<[/*4*/]>;`
 	f.VerifyCompletions(t, "4", &fourslash.CompletionsExpectedList{
 		IsIncomplete: false,
 		ItemDefaults: &fourslash.CompletionsExpectedItemDefaults{
-			CommitCharacters: &[]string{},
+			CommitCharacters: &DefaultCommitCharacters,
 			EditRange:        Ignored,
 		},
 		Items: &fourslash.CompletionsExpectedItems{

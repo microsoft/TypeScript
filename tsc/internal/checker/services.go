@@ -243,6 +243,10 @@ func (c *Checker) GetNumberIndexType(t *Type) *Type {
 	return c.getIndexTypeOfType(t, c.numberType)
 }
 
+func (c *Checker) GetElementTypeOfArrayType(t *Type) *Type {
+	return c.getElementTypeOfArrayType(t)
+}
+
 func (c *Checker) GetCallSignatures(t *Type) []*Signature {
 	return c.getSignaturesOfType(t, SignatureKindCall)
 }
@@ -650,24 +654,110 @@ func (c *Checker) GetTypeArgumentConstraint(node *ast.Node) *Type {
 	return c.getTypeArgumentConstraint(node)
 }
 
-func (c *Checker) getTypeArgumentConstraint(node *ast.Node) *Type {
-	typeReferenceNode := core.IfElse(ast.IsTypeReferenceType(node.Parent), node.Parent, nil)
-	if typeReferenceNode == nil {
+// getUninstantiatedSignatures gets generic signatures from the function's/constructor's type.
+func (c *Checker) getUninstantiatedSignatures(node *ast.Node) []*Signature {
+	switch node.Kind {
+	case ast.KindCallExpression, ast.KindDecorator:
+		return c.getSignaturesOfType(c.getTypeOfExpression(node.Expression()), SignatureKindCall)
+	case ast.KindNewExpression:
+		return c.getSignaturesOfType(c.getTypeOfExpression(node.Expression()), SignatureKindConstruct)
+	case ast.KindJsxSelfClosingElement, ast.KindJsxOpeningElement:
+		if isJsxIntrinsicTagName(node.TagName()) {
+			return nil
+		}
+		return c.getSignaturesOfType(c.getTypeOfExpression(node.TagName()), SignatureKindCall)
+	case ast.KindTaggedTemplateExpression:
+		return c.getSignaturesOfType(c.getTypeOfExpression(node.AsTaggedTemplateExpression().Tag), SignatureKindCall)
+	case ast.KindBinaryExpression, ast.KindJsxOpeningFragment:
 		return nil
 	}
-	typeParameters := c.getTypeParametersForTypeReferenceOrImport(typeReferenceNode)
-	if len(typeParameters) == 0 {
-		return nil
+	return nil
+}
+
+func (c *Checker) getTypeParameterConstraintForPositionAcrossSignatures(signatures []*Signature, position int) *Type {
+	var relevantConstraints []*Type
+	for _, signature := range signatures {
+		if position >= len(signature.typeParameters) {
+			continue
+		}
+		relevantTypeParameter := signature.typeParameters[position]
+		relevantConstraint := c.getConstraintOfTypeParameter(relevantTypeParameter)
+		if relevantConstraint != nil {
+			relevantConstraints = append(relevantConstraints, relevantConstraint)
+		}
+	}
+	return c.getUnionType(relevantConstraints)
+}
+
+func (c *Checker) getTypeArgumentConstraint(node *ast.Node) *Type {
+	var typeArgumentPosition int = -1
+	if ast.HasTypeArguments(node.Parent) {
+		typeArgs := node.Parent.TypeArguments()
+		for i, arg := range typeArgs {
+			if arg == node {
+				typeArgumentPosition = i
+				break
+			}
+		}
 	}
 
-	typeParamIndex := core.FindIndex(typeReferenceNode.TypeArguments(), func(n *ast.Node) bool {
-		return n == node
-	})
-	constraint := c.getConstraintOfTypeParameter(typeParameters[typeParamIndex])
-	if constraint != nil {
-		return c.instantiateType(
-			constraint,
-			newTypeMapper(typeParameters, c.getEffectiveTypeArguments(typeReferenceNode, typeParameters)))
+	if typeArgumentPosition >= 0 {
+		// The node could be a type argument of a call, a `new` expression, a decorator, an
+		// instantiation expression, or a generic type instantiation.
+
+		if ast.IsCallLikeExpression(node.Parent) {
+			return c.getTypeParameterConstraintForPositionAcrossSignatures(
+				c.getUninstantiatedSignatures(node.Parent),
+				typeArgumentPosition,
+			)
+		}
+
+		if ast.IsDecorator(node.Parent.Parent) {
+			return c.getTypeParameterConstraintForPositionAcrossSignatures(
+				c.getUninstantiatedSignatures(node.Parent.Parent),
+				typeArgumentPosition,
+			)
+		}
+
+		if ast.IsExpressionWithTypeArguments(node.Parent) && ast.IsExpressionStatement(node.Parent.Parent) {
+			uninstantiatedType := c.checkExpression(node.Parent.Expression())
+
+			callConstraint := c.getTypeParameterConstraintForPositionAcrossSignatures(
+				c.getSignaturesOfType(uninstantiatedType, SignatureKindCall),
+				typeArgumentPosition,
+			)
+			constructConstraint := c.getTypeParameterConstraintForPositionAcrossSignatures(
+				c.getSignaturesOfType(uninstantiatedType, SignatureKindConstruct),
+				typeArgumentPosition,
+			)
+
+			// An instantiation expression instantiates both call and construct signatures, so
+			// if both exist type arguments must be assignable to both constraints.
+			if constructConstraint.flags&TypeFlagsNever != 0 {
+				return callConstraint
+			}
+			if callConstraint.flags&TypeFlagsNever != 0 {
+				return constructConstraint
+			}
+			return c.getIntersectionType([]*Type{callConstraint, constructConstraint})
+		}
+
+		if ast.IsTypeReferenceType(node.Parent) {
+			typeParameters := c.getTypeParametersForTypeReferenceOrImport(node.Parent)
+			if len(typeParameters) == 0 {
+				return nil
+			}
+			if typeArgumentPosition >= len(typeParameters) {
+				return nil
+			}
+			relevantTypeParameter := typeParameters[typeArgumentPosition]
+			constraint := c.getConstraintOfTypeParameter(relevantTypeParameter)
+			if constraint != nil {
+				return c.instantiateType(
+					constraint,
+					newTypeMapper(typeParameters, c.getEffectiveTypeArguments(node.Parent, typeParameters)))
+			}
+		}
 	}
 	return nil
 }

@@ -1588,9 +1588,12 @@ func (l *LanguageService) getCompletionData(
 		}
 	}
 
-	var contextualType *checker.Type
+	var contextualTypeOrConstraint *checker.Type
 	if previousToken != nil {
-		contextualType = getContextualType(previousToken, position, file, typeChecker)
+		contextualTypeOrConstraint = getContextualType(previousToken, position, file, typeChecker)
+		if contextualTypeOrConstraint == nil {
+			contextualTypeOrConstraint = getConstraintOfTypeArgumentProperty(previousToken, typeChecker)
+		}
 	}
 
 	// exclude literal suggestions after <input type="text" [||] /> microsoft/TypeScript#51667) and after closing quote (microsoft/TypeScript#52675)
@@ -1599,10 +1602,10 @@ func (l *LanguageService) getCompletionData(
 	var literals []literalValue
 	if isLiteralExpected {
 		var types []*checker.Type
-		if contextualType != nil && contextualType.IsUnion() {
-			types = contextualType.Types()
-		} else if contextualType != nil {
-			types = []*checker.Type{contextualType}
+		if contextualTypeOrConstraint != nil && contextualTypeOrConstraint.IsUnion() {
+			types = contextualTypeOrConstraint.Types()
+		} else if contextualTypeOrConstraint != nil {
+			types = []*checker.Type{contextualTypeOrConstraint}
 		}
 		literals = core.MapNonNil(types, func(t *checker.Type) literalValue {
 			if isLiteral(t) && !t.IsEnumLiteral() {
@@ -1613,8 +1616,8 @@ func (l *LanguageService) getCompletionData(
 	}
 
 	var recommendedCompletion *ast.Symbol
-	if previousToken != nil && contextualType != nil {
-		recommendedCompletion = getRecommendedCompletion(previousToken, contextualType, typeChecker)
+	if previousToken != nil && contextualTypeOrConstraint != nil {
+		recommendedCompletion = getRecommendedCompletion(previousToken, contextualTypeOrConstraint, typeChecker)
 	}
 
 	if defaultCommitCharacters == nil {
@@ -3629,8 +3632,11 @@ func getConstraintOfTypeArgumentProperty(node *ast.Node, typeChecker *checker.Ch
 		return nil
 	}
 
-	if ast.IsTypeNode(node) && ast.IsTypeReferenceType(node.Parent) {
-		return typeChecker.GetTypeArgumentConstraint(node)
+	if ast.IsTypeNode(node) {
+		constraint := typeChecker.GetTypeArgumentConstraint(node)
+		if constraint != nil {
+			return constraint
+		}
 	}
 
 	t := getConstraintOfTypeArgumentProperty(node.Parent, typeChecker)
@@ -3641,8 +3647,16 @@ func getConstraintOfTypeArgumentProperty(node *ast.Node, typeChecker *checker.Ch
 	switch node.Kind {
 	case ast.KindPropertySignature:
 		return typeChecker.GetTypeOfPropertyOfContextualType(t, node.Symbol().Name)
+	case ast.KindColonToken:
+		if node.Parent.Kind == ast.KindPropertySignature {
+			// The cursor is at a property value location like `Foo<{ x: | }`.
+			// `t` already refers to the appropriate property type.
+			return t
+		}
 	case ast.KindIntersectionType, ast.KindTypeLiteral, ast.KindUnionType:
 		return t
+	case ast.KindOpenBracketToken:
+		return typeChecker.GetElementTypeOfArrayType(t)
 	}
 
 	return nil
