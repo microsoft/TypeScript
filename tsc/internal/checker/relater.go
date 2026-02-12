@@ -1205,7 +1205,7 @@ func (c *Checker) discriminateTypeByDiscriminableItems(target *Type, discriminat
 	types := target.Types()
 	include := make([]Ternary, len(types))
 	for i, t := range types {
-		if t.flags&TypeFlagsPrimitive == 0 {
+		if t.flags&TypeFlagsPrimitive == 0 && c.getReducedType(t).flags&TypeFlagsNever == 0 {
 			include[i] = TernaryTrue
 		}
 	}

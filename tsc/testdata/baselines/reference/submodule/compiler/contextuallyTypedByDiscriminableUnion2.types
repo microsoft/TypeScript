@@ -80,7 +80,7 @@ declare const item: string | null;
 MyComponent({
 >MyComponent({  enableD: true,  value: item,  setItem: (item) => {},}) : void
 >MyComponent : <I extends Identifiable>(props: (DisableA & DisableB & DisableD<I>) | (DisableA & DisableB & EnableD<I>) | (DisableA & EnableB & DisableD<I>) | (DisableA & EnableB & EnableD<I>) | (EnableA & EnableB & DisableD<I>) | (EnableA & EnableB & EnableD<I>)) => void
->{  enableD: true,  value: item,  setItem: (item) => {},} : { enableD: true; value: string | null; setItem: (item: any) => void; }
+>{  enableD: true,  value: item,  setItem: (item) => {},} : { enableD: true; value: string | null; setItem: (item: Identifiable | null) => void; }
 
   enableD: true,
 >enableD : true
@@ -91,9 +91,9 @@ MyComponent({
 >item : string | null
 
   setItem: (item) => {},
->setItem : (item: any) => void
->(item) => {} : (item: any) => void
->item : any
+>setItem : (item: Identifiable | null) => void
+>(item) => {} : (item: Identifiable | null) => void
+>item : Identifiable | null
 
 });
 
