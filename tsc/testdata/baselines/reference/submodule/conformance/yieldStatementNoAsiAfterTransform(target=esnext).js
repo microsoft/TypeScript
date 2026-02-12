@@ -68,52 +68,52 @@ function *t10() {
 //// [yieldStatementNoAsiAfterTransform.js]
 "use strict";
 function* t1() {
-    yield 
+    yield (
     // comment
-    a;
+    a);
 }
 function* t2() {
-    yield 
+    yield (
     // comment
-    a + 1;
+    a) + 1;
 }
 function* t3() {
-    yield 
+    yield (
     // comment
-    a ? 0 : 1;
+    a) ? 0 : 1;
 }
 function* t4() {
-    yield 
+    yield (
     // comment
-    a.b;
+    a).b;
 }
 function* t5() {
-    yield 
+    yield (
     // comment
-    a[a];
+    a)[a];
 }
 function* t6() {
-    yield 
+    yield (
     // comment
-    a();
+    a)();
 }
 function* t7() {
-    yield 
+    yield (
     // comment
-    a ``;
+    a) ``;
 }
 function* t8() {
-    yield 
+    yield (
     // comment
-    a;
+    a);
 }
 function* t9() {
-    yield 
+    yield (
     // comment
-    a;
+    a);
 }
 function* t10() {
-    yield 
+    yield (
     // comment
-    a;
+    a);
 }

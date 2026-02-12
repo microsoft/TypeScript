@@ -2952,29 +2952,163 @@ func (p *Printer) emitPartiallyEmittedExpression(node *ast.PartiallyEmittedExpre
 	}
 }
 
+func (p *Printer) commentWillEmitNewLine(comment ast.CommentRange) bool {
+	return comment.Kind == ast.KindSingleLineCommentTrivia || comment.HasTrailingNewLine
+}
+
+func (p *Printer) syntheticCommentWillEmitNewLine(comment SynthesizedComment) bool {
+	return comment.Kind == ast.KindSingleLineCommentTrivia || comment.HasTrailingNewLine
+}
+
 func (p *Printer) willEmitLeadingNewLine(node *ast.Expression) bool {
-	return false // !!! check if node will emit a leading comment that contains a trailing newline
+	if p.currentSourceFile == nil {
+		return false
+	}
+	hasLeadingCommentRanges := false
+	hasNewLineComment := false
+	for comment := range scanner.GetLeadingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), node.Pos()) {
+		hasLeadingCommentRanges = true
+		if p.commentWillEmitNewLine(comment) {
+			hasNewLineComment = true
+		}
+	}
+	if hasLeadingCommentRanges {
+		parseNode := p.emitContext.ParseNode(node)
+		if parseNode != nil && ast.IsParenthesizedExpression(parseNode.Parent) {
+			return true
+		}
+	}
+	if hasNewLineComment {
+		return true
+	}
+	if slices.ContainsFunc(p.emitContext.GetSyntheticLeadingComments(node), p.syntheticCommentWillEmitNewLine) {
+		return true
+	}
+	if ast.IsPartiallyEmittedExpression(node) {
+		pee := node.AsPartiallyEmittedExpression()
+		if node.Pos() != pee.Expression.Pos() {
+			for comment := range scanner.GetTrailingCommentRanges(p.emitContext.Factory.AsNodeFactory(), p.currentSourceFile.Text(), pee.Expression.Pos()) {
+				if p.commentWillEmitNewLine(comment) {
+					return true
+				}
+			}
+		}
+		return p.willEmitLeadingNewLine(pee.Expression)
+	}
+	return false
+}
+
+// parenthesizeExpressionForNoAsi wraps an expression in parens if we would emit a leading comment
+// that would introduce a line separator between the node and its parent.
+func (p *Printer) parenthesizeExpressionForNoAsi(node *ast.Expression) *ast.Expression {
+	if !p.commentsDisabled {
+		switch node.Kind {
+		case ast.KindPartiallyEmittedExpression:
+			if p.willEmitLeadingNewLine(node) {
+				pee := node.AsPartiallyEmittedExpression()
+				parseNode := p.emitContext.ParseNode(node)
+				if parseNode != nil && ast.IsParenthesizedExpression(parseNode) {
+					// If the original node was a parenthesized expression, restore it to preserve comment and source map emit
+					parens := p.emitContext.Factory.NewParenthesizedExpression(pee.Expression)
+					p.emitContext.SetOriginal(parens, node)
+					parens.Loc = parseNode.Loc
+					return parens
+				}
+				return p.emitContext.Factory.NewParenthesizedExpression(node)
+			}
+			pee := node.AsPartiallyEmittedExpression()
+			return p.emitContext.Factory.UpdatePartiallyEmittedExpression(
+				pee,
+				p.parenthesizeExpressionForNoAsi(pee.Expression),
+			)
+		case ast.KindPropertyAccessExpression:
+			pae := node.AsPropertyAccessExpression()
+			return p.emitContext.Factory.UpdatePropertyAccessExpression(
+				pae,
+				p.parenthesizeExpressionForNoAsi(pae.Expression),
+				pae.QuestionDotToken,
+				pae.Name(),
+			)
+		case ast.KindElementAccessExpression:
+			eae := node.AsElementAccessExpression()
+			return p.emitContext.Factory.UpdateElementAccessExpression(
+				eae,
+				p.parenthesizeExpressionForNoAsi(eae.Expression),
+				eae.QuestionDotToken,
+				eae.ArgumentExpression,
+			)
+		case ast.KindCallExpression:
+			ce := node.AsCallExpression()
+			return p.emitContext.Factory.UpdateCallExpression(
+				ce,
+				p.parenthesizeExpressionForNoAsi(ce.Expression),
+				ce.QuestionDotToken,
+				ce.TypeArguments,
+				ce.Arguments,
+			)
+		case ast.KindTaggedTemplateExpression:
+			tte := node.AsTaggedTemplateExpression()
+			return p.emitContext.Factory.UpdateTaggedTemplateExpression(
+				tte,
+				p.parenthesizeExpressionForNoAsi(tte.Tag),
+				tte.QuestionDotToken,
+				tte.TypeArguments,
+				tte.Template,
+			)
+		case ast.KindPostfixUnaryExpression:
+			pue := node.AsPostfixUnaryExpression()
+			return p.emitContext.Factory.UpdatePostfixUnaryExpression(
+				pue,
+				p.parenthesizeExpressionForNoAsi(pue.Operand),
+			)
+		case ast.KindBinaryExpression:
+			be := node.AsBinaryExpression()
+			return p.emitContext.Factory.UpdateBinaryExpression(
+				be,
+				be.Modifiers(),
+				p.parenthesizeExpressionForNoAsi(be.Left),
+				be.Type,
+				be.OperatorToken,
+				be.Right,
+			)
+		case ast.KindConditionalExpression:
+			ce := node.AsConditionalExpression()
+			return p.emitContext.Factory.UpdateConditionalExpression(
+				ce,
+				p.parenthesizeExpressionForNoAsi(ce.Condition),
+				ce.QuestionToken,
+				ce.WhenTrue,
+				ce.ColonToken,
+				ce.WhenFalse,
+			)
+		case ast.KindAsExpression:
+			ae := node.AsAsExpression()
+			return p.emitContext.Factory.UpdateAsExpression(
+				ae,
+				p.parenthesizeExpressionForNoAsi(ae.Expression),
+				ae.Type,
+			)
+		case ast.KindSatisfiesExpression:
+			se := node.AsSatisfiesExpression()
+			return p.emitContext.Factory.UpdateSatisfiesExpression(
+				se,
+				p.parenthesizeExpressionForNoAsi(se.Expression),
+				se.Type,
+			)
+		case ast.KindNonNullExpression:
+			nne := node.AsNonNullExpression()
+			return p.emitContext.Factory.UpdateNonNullExpression(
+				nne,
+				p.parenthesizeExpressionForNoAsi(nne.Expression),
+			)
+		}
+	}
+	return node
 }
 
 func (p *Printer) emitExpressionNoASI(node *ast.Expression, precedence ast.OperatorPrecedence) {
-	// !!! restore parens when necessary to ensure a leading single-line comment doesn't introduce ASI:
-	//	function f() {
-	//	  return (// comment
-	//	    a as T
-	//	  )
-	//	}
-	// If we do not restore the parens, we would produce the following incorrect output:
-	//	function f() {
-	//	  return // comment
-	//	    a;
-	//	}
-	// Due to ASI, this would result in a `return` with no value followed by an unreachable expression statement.
-	if !p.commentsDisabled && node.Kind == ast.KindPartiallyEmittedExpression && p.willEmitLeadingNewLine(node) {
-		// !!! if there is an original parse tree node, restore it with location to preserve comments and source maps.
-		p.emitExpression(node, ast.OperatorPrecedenceParentheses)
-	} else {
-		p.emitExpression(node, precedence)
-	}
+	node = p.parenthesizeExpressionForNoAsi(node)
+	p.emitExpression(node, precedence)
 }
 
 func (p *Printer) emitExpression(node *ast.Expression, precedence ast.OperatorPrecedence) {
