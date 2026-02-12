@@ -20860,7 +20860,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
     }
 
     function getHomomorphicTypeVariable(type: MappedType) {
-        const constraintType = getConstraintTypeFromMappedType(type);
+        const constraintType = getActualTypeVariable(getConstraintTypeFromMappedType(type));
         if (constraintType.flags & TypeFlags.Index) {
             const typeVariable = getActualTypeVariable((constraintType as IndexType).type);
             if (typeVariable.flags & TypeFlags.TypeParameter) {

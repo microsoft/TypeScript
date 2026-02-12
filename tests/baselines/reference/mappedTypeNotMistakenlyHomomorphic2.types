@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/mappedTypeNotMistakenlyHomomorphic2.ts] ////
+
+=== mappedTypeNotMistakenlyHomomorphic2.ts ===
+// https://github.com/microsoft/TypeScript/issues/63132
+
+type KeyMap<T> = keyof T extends PropertyKey ? { [K in keyof T]: K } : never;
+>KeyMap : KeyMap<T>
+>       : ^^^^^^^^^
+
+type X = KeyMap<number>;
+>X : number
+>  : ^^^^^^
+
+type U = { a?: number; b: string } | { b: string; readonly c: boolean };
+>U : U
+>  : ^
+>a : number | undefined
+>  : ^^^^^^^^^^^^^^^^^^
+>b : string
+>  : ^^^^^^
+>b : string
+>  : ^^^^^^
+>c : boolean
+>  : ^^^^^^^
+
+type MapStringOnly<T> = keyof T extends string ? { [K in keyof T]: [T[K]] } : never;
+>MapStringOnly : MapStringOnly<T>
+>              : ^^^^^^^^^^^^^^^^
+
+type Y = MapStringOnly<U>;
+>Y : { a?: [number | undefined] | undefined; b: [string]; } | { b: [string]; readonly c: [boolean]; }
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
