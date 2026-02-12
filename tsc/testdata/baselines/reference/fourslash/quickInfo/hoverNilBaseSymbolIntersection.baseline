@@ -1,0 +1,46 @@
+// === QuickInfo ===
+=== /main.ts ===
+// class Base {}
+// 
+// declare const BaseFactory: new() => Base & { c: string };
+// 
+// class Derived extends BaseFactory {
+//   static idField = "id" as const;
+//          ^^^^^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) Derived.idField: "id"
+// | ```
+// | 
+// | ----------------------------------------------------------------------
+// }
+// 
+[
+  {
+    "marker": {
+      "Position": 119,
+      "LSPosition": {
+        "line": 5,
+        "character": 9
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) Derived.idField: \"id\"\n```\n"
+      },
+      "range": {
+        "start": {
+          "line": 5,
+          "character": 9
+        },
+        "end": {
+          "line": 5,
+          "character": 16
+        }
+      }
+    }
+  }
+]

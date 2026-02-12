@@ -509,7 +509,7 @@ func getJSDocOrTag(c *checker.Checker, node *ast.Node) *ast.Node {
 			isStatic := ast.HasStaticModifier(node)
 			for _, baseType := range c.GetBaseTypes(c.GetDeclaredTypeOfSymbol(node.Parent.Symbol())) {
 				t := baseType
-				if isStatic {
+				if isStatic && baseType.Symbol() != nil {
 					t = c.GetTypeOfSymbol(baseType.Symbol())
 				}
 				if prop := c.GetPropertyOfType(t, symbol.Name); prop != nil && prop.ValueDeclaration != nil {
