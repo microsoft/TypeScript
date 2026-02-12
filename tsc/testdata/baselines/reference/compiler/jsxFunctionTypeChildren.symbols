@@ -1,0 +1,70 @@
+//// [tests/cases/compiler/jsxFunctionTypeChildren.tsx] ////
+
+=== jsxFunctionTypeChildren.tsx ===
+// https://github.com/microsoft/typescript-go/issues/2703
+
+/// <reference path="react.d.ts" />
+
+import * as React from 'react';
+>React : Symbol(React, Decl(jsxFunctionTypeChildren.tsx, 4, 6))
+
+type BaseProps = { locale: string };
+>BaseProps : Symbol(BaseProps, Decl(jsxFunctionTypeChildren.tsx, 4, 31))
+>locale : Symbol(locale, Decl(jsxFunctionTypeChildren.tsx, 6, 18))
+
+type Props<T extends BaseProps> = {
+>Props : Symbol(Props, Decl(jsxFunctionTypeChildren.tsx, 6, 36))
+>T : Symbol(T, Decl(jsxFunctionTypeChildren.tsx, 8, 11))
+>BaseProps : Symbol(BaseProps, Decl(jsxFunctionTypeChildren.tsx, 4, 31))
+
+    children: (props: T) => React.ReactNode;
+>children : Symbol(children, Decl(jsxFunctionTypeChildren.tsx, 8, 35))
+>props : Symbol(props, Decl(jsxFunctionTypeChildren.tsx, 9, 15))
+>T : Symbol(T, Decl(jsxFunctionTypeChildren.tsx, 8, 11))
+>React : Symbol(React, Decl(jsxFunctionTypeChildren.tsx, 4, 6))
+>ReactNode : Symbol(React.ReactNode, Decl(react.d.ts, 91, 66))
+
+} & T;
+>T : Symbol(T, Decl(jsxFunctionTypeChildren.tsx, 8, 11))
+
+declare function Comp<T extends BaseProps>(props: Props<T>): JSX.Element;
+>Comp : Symbol(Comp, Decl(jsxFunctionTypeChildren.tsx, 10, 6))
+>T : Symbol(T, Decl(jsxFunctionTypeChildren.tsx, 12, 22))
+>BaseProps : Symbol(BaseProps, Decl(jsxFunctionTypeChildren.tsx, 4, 31))
+>props : Symbol(props, Decl(jsxFunctionTypeChildren.tsx, 12, 43))
+>Props : Symbol(Props, Decl(jsxFunctionTypeChildren.tsx, 6, 36))
+>T : Symbol(T, Decl(jsxFunctionTypeChildren.tsx, 12, 22))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2355, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2358, 27))
+
+const bp: BaseProps = { locale: 'en' };
+>bp : Symbol(bp, Decl(jsxFunctionTypeChildren.tsx, 14, 5))
+>BaseProps : Symbol(BaseProps, Decl(jsxFunctionTypeChildren.tsx, 4, 31))
+>locale : Symbol(locale, Decl(jsxFunctionTypeChildren.tsx, 14, 23))
+
+// Error in ts-go: Type '(props: ...) => Element' is not assignable to
+// type '((props: ...) => ReactNode) & {}'.
+const el = <Comp {...bp}>{(props) => <div>{props.locale}</div>}</Comp>;
+>el : Symbol(el, Decl(jsxFunctionTypeChildren.tsx, 18, 5))
+>Comp : Symbol(Comp, Decl(jsxFunctionTypeChildren.tsx, 10, 6))
+>bp : Symbol(bp, Decl(jsxFunctionTypeChildren.tsx, 14, 5))
+>props : Symbol(props, Decl(jsxFunctionTypeChildren.tsx, 18, 27))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>props.locale : Symbol(locale, Decl(jsxFunctionTypeChildren.tsx, 6, 18))
+>props : Symbol(props, Decl(jsxFunctionTypeChildren.tsx, 18, 27))
+>locale : Symbol(locale, Decl(jsxFunctionTypeChildren.tsx, 6, 18))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>Comp : Symbol(Comp, Decl(jsxFunctionTypeChildren.tsx, 10, 6))
+
+// But the equivalent non-JSX call works fine:
+Comp({ ...bp, children: (props) => <div>{props.locale}</div> });
+>Comp : Symbol(Comp, Decl(jsxFunctionTypeChildren.tsx, 10, 6))
+>bp : Symbol(bp, Decl(jsxFunctionTypeChildren.tsx, 14, 5))
+>children : Symbol(children, Decl(jsxFunctionTypeChildren.tsx, 21, 13))
+>props : Symbol(props, Decl(jsxFunctionTypeChildren.tsx, 21, 25))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+>props.locale : Symbol(locale, Decl(jsxFunctionTypeChildren.tsx, 6, 18))
+>props : Symbol(props, Decl(jsxFunctionTypeChildren.tsx, 21, 25))
+>locale : Symbol(locale, Decl(jsxFunctionTypeChildren.tsx, 6, 18))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2402, 45))
+
