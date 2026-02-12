@@ -16,6 +16,10 @@ import {
 } from "vscode-languageclient/node";
 
 import { codeLensShowLocationsCommandName } from "./commands";
+import {
+    configurationMiddleware,
+    sendNotificationMiddleware,
+} from "./configurationMiddleware";
 import { registerTagClosingFeature } from "./languageFeatures/tagClosing";
 import * as tr from "./telemetryReporting";
 import {
@@ -63,6 +67,12 @@ export class Client implements vscode.Disposable {
                 codeLensShowLocationsCommandName,
             },
             errorHandler: new ReportingErrorHandler(this.telemetryReporter, 5),
+            middleware: {
+                workspace: {
+                    ...configurationMiddleware,
+                },
+                sendNotification: sendNotificationMiddleware,
+            },
             diagnosticPullOptions: {
                 onChange: true,
                 onSave: true,
