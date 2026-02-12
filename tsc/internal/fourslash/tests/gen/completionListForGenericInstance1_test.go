@@ -31,7 +31,7 @@ i/**/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "i",
-					Detail: PtrTo("var i: Iterator<string, number>"),
+					Detail: new("var i: Iterator<string, number>"),
 				},
 			},
 		},

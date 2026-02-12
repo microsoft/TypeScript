@@ -42,7 +42,7 @@ class C {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "using",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

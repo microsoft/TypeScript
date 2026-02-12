@@ -30,7 +30,7 @@ v./**/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "toExponential",
-					Kind:  PtrTo(lsproto.CompletionItemKindMethod),
+					Kind:  new(lsproto.CompletionItemKindMethod),
 				},
 			},
 		},

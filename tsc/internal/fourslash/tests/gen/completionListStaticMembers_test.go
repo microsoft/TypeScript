@@ -33,15 +33,15 @@ Foo./**/`
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "a",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "b",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "prototype",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 				}),
 		},

@@ -42,8 +42,8 @@ class Foo {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "aria-label",
-					Kind:   PtrTo(lsproto.CompletionItemKindField),
-					Detail: PtrTo("(property) \"aria-label\": string"),
+					Kind:   new(lsproto.CompletionItemKindField),
+					Detail: new("(property) \"aria-label\": string"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -53,8 +53,8 @@ class Foo {
 				},
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Kind:   PtrTo(lsproto.CompletionItemKindField),
-					Detail: PtrTo("(property) foo: string"),
+					Kind:   new(lsproto.CompletionItemKindField),
+					Detail: new("(property) foo: string"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,

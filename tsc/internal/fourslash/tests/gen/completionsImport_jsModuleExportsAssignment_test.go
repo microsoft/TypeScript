@@ -66,7 +66,7 @@ module.exports = {
 						},
 					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 			Excludes: []string{
@@ -74,14 +74,14 @@ module.exports = {
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "defaults",
 		Source:      "./third_party/marked/src/defaults",
 		Description: "Add import from \"./third_party/marked/src/defaults\"",
 		AutoImportFix: &lsproto.AutoImportFix{
 			ModuleSpecifier: "./third_party/marked/src/defaults",
 		},
-		NewFileContent: PtrTo(`import { defaults } from "./third_party/marked/src/defaults";
+		NewFileContent: new(`import { defaults } from "./third_party/marked/src/defaults";
 
 d`),
 	})

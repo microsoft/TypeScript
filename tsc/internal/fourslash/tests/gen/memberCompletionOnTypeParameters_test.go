@@ -38,11 +38,11 @@ function foo<S, T extends IFoo, U extends Object, V extends IFoo>() {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "x",
-					Detail: PtrTo("(property) IFoo.x: number"),
+					Detail: new("(property) IFoo.x: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "y",
-					Detail: PtrTo("(property) IFoo.y: string"),
+					Detail: new("(property) IFoo.y: string"),
 				},
 			},
 		},

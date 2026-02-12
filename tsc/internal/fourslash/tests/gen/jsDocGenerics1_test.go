@@ -45,7 +45,7 @@ x[0].a./*3*/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "toFixed",
-					Kind:  PtrTo(lsproto.CompletionItemKindMethod),
+					Kind:  new(lsproto.CompletionItemKindMethod),
 				},
 			},
 		},

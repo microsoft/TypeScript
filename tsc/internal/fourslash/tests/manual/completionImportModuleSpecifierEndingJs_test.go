@@ -32,7 +32,7 @@ import { f } from ".//**/"`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "test.js",
-					Detail: PtrTo("test.js"),
+					Detail: new("test.js"),
 				},
 			},
 		},
@@ -48,7 +48,7 @@ import { f } from ".//**/"`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "test",
-					Detail: PtrTo("test.js"),
+					Detail: new("test.js"),
 				},
 			},
 		},

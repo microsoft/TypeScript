@@ -35,7 +35,7 @@ func TestArgumentsAreAvailableAfterEditsAtEndOfFunction(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "children",
-					Detail: PtrTo("(parameter) children: string[]"),
+					Detail: new("(parameter) children: string[]"),
 				},
 			},
 		},

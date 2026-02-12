@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
-	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -30,7 +29,7 @@ function Cls() {
 		{
 			Pattern:     "x",
 			Preferences: nil,
-			Exact: PtrTo([]*lsproto.SymbolInformation{
+			Exact: new([]*lsproto.SymbolInformation{
 				{
 					Name:     "x",
 					Kind:     lsproto.SymbolKindVariable,
@@ -40,7 +39,7 @@ function Cls() {
 		}, {
 			Pattern:     "z",
 			Preferences: nil,
-			Exact: PtrTo([]*lsproto.SymbolInformation{
+			Exact: new([]*lsproto.SymbolInformation{
 				{
 					Name:     "z",
 					Kind:     lsproto.SymbolKindVariable,
@@ -50,18 +49,18 @@ function Cls() {
 		}, {
 			Pattern:     "instanceProp",
 			Preferences: nil,
-			Exact: PtrTo([]*lsproto.SymbolInformation{
+			Exact: new([]*lsproto.SymbolInformation{
 				{
 					Name:          "instanceProp",
 					Kind:          lsproto.SymbolKindProperty,
 					Location:      f.Ranges()[2].LSLocation(),
-					ContainerName: PtrTo("Cls"),
+					ContainerName: new("Cls"),
 				},
 			}),
 		}, {
 			Pattern:     "staticMethod",
 			Preferences: nil,
-			Exact: PtrTo([]*lsproto.SymbolInformation{
+			Exact: new([]*lsproto.SymbolInformation{
 				{
 					Name:     "staticMethod",
 					Kind:     lsproto.SymbolKindProperty,
@@ -71,7 +70,7 @@ function Cls() {
 		}, {
 			Pattern:     "staticProperty",
 			Preferences: nil,
-			Exact: PtrTo([]*lsproto.SymbolInformation{
+			Exact: new([]*lsproto.SymbolInformation{
 				{
 					Name:     "staticProperty",
 					Kind:     lsproto.SymbolKindProperty,
@@ -81,7 +80,7 @@ function Cls() {
 		}, {
 			Pattern:     "instanceMethod",
 			Preferences: nil,
-			Exact: PtrTo([]*lsproto.SymbolInformation{
+			Exact: new([]*lsproto.SymbolInformation{
 				{
 					Name:     "instanceMethod",
 					Kind:     lsproto.SymbolKindProperty,

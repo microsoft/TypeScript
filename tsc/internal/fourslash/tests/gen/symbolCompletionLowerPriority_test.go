@@ -34,12 +34,12 @@ obj./*completions*/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "normalProperty",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "mySymbol",
-					InsertText: PtrTo("[mySymbol]"),
-					SortText:   PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					InsertText: new("[mySymbol]"),
+					SortText:   new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

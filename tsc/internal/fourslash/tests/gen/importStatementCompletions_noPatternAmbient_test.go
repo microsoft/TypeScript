@@ -33,7 +33,7 @@ import style/**/`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

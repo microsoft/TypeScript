@@ -304,7 +304,7 @@ func (s *inlayHintState) getParameterDeclarationTypeHints(symbol *ast.Symbol) *l
 		return nil
 	}
 
-	return ptrTo(s.typeToInlayHintParts(signatureParamType))
+	return new(s.typeToInlayHintParts(signatureParamType))
 }
 
 func (s *inlayHintState) typeToInlayHintParts(t *checker.Type) lsproto.StringOrInlayHintLabelParts {
@@ -315,7 +315,7 @@ func (s *inlayHintState) typeToInlayHintParts(t *checker.Type) lsproto.StringOrI
 	typeNode := s.checker.TypeToTypeNode(t, nil /*enclosingDeclaration*/, flags, idToSymbol)
 	debug.AssertIsDefined(typeNode, "should always get typenode")
 	return lsproto.StringOrInlayHintLabelParts{
-		InlayHintLabelParts: ptrTo(s.getInlayHintLabelParts(typeNode, idToSymbol)),
+		InlayHintLabelParts: new(s.getInlayHintLabelParts(typeNode, idToSymbol)),
 	}
 }
 
@@ -327,31 +327,31 @@ func (s *inlayHintState) typePredicateToInlayHintParts(typePredicate *checker.Ty
 	typeNode := s.checker.TypePredicateToTypePredicateNode(typePredicate, nil /*enclosingDeclaration*/, flags, idToSymbol)
 	debug.AssertIsDefined(typeNode, "should always get typePredicateNode")
 	return lsproto.StringOrInlayHintLabelParts{
-		InlayHintLabelParts: ptrTo(s.getInlayHintLabelParts(typeNode, idToSymbol)),
+		InlayHintLabelParts: new(s.getInlayHintLabelParts(typeNode, idToSymbol)),
 	}
 }
 
 func (s *inlayHintState) addTypeHints(hint lsproto.StringOrInlayHintLabelParts, position int) {
 	if hint.String != nil {
-		hint.String = ptrTo(": " + *hint.String)
+		hint.String = new(": " + *hint.String)
 	} else {
-		hint.InlayHintLabelParts = ptrTo(append([]*lsproto.InlayHintLabelPart{{Value: ": "}}, *hint.InlayHintLabelParts...))
+		hint.InlayHintLabelParts = new(append([]*lsproto.InlayHintLabelPart{{Value: ": "}}, *hint.InlayHintLabelParts...))
 	}
 	s.result = append(s.result, &lsproto.InlayHint{
 		Label:       hint,
 		Position:    s.converters.PositionToLineAndCharacter(s.file, core.TextPos(position)),
-		Kind:        ptrTo(lsproto.InlayHintKindType),
-		PaddingLeft: ptrTo(true),
+		Kind:        new(lsproto.InlayHintKindType),
+		PaddingLeft: new(true),
 	})
 }
 
 func (s *inlayHintState) addEnumMemberValueHints(text string, position int) {
 	s.result = append(s.result, &lsproto.InlayHint{
 		Label: lsproto.StringOrInlayHintLabelParts{
-			String: ptrTo("= " + text),
+			String: new("= " + text),
 		},
 		Position:    s.converters.PositionToLineAndCharacter(s.file, core.TextPos(position)),
-		PaddingLeft: ptrTo(true),
+		PaddingLeft: new(true),
 	})
 }
 
@@ -368,8 +368,8 @@ func (s *inlayHintState) addParameterHints(text string, parameter *ast.Identifie
 	s.result = append(s.result, &lsproto.InlayHint{
 		Label:        labelParts,
 		Position:     s.converters.PositionToLineAndCharacter(s.file, core.TextPos(position)),
-		Kind:         ptrTo(lsproto.InlayHintKindParameter),
-		PaddingRight: ptrTo(true),
+		Kind:         new(lsproto.InlayHintKindParameter),
+		PaddingRight: new(true),
 	})
 }
 

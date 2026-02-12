@@ -33,12 +33,12 @@ function f<T extends Address>(x: T) {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "city",
-					Detail: PtrTo("(property) Address.city: string"),
+					Detail: new("(property) Address.city: string"),
 				},
 				&lsproto.CompletionItem{
 					Label:      "postal code",
-					InsertText: PtrTo("[\"postal code\"]"),
-					Detail:     PtrTo("(property) Address[\"postal code\"]: string"),
+					InsertText: new("[\"postal code\"]"),
+					Detail:     new("(property) Address[\"postal code\"]: string"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "postal code",

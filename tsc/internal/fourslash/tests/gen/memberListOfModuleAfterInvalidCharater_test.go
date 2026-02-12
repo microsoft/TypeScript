@@ -30,7 +30,7 @@ testModule./**/`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Detail: PtrTo("var testModule.foo: number"),
+					Detail: new("var testModule.foo: number"),
 				},
 			},
 		},

@@ -36,7 +36,7 @@ let v = 100;
 				"lastIndex",
 				&lsproto.CompletionItem{
 					Label:    "compile",
-					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					SortText: new(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},

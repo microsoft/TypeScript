@@ -57,17 +57,17 @@ const b = new MyClass2/*2*/();`
 						},
 					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:          "MyClass",
 		Source:        "mylib",
 		Description:   "Add import from \"mylib\"",
 		AutoImportFix: &lsproto.AutoImportFix{},
-		NewFileContent: PtrTo(`import { MyClass } from "mylib";
+		NewFileContent: new(`import { MyClass } from "mylib";
 
 const a = new MyClass();
 const b = new MyClass2();`),

@@ -50,15 +50,15 @@ class Gossip extends Secret {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "hint",
-					InsertText: PtrTo("protected hint(): string {\n}"),
-					FilterText: PtrTo("hint"),
-					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
+					InsertText: new("protected hint(): string {\n}"),
+					FilterText: new("hint"),
+					SortText:   new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "refuse",
-					InsertText: PtrTo("public refuse(): string {\n}"),
-					FilterText: PtrTo("refuse"),
-					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
+					InsertText: new("public refuse(): string {\n}"),
+					FilterText: new("refuse"),
+					SortText:   new(string(ls.SortTextLocationPriority)),
 				},
 			},
 			Excludes: []string{

@@ -47,8 +47,8 @@ class FullPiece extends Piece {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:               "container",
-					InsertText:          PtrTo("container: Container;"),
-					FilterText:          PtrTo("container"),
+					InsertText:          new("container: Container;"),
+					FilterText:          new("container"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 					Data: &lsproto.CompletionItemData{
 						Source: "ClassMemberSnippet/",
@@ -57,11 +57,11 @@ class FullPiece extends Piece {
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "container",
 		Source:      "ClassMemberSnippet/",
 		Description: "Includes imports of types referenced by 'container'",
-		NewFileContent: PtrTo(`import { Container, Piece } from "@sapphire/pieces";
+		NewFileContent: new(`import { Container, Piece } from "@sapphire/pieces";
 class FullPiece extends Piece {
   
 }`),

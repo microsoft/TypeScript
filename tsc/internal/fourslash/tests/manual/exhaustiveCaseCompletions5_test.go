@@ -36,9 +36,9 @@ switch (p) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:            "case P[\" Space\"]: ...",
-					InsertText:       PtrTo("case P[\" Space\"]:$1\ncase P.Bar:$2"),
-					SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					InsertText:       new("case P[\" Space\"]:$1\ncase P.Bar:$2"),
+					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 				},
 			},
 		},

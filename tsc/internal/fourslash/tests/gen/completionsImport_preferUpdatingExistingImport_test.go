@@ -45,7 +45,7 @@ y/**/`
 								ModuleSpecifier: "./deep/module/why/you/want/this/path",
 							},
 						},
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 					},
 				}, false),

@@ -49,7 +49,7 @@ var new/*9*/Var = new extMod.m1.m2./*10*/c();`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "m1",
-					Detail: PtrTo("namespace extMod.m1"),
+					Detail: new("namespace extMod.m1"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -70,7 +70,7 @@ var new/*9*/Var = new extMod.m1.m2./*10*/c();`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "b",
-					Detail: PtrTo("var extMod.m1.b: number"),
+					Detail: new("var extMod.m1.b: number"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -80,7 +80,7 @@ var new/*9*/Var = new extMod.m1.m2./*10*/c();`
 				},
 				&lsproto.CompletionItem{
 					Label:  "fooExport",
-					Detail: PtrTo("function extMod.m1.fooExport(): number"),
+					Detail: new("function extMod.m1.fooExport(): number"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -90,7 +90,7 @@ var new/*9*/Var = new extMod.m1.m2./*10*/c();`
 				},
 				&lsproto.CompletionItem{
 					Label:  "m2",
-					Detail: PtrTo("namespace extMod.m1.m2"),
+					Detail: new("namespace extMod.m1.m2"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -115,7 +115,7 @@ var new/*9*/Var = new extMod.m1.m2./*10*/c();`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "c",
-					Detail: PtrTo("constructor extMod.m1.m2.c(): extMod.m1.m2.c"),
+					Detail: new("constructor extMod.m1.m2.c(): extMod.m1.m2.c"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -125,7 +125,7 @@ var new/*9*/Var = new extMod.m1.m2./*10*/c();`
 				},
 				&lsproto.CompletionItem{
 					Label:  "i",
-					Detail: PtrTo("var extMod.m1.m2.i: extMod.m1.m2.c"),
+					Detail: new("var extMod.m1.m2.i: extMod.m1.m2.c"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,

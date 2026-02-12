@@ -42,7 +42,7 @@ x.anotherProperty./*2*/;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "toLocaleString",
-					Detail: PtrTo("(method) toLocaleString(): string (+1 overload)"),
+					Detail: new("(method) toLocaleString(): string (+1 overload)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -52,7 +52,7 @@ x.anotherProperty./*2*/;`
 				},
 				&lsproto.CompletionItem{
 					Label:  "toString",
-					Detail: PtrTo("(method) toString(): string (+1 overload)"),
+					Detail: new("(method) toString(): string (+1 overload)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -62,7 +62,7 @@ x.anotherProperty./*2*/;`
 				},
 				&lsproto.CompletionItem{
 					Label:  "valueOf",
-					Detail: PtrTo("(method) valueOf(): string | number"),
+					Detail: new("(method) valueOf(): string | number"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,

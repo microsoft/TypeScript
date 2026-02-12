@@ -39,8 +39,8 @@ bar(a, a == '' ? /*3*/ : /*4*/);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:     "Foo",
-					Kind:      PtrTo(lsproto.CompletionItemKindEnum),
-					Preselect: PtrTo(true),
+					Kind:      new(lsproto.CompletionItemKindEnum),
+					Preselect: new(true),
 				},
 			},
 		},
@@ -57,8 +57,8 @@ bar(a, a == '' ? /*3*/ : /*4*/);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:     "Foo",
-					Kind:      PtrTo(lsproto.CompletionItemKindEnum),
-					Preselect: PtrTo(true),
+					Kind:      new(lsproto.CompletionItemKindEnum),
+					Preselect: new(true),
 				},
 			},
 		},
@@ -75,8 +75,8 @@ bar(a, a == '' ? /*3*/ : /*4*/);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:     "Foo",
-					Kind:      PtrTo(lsproto.CompletionItemKindEnum),
-					Preselect: PtrTo(true),
+					Kind:      new(lsproto.CompletionItemKindEnum),
+					Preselect: new(true),
 				},
 			},
 		},
@@ -93,8 +93,8 @@ bar(a, a == '' ? /*3*/ : /*4*/);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:     "Foo",
-					Kind:      PtrTo(lsproto.CompletionItemKindEnum),
-					Preselect: PtrTo(true),
+					Kind:      new(lsproto.CompletionItemKindEnum),
+					Preselect: new(true),
 				},
 			},
 		},

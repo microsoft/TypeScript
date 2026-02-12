@@ -28,6 +28,10 @@
         "Install Graphviz": "sudo apt update -y; sudo apt install -y graphviz"
     },
 
+    "containerEnv": {
+        "GOTOOLCHAIN": "auto"
+    },
+
     // Configure tool-specific properties.
     "customizations": {
         "vscode": {

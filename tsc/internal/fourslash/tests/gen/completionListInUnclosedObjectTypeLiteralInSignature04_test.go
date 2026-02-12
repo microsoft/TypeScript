@@ -32,7 +32,7 @@ declare function foo<TString, TNumber>(obj: I<TString, TNumber>): { /*1*/`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "readonly",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

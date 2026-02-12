@@ -48,7 +48,7 @@ let x = new Something(/*sig*/);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "toFixed",
-					Kind:  PtrTo(lsproto.CompletionItemKindMethod),
+					Kind:  new(lsproto.CompletionItemKindMethod),
 				},
 			},
 		},
@@ -68,7 +68,7 @@ let x = new Something(/*sig*/);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "toFixed",
-					Kind:  PtrTo(lsproto.CompletionItemKindMethod),
+					Kind:  new(lsproto.CompletionItemKindMethod),
 				},
 			},
 		},

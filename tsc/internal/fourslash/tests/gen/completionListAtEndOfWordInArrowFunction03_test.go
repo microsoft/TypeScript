@@ -28,9 +28,9 @@ func TestCompletionListAtEndOfWordInArrowFunction03(t *testing.T) {
 				"defaultIsAnInvalidParameterName",
 				&lsproto.CompletionItem{
 					Label:    "default",
-					Detail:   PtrTo("default"),
-					Kind:     PtrTo(lsproto.CompletionItemKindKeyword),
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					Detail:   new("default"),
+					Kind:     new(lsproto.CompletionItemKindKeyword),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

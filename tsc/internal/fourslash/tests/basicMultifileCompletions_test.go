@@ -30,8 +30,8 @@ const test = foo./*1*/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "bar",
-					Kind:     PtrTo(lsproto.CompletionItemKindField),
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					Kind:     new(lsproto.CompletionItemKindField),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

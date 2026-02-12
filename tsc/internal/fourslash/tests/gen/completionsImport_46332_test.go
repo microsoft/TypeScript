@@ -83,17 +83,17 @@ ref/**/`
 						},
 					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:          "ref",
 		Source:        "vue",
 		Description:   "Update import from \"vue\"",
 		AutoImportFix: &lsproto.AutoImportFix{},
-		NewFileContent: PtrTo(`import { ref } from "vue";
+		NewFileContent: new(`import { ref } from "vue";
 ref`),
 	})
 }

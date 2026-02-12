@@ -252,6 +252,11 @@ func (e *brokenSymlinkError) Error() string {
 	return fmt.Sprintf("broken symlink %q -> %q", e.from, e.to)
 }
 
+func isBrokenSymlinkError(err error) bool {
+	_, ok := errors.AsType[*brokenSymlinkError](err)
+	return ok
+}
+
 func (m *MapFS) getFollowingSymlinksWorker(p canonicalPath, symlinkFrom, symlinkTo canonicalPath) (*fstest.MapFile, canonicalPath, error) {
 	if file, ok := m.m[string(p)]; ok && file.Mode&fs.ModeSymlink == 0 {
 		return file, p, nil
@@ -510,8 +515,7 @@ func (m *MapFS) WriteFile(path string, data []byte, perm fs.FileMode) error {
 
 	file, cp, err := m.getFollowingSymlinks(m.getCanonicalPath(path))
 	if err != nil {
-		var brokenSymlinkError *brokenSymlinkError
-		if !errors.Is(err, fs.ErrNotExist) && !errors.As(err, &brokenSymlinkError) {
+		if !errors.Is(err, fs.ErrNotExist) && !isBrokenSymlinkError(err) {
 			// No other errors are possible.
 			panic(err)
 		}

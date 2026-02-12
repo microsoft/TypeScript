@@ -34,8 +34,8 @@ user.address[|./**/|]`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "city",
-					InsertText: PtrTo("?.city"),
-					Detail:     PtrTo("(property) city: string"),
+					InsertText: new("?.city"),
+					Detail:     new("(property) city: string"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "city",
@@ -45,8 +45,8 @@ user.address[|./**/|]`
 				},
 				&lsproto.CompletionItem{
 					Label:      "postal code",
-					InsertText: PtrTo("?.[\"postal code\"]"),
-					Detail:     PtrTo("(property) \"postal code\": string"),
+					InsertText: new("?.[\"postal code\"]"),
+					Detail:     new("(property) \"postal code\": string"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "postal code",

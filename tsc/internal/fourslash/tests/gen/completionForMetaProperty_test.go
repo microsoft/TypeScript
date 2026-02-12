@@ -28,7 +28,7 @@ function test() { new./*3*/ }`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "meta",
-					Detail: PtrTo("(property) ImportMetaExpression.meta: ImportMeta"),
+					Detail: new("(property) ImportMetaExpression.meta: ImportMeta"),
 				},
 			},
 		},
@@ -53,7 +53,7 @@ function test() { new./*3*/ }`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "target",
-					Detail: PtrTo("(property) NewTargetExpression.target: () => void"),
+					Detail: new("(property) NewTargetExpression.target: () => void"),
 				},
 			},
 		},

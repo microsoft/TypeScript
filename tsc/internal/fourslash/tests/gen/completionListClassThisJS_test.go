@@ -37,8 +37,8 @@ class Foo {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "this",
-					Kind:     PtrTo(lsproto.CompletionItemKindKeyword),
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					Kind:     new(lsproto.CompletionItemKindKeyword),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

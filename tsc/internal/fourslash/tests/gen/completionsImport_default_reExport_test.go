@@ -48,7 +48,7 @@ export default foo.b;`
 							},
 						},
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 					&lsproto.CompletionItem{
 						Label: "b",
@@ -58,7 +58,7 @@ export default foo.b;`
 							},
 						},
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 				}, false),
 		},

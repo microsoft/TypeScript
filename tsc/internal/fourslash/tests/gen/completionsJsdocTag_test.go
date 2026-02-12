@@ -29,8 +29,8 @@ func TestCompletionsJsdocTag(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "@property",
-					Detail: PtrTo("@property"),
-					Kind:   PtrTo(lsproto.CompletionItemKindKeyword),
+					Detail: new("@property"),
+					Kind:   new(lsproto.CompletionItemKindKeyword),
 				},
 			},
 		},

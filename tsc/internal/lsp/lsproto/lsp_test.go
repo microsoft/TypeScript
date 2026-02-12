@@ -51,7 +51,7 @@ func TestUnmarshalCompletionItem(t *testing.T) {
 
 	assert.DeepEqual(t, result, CompletionItem{
 		Label:            "pageXOffset",
-		InsertTextFormat: ptrTo(InsertTextFormatPlainText),
+		InsertTextFormat: new(InsertTextFormatPlainText),
 		TextEdit: &TextEditOrInsertReplaceEdit{
 			InsertReplaceEdit: &InsertReplaceEdit{
 				NewText: "pageXOffset",
@@ -77,8 +77,8 @@ func TestUnmarshalCompletionItem(t *testing.T) {
 				},
 			},
 		},
-		Kind:             ptrTo(CompletionItemKindVariable),
-		SortText:         ptrTo("15"),
-		CommitCharacters: ptrTo([]string{".", ",", ";"}),
+		Kind:             new(CompletionItemKindVariable),
+		SortText:         new("15"),
+		CommitCharacters: new([]string{".", ",", ";"}),
 	})
 }

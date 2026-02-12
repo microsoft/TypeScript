@@ -35,13 +35,13 @@ export declare function Component(): void;
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "Component",
-					InsertText: PtrTo("import { Component$1 } from \"react\";"),
+					InsertText: new("import { Component$1 } from \"react\";"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "react",
 						},
 					},
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "Component",
@@ -51,7 +51,7 @@ export declare function Component(): void;
 				},
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

@@ -1536,7 +1536,3 @@ func getReferenceAtPosition(sourceFile *ast.SourceFile, position int, program *c
 
 	return nil
 }
-
-func ptrTo[T any](v T) *T {
-	return &v
-}

@@ -34,7 +34,7 @@ func TestCompletionEntryOnNarrowedType(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "strOrNum",
-					Detail: PtrTo("(parameter) strOrNum: string | number"),
+					Detail: new("(parameter) strOrNum: string | number"),
 				},
 			},
 		},
@@ -49,7 +49,7 @@ func TestCompletionEntryOnNarrowedType(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "strOrNum",
-					Detail: PtrTo("(parameter) strOrNum: number"),
+					Detail: new("(parameter) strOrNum: number"),
 				},
 			},
 		},
@@ -64,7 +64,7 @@ func TestCompletionEntryOnNarrowedType(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "strOrNum",
-					Detail: PtrTo("(parameter) strOrNum: string"),
+					Detail: new("(parameter) strOrNum: string"),
 				},
 			},
 		},

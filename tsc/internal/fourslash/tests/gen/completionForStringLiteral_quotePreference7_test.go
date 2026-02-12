@@ -34,7 +34,7 @@ foo[|./**/|]`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "#",
-					InsertText: PtrTo("['#']"),
+					InsertText: new("['#']"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "#",

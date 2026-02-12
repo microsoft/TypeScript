@@ -34,11 +34,11 @@ let x: ns./**/`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "Box",
-					Detail: PtrTo("class ns.Box<T>"),
+					Detail: new("class ns.Box<T>"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "Type",
-					Detail: PtrTo("type ns.Type = {}"),
+					Detail: new("type ns.Type = {}"),
 				},
 			},
 		},

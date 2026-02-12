@@ -50,9 +50,9 @@ switch (u) {
 
 	exhaustiveCaseCompletion := &lsproto.CompletionItem{
 		Label:            "case E.A: ...",
-		InsertText:       PtrTo("case E.A:$1\ncase E.B:$2\ncase E.C:$3"),
-		SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
-		InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+		InsertText:       new("case E.A:$1\ncase E.B:$2\ncase E.C:$3"),
+		SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
+		InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 	}
 
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
@@ -105,8 +105,8 @@ switch (u) {
 							Replace: f.Ranges()[0].LSRange,
 						},
 					},
-					SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 				},
 			},
 		},

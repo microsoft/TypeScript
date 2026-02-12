@@ -48,10 +48,10 @@ let opt4 = <Opt wrong /*5*/ />;`
 				"propx",
 				&lsproto.CompletionItem{
 					Label:      "optional?",
-					InsertText: PtrTo("optional"),
-					FilterText: PtrTo("optional"),
-					Kind:       PtrTo(lsproto.CompletionItemKindField),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("optional"),
+					FilterText: new("optional"),
+					Kind:       new(lsproto.CompletionItemKindField),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},
@@ -68,9 +68,9 @@ let opt4 = <Opt wrong /*5*/ />;`
 				"propx",
 				&lsproto.CompletionItem{
 					Label:      "optional?",
-					FilterText: PtrTo("optional"),
-					Kind:       PtrTo(lsproto.CompletionItemKindField),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					FilterText: new("optional"),
+					Kind:       new(lsproto.CompletionItemKindField),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						InsertReplaceEdit: &lsproto.InsertReplaceEdit{
 							NewText: "optional",
@@ -93,10 +93,10 @@ let opt4 = <Opt wrong /*5*/ />;`
 				"propString",
 				&lsproto.CompletionItem{
 					Label:      "optional?",
-					InsertText: PtrTo("optional"),
-					FilterText: PtrTo("optional"),
-					Kind:       PtrTo(lsproto.CompletionItemKindField),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("optional"),
+					FilterText: new("optional"),
+					Kind:       new(lsproto.CompletionItemKindField),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},

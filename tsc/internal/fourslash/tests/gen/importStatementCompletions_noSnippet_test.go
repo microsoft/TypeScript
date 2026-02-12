@@ -30,7 +30,7 @@ export const foo = 0;
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "foo",
-					InsertText: PtrTo("import { foo } from \"./mod\";"),
+					InsertText: new("import { foo } from \"./mod\";"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./mod",
@@ -45,7 +45,7 @@ export const foo = 0;
 				},
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

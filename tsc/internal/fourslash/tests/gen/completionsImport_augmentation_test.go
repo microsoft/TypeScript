@@ -35,25 +35,25 @@ declare module "./a" {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Detail: PtrTo("const foo: 0"),
+					Detail: new("const foo: 0"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 				&lsproto.CompletionItem{
 					Label:  "bar",
-					Detail: PtrTo("const bar: 0"),
+					Detail: new("const bar: 0"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./a",
 						},
 					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},

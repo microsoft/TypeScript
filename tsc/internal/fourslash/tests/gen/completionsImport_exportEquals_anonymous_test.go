@@ -53,19 +53,19 @@ fooB/*1*/`
 								ModuleSpecifier: "./foo-bar",
 							},
 						},
-						Detail:              PtrTo("(property) export=: 0"),
-						Kind:                PtrTo(lsproto.CompletionItemKindField),
+						Detail:              new("(property) export=: 0"),
+						Kind:                new(lsproto.CompletionItemKindField),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 				}, true),
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "fooBar",
 		Source:      "./foo-bar",
 		Description: "Add import from \"./foo-bar\"",
-		NewFileContent: PtrTo(`import fooBar = require("./foo-bar")
+		NewFileContent: new(`import fooBar = require("./foo-bar")
 
 exp
 fooB`),

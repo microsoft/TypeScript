@@ -38,8 +38,8 @@ import { } from "repo//**/";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "card.js",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("card.js"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("card.js"),
 				},
 			},
 		},

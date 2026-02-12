@@ -64,7 +64,7 @@ fooFrom/**/`
 							ModuleSpecifier: "dependency/lol",
 						},
 					},
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 				},
 			},

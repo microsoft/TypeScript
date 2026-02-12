@@ -30,9 +30,9 @@ switch (u) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:            "case \"$1\": ...",
-					InsertText:       PtrTo("case \"\\$1\":$1\ncase \"2\":$2"),
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
-					SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					InsertText:       new("case \"\\$1\":$1\ncase \"2\":$2"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

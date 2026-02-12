@@ -174,17 +174,17 @@ func createTypeHelpItems(ctx context.Context, symbol *ast.Symbol, argumentInfo *
 
 	// If client supports per-signature activeParameter, set it on SignatureInformation
 	if supportsPerSignatureActiveParam && len(item.Parameters) > 0 {
-		sigInfo.ActiveParameter = &lsproto.UintegerOrNull{Uinteger: ptrTo(uint32(argumentInfo.argumentIndex))}
+		sigInfo.ActiveParameter = &lsproto.UintegerOrNull{Uinteger: new(uint32(argumentInfo.argumentIndex))}
 	}
 
 	help := &lsproto.SignatureHelp{
 		Signatures:      []*lsproto.SignatureInformation{sigInfo},
-		ActiveSignature: ptrTo(uint32(0)),
+		ActiveSignature: new(uint32(0)),
 	}
 
 	// If client doesn't support per-signature activeParameter, set it on the top-level SignatureHelp
 	if !supportsPerSignatureActiveParam && len(item.Parameters) > 0 {
-		help.ActiveParameter = &lsproto.UintegerOrNull{Uinteger: ptrTo(uint32(argumentInfo.argumentIndex))}
+		help.ActiveParameter = &lsproto.UintegerOrNull{Uinteger: new(uint32(argumentInfo.argumentIndex))}
 	}
 
 	return help
@@ -371,7 +371,7 @@ func (l *LanguageService) createSignatureHelpItems(ctx context.Context, candidat
 
 	help := &lsproto.SignatureHelp{
 		Signatures:      signatureInformation,
-		ActiveSignature: ptrTo(uint32(selectedItemIndex)),
+		ActiveSignature: new(uint32(selectedItemIndex)),
 	}
 
 	// If client doesn't support per-signature activeParameter, set it on the top-level SignatureHelp
@@ -404,7 +404,7 @@ func (l *LanguageService) computeActiveParameter(sig signatureInformation, argum
 				return &lsproto.UintegerOrNull{} // null means "no parameter is active"
 			}
 			// Client doesn't support null, use out-of-range index (defaults to 0 per LSP spec)
-			return &lsproto.UintegerOrNull{Uinteger: ptrTo(uint32(paramCount))}
+			return &lsproto.UintegerOrNull{Uinteger: new(uint32(paramCount))}
 		}
 		// Clamp to last parameter for trailing rest parameters
 		if activeParam > uint32(paramCount-1) {
@@ -412,7 +412,7 @@ func (l *LanguageService) computeActiveParameter(sig signatureInformation, argum
 		}
 	}
 
-	return &lsproto.UintegerOrNull{Uinteger: ptrTo(activeParam)}
+	return &lsproto.UintegerOrNull{Uinteger: new(activeParam)}
 }
 
 func (l *LanguageService) getSignatureHelpItem(candidate *checker.Signature, isTypeParameterList bool, callTargetSymbol string, enclosingDeclaration *ast.Node, sourceFile *ast.SourceFile, c *checker.Checker, docFormat lsproto.MarkupKind) []signatureInformation {

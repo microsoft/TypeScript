@@ -35,8 +35,7 @@ func TestCompilerOptionsDeclaration(t *testing.T) {
 	}
 
 	compilerOptionsType := reflect.TypeFor[core.CompilerOptions]()
-	for i := range compilerOptionsType.NumField() {
-		field := compilerOptionsType.Field(i)
+	for field := range compilerOptionsType.Fields() {
 		if !field.IsExported() {
 			continue
 		}

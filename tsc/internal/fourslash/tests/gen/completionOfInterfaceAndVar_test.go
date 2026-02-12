@@ -33,8 +33,8 @@ declare var AnalyserNode: {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "AnalyserNode",
-					Detail: PtrTo("interface AnalyserNode\nvar AnalyserNode: {\n    new (): AnalyserNode;\n    prototype: AnalyserNode;\n}"),
-					Kind:   PtrTo(lsproto.CompletionItemKindVariable),
+					Detail: new("interface AnalyserNode\nvar AnalyserNode: {\n    new (): AnalyserNode;\n    prototype: AnalyserNode;\n}"),
+					Kind:   new(lsproto.CompletionItemKindVariable),
 				},
 			},
 		},

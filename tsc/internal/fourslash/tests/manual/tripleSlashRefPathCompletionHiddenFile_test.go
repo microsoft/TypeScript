@@ -33,7 +33,7 @@ func TestTripleSlashRefPathCompletionHiddenFile(t *testing.T) {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f.ts",
-					Detail: PtrTo("f.ts"),
+					Detail: new("f.ts"),
 				},
 			},
 		},
@@ -48,7 +48,7 @@ func TestTripleSlashRefPathCompletionHiddenFile(t *testing.T) {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f.ts",
-					Detail: PtrTo("f.ts"),
+					Detail: new("f.ts"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "f.ts",

@@ -37,9 +37,9 @@ export class Class implements Interface {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "method",
-					InsertText: PtrTo("method(): void {\n}"),
-					FilterText: PtrTo("method"),
-					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
+					InsertText: new("method(): void {\n}"),
+					FilterText: new("method"),
+					SortText:   new(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

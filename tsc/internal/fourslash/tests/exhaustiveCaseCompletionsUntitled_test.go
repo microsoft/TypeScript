@@ -38,9 +38,9 @@ switch (e) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:            "case E.A: ...",
-					InsertText:       PtrTo("case E.A:$1\ncase E.B:$2\ncase E.C:$3"),
-					SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					InsertText:       new("case E.A:$1\ncase E.B:$2\ncase E.C:$3"),
+					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 				},
 			},
 		},
@@ -78,9 +78,9 @@ switch (direction) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:            "case Direction.Up: ...",
-					InsertText:       PtrTo("case Direction.Up:$1\ncase Direction.Down:$2\ncase Direction.Left:$3\ncase Direction.Right:$4"),
-					SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					InsertText:       new("case Direction.Up:$1\ncase Direction.Down:$2\ncase Direction.Left:$3\ncase Direction.Right:$4"),
+					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 				},
 			},
 		},
@@ -111,9 +111,9 @@ switch (status) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:            `case "error": ...`,
-					InsertText:       PtrTo(`case "error":$1` + "\n" + `case "pending":$2` + "\n" + `case "success":$3`),
-					SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					InsertText:       new(`case "error":$1` + "\n" + `case "pending":$2` + "\n" + `case "success":$3`),
+					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 				},
 			},
 		},
@@ -151,9 +151,9 @@ switch (s) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:            "case Status.Active: ...",
-					InsertText:       PtrTo("case Status.Active:$1\ncase Status.Inactive:$2\ncase Status.Pending:$3"),
-					SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					InsertText:       new("case Status.Active:$1\ncase Status.Inactive:$2\ncase Status.Pending:$3"),
+					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 				},
 			},
 		},

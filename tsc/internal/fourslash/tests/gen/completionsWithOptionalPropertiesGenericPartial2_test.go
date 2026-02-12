@@ -32,15 +32,15 @@ partialFoo({ a: true, b: true }, { /*1*/ });`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "a?",
-					InsertText: PtrTo("a"),
-					FilterText: PtrTo("a"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("a"),
+					FilterText: new("a"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "b?",
-					InsertText: PtrTo("b"),
-					FilterText: PtrTo("b"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("b"),
+					FilterText: new("b"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},

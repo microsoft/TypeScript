@@ -38,19 +38,19 @@ f/**/;`
 							ModuleSpecifier: "./a",
 						},
 					},
-					Detail:              PtrTo("(alias) const foo: 0\nexport default foo"),
-					Kind:                PtrTo(lsproto.CompletionItemKindVariable),
+					Detail:              new("(alias) const foo: 0\nexport default foo"),
+					Kind:                new(lsproto.CompletionItemKindVariable),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "foo",
 		Source:      "./a",
 		Description: "Add import from \"./a\"",
-		NewFileContent: PtrTo(`import foo from "./a";
+		NewFileContent: new(`import foo from "./a";
 
 f;`),
 	})

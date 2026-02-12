@@ -41,8 +41,8 @@ import { } from "foo//**/";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "for-everywhere",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("for-everywhere.js"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("for-everywhere.js"),
 				},
 			},
 		},

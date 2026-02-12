@@ -42,7 +42,7 @@ Ba/**/`
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "foo",
-						SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+						SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 					},
 					&lsproto.CompletionItem{
 						Label: "Bar",
@@ -52,7 +52,7 @@ Ba/**/`
 							},
 						},
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 					&lsproto.CompletionItem{
 						Label: "Bar",
@@ -62,16 +62,16 @@ Ba/**/`
 							},
 						},
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 				}, false),
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "Bar",
 		Source:      "path2longer",
 		Description: "Add import from \"path2longer\"",
-		NewFileContent: PtrTo(`import { Bar } from "path2longer";
+		NewFileContent: new(`import { Bar } from "path2longer";
 
 Ba`),
 	})

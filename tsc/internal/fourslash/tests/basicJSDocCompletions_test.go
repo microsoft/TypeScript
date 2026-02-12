@@ -64,8 +64,8 @@ function baz(x = 0) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "link",
-					Kind:   PtrTo(lsproto.CompletionItemKindKeyword),
-					Detail: PtrTo("link"),
+					Kind:   new(lsproto.CompletionItemKindKeyword),
+					Detail: new("link"),
 				},
 				"param",
 				"returns",

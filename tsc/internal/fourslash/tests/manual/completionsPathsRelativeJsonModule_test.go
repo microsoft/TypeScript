@@ -30,8 +30,8 @@ import { } from ".//**/";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "test.json",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("test.json"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("test.json"),
 				},
 			},
 		},

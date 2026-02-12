@@ -35,8 +35,8 @@ const value = "test";
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "value",
-					Kind:     PtrTo(lsproto.CompletionItemKindVariable),
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					Kind:     new(lsproto.CompletionItemKindVariable),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

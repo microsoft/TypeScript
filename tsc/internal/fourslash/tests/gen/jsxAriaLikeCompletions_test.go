@@ -36,9 +36,9 @@ const a = <div {...{}} /*1*/></div>;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "aria-whatever?",
-					InsertText: PtrTo("aria-whatever"),
-					FilterText: PtrTo("aria-whatever"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("aria-whatever"),
+					FilterText: new("aria-whatever"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},

@@ -35,9 +35,9 @@ class SubComponent extends Component<{}> {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "setState",
-					InsertText: PtrTo("setState(stateHandler: (oldState: {}, newState: {}) => void): void {\n}"),
-					FilterText: PtrTo("setState"),
-					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
+					InsertText: new("setState(stateHandler: (oldState: {}, newState: {}) => void): void {\n}"),
+					FilterText: new("setState"),
+					SortText:   new(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

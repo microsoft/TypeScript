@@ -381,7 +381,7 @@ func (t *Tracker) InsertNodeInListAfter(sourceFile *ast.SourceFile, after *ast.N
 		lsproto.Range{Start: insertLSPos, End: insertLSPos},
 		newNode,
 		NodeOptions{
-			indentation: ptrTo(indentation),
+			indentation: new(indentation),
 			Prefix:      t.newLine,
 		},
 	)
@@ -490,10 +490,6 @@ func (t *Tracker) getOptionsForInsertNodeBefore(before *ast.Node, inserted *ast.
 	}
 	// We haven't handled this kind of node yet -- add it
 	panic("unimplemented node type " + before.Kind.String() + " in changeTracker.getOptionsForInsertNodeBefore")
-}
-
-func ptrTo[T any](v T) *T {
-	return &v
 }
 
 func rangeContainsRangeExclusive(outer *ast.Node, inner *ast.Node) bool {

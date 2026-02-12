@@ -41,8 +41,8 @@ import { } from "salesforce-pageobjects//**/";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "action",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("action"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("action"),
 				},
 			},
 		},
@@ -58,8 +58,8 @@ import { } from "salesforce-pageobjects//**/";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "pageObjects",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("pageObjects"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("pageObjects"),
 				},
 			},
 		},
@@ -75,8 +75,8 @@ import { } from "salesforce-pageobjects//**/";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "actionRenderer",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("actionRenderer.d.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("actionRenderer.d.ts"),
 				},
 			},
 		},

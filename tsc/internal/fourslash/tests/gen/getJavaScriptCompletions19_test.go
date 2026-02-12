@@ -42,7 +42,7 @@ if(typeof x === 'string') {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "substring",
-					Kind:  PtrTo(lsproto.CompletionItemKindMethod),
+					Kind:  new(lsproto.CompletionItemKindMethod),
 				},
 			},
 		},
@@ -59,7 +59,7 @@ if(typeof x === 'string') {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "toFixed",
-					Kind:  PtrTo(lsproto.CompletionItemKindMethod),
+					Kind:  new(lsproto.CompletionItemKindMethod),
 				},
 			},
 		},

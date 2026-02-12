@@ -38,8 +38,8 @@ const i: I = {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "a",
-					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextMemberDeclaredBySpreadAssignment))),
-					Kind:     PtrTo(lsproto.CompletionItemKindField),
+					SortText: new(string(ls.DeprecateSortText(ls.SortTextMemberDeclaredBySpreadAssignment))),
+					Kind:     new(lsproto.CompletionItemKindField),
 				},
 			},
 		},

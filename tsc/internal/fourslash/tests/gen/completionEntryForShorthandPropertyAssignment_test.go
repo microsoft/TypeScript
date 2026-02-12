@@ -26,7 +26,7 @@ func TestCompletionEntryForShorthandPropertyAssignment(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "name",
-					Kind:  PtrTo(lsproto.CompletionItemKindField),
+					Kind:  new(lsproto.CompletionItemKindField),
 				},
 			},
 		},

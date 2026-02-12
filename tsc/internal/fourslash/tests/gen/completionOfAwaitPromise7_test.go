@@ -30,7 +30,7 @@ func TestCompletionOfAwaitPromise7(t *testing.T) {
 				"then",
 				&lsproto.CompletionItem{
 					Label:      "trim",
-					InsertText: PtrTo(";(await x).trim"),
+					InsertText: new(";(await x).trim"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "trim",

@@ -72,13 +72,13 @@ import { } from "foo//**/";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "blah",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("blah.d.mts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("blah.d.mts"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "index",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("index.d.mts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("index.d.mts"),
 				},
 			},
 		},

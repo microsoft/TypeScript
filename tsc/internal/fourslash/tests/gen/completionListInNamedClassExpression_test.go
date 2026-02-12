@@ -31,8 +31,8 @@ func TestCompletionListInNamedClassExpression(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "myClass",
-					Detail: PtrTo("(local class) myClass"),
-					Kind:   PtrTo(lsproto.CompletionItemKindProperty),
+					Detail: new("(local class) myClass"),
+					Kind:   new(lsproto.CompletionItemKindProperty),
 				},
 			},
 		},

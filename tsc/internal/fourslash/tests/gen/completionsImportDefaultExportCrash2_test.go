@@ -60,7 +60,7 @@ export default methods.$;
 							ModuleSpecifier: "dom7",
 						},
 					},
-					SortText: PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText: new(string(ls.SortTextAutoImportSuggestions)),
 				},
 				&lsproto.CompletionItem{
 					Label:               "Dom7",
@@ -70,7 +70,7 @@ export default methods.$;
 							ModuleSpecifier: "./dom7",
 						},
 					},
-					SortText: PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText: new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},

@@ -44,7 +44,7 @@ conso/**/`
 					&lsproto.CompletionItem{
 						Label:               "console",
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+						SortText:            new(string(ls.SortTextGlobalsOrKeywords)),
 					},
 				}, false),
 		},

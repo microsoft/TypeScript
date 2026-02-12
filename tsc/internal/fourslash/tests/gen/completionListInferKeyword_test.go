@@ -29,8 +29,8 @@ func TestCompletionListInferKeyword(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "infer",
-					Kind:     PtrTo(lsproto.CompletionItemKindKeyword),
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					Kind:     new(lsproto.CompletionItemKindKeyword),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

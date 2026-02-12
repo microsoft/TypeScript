@@ -65,23 +65,23 @@ D./*2*/`
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "bar",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "bar2",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "baz",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "prototype",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "x",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 				}),
 		},

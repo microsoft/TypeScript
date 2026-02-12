@@ -24,8 +24,8 @@ func TestStringCompletionDetails(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "aa",
-					Kind:   PtrTo(lsproto.CompletionItemKindConstant),
-					Detail: PtrTo("aa"),
+					Kind:   new(lsproto.CompletionItemKindConstant),
+					Detail: new("aa"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							Range: lsproto.Range{

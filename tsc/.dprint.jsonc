@@ -38,7 +38,7 @@
         "trailingCommas": "never"
     },
     "gofumpt": {
-        "langVersion": "go1.25",
+        "langVersion": "go1.26",
         "modulePath": "github.com/microsoft/typescript-go"
     },
     "excludes": [

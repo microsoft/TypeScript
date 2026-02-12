@@ -36,9 +36,9 @@ class HSub extends HBase {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "foo",
-					InsertText: PtrTo("override foo(a: string): void {\n}"),
-					FilterText: PtrTo("foo"),
-					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
+					InsertText: new("override foo(a: string): void {\n}"),
+					FilterText: new("foo"),
+					SortText:   new(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

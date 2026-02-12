@@ -30,7 +30,7 @@ async function foo(x: Promise<Foo>) {
 				"then",
 				&lsproto.CompletionItem{
 					Label:      "foo-foo",
-					InsertText: PtrTo("(await x)[\"foo-foo\"]"),
+					InsertText: new("(await x)[\"foo-foo\"]"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "foo-foo",

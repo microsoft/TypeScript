@@ -601,7 +601,7 @@ function parseVerifyApplyCodeActionFromCompletionArgs(args: readonly ts.Expressi
         return undefined;
     }
     const markerName = getStringLiteralLike(args[0])?.text;
-    const marker = markerName === undefined ? "nil" : `PtrTo(${getGoStringLiteral(markerName)})`;
+    const marker = markerName === undefined ? "nil" : `new(${getGoStringLiteral(markerName)})`;
     const options = parseVerifyApplyCodeActionArgs(args[1]);
     if (options === undefined) {
         return undefined;
@@ -686,7 +686,7 @@ function parseVerifyApplyCodeActionArgs(arg: ts.Expression): string | undefined 
                     console.error(`Expected string literal for newFileContent in verify.applyCodeActionFromCompletion options, got ${init.getText()}`);
                     return undefined;
                 }
-                props.push(`NewFileContent: PtrTo(${getGoMultiLineStringLiteral(newFileContentInit.text)}),`);
+                props.push(`NewFileContent: new(${getGoMultiLineStringLiteral(newFileContentInit.text)}),`);
                 break;
             case "newRangeContent":
                 const newRangeContentInit = getStringLiteralLike(init);
@@ -694,7 +694,7 @@ function parseVerifyApplyCodeActionArgs(arg: ts.Expression): string | undefined 
                     console.error(`Expected string literal for newRangeContent in verify.applyCodeActionFromCompletion options, got ${init.getText()}`);
                     return undefined;
                 }
-                props.push(`NewRangeContent: PtrTo(${getGoMultiLineStringLiteral(newRangeContentInit.text)}),`);
+                props.push(`NewRangeContent: new(${getGoMultiLineStringLiteral(newRangeContentInit.text)}),`);
                 break;
             case "preferences":
                 // Few if any tests use non-default preferences
@@ -1079,7 +1079,7 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
                     if (!result) {
                         return undefined;
                     }
-                    itemProps.push(`SortText: PtrTo(string(${result})),`);
+                    itemProps.push(`SortText: new(string(${result})),`);
                     if (result === "ls.SortTextOptionalMember") {
                         isOptional = true;
                     }
@@ -1111,7 +1111,7 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
                 }
                 case "isRecommended":
                     if (init.kind === ts.SyntaxKind.TrueKeyword) {
-                        itemProps.push(`Preselect: PtrTo(true),`);
+                        itemProps.push(`Preselect: new(true),`);
                     }
                     break;
                 case "kind":
@@ -1119,7 +1119,7 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
                     if (!kind) {
                         return undefined;
                     }
-                    itemProps.push(`Kind: PtrTo(${kind}),`);
+                    itemProps.push(`Kind: new(${kind}),`);
                     break;
                 case "kindModifiers":
                     const modifiers = parseKindModifiers(init);
@@ -1131,7 +1131,7 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
                 case "text": {
                     let textInit;
                     if (textInit = getStringLiteralLike(init)) {
-                        itemProps.push(`Detail: PtrTo(${getGoStringLiteral(textInit.text)}),`);
+                        itemProps.push(`Detail: new(${getGoStringLiteral(textInit.text)}),`);
                     }
                     else {
                         console.error(`Expected string literal for text, got ${init.getText()}`);
@@ -1214,7 +1214,7 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
                 }
                 case "isSnippet":
                     if (init.kind === ts.SyntaxKind.TrueKeyword) {
-                        itemProps.push(`InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),`);
+                        itemProps.push(`InsertTextFormat: new(lsproto.InsertTextFormatSnippet),`);
                     }
                     break;
                 default:
@@ -1227,7 +1227,7 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
         }
         if (codeActionArgs && codeActionArgs.name === name && codeActionArgs.source === sourceInit?.text) {
             itemProps.push(`LabelDetails: &lsproto.CompletionItemLabelDetails{
-                Description: PtrTo(${getGoStringLiteral(codeActionArgs.source)}),
+                Description: new(${getGoStringLiteral(codeActionArgs.source)}),
             },`);
         }
         if (replacementSpanIdx) {
@@ -1243,8 +1243,8 @@ function parseExpectedCompletionItem(expr: ts.Expression, codeActionArgs?: Verif
             filterText ??= name;
             name += "?";
         }
-        if (filterText) itemProps.unshift(`FilterText: PtrTo(${getGoStringLiteral(filterText)}),`);
-        if (insertText) itemProps.unshift(`InsertText: PtrTo(${getGoStringLiteral(insertText)}),`);
+        if (filterText) itemProps.unshift(`FilterText: new(${getGoStringLiteral(filterText)}),`);
+        if (insertText) itemProps.unshift(`InsertText: new(${getGoStringLiteral(insertText)}),`);
         itemProps.unshift(`Label: ${getGoStringLiteral(name!)},`);
         return `&lsproto.CompletionItem{\n${itemProps.join("\n")}}`;
     }
@@ -1570,7 +1570,7 @@ function parseExpectedDiagnostic(expr: ts.Expression): string | undefined {
             case "code": {
                 let codeInit;
                 if (codeInit = getNumericLiteral(init)) {
-                    diagnosticProps.push(`Code: &lsproto.IntegerOrString{Integer: PtrTo[int32](${codeInit.text})},`);
+                    diagnosticProps.push(`Code: &lsproto.IntegerOrString{Integer: new(int32(${codeInit.text}))},`);
                 }
                 else {
                     console.error(`Expected numeric literal for diagnostic code, got ${init.getText()}`);
@@ -2243,7 +2243,7 @@ function parseOrganizeImportsArgs(args: readonly ts.Expression[]): [VerifyOrgani
             }
             // Default handling for other string properties
             else if (ts.isStringLiteral(propValue)) {
-                prefsFields.push(`${goFieldName}: PtrTo(${getGoStringLiteral(propValue.text)})`);
+                prefsFields.push(`${goFieldName}: new(${getGoStringLiteral(propValue.text)})`);
             }
             else if (propValue.kind === ts.SyntaxKind.TrueKeyword) {
                 prefsFields.push(`${goFieldName}: core.TSTrue`);
@@ -2851,7 +2851,7 @@ function parseVerifyNavigateToArg(arg: ts.Expression): string | undefined {
     return `{
         Pattern: ${pattern ? pattern : '""'},
         Preferences: ${prefs},
-        Exact: PtrTo([]*lsproto.SymbolInformation{${items.length ? items.join(",\n") + ",\n" : ""}}),
+        Exact: new([]*lsproto.SymbolInformation{${items.length ? items.join(",\n") + ",\n" : ""}}),
     }`;
 }
 
@@ -2921,7 +2921,7 @@ function parseNavToItem(arg: ts.Expression): string | undefined {
                     console.error(`Expected string literal for container name in navigateTo item, got ${init.getText()}`);
                     return undefined;
                 }
-                itemProps.push(`ContainerName: PtrTo(${getGoStringLiteral(nameInit.text)})`);
+                itemProps.push(`ContainerName: new(${getGoStringLiteral(nameInit.text)})`);
                 break;
             }
             default:
@@ -3495,9 +3495,9 @@ function generateTriggerContext(triggerReason: SignatureHelpTriggerReason | unde
         case "invoked":
             return `&lsproto.SignatureHelpContext{TriggerKind: lsproto.SignatureHelpTriggerKindInvoked}`;
         case "characterTyped":
-            return `&lsproto.SignatureHelpContext{TriggerKind: lsproto.SignatureHelpTriggerKindTriggerCharacter, TriggerCharacter: PtrTo(${getGoStringLiteral(triggerReason.triggerCharacter ?? "")}), IsRetrigger: false}`;
+            return `&lsproto.SignatureHelpContext{TriggerKind: lsproto.SignatureHelpTriggerKindTriggerCharacter, TriggerCharacter: new(${getGoStringLiteral(triggerReason.triggerCharacter ?? "")}), IsRetrigger: false}`;
         case "retrigger":
-            return `&lsproto.SignatureHelpContext{TriggerKind: lsproto.SignatureHelpTriggerKindTriggerCharacter, TriggerCharacter: PtrTo(${getGoStringLiteral(triggerReason.triggerCharacter ?? "")}), IsRetrigger: true}`;
+            return `&lsproto.SignatureHelpContext{TriggerKind: lsproto.SignatureHelpTriggerKindTriggerCharacter, TriggerCharacter: new(${getGoStringLiteral(triggerReason.triggerCharacter ?? "")}), IsRetrigger: true}`;
         default:
             throw new Error(`Unknown trigger reason kind: ${triggerReason}`);
     }
@@ -3681,7 +3681,6 @@ function usesFourslashUtil(goTxt: string): boolean {
     }
     return goTxt.includes("Ignored")
         || goTxt.includes("DefaultCommitCharacters")
-        || goTxt.includes("PtrTo")
         || goTxt.includes("ToAny");
 }
 

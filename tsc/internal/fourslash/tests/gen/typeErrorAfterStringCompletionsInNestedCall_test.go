@@ -58,7 +58,7 @@ createMachine<GreetingEvent>({
 	})
 	f.VerifyNonSuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
-			Code:    &lsproto.IntegerOrString{Integer: PtrTo[int32](2322)},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(2322))},
 			Message: "Type 'RaiseActionObject<{ type: \"ALOHAx\"; }>' is not assignable to type 'RaiseActionObject<GreetingEvent>'.\n  Type '{ type: \"ALOHAx\"; }' is not assignable to type 'GreetingEvent'.\n    Type '{ type: \"ALOHAx\"; }' is not assignable to type '{ type: \"ALOHA\"; }'.\n      Types of property 'type' are incompatible.\n        Type '\"ALOHAx\"' is not assignable to type '\"ALOHA\"'.",
 		},
 	})

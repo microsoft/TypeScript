@@ -27,10 +27,10 @@ x[|.|]/**/;
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "0",
-					Kind:       PtrTo(lsproto.CompletionItemKindField),
-					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
-					InsertText: PtrTo("[0]"),
-					FilterText: PtrTo(".0"),
+					Kind:       new(lsproto.CompletionItemKindField),
+					SortText:   new(string(ls.SortTextLocationPriority)),
+					InsertText: new("[0]"),
+					FilterText: new(".0"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "[0]",

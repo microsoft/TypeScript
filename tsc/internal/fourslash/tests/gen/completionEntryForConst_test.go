@@ -31,8 +31,8 @@ const e = 1
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "c",
-					Detail: PtrTo("const c: \"s\""),
-					Kind:   PtrTo(lsproto.CompletionItemKindVariable),
+					Detail: new("const c: \"s\""),
+					Kind:   new(lsproto.CompletionItemKindVariable),
 				},
 			},
 		},
@@ -47,8 +47,8 @@ const e = 1
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "d",
-					Detail: PtrTo("const d: 1"),
-					Kind:   PtrTo(lsproto.CompletionItemKindVariable),
+					Detail: new("const d: 1"),
+					Kind:   new(lsproto.CompletionItemKindVariable),
 				},
 			},
 		},
@@ -63,8 +63,8 @@ const e = 1
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "e",
-					Detail: PtrTo("const e: 1"),
-					Kind:   PtrTo(lsproto.CompletionItemKindVariable),
+					Detail: new("const e: 1"),
+					Kind:   new(lsproto.CompletionItemKindVariable),
 				},
 			},
 		},

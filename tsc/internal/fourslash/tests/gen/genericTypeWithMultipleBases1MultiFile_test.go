@@ -41,15 +41,15 @@ x./**/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "watch",
-					Detail: PtrTo("(property) iBaseScope.watch: () => void"),
+					Detail: new("(property) iBaseScope.watch: () => void"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "moveUp",
-					Detail: PtrTo("(property) iMover.moveUp: () => void"),
+					Detail: new("(property) iMover.moveUp: () => void"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "family",
-					Detail: PtrTo("(property) iScope<number>.family: number"),
+					Detail: new("(property) iScope<number>.family: number"),
 				},
 			},
 		},

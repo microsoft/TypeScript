@@ -31,11 +31,11 @@ F(()=>({/*1*/} as const))`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "foo1",
-					Detail: PtrTo("(property) foo1: 1"),
+					Detail: new("(property) foo1: 1"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "foo2",
-					Detail: PtrTo("(property) foo2: 2"),
+					Detail: new("(property) foo2: 2"),
 				},
 			},
 		},

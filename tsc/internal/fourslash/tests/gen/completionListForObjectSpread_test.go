@@ -44,11 +44,11 @@ spreadUndefined./*4*/a;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: PtrTo("(property) a: number"),
+					Detail: new("(property) a: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "b",
-					Detail: PtrTo("(property) b: string"),
+					Detail: new("(property) b: string"),
 				},
 			},
 		},
@@ -63,15 +63,15 @@ spreadUndefined./*4*/a;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: PtrTo("(property) a: number"),
+					Detail: new("(property) a: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "b",
-					Detail: PtrTo("(property) b: boolean"),
+					Detail: new("(property) b: boolean"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c",
-					Detail: PtrTo("(property) c: number"),
+					Detail: new("(property) c: number"),
 				},
 			},
 		},
@@ -86,7 +86,7 @@ spreadUndefined./*4*/a;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: PtrTo("(property) a: number"),
+					Detail: new("(property) a: number"),
 				},
 			},
 		},

@@ -39,19 +39,19 @@ conca/**/`
 							ModuleSpecifier: "bar/concat",
 						},
 					},
-					Detail:              PtrTo("const concat: 0"),
-					Kind:                PtrTo(lsproto.CompletionItemKindVariable),
+					Detail:              new("const concat: 0"),
+					Kind:                new(lsproto.CompletionItemKindVariable),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "concat",
 		Source:      "bar/concat",
 		Description: "Add import from \"bar/concat\"",
-		NewFileContent: PtrTo(`import { concat } from "bar/concat";
+		NewFileContent: new(`import { concat } from "bar/concat";
 
 export {};
 conca`),

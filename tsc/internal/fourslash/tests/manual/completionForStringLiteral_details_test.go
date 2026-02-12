@@ -39,8 +39,8 @@ o["[|/*prop*/|]"];`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "other",
-					Detail: PtrTo("other.ts"),
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
+					Detail: new("other.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
 				},
 			},
 		},
@@ -55,8 +55,8 @@ o["[|/*prop*/|]"];`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: PtrTo("a"),
-					Kind:   PtrTo(lsproto.CompletionItemKindConstant),
+					Detail: new("a"),
+					Kind:   new(lsproto.CompletionItemKindConstant),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "a",
@@ -77,14 +77,14 @@ o["[|/*prop*/|]"];`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "m",
-					Detail: PtrTo("(method) I.m(): void"),
+					Detail: new("(method) I.m(): void"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
 							Value: "Method doc",
 						},
 					},
-					Kind: PtrTo(lsproto.CompletionItemKindMethod),
+					Kind: new(lsproto.CompletionItemKindMethod),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "m",
@@ -94,14 +94,14 @@ o["[|/*prop*/|]"];`
 				},
 				&lsproto.CompletionItem{
 					Label:  "x",
-					Detail: PtrTo("(property) I.x: number"),
+					Detail: new("(property) I.x: number"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
 							Value: "Prop doc",
 						},
 					},
-					Kind: PtrTo(lsproto.CompletionItemKindField),
+					Kind: new(lsproto.CompletionItemKindField),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "x",

@@ -42,7 +42,7 @@ Table/**/`
 								ModuleSpecifier: "antd",
 							},
 						},
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 					},
 					&lsproto.CompletionItem{
@@ -52,7 +52,7 @@ Table/**/`
 								ModuleSpecifier: "rc-table",
 							},
 						},
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
 					},
 				}, false),

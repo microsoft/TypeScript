@@ -30,8 +30,8 @@ func TestCompletionsAfterJSDoc(t *testing.T) {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "readonly",
-					Kind:     PtrTo(lsproto.CompletionItemKindKeyword),
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					Kind:     new(lsproto.CompletionItemKindKeyword),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

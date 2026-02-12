@@ -35,9 +35,9 @@ class Sub extends Base {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "foo",
-					InsertText: PtrTo("protected foo: string;"),
-					FilterText: PtrTo("foo"),
-					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
+					InsertText: new("protected foo: string;"),
+					FilterText: new("foo"),
+					SortText:   new(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

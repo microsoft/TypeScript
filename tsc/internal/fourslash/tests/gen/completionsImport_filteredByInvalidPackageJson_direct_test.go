@@ -56,7 +56,7 @@ const x = Re/**/`
 							ModuleSpecifier: "react",
 						},
 					},
-					SortText: PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText: new(string(ls.SortTextAutoImportSuggestions)),
 				},
 				&lsproto.CompletionItem{
 					Label:               "ReactFake",
@@ -66,7 +66,7 @@ const x = Re/**/`
 							ModuleSpecifier: "fake-react",
 						},
 					},
-					SortText: PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText: new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},

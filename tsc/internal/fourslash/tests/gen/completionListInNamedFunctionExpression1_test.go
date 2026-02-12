@@ -28,8 +28,8 @@ func TestCompletionListInNamedFunctionExpression1(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Detail: PtrTo("(local function) foo(): void"),
-					Kind:   PtrTo(lsproto.CompletionItemKindFunction),
+					Detail: new("(local function) foo(): void"),
+					Kind:   new(lsproto.CompletionItemKindFunction),
 				},
 			},
 		},

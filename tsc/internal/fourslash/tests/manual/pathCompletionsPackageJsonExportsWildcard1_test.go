@@ -57,18 +57,18 @@ import { } from "foo//**/";`
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "blah",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("blah.d.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("blah.d.ts"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "index",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("index.d.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("index.d.ts"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "arguments",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("arguments.d.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("arguments.d.ts"),
 				},
 			},
 		},

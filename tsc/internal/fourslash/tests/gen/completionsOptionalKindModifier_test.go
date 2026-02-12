@@ -29,15 +29,15 @@ x./*a*/;
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "a?",
-					InsertText: PtrTo("a"),
-					FilterText: PtrTo("a"),
-					Kind:       PtrTo(lsproto.CompletionItemKindField),
+					InsertText: new("a"),
+					FilterText: new("a"),
+					Kind:       new(lsproto.CompletionItemKindField),
 				},
 				&lsproto.CompletionItem{
 					Label:      "method?",
-					InsertText: PtrTo("method"),
-					FilterText: PtrTo("method"),
-					Kind:       PtrTo(lsproto.CompletionItemKindMethod),
+					InsertText: new("method"),
+					FilterText: new("method"),
+					Kind:       new(lsproto.CompletionItemKindMethod),
 				},
 			},
 		},

@@ -40,11 +40,11 @@ namespace C {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "f",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "foo",
-					SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+					SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 				},
 			},
 		},

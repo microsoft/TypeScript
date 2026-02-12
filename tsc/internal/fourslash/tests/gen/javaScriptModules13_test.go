@@ -39,7 +39,7 @@ var x = require('./myMod');
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "y",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 			Excludes: []string{
@@ -58,7 +58,7 @@ var x = require('./myMod');
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "a",
-					Kind:  PtrTo(lsproto.CompletionItemKindField),
+					Kind:  new(lsproto.CompletionItemKindField),
 				},
 			},
 		},
@@ -74,7 +74,7 @@ var x = require('./myMod');
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "toFixed",
-					Kind:  PtrTo(lsproto.CompletionItemKindMethod),
+					Kind:  new(lsproto.CompletionItemKindMethod),
 				},
 			},
 		},

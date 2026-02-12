@@ -46,15 +46,15 @@ Person.getNa/**/ = 10;`
 					"getNa",
 					&lsproto.CompletionItem{
 						Label:    "Person",
-						SortText: PtrTo(string(ls.SortTextJavascriptIdentifiers)),
+						SortText: new(string(ls.SortTextJavascriptIdentifiers)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "name",
-						SortText: PtrTo(string(ls.SortTextJavascriptIdentifiers)),
+						SortText: new(string(ls.SortTextJavascriptIdentifiers)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "age",
-						SortText: PtrTo(string(ls.SortTextJavascriptIdentifiers)),
+						SortText: new(string(ls.SortTextJavascriptIdentifiers)),
 					},
 				}),
 		},

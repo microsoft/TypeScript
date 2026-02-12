@@ -54,31 +54,31 @@ class C2 extends Base {
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "protectedMethod",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedOverriddenMethod",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedOverriddenProperty",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedProperty",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "publicMethod",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "publicProperty",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "prototype",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 				}),
 		},
@@ -94,35 +94,35 @@ class C2 extends Base {
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "protectedMethod",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedOverriddenMethod",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedOverriddenProperty",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "protectedProperty",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "publicMethod",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "publicProperty",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "test",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "prototype",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 				}),
 		},
@@ -137,59 +137,59 @@ class C2 extends Base {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "protectedMethod",
-					SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+					SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "protectedOverriddenMethod",
-					SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+					SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "protectedOverriddenProperty",
-					SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+					SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "protectedProperty",
-					SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+					SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "publicMethod",
-					SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+					SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "publicProperty",
-					SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+					SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "apply",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "arguments",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "bind",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "call",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "caller",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "length",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "prototype",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "toString",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

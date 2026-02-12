@@ -32,7 +32,7 @@ func TestCompletionWithDotFollowedByNamespaceKeyword(t *testing.T) {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "baz",
-					Detail: PtrTo("function B.baz(): void"),
+					Detail: new("function B.baz(): void"),
 				},
 			},
 		},

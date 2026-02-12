@@ -54,8 +54,8 @@ class PingCommand extends CommandAlias {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:               "container",
-					InsertText:          PtrTo("get container(): Container {\n}"),
-					FilterText:          PtrTo("container"),
+					InsertText:          new("get container(): Container {\n}"),
+					FilterText:          new("container"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 					Data: &lsproto.CompletionItemData{
 						Source: "ClassMemberSnippet/",
@@ -64,11 +64,11 @@ class PingCommand extends CommandAlias {
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "container",
 		Source:      "ClassMemberSnippet/",
 		Description: "Includes imports of types referenced by 'container'",
-		NewFileContent: PtrTo(`import "@sapphire/pieces";
+		NewFileContent: new(`import "@sapphire/pieces";
 import { CommandAlias } from "@sapphire/framework";
 import { Container } from "@sapphire/pieces";
 class PingCommand extends CommandAlias {

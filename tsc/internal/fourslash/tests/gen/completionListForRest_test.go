@@ -33,11 +33,11 @@ rest./*1*/x;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "millenial",
-					Detail: PtrTo("(property) Gen.millenial: string"),
+					Detail: new("(property) Gen.millenial: string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "parent",
-					Detail: PtrTo("(property) Gen.parent: Gen"),
+					Detail: new("(property) Gen.parent: Gen"),
 				},
 			},
 		},

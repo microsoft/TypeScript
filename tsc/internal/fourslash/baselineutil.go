@@ -1069,11 +1069,11 @@ func annotateContentWithTooltips[T comparable](
 
 func (t *textWithContext) sliceOfContent(start *int, end *int) string {
 	if start == nil || *start < 0 {
-		start = ptrTo(0)
+		start = new(0)
 	}
 
 	if end == nil || *end > len(t.content) {
-		end = ptrTo(len(t.content))
+		end = new(len(t.content))
 	}
 
 	if *start > *end {
@@ -1088,11 +1088,11 @@ func (t *textWithContext) getIndex(i any) *int {
 	case *int:
 		return i
 	case int:
-		return ptrTo(i)
+		return new(i)
 	case core.TextPos:
-		return ptrTo(int(i))
+		return new(int(i))
 	case *core.TextPos:
-		return ptrTo(int(*i))
+		return new(int(*i))
 	case lsproto.Position:
 		return t.getIndex(t.converters.LineAndCharacterToPosition(t, i))
 	case *lsproto.Position:

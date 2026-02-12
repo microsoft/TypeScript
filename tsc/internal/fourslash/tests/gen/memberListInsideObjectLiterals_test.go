@@ -48,11 +48,11 @@ func TestMemberListInsideObjectLiterals(t *testing.T) {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "x1",
-					Detail: PtrTo("(property) MyPoint.x1: number"),
+					Detail: new("(property) MyPoint.x1: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "y1",
-					Detail: PtrTo("(property) MyPoint.y1: number"),
+					Detail: new("(property) MyPoint.y1: number"),
 				},
 			},
 		},
@@ -67,7 +67,7 @@ func TestMemberListInsideObjectLiterals(t *testing.T) {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "y1",
-					Detail: PtrTo("(property) MyPoint.y1: number"),
+					Detail: new("(property) MyPoint.y1: number"),
 				},
 			},
 		},

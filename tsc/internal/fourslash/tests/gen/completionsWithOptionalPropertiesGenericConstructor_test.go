@@ -37,15 +37,15 @@ new Clazz({ /*1*/ })`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "someFunction?",
-					InsertText: PtrTo("someFunction"),
-					FilterText: PtrTo("someFunction"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("someFunction"),
+					FilterText: new("someFunction"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "anotherFunction?",
-					InsertText: PtrTo("anotherFunction"),
-					FilterText: PtrTo("anotherFunction"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("anotherFunction"),
+					FilterText: new("anotherFunction"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},

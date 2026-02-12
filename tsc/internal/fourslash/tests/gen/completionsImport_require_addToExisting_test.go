@@ -40,18 +40,18 @@ x/**/`
 							ModuleSpecifier: "./a",
 						},
 					},
-					Detail:              PtrTo("(alias) const x: 0\nimport x"),
+					Detail:              new("(alias) const x: 0\nimport x"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "x",
 		Source:      "./a",
 		Description: "Update import from \"./a\"",
-		NewFileContent: PtrTo(`const { f, x } = require("./a");
+		NewFileContent: new(`const { f, x } = require("./a");
 
 x`),
 	})

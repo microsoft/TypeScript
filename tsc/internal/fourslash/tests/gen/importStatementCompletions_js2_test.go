@@ -39,13 +39,13 @@ export = React;
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "React",
-					InsertText: PtrTo("import * as React from \"react\";"),
+					InsertText: new("import * as React from \"react\";"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "react",
 						},
 					},
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "React",

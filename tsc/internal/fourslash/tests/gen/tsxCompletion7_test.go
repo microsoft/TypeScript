@@ -35,13 +35,13 @@ var x = <div {...y} /**/ />;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "TWO",
-					Kind:     PtrTo(lsproto.CompletionItemKindField),
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					Kind:     new(lsproto.CompletionItemKindField),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "ONE",
-					Kind:     PtrTo(lsproto.CompletionItemKindField),
-					SortText: PtrTo(string(ls.SortTextMemberDeclaredBySpreadAssignment)),
+					Kind:     new(lsproto.CompletionItemKindField),
+					SortText: new(string(ls.SortTextMemberDeclaredBySpreadAssignment)),
 				},
 			},
 		},

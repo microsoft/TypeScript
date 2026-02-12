@@ -30,7 +30,7 @@ func TestCompletionBeforeSemanticDiagnosticsInArrowFunction1(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "T",
-					Detail: PtrTo("(type parameter) T in <T>(x: A): void"),
+					Detail: new("(type parameter) T in <T>(x: A): void"),
 				},
 			},
 		},

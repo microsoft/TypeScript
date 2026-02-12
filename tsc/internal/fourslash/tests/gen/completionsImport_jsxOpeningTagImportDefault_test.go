@@ -41,7 +41,7 @@ export function Index() {
 						},
 					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 			Excludes: []string{
@@ -49,11 +49,11 @@ export function Index() {
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "Component",
 		Source:      "./component",
 		Description: "Add import from \"./component\"",
-		NewFileContent: PtrTo(`import Component from "./component";
+		NewFileContent: new(`import Component from "./component";
 
 export function Index() {
     return <Component

@@ -33,9 +33,9 @@ bar({ hello: true, /*1*/ });`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "world?",
-					InsertText: PtrTo("world"),
-					FilterText: PtrTo("world"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("world"),
+					FilterText: new("world"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},

@@ -45,9 +45,9 @@ switch (u) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:               "case 1: ...",
-					InsertText:          PtrTo("case 1:$1\ncase E.A:$2\ncase E.B:$3"),
-					InsertTextFormat:    PtrTo(lsproto.InsertTextFormatSnippet),
-					SortText:            PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					InsertText:          new("case 1:$1\ncase E.A:$2\ncase E.B:$3"),
+					InsertTextFormat:    new(lsproto.InsertTextFormatSnippet),
+					SortText:            new(string(ls.SortTextGlobalsOrKeywords)),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 				},
 			},
@@ -63,17 +63,17 @@ switch (u) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:            "case d.E.A: ...",
-					InsertText:       PtrTo("case d.E.A:$1\ncase d.E.B:$2\ncase d.E.C:$3"),
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
-					SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					InsertText:       new("case d.E.A:$1\ncase d.E.B:$2\ncase d.E.C:$3"),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
+					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:   "case 1: ...",
 		Source: "SwitchCases/",
-		NewFileContent: PtrTo(`import { E, u } from "./dep";
+		NewFileContent: new(`import { E, u } from "./dep";
 switch (u) {
     case
 }`),

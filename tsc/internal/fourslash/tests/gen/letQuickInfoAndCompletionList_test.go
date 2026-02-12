@@ -31,7 +31,7 @@ function foo() {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: PtrTo("let a: number"),
+					Detail: new("let a: number"),
 				},
 			},
 		},
@@ -46,11 +46,11 @@ function foo() {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: PtrTo("let a: number"),
+					Detail: new("let a: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "b",
-					Detail: PtrTo("let b: number"),
+					Detail: new("let b: number"),
 				},
 			},
 		},
@@ -65,11 +65,11 @@ function foo() {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: PtrTo("let a: number"),
+					Detail: new("let a: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "b",
-					Detail: PtrTo("let b: number"),
+					Detail: new("let b: number"),
 				},
 			},
 		},

@@ -47,7 +47,7 @@ func TestCompletionListAfterStringLiteral1(t *testing.T) {
 				"length",
 				&lsproto.CompletionItem{
 					Label:    "substr",
-					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					SortText: new(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 				"valueOf",
 			},

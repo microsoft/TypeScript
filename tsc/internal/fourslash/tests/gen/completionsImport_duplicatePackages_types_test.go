@@ -58,7 +58,7 @@ import "react";
 							},
 						},
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 					&lsproto.CompletionItem{
 						Label: "useState",
@@ -68,7 +68,7 @@ import "react";
 							},
 						},
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 				}, false),
 		},

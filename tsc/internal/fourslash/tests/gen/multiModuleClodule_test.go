@@ -58,19 +58,19 @@ c./*3*/foo = C./*4*/foo;`
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "boo",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "foo",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "prototype",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "x",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 				}),
 		},

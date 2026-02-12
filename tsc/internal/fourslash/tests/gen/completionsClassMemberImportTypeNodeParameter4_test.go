@@ -38,8 +38,8 @@ export declare class Derived extends Cls {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:               "method",
-					InsertText:          PtrTo("method(param: import(\"./doesntexist.js\").Foo);"),
-					FilterText:          PtrTo("method"),
+					InsertText:          new("method(param: import(\"./doesntexist.js\").Foo);"),
+					FilterText:          new("method"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 				},
 			},

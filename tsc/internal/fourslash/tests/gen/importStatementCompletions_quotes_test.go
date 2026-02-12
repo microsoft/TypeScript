@@ -31,13 +31,13 @@ import * as fs from 'fs';
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "foo",
-					InsertText: PtrTo("import { foo$1 } from './mod';"),
+					InsertText: new("import { foo$1 } from './mod';"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./mod",
 						},
 					},
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "foo",
@@ -47,7 +47,7 @@ import * as fs from 'fs';
 				},
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

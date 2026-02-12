@@ -131,7 +131,7 @@ func TestSession(t *testing.T) {
 
 			session.DidChangeFile(context.Background(), "file:///home/projects/TS/p1/src/x.ts", 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 				{
-					Partial: ptrTo(lsproto.TextDocumentContentChangePartial{
+					Partial: new(lsproto.TextDocumentContentChangePartial{
 						Range: lsproto.Range{
 							Start: lsproto.Position{
 								Line:      0,
@@ -169,7 +169,7 @@ func TestSession(t *testing.T) {
 
 			session.DidChangeFile(context.Background(), "file:///home/projects/TS/p1/src/x.ts", 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 				{
-					Partial: ptrTo(lsproto.TextDocumentContentChangePartial{
+					Partial: new(lsproto.TextDocumentContentChangePartial{
 						Range: lsproto.Range{
 							Start: lsproto.Position{
 								Line:      0,
@@ -209,7 +209,7 @@ func TestSession(t *testing.T) {
 
 			session.DidChangeFile(context.Background(), "file:///home/projects/TS/p1/src/index.ts", 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 				{
-					Partial: ptrTo(lsproto.TextDocumentContentChangePartial{
+					Partial: new(lsproto.TextDocumentContentChangePartial{
 						Range: lsproto.Range{
 							Start: lsproto.Position{
 								Line:      0,
@@ -255,7 +255,7 @@ func TestSession(t *testing.T) {
 
 			session.DidChangeFile(context.Background(), "file:///home/projects/TS/p1/src/index.ts", 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
 				{
-					Partial: ptrTo(lsproto.TextDocumentContentChangePartial{
+					Partial: new(lsproto.TextDocumentContentChangePartial{
 						Range: lsproto.Range{
 							Start: lsproto.Position{
 								Line:      0,
@@ -949,8 +949,4 @@ func TestSession(t *testing.T) {
 		assert.DeepEqual(t, *actualConfig2.TS(), *expectedPrefs1)
 		assert.DeepEqual(t, *actualConfig2.JS(), *expectedPrefs2)
 	})
-}
-
-func ptrTo[T any](v T) *T {
-	return &v
 }

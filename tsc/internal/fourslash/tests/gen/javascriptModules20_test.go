@@ -33,12 +33,12 @@ mod./**/`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "a",
-					Kind:  PtrTo(lsproto.CompletionItemKindField),
+					Kind:  new(lsproto.CompletionItemKindField),
 				},
 				&lsproto.CompletionItem{
 					Label:    "mod",
-					Kind:     PtrTo(lsproto.CompletionItemKindText),
-					SortText: PtrTo(string(ls.SortTextJavascriptIdentifiers)),
+					Kind:     new(lsproto.CompletionItemKindText),
+					SortText: new(string(ls.SortTextJavascriptIdentifiers)),
 				},
 			},
 		},

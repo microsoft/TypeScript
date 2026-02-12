@@ -33,7 +33,7 @@ const foo: T = {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "foo",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

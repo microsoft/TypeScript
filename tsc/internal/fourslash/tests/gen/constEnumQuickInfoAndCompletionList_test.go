@@ -31,7 +31,7 @@ func TestConstEnumQuickInfoAndCompletionList(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "e",
-					Detail: PtrTo("const enum e"),
+					Detail: new("const enum e"),
 				},
 			},
 		},

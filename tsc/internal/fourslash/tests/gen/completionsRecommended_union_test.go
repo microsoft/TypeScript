@@ -30,7 +30,7 @@ const e2: E | E2 = /*b*/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:     "E",
-					Preselect: PtrTo(true),
+					Preselect: new(true),
 				},
 			},
 		},
@@ -45,7 +45,7 @@ const e2: E | E2 = /*b*/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:     "E",
-					Preselect: PtrTo(true),
+					Preselect: new(true),
 				},
 				&lsproto.CompletionItem{
 					Label: "E2",

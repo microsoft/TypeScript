@@ -108,7 +108,7 @@ func TestAutoImportTransitiveLeak(t *testing.T) {
 				&lsproto.CompletionItem{
 					Label:               "foo",
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextLocationPriority)),
+					SortText:            new(string(ls.SortTextLocationPriority)),
 				},
 			},
 			Excludes: []string{"fooInternal"},

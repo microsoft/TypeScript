@@ -72,8 +72,8 @@ export = Container;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:               "parent",
-					InsertText:          PtrTo("parent: Container_ | Document_ | undefined;"),
-					FilterText:          PtrTo("parent"),
+					InsertText:          new("parent: Container_ | Document_ | undefined;"),
+					FilterText:          new("parent"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 					Data: &lsproto.CompletionItemData{
 						Source: "ClassMemberSnippet/",
@@ -82,11 +82,11 @@ export = Container;`
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "parent",
 		Source:      "ClassMemberSnippet/",
 		Description: "Includes imports of types referenced by 'parent'",
-		NewFileContent: PtrTo(`import Document_ from "./document.js";
+		NewFileContent: new(`import Document_ from "./document.js";
 import Node from "./node.js";
 
 declare namespace Container {

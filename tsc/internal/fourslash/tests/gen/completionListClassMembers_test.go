@@ -49,23 +49,23 @@ c./*instanceMembersOutsideClassScope*/privateProperty;`
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "privateStaticMethod",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "privateStaticProperty",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "publicStaticMethod",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "publicStaticProperty",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "prototype",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 				}),
 		},
@@ -96,15 +96,15 @@ c./*instanceMembersOutsideClassScope*/privateProperty;`
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "publicStaticMethod",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "publicStaticProperty",
-						SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+						SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "prototype",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 				}),
 		},

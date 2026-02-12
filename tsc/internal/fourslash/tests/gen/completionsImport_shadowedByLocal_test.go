@@ -32,7 +32,7 @@ fo/**/`
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:  "foo",
-						Detail: PtrTo("const foo: 1"),
+						Detail: new("const foo: 1"),
 					},
 				}, true),
 		},

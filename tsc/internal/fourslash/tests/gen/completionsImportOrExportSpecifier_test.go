@@ -59,20 +59,20 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\" as __some_type"),
+					InsertText: new("\"__some type\" as __some_type"),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\" as __some_type2"),
+					InsertText: new("\"__some type2\" as __some_type2"),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\" as __some_value"),
+					InsertText: new("\"__some value\" as __some_value"),
 				},
 				"foo",
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
@@ -87,20 +87,20 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\""),
+					InsertText: new("\"__some type\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\""),
+					InsertText: new("\"__some type2\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\""),
+					InsertText: new("\"__some value\""),
 				},
 				"foo",
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
@@ -125,19 +125,19 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\""),
+					InsertText: new("\"__some type\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\""),
+					InsertText: new("\"__some type2\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\""),
+					InsertText: new("\"__some value\""),
 				},
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
@@ -164,20 +164,20 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\""),
+					InsertText: new("\"__some type\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\""),
+					InsertText: new("\"__some type2\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\""),
+					InsertText: new("\"__some value\""),
 				},
 				"foo",
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
@@ -192,20 +192,20 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\""),
+					InsertText: new("\"__some type\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\""),
+					InsertText: new("\"__some type2\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\""),
+					InsertText: new("\"__some value\""),
 				},
 				"foo",
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
@@ -230,19 +230,19 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\""),
+					InsertText: new("\"__some type\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\""),
+					InsertText: new("\"__some type2\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\""),
+					InsertText: new("\"__some value\""),
 				},
 				&lsproto.CompletionItem{
 					Label:    "type",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},
@@ -257,15 +257,15 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\" as __some_type"),
+					InsertText: new("\"__some type\" as __some_type"),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\" as __some_type2"),
+					InsertText: new("\"__some type2\" as __some_type2"),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\" as __some_value"),
+					InsertText: new("\"__some value\" as __some_value"),
 				},
 				"foo",
 			},
@@ -281,15 +281,15 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\""),
+					InsertText: new("\"__some type\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\""),
+					InsertText: new("\"__some type2\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\""),
+					InsertText: new("\"__some value\""),
 				},
 				"foo",
 			},
@@ -315,15 +315,15 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\""),
+					InsertText: new("\"__some type\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\""),
+					InsertText: new("\"__some type2\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\""),
+					InsertText: new("\"__some value\""),
 				},
 			},
 		},
@@ -338,15 +338,15 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\""),
+					InsertText: new("\"__some type\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\""),
+					InsertText: new("\"__some type2\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\""),
+					InsertText: new("\"__some value\""),
 				},
 				"foo",
 			},
@@ -362,15 +362,15 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\""),
+					InsertText: new("\"__some type\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\""),
+					InsertText: new("\"__some type2\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\""),
+					InsertText: new("\"__some value\""),
 				},
 				"foo",
 			},
@@ -396,15 +396,15 @@ export { type foo, type /*typeExport3*/ } from "./exports";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "__some type",
-					InsertText: PtrTo("\"__some type\""),
+					InsertText: new("\"__some type\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some type2",
-					InsertText: PtrTo("\"__some type2\""),
+					InsertText: new("\"__some type2\""),
 				},
 				&lsproto.CompletionItem{
 					Label:      "__some value",
-					InsertText: PtrTo("\"__some value\""),
+					InsertText: new("\"__some value\""),
 				},
 			},
 		},

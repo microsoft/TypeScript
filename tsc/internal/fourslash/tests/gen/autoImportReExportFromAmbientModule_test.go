@@ -49,7 +49,7 @@ access/**/`
 						},
 					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 				&lsproto.CompletionItem{
 					Label: "accessSync",
@@ -59,16 +59,16 @@ access/**/`
 						},
 					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "accessSync",
 		Source:      "fs-extra",
 		Description: "Add import from \"fs-extra\"",
-		NewFileContent: PtrTo(`import { accessSync } from "fs-extra";
+		NewFileContent: new(`import { accessSync } from "fs-extra";
 
 access`),
 		AutoImportFix: &lsproto.AutoImportFix{

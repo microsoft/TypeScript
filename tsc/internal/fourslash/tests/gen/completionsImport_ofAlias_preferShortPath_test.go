@@ -40,19 +40,19 @@ fo/**/`
 								ModuleSpecifier: "./foo",
 							},
 						},
-						Detail:              PtrTo("(alias) const foo: 0\nexport foo"),
-						Kind:                PtrTo(lsproto.CompletionItemKindVariable),
+						Detail:              new("(alias) const foo: 0\nexport foo"),
+						Kind:                new(lsproto.CompletionItemKindVariable),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 				}, true),
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "foo",
 		Source:      "./foo",
 		Description: "Add import from \"./foo\"",
-		NewFileContent: PtrTo(`import { foo } from "./foo";
+		NewFileContent: new(`import { foo } from "./foo";
 
 fo`),
 	})

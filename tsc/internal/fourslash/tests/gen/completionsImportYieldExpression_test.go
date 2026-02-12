@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
-	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
 
@@ -20,11 +19,11 @@ function *f() {
 }`
 	f, done := fourslash.NewFourslash(t, nil /*capabilities*/, content)
 	defer done()
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "a",
 		Source:      "./a",
 		Description: "Add import from \"./a\"",
-		NewFileContent: PtrTo(`import { a } from "./a";
+		NewFileContent: new(`import { a } from "./a";
 
 function *f() {
   yield a

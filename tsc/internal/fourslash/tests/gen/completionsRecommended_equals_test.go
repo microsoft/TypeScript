@@ -29,9 +29,9 @@ e === E/*b*/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:     "Enu",
-					Detail:    PtrTo("enum Enu"),
-					Kind:      PtrTo(lsproto.CompletionItemKindEnum),
-					Preselect: PtrTo(true),
+					Detail:    new("enum Enu"),
+					Kind:      new(lsproto.CompletionItemKindEnum),
+					Preselect: new(true),
 				},
 			},
 		},

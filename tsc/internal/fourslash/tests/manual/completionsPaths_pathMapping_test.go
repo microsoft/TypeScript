@@ -40,18 +40,18 @@ import {} from "foo/dir//*1*/";
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("a.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("a.ts"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "b",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("b.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("b.ts"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "dir",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("dir"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("dir"),
 				},
 			},
 		},
@@ -66,8 +66,8 @@ import {} from "foo/dir//*1*/";
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "x",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("x.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("x.ts"),
 				},
 			},
 		},

@@ -49,19 +49,19 @@ import {} from "@reduxjs/toolkit";
 						},
 					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:   "configureStore",
 		Source: "@reduxjs/toolkit",
 		AutoImportFix: &lsproto.AutoImportFix{
 			ModuleSpecifier: "@reduxjs/toolkit",
 		},
 		Description: "Update import from \"@reduxjs/toolkit\"",
-		NewFileContent: PtrTo(`import { configureStore } from "@reduxjs/toolkit";
+		NewFileContent: new(`import { configureStore } from "@reduxjs/toolkit";
 `),
 	})
 }

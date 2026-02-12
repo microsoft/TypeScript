@@ -39,8 +39,8 @@ import { } from "/**/";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "#only-with-custom-conditions",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#only-with-custom-conditions.js"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("#only-with-custom-conditions.js"),
 				},
 			},
 		},

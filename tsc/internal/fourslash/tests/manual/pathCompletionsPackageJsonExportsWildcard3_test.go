@@ -44,18 +44,18 @@ import { } from "foo//**/";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "component-blah",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("component-blah.d.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("component-blah.d.ts"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "component-index",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("component-index.d.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("component-index.d.ts"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "component-subfolder",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("component-subfolder"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("component-subfolder"),
 				},
 			},
 		},
@@ -71,8 +71,8 @@ import { } from "foo//**/";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "one",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("one.d.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("one.d.ts"),
 				},
 			},
 		},

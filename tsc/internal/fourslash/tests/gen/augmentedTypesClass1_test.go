@@ -30,7 +30,7 @@ r./*2*/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "prototype",
-					Detail: PtrTo("(property) c5b.prototype: c5b"),
+					Detail: new("(property) c5b.prototype: c5b"),
 				},
 			},
 		},
@@ -46,7 +46,7 @@ r./*2*/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Detail: PtrTo("(method) c5b.foo(): void"),
+					Detail: new("(method) c5b.foo(): void"),
 				},
 			},
 		},

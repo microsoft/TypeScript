@@ -39,9 +39,9 @@ export { x as y } from "./a";
 							ModuleSpecifier: "./a",
 						},
 					},
-					Detail:              PtrTo("const x: 0"),
+					Detail:              new("const x: 0"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 				&lsproto.CompletionItem{
 					Label: "y",
@@ -50,26 +50,26 @@ export { x as y } from "./a";
 							ModuleSpecifier: ".",
 						},
 					},
-					Detail:              PtrTo("(alias) const y: 0\nexport y"),
+					Detail:              new("(alias) const y: 0\nexport y"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "x",
 		Source:      "./a",
 		Description: "Add import from \"./a\"",
-		NewFileContent: PtrTo(`import { x } from "./a";
+		NewFileContent: new(`import { x } from "./a";
 
 `),
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "y",
 		Source:      ".",
 		Description: "Add import from \".\"",
-		NewFileContent: PtrTo(`import { y } from ".";
+		NewFileContent: new(`import { y } from ".";
 import { x } from "./a";
 
 `),

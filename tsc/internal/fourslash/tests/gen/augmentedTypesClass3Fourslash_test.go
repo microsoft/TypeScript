@@ -30,7 +30,7 @@ namespace c/*2*/5b { export var y = 2; } // should be ok
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "c5b",
-					Detail: PtrTo("class c5b\nnamespace c5b"),
+					Detail: new("class c5b\nnamespace c5b"),
 				},
 			},
 		},

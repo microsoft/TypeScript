@@ -47,33 +47,33 @@ import { } from "foo//**/";`
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "blah.js",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("blah.js"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("blah.js"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "index.js",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("index.js"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("index.js"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("foo"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("foo"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "subfolder",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("subfolder"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("subfolder"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "bar",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("bar"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("bar"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "exact-match",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("exact-match.d.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("exact-match.d.ts"),
 				},
 			},
 		},
@@ -89,23 +89,23 @@ import { } from "foo//**/";`
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "blah.js",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("blah.js"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("blah.js"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "index.js",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("index.js"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("index.js"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("foo"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("foo"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "subfolder",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("subfolder"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("subfolder"),
 				},
 			},
 		},
@@ -121,8 +121,8 @@ import { } from "foo//**/";`
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "onlyInFooFolder.js",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("onlyInFooFolder.js"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("onlyInFooFolder.js"),
 				},
 			},
 		},

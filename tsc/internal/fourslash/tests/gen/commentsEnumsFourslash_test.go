@@ -41,7 +41,7 @@ x = Colors./*7*/FancyPink;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "Colors",
-					Detail: PtrTo("enum Colors"),
+					Detail: new("enum Colors"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -62,7 +62,7 @@ x = Colors./*7*/FancyPink;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "Cornflower",
-					Detail: PtrTo("(enum member) Colors.Cornflower = 0"),
+					Detail: new("(enum member) Colors.Cornflower = 0"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -72,7 +72,7 @@ x = Colors./*7*/FancyPink;`
 				},
 				&lsproto.CompletionItem{
 					Label:  "FancyPink",
-					Detail: PtrTo("(enum member) Colors.FancyPink = 1"),
+					Detail: new("(enum member) Colors.FancyPink = 1"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,

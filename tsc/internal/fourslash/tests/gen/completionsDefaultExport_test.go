@@ -30,7 +30,7 @@ a./**/;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "default",
-					Detail: PtrTo("function f(): void"),
+					Detail: new("function f(): void"),
 				},
 			},
 		},

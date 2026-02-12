@@ -32,8 +32,8 @@ foo/**/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "foo",
-					Kind:     PtrTo(lsproto.CompletionItemKindFunction),
-					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Kind:     new(lsproto.CompletionItemKindFunction),
+					SortText: new(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},

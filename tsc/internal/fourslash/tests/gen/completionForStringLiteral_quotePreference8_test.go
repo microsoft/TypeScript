@@ -34,7 +34,7 @@ foo[|./**/|]`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "\"a name's all good but it's better with more\"",
-					InsertText: PtrTo("['\"a name\\'s all good but it\\'s better with more\"']"),
+					InsertText: new("['\"a name\\'s all good but it\\'s better with more\"']"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "\"a name's all good but it's better with more\"",

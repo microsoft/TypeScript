@@ -37,7 +37,7 @@ file2Identifier2./*2*/`
 				"file2Identifier2",
 				&lsproto.CompletionItem{
 					Label:    "file1Identifier",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 			Excludes: []string{
@@ -55,11 +55,11 @@ file2Identifier2./*2*/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "file2Identifier1",
-					SortText: PtrTo(string(ls.SortTextJavascriptIdentifiers)),
+					SortText: new(string(ls.SortTextJavascriptIdentifiers)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "file2Identifier2",
-					SortText: PtrTo(string(ls.SortTextJavascriptIdentifiers)),
+					SortText: new(string(ls.SortTextJavascriptIdentifiers)),
 				},
 			},
 			Excludes: []string{

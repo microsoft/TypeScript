@@ -40,9 +40,9 @@ export const m = 0;
 							ModuleSpecifier: "./a",
 						},
 					},
-					Detail:              PtrTo("class C"),
+					Detail:              new("class C"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 				&lsproto.CompletionItem{
 					Label: "T",
@@ -51,9 +51,9 @@ export const m = 0;
 							ModuleSpecifier: "./a",
 						},
 					},
-					Detail:              PtrTo("type T = number"),
+					Detail:              new("type T = number"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 			Excludes: []string{
@@ -61,21 +61,21 @@ export const m = 0;
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("0"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new("0"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "C",
 		Source:      "./a",
 		Description: "Add import from \"./a\"",
-		NewFileContent: PtrTo(`import { C } from "./a";
+		NewFileContent: new(`import { C } from "./a";
 
 export const m = 0;
 /** @type {} */
 /** @type {} */`),
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "T",
 		Source:      "./a",
 		Description: "Change 'T' to 'import(\"./a\").T'",
-		NewFileContent: PtrTo(`import { C } from "./a";
+		NewFileContent: new(`import { C } from "./a";
 
 export const m = 0;
 /** @type {} */

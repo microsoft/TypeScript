@@ -35,7 +35,7 @@ var /*2*/x = point./*3*/x;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "x",
-					Detail: PtrTo("(property) x: number"),
+					Detail: new("(property) x: number"),
 				},
 			},
 		},

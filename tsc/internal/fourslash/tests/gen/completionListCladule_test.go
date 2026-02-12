@@ -39,15 +39,15 @@ f/*c3*/;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "x",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "prototype",
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "staticMethod",
-					SortText: PtrTo(string(ls.SortTextLocalDeclarationPriority)),
+					SortText: new(string(ls.SortTextLocalDeclarationPriority)),
 				},
 			},
 		},

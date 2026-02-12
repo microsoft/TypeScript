@@ -594,7 +594,7 @@ func getDirectoryFragmentRange(text string, textStart int) *core.TextRange {
 	if length == 0 {
 		return nil
 	}
-	return ptrTo(core.NewTextRange(textStart+offset, textStart+offset+length))
+	return new(core.NewTextRange(textStart+offset, textStart+offset+length))
 }
 
 func (l *LanguageService) getStringLiteralCompletionsFromModuleNamesWorker(

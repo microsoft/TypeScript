@@ -37,19 +37,19 @@ f/**/;`
 							ModuleSpecifier: "./a",
 						},
 					},
-					Detail:              PtrTo("function foo(): void"),
-					Kind:                PtrTo(lsproto.CompletionItemKindFunction),
+					Detail:              new("function foo(): void"),
+					Kind:                new(lsproto.CompletionItemKindFunction),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "foo",
 		Source:      "./a",
 		Description: "Update import from \"./a\"",
-		NewFileContent: PtrTo(`import foo, { x } from "./a";
+		NewFileContent: new(`import foo, { x } from "./a";
 f;`),
 	})
 }

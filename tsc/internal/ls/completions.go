@@ -531,8 +531,8 @@ func (l *LanguageService) getCompletionData(
 				return &completionDataKeyword{
 					keywordCompletions: []*lsproto.CompletionItem{{
 						Label:    scanner.TokenToString(importStatementCompletionInfo.keywordCompletion),
-						Kind:     ptrTo(lsproto.CompletionItemKindKeyword),
-						SortText: ptrTo(string(SortTextGlobalsOrKeywords)),
+						Kind:     new(lsproto.CompletionItemKindKeyword),
+						SortText: new(string(SortTextGlobalsOrKeywords)),
 					}},
 					isNewIdentifierLocation: importStatementCompletionInfo.isNewIdentifierLocation,
 				}, nil
@@ -1903,7 +1903,7 @@ func (l *LanguageService) getCompletionEntriesFromSymbols(
 			nil,
 			nil,
 			&lsproto.CompletionItemLabelDetails{
-				Description: ptrTo(autoImport.Fix.ModuleSpecifier),
+				Description: new(autoImport.Fix.ModuleSpecifier),
 			},
 			file,
 			position,
@@ -1953,9 +1953,9 @@ func createCompletionItemForLiteral(
 ) *lsproto.CompletionItem {
 	return &lsproto.CompletionItem{
 		Label:            completionNameForLiteral(file, preferences, literal),
-		Kind:             ptrTo(lsproto.CompletionItemKindConstant),
-		SortText:         ptrTo(string(SortTextLocationPriority)),
-		CommitCharacters: ptrTo([]string{}),
+		Kind:             new(lsproto.CompletionItemKindConstant),
+		SortText:         new(string(SortTextLocationPriority)),
+		CommitCharacters: new([]string{}),
 	}
 }
 
@@ -2187,7 +2187,7 @@ func (l *LanguageService) createCompletionItem(
 		if elementKind == lsutil.ScriptElementKindWarning || elementKind == lsutil.ScriptElementKindString {
 			commitCharacters = &[]string{}
 		} else if !clientSupportsDefaultCommitCharacters(ctx) {
-			commitCharacters = ptrTo(data.defaultCommitCharacters)
+			commitCharacters = new(data.defaultCommitCharacters)
 		}
 		// Otherwise use the completion list default.
 	}
@@ -2371,7 +2371,7 @@ func strPtrTo(v string) *string {
 
 func boolToPtr(v bool) *bool {
 	if v {
-		return ptrTo(true)
+		return new(true)
 	}
 	return nil
 }
@@ -3196,8 +3196,8 @@ var (
 		for i := ast.KindFirstKeyword; i <= ast.KindLastKeyword; i++ {
 			result = append(result, &lsproto.CompletionItem{
 				Label:    scanner.TokenToString(i),
-				Kind:     ptrTo(lsproto.CompletionItemKindKeyword),
-				SortText: ptrTo(string(SortTextGlobalsOrKeywords)),
+				Kind:     new(lsproto.CompletionItemKindKeyword),
+				SortText: new(string(SortTextGlobalsOrKeywords)),
 			})
 		}
 		return result
@@ -3360,8 +3360,8 @@ func getContextualKeywords(file *ast.SourceFile, contextToken *ast.Node, positio
 			tokenLine == currentLine {
 			entries = append(entries, &lsproto.CompletionItem{
 				Label:    scanner.TokenToString(ast.KindAssertKeyword),
-				Kind:     ptrTo(lsproto.CompletionItemKindKeyword),
-				SortText: ptrTo(string(SortTextGlobalsOrKeywords)),
+				Kind:     new(lsproto.CompletionItemKindKeyword),
+				SortText: new(string(SortTextGlobalsOrKeywords)),
 			})
 		}
 	}
@@ -3385,9 +3385,9 @@ func (l *LanguageService) getJSCompletionEntries(
 			uniqueNames.Add(name)
 			sortedEntries = append(sortedEntries, &lsproto.CompletionItem{
 				Label:            name,
-				Kind:             ptrTo(lsproto.CompletionItemKindText),
-				SortText:         ptrTo(string(SortTextJavascriptIdentifiers)),
-				CommitCharacters: ptrTo([]string{}),
+				Kind:             new(lsproto.CompletionItemKindText),
+				SortText:         new(string(SortTextJavascriptIdentifiers)),
+				CommitCharacters: new([]string{}),
 			})
 		}
 	}
@@ -4392,7 +4392,7 @@ func (l *LanguageService) createLSPCompletionItem(
 	// Client assumes plain text by default.
 	var insertTextFormat *lsproto.InsertTextFormat
 	if isSnippet {
-		insertTextFormat = ptrTo(lsproto.InsertTextFormatSnippet)
+		insertTextFormat = new(lsproto.InsertTextFormatSnippet)
 	}
 
 	return &lsproto.CompletionItem{
@@ -4402,7 +4402,7 @@ func (l *LanguageService) createLSPCompletionItem(
 		Tags:             tags,
 		Detail:           detail,
 		Preselect:        boolToPtr(preselect),
-		SortText:         ptrTo(string(sortText)),
+		SortText:         new(string(sortText)),
 		FilterText:       strPtrTo(filterText),
 		InsertText:       strPtrTo(insertText),
 		InsertTextFormat: insertTextFormat,
@@ -5377,8 +5377,8 @@ var jsDocTagNameCompletionItems = sync.OnceValue(func() []*lsproto.CompletionIte
 	for _, tagName := range jsDocTagNames {
 		item := &lsproto.CompletionItem{
 			Label:    tagName,
-			Kind:     ptrTo(lsproto.CompletionItemKindKeyword),
-			SortText: ptrTo(string(SortTextLocationPriority)),
+			Kind:     new(lsproto.CompletionItemKindKeyword),
+			SortText: new(string(SortTextLocationPriority)),
 		}
 		items = append(items, item)
 	}
@@ -5390,8 +5390,8 @@ var jsDocTagCompletionItems = sync.OnceValue(func() []*lsproto.CompletionItem {
 	for _, tagName := range jsDocTagNames {
 		item := &lsproto.CompletionItem{
 			Label:    "@" + tagName,
-			Kind:     ptrTo(lsproto.CompletionItemKindKeyword),
-			SortText: ptrTo(string(SortTextLocationPriority)),
+			Kind:     new(lsproto.CompletionItemKindKeyword),
+			SortText: new(string(SortTextLocationPriority)),
 		}
 		items = append(items, item)
 	}
@@ -5494,10 +5494,10 @@ func getJSDocParameterCompletions(
 
 			return &lsproto.CompletionItem{
 				Label:            displayText,
-				Kind:             ptrTo(lsproto.CompletionItemKindVariable),
-				SortText:         ptrTo(string(SortTextLocationPriority)),
+				Kind:             new(lsproto.CompletionItemKindVariable),
+				SortText:         new(string(SortTextLocationPriority)),
 				InsertText:       strPtrTo(snippetText),
-				InsertTextFormat: core.IfElse(isSnippet, ptrTo(lsproto.InsertTextFormatSnippet), nil),
+				InsertTextFormat: core.IfElse(isSnippet, new(lsproto.InsertTextFormatSnippet), nil),
 			}
 		} else if paramIndex == paramTagCount {
 			// Destructuring parameter; do it positionally
@@ -5535,10 +5535,10 @@ func getJSDocParameterCompletions(
 			}
 			return &lsproto.CompletionItem{
 				Label:            displayText,
-				Kind:             ptrTo(lsproto.CompletionItemKindVariable),
-				SortText:         ptrTo(string(SortTextLocationPriority)),
+				Kind:             new(lsproto.CompletionItemKindVariable),
+				SortText:         new(string(SortTextLocationPriority)),
 				InsertText:       strPtrTo(snippetText),
-				InsertTextFormat: core.IfElse(isSnippet, ptrTo(lsproto.InsertTextFormatSnippet), nil),
+				InsertTextFormat: core.IfElse(isSnippet, new(lsproto.InsertTextFormatSnippet), nil),
 			}
 		}
 		return nil
@@ -5836,8 +5836,8 @@ func getJSDocParameterNameCompletions(tag *ast.JSDocParameterTag) []*lsproto.Com
 
 		return &lsproto.CompletionItem{
 			Label:    name,
-			Kind:     ptrTo(lsproto.CompletionItemKindVariable),
-			SortText: ptrTo(string(SortTextLocationPriority)),
+			Kind:     new(lsproto.CompletionItemKindVariable),
+			SortText: new(string(SortTextLocationPriority)),
 		}
 	})
 }
@@ -5954,16 +5954,16 @@ func (l *LanguageService) getExhaustiveCaseSnippets(
 
 		var additionalTextEdits *[]*lsproto.TextEdit
 		if importAdder != nil {
-			additionalTextEdits = ptrTo(importAdder.Edits())
+			additionalTextEdits = new(importAdder.Edits())
 		}
 
 		return &lsproto.CompletionItem{
 			Label:               name,
-			Kind:                ptrTo(lsproto.CompletionItemKindSnippet),
-			SortText:            ptrTo(string(SortTextGlobalsOrKeywords)),
+			Kind:                new(lsproto.CompletionItemKindSnippet),
+			SortText:            new(string(SortTextGlobalsOrKeywords)),
 			InsertText:          strPtrTo(insertText),
 			AdditionalTextEdits: additionalTextEdits,
-			InsertTextFormat:    core.IfElse(clientSupportsItemSnippet(ctx), ptrTo(lsproto.InsertTextFormatSnippet), nil),
+			InsertTextFormat:    core.IfElse(clientSupportsItemSnippet(ctx), new(lsproto.InsertTextFormatSnippet), nil),
 			Data: &lsproto.CompletionItemData{
 				FileName: file.FileName(),
 				Position: int32(position),

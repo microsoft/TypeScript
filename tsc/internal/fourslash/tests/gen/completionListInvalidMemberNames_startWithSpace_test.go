@@ -27,7 +27,7 @@ x[|./**/|];`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "foo ",
-					InsertText: PtrTo("[\"foo \"]"),
+					InsertText: new("[\"foo \"]"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "foo ",

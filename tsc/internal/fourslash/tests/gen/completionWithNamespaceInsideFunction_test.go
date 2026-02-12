@@ -45,7 +45,7 @@ function f2() {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f",
-					Detail: PtrTo("function f(): void"),
+					Detail: new("function f(): void"),
 				},
 			},
 			Excludes: []string{
@@ -64,15 +64,15 @@ function f2() {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f2",
-					Detail: PtrTo("function f2(): void"),
+					Detail: new("function f2(): void"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "n2",
-					Detail: PtrTo("namespace n2"),
+					Detail: new("namespace n2"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "I2",
-					Detail: PtrTo("class I2"),
+					Detail: new("class I2"),
 				},
 			},
 		},
@@ -87,11 +87,11 @@ function f2() {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f2",
-					Detail: PtrTo("function f2(): void"),
+					Detail: new("function f2(): void"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "n2",
-					Detail: PtrTo("namespace n2"),
+					Detail: new("namespace n2"),
 				},
 			},
 			Excludes: []string{
@@ -109,7 +109,7 @@ function f2() {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f2",
-					Detail: PtrTo("function f2(): void"),
+					Detail: new("function f2(): void"),
 				},
 			},
 			Excludes: []string{

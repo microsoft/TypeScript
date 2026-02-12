@@ -38,14 +38,14 @@ x[|./**/|]`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "0",
-					InsertText: PtrTo("[0]"),
+					InsertText: new("[0]"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
 							Value: "The first label",
 						},
 					},
-					Detail: PtrTo("(property) 0: number (lbl1)"),
+					Detail: new("(property) 0: number (lbl1)"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "0",
@@ -55,14 +55,14 @@ x[|./**/|]`
 				},
 				&lsproto.CompletionItem{
 					Label:      "1",
-					InsertText: PtrTo("[1]"),
+					InsertText: new("[1]"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
 							Value: "The second label",
 						},
 					},
-					Detail: PtrTo("(property) 1: number (lbl2)"),
+					Detail: new("(property) 1: number (lbl2)"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "1",

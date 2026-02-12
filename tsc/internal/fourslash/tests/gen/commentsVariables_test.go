@@ -66,7 +66,7 @@ var x = fo/*15*/o2;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "myVariable",
-					Detail: PtrTo("var myVariable: number"),
+					Detail: new("var myVariable: number"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -87,7 +87,7 @@ var x = fo/*15*/o2;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "myVariable",
-					Detail: PtrTo("var myVariable: number"),
+					Detail: new("var myVariable: number"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -97,7 +97,7 @@ var x = fo/*15*/o2;`
 				},
 				&lsproto.CompletionItem{
 					Label:  "d",
-					Detail: PtrTo("var d: number"),
+					Detail: new("var d: number"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -118,7 +118,7 @@ var x = fo/*15*/o2;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Detail: PtrTo("function foo(): void"),
+					Detail: new("function foo(): void"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -128,7 +128,7 @@ var x = fo/*15*/o2;`
 				},
 				&lsproto.CompletionItem{
 					Label:  "fooVar",
-					Detail: PtrTo("var fooVar: () => void"),
+					Detail: new("var fooVar: () => void"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -155,7 +155,7 @@ var x = fo/*15*/o2;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Detail: PtrTo("function foo(): void"),
+					Detail: new("function foo(): void"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -165,7 +165,7 @@ var x = fo/*15*/o2;`
 				},
 				&lsproto.CompletionItem{
 					Label:  "fooVar",
-					Detail: PtrTo("var fooVar: () => void"),
+					Detail: new("var fooVar: () => void"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -193,7 +193,7 @@ var x = fo/*15*/o2;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "i",
-					Detail: PtrTo("var i: c"),
+					Detail: new("var i: c"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -214,7 +214,7 @@ var x = fo/*15*/o2;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "i1_i",
-					Detail: PtrTo("var i1_i: i1"),
+					Detail: new("var i1_i: i1"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,

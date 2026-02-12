@@ -26,7 +26,7 @@ func TestCompletionListOnPrivateVariableInModule(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "testing",
-					Detail: PtrTo("var testing: string"),
+					Detail: new("var testing: string"),
 				},
 			},
 		},

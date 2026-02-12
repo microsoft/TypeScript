@@ -40,8 +40,8 @@ i[|./**/|];`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "M",
-					InsertText: PtrTo("[M]"),
-					SortText:   PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					InsertText: new("[M]"),
+					SortText:   new(string(ls.SortTextGlobalsOrKeywords)),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "M",

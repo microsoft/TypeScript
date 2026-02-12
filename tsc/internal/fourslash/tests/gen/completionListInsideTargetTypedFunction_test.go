@@ -29,7 +29,7 @@ func TestCompletionListInsideTargetTypedFunction(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "elem",
-					Detail: PtrTo("(parameter) elem: string"),
+					Detail: new("(parameter) elem: string"),
 				},
 			},
 		},

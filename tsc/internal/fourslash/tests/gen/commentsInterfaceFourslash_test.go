@@ -102,7 +102,7 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:  "x",
-						Detail: PtrTo("(property) i2.x: number"),
+						Detail: new("(property) i2.x: number"),
 						Documentation: &lsproto.StringOrMarkupContent{
 							MarkupContent: &lsproto.MarkupContent{
 								Kind:  lsproto.MarkupKindMarkdown,
@@ -112,7 +112,7 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 					},
 					&lsproto.CompletionItem{
 						Label:  "foo",
-						Detail: PtrTo("(property) i2.foo: (b: number) => string"),
+						Detail: new("(property) i2.foo: (b: number) => string"),
 						Documentation: &lsproto.StringOrMarkupContent{
 							MarkupContent: &lsproto.MarkupContent{
 								Kind:  lsproto.MarkupKindMarkdown,
@@ -122,15 +122,15 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 					},
 					&lsproto.CompletionItem{
 						Label:  "nc_x",
-						Detail: PtrTo("(property) i2.nc_x: number"),
+						Detail: new("(property) i2.nc_x: number"),
 					},
 					&lsproto.CompletionItem{
 						Label:  "nc_foo",
-						Detail: PtrTo("(property) i2.nc_foo: (b: number) => string"),
+						Detail: new("(property) i2.nc_foo: (b: number) => string"),
 					},
 					&lsproto.CompletionItem{
 						Label:  "fnfoo",
-						Detail: PtrTo("(method) i2.fnfoo(b: number): string"),
+						Detail: new("(method) i2.fnfoo(b: number): string"),
 						Documentation: &lsproto.StringOrMarkupContent{
 							MarkupContent: &lsproto.MarkupContent{
 								Kind:  lsproto.MarkupKindMarkdown,
@@ -140,7 +140,7 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 					},
 					&lsproto.CompletionItem{
 						Label:  "nc_fnfoo",
-						Detail: PtrTo("(method) i2.nc_fnfoo(b: number): string"),
+						Detail: new("(method) i2.nc_fnfoo(b: number): string"),
 					},
 				}),
 		},
@@ -195,11 +195,11 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "i1_i",
-					Detail: PtrTo("var i1_i: i1"),
+					Detail: new("var i1_i: i1"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "nc_i1_i",
-					Detail: PtrTo("var nc_i1_i: nc_i1"),
+					Detail: new("var nc_i1_i: nc_i1"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -209,63 +209,63 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i",
-					Detail: PtrTo("var i2_i: i2"),
+					Detail: new("var i2_i: i2"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_x",
-					Detail: PtrTo("var i2_i_x: number"),
+					Detail: new("var i2_i_x: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_foo",
-					Detail: PtrTo("var i2_i_foo: (b: number) => string"),
+					Detail: new("var i2_i_foo: (b: number) => string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_foo_r",
-					Detail: PtrTo("var i2_i_foo_r: string"),
+					Detail: new("var i2_i_foo_r: string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_i2_si",
-					Detail: PtrTo("var i2_i_i2_si: number"),
+					Detail: new("var i2_i_i2_si: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_i2_ii",
-					Detail: PtrTo("var i2_i_i2_ii: number"),
+					Detail: new("var i2_i_i2_ii: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_n",
-					Detail: PtrTo("var i2_i_n: any"),
+					Detail: new("var i2_i_n: any"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_nc_x",
-					Detail: PtrTo("var i2_i_nc_x: number"),
+					Detail: new("var i2_i_nc_x: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_nc_foo",
-					Detail: PtrTo("var i2_i_nc_foo: (b: number) => string"),
+					Detail: new("var i2_i_nc_foo: (b: number) => string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_nc_foo_r",
-					Detail: PtrTo("var i2_i_nc_foo_r: string"),
+					Detail: new("var i2_i_nc_foo_r: string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_r",
-					Detail: PtrTo("var i2_i_r: number"),
+					Detail: new("var i2_i_r: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_fnfoo",
-					Detail: PtrTo("var i2_i_fnfoo: (b: number) => string"),
+					Detail: new("var i2_i_fnfoo: (b: number) => string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_fnfoo_r",
-					Detail: PtrTo("var i2_i_fnfoo_r: string"),
+					Detail: new("var i2_i_fnfoo_r: string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_nc_fnfoo",
-					Detail: PtrTo("var i2_i_nc_fnfoo: (b: number) => string"),
+					Detail: new("var i2_i_nc_fnfoo: (b: number) => string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i_nc_fnfoo_r",
-					Detail: PtrTo("var i2_i_nc_fnfoo_r: string"),
+					Detail: new("var i2_i_nc_fnfoo_r: string"),
 				},
 			},
 			Excludes: []string{
@@ -285,7 +285,7 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "i1",
-					Detail: PtrTo("interface i1"),
+					Detail: new("interface i1"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -295,11 +295,11 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 				},
 				&lsproto.CompletionItem{
 					Label:  "nc_i1",
-					Detail: PtrTo("interface nc_i1"),
+					Detail: new("interface nc_i1"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2",
-					Detail: PtrTo("interface i2"),
+					Detail: new("interface i2"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -320,7 +320,7 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: PtrTo("(parameter) a: number"),
+					Detail: new("(parameter) a: number"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -342,7 +342,7 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "i3_i",
-					Detail: PtrTo("var i3_i: i3"),
+					Detail: new("var i3_i: i3"),
 				},
 			},
 			Excludes: []string{
@@ -362,7 +362,7 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f",
-					Detail: PtrTo("(method) i3.f(a: number): string"),
+					Detail: new("(method) i3.f(a: number): string"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -372,7 +372,7 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 				},
 				&lsproto.CompletionItem{
 					Label:  "l",
-					Detail: PtrTo("(property) i3.l: (b: number) => string"),
+					Detail: new("(property) i3.l: (b: number) => string"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -382,19 +382,19 @@ i3_i.nc/*45q*/_l(/*45*/10);`
 				},
 				&lsproto.CompletionItem{
 					Label:  "nc_f",
-					Detail: PtrTo("(method) i3.nc_f(a: number): string"),
+					Detail: new("(method) i3.nc_f(a: number): string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "nc_l",
-					Detail: PtrTo("(property) i3.nc_l: (b: number) => string"),
+					Detail: new("(property) i3.nc_l: (b: number) => string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "nc_x",
-					Detail: PtrTo("(property) i3.nc_x: number"),
+					Detail: new("(property) i3.nc_x: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "x",
-					Detail: PtrTo("(property) i3.x: number"),
+					Detail: new("(property) i3.x: number"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,

@@ -45,7 +45,7 @@ one/**/`
 							},
 						},
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 					&lsproto.CompletionItem{
 						Label: "one",
@@ -55,7 +55,7 @@ one/**/`
 							},
 						},
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 				}, false),
 		},

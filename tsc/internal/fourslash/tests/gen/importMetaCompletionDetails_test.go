@@ -29,7 +29,7 @@ let x = import.meta/**/;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "meta",
-					Detail: PtrTo("(property) ImportMetaExpression.meta: ImportMeta"),
+					Detail: new("(property) ImportMetaExpression.meta: ImportMeta"),
 				},
 			},
 		},

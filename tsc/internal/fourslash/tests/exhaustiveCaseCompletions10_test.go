@@ -19,7 +19,7 @@ switch (u) {
     case/*1*/
 }`
 	capabilities := fourslash.GetDefaultCapabilities()
-	capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = PtrTo(false)
+	capabilities.TextDocument.Completion.CompletionItem.SnippetSupport = new(false)
 	f, done := fourslash.NewFourslash(t, capabilities, content)
 	defer done()
 	f.VerifyCompletions(t, "1", &fourslash.CompletionsExpectedList{
@@ -32,8 +32,8 @@ switch (u) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "case \"$1\": ...",
-					InsertText: PtrTo("case \"$1\":\ncase \"2\":"),
-					SortText:   PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					InsertText: new("case \"$1\":\ncase \"2\":"),
+					SortText:   new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

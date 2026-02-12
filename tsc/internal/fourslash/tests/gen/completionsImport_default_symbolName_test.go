@@ -39,24 +39,24 @@ R/*0*/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label: "RangeParser",
-					Kind:  PtrTo(lsproto.CompletionItemKindFunction),
+					Kind:  new(lsproto.CompletionItemKindFunction),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "range-parser",
 						},
 					},
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
-					Detail:              PtrTo("namespace RangeParser\nfunction RangeParser(): string"),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
+					Detail:              new("namespace RangeParser\nfunction RangeParser(): string"),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("0"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new("0"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "RangeParser",
 		Source:      "range-parser",
 		Description: "Add import from \"range-parser\"",
-		NewFileContent: PtrTo(`import RangeParser = require("range-parser");
+		NewFileContent: new(`import RangeParser = require("range-parser");
 
 R`),
 	})

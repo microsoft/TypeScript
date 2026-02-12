@@ -30,7 +30,7 @@ const x = /** @type {{ s: string }} */ ({ /**/ });`
 				"s",
 				&lsproto.CompletionItem{
 					Label:    "x",
-					SortText: PtrTo(string(ls.SortTextJavascriptIdentifiers)),
+					SortText: new(string(ls.SortTextJavascriptIdentifiers)),
 				},
 			},
 		},

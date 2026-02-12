@@ -29,7 +29,7 @@ import { Test } from ".//**/"`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "test.js",
-					Detail: PtrTo("test.js"),
+					Detail: new("test.js"),
 				},
 			},
 		},
@@ -45,7 +45,7 @@ import { Test } from ".//**/"`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "test",
-					Detail: PtrTo("test.d.ts"),
+					Detail: new("test.d.ts"),
 				},
 			},
 		},

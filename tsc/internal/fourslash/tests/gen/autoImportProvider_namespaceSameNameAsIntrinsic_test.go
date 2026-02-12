@@ -41,11 +41,11 @@ type A = { name: string/**/ }`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "string",
-					SortText: PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText: new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "string",
-					SortText: PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText: new(string(ls.SortTextAutoImportSuggestions)),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "fp-ts",

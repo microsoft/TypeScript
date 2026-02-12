@@ -38,11 +38,11 @@ x./**/`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "commonFunction",
-					Detail: PtrTo("(method) commonFunction(): number"),
+					Detail: new("(method) commonFunction(): number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "commonProperty",
-					Detail: PtrTo("(property) commonProperty: string | number"),
+					Detail: new("(property) commonProperty: string | number"),
 				},
 			},
 		},

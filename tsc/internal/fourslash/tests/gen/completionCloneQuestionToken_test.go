@@ -38,8 +38,8 @@ class Foo extends Bar<TwoKeys> {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "baz",
-					InsertText: PtrTo("baz(a: { a?: (options: { thisFails?: any; }) => any; b?: (options: { thisFails?: any; }) => any; }): void {\n}"),
-					FilterText: PtrTo("baz"),
+					InsertText: new("baz(a: { a?: (options: { thisFails?: any; }) => any; b?: (options: { thisFails?: any; }) => any; }): void {\n}"),
+					FilterText: new("baz"),
 				},
 			},
 		},

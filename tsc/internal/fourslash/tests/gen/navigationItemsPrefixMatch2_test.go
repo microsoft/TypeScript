@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
-	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -39,18 +38,18 @@ function PointsFunc(): void {
 		{
 			Pattern:     "origin",
 			Preferences: nil,
-			Exact: PtrTo([]*lsproto.SymbolInformation{
+			Exact: new([]*lsproto.SymbolInformation{
 				{
 					Name:          "origin1",
 					Kind:          lsproto.SymbolKindProperty,
 					Location:      f.Ranges()[5].LSLocation(),
-					ContainerName: PtrTo("OriginI"),
+					ContainerName: new("OriginI"),
 				},
 				{
 					Name:          "originality",
 					Kind:          lsproto.SymbolKindProperty,
 					Location:      f.Ranges()[0].LSLocation(),
-					ContainerName: PtrTo("Point"),
+					ContainerName: new("Point"),
 				},
 				{
 					Name:     "OriginI",
@@ -61,36 +60,36 @@ function PointsFunc(): void {
 		}, {
 			Pattern:     "distance",
 			Preferences: nil,
-			Exact: PtrTo([]*lsproto.SymbolInformation{
+			Exact: new([]*lsproto.SymbolInformation{
 				{
 					Name:          "distanceFarFarAway",
 					Kind:          lsproto.SymbolKindProperty,
 					Location:      f.Ranges()[2].LSLocation(),
-					ContainerName: PtrTo("Point"),
+					ContainerName: new("Point"),
 				},
 				{
 					Name:          "distanceFarFarAwayLocal",
 					Kind:          lsproto.SymbolKindVariable,
 					Location:      f.Ranges()[3].LSLocation(),
-					ContainerName: PtrTo("distanceFarFarAway"),
+					ContainerName: new("distanceFarFarAway"),
 				},
 				{
 					Name:          "distanceFromOrig",
 					Kind:          lsproto.SymbolKindProperty,
 					Location:      f.Ranges()[1].LSLocation(),
-					ContainerName: PtrTo("Point"),
+					ContainerName: new("Point"),
 				},
 				{
 					Name:          "_distance",
 					Kind:          lsproto.SymbolKindMethod,
 					Location:      f.Ranges()[6].LSLocation(),
-					ContainerName: PtrTo("OriginI"),
+					ContainerName: new("OriginI"),
 				},
 			}),
 		}, {
 			Pattern:     "mPointThatIJustInitiated wrongKeyWord",
 			Preferences: nil,
-			Exact:       PtrTo([]*lsproto.SymbolInformation{}),
+			Exact:       new([]*lsproto.SymbolInformation{}),
 		},
 	})
 }

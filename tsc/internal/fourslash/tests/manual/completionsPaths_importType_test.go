@@ -35,8 +35,8 @@ type B = import(".//*2*/");
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "package",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("package"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("package"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "package",
@@ -57,8 +57,8 @@ type B = import(".//*2*/");
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "package",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("package"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("package"),
 				},
 			},
 		},
@@ -73,18 +73,18 @@ type B = import(".//*2*/");
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "node_modules",
-					Kind:   PtrTo(lsproto.CompletionItemKindFolder),
-					Detail: PtrTo("node_modules"),
+					Kind:   new(lsproto.CompletionItemKindFolder),
+					Detail: new("node_modules"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "ns",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("ns.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("ns.ts"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "user",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("user.js"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("user.js"),
 				},
 			},
 		},

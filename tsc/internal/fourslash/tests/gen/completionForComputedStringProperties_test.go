@@ -36,8 +36,8 @@ a[|./**/|]`
 				},
 				&lsproto.CompletionItem{
 					Label:      "p2",
-					InsertText: PtrTo("[p2]"),
-					SortText:   PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					InsertText: new("[p2]"),
+					SortText:   new(string(ls.SortTextGlobalsOrKeywords)),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "p2",

@@ -38,10 +38,10 @@ someMo/**/`
 								ModuleSpecifier: "./someModule",
 							},
 						},
-						Detail:              PtrTo("const someModule: 0"),
-						Kind:                PtrTo(lsproto.CompletionItemKindVariable),
+						Detail:              new("const someModule: 0"),
+						Kind:                new(lsproto.CompletionItemKindVariable),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 					&lsproto.CompletionItem{
 						Label: "someModule",
@@ -50,22 +50,22 @@ someMo/**/`
 								ModuleSpecifier: "./someModule",
 							},
 						},
-						Detail:              PtrTo("(property) default: 1"),
-						Kind:                PtrTo(lsproto.CompletionItemKindField),
+						Detail:              new("(property) default: 1"),
+						Kind:                new(lsproto.CompletionItemKindField),
 						AdditionalTextEdits: fourslash.AnyTextEdits,
-						SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+						SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					},
 				},
 				true,
 			),
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:          "someModule",
 		Source:        "./someModule",
 		AutoImportFix: &lsproto.AutoImportFix{},
 		Description:   "Add import from \"./someModule\"",
-		NewFileContent: PtrTo(`import { someModule } from "./someModule";
+		NewFileContent: new(`import { someModule } from "./someModule";
 
 someMo`),
 	})

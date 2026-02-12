@@ -36,15 +36,15 @@ class Foo implements IFoo {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "a",
-					InsertText: PtrTo("a?: number;"),
-					FilterText: PtrTo("a"),
-					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
+					InsertText: new("a?: number;"),
+					FilterText: new("a"),
+					SortText:   new(string(ls.SortTextLocationPriority)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "b",
-					InsertText: PtrTo("b(x: number): void {\n}"),
-					FilterText: PtrTo("b"),
-					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
+					InsertText: new("b(x: number): void {\n}"),
+					FilterText: new("b"),
+					SortText:   new(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

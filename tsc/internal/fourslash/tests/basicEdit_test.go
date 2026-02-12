@@ -34,8 +34,8 @@ p/*a*/`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "x",
-					Kind:     PtrTo(lsproto.CompletionItemKindField),
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					Kind:     new(lsproto.CompletionItemKindField),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 				"y",
 			},

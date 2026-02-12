@@ -51,9 +51,9 @@ switch (f) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:            "case 1: ...",
-					InsertText:       PtrTo("case 1:$1\ncase E.A:$2\ncase E.B:$3"),
-					SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					InsertText:       new("case 1:$1\ncase E.A:$2\ncase E.B:$3"),
+					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 				},
 			},
 		},
@@ -68,9 +68,9 @@ switch (f) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:            "case E.A: ...",
-					InsertText:       PtrTo("case E.A:$1\ncase E.B:$2\ncase E.C:$3"),
-					SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					InsertText:       new("case E.A:$1\ncase E.B:$2\ncase E.C:$3"),
+					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 				},
 			},
 		},
@@ -85,9 +85,9 @@ switch (f) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:            "case F.D: ...",
-					InsertText:       PtrTo("case F.D:$1\ncase F.E:$2\ncase F.F:$3"),
-					SortText:         PtrTo(string(ls.SortTextGlobalsOrKeywords)),
-					InsertTextFormat: PtrTo(lsproto.InsertTextFormatSnippet),
+					InsertText:       new("case F.D:$1\ncase F.E:$2\ncase F.F:$3"),
+					SortText:         new(string(ls.SortTextGlobalsOrKeywords)),
+					InsertTextFormat: new(lsproto.InsertTextFormatSnippet),
 				},
 			},
 		},

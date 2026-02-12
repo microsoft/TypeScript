@@ -33,11 +33,11 @@ object./**/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "bar",
-					Detail: PtrTo("(property) bar: any"),
+					Detail: new("(property) bar: any"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Detail: PtrTo("(method) foo(bar: any): any"),
+					Detail: new("(method) foo(bar: any): any"),
 				},
 			},
 		},

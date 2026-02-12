@@ -44,7 +44,7 @@ import /**/`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "TestClassBaseline",
-					InsertText: PtrTo("import { TestClassBaseline } from \"./baseline\";"),
+					InsertText: new("import { TestClassBaseline } from \"./baseline\";"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./baseline",
@@ -53,7 +53,7 @@ import /**/`
 				},
 				&lsproto.CompletionItem{
 					Label:      "TestClassExportList",
-					InsertText: PtrTo("import { TestClassExportList } from \"./exportList\";"),
+					InsertText: new("import { TestClassExportList } from \"./exportList\";"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./exportList",
@@ -62,7 +62,7 @@ import /**/`
 				},
 				&lsproto.CompletionItem{
 					Label:      "TestClassReExport",
-					InsertText: PtrTo("import { TestClassReExport } from \"./reExport\";"),
+					InsertText: new("import { TestClassReExport } from \"./reExport\";"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./reExport",
@@ -71,7 +71,7 @@ import /**/`
 				},
 				&lsproto.CompletionItem{
 					Label:      "TestDefaultClass",
-					InsertText: PtrTo("import TestDefaultClass from \"./default\";"),
+					InsertText: new("import TestDefaultClass from \"./default\";"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./default",

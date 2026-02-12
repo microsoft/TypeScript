@@ -37,9 +37,9 @@ bar({ deep: {/*1*/} });`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "another?",
-					InsertText: PtrTo("another"),
-					FilterText: PtrTo("another"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("another"),
+					FilterText: new("another"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},

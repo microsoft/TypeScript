@@ -466,9 +466,9 @@ const showCodeLensLocationsCommandName = "typescript.showCodeLensLocations"
 
 func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCapabilities) {
 	params := &lsproto.InitializeParams{
-		Locale: ptrTo("en-US"),
+		Locale: new("en-US"),
 		InitializationOptions: &lsproto.InitializationOptions{
-			CodeLensShowLocationsCommandName: ptrTo(showCodeLensLocationsCommandName),
+			CodeLensShowLocationsCommandName: new(showCodeLensLocationsCommandName),
 		},
 	}
 	params.Capabilities = getCapabilitiesWithDefaults(capabilities)
@@ -488,7 +488,7 @@ func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCap
 
 // If modifying the defaults, update GetDefaultCapabilities too.
 var (
-	ptrTrue                       = ptrTo(true)
+	ptrTrue                       = new(true)
 	defaultCompletionCapabilities = &lsproto.CompletionClientCapabilities{
 		CompletionItem: &lsproto.ClientCompletionItemOptions{
 			SnippetSupport:          ptrTrue,
@@ -528,7 +528,7 @@ var (
 		HierarchicalDocumentSymbolSupport: ptrTrue,
 	}
 	defaultFoldingRangeCapabilities = &lsproto.FoldingRangeClientCapabilities{
-		RangeLimit: ptrTo[uint32](5000),
+		RangeLimit: new(uint32(5000)),
 		// LineFoldingOnly: ptrTrue,
 		FoldingRangeKind: &lsproto.ClientFoldingRangeKindOptions{
 			ValueSet: &[]lsproto.FoldingRangeKind{
@@ -624,7 +624,7 @@ func GetDefaultCapabilities() *lsproto.ClientCapabilities {
 				HierarchicalDocumentSymbolSupport: ptrTrue,
 			},
 			FoldingRange: &lsproto.FoldingRangeClientCapabilities{
-				RangeLimit: ptrTo[uint32](5000),
+				RangeLimit: new(uint32(5000)),
 				FoldingRangeKind: &lsproto.ClientFoldingRangeKindOptions{
 					ValueSet: &[]lsproto.FoldingRangeKind{
 						lsproto.FoldingRangeKindComment,
@@ -1502,7 +1502,7 @@ func (f *FourslashTest) verifyCompletionItem(t *testing.T, prefix string, actual
 			return fmt.Sprintf("%s:\n%s", "Kind mismatch", err)
 		}
 	}
-	if err := cmp.Diff(actual.SortText, core.OrElse(expected.SortText, ptrTo(string(ls.SortTextLocationPriority)))); err != "" {
+	if err := cmp.Diff(actual.SortText, core.OrElse(expected.SortText, new(string(ls.SortTextLocationPriority)))); err != "" {
 		return fmt.Sprintf("%s:\n%s", "SortText mismatch", err)
 	}
 
@@ -2859,10 +2859,6 @@ func (f *FourslashTest) lookupMarkersOrGetRanges(t *testing.T, markers []string)
 	return referenceLocations
 }
 
-func ptrTo[T any](v T) *T {
-	return &v
-}
-
 // This function is intended for spots where a complex
 // value needs to be reinterpreted following some prior JSON deserialization.
 // The default deserializer for `any` properties will give us a map at runtime,
@@ -3772,7 +3768,7 @@ func (f *FourslashTest) verifyBaselineRename(
 					text := spanToText[span]
 					prefixAndSuffix := strings.Split(text, "?")
 					if prefixAndSuffix[0] != "" {
-						return ptrTo("/*START PREFIX*/" + prefixAndSuffix[0])
+						return new("/*START PREFIX*/" + prefixAndSuffix[0])
 					}
 					return nil
 				},
@@ -3780,7 +3776,7 @@ func (f *FourslashTest) verifyBaselineRename(
 					text := spanToText[span]
 					prefixAndSuffix := strings.Split(text, "?")
 					if prefixAndSuffix[1] != "" {
-						return ptrTo(prefixAndSuffix[1] + "/*END SUFFIX*/")
+						return new(prefixAndSuffix[1] + "/*END SUFFIX*/")
 					}
 					return nil
 				},

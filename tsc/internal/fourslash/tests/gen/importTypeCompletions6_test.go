@@ -32,7 +32,7 @@ export interface Foo { };
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "Foo",
-					InsertText: PtrTo("import type { Foo } from \"./foo\";"),
+					InsertText: new("import type { Foo } from \"./foo\";"),
 					Data: &lsproto.CompletionItemData{
 						AutoImport: &lsproto.AutoImportFix{
 							ModuleSpecifier: "./foo",

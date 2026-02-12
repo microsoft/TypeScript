@@ -42,19 +42,19 @@ declare module "m" {
 							ModuleSpecifier: "m",
 						},
 					},
-					Detail:              PtrTo("class M\ninterface M"),
-					Kind:                PtrTo(lsproto.CompletionItemKindClass),
+					Detail:              new("class M\ninterface M"),
+					Kind:                new(lsproto.CompletionItemKindClass),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo(""), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new(""), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "M",
 		Source:      "m",
 		Description: "Add import from \"m\"",
-		NewFileContent: PtrTo(`import { M } from "m";
+		NewFileContent: new(`import { M } from "m";
 
 `),
 	})

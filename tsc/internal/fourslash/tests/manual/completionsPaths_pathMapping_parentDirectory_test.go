@@ -37,8 +37,8 @@ export const x = 0;
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "x",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("x.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("x.ts"),
 				},
 			},
 		},

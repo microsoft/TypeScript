@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
-	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -30,7 +29,7 @@ func TestSuggestionOfUnusedVariableWithExternalModule(t *testing.T) {
 	f.GoToFile(t, "/app.js")
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
-			Code:    &lsproto.IntegerOrString{Integer: PtrTo[int32](80001)},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(80001))},
 			Message: "File is a CommonJS module; it may be converted to an ES module.",
 			Range:   f.Ranges()[2].LSRange,
 		},
@@ -39,13 +38,13 @@ func TestSuggestionOfUnusedVariableWithExternalModule(t *testing.T) {
 	f.VerifySuggestionDiagnostics(t, []*lsproto.Diagnostic{
 		{
 			Message: "'root' is declared but its value is never read.",
-			Code:    &lsproto.IntegerOrString{Integer: PtrTo[int32](6133)},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6133))},
 			Range:   f.Ranges()[0].LSRange,
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagUnnecessary},
 		},
 		{
 			Message: "'unusedVar' is declared but its value is never read.",
-			Code:    &lsproto.IntegerOrString{Integer: PtrTo[int32](6133)},
+			Code:    &lsproto.IntegerOrString{Integer: new(int32(6133))},
 			Range:   f.Ranges()[1].LSRange,
 			Tags:    &[]lsproto.DiagnosticTag{lsproto.DiagnosticTagUnnecessary},
 		},

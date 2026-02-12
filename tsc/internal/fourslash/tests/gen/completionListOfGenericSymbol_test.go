@@ -27,25 +27,25 @@ a./**/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "length",
-					Detail: PtrTo("(property) Array<number>.length: number"),
+					Detail: new("(property) Array<number>.length: number"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
 							Value: "Gets or sets the length of the array. This is a number one higher than the highest index in the array.",
 						},
 					},
-					Kind: PtrTo(lsproto.CompletionItemKindField),
+					Kind: new(lsproto.CompletionItemKindField),
 				},
 				&lsproto.CompletionItem{
 					Label:  "toString",
-					Detail: PtrTo("(method) Array<number>.toString(): string"),
+					Detail: new("(method) Array<number>.toString(): string"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
 							Value: "Returns a string representation of an array.",
 						},
 					},
-					Kind: PtrTo(lsproto.CompletionItemKindMethod),
+					Kind: new(lsproto.CompletionItemKindMethod),
 				},
 			},
 		},

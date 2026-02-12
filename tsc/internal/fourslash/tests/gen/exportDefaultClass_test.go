@@ -29,8 +29,8 @@ func TestExportDefaultClass(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "C",
-					Detail: PtrTo("class C"),
-					Kind:   PtrTo(lsproto.CompletionItemKindClass),
+					Detail: new("class C"),
+					Kind:   new(lsproto.CompletionItemKindClass),
 				},
 			},
 		},

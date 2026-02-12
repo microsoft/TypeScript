@@ -138,10 +138,6 @@ func assertAtMostOne(message string, values ...bool) {
 	}
 }
 
-func ptrTo[T any](v T) *T {
-	return &v
-}
-
 type requiredProp bool
 
 func (v *requiredProp) UnmarshalJSONFrom(dec *json.Decoder) error {

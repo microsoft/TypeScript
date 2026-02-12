@@ -38,15 +38,15 @@ fn({ a: "a", b: "b" }, {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "on_a?",
-					InsertText: PtrTo("on_a"),
-					FilterText: PtrTo("on_a"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("on_a"),
+					FilterText: new("on_a"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "on_b?",
-					InsertText: PtrTo("on_b"),
-					FilterText: PtrTo("on_b"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("on_b"),
+					FilterText: new("on_b"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},

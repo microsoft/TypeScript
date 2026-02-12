@@ -60,18 +60,18 @@ import { } from "/**/";`
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "#blah",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#blah.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("#blah.ts"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "#index",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#index.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("#index.ts"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "#arguments",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#arguments.d.ts"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("#arguments.d.ts"),
 				},
 			},
 		},

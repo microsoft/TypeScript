@@ -79,9 +79,9 @@ f4({
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "world?",
-					InsertText: PtrTo("world"),
-					FilterText: PtrTo("world"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("world"),
+					FilterText: new("world"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},
@@ -96,15 +96,15 @@ f4({
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "autoIncrement?",
-					InsertText: PtrTo("autoIncrement"),
-					FilterText: PtrTo("autoIncrement"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("autoIncrement"),
+					FilterText: new("autoIncrement"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 				&lsproto.CompletionItem{
 					Label:      "keyPath?",
-					InsertText: PtrTo("keyPath"),
-					FilterText: PtrTo("keyPath"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("keyPath"),
+					FilterText: new("keyPath"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},
@@ -133,9 +133,9 @@ f4({
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "a?",
-					InsertText: PtrTo("a"),
-					FilterText: PtrTo("a"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("a"),
+					FilterText: new("a"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},
@@ -150,9 +150,9 @@ f4({
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "x?",
-					InsertText: PtrTo("x"),
-					FilterText: PtrTo("x"),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("x"),
+					FilterText: new("x"),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},

@@ -54,8 +54,8 @@ export class MoveInsideNextQuote extends MoveQuoteMatch {/*1*/
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:               "execActionWithCount",
-					InsertText:          PtrTo("public execActionWithCount(position: Position): Promise<void> {\n}"),
-					FilterText:          PtrTo("execActionWithCount"),
+					InsertText:          new("public execActionWithCount(position: Position): Promise<void> {\n}"),
+					FilterText:          new("execActionWithCount"),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 					Data: &lsproto.CompletionItemData{
 						Source: "ClassMemberSnippet/",
@@ -64,11 +64,11 @@ export class MoveInsideNextQuote extends MoveQuoteMatch {/*1*/
 			},
 		},
 	})
-	f.VerifyApplyCodeActionFromCompletion(t, PtrTo("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
+	f.VerifyApplyCodeActionFromCompletion(t, new("1"), &fourslash.ApplyCodeActionFromCompletionOptions{
 		Name:        "execActionWithCount",
 		Source:      "ClassMemberSnippet/",
 		Description: "Includes imports of types referenced by 'execActionWithCount'",
-		NewFileContent: PtrTo(`import { Position } from "vscode";
+		NewFileContent: new(`import { Position } from "vscode";
 import { MoveQuoteMatch } from "./motion";
 
 export class MoveInsideNextQuote extends MoveQuoteMatch {

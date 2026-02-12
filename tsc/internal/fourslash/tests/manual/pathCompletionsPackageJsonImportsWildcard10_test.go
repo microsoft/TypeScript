@@ -39,8 +39,8 @@ import { } from "/**/";`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "#card.tsx",
-					Kind:   PtrTo(lsproto.CompletionItemKindFile),
-					Detail: PtrTo("#card.tsx"),
+					Kind:   new(lsproto.CompletionItemKindFile),
+					Detail: new("#card.tsx"),
 				},
 			},
 		},

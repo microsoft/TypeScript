@@ -33,10 +33,10 @@ else {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "bar",
-					Kind:       PtrTo(lsproto.CompletionItemKindField),
-					SortText:   PtrTo(string(ls.SortTextLocationPriority)),
-					InsertText: PtrTo("?.bar"),
-					FilterText: PtrTo(".bar"),
+					Kind:       new(lsproto.CompletionItemKindField),
+					SortText:   new(string(ls.SortTextLocationPriority)),
+					InsertText: new("?.bar"),
+					FilterText: new(".bar"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "?.bar",
@@ -56,8 +56,8 @@ else {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "bar",
-					Kind:     PtrTo(lsproto.CompletionItemKindField),
-					SortText: PtrTo(string(ls.SortTextLocationPriority)),
+					Kind:     new(lsproto.CompletionItemKindField),
+					SortText: new(string(ls.SortTextLocationPriority)),
 				},
 			},
 		},

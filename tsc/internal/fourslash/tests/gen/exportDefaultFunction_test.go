@@ -29,8 +29,8 @@ func TestExportDefaultFunction(t *testing.T) {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "func",
-					Detail: PtrTo("function func(): void"),
-					Kind:   PtrTo(lsproto.CompletionItemKindFunction),
+					Detail: new("function func(): void"),
+					Kind:   new(lsproto.CompletionItemKindFunction),
 				},
 			},
 		},

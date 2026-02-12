@@ -53,7 +53,7 @@ const x = Re/**/`
 							ModuleSpecifier: "react",
 						},
 					},
-					SortText: PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText: new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 			Excludes: []string{

@@ -46,8 +46,8 @@ fooba/*5*/;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "Foo",
-					Kind:     PtrTo(lsproto.CompletionItemKindInterface),
-					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Kind:     new(lsproto.CompletionItemKindInterface),
+					SortText: new(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},
@@ -62,8 +62,8 @@ fooba/*5*/;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "bar",
-					Kind:     PtrTo(lsproto.CompletionItemKindMethod),
-					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Kind:     new(lsproto.CompletionItemKindMethod),
+					SortText: new(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},
@@ -78,8 +78,8 @@ fooba/*5*/;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "prop",
-					Kind:     PtrTo(lsproto.CompletionItemKindField),
-					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Kind:     new(lsproto.CompletionItemKindField),
+					SortText: new(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},
@@ -94,8 +94,8 @@ fooba/*5*/;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "foobar",
-					Kind:     PtrTo(lsproto.CompletionItemKindFunction),
-					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Kind:     new(lsproto.CompletionItemKindFunction),
+					SortText: new(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},
@@ -110,8 +110,8 @@ fooba/*5*/;`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "foobar",
-					Kind:     PtrTo(lsproto.CompletionItemKindVariable),
-					SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
+					Kind:     new(lsproto.CompletionItemKindVariable),
+					SortText: new(string(ls.DeprecateSortText(ls.SortTextLocationPriority))),
 				},
 			},
 		},

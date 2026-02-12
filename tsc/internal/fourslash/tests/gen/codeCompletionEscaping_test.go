@@ -29,13 +29,13 @@ ___foo; __foo;/**/`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:    "__foo",
-					Kind:     PtrTo(lsproto.CompletionItemKindText),
-					SortText: PtrTo(string(ls.SortTextJavascriptIdentifiers)),
+					Kind:     new(lsproto.CompletionItemKindText),
+					SortText: new(string(ls.SortTextJavascriptIdentifiers)),
 				},
 				&lsproto.CompletionItem{
 					Label:    "___foo",
-					Kind:     PtrTo(lsproto.CompletionItemKindText),
-					SortText: PtrTo(string(ls.SortTextJavascriptIdentifiers)),
+					Kind:     new(lsproto.CompletionItemKindText),
+					SortText: new(string(ls.SortTextJavascriptIdentifiers)),
 				},
 			},
 		},

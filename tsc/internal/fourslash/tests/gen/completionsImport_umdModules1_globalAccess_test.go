@@ -42,7 +42,7 @@ const el1 = <div className={class/*1*/}>foo</div>;`
 				&lsproto.CompletionItem{
 					Label:               "classNames",
 					AdditionalTextEdits: fourslash.AnyTextEdits,
-					SortText:            PtrTo(string(ls.SortTextGlobalsOrKeywords)),
+					SortText:            new(string(ls.SortTextGlobalsOrKeywords)),
 				},
 			},
 		},

@@ -285,7 +285,7 @@ foo(null);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "f1",
-					Detail: PtrTo("function f1(a: number): number (+1 overload)"),
+					Detail: new("function f1(a: number): number (+1 overload)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -295,15 +295,15 @@ foo(null);`
 				},
 				&lsproto.CompletionItem{
 					Label:  "f2",
-					Detail: PtrTo("function f2(a: number): number (+1 overload)"),
+					Detail: new("function f2(a: number): number (+1 overload)"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "f3",
-					Detail: PtrTo("function f3(a: number): number (+1 overload)"),
+					Detail: new("function f3(a: number): number (+1 overload)"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "f4",
-					Detail: PtrTo("function f4(a: number): number (+1 overload)"),
+					Detail: new("function f4(a: number): number (+1 overload)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -324,7 +324,7 @@ foo(null);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "i1_i",
-					Detail: PtrTo("var i1_i: i1\nnew (b: number) => any (+1 overload)"),
+					Detail: new("var i1_i: i1\nnew (b: number) => any (+1 overload)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -334,11 +334,11 @@ foo(null);`
 				},
 				&lsproto.CompletionItem{
 					Label:  "i2_i",
-					Detail: PtrTo("var i2_i: i2\nnew (a: string) => any (+1 overload)"),
+					Detail: new("var i2_i: i2\nnew (a: string) => any (+1 overload)"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "i3_i",
-					Detail: PtrTo("var i3_i: i3\nnew (a: string) => any (+1 overload)"),
+					Detail: new("var i3_i: i3\nnew (a: string) => any (+1 overload)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -348,7 +348,7 @@ foo(null);`
 				},
 				&lsproto.CompletionItem{
 					Label:  "i4_i",
-					Detail: PtrTo("var i4_i: i4\nnew (a: string) => any (+1 overload)"),
+					Detail: new("var i4_i: i4\nnew (a: string) => any (+1 overload)"),
 				},
 			},
 			Excludes: []string{
@@ -382,7 +382,7 @@ foo(null);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "foo",
-					Detail: PtrTo("(method) i1.foo(a: number): number (+1 overload)"),
+					Detail: new("(method) i1.foo(a: number): number (+1 overload)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -392,15 +392,15 @@ foo(null);`
 				},
 				&lsproto.CompletionItem{
 					Label:  "foo2",
-					Detail: PtrTo("(method) i1.foo2(a: number): number (+1 overload)"),
+					Detail: new("(method) i1.foo2(a: number): number (+1 overload)"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "foo3",
-					Detail: PtrTo("(method) i1.foo3(a: number): number (+1 overload)"),
+					Detail: new("(method) i1.foo3(a: number): number (+1 overload)"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "foo4",
-					Detail: PtrTo("(method) i1.foo4(a: number): number (+1 overload)"),
+					Detail: new("(method) i1.foo4(a: number): number (+1 overload)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -481,11 +481,11 @@ foo(null);`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "prop1",
-					Detail: PtrTo("(method) c.prop1(a: number): number (+1 overload)"),
+					Detail: new("(method) c.prop1(a: number): number (+1 overload)"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "prop2",
-					Detail: PtrTo("(method) c.prop2(a: number): number (+1 overload)"),
+					Detail: new("(method) c.prop2(a: number): number (+1 overload)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -495,11 +495,11 @@ foo(null);`
 				},
 				&lsproto.CompletionItem{
 					Label:  "prop3",
-					Detail: PtrTo("(method) c.prop3(a: number): number (+1 overload)"),
+					Detail: new("(method) c.prop3(a: number): number (+1 overload)"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "prop4",
-					Detail: PtrTo("(method) c.prop4(a: number): number (+1 overload)"),
+					Detail: new("(method) c.prop4(a: number): number (+1 overload)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -509,7 +509,7 @@ foo(null);`
 				},
 				&lsproto.CompletionItem{
 					Label:  "prop5",
-					Detail: PtrTo("(method) c.prop5(a: number): number (+1 overload)"),
+					Detail: new("(method) c.prop5(a: number): number (+1 overload)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -590,75 +590,75 @@ foo(null);`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "c",
-					Detail: PtrTo("class c"),
+					Detail: new("class c"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c1",
-					Detail: PtrTo("class c1"),
+					Detail: new("class c1"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c2",
-					Detail: PtrTo("class c2"),
+					Detail: new("class c2"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c3",
-					Detail: PtrTo("class c3"),
+					Detail: new("class c3"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c4",
-					Detail: PtrTo("class c4"),
+					Detail: new("class c4"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c5",
-					Detail: PtrTo("class c5"),
+					Detail: new("class c5"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c_i",
-					Detail: PtrTo("var c_i: c"),
+					Detail: new("var c_i: c"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c1_i_1",
-					Detail: PtrTo("var c1_i_1: c1"),
+					Detail: new("var c1_i_1: c1"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c2_i_1",
-					Detail: PtrTo("var c2_i_1: c2"),
+					Detail: new("var c2_i_1: c2"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c3_i_1",
-					Detail: PtrTo("var c3_i_1: c3"),
+					Detail: new("var c3_i_1: c3"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c4_i_1",
-					Detail: PtrTo("var c4_i_1: c4"),
+					Detail: new("var c4_i_1: c4"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c5_i_1",
-					Detail: PtrTo("var c5_i_1: c5"),
+					Detail: new("var c5_i_1: c5"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c1_i_2",
-					Detail: PtrTo("var c1_i_2: c1"),
+					Detail: new("var c1_i_2: c1"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c2_i_2",
-					Detail: PtrTo("var c2_i_2: c2"),
+					Detail: new("var c2_i_2: c2"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c3_i_2",
-					Detail: PtrTo("var c3_i_2: c3"),
+					Detail: new("var c3_i_2: c3"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c4_i_2",
-					Detail: PtrTo("var c4_i_2: c4"),
+					Detail: new("var c4_i_2: c4"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "c5_i_2",
-					Detail: PtrTo("var c5_i_2: c5"),
+					Detail: new("var c5_i_2: c5"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "multiOverload",
-					Detail: PtrTo("function multiOverload(a: number): string (+2 overloads)"),
+					Detail: new("function multiOverload(a: number): string (+2 overloads)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,
@@ -668,7 +668,7 @@ foo(null);`
 				},
 				&lsproto.CompletionItem{
 					Label:  "ambientF1",
-					Detail: PtrTo("function ambientF1(a: number): string (+2 overloads)"),
+					Detail: new("function ambientF1(a: number): string (+2 overloads)"),
 					Documentation: &lsproto.StringOrMarkupContent{
 						MarkupContent: &lsproto.MarkupContent{
 							Kind:  lsproto.MarkupKindMarkdown,

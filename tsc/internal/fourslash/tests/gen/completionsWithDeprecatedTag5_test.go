@@ -33,12 +33,12 @@ Foo./**/`
 				[]fourslash.CompletionsExpectedItem{
 					&lsproto.CompletionItem{
 						Label:    "prototype",
-						SortText: PtrTo(string(ls.SortTextLocationPriority)),
+						SortText: new(string(ls.SortTextLocationPriority)),
 					},
 					&lsproto.CompletionItem{
 						Label:    "m",
-						Kind:     PtrTo(lsproto.CompletionItemKindMethod),
-						SortText: PtrTo(string(ls.DeprecateSortText(ls.SortTextLocalDeclarationPriority))),
+						Kind:     new(lsproto.CompletionItemKindMethod),
+						SortText: new(string(ls.DeprecateSortText(ls.SortTextLocalDeclarationPriority))),
 					},
 				}),
 		},

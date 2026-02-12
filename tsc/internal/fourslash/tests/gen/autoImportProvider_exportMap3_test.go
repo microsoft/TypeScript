@@ -60,7 +60,7 @@ fooFrom/**/`
 							ModuleSpecifier: "dependency",
 						},
 					},
-					SortText:            PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText:            new(string(ls.SortTextAutoImportSuggestions)),
 					AdditionalTextEdits: fourslash.AnyTextEdits,
 				},
 			},

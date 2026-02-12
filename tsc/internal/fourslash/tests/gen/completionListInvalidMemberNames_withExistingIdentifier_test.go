@@ -29,7 +29,7 @@ unrelatedIdentifier;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "foo ",
-					InsertText: PtrTo("[\"foo \"]"),
+					InsertText: new("[\"foo \"]"),
 				},
 			},
 		},
@@ -44,7 +44,7 @@ unrelatedIdentifier;`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "foo ",
-					InsertText: PtrTo("[\"foo \"]"),
+					InsertText: new("[\"foo \"]"),
 				},
 			},
 		},

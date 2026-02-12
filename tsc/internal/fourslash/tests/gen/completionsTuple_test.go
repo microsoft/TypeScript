@@ -27,7 +27,7 @@ x[|./**/|];`
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "0",
-					InsertText: PtrTo("[0]"),
+					InsertText: new("[0]"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "0",
@@ -37,7 +37,7 @@ x[|./**/|];`
 				},
 				&lsproto.CompletionItem{
 					Label:      "1",
-					InsertText: PtrTo("[1]"),
+					InsertText: new("[1]"),
 					TextEdit: &lsproto.TextEditOrInsertReplaceEdit{
 						TextEdit: &lsproto.TextEdit{
 							NewText: "1",

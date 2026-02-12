@@ -63,11 +63,11 @@ var o6: {
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "__proto__",
-					Detail: PtrTo("(property) __proto__: number"),
+					Detail: new("(property) __proto__: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -83,7 +83,7 @@ var o6: {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -98,11 +98,11 @@ var o6: {
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "__proto__",
-					Detail: PtrTo("(property) __proto__: number"),
+					Detail: new("(property) __proto__: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -118,7 +118,7 @@ var o6: {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -133,11 +133,11 @@ var o6: {
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "__proto__",
-					Detail: PtrTo("(property) \"__proto__\": number"),
+					Detail: new("(property) \"__proto__\": number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -153,7 +153,7 @@ var o6: {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -168,11 +168,11 @@ var o6: {
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "__proto__",
-					Detail: PtrTo("(property) \"__proto__\": number"),
+					Detail: new("(property) \"__proto__\": number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -188,7 +188,7 @@ var o6: {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -203,15 +203,15 @@ var o6: {
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "__proto__",
-					Detail: PtrTo("(property) __proto__: number"),
+					Detail: new("(property) __proto__: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "___proto__",
-					Detail: PtrTo("(property) ___proto__: string"),
+					Detail: new("(property) ___proto__: string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -227,11 +227,11 @@ var o6: {
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "___proto__",
-					Detail: PtrTo("(property) ___proto__: string"),
+					Detail: new("(property) ___proto__: string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -247,7 +247,7 @@ var o6: {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -262,15 +262,15 @@ var o6: {
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "__proto__",
-					Detail: PtrTo("(property) __proto__: number"),
+					Detail: new("(property) __proto__: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "___proto__",
-					Detail: PtrTo("(property) ___proto__: string"),
+					Detail: new("(property) ___proto__: string"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -286,11 +286,11 @@ var o6: {
 			Unsorted: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "__proto__",
-					Detail: PtrTo("(property) __proto__: number"),
+					Detail: new("(property) __proto__: number"),
 				},
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},
@@ -306,7 +306,7 @@ var o6: {
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "p",
-					Detail: PtrTo("(property) p: number"),
+					Detail: new("(property) p: number"),
 				},
 			},
 		},

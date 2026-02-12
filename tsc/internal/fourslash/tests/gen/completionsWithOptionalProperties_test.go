@@ -36,10 +36,10 @@ foo({
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:      "world?",
-					InsertText: PtrTo("world"),
-					FilterText: PtrTo("world"),
-					Kind:       PtrTo(lsproto.CompletionItemKindField),
-					SortText:   PtrTo(string(ls.SortTextOptionalMember)),
+					InsertText: new("world"),
+					FilterText: new("world"),
+					Kind:       new(lsproto.CompletionItemKindField),
+					SortText:   new(string(ls.SortTextOptionalMember)),
 				},
 			},
 		},

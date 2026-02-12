@@ -51,8 +51,8 @@ var y = class {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "myClass",
-					Detail: PtrTo("class myClass"),
-					Kind:   PtrTo(lsproto.CompletionItemKindClass),
+					Detail: new("class myClass"),
+					Kind:   new(lsproto.CompletionItemKindClass),
 				},
 			},
 		},
@@ -67,8 +67,8 @@ var y = class {
 			Includes: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "myClass",
-					Detail: PtrTo("(local class) myClass"),
-					Kind:   PtrTo(lsproto.CompletionItemKindProperty),
+					Detail: new("(local class) myClass"),
+					Kind:   new(lsproto.CompletionItemKindProperty),
 				},
 			},
 		},

@@ -31,7 +31,7 @@ ctx(function () { return th/*1*/is./*2*/a });`
 			Exact: []fourslash.CompletionsExpectedItem{
 				&lsproto.CompletionItem{
 					Label:  "a",
-					Detail: PtrTo("(property) A.a: string"),
+					Detail: new("(property) A.a: string"),
 				},
 			},
 		},

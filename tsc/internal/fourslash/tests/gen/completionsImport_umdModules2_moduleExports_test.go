@@ -47,7 +47,7 @@ const el1 = <div className={class/*1*/}>foo</div>;`
 							ModuleSpecifier: "classnames",
 						},
 					},
-					SortText: PtrTo(string(ls.SortTextAutoImportSuggestions)),
+					SortText: new(string(ls.SortTextAutoImportSuggestions)),
 				},
 			},
 		},

@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/microsoft/typescript-go/internal/fourslash"
-	. "github.com/microsoft/typescript-go/internal/fourslash/tests/util"
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/testutil"
 )
@@ -25,24 +24,24 @@ class Test {
 		{
 			Pattern:     "search",
 			Preferences: nil,
-			Exact: PtrTo([]*lsproto.SymbolInformation{
+			Exact: new([]*lsproto.SymbolInformation{
 				{
 					Name:          "search1",
 					Kind:          lsproto.SymbolKindProperty,
 					Location:      f.Ranges()[0].LSLocation(),
-					ContainerName: PtrTo("Test"),
+					ContainerName: new("Test"),
 				},
 				{
 					Name:          "search2",
 					Kind:          lsproto.SymbolKindProperty,
 					Location:      f.Ranges()[1].LSLocation(),
-					ContainerName: PtrTo("Test"),
+					ContainerName: new("Test"),
 				},
 				{
 					Name:          "search3",
 					Kind:          lsproto.SymbolKindProperty,
 					Location:      f.Ranges()[2].LSLocation(),
-					ContainerName: PtrTo("Test"),
+					ContainerName: new("Test"),
 				},
 			}),
 		},
