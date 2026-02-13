@@ -362,6 +362,36 @@ interface FontFaceSetLoadEventInit extends EventInit {
     fontfaces?: FontFace[];
 }
 
+interface GPUBindGroupDescriptor extends GPUObjectDescriptorBase {
+    entries: GPUBindGroupEntry[];
+    layout: GPUBindGroupLayout;
+}
+
+interface GPUBindGroupEntry {
+    binding: GPUIndex32;
+    resource: GPUBindingResource;
+}
+
+interface GPUBufferBinding {
+    buffer: GPUBuffer;
+    offset?: GPUSize64;
+    size?: GPUSize64;
+}
+
+interface GPUCanvasConfiguration {
+    alphaMode?: GPUCanvasAlphaMode;
+    colorSpace?: PredefinedColorSpace;
+    device: GPUDevice;
+    format: GPUTextureFormat;
+    toneMapping?: GPUCanvasToneMapping;
+    usage?: GPUTextureUsageFlags;
+    viewFormats?: GPUTextureFormat[];
+}
+
+interface GPUCanvasToneMapping {
+    mode?: GPUCanvasToneMappingMode;
+}
+
 interface GPUColorDict {
     a: number;
     b: number;
@@ -369,8 +399,54 @@ interface GPUColorDict {
     r: number;
 }
 
+interface GPUCommandBufferDescriptor extends GPUObjectDescriptorBase {
+}
+
+interface GPUComputePassDescriptor extends GPUObjectDescriptorBase {
+    timestampWrites?: GPUComputePassTimestampWrites;
+}
+
+interface GPUComputePassTimestampWrites {
+    beginningOfPassWriteIndex?: GPUSize32;
+    endOfPassWriteIndex?: GPUSize32;
+    querySet: GPUQuerySet;
+}
+
+interface GPUCopyExternalImageDestInfo extends GPUTexelCopyTextureInfo {
+    colorSpace?: PredefinedColorSpace;
+    premultipliedAlpha?: boolean;
+}
+
+interface GPUCopyExternalImageSourceInfo {
+    flipY?: boolean;
+    origin?: GPUOrigin2D;
+    source: GPUCopyExternalImageSource;
+}
+
+interface GPUExtent3DDict {
+    depthOrArrayLayers?: GPUIntegerCoordinate;
+    height?: GPUIntegerCoordinate;
+    width: GPUIntegerCoordinate;
+}
+
+interface GPUExternalTextureDescriptor extends GPUObjectDescriptorBase {
+    colorSpace?: PredefinedColorSpace;
+    source: VideoFrame;
+}
+
 interface GPUObjectDescriptorBase {
     label?: string;
+}
+
+interface GPUOrigin2DDict {
+    x?: GPUIntegerCoordinate;
+    y?: GPUIntegerCoordinate;
+}
+
+interface GPUOrigin3DDict {
+    x?: GPUIntegerCoordinate;
+    y?: GPUIntegerCoordinate;
+    z?: GPUIntegerCoordinate;
 }
 
 interface GPUPipelineErrorInit {
@@ -378,6 +454,58 @@ interface GPUPipelineErrorInit {
 }
 
 interface GPURenderBundleDescriptor extends GPUObjectDescriptorBase {
+}
+
+interface GPURenderPassColorAttachment {
+    clearValue?: GPUColor;
+    depthSlice?: GPUIntegerCoordinate;
+    loadOp: GPULoadOp;
+    resolveTarget?: GPUTexture | GPUTextureView;
+    storeOp: GPUStoreOp;
+    view: GPUTexture | GPUTextureView;
+}
+
+interface GPURenderPassDepthStencilAttachment {
+    depthClearValue?: number;
+    depthLoadOp?: GPULoadOp;
+    depthReadOnly?: boolean;
+    depthStoreOp?: GPUStoreOp;
+    stencilClearValue?: GPUStencilValue;
+    stencilLoadOp?: GPULoadOp;
+    stencilReadOnly?: boolean;
+    stencilStoreOp?: GPUStoreOp;
+    view: GPUTexture | GPUTextureView;
+}
+
+interface GPURenderPassDescriptor extends GPUObjectDescriptorBase {
+    colorAttachments: (GPURenderPassColorAttachment | null)[];
+    depthStencilAttachment?: GPURenderPassDepthStencilAttachment;
+    maxDrawCount?: GPUSize64;
+    occlusionQuerySet?: GPUQuerySet;
+    timestampWrites?: GPURenderPassTimestampWrites;
+}
+
+interface GPURenderPassTimestampWrites {
+    beginningOfPassWriteIndex?: GPUSize32;
+    endOfPassWriteIndex?: GPUSize32;
+    querySet: GPUQuerySet;
+}
+
+interface GPUTexelCopyBufferInfo extends GPUTexelCopyBufferLayout {
+    buffer: GPUBuffer;
+}
+
+interface GPUTexelCopyBufferLayout {
+    bytesPerRow?: GPUSize32;
+    offset?: GPUSize64;
+    rowsPerImage?: GPUSize32;
+}
+
+interface GPUTexelCopyTextureInfo {
+    aspect?: GPUTextureAspect;
+    mipLevel?: GPUIntegerCoordinate;
+    origin?: GPUOrigin3D;
+    texture: GPUTexture;
 }
 
 interface GPUTextureViewDescriptor extends GPUObjectDescriptorBase {
@@ -5056,6 +5184,50 @@ declare var GPUBuffer: {
 };
 
 /**
+ * The **`GPUCanvasContext`** interface of the WebGPU API represents the WebGPU rendering context of a <canvas> element, returned via an HTMLCanvasElement.getContext() call with a contextType of "webgpu".
+ * Available only in secure contexts.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCanvasContext)
+ */
+interface GPUCanvasContext {
+    /**
+     * The **`canvas`** read-only property of the GPUCanvasContext interface returns a reference to the canvas that the context was created from.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCanvasContext/canvas)
+     */
+    readonly canvas: OffscreenCanvas;
+    /**
+     * The **`configure()`** method of the GPUCanvasContext interface configures the context to use for rendering with a given GPUDevice. When called the canvas will initially be cleared to transparent black.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCanvasContext/configure)
+     */
+    configure(configuration: GPUCanvasConfiguration): void;
+    /**
+     * The **`getConfiguration()`** method of the GPUCanvasContext interface returns the current configuration set for the context.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCanvasContext/getConfiguration)
+     */
+    getConfiguration(): GPUCanvasConfiguration | null;
+    /**
+     * The **`getCurrentTexture()`** method of the GPUCanvasContext interface returns the next GPUTexture to be composited to the document by the canvas context.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCanvasContext/getCurrentTexture)
+     */
+    getCurrentTexture(): GPUTexture;
+    /**
+     * The **`unconfigure()`** method of the GPUCanvasContext interface removes any previously-set context configuration, and destroys any textures returned via getCurrentTexture() while the canvas context was configured.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCanvasContext/unconfigure)
+     */
+    unconfigure(): void;
+}
+
+declare var GPUCanvasContext: {
+    prototype: GPUCanvasContext;
+    new(): GPUCanvasContext;
+};
+
+/**
  * The **`GPUCommandBuffer`** interface of the WebGPU API represents a pre-recorded list of GPU commands that can be submitted to a GPUQueue for execution.
  * Available only in secure contexts.
  *
@@ -5067,6 +5239,75 @@ interface GPUCommandBuffer extends GPUObjectBase {
 declare var GPUCommandBuffer: {
     prototype: GPUCommandBuffer;
     new(): GPUCommandBuffer;
+};
+
+/**
+ * The **`GPUCommandEncoder`** interface of the WebGPU API represents an encoder that collects a sequence of GPU commands to be issued to the GPU.
+ * Available only in secure contexts.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder)
+ */
+interface GPUCommandEncoder extends GPUDebugCommandsMixin, GPUObjectBase {
+    /**
+     * The **`beginComputePass()`** method of the GPUCommandEncoder interface starts encoding a compute pass, returning a GPUComputePassEncoder that can be used to control computation.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/beginComputePass)
+     */
+    beginComputePass(descriptor?: GPUComputePassDescriptor): GPUComputePassEncoder;
+    /**
+     * The **`beginRenderPass()`** method of the GPUCommandEncoder interface starts encoding a render pass, returning a GPURenderPassEncoder that can be used to control rendering.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/beginRenderPass)
+     */
+    beginRenderPass(descriptor: GPURenderPassDescriptor): GPURenderPassEncoder;
+    /**
+     * The **`clearBuffer()`** method of the GPUCommandEncoder interface encodes a command that fills a region of a GPUBuffer with zeroes.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/clearBuffer)
+     */
+    clearBuffer(buffer: GPUBuffer, offset?: GPUSize64, size?: GPUSize64): void;
+    /**
+     * The **`copyBufferToBuffer()`** method of the GPUCommandEncoder interface encodes a command that copies data from one GPUBuffer to another.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyBufferToBuffer)
+     */
+    copyBufferToBuffer(source: GPUBuffer, destination: GPUBuffer, size?: GPUSize64): void;
+    copyBufferToBuffer(source: GPUBuffer, sourceOffset: GPUSize64, destination: GPUBuffer, destinationOffset: GPUSize64, size?: GPUSize64): void;
+    /**
+     * The **`copyBufferToTexture()`** method of the GPUCommandEncoder interface encodes a command that copies data from a GPUBuffer to a GPUTexture.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyBufferToTexture)
+     */
+    copyBufferToTexture(source: GPUTexelCopyBufferInfo, destination: GPUTexelCopyTextureInfo, copySize: GPUExtent3D): void;
+    /**
+     * The **`copyTextureToBuffer()`** method of the GPUCommandEncoder interface encodes a command that copies data from a GPUTexture to a GPUBuffer.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyTextureToBuffer)
+     */
+    copyTextureToBuffer(source: GPUTexelCopyTextureInfo, destination: GPUTexelCopyBufferInfo, copySize: GPUExtent3D): void;
+    /**
+     * The **`copyTextureToTexture()`** method of the GPUCommandEncoder interface encodes a command that copies data from one GPUTexture to another.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyTextureToTexture)
+     */
+    copyTextureToTexture(source: GPUTexelCopyTextureInfo, destination: GPUTexelCopyTextureInfo, copySize: GPUExtent3D): void;
+    /**
+     * The **`finish()`** method of the GPUCommandEncoder interface completes recording of the command sequence encoded on this GPUCommandEncoder, returning a corresponding GPUCommandBuffer.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/finish)
+     */
+    finish(descriptor?: GPUCommandBufferDescriptor): GPUCommandBuffer;
+    /**
+     * The **`resolveQuerySet()`** method of the GPUCommandEncoder interface encodes a command that resolves a GPUQuerySet, copying the results into a specified GPUBuffer.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/resolveQuerySet)
+     */
+    resolveQuerySet(querySet: GPUQuerySet, firstQuery: GPUSize32, queryCount: GPUSize32, destination: GPUBuffer, destinationOffset: GPUSize64): void;
+}
+
+declare var GPUCommandEncoder: {
+    prototype: GPUCommandEncoder;
+    new(): GPUCommandEncoder;
 };
 
 /**
@@ -5199,6 +5440,90 @@ interface GPUDebugCommandsMixin {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/pushDebugGroup) */
     pushDebugGroup(groupLabel: string): void;
 }
+
+interface GPUDeviceEventMap {
+    "uncapturederror": GPUUncapturedErrorEvent;
+}
+
+/**
+ * The **`GPUDevice`** interface of the WebGPU API represents a logical GPU device. This is the main interface through which the majority of WebGPU functionality is accessed.
+ * Available only in secure contexts.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice)
+ */
+interface GPUDevice extends EventTarget, GPUObjectBase {
+    /**
+     * The **`adapterInfo`** read-only property of the GPUDevice interface returns a GPUAdapterInfo object containing identifying information about the device's originating adapter.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/adapterInfo)
+     */
+    readonly adapterInfo: GPUAdapterInfo;
+    /**
+     * The **`features`** read-only property of the GPUDevice interface returns a GPUSupportedFeatures object that describes additional functionality supported by the device. Only features requested during the creation of the device (i.e., when GPUAdapter.requestDevice() is called) are included.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/features)
+     */
+    readonly features: GPUSupportedFeatures;
+    /**
+     * The **`limits`** read-only property of the GPUDevice interface returns a GPUSupportedLimits object that describes the limits supported by the device. All limit values will be included, and the limits requested during the creation of the device (i.e., when GPUAdapter.requestDevice() is called) will be reflected in those values.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/limits)
+     */
+    readonly limits: GPUSupportedLimits;
+    /**
+     * The **`lost`** read-only property of the GPUDevice interface contains a Promise that remains pending throughout the device's lifetime and resolves with a GPUDeviceLostInfo object when the device is lost.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/lost)
+     */
+    readonly lost: Promise<GPUDeviceLostInfo>;
+    /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/uncapturederror_event) */
+    onuncapturederror: ((this: GPUDevice, ev: GPUUncapturedErrorEvent) => any) | null;
+    /**
+     * The **`queue`** read-only property of the GPUDevice interface returns the primary GPUQueue for the device.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/queue)
+     */
+    readonly queue: GPUQueue;
+    /**
+     * The **`createBindGroup()`** method of the GPUDevice interface creates a GPUBindGroup based on a GPUBindGroupLayout that defines a set of resources to be bound together in a group and how those resources are used in shader stages.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createBindGroup)
+     */
+    createBindGroup(descriptor: GPUBindGroupDescriptor): GPUBindGroup;
+    /**
+     * The **`destroy()`** method of the GPUDevice interface destroys the device, preventing further operations on it.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/destroy)
+     */
+    destroy(): void;
+    /**
+     * The **`importExternalTexture()`** method of the GPUDevice interface takes an HTMLVideoElement or a VideoFrame object as an input and returns a GPUExternalTexture wrapper object containing a snapshot of the video that can be used as a frame in GPU rendering operations.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/importExternalTexture)
+     */
+    importExternalTexture(descriptor: GPUExternalTextureDescriptor): GPUExternalTexture;
+    /**
+     * The **`popErrorScope()`** method of the GPUDevice interface pops an existing GPU error scope from the error scope stack (originally pushed using GPUDevice.pushErrorScope()) and returns a Promise that resolves to an object describing the first error captured in the scope, or null if no error occurred.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/popErrorScope)
+     */
+    popErrorScope(): Promise<GPUError | null>;
+    /**
+     * The **`pushErrorScope()`** method of the GPUDevice interface pushes a new GPU error scope onto the device's error scope stack, allowing you to capture errors of a particular type.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/pushErrorScope)
+     */
+    pushErrorScope(filter: GPUErrorFilter): void;
+    addEventListener<K extends keyof GPUDeviceEventMap>(type: K, listener: (this: GPUDevice, ev: GPUDeviceEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
+    addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
+    removeEventListener<K extends keyof GPUDeviceEventMap>(type: K, listener: (this: GPUDevice, ev: GPUDeviceEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
+    removeEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | EventListenerOptions): void;
+}
+
+declare var GPUDevice: {
+    prototype: GPUDevice;
+    new(): GPUDevice;
+};
 
 /**
  * The **`GPUDeviceLostInfo`** interface of the WebGPU API represents the object returned when the GPUDevice.lost Promise resolves. This provides information as to why a device has been lost.
@@ -5362,6 +5687,50 @@ interface GPUQuerySet extends GPUObjectBase {
 declare var GPUQuerySet: {
     prototype: GPUQuerySet;
     new(): GPUQuerySet;
+};
+
+/**
+ * The **`GPUQueue`** interface of the WebGPU API controls execution of encoded commands on the GPU.
+ * Available only in secure contexts.
+ *
+ * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue)
+ */
+interface GPUQueue extends GPUObjectBase {
+    /**
+     * The **`copyExternalImageToTexture()`** method of the GPUQueue interface copies a snapshot taken from a source image, video, or canvas into a given GPUTexture.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/copyExternalImageToTexture)
+     */
+    copyExternalImageToTexture(source: GPUCopyExternalImageSourceInfo, destination: GPUCopyExternalImageDestInfo, copySize: GPUExtent3D): void;
+    /**
+     * The **`onSubmittedWorkDone()`** method of the GPUQueue interface returns a Promise that resolves when all the work submitted to the GPU via this GPUQueue at the point the method is called has been processed.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/onSubmittedWorkDone)
+     */
+    onSubmittedWorkDone(): Promise<void>;
+    /**
+     * The **`submit()`** method of the GPUQueue interface schedules the execution of command buffers represented by one or more GPUCommandBuffer objects by the GPU.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/submit)
+     */
+    submit(commandBuffers: GPUCommandBuffer[]): void;
+    /**
+     * The **`writeBuffer()`** method of the GPUQueue interface writes a provided data source into a given GPUBuffer.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/writeBuffer)
+     */
+    writeBuffer(buffer: GPUBuffer, bufferOffset: GPUSize64, data: AllowSharedBufferSource, dataOffset?: GPUSize64, size?: GPUSize64): void;
+    /**
+     * The **`writeTexture()`** method of the GPUQueue interface writes a provided data source into a given GPUTexture.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/writeTexture)
+     */
+    writeTexture(destination: GPUTexelCopyTextureInfo, data: AllowSharedBufferSource, dataLayout: GPUTexelCopyBufferLayout, size: GPUExtent3D): void;
+}
+
+declare var GPUQueue: {
+    prototype: GPUQueue;
+    new(): GPUQueue;
 };
 
 /**
@@ -14284,13 +14653,18 @@ type GLsizei = number;
 type GLsizeiptr = number;
 type GLuint = number;
 type GLuint64 = number;
+type GPUBindingResource = GPUSampler | GPUTexture | GPUTextureView | GPUBuffer | GPUBufferBinding | GPUExternalTexture;
 type GPUBufferDynamicOffset = number;
 type GPUColor = number[] | GPUColorDict;
+type GPUCopyExternalImageSource = ImageBitmap | ImageData | VideoFrame | OffscreenCanvas;
+type GPUExtent3D = GPUIntegerCoordinate[] | GPUExtent3DDict;
 type GPUFlagsConstant = number;
 type GPUIndex32 = number;
 type GPUIntegerCoordinate = number;
 type GPUIntegerCoordinateOut = number;
 type GPUMapModeFlags = number;
+type GPUOrigin2D = GPUIntegerCoordinate[] | GPUOrigin2DDict;
+type GPUOrigin3D = GPUIntegerCoordinate[] | GPUOrigin3DDict;
 type GPUSignedOffset32 = number;
 type GPUSize32 = number;
 type GPUSize32Out = number;
@@ -14307,7 +14681,7 @@ type ImageDataArray = Uint8ClampedArray<ArrayBuffer>;
 type Int32List = Int32Array<ArrayBufferLike> | GLint[];
 type MessageEventSource = MessagePort | ServiceWorker;
 type NamedCurve = string;
-type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext;
+type OffscreenRenderingContext = OffscreenCanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext | WebGL2RenderingContext | GPUCanvasContext;
 type OnErrorEventHandler = OnErrorEventHandlerNonNull | null;
 type PerformanceEntryList = PerformanceEntry[];
 type PushMessageDataInit = BufferSource | string;
@@ -14356,11 +14730,16 @@ type FontFaceLoadStatus = "error" | "loaded" | "loading" | "unloaded";
 type FontFaceSetLoadStatus = "loaded" | "loading";
 type FrameType = "auxiliary" | "nested" | "none" | "top-level";
 type GPUBufferMapState = "mapped" | "pending" | "unmapped";
+type GPUCanvasAlphaMode = "opaque" | "premultiplied";
+type GPUCanvasToneMappingMode = "extended" | "standard";
 type GPUCompilationMessageType = "error" | "info" | "warning";
 type GPUDeviceLostReason = "destroyed" | "unknown";
+type GPUErrorFilter = "internal" | "out-of-memory" | "validation";
 type GPUIndexFormat = "uint16" | "uint32";
+type GPULoadOp = "clear" | "load";
 type GPUPipelineErrorReason = "internal" | "validation";
 type GPUQueryType = "occlusion" | "timestamp";
+type GPUStoreOp = "discard" | "store";
 type GPUTextureAspect = "all" | "depth-only" | "stencil-only";
 type GPUTextureDimension = "1d" | "2d" | "3d";
 type GPUTextureFormat = "astc-10x10-unorm" | "astc-10x10-unorm-srgb" | "astc-10x5-unorm" | "astc-10x5-unorm-srgb" | "astc-10x6-unorm" | "astc-10x6-unorm-srgb" | "astc-10x8-unorm" | "astc-10x8-unorm-srgb" | "astc-12x10-unorm" | "astc-12x10-unorm-srgb" | "astc-12x12-unorm" | "astc-12x12-unorm-srgb" | "astc-4x4-unorm" | "astc-4x4-unorm-srgb" | "astc-5x4-unorm" | "astc-5x4-unorm-srgb" | "astc-5x5-unorm" | "astc-5x5-unorm-srgb" | "astc-6x5-unorm" | "astc-6x5-unorm-srgb" | "astc-6x6-unorm" | "astc-6x6-unorm-srgb" | "astc-8x5-unorm" | "astc-8x5-unorm-srgb" | "astc-8x6-unorm" | "astc-8x6-unorm-srgb" | "astc-8x8-unorm" | "astc-8x8-unorm-srgb" | "bc1-rgba-unorm" | "bc1-rgba-unorm-srgb" | "bc2-rgba-unorm" | "bc2-rgba-unorm-srgb" | "bc3-rgba-unorm" | "bc3-rgba-unorm-srgb" | "bc4-r-snorm" | "bc4-r-unorm" | "bc5-rg-snorm" | "bc5-rg-unorm" | "bc6h-rgb-float" | "bc6h-rgb-ufloat" | "bc7-rgba-unorm" | "bc7-rgba-unorm-srgb" | "bgra8unorm" | "bgra8unorm-srgb" | "depth16unorm" | "depth24plus" | "depth24plus-stencil8" | "depth32float" | "depth32float-stencil8" | "eac-r11snorm" | "eac-r11unorm" | "eac-rg11snorm" | "eac-rg11unorm" | "etc2-rgb8a1unorm" | "etc2-rgb8a1unorm-srgb" | "etc2-rgb8unorm" | "etc2-rgb8unorm-srgb" | "etc2-rgba8unorm" | "etc2-rgba8unorm-srgb" | "r16float" | "r16sint" | "r16snorm" | "r16uint" | "r16unorm" | "r32float" | "r32sint" | "r32uint" | "r8sint" | "r8snorm" | "r8uint" | "r8unorm" | "rg11b10ufloat" | "rg16float" | "rg16sint" | "rg16snorm" | "rg16uint" | "rg16unorm" | "rg32float" | "rg32sint" | "rg32uint" | "rg8sint" | "rg8snorm" | "rg8uint" | "rg8unorm" | "rgb10a2uint" | "rgb10a2unorm" | "rgb9e5ufloat" | "rgba16float" | "rgba16sint" | "rgba16snorm" | "rgba16uint" | "rgba16unorm" | "rgba32float" | "rgba32sint" | "rgba32uint" | "rgba8sint" | "rgba8snorm" | "rgba8uint" | "rgba8unorm" | "rgba8unorm-srgb" | "stencil8";
@@ -14509,6 +14888,48 @@ interface FormData {
 interface GPUBindingCommandsMixin {
     /** [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUComputePassEncoder/setBindGroup) */
     setBindGroup(index: GPUIndex32, bindGroup: GPUBindGroup | null, dynamicOffsets?: Iterable<GPUBufferDynamicOffset>): void;
+}
+
+interface GPUCommandEncoder {
+    /**
+     * The **`copyBufferToTexture()`** method of the GPUCommandEncoder interface encodes a command that copies data from a GPUBuffer to a GPUTexture.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyBufferToTexture)
+     */
+    copyBufferToTexture(source: GPUTexelCopyBufferInfo, destination: GPUTexelCopyTextureInfo, copySize: Iterable<GPUIntegerCoordinate>): void;
+    /**
+     * The **`copyTextureToBuffer()`** method of the GPUCommandEncoder interface encodes a command that copies data from a GPUTexture to a GPUBuffer.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyTextureToBuffer)
+     */
+    copyTextureToBuffer(source: GPUTexelCopyTextureInfo, destination: GPUTexelCopyBufferInfo, copySize: Iterable<GPUIntegerCoordinate>): void;
+    /**
+     * The **`copyTextureToTexture()`** method of the GPUCommandEncoder interface encodes a command that copies data from one GPUTexture to another.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUCommandEncoder/copyTextureToTexture)
+     */
+    copyTextureToTexture(source: GPUTexelCopyTextureInfo, destination: GPUTexelCopyTextureInfo, copySize: Iterable<GPUIntegerCoordinate>): void;
+}
+
+interface GPUQueue {
+    /**
+     * The **`copyExternalImageToTexture()`** method of the GPUQueue interface copies a snapshot taken from a source image, video, or canvas into a given GPUTexture.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/copyExternalImageToTexture)
+     */
+    copyExternalImageToTexture(source: GPUCopyExternalImageSourceInfo, destination: GPUCopyExternalImageDestInfo, copySize: Iterable<GPUIntegerCoordinate>): void;
+    /**
+     * The **`submit()`** method of the GPUQueue interface schedules the execution of command buffers represented by one or more GPUCommandBuffer objects by the GPU.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/submit)
+     */
+    submit(commandBuffers: Iterable<GPUCommandBuffer>): void;
+    /**
+     * The **`writeTexture()`** method of the GPUQueue interface writes a provided data source into a given GPUTexture.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUQueue/writeTexture)
+     */
+    writeTexture(destination: GPUTexelCopyTextureInfo, data: AllowSharedBufferSource, dataLayout: GPUTexelCopyBufferLayout, size: Iterable<GPUIntegerCoordinate>): void;
 }
 
 interface GPURenderPassEncoder {
