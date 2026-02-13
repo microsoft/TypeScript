@@ -21027,6 +21027,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             // that perpetually generate new type identities, so we stop the recursion here by yielding the error type.
             tracing?.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
             error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+            // set this to a max value to "propagate" the error through any further instantiations within the currently checked node
+            // this can skip a bunch of redundant work in the case of hitting the depth limit
+            instantiationCount = 5000000;
             return errorType;
         }
         const index = findActiveMapper(mapper);

@@ -1,0 +1,21 @@
+recursiveConditionalCrash5.ts(13,6): error TS2589: Type instantiation is excessively deep and possibly infinite.
+
+
+==== recursiveConditionalCrash5.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/62966
+    
+    type Prepend<Elm, T extends unknown[]> = T extends unknown
+      ? ((arg: Elm, ...rest: T) => void) extends (...args: infer T2) => void
+        ? T2
+        : never
+      : never;
+    
+    type ExactExtract<T, U> = (T extends U ? U extends T ? T : never : never) & string;
+    
+    type Conv<T, U = T> = {
+      0: [T];
+      1: Prepend<T, Conv<ExactExtract<U, T>>>;
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2589: Type instantiation is excessively deep and possibly infinite.
+    }[U extends T ? 0 : 1];
+    

@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/recursiveConditionalCrash5.ts] ////
+
+=== recursiveConditionalCrash5.ts ===
+// https://github.com/microsoft/TypeScript/issues/62966
+
+type Prepend<Elm, T extends unknown[]> = T extends unknown
+>Prepend : Symbol(Prepend, Decl(recursiveConditionalCrash5.ts, 0, 0))
+>Elm : Symbol(Elm, Decl(recursiveConditionalCrash5.ts, 2, 13))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 2, 17))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 2, 17))
+
+  ? ((arg: Elm, ...rest: T) => void) extends (...args: infer T2) => void
+>arg : Symbol(arg, Decl(recursiveConditionalCrash5.ts, 3, 6))
+>Elm : Symbol(Elm, Decl(recursiveConditionalCrash5.ts, 2, 13))
+>rest : Symbol(rest, Decl(recursiveConditionalCrash5.ts, 3, 15))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 2, 17))
+>args : Symbol(args, Decl(recursiveConditionalCrash5.ts, 3, 46))
+>T2 : Symbol(T2, Decl(recursiveConditionalCrash5.ts, 3, 60))
+
+    ? T2
+>T2 : Symbol(T2, Decl(recursiveConditionalCrash5.ts, 3, 60))
+
+    : never
+  : never;
+
+type ExactExtract<T, U> = (T extends U ? U extends T ? T : never : never) & string;
+>ExactExtract : Symbol(ExactExtract, Decl(recursiveConditionalCrash5.ts, 6, 10))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 8, 18))
+>U : Symbol(U, Decl(recursiveConditionalCrash5.ts, 8, 20))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 8, 18))
+>U : Symbol(U, Decl(recursiveConditionalCrash5.ts, 8, 20))
+>U : Symbol(U, Decl(recursiveConditionalCrash5.ts, 8, 20))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 8, 18))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 8, 18))
+
+type Conv<T, U = T> = {
+>Conv : Symbol(Conv, Decl(recursiveConditionalCrash5.ts, 8, 83))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 10, 10))
+>U : Symbol(U, Decl(recursiveConditionalCrash5.ts, 10, 12))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 10, 10))
+
+  0: [T];
+>0 : Symbol(0, Decl(recursiveConditionalCrash5.ts, 10, 23))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 10, 10))
+
+  1: Prepend<T, Conv<ExactExtract<U, T>>>;
+>1 : Symbol(1, Decl(recursiveConditionalCrash5.ts, 11, 9))
+>Prepend : Symbol(Prepend, Decl(recursiveConditionalCrash5.ts, 0, 0))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 10, 10))
+>Conv : Symbol(Conv, Decl(recursiveConditionalCrash5.ts, 8, 83))
+>ExactExtract : Symbol(ExactExtract, Decl(recursiveConditionalCrash5.ts, 6, 10))
+>U : Symbol(U, Decl(recursiveConditionalCrash5.ts, 10, 12))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 10, 10))
+
+}[U extends T ? 0 : 1];
+>U : Symbol(U, Decl(recursiveConditionalCrash5.ts, 10, 12))
+>T : Symbol(T, Decl(recursiveConditionalCrash5.ts, 10, 10))
+

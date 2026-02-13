@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/recursiveConditionalCrash5.ts] ////
+
+=== Performance Stats ===
+Instantiation count: 5,000
+
+=== recursiveConditionalCrash5.ts ===
+// https://github.com/microsoft/TypeScript/issues/62966
+
+type Prepend<Elm, T extends unknown[]> = T extends unknown
+>Prepend : Prepend<Elm, T>
+>        : ^^^^^^^^^^^^^^^
+
+  ? ((arg: Elm, ...rest: T) => void) extends (...args: infer T2) => void
+>arg : Elm
+>    : ^^^
+>rest : T
+>     : ^
+>args : T2
+>     : ^^
+
+    ? T2
+    : never
+  : never;
+
+type ExactExtract<T, U> = (T extends U ? U extends T ? T : never : never) & string;
+>ExactExtract : ExactExtract<T, U>
+>             : ^^^^^^^^^^^^^^^^^^
+
+type Conv<T, U = T> = {
+>Conv : Conv<T, U>
+>     : ^^^^^^^^^^
+
+  0: [T];
+>0 : [T]
+>  : ^^^
+
+  1: Prepend<T, Conv<ExactExtract<U, T>>>;
+>1 : Prepend<T, Conv<ExactExtract<U, T>, ExactExtract<U, T>>>
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+}[U extends T ? 0 : 1];
+
