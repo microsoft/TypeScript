@@ -166,6 +166,11 @@ func organizeImportsWorker(
 
 		for _, importGroup := range grouped {
 			coalesced := coalesceImportsWorker(importGroup, comparer.moduleSpecifierComparer, specifierComparer, sourceFile, changeTracker)
+			if shouldSort {
+				slices.SortFunc(coalesced, func(a, b *ast.Statement) int {
+					return lsutil.CompareImportsOrRequireStatements(a, b, comparer.moduleSpecifierComparer)
+				})
+			}
 			newImportDecls = append(newImportDecls, coalesced...)
 		}
 	} else {
