@@ -23,7 +23,7 @@
 // === goToDefinition ===
 // === /goToDefinitionObjectLiteralProperties3.ts ===
 // type A = {
-//   foo: unknown;
+//   <|[|foo|]: unknown;|>
 // };
 // 
 // type B = {
@@ -37,5 +37,5 @@
 // function test2<T extends A>(arg: T | B) {}
 // 
 // test2({
-//   <|[|foo|]/*GOTO DEF*/: 2|>,
+//   foo/*GOTO DEF*/: 2,
 // });

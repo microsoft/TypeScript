@@ -314,7 +314,7 @@ func (c *Checker) shouldTreatPropertiesOfExternalModuleAsExports(resolvedExterna
 }
 
 func (c *Checker) GetContextualType(node *ast.Expression, contextFlags ContextFlags) *Type {
-	if contextFlags&ContextFlagsCompletions != 0 {
+	if contextFlags&ContextFlagsIgnoreNodeInferences != 0 {
 		return runWithInferenceBlockedFromSourceNode(c, node, func() *Type { return c.getContextualType(node, contextFlags) })
 	}
 	return c.getContextualType(node, contextFlags)
@@ -889,27 +889,6 @@ func (c *Checker) GetTypeParameterAtPosition(s *Signature, pos int) *Type {
 		}
 	}
 	return t
-}
-
-func (c *Checker) GetContextualDeclarationsForObjectLiteralElement(objectLiteral *ast.Node, name string) []*ast.Node {
-	var result []*ast.Node
-	if t := c.getApparentTypeOfContextualType(objectLiteral, ContextFlagsNone); t != nil {
-		for _, t := range t.Distributed() {
-			prop := c.getPropertyOfType(t, name)
-			if prop != nil {
-				for _, declaration := range prop.Declarations {
-					result = core.AppendIfUnique(result, declaration)
-				}
-			} else {
-				for _, info := range c.getApplicableIndexInfos(t, c.getStringLiteralType(name)) {
-					if info.declaration != nil {
-						result = core.AppendIfUnique(result, info.declaration)
-					}
-				}
-			}
-		}
-	}
-	return result
 }
 
 // GetContextualTypeForArrayLiteralAtPosition returns the contextual type for an element at the given position

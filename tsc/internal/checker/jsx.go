@@ -225,7 +225,7 @@ func (c *Checker) getContextualTypeForJsxAttribute(attribute *ast.Node, contextF
 }
 
 func (c *Checker) getContextualJsxElementAttributesType(node *ast.Node, contextFlags ContextFlags) *Type {
-	if ast.IsJsxOpeningElement(node) && contextFlags != ContextFlagsCompletions {
+	if ast.IsJsxOpeningElement(node) && contextFlags != ContextFlagsIgnoreNodeInferences {
 		index := c.findContextualNode(node.Parent, contextFlags == ContextFlagsNone)
 		if index >= 0 {
 			// Contextually applied type is moved from attributes up to the outer jsx attributes so when walking up from the children they get hit

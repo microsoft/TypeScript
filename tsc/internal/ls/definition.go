@@ -227,12 +227,9 @@ func getDeclarationsFromLocation(c *checker.Checker, node *ast.Node) []*ast.Node
 				symbol = resolved
 			}
 		}
-		if symbol.Flags&(ast.SymbolFlagsProperty|ast.SymbolFlagsMethod|ast.SymbolFlagsAccessor) != 0 && symbol.Parent != nil && symbol.Parent.Flags&ast.SymbolFlagsObjectLiteral != 0 {
-			if objectLiteral := core.FirstOrNil(symbol.Parent.Declarations); objectLiteral != nil {
-				if declarations := c.GetContextualDeclarationsForObjectLiteralElement(objectLiteral, symbol.Name); len(declarations) != 0 {
-					return declarations
-				}
-			}
+		objectLiteralElementDeclarations := getDeclarationsFromObjectLiteralElement(c, node)
+		if len(objectLiteralElementDeclarations) > 0 {
+			return objectLiteralElementDeclarations
 		}
 		return symbol.Declarations
 	}
@@ -250,19 +247,27 @@ func getDeclarationsFromObjectLiteralElement(c *checker.Checker, node *ast.Node)
 		return nil
 	}
 
-	// Get the contextual type of the object literal
-	objectLiteral := element.Parent
-	if objectLiteral == nil || !ast.IsObjectLiteralExpression(objectLiteral) {
+	contextualType := c.GetContextualType(element.Parent, checker.ContextFlagsNone)
+	if contextualType == nil {
 		return nil
 	}
 
-	// Get the name of the property
-	name := ast.GetTextOfPropertyName(element.Name())
-	if name == "" {
-		return nil
+	properties := c.GetPropertySymbolsFromContextualType(element, contextualType, false /*unionSymbolOk*/)
+	if core.Some(properties, func(p *ast.Symbol) bool {
+		return p.ValueDeclaration != nil && ast.IsObjectLiteralExpression(p.ValueDeclaration.Parent) && ast.IsObjectLiteralElement(p.ValueDeclaration) && p.ValueDeclaration.Name() == node
+	}) {
+		if withoutNodeInferencesType := c.GetContextualType(element.Parent, checker.ContextFlagsIgnoreNodeInferences); withoutNodeInferencesType != nil {
+			if withoutNodeInferencesProperties := c.GetPropertySymbolsFromContextualType(element, withoutNodeInferencesType, false /*unionSymbolOk*/); len(withoutNodeInferencesProperties) > 0 {
+				properties = withoutNodeInferencesProperties
+			}
+		}
 	}
 
-	return c.GetContextualDeclarationsForObjectLiteralElement(objectLiteral, name)
+	var result []*ast.Node
+	for _, prop := range properties {
+		result = append(result, prop.Declarations...)
+	}
+	return result
 }
 
 // Returns a CallLikeExpression where `node` is the target being invoked.

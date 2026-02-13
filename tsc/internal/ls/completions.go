@@ -972,7 +972,7 @@ func (l *LanguageService) getCompletionData(
 				}
 				return globalsSearchContinue, nil
 			}
-			completionsType := typeChecker.GetContextualType(objectLikeContainer, checker.ContextFlagsCompletions)
+			completionsType := typeChecker.GetContextualType(objectLikeContainer, checker.ContextFlagsIgnoreNodeInferences)
 			t := core.IfElse(completionsType != nil, completionsType, instantiatedType)
 			stringIndexType := typeChecker.GetStringIndexType(t)
 			numberIndexType := typeChecker.GetNumberIndexType(t)
@@ -1389,7 +1389,7 @@ func (l *LanguageService) getCompletionData(
 		if attrsType == nil {
 			return globalsSearchContinue, nil
 		}
-		completionsType := typeChecker.GetContextualType(jsxContainer.Attributes(), checker.ContextFlagsCompletions)
+		completionsType := typeChecker.GetContextualType(jsxContainer.Attributes(), checker.ContextFlagsIgnoreNodeInferences)
 		filteredSymbols, spreadMemberNames := filterJsxAttributes(
 			getPropertiesForObjectExpression(attrsType, completionsType, jsxContainer.Attributes(), typeChecker),
 			jsxContainer.Attributes().Properties(),
@@ -2797,7 +2797,7 @@ func getContextualTypeForConditionalExpression(conditionalExpr *ast.Node, positi
 		return typeChecker.GetContextualTypeForArgumentAtIndex(argInfo.invocation, argInfo.argumentIndex)
 	}
 	// Fall through to regular contextual type logic if not in an argument
-	contextualType := typeChecker.GetContextualType(conditionalExpr, checker.ContextFlagsCompletions)
+	contextualType := typeChecker.GetContextualType(conditionalExpr, checker.ContextFlagsIgnoreNodeInferences)
 	if contextualType != nil {
 		return contextualType
 	}
@@ -2885,7 +2885,7 @@ func getContextualType(previousToken *ast.Node, position int, file *ast.SourceFi
 		// completion at `x ===/**/`
 		return typeChecker.GetTypeAtLocation(parent.AsBinaryExpression().Left)
 	} else {
-		contextualType := typeChecker.GetContextualType(previousToken, checker.ContextFlagsCompletions)
+		contextualType := typeChecker.GetContextualType(previousToken, checker.ContextFlagsIgnoreNodeInferences)
 		if contextualType != nil {
 			return contextualType
 		}
