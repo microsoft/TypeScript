@@ -1,0 +1,47 @@
+--- old.enumMemberNameNonIdentifier.types
++++ new.enumMemberNameNonIdentifier.types
+@@= skipped -8, +8 lines =@@
+ >0 : 0
+
+     "hyphen-member" = 1,
+->"hyphen-member" : (typeof E)["hyphen-member"]
++>"hyphen-member" : typeof E["hyphen-member"]
+ >1 : 1
+
+     "123startsWithNumber" = 2,
+->"123startsWithNumber" : (typeof E)["123startsWithNumber"]
++>"123startsWithNumber" : typeof E["123startsWithNumber"]
+ >2 : 2
+
+     "has space" = 3,
+->"has space" : (typeof E)["has space"]
++>"has space" : typeof E["has space"]
+ >3 : 3
+
+     // Greek Capital Yot (U+037F) - valid identifier in ES2015+ but NOT in ES5
+@@= skipped -18, +18 lines =@@
+ }
+
+ export const a = E["hyphen-member"];
+->a : (typeof E)["hyphen-member"]
+->E["hyphen-member"] : (typeof E)["hyphen-member"]
++>a : typeof E["hyphen-member"]
++>E["hyphen-member"] : typeof E["hyphen-member"]
+ >E : typeof E
+ >"hyphen-member" : "hyphen-member"
+
+ export const b = E["123startsWithNumber"];
+->b : (typeof E)["123startsWithNumber"]
+->E["123startsWithNumber"] : (typeof E)["123startsWithNumber"]
++>b : typeof E["123startsWithNumber"]
++>E["123startsWithNumber"] : typeof E["123startsWithNumber"]
+ >E : typeof E
+ >"123startsWithNumber" : "123startsWithNumber"
+
+ export const c = E["has space"];
+->c : (typeof E)["has space"]
+->E["has space"] : (typeof E)["has space"]
++>c : typeof E["has space"]
++>E["has space"] : typeof E["has space"]
+ >E : typeof E
+ >"has space" : "has space"

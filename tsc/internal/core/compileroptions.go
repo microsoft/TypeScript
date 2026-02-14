@@ -513,9 +513,9 @@ func (newLine NewLineKind) GetNewLineCharacter() string {
 type ScriptTarget int32
 
 const (
-	ScriptTargetNone           ScriptTarget = 0
-	ScriptTargetES3            ScriptTarget = 0 // Deprecated
-	ScriptTargetES5            ScriptTarget = 1 // Deprecated
+	ScriptTargetNone ScriptTarget = 0
+	// Deprecated: Do not use outside of options parsing and validation.
+	ScriptTargetES5            ScriptTarget = 1
 	ScriptTargetES2015         ScriptTarget = 2
 	ScriptTargetES2016         ScriptTarget = 3
 	ScriptTargetES2017         ScriptTarget = 4

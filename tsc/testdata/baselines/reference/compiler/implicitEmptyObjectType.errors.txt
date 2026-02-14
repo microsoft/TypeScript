@@ -1,0 +1,16 @@
+implicitEmptyObjectType.ts(6,17): error TS2345: Argument of type '{}' is not assignable to parameter of type 'Record<string, string>'.
+  Index signature for type 'string' is missing in type '{}'.
+
+
+==== implicitEmptyObjectType.ts (1 errors) ====
+    // https://github.com/microsoft/typescript-go/issues/1563
+    
+    function f() {
+      const v: unknown = "lol";
+      const acceptsRecord = (record: Record<string, string>) => {};
+      acceptsRecord(v || {});
+                    ~~~~~~~
+!!! error TS2345: Argument of type '{}' is not assignable to parameter of type 'Record<string, string>'.
+!!! error TS2345:   Index signature for type 'string' is missing in type '{}'.
+    }
+    

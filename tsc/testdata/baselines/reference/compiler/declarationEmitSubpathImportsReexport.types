@@ -1,0 +1,33 @@
+//// [tests/cases/compiler/declarationEmitSubpathImportsReexport.ts] ////
+
+=== /packages/a/src/re_export.ts ===
+import type { B } from "package-b";
+>B : B
+
+declare function foo(): Promise<B>
+>foo : () => Promise<B>
+
+export const re = { foo };
+>re : { foo: () => Promise<B>; }
+>{ foo } : { foo: () => Promise<B>; }
+>foo : () => Promise<B>
+
+=== /packages/a/src/index.ts ===
+import { re } from "#re_export";
+>re : { foo: () => Promise<import("package-b").B>; }
+
+const { foo } = re;
+>foo : () => Promise<import("package-b").B>
+>re : { foo: () => Promise<import("package-b").B>; }
+
+export { foo };
+>foo : () => Promise<import("package-b").B>
+
+
+
+=== /packages/b/index.d.ts ===
+export interface B {
+	b: "b";
+>b : "b"
+}
+

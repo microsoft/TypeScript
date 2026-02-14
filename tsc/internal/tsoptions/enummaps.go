@@ -152,7 +152,6 @@ var moduleResolutionOptionMap = collections.NewOrderedMapFromList([]collections.
 })
 
 var targetOptionMap = collections.NewOrderedMapFromList([]collections.MapEntry[string, any]{
-	{Key: "es3", Value: core.ScriptTargetES3},
 	{Key: "es5", Value: core.ScriptTargetES5},
 	{Key: "es6", Value: core.ScriptTargetES2015},
 	{Key: "es2015", Value: core.ScriptTargetES2015},

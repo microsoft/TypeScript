@@ -1,0 +1,50 @@
+//// [tests/cases/compiler/enumMemberNameNonIdentifier.ts] ////
+
+=== enumMemberNameNonIdentifier.ts ===
+export const enum E {
+>E : Symbol(E, Decl(enumMemberNameNonIdentifier.ts, 0, 0))
+
+    regular = 0,
+>regular : Symbol(E.regular, Decl(enumMemberNameNonIdentifier.ts, 0, 21))
+
+    "hyphen-member" = 1,
+>"hyphen-member" : Symbol(E["hyphen-member"], Decl(enumMemberNameNonIdentifier.ts, 1, 16))
+
+    "123startsWithNumber" = 2,
+>"123startsWithNumber" : Symbol(E["123startsWithNumber"], Decl(enumMemberNameNonIdentifier.ts, 2, 24))
+
+    "has space" = 3,
+>"has space" : Symbol(E["has space"], Decl(enumMemberNameNonIdentifier.ts, 3, 30))
+
+    // Greek Capital Yot (U+037F) - valid identifier in ES2015+ but NOT in ES5
+    Ϳ = 4,
+>Ϳ : Symbol(E.Ϳ, Decl(enumMemberNameNonIdentifier.ts, 4, 20))
+}
+
+export const a = E["hyphen-member"];
+>a : Symbol(a, Decl(enumMemberNameNonIdentifier.ts, 9, 12))
+>E : Symbol(E, Decl(enumMemberNameNonIdentifier.ts, 0, 0))
+>"hyphen-member" : Symbol(E["hyphen-member"], Decl(enumMemberNameNonIdentifier.ts, 1, 16))
+
+export const b = E["123startsWithNumber"];
+>b : Symbol(b, Decl(enumMemberNameNonIdentifier.ts, 10, 12))
+>E : Symbol(E, Decl(enumMemberNameNonIdentifier.ts, 0, 0))
+>"123startsWithNumber" : Symbol(E["123startsWithNumber"], Decl(enumMemberNameNonIdentifier.ts, 2, 24))
+
+export const c = E["has space"];
+>c : Symbol(c, Decl(enumMemberNameNonIdentifier.ts, 11, 12))
+>E : Symbol(E, Decl(enumMemberNameNonIdentifier.ts, 0, 0))
+>"has space" : Symbol(E["has space"], Decl(enumMemberNameNonIdentifier.ts, 3, 30))
+
+export const d = E.regular;
+>d : Symbol(d, Decl(enumMemberNameNonIdentifier.ts, 12, 12))
+>E.regular : Symbol(E.regular, Decl(enumMemberNameNonIdentifier.ts, 0, 21))
+>E : Symbol(E, Decl(enumMemberNameNonIdentifier.ts, 0, 0))
+>regular : Symbol(E.regular, Decl(enumMemberNameNonIdentifier.ts, 0, 21))
+
+export const e = E.Ϳ;
+>e : Symbol(e, Decl(enumMemberNameNonIdentifier.ts, 13, 12))
+>E.Ϳ : Symbol(E.Ϳ, Decl(enumMemberNameNonIdentifier.ts, 4, 20))
+>E : Symbol(E, Decl(enumMemberNameNonIdentifier.ts, 0, 0))
+>Ϳ : Symbol(E.Ϳ, Decl(enumMemberNameNonIdentifier.ts, 4, 20))
+

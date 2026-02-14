@@ -1,0 +1,14 @@
+typedefModuleExportsIndirect2.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+
+
+==== typedefModuleExportsIndirect2.js (1 errors) ====
+    /** @typedef {{ a: 1, m: 1 }} C */
+    const f = function() {};
+    module.exports = f;
+    ~~~~~~~~~~~~~~~~~~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+==== use.js (0 errors) ====
+    /** @typedef {import('./typedefModuleExportsIndirect2').C} C */
+    /** @type {C} */
+    var c
+    

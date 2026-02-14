@@ -43,7 +43,7 @@ export { C } from "./c";
 }
 
 tsgo --b --verbose
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
@@ -51,6 +51,14 @@ Output::
 [[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output file 'tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
+
+[96mtsconfig.json[0m:[93m4[0m:[93m19[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m4[0m         "target": "es5",
+[7m [0m [91m                  ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:4[0m
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
@@ -107,10 +115,11 @@ export { C } from "./c";
 //// [/home/src/workspaces/project/lib/index.d.ts.map] *new* 
 {"version":3,"file":"index.d.ts","sourceRoot":"","sources":["../src/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AACxB,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC;AACxB,OAAO,EAAE,CAAC,EAAE,MAAM,KAAK,CAAC"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./src/c.ts","./src/b.ts","./src/a.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e8d66a87a10151e3d8c84e04e3d962c9-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}","signature":"57c1fb7dd5816e999a47a54abfd60004-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n","impliedNodeFormat":1},{"version":"635cd13fa5127837a0f61aa9d436e764-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}","signature":"2c6af9ce6f102ba192048b07d4b44ebf-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n","impliedNodeFormat":1},{"version":"0c094e56b7619bf6cde26939daf7a796-import { B } from \"./b\";\n\nexport interface A {\n    b: B;\n}","signature":"2904de9e1ae84b014654eae6ae9d57b8-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n","impliedNodeFormat":1},{"version":"9752277022f460184d673fd343fe2c3f-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";","signature":"c689f6bb5a7ac5a812528f5b6ccb6872-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n","impliedNodeFormat":1}],"fileIdsList":[[3],[2],[4],[2,3,4]],"options":{"alwaysStrict":true,"composite":true,"emitDeclarationOnly":true,"declaration":true,"declarationMap":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","strict":true,"sourceMap":true,"target":1},"referencedMap":[[4,1],[3,2],[2,3],[5,4]],"latestChangedDtsFile":"./lib/index.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[[2,5]],"fileNames":["lib.d.ts","./src/c.ts","./src/b.ts","./src/a.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e8d66a87a10151e3d8c84e04e3d962c9-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}","signature":"57c1fb7dd5816e999a47a54abfd60004-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n","impliedNodeFormat":1},{"version":"635cd13fa5127837a0f61aa9d436e764-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}","signature":"2c6af9ce6f102ba192048b07d4b44ebf-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n","impliedNodeFormat":1},{"version":"0c094e56b7619bf6cde26939daf7a796-import { B } from \"./b\";\n\nexport interface A {\n    b: B;\n}","signature":"2904de9e1ae84b014654eae6ae9d57b8-import { B } from \"./b\";\nexport interface A {\n    b: B;\n}\n","impliedNodeFormat":1},{"version":"9752277022f460184d673fd343fe2c3f-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";","signature":"c689f6bb5a7ac5a812528f5b6ccb6872-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n","impliedNodeFormat":1}],"fileIdsList":[[3],[2],[4],[2,3,4]],"options":{"alwaysStrict":true,"composite":true,"emitDeclarationOnly":true,"declaration":true,"declarationMap":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","strict":true,"sourceMap":true,"target":1},"referencedMap":[[4,1],[3,2],[2,3],[5,4]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./lib/index.d.ts"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -236,17 +245,24 @@ export { C } from "./c";
       "./src/a.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    "lib.d.ts",
+    "./src/c.ts",
+    "./src/b.ts",
+    "./src/a.ts",
+    "./src/index.ts"
+  ],
   "latestChangedDtsFile": "./lib/index.d.ts",
-  "size": 2277
+  "size": 2332
 }
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
-*refresh*    /home/src/workspaces/project/src/c.ts
-*refresh*    /home/src/workspaces/project/src/b.ts
-*refresh*    /home/src/workspaces/project/src/a.ts
-*refresh*    /home/src/workspaces/project/src/index.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/workspaces/project/src/c.ts
+*not cached* /home/src/workspaces/project/src/b.ts
+*not cached* /home/src/workspaces/project/src/a.ts
+*not cached* /home/src/workspaces/project/src/index.ts
 Signatures::
 (stored at emit) /home/src/workspaces/project/src/c.ts
 (stored at emit) /home/src/workspaces/project/src/b.ts
@@ -263,14 +279,22 @@ export interface A {
 }
 
 tsgo --b --verbose
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because output 'tsconfig.tsbuildinfo' is older than input 'src/a.ts'
+[[90mHH:MM:SS AM[0m] Project 'tsconfig.json' is out of date because buildinfo file 'tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
 [[90mHH:MM:SS AM[0m] Building project 'tsconfig.json'...
+
+[96mtsconfig.json[0m:[93m4[0m:[93m19[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m4[0m         "target": "es5",
+[7m [0m [91m                  ~~~~~[0m
+
+
+Found 1 error in tsconfig.json[90m:4[0m
 
 //// [/home/src/workspaces/project/lib/a.d.ts] *modified* 
 import { B } from "./b";
@@ -285,10 +309,11 @@ export interface A {
 //// [/home/src/workspaces/project/lib/c.d.ts.map] *rewrite with same content*
 //// [/home/src/workspaces/project/lib/index.d.ts.map] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,5]],"fileNames":["lib.d.ts","./src/c.ts","./src/b.ts","./src/a.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e8d66a87a10151e3d8c84e04e3d962c9-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}","signature":"57c1fb7dd5816e999a47a54abfd60004-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n","impliedNodeFormat":1},{"version":"635cd13fa5127837a0f61aa9d436e764-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}","signature":"2c6af9ce6f102ba192048b07d4b44ebf-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n","impliedNodeFormat":1},{"version":"078c59719381373c2fc227a7b5ee0f0b-import { B } from \"./b\";\n\nexport interface A {\n    b: B; foo: any;\n}","signature":"ddf8205c0552214926ecdcce4664e925-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n","impliedNodeFormat":1},{"version":"9752277022f460184d673fd343fe2c3f-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";","signature":"c689f6bb5a7ac5a812528f5b6ccb6872-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n","impliedNodeFormat":1}],"fileIdsList":[[3],[2],[4],[2,3,4]],"options":{"alwaysStrict":true,"composite":true,"emitDeclarationOnly":true,"declaration":true,"declarationMap":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","strict":true,"sourceMap":true,"target":1},"referencedMap":[[4,1],[3,2],[2,3],[5,4]],"latestChangedDtsFile":"./lib/a.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[[2,5]],"fileNames":["lib.d.ts","./src/c.ts","./src/b.ts","./src/a.ts","./src/index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"e8d66a87a10151e3d8c84e04e3d962c9-import { A } from \"./a\";\n\nexport interface C {\n    a: A;\n}","signature":"57c1fb7dd5816e999a47a54abfd60004-import { A } from \"./a\";\nexport interface C {\n    a: A;\n}\n","impliedNodeFormat":1},{"version":"635cd13fa5127837a0f61aa9d436e764-import { C } from \"./c\";\n\nexport interface B {\n    b: C;\n}","signature":"2c6af9ce6f102ba192048b07d4b44ebf-import { C } from \"./c\";\nexport interface B {\n    b: C;\n}\n","impliedNodeFormat":1},{"version":"078c59719381373c2fc227a7b5ee0f0b-import { B } from \"./b\";\n\nexport interface A {\n    b: B; foo: any;\n}","signature":"ddf8205c0552214926ecdcce4664e925-import { B } from \"./b\";\nexport interface A {\n    b: B;\n    foo: any;\n}\n","impliedNodeFormat":1},{"version":"9752277022f460184d673fd343fe2c3f-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";","signature":"c689f6bb5a7ac5a812528f5b6ccb6872-export { A } from \"./a\";\nexport { B } from \"./b\";\nexport { C } from \"./c\";\n","impliedNodeFormat":1}],"fileIdsList":[[3],[2],[4],[2,3,4]],"options":{"alwaysStrict":true,"composite":true,"emitDeclarationOnly":true,"declaration":true,"declarationMap":true,"esModuleInterop":true,"module":1,"outDir":"./lib","rootDir":"./src","strict":true,"sourceMap":true,"target":1},"referencedMap":[[4,1],[3,2],[2,3],[5,4]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./lib/a.d.ts"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -414,16 +439,24 @@ export interface A {
       "./src/a.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    "lib.d.ts",
+    "./src/c.ts",
+    "./src/b.ts",
+    "./src/a.ts",
+    "./src/index.ts"
+  ],
   "latestChangedDtsFile": "./lib/a.d.ts",
-  "size": 2298
+  "size": 2353
 }
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/workspaces/project/src/c.ts
-*refresh*    /home/src/workspaces/project/src/b.ts
-*refresh*    /home/src/workspaces/project/src/a.ts
-*refresh*    /home/src/workspaces/project/src/index.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/workspaces/project/src/c.ts
+*not cached* /home/src/workspaces/project/src/b.ts
+*not cached* /home/src/workspaces/project/src/a.ts
+*not cached* /home/src/workspaces/project/src/index.ts
 Signatures::
 (computed .d.ts) /home/src/workspaces/project/src/c.ts
 (stored at emit) /home/src/workspaces/project/src/b.ts

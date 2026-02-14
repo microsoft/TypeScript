@@ -9,7 +9,6 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[ScriptTargetNone-0]
-	_ = x[ScriptTargetES3-0]
 	_ = x[ScriptTargetES5-1]
 	_ = x[ScriptTargetES2015-2]
 	_ = x[ScriptTargetES2016-3]

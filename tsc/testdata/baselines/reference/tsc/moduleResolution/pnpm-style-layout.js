@@ -111,7 +111,7 @@ export { Button, createButton } from "@component-type-checker/components";
 export const VERSION = "0.0.2";
 
 tsgo --traceResolution --explainFiles
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 ======== Resolving module '@component-type-checker/sdk' from '/home/src/projects/component-type-checker/packages/app/src/app.tsx'. ========
 Module resolution kind is not specified, using 'Bundler'.
@@ -263,6 +263,11 @@ File '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-ty
 'package.json' does not have a 'peerDependencies' field.
 Resolving real path for '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+components@0.0.1_@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts', result '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts'.
 ======== Module name '@component-type-checker/button' was successfully resolved to '/home/src/projects/component-type-checker/node_modules/.pnpm/@component-type-checker+button@0.0.2/node_modules/@component-type-checker/button/src/index.ts' with Package ID '@component-type-checker/button/src/index.ts@0.0.2'. ========
+[96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m3[0m         "target": "es5",
+[7m [0m [91m                  ~~~~~[0m
+
 ../../../../tslibs/TS/Lib/lib.es5.d.ts
    Library 'lib.es5.d.ts' specified in compilerOptions
 ../../node_modules/.pnpm/@component-type-checker+button@0.0.1/node_modules/@component-type-checker/button/src/index.ts
@@ -278,6 +283,9 @@ Resolving real path for '/home/src/projects/component-type-checker/node_modules/
    Imported via "@component-type-checker/components" from file 'src/app.tsx' with packageId '@component-type-checker/components/src/index.ts@0.0.1+@component-type-checker/button@0.0.2'
 src/app.tsx
    Matched by include pattern 'src' in 'tsconfig.json'
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 //// [/home/src/projects/component-type-checker/packages/app/dist/src/app.js] *new* 
 import { createButton } from "@component-type-checker/button";
 const button = createButton();

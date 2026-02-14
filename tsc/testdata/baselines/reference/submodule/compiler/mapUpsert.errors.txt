@@ -1,0 +1,83 @@
+mapUpsert.ts(14,5): error TS2554: Expected 2 arguments, but got 1.
+mapUpsert.ts(15,24): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+mapUpsert.ts(16,24): error TS2345: Argument of type '() => number' is not assignable to parameter of type 'number'.
+mapUpsert.ts(17,5): error TS2554: Expected 2 arguments, but got 1.
+mapUpsert.ts(18,32): error TS2345: Argument of type 'number' is not assignable to parameter of type '(key: string) => number'.
+mapUpsert.ts(19,38): error TS2322: Type 'string' is not assignable to type 'number'.
+mapUpsert.ts(20,6): error TS2554: Expected 2 arguments, but got 1.
+mapUpsert.ts(21,22): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+mapUpsert.ts(22,22): error TS2345: Argument of type '() => number' is not assignable to parameter of type 'number'.
+mapUpsert.ts(23,6): error TS2554: Expected 2 arguments, but got 1.
+mapUpsert.ts(24,30): error TS2345: Argument of type 'number' is not assignable to parameter of type '(key: object) => number'.
+mapUpsert.ts(25,36): error TS2322: Type 'string' is not assignable to type 'number'.
+mapUpsert.ts(28,6): error TS2339: Property 'getOrInsert' does not exist on type 'ReadonlyMap<string, number>'.
+mapUpsert.ts(29,6): error TS2339: Property 'getOrInsertComputed' does not exist on type 'ReadonlyMap<string, number>'.
+
+
+==== mapUpsert.ts (14 errors) ====
+    declare const map: Map<string, number>;
+    declare const mapR: ReadonlyMap<string, number>;
+    declare const mapW: WeakMap<object, number>;
+    
+    // OK
+    map.getOrInsert("key", 123);
+    map.getOrInsertComputed("key", () => 123);
+    map.getOrInsertComputed("key", (key: string) => 123);
+    mapW.getOrInsert({}, 123);
+    mapW.getOrInsertComputed({}, () => 123);
+    mapW.getOrInsertComputed({}, (key: object) => 123);
+    
+    // Errors
+    map.getOrInsert("key");
+        ~~~~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 1.
+!!! related TS6210 lib.esnext.collection.d.ts:--:--: An argument for 'defaultValue' was not provided.
+    map.getOrInsert("key", "value");
+                           ~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    map.getOrInsert("key", () => 123);
+                           ~~~~~~~~~
+!!! error TS2345: Argument of type '() => number' is not assignable to parameter of type 'number'.
+!!! related TS6212 mapUpsert.ts:16:24: Did you mean to call this expression?
+    map.getOrInsertComputed("key");
+        ~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 1.
+!!! related TS6210 lib.esnext.collection.d.ts:--:--: An argument for 'callback' was not provided.
+    map.getOrInsertComputed("key", 123);
+                                   ~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type '(key: string) => number'.
+    map.getOrInsertComputed("key", () => "value");
+                                         ~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6502 lib.esnext.collection.d.ts:--:--: The expected type comes from the return type of this signature.
+    mapW.getOrInsert({});
+         ~~~~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 1.
+!!! related TS6210 lib.esnext.collection.d.ts:--:--: An argument for 'defaultValue' was not provided.
+    mapW.getOrInsert({}, "value");
+                         ~~~~~~~
+!!! error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+    mapW.getOrInsert({}, () => 123);
+                         ~~~~~~~~~
+!!! error TS2345: Argument of type '() => number' is not assignable to parameter of type 'number'.
+!!! related TS6212 mapUpsert.ts:22:22: Did you mean to call this expression?
+    mapW.getOrInsertComputed({});
+         ~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 2 arguments, but got 1.
+!!! related TS6210 lib.esnext.collection.d.ts:--:--: An argument for 'callback' was not provided.
+    mapW.getOrInsertComputed({}, 123);
+                                 ~~~
+!!! error TS2345: Argument of type 'number' is not assignable to parameter of type '(key: object) => number'.
+    mapW.getOrInsertComputed({}, () => "value");
+                                       ~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6502 lib.esnext.collection.d.ts:--:--: The expected type comes from the return type of this signature.
+    
+    // Not present on readonly interface
+    mapR.getOrInsert("key", 123);
+         ~~~~~~~~~~~
+!!! error TS2339: Property 'getOrInsert' does not exist on type 'ReadonlyMap<string, number>'.
+    mapR.getOrInsertComputed("key", () => 123);
+         ~~~~~~~~~~~~~~~~~~~
+!!! error TS2339: Property 'getOrInsertComputed' does not exist on type 'ReadonlyMap<string, number>'.
+    

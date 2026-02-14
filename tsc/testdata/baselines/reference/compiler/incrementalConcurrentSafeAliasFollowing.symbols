@@ -1,0 +1,151 @@
+//// [tests/cases/compiler/incrementalConcurrentSafeAliasFollowing.ts] ////
+
+=== file1.ts ===
+// need an out of date but present buildinfo, chained export aliases,
+// and enough files that the same checker is used for multiple files
+// to trigger the race from typescript-go/#1470
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file1.ts, 3, 8))
+
+export type {b as c}
+>b : Symbol(b, Decl(file1.ts, 3, 8))
+>c : Symbol(c, Decl(file1.ts, 5, 13))
+
+=== file2.ts ===
+const a = 1
+>a : Symbol(a, Decl(file2.ts, 0, 5))
+
+export type {a as b}
+>a : Symbol(a, Decl(file2.ts, 0, 5))
+>b : Symbol(b, Decl(file2.ts, 2, 13))
+
+=== file0.ts ===
+import {c} from "./file1.js"
+>c : Symbol(c, Decl(file0.ts, 0, 8))
+
+export type {c as d}
+>c : Symbol(c, Decl(file0.ts, 0, 8))
+>d : Symbol(d, Decl(file0.ts, 2, 13))
+
+=== file3.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file3.ts, 0, 8))
+
+export type {b as e}
+>b : Symbol(b, Decl(file3.ts, 0, 8))
+>e : Symbol(e, Decl(file3.ts, 2, 13))
+
+=== file4.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file4.ts, 0, 8))
+
+export type {b as f}
+>b : Symbol(b, Decl(file4.ts, 0, 8))
+>f : Symbol(f, Decl(file4.ts, 2, 13))
+
+=== file5.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file5.ts, 0, 8))
+
+export type {b as g}
+>b : Symbol(b, Decl(file5.ts, 0, 8))
+>g : Symbol(g, Decl(file5.ts, 2, 13))
+
+=== file6.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file6.ts, 0, 8))
+
+export type {b as h}
+>b : Symbol(b, Decl(file6.ts, 0, 8))
+>h : Symbol(h, Decl(file6.ts, 2, 13))
+
+=== file7.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file7.ts, 0, 8))
+
+export type {b as i}
+>b : Symbol(b, Decl(file7.ts, 0, 8))
+>i : Symbol(i, Decl(file7.ts, 2, 13))
+
+=== file8.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file8.ts, 0, 8))
+
+export type {b as j}
+>b : Symbol(b, Decl(file8.ts, 0, 8))
+>j : Symbol(j, Decl(file8.ts, 2, 13))
+
+=== file9.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file9.ts, 0, 8))
+
+export type {b as k}
+>b : Symbol(b, Decl(file9.ts, 0, 8))
+>k : Symbol(k, Decl(file9.ts, 2, 13))
+
+=== file10.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file10.ts, 0, 8))
+
+export type {b as l}
+>b : Symbol(b, Decl(file10.ts, 0, 8))
+>l : Symbol(l, Decl(file10.ts, 2, 13))
+
+=== file11.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file11.ts, 0, 8))
+
+export type {b as m}
+>b : Symbol(b, Decl(file11.ts, 0, 8))
+>m : Symbol(m, Decl(file11.ts, 2, 13))
+
+=== file12.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file12.ts, 0, 8))
+
+export type {b as n}
+>b : Symbol(b, Decl(file12.ts, 0, 8))
+>n : Symbol(n, Decl(file12.ts, 2, 13))
+
+=== file13.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file13.ts, 0, 8))
+
+export type {b as o}
+>b : Symbol(b, Decl(file13.ts, 0, 8))
+>o : Symbol(o, Decl(file13.ts, 2, 13))
+
+=== file14.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file14.ts, 0, 8))
+
+export type {b as p}
+>b : Symbol(b, Decl(file14.ts, 0, 8))
+>p : Symbol(p, Decl(file14.ts, 2, 13))
+
+=== file15.ts ===
+import {b} from "./file2.js"
+>b : Symbol(b, Decl(file15.ts, 0, 8))
+
+export type {b as q}
+>b : Symbol(b, Decl(file15.ts, 0, 8))
+>q : Symbol(q, Decl(file15.ts, 2, 13))
+
+=== barrel.ts ===
+
+export * from "./file0.js"
+export * from "./file1.js"
+export * from "./file2.js"
+export * from "./file3.js"
+export * from "./file4.js"
+export * from "./file5.js"
+export * from "./file6.js"
+export * from "./file7.js"
+export * from "./file8.js"
+export * from "./file9.js"
+export * from "./file10.js"
+export * from "./file11.js"
+export * from "./file12.js"
+export * from "./file13.js"
+export * from "./file14.js"
+export * from "./file15.js"

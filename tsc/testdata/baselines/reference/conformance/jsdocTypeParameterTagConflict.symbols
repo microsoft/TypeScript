@@ -1,0 +1,91 @@
+//// [tests/cases/conformance/jsdoc/jsdocTypeParameterTagConflict.ts] ////
+
+=== /a.js ===
+// @type on a function is applicable when there are no preceding @param, @return, or @template annotations
+// and no @type parameter annotations.
+
+// @param for a parameter is applicable when there is no applicable @type annotation for the function and
+// no @type annotation on the parameter.
+
+// @return is applicable when there is no applicable @type annotation for the function.
+
+// @template is applicable when there is no applicable @type annotation for the function.
+
+/**
+ * @type {(a: 1, b: 2) => number}
+ * @param {3} a
+ * @param {4} b
+ * @return {string}
+ */
+function f1(/** @type {5}*/ a, b) { return "abc" }
+>f1 : Symbol(f1, Decl(a.js, 0, 0))
+>a : Symbol(a, Decl(a.js, 16, 12))
+>b : Symbol(b, Decl(a.js, 16, 30))
+
+/**
+ * @type {(a: 1, b: 2) => number}
+ * @param {3} a
+ * @param {4} b
+ * @return {string}
+ */
+function f2(a, b) { return 42 }
+>f2 : Symbol(f2, Decl(a.js, 16, 50))
+>a : Symbol(a, Decl(a.js, 24, 12))
+>b : Symbol(b, Decl(a.js, 24, 14))
+
+/**
+ * @param {3} a
+ * @type {(a: 1, b: 2) => number}
+ * @param {4} b
+ * @return {string}
+ */
+function f3(a, b) { return "abc" }
+>f3 : Symbol(f3, Decl(a.js, 24, 31))
+>a : Symbol(a, Decl(a.js, 32, 12))
+>b : Symbol(b, Decl(a.js, 32, 14))
+
+/**
+ * @return {string}
+ * @type {(a: 1, b: 2) => number}
+ * @param {3} a
+ * @param {4} b
+ */
+function f4(a, b) { return "abc" }
+>f4 : Symbol(f4, Decl(a.js, 32, 34))
+>a : Symbol(a, Decl(a.js, 40, 12))
+>b : Symbol(b, Decl(a.js, 40, 14))
+
+/**
+ * @type {(a: 1, b: 2) => number}
+ * @template T
+ * @template U
+ * @param {T} a
+ * @param {U} b
+ * @return {string}
+ */
+function f5(a, b) { return 42 }
+>f5 : Symbol(f5, Decl(a.js, 40, 34))
+>a : Symbol(a, Decl(a.js, 50, 12))
+>b : Symbol(b, Decl(a.js, 50, 14))
+
+/**
+ * @template T
+ * @type {(a: 1, b: 2) => number}
+ * @template U
+ * @param {T} a
+ * @param {U} b
+ * @return {string}
+ */
+function f6(a, b) { return "abc" }
+>f6 : Symbol(f6, Decl(a.js, 50, 31))
+>a : Symbol(a, Decl(a.js, 60, 12))
+>b : Symbol(b, Decl(a.js, 60, 14))
+
+/**
+ * @param {1} a
+ * @param {2} a
+ */
+function f7(a) {}
+>f7 : Symbol(f7, Decl(a.js, 60, 34))
+>a : Symbol(a, Decl(a.js, 66, 12))
+

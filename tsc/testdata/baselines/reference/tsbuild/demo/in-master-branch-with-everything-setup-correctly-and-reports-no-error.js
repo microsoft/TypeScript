@@ -110,7 +110,7 @@ export function createZoo(): Array<Dog> {
 }
 
 tsgo --b --verbose
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -122,13 +122,36 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'core/tsconfig.json'...
 
+[96mcore/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m3[0m     "compilerOptions": {
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Project 'animals/tsconfig.json' is out of date because output file 'lib/animals/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project 'animals/tsconfig.json'...
 
+[96manimals/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m3[0m     "compilerOptions": {
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~[0m
+
 [[90mHH:MM:SS AM[0m] Project 'zoo/tsconfig.json' is out of date because output file 'lib/zoo/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project 'zoo/tsconfig.json'...
+
+[96mzoo/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m3[0m     "compilerOptions": {
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~[0m
+
+
+Found 3 errors in 3 files.
+
+Errors  Files
+     1  animals/tsconfig.json[90m:3[0m
+     1  core/tsconfig.json[90m:3[0m
+     1  zoo/tsconfig.json[90m:3[0m
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
@@ -200,10 +223,11 @@ const dog_1 = require("./dog");
 Object.defineProperty(exports, "createDog", { enumerable: true, get: function () { return dog_1.createDog; } });
 
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,3],5],"fileNames":["lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../core/utilities.d.ts","../../animals/dog.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"47f086fff365b1e8b96a6df2c4313c1a-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}","signature":"1d76529d4652ddf9ebdfa65e748240fb-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n","impliedNodeFormat":1},{"version":"d6a6b65b86b0330b1a1bd96b1738d5a4-import Animal from './animal';\n\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };","signature":"a3e41a5ccafc3d07a201f0603e28edcf-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n","impliedNodeFormat":1},"096c311e7aecdb577f7b613fbf1716e5-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n",{"version":"39dbb9b755eef022e56879989968e5cf-import Animal from '.';\nimport { makeRandomName } from '../core/utilities';\n\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\n\nexport function createDog(): Dog {\n    return ({\n        size: \"medium\",\n        woof: function(this: Dog) {\n            console.log(`${ this.name } says \"Woof\"!`);\n        },\n        name: makeRandomName()\n    });\n}","signature":"4dc4bc559452869bfd0d92b5ed5d604f-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n","impliedNodeFormat":1}],"fileIdsList":[[3,4],[2,5]],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../animals","strict":true,"target":1},"referencedMap":[[5,1],[3,2]],"latestChangedDtsFile":"./dog.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[[2,3],5],"fileNames":["lib.d.ts","../../animals/animal.ts","../../animals/index.ts","../core/utilities.d.ts","../../animals/dog.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"47f086fff365b1e8b96a6df2c4313c1a-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}","signature":"1d76529d4652ddf9ebdfa65e748240fb-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n","impliedNodeFormat":1},{"version":"d6a6b65b86b0330b1a1bd96b1738d5a4-import Animal from './animal';\n\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };","signature":"a3e41a5ccafc3d07a201f0603e28edcf-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n","impliedNodeFormat":1},"096c311e7aecdb577f7b613fbf1716e5-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n",{"version":"39dbb9b755eef022e56879989968e5cf-import Animal from '.';\nimport { makeRandomName } from '../core/utilities';\n\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\n\nexport function createDog(): Dog {\n    return ({\n        size: \"medium\",\n        woof: function(this: Dog) {\n            console.log(`${ this.name } says \"Woof\"!`);\n        },\n        name: makeRandomName()\n    });\n}","signature":"4dc4bc559452869bfd0d92b5ed5d604f-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n","impliedNodeFormat":1}],"fileIdsList":[[3,4],[2,5]],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../animals","strict":true,"target":1},"referencedMap":[[5,1],[3,2]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./dog.d.ts"}
 //// [/user/username/projects/demo/lib/animals/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -315,14 +339,22 @@ Object.defineProperty(exports, "createDog", { enumerable: true, get: function ()
       "../../animals/dog.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    "lib.d.ts",
+    "../../animals/animal.ts",
+    "../../animals/index.ts",
+    "../core/utilities.d.ts",
+    "../../animals/dog.ts"
+  ],
   "latestChangedDtsFile": "./dog.d.ts",
-  "size": 2794
+  "size": 2849
 }
 //// [/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.d.ts","../../core/utilities.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"43144ca7c82db0f51f0d56a2b3e2f565-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}","signature":"096c311e7aecdb577f7b613fbf1716e5-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n","impliedNodeFormat":1}],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../core","strict":true,"target":1},"latestChangedDtsFile":"./utilities.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.d.ts","../../core/utilities.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"43144ca7c82db0f51f0d56a2b3e2f565-export function makeRandomName() {\n    return \"Bob!?! \";\n}\n\nexport function lastElementOf<T>(arr: T[]): T | undefined {\n    if (arr.length === 0) return undefined;\n    return arr[arr.length - 1];\n}","signature":"096c311e7aecdb577f7b613fbf1716e5-export declare function makeRandomName(): string;\nexport declare function lastElementOf<T>(arr: T[]): T | undefined;\n","impliedNodeFormat":1}],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../core","strict":true,"target":1},"semanticDiagnosticsPerFile":[1,2],"latestChangedDtsFile":"./utilities.d.ts"}
 //// [/user/username/projects/demo/lib/core/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -373,8 +405,12 @@ Object.defineProperty(exports, "createDog", { enumerable: true, get: function ()
     "strict": true,
     "target": 1
   },
+  "semanticDiagnosticsPerFile": [
+    "lib.d.ts",
+    "../../core/utilities.ts"
+  ],
   "latestChangedDtsFile": "./utilities.d.ts",
-  "size": 1586
+  "size": 1635
 }
 //// [/user/username/projects/demo/lib/core/utilities.d.ts] *new* 
 export declare function makeRandomName(): string;
@@ -395,10 +431,11 @@ function lastElementOf(arr) {
 }
 
 //// [/user/username/projects/demo/lib/zoo/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[5],"fileNames":["lib.d.ts","../animals/animal.d.ts","../animals/dog.d.ts","../animals/index.d.ts","../../zoo/zoo.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"1d76529d4652ddf9ebdfa65e748240fb-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n","4dc4bc559452869bfd0d92b5ed5d604f-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n","a3e41a5ccafc3d07a201f0603e28edcf-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n",{"version":"90c7a8cea6924c55890fba84da3398f3-import { Dog, createDog } from '../animals/index';\n\nexport function createZoo(): Array<Dog> {\n    return [\n        createDog()\n    ];\n}","signature":"f9be246631fc3123a90a7f2cf5f5a1a2-import { Dog } from '../animals/index';\nexport declare function createZoo(): Array<Dog>;\n","impliedNodeFormat":1}],"fileIdsList":[[4],[2,3]],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../zoo","strict":true,"target":1},"referencedMap":[[3,1],[4,2],[5,1]],"latestChangedDtsFile":"./zoo.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[5],"fileNames":["lib.d.ts","../animals/animal.d.ts","../animals/dog.d.ts","../animals/index.d.ts","../../zoo/zoo.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"1d76529d4652ddf9ebdfa65e748240fb-export type Size = \"small\" | \"medium\" | \"large\";\nexport default interface Animal {\n    size: Size;\n}\n","4dc4bc559452869bfd0d92b5ed5d604f-import Animal from '.';\nexport interface Dog extends Animal {\n    woof(): void;\n    name: string;\n}\nexport declare function createDog(): Dog;\n","a3e41a5ccafc3d07a201f0603e28edcf-import Animal from './animal';\nexport default Animal;\nimport { createDog, Dog } from './dog';\nexport { createDog, Dog };\n",{"version":"90c7a8cea6924c55890fba84da3398f3-import { Dog, createDog } from '../animals/index';\n\nexport function createZoo(): Array<Dog> {\n    return [\n        createDog()\n    ];\n}","signature":"f9be246631fc3123a90a7f2cf5f5a1a2-import { Dog } from '../animals/index';\nexport declare function createZoo(): Array<Dog>;\n","impliedNodeFormat":1}],"fileIdsList":[[4],[2,3]],"options":{"composite":true,"declaration":true,"module":1,"noFallthroughCasesInSwitch":true,"noImplicitReturns":true,"noUnusedLocals":true,"noUnusedParameters":true,"outDir":"./","rootDir":"../../zoo","strict":true,"target":1},"referencedMap":[[3,1],[4,2],[5,1]],"semanticDiagnosticsPerFile":[1,2,3,4,5],"latestChangedDtsFile":"./zoo.d.ts"}
 //// [/user/username/projects/demo/lib/zoo/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -491,8 +528,15 @@ function lastElementOf(arr) {
       "../animals/index.d.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    "lib.d.ts",
+    "../animals/animal.d.ts",
+    "../animals/dog.d.ts",
+    "../animals/index.d.ts",
+    "../../zoo/zoo.ts"
+  ],
   "latestChangedDtsFile": "./zoo.d.ts",
-  "size": 2104
+  "size": 2159
 }
 //// [/user/username/projects/demo/lib/zoo/zoo.d.ts] *new* 
 import { Dog } from '../animals/index';
@@ -512,18 +556,18 @@ function createZoo() {
 
 core/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
-*refresh*    /user/username/projects/demo/core/utilities.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /user/username/projects/demo/core/utilities.ts
 Signatures::
 (stored at emit) /user/username/projects/demo/core/utilities.ts
 
 animals/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
-*refresh*    /user/username/projects/demo/animals/animal.ts
-*refresh*    /user/username/projects/demo/animals/index.ts
-*refresh*    /user/username/projects/demo/lib/core/utilities.d.ts
-*refresh*    /user/username/projects/demo/animals/dog.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /user/username/projects/demo/animals/animal.ts
+*not cached* /user/username/projects/demo/animals/index.ts
+*not cached* /user/username/projects/demo/lib/core/utilities.d.ts
+*not cached* /user/username/projects/demo/animals/dog.ts
 Signatures::
 (stored at emit) /user/username/projects/demo/animals/animal.ts
 (stored at emit) /user/username/projects/demo/animals/index.ts
@@ -531,11 +575,11 @@ Signatures::
 
 zoo/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
-*refresh*    /user/username/projects/demo/lib/animals/animal.d.ts
-*refresh*    /user/username/projects/demo/lib/animals/dog.d.ts
-*refresh*    /user/username/projects/demo/lib/animals/index.d.ts
-*refresh*    /user/username/projects/demo/zoo/zoo.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /user/username/projects/demo/lib/animals/animal.d.ts
+*not cached* /user/username/projects/demo/lib/animals/dog.d.ts
+*not cached* /user/username/projects/demo/lib/animals/index.d.ts
+*not cached* /user/username/projects/demo/zoo/zoo.ts
 Signatures::
 (stored at emit) /user/username/projects/demo/zoo/zoo.ts
 
@@ -543,7 +587,7 @@ Signatures::
 Edit [0]:: no change
 
 tsgo --b --verbose
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -551,10 +595,62 @@ Output::
     * zoo/tsconfig.json
     * tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is up to date because newest input 'core/utilities.ts' is older than output 'lib/core/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because buildinfo file 'lib/core/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
-[[90mHH:MM:SS AM[0m] Project 'animals/tsconfig.json' is up to date because newest input 'animals/index.ts' is older than output 'lib/animals/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Building project 'core/tsconfig.json'...
 
-[[90mHH:MM:SS AM[0m] Project 'zoo/tsconfig.json' is up to date because newest input 'zoo/zoo.ts' is older than output 'lib/zoo/tsconfig.tsbuildinfo'
+[96mcore/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m3[0m     "compilerOptions": {
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Project 'animals/tsconfig.json' is out of date because buildinfo file 'lib/animals/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project 'animals/tsconfig.json'...
+
+[96manimals/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m3[0m     "compilerOptions": {
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~[0m
+
+[[90mHH:MM:SS AM[0m] Project 'zoo/tsconfig.json' is out of date because buildinfo file 'lib/zoo/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project 'zoo/tsconfig.json'...
+
+[96mzoo/tsconfig.json[0m:[93m3[0m:[93m5[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m3[0m     "compilerOptions": {
+[7m [0m [91m    ~~~~~~~~~~~~~~~~~[0m
 
 
+Found 3 errors in 3 files.
+
+Errors  Files
+     1  animals/tsconfig.json[90m:3[0m
+     1  core/tsconfig.json[90m:3[0m
+     1  zoo/tsconfig.json[90m:3[0m
+
+
+core/tsconfig.json::
+SemanticDiagnostics::
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /user/username/projects/demo/core/utilities.ts
+Signatures::
+
+animals/tsconfig.json::
+SemanticDiagnostics::
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /user/username/projects/demo/animals/animal.ts
+*not cached* /user/username/projects/demo/animals/index.ts
+*not cached* /user/username/projects/demo/lib/core/utilities.d.ts
+*not cached* /user/username/projects/demo/animals/dog.ts
+Signatures::
+
+zoo/tsconfig.json::
+SemanticDiagnostics::
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /user/username/projects/demo/lib/animals/animal.d.ts
+*not cached* /user/username/projects/demo/lib/animals/dog.d.ts
+*not cached* /user/username/projects/demo/lib/animals/index.d.ts
+*not cached* /user/username/projects/demo/zoo/zoo.ts
+Signatures::

@@ -429,8 +429,6 @@ func parseHarnessOption(t *testing.T, key string, value any, harnessOptions *Har
 	}
 }
 
-var deprecatedModuleResolution []string = []string{"node", "classic", "node10"}
-
 func getOptionValue(t *testing.T, option *tsoptions.CommandLineOption, value string, cwd string) tsoptions.CompilerOptionsValue {
 	switch option.Kind {
 	case tsoptions.CommandLineOptionTypeString:
@@ -1103,7 +1101,12 @@ func splitOptionValues(t *testing.T, value string, option string) []string {
 
 	// remove all excluded entries
 	for _, exclude := range excludes {
-		value := getValueOfOptionString(t, option, exclude)
+		value, ok := tryGetValueOfOptionString(option, exclude)
+		if !ok {
+			// The excluded value is not recognized (e.g., a removed option like "es3").
+			// Just skip it since there's nothing to remove.
+			continue
+		}
 		delete(variations, value)
 	}
 
@@ -1114,15 +1117,35 @@ func splitOptionValues(t *testing.T, value string, option string) []string {
 }
 
 func getValueOfOptionString(t *testing.T, option string, value string) tsoptions.CompilerOptionsValue {
+	result, ok := tryGetValueOfOptionString(option, value)
+	if !ok {
+		t.Fatalf("Unknown value '%s' for option '%s'", value, option)
+	}
+	return result
+}
+
+func tryGetValueOfOptionString(option string, value string) (tsoptions.CompilerOptionsValue, bool) {
 	optionDecl := getCommandLineOption(option)
 	if optionDecl == nil {
-		t.Fatalf("Unknown option '%s'", option)
+		return nil, false
 	}
-	// TODO(gabritto): remove this when we deprecate the tests containing those option values
-	if optionDecl.Name == "moduleResolution" && slices.Contains(deprecatedModuleResolution, strings.ToLower(value)) {
-		return value
+	switch optionDecl.Kind {
+	case tsoptions.CommandLineOptionTypeEnum:
+		enumVal, ok := optionDecl.EnumMap().Get(strings.ToLower(value))
+		if !ok {
+			return nil, false
+		}
+		return enumVal, true
+	case tsoptions.CommandLineOptionTypeBoolean:
+		switch strings.ToLower(value) {
+		case "true":
+			return true, true
+		case "false":
+			return false, true
+		}
+		return nil, false
 	}
-	return getOptionValue(t, optionDecl, value, "/")
+	return value, true
 }
 
 func getCommandLineOption(option string) *tsoptions.CommandLineOption {
@@ -1202,7 +1225,7 @@ func SkipUnsupportedCompilerOptions(t *testing.T, options *core.CompilerOptions)
 		t.Skipf("unsupported outFile %s", options.OutFile)
 	}
 	switch options.Target {
-	case core.ScriptTargetES3, core.ScriptTargetES5:
+	case core.ScriptTargetES5:
 		t.Skipf("unsupported target %s", options.Target)
 	}
 }

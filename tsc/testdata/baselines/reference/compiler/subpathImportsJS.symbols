@@ -1,0 +1,13 @@
+//// [tests/cases/compiler/subpathImportsJS.ts] ////
+
+=== /src/subpath.ts ===
+export const foo = "foo";
+>foo : Symbol(foo, Decl(subpath.ts, 0, 12))
+
+=== /src/index.ts ===
+import { foo } from "#subpath";
+>foo : Symbol(foo, Decl(index.ts, 0, 8))
+
+foo;
+>foo : Symbol(foo, Decl(index.ts, 0, 8))
+

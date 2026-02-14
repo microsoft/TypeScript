@@ -1,0 +1,47 @@
+//// [tests/cases/compiler/declarationEmitAugmentationUsesCorrectSourceFile.ts] ////
+
+=== node_modules/knex/index.d.ts ===
+// A bunch of random text to move the positions forward
+// A bunch of random text to move the positions forward
+// A bunch of random text to move the positions forward
+// A bunch of random text to move the positions forward
+// A bunch of random text to move the positions forward
+// A bunch of random text to move the positions forward
+// A bunch of random text to move the positions forward
+// A bunch of random text to move the positions forward
+// A bunch of random text to move the positions forward
+
+type ShouldJustBeAny = [any][0];
+>ShouldJustBeAny : any
+
+declare namespace knex {
+  export { Knex };
+>Knex : any
+}
+
+declare namespace Knex {
+  interface Interface {
+    method(): ShouldJustBeAny;
+>method : () => any
+  }
+}
+
+export = knex;
+>knex : typeof import("knex")
+
+=== index.ts ===
+import "knex";
+declare module "knex" {
+>"knex" : typeof import("knex")
+
+  namespace Knex {
+>Knex : typeof Knex
+
+    function newFunc(): Knex.Interface;
+>newFunc : () => Interface
+>Knex : any
+  }
+}
+
+
+

@@ -15,12 +15,20 @@ export const x = 10;
 }
 
 tsgo --incremental --tsBuildInfoFile .tsbuildinfo --explainFiles
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m3[0m         "target": "es5",
+[7m [0m [91m                  ~~~~~[0m
+
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 src/main.ts
    Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
+
+Found 1 error in tsconfig.json[90m:3[0m
+
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -45,10 +53,11 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"28e8748a7acd58f4f59388926e914f86-export const x = 10;"],"options":{"module":1,"target":1,"tsBuildInfoFile":"./.tsbuildinfo"}}
+{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.d.ts","./src/main.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"28e8748a7acd58f4f59388926e914f86-export const x = 10;"],"options":{"module":1,"target":1,"tsBuildInfoFile":"./.tsbuildinfo"},"semanticDiagnosticsPerFile":[1,2]}
 //// [/home/src/workspaces/project/.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -86,7 +95,11 @@ declare const console: { log(msg: any): void; };
     "target": 1,
     "tsBuildInfoFile": "./.tsbuildinfo"
   },
-  "size": 988
+  "semanticDiagnosticsPerFile": [
+    "lib.d.ts",
+    "./src/main.ts"
+  ],
+  "size": 1037
 }
 //// [/home/src/workspaces/project/src/main.js] *new* 
 "use strict";
@@ -97,21 +110,31 @@ exports.x = 10;
 
 tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
-*refresh*    /home/src/workspaces/project/src/main.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/workspaces/project/src/main.ts
 Signatures::
 
 
 Edit [0]:: no change
 
 tsgo --incremental --tsBuildInfoFile .tsbuildinfo --explainFiles
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
+[96mtsconfig.json[0m:[93m3[0m:[93m19[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m3[0m         "target": "es5",
+[7m [0m [91m                  ~~~~~[0m
+
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 src/main.ts
    Matched by include pattern 'src/**/*.ts' in 'tsconfig.json'
 
+Found 1 error in tsconfig.json[90m:3[0m
+
+
 tsconfig.json::
 SemanticDiagnostics::
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/workspaces/project/src/main.ts
 Signatures::

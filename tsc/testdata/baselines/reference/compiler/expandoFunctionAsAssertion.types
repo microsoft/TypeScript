@@ -1,0 +1,34 @@
+//// [tests/cases/compiler/expandoFunctionAsAssertion.ts] ////
+
+=== expandoFunctionAsAssertion.ts ===
+function example() {}
+>example : { (): void; isFoo: (value: string) => asserts value is "foo"; }
+
+example.isFoo = function isFoo(value: string): asserts value is 'foo' {
+>example.isFoo = function isFoo(value: string): asserts value is 'foo' {  if (value !== 'foo') {    throw new Error('Not foo');  }} : (value: string) => asserts value is "foo"
+>example.isFoo : (value: string) => asserts value is "foo"
+>example : { (): void; isFoo: (value: string) => asserts value is "foo"; }
+>isFoo : (value: string) => asserts value is "foo"
+>function isFoo(value: string): asserts value is 'foo' {  if (value !== 'foo') {    throw new Error('Not foo');  }} : (value: string) => asserts value is "foo"
+>isFoo : (value: string) => asserts value is "foo"
+>value : string
+
+  if (value !== 'foo') {
+>value !== 'foo' : boolean
+>value : string
+>'foo' : "foo"
+
+    throw new Error('Not foo');
+>new Error('Not foo') : Error
+>Error : ErrorConstructor
+>'Not foo' : "Not foo"
+  }
+};
+
+example.isFoo('test');
+>example.isFoo('test') : void
+>example.isFoo : (value: string) => asserts value is "foo"
+>example : { (): void; isFoo: (value: string) => asserts value is "foo"; }
+>isFoo : (value: string) => asserts value is "foo"
+>'test' : "test"
+

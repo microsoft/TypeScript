@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/simpleTestMultiFile.ts] ////
+
+=== /src/foo.ts ===
+const x: number = "";
+>x : number
+>"" : ""
+
+=== /src/bar.ts ===
+const y: string = 1;
+>y : string
+>1 : 1
+

@@ -1,0 +1,105 @@
+//// [tests/cases/compiler/missingDiscriminants2.ts] ////
+
+=== missingDiscriminants2.ts ===
+// https://github.com/microsoft/typescript-go/issues/1020
+
+// This tests ensures the change also works for discriminated unions with more than 10 cases
+
+type Thing =
+>Thing : Symbol(Thing, Decl(missingDiscriminants2.ts, 0, 0))
+
+  | { str: "a", num: 0 }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 5, 5))
+>num : Symbol(num, Decl(missingDiscriminants2.ts, 5, 15))
+
+  | { str: "b" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 6, 5))
+
+  | { str: "c" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 7, 5))
+
+  | { str: "d" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 8, 5))
+
+  | { str: "e" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 9, 5))
+
+  | { str: "f" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 10, 5))
+
+  | { str: "g" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 11, 5))
+
+  | { str: "h" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 12, 5))
+
+  | { str: "i" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 13, 5))
+
+  | { str: "j" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 14, 5))
+
+  | { str: "k" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 15, 5))
+
+  | { str: "l" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 16, 5))
+
+  | { str: "m" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 17, 5))
+
+  | { str: "n" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 18, 5))
+
+  | { str: "o" }
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 19, 5))
+
+  | { num: 1 }
+>num : Symbol(num, Decl(missingDiscriminants2.ts, 20, 5))
+
+const thing1: Thing = { str: "a", num: 0 }
+>thing1 : Symbol(thing1, Decl(missingDiscriminants2.ts, 22, 5))
+>Thing : Symbol(Thing, Decl(missingDiscriminants2.ts, 0, 0))
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 22, 23))
+>num : Symbol(num, Decl(missingDiscriminants2.ts, 22, 33))
+
+const thing2: Thing = { str: "b", num: 1 } // Shouldn't be error
+>thing2 : Symbol(thing2, Decl(missingDiscriminants2.ts, 23, 5))
+>Thing : Symbol(Thing, Decl(missingDiscriminants2.ts, 0, 0))
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 23, 23))
+>num : Symbol(num, Decl(missingDiscriminants2.ts, 23, 33))
+
+const thing3: Thing = { num: 1, str: "b" } // Shouldn't be error
+>thing3 : Symbol(thing3, Decl(missingDiscriminants2.ts, 24, 5))
+>Thing : Symbol(Thing, Decl(missingDiscriminants2.ts, 0, 0))
+>num : Symbol(num, Decl(missingDiscriminants2.ts, 24, 23))
+>str : Symbol(str, Decl(missingDiscriminants2.ts, 24, 31))
+
+type Item =
+>Item : Symbol(Item, Decl(missingDiscriminants2.ts, 24, 42))
+
+  | { kind: "a", subkind: 0, value: string }
+>kind : Symbol(kind, Decl(missingDiscriminants2.ts, 27, 5))
+>subkind : Symbol(subkind, Decl(missingDiscriminants2.ts, 27, 16))
+>value : Symbol(value, Decl(missingDiscriminants2.ts, 27, 28))
+
+  | { kind: "a", subkind: 1, value: number }
+>kind : Symbol(kind, Decl(missingDiscriminants2.ts, 28, 5))
+>subkind : Symbol(subkind, Decl(missingDiscriminants2.ts, 28, 16))
+>value : Symbol(value, Decl(missingDiscriminants2.ts, 28, 28))
+
+  | { kind: "b" }
+>kind : Symbol(kind, Decl(missingDiscriminants2.ts, 29, 5))
+
+const item1: Item = { subkind: 1, kind: "b" } // Error, type "b" not assignable to type "a"
+>item1 : Symbol(item1, Decl(missingDiscriminants2.ts, 31, 5))
+>Item : Symbol(Item, Decl(missingDiscriminants2.ts, 24, 42))
+>subkind : Symbol(subkind, Decl(missingDiscriminants2.ts, 31, 21))
+>kind : Symbol(kind, Decl(missingDiscriminants2.ts, 31, 33))
+
+const item2: Item = { kind: "b", subkind: 1 } // Error, 'subkind' isn't a known property
+>item2 : Symbol(item2, Decl(missingDiscriminants2.ts, 32, 5))
+>Item : Symbol(Item, Decl(missingDiscriminants2.ts, 24, 42))
+>kind : Symbol(kind, Decl(missingDiscriminants2.ts, 32, 21))
+>subkind : Symbol(subkind, Decl(missingDiscriminants2.ts, 32, 32))
+

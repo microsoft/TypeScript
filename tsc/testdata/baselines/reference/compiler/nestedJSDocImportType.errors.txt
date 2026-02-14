@@ -1,0 +1,25 @@
+b.js(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+b.js(3,24): error TS2306: File 'a.js' is not a module.
+
+
+==== a.js (0 errors) ====
+    /** @typedef {string} A */
+    
+==== b.js (2 errors) ====
+    module.exports = {
+    ~~~~~~~~~~~~~~~~~~
+      create() {
+    ~~~~~~~~~~~~
+        /** @param {import("./a").A} x */
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                           ~~~~~
+!!! error TS2306: File 'a.js' is not a module.
+        function f(x) {}
+    ~~~~~~~~~~~~~~~~~~~~
+        return f("hi");
+    ~~~~~~~~~~~~~~~~~~~
+      }
+    ~~~
+    }
+    ~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.

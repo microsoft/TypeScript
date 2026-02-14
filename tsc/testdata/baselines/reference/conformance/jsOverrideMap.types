@@ -1,0 +1,13 @@
+//// [tests/cases/conformance/salsa/jsOverrideMap.ts] ////
+
+=== index.js ===
+/**
+ * @template K
+ * @template V
+ * @extends {Map<K, V>}
+ */
+export class TestMap extends Map {
+>TestMap : TestMap<K, V>
+>Map : Map<K, V>
+}
+

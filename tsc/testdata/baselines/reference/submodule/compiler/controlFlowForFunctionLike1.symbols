@@ -1,0 +1,100 @@
+//// [tests/cases/compiler/controlFlowForFunctionLike1.ts] ////
+
+=== controlFlowForFunctionLike1.ts ===
+function test1(a: number | string) {
+>test1 : Symbol(test1, Decl(controlFlowForFunctionLike1.ts, 0, 0))
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 0, 15))
+
+  if (typeof a === "number") {
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 0, 15))
+
+    const fn = (arg: typeof a) => true;
+>fn : Symbol(fn, Decl(controlFlowForFunctionLike1.ts, 2, 9))
+>arg : Symbol(arg, Decl(controlFlowForFunctionLike1.ts, 2, 16))
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 0, 15))
+
+    return fn;
+>fn : Symbol(fn, Decl(controlFlowForFunctionLike1.ts, 2, 9))
+  }
+  return;
+}
+
+test1(0)?.(100);
+>test1 : Symbol(test1, Decl(controlFlowForFunctionLike1.ts, 0, 0))
+
+test1(0)?.("");
+>test1 : Symbol(test1, Decl(controlFlowForFunctionLike1.ts, 0, 0))
+
+function test2(a: number | string) {
+>test2 : Symbol(test2, Decl(controlFlowForFunctionLike1.ts, 9, 15))
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 11, 15))
+
+  if (typeof a === "number") {
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 11, 15))
+
+    const fn: { (arg: typeof a): boolean; } = () => true;
+>fn : Symbol(fn, Decl(controlFlowForFunctionLike1.ts, 13, 9))
+>arg : Symbol(arg, Decl(controlFlowForFunctionLike1.ts, 13, 17))
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 11, 15))
+
+    return fn;
+>fn : Symbol(fn, Decl(controlFlowForFunctionLike1.ts, 13, 9))
+  }
+  return;
+}
+
+test2(0)?.(100);
+>test2 : Symbol(test2, Decl(controlFlowForFunctionLike1.ts, 9, 15))
+
+test2(0)?.("");
+>test2 : Symbol(test2, Decl(controlFlowForFunctionLike1.ts, 9, 15))
+
+function test3(a: number | string) {
+>test3 : Symbol(test3, Decl(controlFlowForFunctionLike1.ts, 20, 15))
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 22, 15))
+
+  if (typeof a === "number") {
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 22, 15))
+
+    return (arg: typeof a) => {};
+>arg : Symbol(arg, Decl(controlFlowForFunctionLike1.ts, 24, 12))
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 22, 15))
+  }
+  throw new Error("");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+test3(1)(100);
+>test3 : Symbol(test3, Decl(controlFlowForFunctionLike1.ts, 20, 15))
+
+test3(1)("");
+>test3 : Symbol(test3, Decl(controlFlowForFunctionLike1.ts, 20, 15))
+
+function test4(a: number | string) {
+>test4 : Symbol(test4, Decl(controlFlowForFunctionLike1.ts, 30, 13))
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 32, 15))
+
+  let fn = (arg: typeof a) => {};
+>fn : Symbol(fn, Decl(controlFlowForFunctionLike1.ts, 33, 5))
+>arg : Symbol(arg, Decl(controlFlowForFunctionLike1.ts, 33, 12))
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 32, 15))
+
+  if (Math.random() && typeof a === "number") {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2025.float16.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(controlFlowForFunctionLike1.ts, 32, 15))
+
+    return fn;
+>fn : Symbol(fn, Decl(controlFlowForFunctionLike1.ts, 33, 5))
+  }
+  throw new Error("");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2022.error.d.ts, --, --))
+}
+
+test4(1)?.(100);
+>test4 : Symbol(test4, Decl(controlFlowForFunctionLike1.ts, 30, 13))
+
+test4(1)?.("");
+>test4 : Symbol(test4, Decl(controlFlowForFunctionLike1.ts, 30, 13))
+

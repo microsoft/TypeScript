@@ -1,0 +1,34 @@
+foo.js(1,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+index.ts(2,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+index.ts(2,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+index.ts(3,1): error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+index.ts(3,1): error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+
+
+==== index.ts (4 errors) ====
+    // These should still error because they are in a TypeScript file
+    import bar = require("./bar.cjs");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    import foo = require("./foo.js");
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1202: Import assignment cannot be used when targeting ECMAScript modules. Consider using 'import * as ns from "mod"', 'import {a} from "mod"', 'import d from "mod"', or another module format instead.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1294: This syntax is not allowed when 'erasableSyntaxOnly' is enabled.
+    
+==== bar.cjs (0 errors) ====
+    module.exports = {
+        a: 1,
+    }
+    
+==== foo.js (1 errors) ====
+    module.exports = {
+    ~~~~~~~~~~~~~~~~~~
+        b: 2,
+    ~~~~~~~~~
+    }
+    ~
+!!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
+    

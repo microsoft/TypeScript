@@ -1,0 +1,15 @@
+//// [tests/cases/compiler/constEnumInEmbeddedStatements.ts] ////
+
+=== constEnumInEmbeddedStatements.ts ===
+function t(x: number) {
+>t : Symbol(t, Decl(constEnumInEmbeddedStatements.ts, 0, 0))
+>x : Symbol(x, Decl(constEnumInEmbeddedStatements.ts, 0, 11))
+
+    if (x)
+>x : Symbol(x, Decl(constEnumInEmbeddedStatements.ts, 0, 11))
+
+        /* before E */ const enum E { A = 1 } /* after E */
+>E : Symbol(E, Decl(constEnumInEmbeddedStatements.ts, 1, 10))
+>A : Symbol(E.A, Decl(constEnumInEmbeddedStatements.ts, 2, 37))
+}
+

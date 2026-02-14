@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/assertionWithNoArgument.ts] ////
+
+=== assertionWithNoArgument.ts ===
+export function assertWeird(value?: string): asserts value {
+>assertWeird : (value?: string | undefined) => asserts value
+>value : string | undefined
+}
+
+assertWeird();
+>assertWeird() : void
+>assertWeird : (value?: string | undefined) => asserts value
+
+assertWeird("hello");
+>assertWeird("hello") : void
+>assertWeird : (value?: string | undefined) => asserts value
+>"hello" : "hello"
+

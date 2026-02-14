@@ -1,0 +1,58 @@
+//// [tests/cases/compiler/enumMemberNameNonIdentifier.ts] ////
+
+=== enumMemberNameNonIdentifier.ts ===
+export const enum E {
+>E : E
+
+    regular = 0,
+>regular : E.regular
+>0 : 0
+
+    "hyphen-member" = 1,
+>"hyphen-member" : typeof E["hyphen-member"]
+>1 : 1
+
+    "123startsWithNumber" = 2,
+>"123startsWithNumber" : typeof E["123startsWithNumber"]
+>2 : 2
+
+    "has space" = 3,
+>"has space" : typeof E["has space"]
+>3 : 3
+
+    // Greek Capital Yot (U+037F) - valid identifier in ES2015+ but NOT in ES5
+    Ϳ = 4,
+>Ϳ : E.Ϳ
+>4 : 4
+}
+
+export const a = E["hyphen-member"];
+>a : typeof E["hyphen-member"]
+>E["hyphen-member"] : typeof E["hyphen-member"]
+>E : typeof E
+>"hyphen-member" : "hyphen-member"
+
+export const b = E["123startsWithNumber"];
+>b : typeof E["123startsWithNumber"]
+>E["123startsWithNumber"] : typeof E["123startsWithNumber"]
+>E : typeof E
+>"123startsWithNumber" : "123startsWithNumber"
+
+export const c = E["has space"];
+>c : typeof E["has space"]
+>E["has space"] : typeof E["has space"]
+>E : typeof E
+>"has space" : "has space"
+
+export const d = E.regular;
+>d : E.regular
+>E.regular : E.regular
+>E : typeof E
+>regular : E.regular
+
+export const e = E.Ϳ;
+>e : E.Ϳ
+>E.Ϳ : E.Ϳ
+>E : typeof E
+>Ϳ : E.Ϳ
+

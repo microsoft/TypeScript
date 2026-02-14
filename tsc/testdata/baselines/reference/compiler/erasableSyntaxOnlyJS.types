@@ -1,0 +1,36 @@
+//// [tests/cases/compiler/erasableSyntaxOnlyJS.ts] ////
+
+=== index.ts ===
+// These should still error because they are in a TypeScript file
+import bar = require("./bar.cjs");
+>bar : { a: number; }
+
+import foo = require("./foo.js");
+>foo : { b: number; }
+
+=== bar.cjs ===
+module.exports = {
+>module.exports = {    a: 1,} : { a: number; }
+>module.exports : { a: number; }
+>module : { "export=": { a: number; }; }
+>exports : { a: number; }
+>{    a: 1,} : { a: number; }
+
+    a: 1,
+>a : number
+>1 : 1
+}
+
+=== foo.js ===
+module.exports = {
+>module.exports = {    b: 2,} : { b: number; }
+>module.exports : { b: number; }
+>module : { "export=": { b: number; }; }
+>exports : { b: number; }
+>{    b: 2,} : { b: number; }
+
+    b: 2,
+>b : number
+>2 : 2
+}
+

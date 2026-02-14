@@ -1,0 +1,42 @@
+//// [tests/cases/compiler/strictBestCommonSupertype.ts] ////
+
+=== strictBestCommonSupertype.ts ===
+// https://github.com/microsoft/typescript-go/issues/1222
+
+class Store<T = object> {
+>Store : Store<T>
+
+    select<K>(mapFn: (state: T) => K) {};
+>select : <K>(mapFn: (state: T) => K) => void
+>mapFn : (state: T) => K
+>state : T
+}
+
+const store: Store = inject(Store);
+>store : Store<object>
+>inject(Store) : Store<any>
+>inject : <T>(token: ProviderToken<T>) => T
+>Store : typeof Store
+
+function inject<T>(token: ProviderToken<T>): T {
+>inject : <T>(token: ProviderToken<T>) => T
+>token : ProviderToken<T>
+
+    return {} as T;
+>{} as T : T
+>{} : {}
+}
+
+interface Type<T> extends Function {
+    new (...args: any[]): T;
+>args : any[]
+}
+
+type ProviderToken<T> = Type<T> | AbstractType<T>;
+>ProviderToken : ProviderToken<T>
+
+interface AbstractType<T> extends Function {
+    prototype: T;
+>prototype : T
+}
+

@@ -212,7 +212,7 @@ Edit [0]:: incremental-declaration-changes
 }
 
 tsgo --b core --verbose
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * core/tsconfig.json
@@ -220,6 +220,11 @@ Output::
 [[90mHH:MM:SS AM[0m] Project 'core/tsconfig.json' is out of date because output 'core/tsconfig.tsbuildinfo' is older than input 'core/tsconfig.json'
 
 [[90mHH:MM:SS AM[0m] Building project 'core/tsconfig.json'...
+
+[96mcore/tsconfig.json[0m:[93m6[0m:[93m19[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m6[0m         "target": "es5",
+[7m [0m [91m                  ~~~~~[0m
 
 TSFILE:  /user/username/projects/sample1/core/anotherModule.js
 TSFILE:  /user/username/projects/sample1/core/index.js
@@ -229,6 +234,9 @@ TSFILE:  /user/username/projects/sample1/core/tsconfig.tsbuildinfo
 /user/username/projects/sample1/core/anotherModule.ts
 /user/username/projects/sample1/core/index.ts
 /user/username/projects/sample1/core/some_decl.d.ts
+
+Found 1 error in core/tsconfig.json[90m:6[0m
+
 //// [/user/username/projects/sample1/core/anotherModule.js] *modified* 
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -246,10 +254,11 @@ function leftPad(s, n) { return s + n; }
 function multiply(a, b) { return a * b; }
 
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[3,5]],"fileNames":["lib.d.ts","lib.esnext.d.ts","./anotherModule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":["77c880b8984a58da26cd0cab7e052e50-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />",{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"19cd44ed7278957051fca663f821c916-export const World = \"hello\";","2753a1085d587a7d57069e1105af24ec-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }",{"version":"6ceab83400a6167be2fb5feab881ded0-declare const dts: any;","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"target":1}}
+{"version":"FakeTSVersion","errors":true,"root":[[3,5]],"fileNames":["lib.d.ts","lib.esnext.d.ts","./anotherModule.ts","./index.ts","./some_decl.d.ts"],"fileInfos":["77c880b8984a58da26cd0cab7e052e50-/// <reference no-default-lib=\"true\"/>\n/// <reference lib=\"esnext\" />",{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"19cd44ed7278957051fca663f821c916-export const World = \"hello\";","2753a1085d587a7d57069e1105af24ec-export const someString: string = \"HELLO WORLD\";\nexport function leftPad(s: string, n: number) { return s + n; }\nexport function multiply(a: number, b: number) { return a * b; }",{"version":"6ceab83400a6167be2fb5feab881ded0-declare const dts: any;","affectsGlobalScope":true,"impliedNodeFormat":1}],"options":{"target":1},"semanticDiagnosticsPerFile":[1]}
 //// [/user/username/projects/sample1/core/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -317,11 +326,14 @@ function multiply(a, b) { return a * b; }
   "options": {
     "target": 1
   },
-  "size": 1458
+  "semanticDiagnosticsPerFile": [
+    "lib.d.ts"
+  ],
+  "size": 1505
 }
 
 core/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
 Signatures::
 (used version)   /home/src/tslibs/TS/Lib/lib.d.ts

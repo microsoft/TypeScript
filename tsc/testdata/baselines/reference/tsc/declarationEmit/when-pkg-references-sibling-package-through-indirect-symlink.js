@@ -63,6 +63,11 @@ Output::
 [7m2[0m export const ADMIN = MetadataAccessor.create<boolean>('1');
 [7m [0m [91m             ~~~~~[0m
 
+[96mpkg3/tsconfig.json[0m:[93m5[0m:[93m19[0m - [91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+
+[7m5[0m         "target": "es5",
+[7m [0m [91m                  ~~~~~[0m
+
 ../../../../home/src/tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 pkg1/dist/types.d.ts
@@ -79,7 +84,11 @@ pkg3/src/keys.ts
 pkg3/src/index.ts
    Matched by default include pattern '**/*'
 
-Found 1 error in pkg3/src/keys.ts[90m:2[0m
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  pkg3/src/keys.ts[90m:2[0m
+     1  pkg3/tsconfig.json[90m:5[0m
 
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
 /// <reference no-default-lib="true"/>

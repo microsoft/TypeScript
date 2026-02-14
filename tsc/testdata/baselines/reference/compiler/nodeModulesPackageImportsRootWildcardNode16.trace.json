@@ -1,0 +1,21 @@
+======== Resolving module '#/foo.js' from '/.src/index.ts'. ========
+Module resolution kind is not specified, using 'Node16'.
+Resolving in ESM mode with conditions 'import', 'types', 'node'.
+Invalid import specifier '#/foo.js' has no possible resolutions.
+Found 'package.json' at '/.src/package.json'.
+Loading module '#/foo.js' from 'node_modules' folder, target file types: TypeScript, JavaScript, Declaration.
+Searching all ancestor node_modules directories for preferred extensions: TypeScript, Declaration.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+File name '/.src/node_modules/#/foo.js' has a '.js' extension - stripping it.
+Directory '/.src/node_modules/@types' does not exist, skipping all lookups in it.
+File name '/.src/node_modules/@types/#/foo.js' has a '.js' extension - stripping it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+File name '/node_modules/#/foo.js' has a '.js' extension - stripping it.
+Directory '/node_modules/@types' does not exist, skipping all lookups in it.
+File name '/node_modules/@types/#/foo.js' has a '.js' extension - stripping it.
+Searching all ancestor node_modules directories for fallback extensions: JavaScript.
+Directory '/.src/node_modules' does not exist, skipping all lookups in it.
+File name '/.src/node_modules/#/foo.js' has a '.js' extension - stripping it.
+Directory '/node_modules' does not exist, skipping all lookups in it.
+File name '/node_modules/#/foo.js' has a '.js' extension - stripping it.
+======== Module name '#/foo.js' was not resolved. ========

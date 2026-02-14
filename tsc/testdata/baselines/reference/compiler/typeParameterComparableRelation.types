@@ -1,0 +1,17 @@
+//// [tests/cases/compiler/typeParameterComparableRelation.ts] ////
+
+=== typeParameterComparableRelation.ts ===
+// https://github.com/microsoft/typescript-go/issues/1462
+
+type StringOrT<T> = T | string
+>StringOrT : StringOrT<T>
+
+function func<A, B, T extends StringOrT<B>>(thing: T): void {
+>func : <A, B, T extends StringOrT<B>>(thing: T) => void
+>thing : T
+
+    thing as A; // Error
+>thing as A : A
+>thing : T
+}
+

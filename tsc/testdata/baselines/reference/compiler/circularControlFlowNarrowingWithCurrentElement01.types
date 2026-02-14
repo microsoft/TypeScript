@@ -1,0 +1,115 @@
+//// [tests/cases/compiler/circularControlFlowNarrowingWithCurrentElement01.ts] ////
+
+=== circularControlFlowNarrowingWithCurrentElement01.ts ===
+class A {
+>A : A
+
+  next: A | null = null;
+>next : A | null
+
+  constructor(readonly children: (A | null)[]) {}
+>children : (A | null)[]
+}
+
+function getNodes(): A[] {
+>getNodes : () => A[]
+
+  const out: A[] = [];
+>out : A[]
+>[] : never[]
+
+  let current: A | null = new A([]);
+>current : A | null
+>new A([]) : A
+>A : typeof A
+>[] : never[]
+
+  while (current !== null) {
+>current !== null : boolean
+>current : A | null
+
+    let firstChild = null;
+>firstChild : any
+
+    if (out.length) {
+>out.length : number
+>out : A[]
+>length : number
+
+      current = current.next;
+>current = current.next : A | null
+>current : A | null
+>current.next : A | null
+>current : A
+>next : A | null
+
+      continue;
+    }
+
+    for (let i = 0; i < current.children.length; i++) {
+>i : number
+>0 : 0
+>i < current.children.length : boolean
+>i : number
+>current.children.length : number
+>current.children : (A | null)[]
+>current : A
+>children : (A | null)[]
+>length : number
+>i++ : number
+>i : number
+
+      const child = current.children[i];
+>child : A | null
+>current.children[i] : A | null
+>current.children : (A | null)[]
+>current : A
+>children : (A | null)[]
+>i : number
+
+      if (child) {
+>child : A | null
+
+        if (!firstChild) {
+>!firstChild : boolean
+>firstChild : A | null
+
+          firstChild = child;
+>firstChild = child : A
+>firstChild : any
+>child : A
+
+          firstChild.next = current.next;
+>firstChild.next = current.next : A | null
+>firstChild.next : A | null
+>firstChild : A
+>next : A | null
+>current.next : A | null
+>current : A
+>next : A | null
+        }
+
+        child.next = current.next;
+>child.next = current.next : A | null
+>child.next : A | null
+>child : A
+>next : A | null
+>current.next : A | null
+>current : A
+>next : A | null
+      }
+    }
+
+    current = firstChild || current.next;
+>current = firstChild || current.next : A | null
+>current : A | null
+>firstChild || current.next : A | null
+>firstChild : A | null
+>current.next : A | null
+>current : A
+>next : A | null
+  }
+
+  return out;
+>out : A[]
+}

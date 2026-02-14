@@ -1,0 +1,28 @@
+--- old.stableTypeOrdering(stabletypeordering=true).types
++++ new.stableTypeOrdering(stabletypeordering=true).types
+@@= skipped -6, +6 lines =@@
+ >"" : ""
+
+ function takeMessageOrArray(message: Message | Message[]) { return message; }
+->takeMessageOrArray : (message: Message | Message[]) => Message[] | Message
++>takeMessageOrArray : (message: Message[] | Message) => Message[] | Message
+ >message : Message[] | Message
+ >message : Message[] | Message
+
+ const result1 = takeMessageOrArray(null!);
+ >result1 : Message[] | Message
+ >takeMessageOrArray(null!) : Message[] | Message
+->takeMessageOrArray : (message: Message | Message[]) => Message[] | Message
++>takeMessageOrArray : (message: Message[] | Message) => Message[] | Message
+ >null! : never
+
+ function checkType(x: string | number | boolean) {
+@@= skipped -39, +39 lines =@@
+ >Blue : Color.Blue
+
+ function enumUnion(x: Color | string | string[]) {
+->enumUnion : (x: Color | string | string[]) => string | string[] | Color
++>enumUnion : (x: string | string[] | Color) => string | string[] | Color
+ >x : string | string[] | Color
+
+     return x;

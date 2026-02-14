@@ -1,0 +1,44 @@
+//// [tests/cases/compiler/exhaustiveSwitchStatementsGeneric1.ts] ////
+
+=== exhaustiveSwitchStatementsGeneric1.ts ===
+// https://github.com/microsoft/typescript-go/issues/986
+
+interface A {
+  type: "a";
+>type : "a"
+}
+
+interface B {
+  type: "b";
+>type : "b"
+}
+
+interface Types {
+  a: A;
+>a : A
+
+  b: B;
+>b : B
+}
+
+export function exhaustiveSwitch<T extends keyof Types>(type: T): boolean {
+>exhaustiveSwitch : <T extends keyof Types>(type: T) => boolean
+>type : T
+
+  switch (type) {
+>type : T
+
+    case "a":
+>"a" : "a"
+
+      return true;
+>true : true
+
+    case "b":
+>"b" : "b"
+
+      return true;
+>true : true
+  }
+}
+

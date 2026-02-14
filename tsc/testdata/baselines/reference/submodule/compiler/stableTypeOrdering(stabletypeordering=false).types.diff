@@ -1,0 +1,67 @@
+--- old.stableTypeOrdering(stabletypeordering=false).types
++++ new.stableTypeOrdering(stabletypeordering=false).types
+@@= skipped -6, +6 lines =@@
+ >"" : ""
+
+ function takeMessageOrArray(message: Message | Message[]) { return message; }
+->takeMessageOrArray : (message: Message | Message[]) => Message | Message[]
+->message : Message | Message[]
+->message : Message | Message[]
++>takeMessageOrArray : (message: Message[] | Message) => Message[] | Message
++>message : Message[] | Message
++>message : Message[] | Message
+
+ const result1 = takeMessageOrArray(null!);
+->result1 : Message | Message[]
+->takeMessageOrArray(null!) : Message | Message[]
+->takeMessageOrArray : (message: Message | Message[]) => Message | Message[]
++>result1 : Message[] | Message
++>takeMessageOrArray(null!) : Message[] | Message
++>takeMessageOrArray : (message: Message[] | Message) => Message[] | Message
+ >null! : never
+
+ function checkType(x: string | number | boolean) {
+->checkType : (x: string | number | boolean) => "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>checkType : (x: string | number | boolean) => "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number | boolean
+
+     const t = typeof x;
+->t : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+->typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>t : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
++>typeof x : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ >x : string | number | boolean
+
+     return t;
+->t : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
++>t : "bigint" | "boolean" | "function" | "number" | "object" | "string" | "symbol" | "undefined"
+ }
+
+ function mixedUnion(x: string | number[] | { a: number }) {
+->mixedUnion : (x: string | number[] | { a: number; }) => string | { a: number; } | number[]
+->x : string | { a: number; } | number[]
++>mixedUnion : (x: string | number[] | { a: number; }) => string | number[] | { a: number; }
++>x : string | number[] | { a: number; }
+ >a : number
+
+     return x;
+->x : string | { a: number; } | number[]
++>x : string | number[] | { a: number; }
+ }
+
+ enum Color { Red, Green, Blue }
+@@= skipped -39, +39 lines =@@
+ >Blue : Color.Blue
+
+ function enumUnion(x: Color | string | string[]) {
+->enumUnion : (x: Color | string | string[]) => string | Color | string[]
+->x : string | Color | string[]
++>enumUnion : (x: string | string[] | Color) => string | string[] | Color
++>x : string | string[] | Color
+
+     return x;
+->x : string | Color | string[]
++>x : string | string[] | Color
+ }
+
+ type Named = { name: string };

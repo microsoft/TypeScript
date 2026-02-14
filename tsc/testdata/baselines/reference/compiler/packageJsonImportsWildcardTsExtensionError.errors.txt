@@ -1,0 +1,34 @@
+src/index.ts(1,23): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+
+
+==== tsconfig.json (0 errors) ====
+    {
+        "compilerOptions": {
+            "module": "nodenext",
+            "moduleResolution": "nodenext",
+            "rootDir": "src",
+            "outDir": "dist"
+        },
+        "include": ["src"]
+    }
+    
+==== src/foo.ts (0 errors) ====
+    export function hello() {
+        return "world";
+    }
+    
+==== src/index.ts (1 errors) ====
+    import { hello } from "#/foo.ts.omg";
+                          ~~~~~~~~~~~~~~
+!!! error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.
+    
+    hello();
+    
+==== package.json (0 errors) ====
+    {
+        "type": "module",
+        "imports": {
+            "#/*.omg": "./src/*"
+        }
+    }
+    

@@ -43,7 +43,7 @@ console.log(foo);
 }
 
 tsgo --b project --verbose --explainFiles
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/strings/tsconfig.json
@@ -54,6 +54,7 @@ Output::
 
 [[90mHH:MM:SS AM[0m] Building project 'project/strings/tsconfig.json'...
 
+[91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 project/strings/foo.json
@@ -62,12 +63,16 @@ project/strings/foo.json
 
 [[90mHH:MM:SS AM[0m] Building project 'project/main/tsconfig.json'...
 
+[91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
 ../../tslibs/TS/Lib/lib.d.ts
    Default library for target 'ES5'
 project/strings/foo.json
    Imported via '../strings/foo.json' from file 'project/main/index.ts'
 project/main/index.ts
    Matched by include pattern './**/*.ts' in 'project/main/tsconfig.json'
+
+Found 2 errors.
+
 //// [/home/src/tslibs/TS/Lib/lib.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -101,10 +106,11 @@ const foo_json_1 = require("../strings/foo.json");
 console.log(foo_json_1.foo);
 
 //// [/home/src/workspaces/solution/project/main/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[3],"fileNames":["lib.d.ts","../strings/foo.json","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"0358fbc55b36110a5af2f042a2f514aa-{\n    \"foo\": \"bar baz\"\n}"},{"version":"a22713a27f380b4892020f4caa9bb85f-import { foo } from '../strings/foo.json';\nconsole.log(foo);","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"referencedMap":[[3,1]],"latestChangedDtsFile":"./index.d.ts"}
+{"version":"FakeTSVersion","errors":true,"root":[3],"fileNames":["lib.d.ts","../strings/foo.json","./index.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"0358fbc55b36110a5af2f042a2f514aa-{\n    \"foo\": \"bar baz\"\n}"},{"version":"a22713a27f380b4892020f4caa9bb85f-import { foo } from '../strings/foo.json';\nconsole.log(foo);","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1}],"fileIdsList":[[2]],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"referencedMap":[[3,1]],"semanticDiagnosticsPerFile":[1,2,3],"latestChangedDtsFile":"./index.d.ts"}
 //// [/home/src/workspaces/solution/project/main/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -170,14 +176,20 @@ console.log(foo_json_1.foo);
       "../strings/foo.json"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    "lib.d.ts",
+    "../strings/foo.json",
+    "./index.ts"
+  ],
   "latestChangedDtsFile": "./index.d.ts",
-  "size": 1336
+  "size": 1387
 }
 //// [/home/src/workspaces/solution/project/strings/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[2],"fileNames":["lib.d.ts","./foo.json"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"0358fbc55b36110a5af2f042a2f514aa-{\n    \"foo\": \"bar baz\"\n}"}],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1}}
+{"version":"FakeTSVersion","errors":true,"root":[2],"fileNames":["lib.d.ts","./foo.json"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"0358fbc55b36110a5af2f042a2f514aa-{\n    \"foo\": \"bar baz\"\n}"}],"options":{"composite":true,"esModuleInterop":true,"module":1,"rootDir":"..","strict":true,"target":1},"semanticDiagnosticsPerFile":[1,2]}
 //// [/home/src/workspaces/solution/project/strings/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
+  "errors": true,
   "root": [
     {
       "files": [
@@ -221,20 +233,24 @@ console.log(foo_json_1.foo);
     "strict": true,
     "target": 1
   },
-  "size": 1041
+  "semanticDiagnosticsPerFile": [
+    "lib.d.ts",
+    "./foo.json"
+  ],
+  "size": 1090
 }
 
 project/strings/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
-*refresh*    /home/src/workspaces/solution/project/strings/foo.json
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/workspaces/solution/project/strings/foo.json
 Signatures::
 
 project/main/tsconfig.json::
 SemanticDiagnostics::
-*refresh*    /home/src/tslibs/TS/Lib/lib.d.ts
-*refresh*    /home/src/workspaces/solution/project/strings/foo.json
-*refresh*    /home/src/workspaces/solution/project/main/index.ts
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/workspaces/solution/project/strings/foo.json
+*not cached* /home/src/workspaces/solution/project/main/index.ts
 Signatures::
 (stored at emit) /home/src/workspaces/solution/project/main/index.ts
 
@@ -242,15 +258,46 @@ Signatures::
 Edit [0]:: no change
 
 tsgo --b project --verbose --explainFiles
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
 [[90mHH:MM:SS AM[0m] Projects in this build: 
     * project/strings/tsconfig.json
     * project/main/tsconfig.json
     * project/tsconfig.json
 
-[[90mHH:MM:SS AM[0m] Project 'project/strings/tsconfig.json' is up to date because newest input 'project/strings/foo.json' is older than output 'project/strings/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Project 'project/strings/tsconfig.json' is out of date because buildinfo file 'project/strings/tsconfig.tsbuildinfo' indicates that program needs to report errors.
 
-[[90mHH:MM:SS AM[0m] Project 'project/main/tsconfig.json' is up to date because newest input 'project/main/index.ts' is older than output 'project/main/tsconfig.tsbuildinfo'
+[[90mHH:MM:SS AM[0m] Building project 'project/strings/tsconfig.json'...
+
+[91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+../../tslibs/TS/Lib/lib.d.ts
+   Default library for target 'ES5'
+project/strings/foo.json
+   Matched by include pattern 'foo.json' in 'project/strings/tsconfig.json'
+[[90mHH:MM:SS AM[0m] Project 'project/main/tsconfig.json' is out of date because buildinfo file 'project/main/tsconfig.tsbuildinfo' indicates that program needs to report errors.
+
+[[90mHH:MM:SS AM[0m] Building project 'project/main/tsconfig.json'...
+
+[91merror[0m[90m TS5108: [0mOption 'target=ES5' has been removed. Please remove it from your configuration.
+../../tslibs/TS/Lib/lib.d.ts
+   Default library for target 'ES5'
+project/strings/foo.json
+   Imported via '../strings/foo.json' from file 'project/main/index.ts'
+project/main/index.ts
+   Matched by include pattern './**/*.ts' in 'project/main/tsconfig.json'
+
+Found 2 errors.
 
 
+project/strings/tsconfig.json::
+SemanticDiagnostics::
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/workspaces/solution/project/strings/foo.json
+Signatures::
+
+project/main/tsconfig.json::
+SemanticDiagnostics::
+*not cached* /home/src/tslibs/TS/Lib/lib.d.ts
+*not cached* /home/src/workspaces/solution/project/strings/foo.json
+*not cached* /home/src/workspaces/solution/project/main/index.ts
+Signatures::
