@@ -378,6 +378,12 @@ interface GPUBufferBinding {
     size?: GPUSize64;
 }
 
+interface GPUBufferDescriptor extends GPUObjectDescriptorBase {
+    mappedAtCreation?: boolean;
+    size: GPUSize64;
+    usage: GPUBufferUsageFlags;
+}
+
 interface GPUCanvasConfiguration {
     alphaMode?: GPUCanvasAlphaMode;
     colorSpace?: PredefinedColorSpace;
@@ -402,6 +408,9 @@ interface GPUColorDict {
 interface GPUCommandBufferDescriptor extends GPUObjectDescriptorBase {
 }
 
+interface GPUCommandEncoderDescriptor extends GPUObjectDescriptorBase {
+}
+
 interface GPUComputePassDescriptor extends GPUObjectDescriptorBase {
     timestampWrites?: GPUComputePassTimestampWrites;
 }
@@ -410,6 +419,10 @@ interface GPUComputePassTimestampWrites {
     beginningOfPassWriteIndex?: GPUSize32;
     endOfPassWriteIndex?: GPUSize32;
     querySet: GPUQuerySet;
+}
+
+interface GPUComputePipelineDescriptor extends GPUPipelineDescriptorBase {
+    compute: GPUProgrammableStage;
 }
 
 interface GPUCopyExternalImageDestInfo extends GPUTexelCopyTextureInfo {
@@ -449,11 +462,35 @@ interface GPUOrigin3DDict {
     z?: GPUIntegerCoordinate;
 }
 
+interface GPUPipelineDescriptorBase extends GPUObjectDescriptorBase {
+    layout: GPUPipelineLayout | GPUAutoLayoutMode;
+}
+
 interface GPUPipelineErrorInit {
     reason: GPUPipelineErrorReason;
 }
 
+interface GPUPipelineLayoutDescriptor extends GPUObjectDescriptorBase {
+    bindGroupLayouts: (GPUBindGroupLayout | null)[];
+}
+
+interface GPUProgrammableStage {
+    constants?: Record<string, GPUPipelineConstantValue>;
+    entryPoint?: string;
+    module: GPUShaderModule;
+}
+
+interface GPUQuerySetDescriptor extends GPUObjectDescriptorBase {
+    count: GPUSize32;
+    type: GPUQueryType;
+}
+
 interface GPURenderBundleDescriptor extends GPUObjectDescriptorBase {
+}
+
+interface GPURenderBundleEncoderDescriptor extends GPURenderPassLayout {
+    depthReadOnly?: boolean;
+    stencilReadOnly?: boolean;
 }
 
 interface GPURenderPassColorAttachment {
@@ -485,10 +522,33 @@ interface GPURenderPassDescriptor extends GPUObjectDescriptorBase {
     timestampWrites?: GPURenderPassTimestampWrites;
 }
 
+interface GPURenderPassLayout extends GPUObjectDescriptorBase {
+    colorFormats: (GPUTextureFormat | null)[];
+    depthStencilFormat?: GPUTextureFormat;
+    sampleCount?: GPUSize32;
+}
+
 interface GPURenderPassTimestampWrites {
     beginningOfPassWriteIndex?: GPUSize32;
     endOfPassWriteIndex?: GPUSize32;
     querySet: GPUQuerySet;
+}
+
+interface GPUSamplerDescriptor extends GPUObjectDescriptorBase {
+    addressModeU?: GPUAddressMode;
+    addressModeV?: GPUAddressMode;
+    addressModeW?: GPUAddressMode;
+    compare?: GPUCompareFunction;
+    lodMaxClamp?: number;
+    lodMinClamp?: number;
+    magFilter?: GPUFilterMode;
+    maxAnisotropy?: number;
+    minFilter?: GPUFilterMode;
+    mipmapFilter?: GPUMipmapFilterMode;
+}
+
+interface GPUShaderModuleDescriptor extends GPUObjectDescriptorBase {
+    code: string;
 }
 
 interface GPUTexelCopyBufferInfo extends GPUTexelCopyBufferLayout {
@@ -506,6 +566,16 @@ interface GPUTexelCopyTextureInfo {
     mipLevel?: GPUIntegerCoordinate;
     origin?: GPUOrigin3D;
     texture: GPUTexture;
+}
+
+interface GPUTextureDescriptor extends GPUObjectDescriptorBase {
+    dimension?: GPUTextureDimension;
+    format: GPUTextureFormat;
+    mipLevelCount?: GPUIntegerCoordinate;
+    sampleCount?: GPUSize32;
+    size: GPUExtent3D;
+    usage: GPUTextureUsageFlags;
+    viewFormats?: GPUTextureFormat[];
 }
 
 interface GPUTextureViewDescriptor extends GPUObjectDescriptorBase {
@@ -5490,6 +5560,66 @@ interface GPUDevice extends EventTarget, GPUObjectBase {
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createBindGroup)
      */
     createBindGroup(descriptor: GPUBindGroupDescriptor): GPUBindGroup;
+    /**
+     * The **`createBuffer()`** method of the GPUDevice interface creates a GPUBuffer in which to store raw data to use in GPU operations.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createBuffer)
+     */
+    createBuffer(descriptor: GPUBufferDescriptor): GPUBuffer;
+    /**
+     * The **`createCommandEncoder()`** method of the GPUDevice interface creates a GPUCommandEncoder, used to encode commands to be issued to the GPU.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createCommandEncoder)
+     */
+    createCommandEncoder(descriptor?: GPUCommandEncoderDescriptor): GPUCommandEncoder;
+    /**
+     * The **`createComputePipeline()`** method of the GPUDevice interface creates a GPUComputePipeline that can control the compute shader stage and be used in a GPUComputePassEncoder.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createComputePipeline)
+     */
+    createComputePipeline(descriptor: GPUComputePipelineDescriptor): GPUComputePipeline;
+    /**
+     * The **`createComputePipelineAsync()`** method of the GPUDevice interface returns a Promise that fulfills with a GPUComputePipeline, which can control the compute shader stage and be used in a GPUComputePassEncoder, once the pipeline can be used without any stalling.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createComputePipelineAsync)
+     */
+    createComputePipelineAsync(descriptor: GPUComputePipelineDescriptor): Promise<GPUComputePipeline>;
+    /**
+     * The **`createPipelineLayout()`** method of the GPUDevice interface creates a GPUPipelineLayout that defines the GPUBindGroupLayouts used by a pipeline. GPUBindGroups used with the pipeline during command encoding must have compatible GPUBindGroupLayouts.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createPipelineLayout)
+     */
+    createPipelineLayout(descriptor: GPUPipelineLayoutDescriptor): GPUPipelineLayout;
+    /**
+     * The **`createQuerySet()`** method of the GPUDevice interface creates a GPUQuerySet that can be used to record the results of queries on passes, such as occlusion or timestamp queries.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createQuerySet)
+     */
+    createQuerySet(descriptor: GPUQuerySetDescriptor): GPUQuerySet;
+    /**
+     * The **`createRenderBundleEncoder()`** method of the GPUDevice interface creates a GPURenderBundleEncoder that can be used to pre-record bundles of commands. These can be reused in GPURenderPassEncoders via the executeBundles() method, as many times as required.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createRenderBundleEncoder)
+     */
+    createRenderBundleEncoder(descriptor: GPURenderBundleEncoderDescriptor): GPURenderBundleEncoder;
+    /**
+     * The **`createSampler()`** method of the GPUDevice interface creates a GPUSampler, which controls how shaders transform and filter texture resource data.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createSampler)
+     */
+    createSampler(descriptor?: GPUSamplerDescriptor): GPUSampler;
+    /**
+     * The **`createShaderModule()`** method of the GPUDevice interface creates a GPUShaderModule from a string of WGSL source code.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createShaderModule)
+     */
+    createShaderModule(descriptor: GPUShaderModuleDescriptor): GPUShaderModule;
+    /**
+     * The **`createTexture()`** method of the GPUDevice interface creates a GPUTexture in which to store 1D, 2D, or 3D arrays of data, such as images, to use in GPU rendering operations.
+     *
+     * [MDN Reference](https://developer.mozilla.org/docs/Web/API/GPUDevice/createTexture)
+     */
+    createTexture(descriptor: GPUTextureDescriptor): GPUTexture;
     /**
      * The **`destroy()`** method of the GPUDevice interface destroys the device, preventing further operations on it.
      *
@@ -14020,7 +14150,7 @@ declare namespace WebAssembly {
          *
          * [MDN Reference](https://developer.mozilla.org/docs/WebAssembly/Reference/JavaScript_interface/Exception/getArg)
          */
-        getArg(index: number): any;
+        getArg(exceptionTag: Tag, index: number): any;
         /**
          * The **`is()`** prototype method of the Exception object can be used to test if the Exception matches a given tag.
          *
@@ -14655,6 +14785,7 @@ type GLuint = number;
 type GLuint64 = number;
 type GPUBindingResource = GPUSampler | GPUTexture | GPUTextureView | GPUBuffer | GPUBufferBinding | GPUExternalTexture;
 type GPUBufferDynamicOffset = number;
+type GPUBufferUsageFlags = number;
 type GPUColor = number[] | GPUColorDict;
 type GPUCopyExternalImageSource = ImageBitmap | ImageData | VideoFrame | OffscreenCanvas;
 type GPUExtent3D = GPUIntegerCoordinate[] | GPUExtent3DDict;
@@ -14665,6 +14796,7 @@ type GPUIntegerCoordinateOut = number;
 type GPUMapModeFlags = number;
 type GPUOrigin2D = GPUIntegerCoordinate[] | GPUOrigin2DDict;
 type GPUOrigin3D = GPUIntegerCoordinate[] | GPUOrigin3DDict;
+type GPUPipelineConstantValue = number;
 type GPUSignedOffset32 = number;
 type GPUSize32 = number;
 type GPUSize32Out = number;
@@ -14729,14 +14861,19 @@ type FontDisplay = "auto" | "block" | "fallback" | "optional" | "swap";
 type FontFaceLoadStatus = "error" | "loaded" | "loading" | "unloaded";
 type FontFaceSetLoadStatus = "loaded" | "loading";
 type FrameType = "auxiliary" | "nested" | "none" | "top-level";
+type GPUAddressMode = "clamp-to-edge" | "mirror-repeat" | "repeat";
+type GPUAutoLayoutMode = "auto";
 type GPUBufferMapState = "mapped" | "pending" | "unmapped";
 type GPUCanvasAlphaMode = "opaque" | "premultiplied";
 type GPUCanvasToneMappingMode = "extended" | "standard";
+type GPUCompareFunction = "always" | "equal" | "greater" | "greater-equal" | "less" | "less-equal" | "never" | "not-equal";
 type GPUCompilationMessageType = "error" | "info" | "warning";
 type GPUDeviceLostReason = "destroyed" | "unknown";
 type GPUErrorFilter = "internal" | "out-of-memory" | "validation";
+type GPUFilterMode = "linear" | "nearest";
 type GPUIndexFormat = "uint16" | "uint32";
 type GPULoadOp = "clear" | "load";
+type GPUMipmapFilterMode = "linear" | "nearest";
 type GPUPipelineErrorReason = "internal" | "validation";
 type GPUQueryType = "occlusion" | "timestamp";
 type GPUStoreOp = "discard" | "store";
