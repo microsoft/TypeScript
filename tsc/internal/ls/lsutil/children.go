@@ -61,7 +61,7 @@ func GetLastVisitedChild(node *ast.Node, sourceFile *ast.SourceFile) *ast.Node {
 	var lastChild *ast.Node
 
 	visitNode := func(n *ast.Node, _ *ast.NodeVisitor) *ast.Node {
-		if !(n == nil || node.Flags&ast.NodeFlagsReparsed != 0) {
+		if n != nil && n.Flags&ast.NodeFlagsReparsed == 0 {
 			lastChild = n
 		}
 		return n

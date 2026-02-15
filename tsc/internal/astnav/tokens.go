@@ -72,28 +72,26 @@ func getTokenAtPosition(
 	visitNode := func(node *ast.Node, _ *ast.NodeVisitor) *ast.Node {
 		// We can't abort visiting children, so once a match is found, we set `next`
 		// and do nothing on subsequent visits.
-		if node == nil {
+		if node == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
 			return nil
 		}
 		if nodeAfterLeft == nil {
 			nodeAfterLeft = node
 		}
 		if next == nil {
-			if node.Flags&ast.NodeFlagsReparsed == 0 {
-				result := testNode(node)
-				switch result {
-				case -1:
-					if !ast.IsJSDocKind(node.Kind) {
-						// We can't move the left boundary into or beyond JSDoc,
-						// because we may end up returning the token after this JSDoc,
-						// constructing it with the scanner, and we need to include
-						// all its leading trivia in its position.
-						left = node.End()
-					}
-					nodeAfterLeft = nil
-				case 0:
-					next = node
+			result := testNode(node)
+			switch result {
+			case -1:
+				if !ast.IsJSDocKind(node.Kind) {
+					// We can't move the left boundary into or beyond JSDoc,
+					// because we may end up returning the token after this JSDoc,
+					// constructing it with the scanner, and we need to include
+					// all its leading trivia in its position.
+					left = node.End()
 				}
+				nodeAfterLeft = nil
+			case 0:
+				next = node
 			}
 		}
 		return node
@@ -469,7 +467,7 @@ func findRightmostValidToken(endPos int, sourceFile *ast.SourceFile, containingN
 				node.End() > endPos || GetStartOfNode(node, sourceFile, !excludeJSDoc /*includeJSDoc*/) >= position)
 		}
 		visitNode := func(node *ast.Node, _ *ast.NodeVisitor) *ast.Node {
-			if node == nil {
+			if node == nil || node.Flags&ast.NodeFlagsReparsed != 0 {
 				return node
 			}
 			hasChildren = true

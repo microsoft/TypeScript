@@ -10912,6 +10912,11 @@ type HasFileName interface {
 	Path() tspath.Path
 }
 
+type TokenCacheKey struct {
+	parent *Node
+	loc    core.TextRange
+}
+
 type SourceFile struct {
 	NodeBase
 	DeclarationBase
@@ -10973,7 +10978,7 @@ type SourceFile struct {
 
 	Hash             xxh3.Uint128
 	tokenCacheMu     sync.Mutex
-	tokenCache       map[core.TextRange]*Node
+	tokenCache       map[TokenCacheKey]*Node
 	tokenFactory     *NodeFactory
 	declarationMapMu sync.Mutex
 	declarationMap   map[string][]*Node
@@ -11178,12 +11183,10 @@ func (node *SourceFile) GetOrCreateToken(
 	node.tokenCacheMu.Lock()
 	defer node.tokenCacheMu.Unlock()
 	loc := core.NewTextRange(pos, end)
-	if token, ok := node.tokenCache[loc]; ok {
+	key := TokenCacheKey{parent, loc}
+	if token, ok := node.tokenCache[key]; ok {
 		if token.Kind != kind {
 			panic(fmt.Sprintf("Token cache mismatch: %v != %v", token.Kind, kind))
-		}
-		if token.Parent != parent {
-			panic(fmt.Sprintf("Token cache mismatch: parent. Expected parent of kind %v, got %v", token.Parent.Kind, parent.Kind))
 		}
 		return token
 	}
@@ -11191,12 +11194,12 @@ func (node *SourceFile) GetOrCreateToken(
 		panic(fmt.Sprintf("Cannot create token from reparsed node of kind %v", parent.Kind))
 	}
 	if node.tokenCache == nil {
-		node.tokenCache = make(map[core.TextRange]*Node)
+		node.tokenCache = make(map[TokenCacheKey]*Node)
 	}
 	token := createToken(kind, node, pos, end, flags)
 	token.Loc = loc
 	token.Parent = parent
-	node.tokenCache[loc] = token
+	node.tokenCache[key] = token
 	return token
 }
 
