@@ -8,7 +8,7 @@ declare namespace Temporal {
     type InstantLike = Instant | ZonedDateTime | string;
     type PlainDateLike = PlainDate | ZonedDateTime | PlainDateTime | DateLikeObject | string;
     type PlainDateTimeLike = PlainDateTime | ZonedDateTime | PlainDate | DateTimeLikeObject | string;
-    type PlainMonthDayLike = PlainMonthDay | MonthDayLikeObject | string;
+    type PlainMonthDayLike = PlainMonthDay | DateLikeObject | string;
     type PlainTimeLike = PlainTime | PlainDateTime | ZonedDateTime | TimeLikeObject | string;
     type PlainYearMonthLike = PlainYearMonth | YearMonthLikeObject | string;
     type TimeZoneLike = ZonedDateTime | string;
@@ -42,8 +42,6 @@ declare namespace Temporal {
         microseconds?: number | undefined;
         nanoseconds?: number | undefined;
     }
-
-    interface MonthDayLikeObject extends Omit<DateLikeObject, "era" | "eraYear"> {}
 
     interface TimeLikeObject {
         hour?: number | undefined;
@@ -438,7 +436,7 @@ declare namespace Temporal {
         readonly calendarId: string;
         readonly monthCode: string;
         readonly day: number;
-        with(monthDayLike: PartialTemporalLike<MonthDayLikeObject>, options?: OverflowOptions): PlainMonthDay;
+        with(monthDayLike: PartialTemporalLike<DateLikeObject>, options?: OverflowOptions): PlainMonthDay;
         equals(other: PlainMonthDayLike): boolean;
         toString(options?: PlainDateToStringOptions): string;
         toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string;
