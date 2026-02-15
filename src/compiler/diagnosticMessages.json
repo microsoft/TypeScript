@@ -7490,6 +7490,10 @@
         "category": "Message",
         "code": 90035
     },
+    "Declare private method '{0}'": {
+        "category": "Message",
+        "code": 90038
+    },
     "Replace '{0}' with 'Promise<{1}>'": {
         "category": "Message",
         "code": 90036
