@@ -48,6 +48,11 @@ const (
 
 type ParsingContexts int
 
+type JSDocInfo struct {
+	parent *ast.Node
+	jsDocs []*ast.Node
+}
+
 type Parser struct {
 	scanner *scanner.Scanner
 	factory ast.NodeFactory
@@ -74,7 +79,7 @@ type Parser struct {
 	notParenthesizedArrow      collections.Set[int]
 	nodeSlicePool              core.Pool[*ast.Node]
 	stringSlicePool            core.Pool[string]
-	jsdocCache                 map[*ast.Node][]*ast.Node
+	jsdocInfos                 []JSDocInfo
 	possibleAwaitSpans         []int
 	jsdocCommentsSpace         []string
 	jsdocCommentRangesSpace    []ast.CommentRange
@@ -264,6 +269,7 @@ type ParserState struct {
 	contextFlags                ast.NodeFlags
 	diagnosticsLen              int
 	jsDiagnosticsLen            int
+	jsdocInfosLen               int
 	reparsedClonesLen           int
 	statementHasAwaitIdentifier bool
 	hasParseError               bool
@@ -275,6 +281,7 @@ func (p *Parser) mark() ParserState {
 		contextFlags:                p.contextFlags,
 		diagnosticsLen:              len(p.diagnostics),
 		jsDiagnosticsLen:            len(p.jsDiagnostics),
+		jsdocInfosLen:               len(p.jsdocInfos),
 		reparsedClonesLen:           len(p.reparsedClones),
 		statementHasAwaitIdentifier: p.statementHasAwaitIdentifier,
 		hasParseError:               p.hasParseError,
@@ -287,6 +294,7 @@ func (p *Parser) rewind(state ParserState) {
 	p.contextFlags = state.contextFlags
 	p.diagnostics = p.diagnostics[0:state.diagnosticsLen]
 	p.jsDiagnostics = p.jsDiagnostics[0:state.jsDiagnosticsLen]
+	p.jsdocInfos = p.jsdocInfos[0:state.jsdocInfosLen]
 	p.reparsedClones = p.reparsedClones[0:state.reparsedClonesLen]
 	p.statementHasAwaitIdentifier = state.statementHasAwaitIdentifier
 	p.hasParseError = state.hasParseError
@@ -386,10 +394,18 @@ func (p *Parser) finishSourceFile(result *ast.SourceFile, isDeclarationFile bool
 	result.NodeCount = p.factory.NodeCount()
 	result.TextCount = p.factory.TextCount()
 	result.IdentifierCount = p.identifierCount
-	result.SetJSDocCache(p.jsdocCache)
+	result.SetJSDocCache(p.createJSDocCache())
 	slices.SortFunc(p.reparsedClones, ast.CompareNodePositions)
 	result.ReparsedClones = slices.Clone(p.reparsedClones)
 	ast.SetExternalModuleIndicator(result, p.opts.ExternalModuleIndicatorOptions)
+}
+
+func (p *Parser) createJSDocCache() map[*ast.Node][]*ast.Node {
+	result := make(map[*ast.Node][]*ast.Node, len(p.jsdocInfos))
+	for _, info := range p.jsdocInfos {
+		result[info.parent] = info.jsDocs
+	}
+	return result
 }
 
 func (p *Parser) parseToplevelStatement(i int) *ast.Node {

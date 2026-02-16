@@ -31,12 +31,6 @@ func (p *Parser) withJSDoc(node *ast.Node, hasJSDoc bool) []*ast.Node {
 	if !hasJSDoc {
 		return nil
 	}
-
-	if p.jsdocCache == nil {
-		p.jsdocCache = make(map[*ast.Node][]*ast.Node, strings.Count(p.sourceText, "/**"))
-	} else if _, ok := p.jsdocCache[node]; ok {
-		panic("tried to set JSDoc on a node with existing JSDoc")
-	}
 	// Should only be called once per node
 	p.hasDeprecatedTag = false
 	ranges := GetJSDocCommentRanges(&p.factory, p.jsdocCommentRangesSpace, node, p.sourceText)
@@ -61,7 +55,7 @@ func (p *Parser) withJSDoc(node *ast.Node, hasJSDoc bool) []*ast.Node {
 		if p.scriptKind == core.ScriptKindJS || p.scriptKind == core.ScriptKindJSX {
 			p.reparseTags(node, jsdoc)
 		}
-		p.jsdocCache[node] = jsdoc
+		p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: node, jsDocs: jsdoc})
 		return jsdoc
 	}
 	return nil

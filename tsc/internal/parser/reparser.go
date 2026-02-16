@@ -96,7 +96,7 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		}
 		typeAlias.AsTypeAliasDeclaration().Type = t
 		p.finishReparsedNode(typeAlias, tag)
-		p.jsdocCache[typeAlias] = []*ast.Node{jsDoc}
+		p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: typeAlias, jsDocs: []*ast.Node{jsDoc}})
 		typeAlias.Flags |= ast.NodeFlagsHasJSDoc
 		p.reparseList = append(p.reparseList, typeAlias)
 	case ast.KindJSDocCallbackTag:
@@ -108,7 +108,7 @@ func (p *Parser) reparseUnhosted(tag *ast.Node, parent *ast.Node, jsDoc *ast.Nod
 		typeAlias := p.factory.NewJSTypeAliasDeclaration(nil, p.addDeepCloneReparse(callbackTag.FullName), nil, functionType)
 		typeAlias.AsTypeAliasDeclaration().TypeParameters = p.gatherTypeParameters(jsDoc, tag)
 		p.finishReparsedNode(typeAlias, tag)
-		p.jsdocCache[typeAlias] = []*ast.Node{jsDoc}
+		p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: typeAlias, jsDocs: []*ast.Node{jsDoc}})
 		typeAlias.Flags |= ast.NodeFlagsHasJSDoc
 		p.reparseList = append(p.reparseList, typeAlias)
 	case ast.KindJSDocImportTag:
@@ -239,7 +239,7 @@ func (p *Parser) reparseJSDocComment(node *ast.Node, tag *ast.Node) {
 	if comment := tag.CommentList(); comment != nil {
 		propJSDoc := p.factory.NewJSDoc(comment, nil)
 		p.finishReparsedNode(propJSDoc, tag)
-		p.jsdocCache[node] = []*ast.Node{propJSDoc}
+		p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: node, jsDocs: []*ast.Node{propJSDoc}})
 		node.Flags |= ast.NodeFlagsHasJSDoc
 	}
 }
