@@ -2027,6 +2027,37 @@ func TestTscIncremental(t *testing.T) {
 				},
 			},
 		},
+		{
+			subScenario: "js file with import in jsdoc in composite project",
+			files: FileMap{
+				"/home/src/workspaces/project/tsconfig.json": `{"compilerOptions": {"allowJs": true, "composite": true}}`,
+				"/home/src/workspaces/project/index.js": stringtestutil.Dedent(`
+					test("", async function () {
+					  ;(/** @type {typeof import("a")} */ ({}))
+					})
+
+					test("", async function () {
+					  ;(/** @type {typeof import("a")} */ a)
+					})
+
+					test("", async function () {
+					  (/** @type {typeof import("a")} */ ({}))
+					  ;(/** @type {typeof import("a")} */ ({}))
+					})
+
+					test("", async function () {
+					  (/** @type {typeof import("a")} */ a)
+					  ;(/** @type {typeof import("a")} */ a)
+					})
+
+					test("", async function () {
+					  (/** @type {typeof import("a")} */ ({}))
+					  ;(/** @type {typeof import("a")} */ ({}))
+					})
+				`),
+			},
+			commandLineArgs: []string{"--noEmit"},
+		},
 	}
 
 	for _, test := range testCases {
