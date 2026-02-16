@@ -28,7 +28,7 @@ edit.backspace();
 // Members of a class method (1)
 goTo.marker('2');
 edit.insert('.');
-verify.completions({ includes: { name: "length", kind: "property", kindModifiers: "declare" } });
+verify.completions({ includes: { name: "length", kind: "property", kindModifiers: "declare", sortText: completion.SortText.SortBelow(completion.SortText.LocationPriority) } });
 edit.backspace();
 
 // Members of the invocation of a class method (1)

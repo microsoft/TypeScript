@@ -1408,6 +1408,8 @@ export namespace Completion {
         sortText: SortText.GlobalsOrKeywords,
     }));
 
+    const deprioritizedSortText = SortText.SortBelow(SortText.LocationPriority);
+
     export const functionMembers: readonly ExpectedCompletionEntryObject[] = [
         methodEntry("apply"),
         methodEntry("call"),
@@ -1416,7 +1418,7 @@ export namespace Completion {
         propertyEntry("length"),
         { name: "arguments", kind: "property", kindModifiers: "declare", text: "(property) Function.arguments: any" },
         propertyEntry("caller"),
-    ].sort(compareExpectedCompletionEntries);
+    ].map(m => ({ ...m, sortText: deprioritizedSortText })).sort(compareExpectedCompletionEntries);
 
     export function functionMembersPlus(plus: readonly ExpectedCompletionEntryObject[]): ExpectedExactCompletionsPlus {
         return combineExpectedCompletionEntries("functionMembersPlus", functionMembers, plus);
@@ -1448,7 +1450,7 @@ export namespace Completion {
 
     export const functionMembersWithPrototype: readonly ExpectedCompletionEntryObject[] = [
         ...functionMembers,
-        propertyEntry("prototype"),
+        { ...propertyEntry("prototype"), sortText: deprioritizedSortText },
     ].sort(compareExpectedCompletionEntries);
 
     export function functionMembersWithPrototypePlus(plus: readonly ExpectedCompletionEntryObject[]): ExpectedCompletionEntryObject[] {

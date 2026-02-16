@@ -260,7 +260,7 @@
           "name": "apply",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -469,7 +469,7 @@
           "name": "arguments",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -518,7 +518,7 @@
           "name": "bind",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -703,7 +703,7 @@
           "name": "call",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -993,7 +993,7 @@
           "name": "caller",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -1042,7 +1042,7 @@
           "name": "length",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -1091,7 +1091,7 @@
           "name": "prototype",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -1140,7 +1140,7 @@
           "name": "toString",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -1218,7 +1218,7 @@
           "name": "apply",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -1427,7 +1427,7 @@
           "name": "arguments",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -1476,7 +1476,7 @@
           "name": "bind",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -1661,7 +1661,7 @@
           "name": "call",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -1951,7 +1951,7 @@
           "name": "caller",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -2000,7 +2000,7 @@
           "name": "length",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -2049,7 +2049,7 @@
           "name": "prototype",
           "kind": "property",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",
@@ -2098,7 +2098,7 @@
           "name": "toString",
           "kind": "method",
           "kindModifiers": "declare",
-          "sortText": "11",
+          "sortText": "111",
           "displayParts": [
             {
               "text": "(",

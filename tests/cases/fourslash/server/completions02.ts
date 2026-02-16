@@ -9,12 +9,11 @@
 ////}
 ////Foo./**/
 
-const sortedFunctionMembers = completion.functionMembersWithPrototype.slice().sort((a, b) => a.name.localeCompare(b.name));
 const exact: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
-    ...sortedFunctionMembers.map(e =>
-        e.name === "arguments" ? { ...e, kind: "property", kindModifiers: "declare", tags: [] } :
-        e.name === "prototype" ? { ...e, kindModifiers: undefined } : e),
+    { name: "prototype", kind: "property", sortText: completion.SortText.LocationPriority },
     { name: "x", text: "var Foo.x: number", tags: [] },
+    ...completion.functionMembers.map(e =>
+        e.name === "arguments" ? { ...e, kind: "property", kindModifiers: "declare", tags: [] } : e),
 ];
 verify.completions({ marker: "", exact });
 

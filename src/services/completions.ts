@@ -3824,7 +3824,13 @@ function getCompletionData(
             // each individual type has. This is because we're going to add all identifiers
             // anyways. So we might as well elevate the members that were at least part
             // of the individual types to a higher status since we know what they are.
-            symbols.push(...filter(getPropertiesForCompletion(type, typeChecker), s => typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, s)));
+            const uncheckedSymbols = filter(getPropertiesForCompletion(type, typeChecker), s => typeChecker.isValidPropertyAccessForCompletions(propertyAccess, type, s));
+            for (const symbol of uncheckedSymbols) {
+                if (isNativeFunctionMember(symbol)) {
+                    symbolToSortTextMap[getSymbolId(symbol)] = SortText.SortBelow(SortText.LocationPriority);
+                }
+            }
+            symbols.push(...uncheckedSymbols);
         }
 
         if (insertAwait && preferences.includeCompletionsWithInsertText) {
@@ -3912,6 +3918,9 @@ function getCompletionData(
         function addSymbolSortInfo(symbol: Symbol) {
             if (isStaticProperty(symbol)) {
                 symbolToSortTextMap[getSymbolId(symbol)] = SortText.LocalDeclarationPriority;
+            }
+            else if (isNativeFunctionMember(symbol)) {
+                symbolToSortTextMap[getSymbolId(symbol)] = SortText.SortBelow(SortText.LocationPriority);
             }
         }
 
@@ -5855,6 +5864,15 @@ function isProbablyGlobalType(type: Type, sourceFile: SourceFile, checker: TypeC
 
 function isStaticProperty(symbol: Symbol) {
     return !!(symbol.valueDeclaration && getEffectiveModifierFlags(symbol.valueDeclaration) & ModifierFlags.Static && isClassLike(symbol.valueDeclaration.parent));
+}
+
+function isNativeFunctionMember(symbol: Symbol): boolean {
+    const parent = symbol.parent;
+    if (!parent) return false;
+    const parentName = parent.escapedName;
+    if (parentName !== "Function" && parentName !== "CallableFunction" && parentName !== "NewableFunction") return false;
+    // A symbol is in the global scope if its parent is undefined
+    return parent.parent === undefined;
 }
 
 function tryGetObjectLiteralContextualType(node: ObjectLiteralExpression, typeChecker: TypeChecker) {

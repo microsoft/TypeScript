@@ -174,51 +174,9 @@ Info seq  [hh:mm:ss:mss] response:
         "isNewIdentifierLocation": false,
         "entries": [
           {
-            "name": "apply",
-            "kind": "method",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
-            "name": "arguments",
-            "kind": "property",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
-            "name": "bind",
-            "kind": "method",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
-            "name": "call",
-            "kind": "method",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
-            "name": "caller",
-            "kind": "property",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
-            "name": "length",
-            "kind": "property",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
             "name": "prototype",
             "kind": "property",
             "kindModifiers": "",
-            "sortText": "11"
-          },
-          {
-            "name": "toString",
-            "kind": "method",
-            "kindModifiers": "declare",
             "sortText": "11"
           },
           {
@@ -226,6 +184,48 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "var",
             "kindModifiers": "export",
             "sortText": "11"
+          },
+          {
+            "name": "apply",
+            "kind": "method",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "arguments",
+            "kind": "property",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "bind",
+            "kind": "method",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "call",
+            "kind": "method",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "caller",
+            "kind": "property",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "length",
+            "kind": "property",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "toString",
+            "kind": "method",
+            "kindModifiers": "declare",
+            "sortText": "111"
           }
         ],
         "defaultCommitCharacters": [
@@ -238,6 +238,78 @@ Info seq  [hh:mm:ss:mss] response:
 Info seq  [hh:mm:ss:mss] request:
     {
       "seq": 4,
+      "type": "request",
+      "arguments": {
+        "file": "/tests/cases/fourslash/server/completions02.ts",
+        "line": 6,
+        "offset": 5,
+        "entryNames": [
+          {
+            "name": "x"
+          }
+        ]
+      },
+      "command": "completionEntryDetails-full"
+    }
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "completionEntryDetails-full",
+      "request_seq": 4,
+      "success": true,
+      "body": [
+        {
+          "name": "x",
+          "kindModifiers": "export",
+          "kind": "var",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Foo",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "x",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ]
+    }
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 5,
       "type": "request",
       "arguments": {
         "file": "/tests/cases/fourslash/server/completions02.ts",
@@ -261,7 +333,7 @@ Info seq  [hh:mm:ss:mss] response:
       "seq": 0,
       "type": "response",
       "command": "completionEntryDetails-full",
-      "request_seq": 4,
+      "request_seq": 5,
       "success": true,
       "body": [
         {
@@ -307,78 +379,6 @@ Info seq  [hh:mm:ss:mss] response:
             },
             {
               "text": "any",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": [],
-          "tags": []
-        }
-      ]
-    }
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "seq": 5,
-      "type": "request",
-      "arguments": {
-        "file": "/tests/cases/fourslash/server/completions02.ts",
-        "line": 6,
-        "offset": 5,
-        "entryNames": [
-          {
-            "name": "x"
-          }
-        ]
-      },
-      "command": "completionEntryDetails-full"
-    }
-Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
-Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
-Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
-Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
-Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "completionEntryDetails-full",
-      "request_seq": 5,
-      "success": true,
-      "body": [
-        {
-          "name": "x",
-          "kindModifiers": "export",
-          "kind": "var",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Foo",
-              "kind": "className"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "x",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
               "kind": "keyword"
             }
           ],
@@ -599,51 +599,9 @@ Info seq  [hh:mm:ss:mss] response:
         "isNewIdentifierLocation": false,
         "entries": [
           {
-            "name": "apply",
-            "kind": "method",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
-            "name": "arguments",
-            "kind": "property",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
-            "name": "bind",
-            "kind": "method",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
-            "name": "call",
-            "kind": "method",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
-            "name": "caller",
-            "kind": "property",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
-            "name": "length",
-            "kind": "property",
-            "kindModifiers": "declare",
-            "sortText": "11"
-          },
-          {
             "name": "prototype",
             "kind": "property",
             "kindModifiers": "",
-            "sortText": "11"
-          },
-          {
-            "name": "toString",
-            "kind": "method",
-            "kindModifiers": "declare",
             "sortText": "11"
           },
           {
@@ -651,6 +609,48 @@ Info seq  [hh:mm:ss:mss] response:
             "kind": "var",
             "kindModifiers": "export",
             "sortText": "11"
+          },
+          {
+            "name": "apply",
+            "kind": "method",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "arguments",
+            "kind": "property",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "bind",
+            "kind": "method",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "call",
+            "kind": "method",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "caller",
+            "kind": "property",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "length",
+            "kind": "property",
+            "kindModifiers": "declare",
+            "sortText": "111"
+          },
+          {
+            "name": "toString",
+            "kind": "method",
+            "kindModifiers": "declare",
+            "sortText": "111"
           }
         ],
         "defaultCommitCharacters": [
@@ -678,7 +678,7 @@ Info seq  [hh:mm:ss:mss] request:
         "offset": 5,
         "entryNames": [
           {
-            "name": "arguments"
+            "name": "x"
           }
         ]
       },
@@ -695,6 +695,78 @@ Info seq  [hh:mm:ss:mss] response:
       "type": "response",
       "command": "completionEntryDetails-full",
       "request_seq": 12,
+      "success": true,
+      "body": [
+        {
+          "name": "x",
+          "kindModifiers": "export",
+          "kind": "var",
+          "displayParts": [
+            {
+              "text": "var",
+              "kind": "keyword"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "Foo",
+              "kind": "className"
+            },
+            {
+              "text": ".",
+              "kind": "punctuation"
+            },
+            {
+              "text": "x",
+              "kind": "localName"
+            },
+            {
+              "text": ":",
+              "kind": "punctuation"
+            },
+            {
+              "text": " ",
+              "kind": "space"
+            },
+            {
+              "text": "number",
+              "kind": "keyword"
+            }
+          ],
+          "documentation": [],
+          "tags": []
+        }
+      ]
+    }
+Info seq  [hh:mm:ss:mss] request:
+    {
+      "seq": 13,
+      "type": "request",
+      "arguments": {
+        "file": "/tests/cases/fourslash/server/completions02.ts",
+        "line": 6,
+        "offset": 5,
+        "entryNames": [
+          {
+            "name": "arguments"
+          }
+        ]
+      },
+      "command": "completionEntryDetails-full"
+    }
+Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
+Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
+Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
+Info seq  [hh:mm:ss:mss] response:
+    {
+      "seq": 0,
+      "type": "response",
+      "command": "completionEntryDetails-full",
+      "request_seq": 13,
       "success": true,
       "body": [
         {
@@ -740,78 +812,6 @@ Info seq  [hh:mm:ss:mss] response:
             },
             {
               "text": "any",
-              "kind": "keyword"
-            }
-          ],
-          "documentation": [],
-          "tags": []
-        }
-      ]
-    }
-Info seq  [hh:mm:ss:mss] request:
-    {
-      "seq": 13,
-      "type": "request",
-      "arguments": {
-        "file": "/tests/cases/fourslash/server/completions02.ts",
-        "line": 6,
-        "offset": 5,
-        "entryNames": [
-          {
-            "name": "x"
-          }
-        ]
-      },
-      "command": "completionEntryDetails-full"
-    }
-Info seq  [hh:mm:ss:mss] getCompletionData: Get current token: *
-Info seq  [hh:mm:ss:mss] getCompletionData: Is inside comment: *
-Info seq  [hh:mm:ss:mss] getCompletionData: Get previous token: *
-Info seq  [hh:mm:ss:mss] getCompletionsAtPosition: isCompletionListBlocker: *
-Info seq  [hh:mm:ss:mss] getCompletionData: Semantic work: *
-Info seq  [hh:mm:ss:mss] response:
-    {
-      "seq": 0,
-      "type": "response",
-      "command": "completionEntryDetails-full",
-      "request_seq": 13,
-      "success": true,
-      "body": [
-        {
-          "name": "x",
-          "kindModifiers": "export",
-          "kind": "var",
-          "displayParts": [
-            {
-              "text": "var",
-              "kind": "keyword"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "Foo",
-              "kind": "className"
-            },
-            {
-              "text": ".",
-              "kind": "punctuation"
-            },
-            {
-              "text": "x",
-              "kind": "localName"
-            },
-            {
-              "text": ":",
-              "kind": "punctuation"
-            },
-            {
-              "text": " ",
-              "kind": "space"
-            },
-            {
-              "text": "number",
               "kind": "keyword"
             }
           ],

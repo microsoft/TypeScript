@@ -55,5 +55,5 @@ verify.completions(
     // var V
     { marker: "5", includes: "toFixed" },
     // function F
-    { marker: "6", includes: "call" },
+    { marker: "6", includes: { name: "call", sortText: completion.SortText.SortBelow(completion.SortText.LocationPriority) } },
 );
