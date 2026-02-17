@@ -1621,6 +1621,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                                 if (isOmittedExpression(elem)) continue;
                                 if (isBindingPattern(elem.name)) {
                                     elems = concatenate(elems, walkBindingPattern(elem.name));
+                                    continue;
                                 }
                                 elems = elems || [];
                                 elems.push(factory.createPropertyDeclaration(
