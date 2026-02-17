@@ -40,12 +40,12 @@ const el = <Comp {...bp}>{(props) => <div>{props.locale}</div>}</Comp>;
 ><Comp {...bp}>{(props) => <div>{props.locale}</div>}</Comp> : JSX.Element
 >Comp : <T extends BaseProps>(props: Props<T>) => JSX.Element
 >bp : BaseProps
->(props) => <div>{props.locale}</div> : (props: { locale: string; children: {}; }) => JSX.Element
->props : { locale: string; children: {}; }
+>(props) => <div>{props.locale}</div> : (props: BaseProps) => JSX.Element
+>props : BaseProps
 ><div>{props.locale}</div> : JSX.Element
 >div : any
 >props.locale : string
->props : { locale: string; children: {}; }
+>props : BaseProps
 >locale : string
 >div : any
 >Comp : <T extends BaseProps>(props: Props<T>) => JSX.Element

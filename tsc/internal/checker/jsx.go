@@ -849,7 +849,7 @@ func (c *Checker) createJsxAttributesTypeFromAttributesProperty(openingLikeEleme
 			childrenPropSymbol.ValueDeclaration.AsPropertySignatureDeclaration().Symbol = childrenPropSymbol
 			childPropMap := make(ast.SymbolTable)
 			childPropMap[jsxChildrenPropertyName] = childrenPropSymbol
-			spread = c.getSpreadType(spread, c.newAnonymousType(attributesSymbol, childPropMap, nil, nil, nil), attributesSymbol, objectFlags, false /*readonly*/)
+			spread = c.getSpreadType(spread, c.newAnonymousType(attributesSymbol, childPropMap, nil, nil, nil), attributesSymbol, objectFlags|c.getPropagatingFlagsOfTypes(childTypes, TypeFlagsNone), false /*readonly*/)
 		}
 	}
 	if hasSpreadAnyType {
@@ -888,8 +888,7 @@ func (c *Checker) checkJsxChildren(node *ast.Node, checkMode CheckMode) []*Type 
 			// empty jsx expressions don't *really* count as present children
 			continue
 		} else {
-			t := c.checkExpressionForMutableLocation(child, checkMode)
-			childTypes = append(childTypes, core.IfElse(t != c.anyFunctionType, t, c.emptyJsxObjectType))
+			childTypes = append(childTypes, c.checkExpressionForMutableLocation(child, checkMode))
 		}
 	}
 	return childTypes
