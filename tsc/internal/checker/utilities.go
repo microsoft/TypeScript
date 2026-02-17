@@ -1373,6 +1373,10 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"Map": {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
+			{lib: "esnext", props: []string{
+				"getOrInsert",
+				"getOrInsertComputed",
+			}},
 		},
 		"MapConstructor": {
 			{lib: "es2024", props: []string{"groupBy"}},
@@ -1401,10 +1405,14 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2019", props: []string{"description"}},
 		},
 		"WeakMap": {
-			{lib: "es2015", props: []string{"entries", "keys", "values"}},
+			{lib: "es2015", props: []string{}},
+			{lib: "esnext", props: []string{
+				"getOrInsert",
+				"getOrInsertComputed",
+			}},
 		},
 		"WeakSet": {
-			{lib: "es2015", props: []string{"entries", "keys", "values"}},
+			{lib: "es2015", props: []string{}},
 		},
 		"String": {
 			{lib: "es2015", props: []string{"codePointAt", "includes", "endsWith", "normalize", "repeat", "startsWith", "anchor", "big", "blink", "bold", "fixed", "fontcolor", "fontsize", "italics", "link", "small", "strike", "sub", "sup"}},
