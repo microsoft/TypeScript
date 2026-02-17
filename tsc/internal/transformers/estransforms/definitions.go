@@ -26,7 +26,7 @@ func GetESTransformer(opts *transformers.TransformOptions) *transformers.Transfo
 	switch options.GetEmitScriptTarget() {
 	case core.ScriptTargetESNext:
 		return nil // no transforms needed
-	case /*core.ScriptTargetES2025,*/ core.ScriptTargetES2024, core.ScriptTargetES2023, core.ScriptTargetES2022:
+	case core.ScriptTargetES2025, core.ScriptTargetES2024, core.ScriptTargetES2023, core.ScriptTargetES2022:
 		return NewESNextTransformer(opts)
 	case core.ScriptTargetES2021:
 		return NewES2022Transformer(opts)

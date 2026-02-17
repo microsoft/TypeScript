@@ -1347,6 +1347,9 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2018", props: []string{"dotAll"}},
 			{lib: "es2024", props: []string{"unicodeSets"}},
 		},
+		"RegExpConstructor": {
+			{lib: "es2025", props: []string{"escape"}},
+		},
 		"Reflect": {
 			{lib: "es2015", props: []string{"apply", "construct", "defineProperty", "deleteProperty", "get", "getOwnPropertyDescriptor", "getPrototypeOf", "has", "isExtensible", "ownKeys", "preventExtensions", "set", "setPrototypeOf"}},
 		},
@@ -1366,6 +1369,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"Math": {
 			{lib: "es2015", props: []string{"clz32", "imul", "sign", "log10", "log2", "log1p", "expm1", "cosh", "sinh", "tanh", "acosh", "asinh", "atanh", "hypot", "trunc", "fround", "cbrt"}},
+			{lib: "es2025", props: []string{"f16round"}},
 		},
 		"Map": {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
@@ -1375,7 +1379,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"Set": {
 			{lib: "es2015", props: []string{"entries", "keys", "values"}},
-			{lib: "esnext", props: []string{
+			{lib: "es2025", props: []string{
 				"union",
 				"intersection",
 				"difference",
@@ -1390,6 +1394,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2020", props: []string{"allSettled"}},
 			{lib: "es2021", props: []string{"any"}},
 			{lib: "es2024", props: []string{"withResolvers"}},
+			{lib: "es2025", props: []string{"try"}},
 		},
 		"Symbol": {
 			{lib: "es2015", props: []string{"for", "keyFor"}},
@@ -1428,6 +1433,10 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"Intl": {
 			{lib: "es2018", props: []string{"PluralRules"}},
+			{lib: "es2020", props: []string{"RelativeTimeFormat", "Locale", "DisplayNames"}},
+			{lib: "es2021", props: []string{"ListFormat", "DateTimeFormat"}},
+			{lib: "es2022", props: []string{"Segmenter"}},
+			{lib: "es2025", props: []string{"DurationFormat"}},
 		},
 		"NumberFormat": {
 			{lib: "es2018", props: []string{"formatToParts"}},
@@ -1442,6 +1451,7 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"DataView": {
 			{lib: "es2020", props: []string{"setBigInt64", "setBigUint64", "getBigInt64", "getBigUint64"}},
+			{lib: "es2025", props: []string{"setFloat16", "getFloat16"}},
 		},
 		"BigInt": {
 			{lib: "es2020", props: []string{}},
@@ -1477,6 +1487,9 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
 		},
+		"Float16Array": {
+			{lib: "es2025", props: []string{}},
+		},
 		"Float32Array": {
 			{lib: "es2022", props: []string{"at"}},
 			{lib: "es2023", props: []string{"findLastIndex", "findLast", "toReversed", "toSorted", "toSpliced", "with"}},
@@ -1497,6 +1510,18 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		},
 		"Error": {
 			{lib: "es2022", props: []string{"cause"}},
+		},
+		"ErrorConstructor": {
+			{lib: "esnext", props: []string{"isError"}},
+		},
+		"Uint8ArrayConstructor": {
+			{lib: "esnext", props: []string{"fromBase64", "fromHex"}},
+		},
+		"DisposableStack": {
+			{lib: "esnext", props: []string{}},
+		},
+		"AsyncDisposableStack": {
+			{lib: "esnext", props: []string{}},
 		},
 	}
 })

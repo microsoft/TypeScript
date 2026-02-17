@@ -35,7 +35,7 @@ export const A = {
 };
 //// [b.js]
 import { A } from './a.js';
-export const B = Object.assign({}, A);
+export const B = { ...A };
 
 
 //// [e.d.ts]
