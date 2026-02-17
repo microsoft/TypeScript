@@ -36,13 +36,13 @@ const (
 	NodeFlagsPossiblyContainsDynamicImport NodeFlags = 1 << 19
 	NodeFlagsPossiblyContainsImportMeta    NodeFlags = 1 << 20
 
-	NodeFlagsHasJSDoc        NodeFlags = 1 << 21 // If node has preceding JSDoc comment(s)
-	NodeFlagsJSDoc           NodeFlags = 1 << 22 // If node was parsed inside jsdoc
-	NodeFlagsAmbient         NodeFlags = 1 << 23 // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
-	NodeFlagsInWithStatement NodeFlags = 1 << 24 // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
-	NodeFlagsJsonFile        NodeFlags = 1 << 25 // If node was parsed in a Json
-	NodeFlagsDeprecated      NodeFlags = 1 << 26 // If has '@deprecated' JSDoc tag
-	NodeFlagsUnreachable     NodeFlags = 1 << 27 // If node is unreachable according to the binder
+	NodeFlagsHasJSDoc                      NodeFlags = 1 << 21 // If node has preceding JSDoc comment(s)
+	NodeFlagsJSDoc                         NodeFlags = 1 << 22 // If node was parsed inside jsdoc
+	NodeFlagsAmbient                       NodeFlags = 1 << 23 // If node was inside an ambient context -- a declaration file, or inside something with the `declare` modifier.
+	NodeFlagsInWithStatement               NodeFlags = 1 << 24 // If any ancestor of node was the `statement` of a WithStatement (not the `expression`)
+	NodeFlagsJsonFile                      NodeFlags = 1 << 25 // If node was parsed in a Json
+	NodeFlagsPossiblyContainsDeprecatedTag NodeFlags = 1 << 26 // Set during parse if comment text contains '@deprecated'; must confirm via JSDoc lookup
+	NodeFlagsUnreachable                   NodeFlags = 1 << 27 // If node is unreachable according to the binder
 
 	NodeFlagsBlockScoped = NodeFlagsLet | NodeFlagsConst | NodeFlagsUsing
 	NodeFlagsConstant    = NodeFlagsConst | NodeFlagsUsing

@@ -20,14 +20,6 @@ import (
 )
 
 func BenchmarkParse(b *testing.B) {
-	jsdocModes := []struct {
-		name string
-		mode ast.JSDocParsingMode
-	}{
-		{"tsc", ast.JSDocParsingModeParseForTypeErrors},
-		{"server", ast.JSDocParsingModeParseAll},
-	}
-
 	for _, f := range fixtures.BenchFixtures {
 		b.Run(f.Name(), func(b *testing.B) {
 			f.SkipIfNotExist(b)
@@ -37,20 +29,13 @@ func BenchmarkParse(b *testing.B) {
 			sourceText := f.ReadFile(b)
 			scriptKind := core.GetScriptKindFromFileName(fileName)
 
-			for _, jsdoc := range jsdocModes {
-				b.Run(jsdoc.name, func(b *testing.B) {
-					jsdocMode := jsdoc.mode
+			opts := ast.SourceFileParseOptions{
+				FileName: fileName,
+				Path:     path,
+			}
 
-					opts := ast.SourceFileParseOptions{
-						FileName:         fileName,
-						Path:             path,
-						JSDocParsingMode: jsdocMode,
-					}
-
-					for b.Loop() {
-						parser.ParseSourceFile(opts, sourceText, scriptKind)
-					}
-				})
+			for b.Loop() {
+				parser.ParseSourceFile(opts, sourceText, scriptKind)
 			}
 		})
 	}
@@ -112,7 +97,7 @@ func FuzzParser(f *testing.F) {
 			sourceText, err := os.ReadFile(file.path)
 			assert.NilError(f, err)
 			extension := tspath.TryGetExtensionFromPath(file.path)
-			f.Add(extension, string(sourceText), uint8(ast.JSDocParsingModeParseAll), false, false)
+			f.Add(extension, string(sourceText), false, false)
 		}
 	}
 
@@ -150,19 +135,13 @@ func FuzzParser(f *testing.F) {
 				if extension == "" {
 					continue
 				}
-				f.Add(extension, unit.content, uint8(ast.JSDocParsingModeParseAll), false, false)
+				f.Add(extension, unit.content, false, false)
 			}
 		}
 	}
 
-	f.Fuzz(func(t *testing.T, extension string, sourceText string, jsdocParsingMode_ uint8, externalModuleIndicatorOptionsJSX bool, externalModuleIndicatorOptionsForce bool) {
-		jsdocParsingMode := ast.JSDocParsingMode(jsdocParsingMode_)
-
+	f.Fuzz(func(t *testing.T, extension string, sourceText string, externalModuleIndicatorOptionsJSX bool, externalModuleIndicatorOptionsForce bool) {
 		if !extensions.Has(extension) {
-			t.Skip()
-		}
-
-		if jsdocParsingMode < ast.JSDocParsingModeParseAll || jsdocParsingMode > ast.JSDocParsingModeParseNone {
 			t.Skip()
 		}
 
@@ -170,9 +149,8 @@ func FuzzParser(f *testing.F) {
 		path := tspath.Path(fileName)
 
 		opts := ast.SourceFileParseOptions{
-			FileName:         fileName,
-			Path:             path,
-			JSDocParsingMode: jsdocParsingMode,
+			FileName: fileName,
+			Path:     path,
 			ExternalModuleIndicatorOptions: ast.ExternalModuleIndicatorOptions{
 				JSX:   externalModuleIndicatorOptionsJSX,
 				Force: externalModuleIndicatorOptionsForce,
@@ -209,9 +187,8 @@ test("", async function () {
 })
 `
 	opts := ast.SourceFileParseOptions{
-		FileName:         "/index.js",
-		Path:             "/index.js",
-		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
+		FileName: "/index.js",
+		Path:     "/index.js",
 	}
 
 	file := parser.ParseSourceFile(opts, sourceText, core.ScriptKindJS)

@@ -48,9 +48,8 @@ func fmtMain(sys tsc.System, input, output string) tsc.ExitStatus {
 	text := fileContent
 	pathified := tspath.ToPath(input, sys.GetCurrentDirectory(), true)
 	sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName:         string(pathified),
-		Path:             pathified,
-		JSDocParsingMode: ast.JSDocParsingModeParseAll,
+		FileName: string(pathified),
+		Path:     pathified,
 	}, text, core.GetScriptKindFromFileName(string(pathified)))
 	edits := format.FormatDocument(ctx, sourceFile)
 	newText := core.ApplyBulkEdits(text, edits)
@@ -271,9 +270,8 @@ func performIncrementalCompilation(
 	// todo: cache, statistics, tracing
 	parseStart := sys.Now()
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config:           config,
-		Host:             host,
-		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
+		Config: config,
+		Host:   host,
 	})
 	compileTimes.ParseTime = sys.Now().Sub(parseStart)
 	changesComputeStart := sys.Now()
@@ -311,9 +309,8 @@ func performCompilation(
 	// todo: cache, statistics, tracing
 	parseStart := sys.Now()
 	program := compiler.NewProgram(compiler.ProgramOptions{
-		Config:           config,
-		Host:             host,
-		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
+		Config: config,
+		Host:   host,
 	})
 	compileTimes.ParseTime = sys.Now().Sub(parseStart)
 	result, _ := tsc.EmitAndReportStatistics(tsc.EmitInput{

@@ -25,10 +25,9 @@ func BenchmarkBind(b *testing.B) {
 			sourceAffecting := compilerOptions.SourceFileAffecting()
 
 			parseOptions := ast.SourceFileParseOptions{
-				FileName:         fileName,
-				Path:             path,
-				CompilerOptions:  sourceAffecting,
-				JSDocParsingMode: ast.JSDocParsingModeParseAll,
+				FileName:        fileName,
+				Path:            path,
+				CompilerOptions: sourceAffecting,
 			}
 			scriptKind := core.GetScriptKindFromFileName(fileName)
 

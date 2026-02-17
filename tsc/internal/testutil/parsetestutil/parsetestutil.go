@@ -15,9 +15,8 @@ import (
 func ParseTypeScript(text string, jsx bool) *ast.SourceFile {
 	fileName := core.IfElse(jsx, "/main.tsx", "/main.ts")
 	file := parser.ParseSourceFile(ast.SourceFileParseOptions{
-		FileName:         fileName,
-		Path:             tspath.Path(fileName),
-		JSDocParsingMode: ast.JSDocParsingModeParseNone,
+		FileName: fileName,
+		Path:     tspath.Path(fileName),
 	}, text, core.GetScriptKindFromFileName(fileName))
 	return file
 }

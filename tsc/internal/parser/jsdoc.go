@@ -10,6 +10,32 @@ import (
 	"github.com/microsoft/typescript-go/internal/stringutil"
 )
 
+func init() {
+	ast.SetParseJSDocForNode(parseJSDocForNode)
+}
+
+// parseJSDocForNode lazily parses JSDoc for a node in a TS file.
+// Called on first access to Node.JSDoc() for non-JS source files.
+func parseJSDocForNode(sourceFile *ast.SourceFile, node *ast.Node) []*ast.Node {
+	p := getParser()
+	defer putParser(p)
+	p.initializeState(sourceFile.ParseOptions(), sourceFile.Text(), sourceFile.ScriptKind)
+	ranges := GetJSDocCommentRanges(&p.factory, nil, node, sourceFile.Text())
+	if len(ranges) == 0 {
+		return nil
+	}
+	jsdoc := make([]*ast.Node, 0, len(ranges))
+	pos := node.Pos()
+	for _, comment := range ranges {
+		if parsed := p.parseJSDocComment(node, comment.Pos(), comment.End(), pos); parsed != nil {
+			parsed.Parent = node
+			jsdoc = append(jsdoc, parsed)
+			pos = parsed.End()
+		}
+	}
+	return jsdoc
+}
+
 type jsdocState int32
 
 const (
@@ -27,14 +53,31 @@ const (
 	propertyLikeParseCallbackParameter
 )
 
-func (p *Parser) withJSDoc(node *ast.Node, hasJSDoc bool) []*ast.Node {
-	if !hasJSDoc {
+func (p *Parser) withJSDoc(node *ast.Node, info jsdocScannerInfo) []*ast.Node {
+	if info&jsdocScannerInfoHasJSDoc == 0 {
 		return nil
 	}
-	// Should only be called once per node
-	p.hasDeprecatedTag = false
+
+	// For TS/TSX files, defer JSDoc parsing to first access, unless the comment
+	// contains @see/@link (needed for unused-identifier checks).
+	// @deprecated is detected via cheap text scan to set PossiblyContainsDeprecatedTag;
+	// callers must confirm via JSDoc lookup.
+	if !p.isJavaScript() {
+		node.Flags |= ast.NodeFlagsHasJSDoc
+		if info&jsdocScannerInfoHasDeprecated != 0 {
+			node.Flags |= ast.NodeFlagsPossiblyContainsDeprecatedTag
+		}
+		if info&jsdocScannerInfoHasSeeOrLink == 0 {
+			return nil
+		}
+		// Fall through to eager parse for @see/@link
+	}
+
 	ranges := GetJSDocCommentRanges(&p.factory, p.jsdocCommentRangesSpace, node, p.sourceText)
 	p.jsdocCommentRangesSpace = ranges[:0]
+
+	// Should only be called once per node
+	p.hasDeprecatedTag = false
 	jsdoc := p.nodeSlicePool.NewSlice(len(ranges))[:0]
 	pos := node.Pos()
 	for _, comment := range ranges {
@@ -50,9 +93,9 @@ func (p *Parser) withJSDoc(node *ast.Node, hasJSDoc bool) []*ast.Node {
 		}
 		if p.hasDeprecatedTag {
 			p.hasDeprecatedTag = false
-			node.Flags |= ast.NodeFlagsDeprecated
+			node.Flags |= ast.NodeFlagsPossiblyContainsDeprecatedTag
 		}
-		if p.scriptKind == core.ScriptKindJS || p.scriptKind == core.ScriptKindJSX {
+		if p.isJavaScript() {
 			p.reparseTags(node, jsdoc)
 		}
 		p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: node, jsDocs: jsdoc})

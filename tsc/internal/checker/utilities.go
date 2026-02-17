@@ -1558,24 +1558,6 @@ func tryGetPropertyAccessOrIdentifierToString(expr *ast.Node) string {
 	return ""
 }
 
-func getFirstJSDocTag(node *ast.Node, f func(*ast.Node) bool) *ast.Node {
-	for _, jsdoc := range node.JSDoc(nil) {
-		tags := jsdoc.AsJSDoc().Tags
-		if tags != nil {
-			for _, tag := range tags.Nodes {
-				if f(tag) {
-					return tag
-				}
-			}
-		}
-	}
-	return nil
-}
-
-func getJSDocDeprecatedTag(node *ast.Node) *ast.Node {
-	return getFirstJSDocTag(node, ast.IsJSDocDeprecatedTag)
-}
-
 func allDeclarationsInSameSourceFile(symbol *ast.Symbol) bool {
 	if len(symbol.Declarations) > 1 {
 		var sourceFile *ast.SourceFile

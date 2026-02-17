@@ -926,7 +926,7 @@ func (c *Checker) checkGrammarClassDeclarationHeritageClauses(node *ast.ClassLik
 					return c.grammarErrorOnFirstToken(typeNodes[1], diagnostics.Classes_can_only_extend_a_single_class)
 				}
 
-				for _, j := range node.JSDoc(file) {
+				for _, j := range node.EagerJSDoc(file) {
 					if j.AsJSDoc().Tags == nil {
 						continue
 					}

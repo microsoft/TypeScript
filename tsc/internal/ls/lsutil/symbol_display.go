@@ -357,7 +357,7 @@ func isDeprecatedDeclaration(typeChecker *checker.Checker, declaration *ast.Node
 	if typeChecker != nil {
 		return typeChecker.IsDeprecatedDeclaration(declaration)
 	}
-	return ast.GetCombinedNodeFlags(declaration)&ast.NodeFlagsDeprecated != 0
+	return ast.IsDeprecatedDeclaration(declaration)
 }
 
 func getNodeModifiers(node *ast.Node, excludeFlags ast.ModifierFlags) collections.Set[ScriptElementKindModifier] {

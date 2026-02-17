@@ -1,6 +1,5 @@
 go test fuzz v1
 string(".ts")
 string("/**@typedef @type object00")
-byte('\x00')
 bool(false)
 bool(false)

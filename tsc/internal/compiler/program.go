@@ -39,7 +39,6 @@ type ProgramOptions struct {
 	CreateCheckerPool           func(*Program) CheckerPool
 	TypingsLocation             string
 	ProjectName                 string
-	JSDocParsingMode            ast.JSDocParsingMode
 }
 
 func (p *ProgramOptions) canUseProjectReferenceSource() bool {

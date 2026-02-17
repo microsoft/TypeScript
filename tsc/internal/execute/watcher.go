@@ -5,7 +5,6 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/execute/incremental"
@@ -78,9 +77,8 @@ func (w *Watcher) DoCycle() {
 	}
 	// updateProgram()
 	w.program = incremental.NewProgram(compiler.NewProgram(compiler.ProgramOptions{
-		Config:           w.config,
-		Host:             w.host,
-		JSDocParsingMode: ast.JSDocParsingModeParseForTypeErrors,
+		Config: w.config,
+		Host:   w.host,
 	}), w.program, nil, w.testing != nil)
 
 	if w.hasBeenModified(w.program.GetProgram()) {
