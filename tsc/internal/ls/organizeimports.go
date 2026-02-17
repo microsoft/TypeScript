@@ -295,11 +295,12 @@ func removeUnusedImports(oldImports []*ast.Statement, sourceFile *ast.SourceFile
 			if hasModuleDeclarationMatchingSpecifier(sourceFile, moduleSpecifier) {
 				if sourceFile.IsDeclarationFile {
 					importDeclNode := importDecl.AsImportDeclaration()
-					newImportDecl := factory.NewImportDeclaration(
+					newImportDecl := factory.UpdateImportDeclaration(
+						importDeclNode,
 						importDeclNode.Modifiers(),
 						nil, // no import clause
 						importDeclNode.ModuleSpecifier,
-						nil, // no attributes
+						importDeclNode.Attributes,
 					)
 					usedImports = append(usedImports, newImportDecl)
 				} else {
