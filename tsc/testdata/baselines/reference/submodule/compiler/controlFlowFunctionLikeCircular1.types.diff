@@ -1,0 +1,262 @@
+--- old.controlFlowFunctionLikeCircular1.types
++++ new.controlFlowFunctionLikeCircular1.types
+@@= skipped -2, +2 lines =@@
+ === controlFlowFunctionLikeCircular_1.ts ===
+ unionOfDifferentReturnType1(true);
+ >unionOfDifferentReturnType1(true) : number | DateConstructor
+->unionOfDifferentReturnType1 : ((a: any) => number) | ((a: number) => typeof Date)
++>unionOfDifferentReturnType1 : ((a: any) => number) | ((a: number) => DateConstructor)
+ >true : true
+
+ const unionOfDifferentReturnType1: { (a: any): number; } | { (a: number): typeof Date; };
+->unionOfDifferentReturnType1 : ((a: any) => number) | ((a: number) => typeof Date)
++>unionOfDifferentReturnType1 : ((a: any) => number) | ((a: number) => DateConstructor)
+ >a : any
+ >a : number
+ >Date : DateConstructor
+@@= skipped -12, +12 lines =@@
+ === controlFlowFunctionLikeCircular_2.ts ===
+ unionOfDifferentReturnType1(true);
+ >unionOfDifferentReturnType1(true) : number | DateConstructor
+->unionOfDifferentReturnType1 : ((a: any) => number) | ((a: number) => typeof Date)
++>unionOfDifferentReturnType1 : ((a: any) => number) | ((a: number) => DateConstructor)
+ >true : true
+
+ const unionOfDifferentReturnType1 = Math.random() ? (a: any) => 1 : (a: number) => ({}) as typeof Date;
+->unionOfDifferentReturnType1 : ((a: any) => number) | ((a: number) => typeof Date)
+->Math.random() ? (a: any) => 1 : (a: number) => ({}) as typeof Date : ((a: any) => number) | ((a: number) => typeof Date)
++>unionOfDifferentReturnType1 : ((a: any) => number) | ((a: number) => DateConstructor)
++>Math.random() ? (a: any) => 1 : (a: number) => ({}) as typeof Date : ((a: any) => number) | ((a: number) => DateConstructor)
+ >Math.random() : number
+ >Math.random : () => number
+ >Math : Math
+@@= skipped -13, +13 lines =@@
+ >(a: any) => 1 : (a: any) => number
+ >a : any
+ >1 : 1
+->(a: number) => ({}) as typeof Date : (a: number) => typeof Date
++>(a: number) => ({}) as typeof Date : (a: number) => DateConstructor
+ >a : number
+ >({}) as typeof Date : DateConstructor
+ >({}) : {}
+@@= skipped -9, +9 lines =@@
+
+ === controlFlowFunctionLikeCircular_3.ts ===
+ function test(arg: () => string) {
+->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
++>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => string | number) | undefined; (arg: string | number): (() => string) | undefined; (arg: string | number): (() => string | number) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => string | number) | undefined; }
+ >arg : () => string
+
+   fn();
+@@= skipped -10, +10 lines =@@
+   const fn: typeof fn = Math.random() ? arg : (): (() => arg) => {};
+ >fn : any
+ >fn : any
+->Math.random() ? arg : (): (() => arg) => {} : (() => string) | (() => (() => arg))
++>Math.random() ? arg : (): (() => arg) => {} : (() => string) | (() => () => arg)
+ >Math.random() : number
+ >Math.random : () => number
+ >Math : Math
+ >random : () => number
+ >arg : () => string
+->(): (() => arg) => {} : () => (() => arg)
++>(): (() => arg) => {} : () => () => arg
+ }
+
+ === controlFlowFunctionLikeCircular_4.ts ===
+ function test(arg: () => string) {
+->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
++>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => string | number) | undefined; (arg: string | number): (() => string) | undefined; (arg: string | number): (() => string | number) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => string | number) | undefined; }
+ >arg : () => string
+
+   fn();
+ >fn() : string | (() => arg)
+->fn : (() => string) | (() => (() => arg))
++>fn : (() => string) | (() => () => arg)
+
+   const fn = Math.random() ? arg : (): (() => arg) => {};
+->fn : (() => string) | (() => (() => arg))
+->Math.random() ? arg : (): (() => arg) => {} : (() => string) | (() => (() => arg))
++>fn : (() => string) | (() => () => arg)
++>Math.random() ? arg : (): (() => arg) => {} : (() => string) | (() => () => arg)
+ >Math.random() : number
+ >Math.random : () => number
+ >Math : Math
+ >random : () => number
+ >arg : () => string
+->(): (() => arg) => {} : () => (() => arg)
++>(): (() => arg) => {} : () => () => arg
+ }
+
+ === controlFlowFunctionLikeCircular_5.ts ===
+ function test(arg: string | number) {
+->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
++>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => string | number) | undefined; (arg: string | number): (() => string) | undefined; (arg: string | number): (() => string | number) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => string | number) | undefined; }
+ >arg : string | number
+
+   if (typeof arg === "string") {
+@@= skipped -42, +42 lines =@@
+
+     fn();
+ >fn() : string | number
+->fn : () => typeof arg
++>fn : () => string | number
+
+     const fn: () => typeof arg = () => arg;
+->fn : () => typeof arg
++>fn : () => string | number
+ >arg : string | number
+ >() => arg : () => string
+ >arg : string
+
+     return fn;
+->fn : () => typeof arg
++>fn : () => string | number
+   }
+   return undefined;
+ >undefined : undefined
+@@= skipped -17, +17 lines =@@
+
+ === controlFlowFunctionLikeCircular_6.ts ===
+ function test(arg: string | number) {
+->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
++>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => string | number) | undefined; (arg: string | number): (() => string) | undefined; (arg: string | number): (() => string | number) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => string | number) | undefined; }
+ >arg : string | number
+
+   if (typeof arg === "string") {
+@@= skipped -11, +11 lines =@@
+
+     fn();
+ >fn() : string
+->fn : () => typeof arg
++>fn : () => string
+
+     const fn = (): typeof arg => arg;
+->fn : () => typeof arg
+->(): typeof arg => arg : () => typeof arg
++>fn : () => string
++>(): typeof arg => arg : () => string
+ >arg : string
+ >arg : string
+
+     return fn;
+->fn : () => typeof arg
++>fn : () => string
+   }
+   return undefined;
+ >undefined : undefined
+@@= skipped -17, +17 lines =@@
+
+ === controlFlowFunctionLikeCircular_7.ts ===
+ function test(arg: string | number) {
+->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
++>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => string | number) | undefined; (arg: string | number): (() => string) | undefined; (arg: string | number): (() => string | number) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => string | number) | undefined; }
+ >arg : string | number
+
+   if (typeof arg === "string") {
+@@= skipped -11, +11 lines =@@
+
+     fn();
+ >fn() : string | number
+->fn : () => typeof arg
++>fn : () => string | number
+
+     const fn: { (): typeof arg } = () => arg;
+->fn : () => typeof arg
++>fn : () => string | number
+ >arg : string | number
+ >() => arg : () => string
+ >arg : string
+
+     return fn;
+->fn : () => typeof arg
++>fn : () => string | number
+   }
+   return undefined;
+ >undefined : undefined
+@@= skipped -17, +17 lines =@@
+
+ === controlFlowFunctionLikeCircular_8.ts ===
+ function test(arg: string | number, whatever: any) {
+->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
++>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => string | number) | undefined; (arg: string | number): (() => string) | undefined; (arg: string | number): (() => string | number) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => string | number) | undefined; }
+ >arg : string | number
+ >whatever : any
+
+@@= skipped -35, +35 lines =@@
+
+ === controlFlowFunctionLikeCircular_9.ts ===
+ function test(arg: string | number, whatever: any) {
+->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
++>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => string | number) | undefined; (arg: string | number): (() => string) | undefined; (arg: string | number): (() => string | number) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => string | number) | undefined; }
+ >arg : string | number
+ >whatever : any
+
+@@= skipped -12, +12 lines =@@
+
+     o.x();
+ >o.x() : void | DateConstructor
+->o.x : (() => typeof Date) | (() => void)
+->o : { [k: string]: () => typeof arg; x: (() => typeof Date) | (() => void); }
+->x : (() => typeof Date) | (() => void)
++>o.x : (() => DateConstructor) | (() => void)
++>o : { [k: string]: () => string | number; x: (() => DateConstructor) | (() => void); }
++>x : (() => DateConstructor) | (() => void)
+
+     const o: { [k: string]: () => typeof arg; x: (() => typeof Date) | (() => void) } = whatever
+->o : { [k: string]: () => typeof arg; x: (() => typeof Date) | (() => void); }
++>o : { [k: string]: () => string | number; x: (() => DateConstructor) | (() => void); }
+ >k : string
+ >arg : string | number
+->x : (() => typeof Date) | (() => void)
++>x : (() => DateConstructor) | (() => void)
+ >Date : DateConstructor
+ >whatever : any
+
+     return o.x;
+->o.x : (() => typeof Date) | (() => void)
+->o : { [k: string]: () => typeof arg; x: (() => typeof Date) | (() => void); }
+->x : (() => typeof Date) | (() => void)
++>o.x : (() => DateConstructor) | (() => void)
++>o : { [k: string]: () => string | number; x: (() => DateConstructor) | (() => void); }
++>x : (() => DateConstructor) | (() => void)
+   }
+   return undefined;
+ >undefined : undefined
+@@= skipped -23, +23 lines =@@
+
+ === controlFlowFunctionLikeCircular_10.ts ===
+ function test(arg: string | number, whatever: any) {
+->test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number): (() => typeof arg) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => typeof arg) | undefined; }
++>test : { (arg: () => string): void; (arg: () => string): void; (arg: string | number): (() => string | number) | undefined; (arg: string | number): (() => string) | undefined; (arg: string | number): (() => string | number) | undefined; (arg: string | number, whatever: any): ((arg: unknown) => arg is any) | undefined; (arg: string | number, whatever: any): (() => void) | undefined; (arg: string | number, whatever: any): (() => string | number) | undefined; }
+ >arg : string | number
+ >whatever : any
+
+@@= skipped -12, +12 lines =@@
+
+     o.foo();
+ >o.foo() : string | number
+->o.foo : () => typeof arg
+->o : { [k: string]: () => typeof arg; }
+->foo : () => typeof arg
++>o.foo : () => string | number
++>o : { [k: string]: () => string | number; }
++>foo : () => string | number
+
+     const o: { [k: string]: () => typeof arg } = whatever
+->o : { [k: string]: () => typeof arg; }
++>o : { [k: string]: () => string | number; }
+ >k : string
+ >arg : string | number
+ >whatever : any
+
+     return o.foo;
+->o.foo : () => typeof arg
+->o : { [k: string]: () => typeof arg; }
+->foo : () => typeof arg
++>o.foo : () => string | number
++>o : { [k: string]: () => string | number; }
++>foo : () => string | number
+   }
+   return undefined;
+ >undefined : undefined

@@ -1,0 +1,210 @@
+controlFlowFunctionLikeCircular_1.ts(1,1): error TS2448: Block-scoped variable 'unionOfDifferentReturnType1' used before its declaration.
+controlFlowFunctionLikeCircular_1.ts(1,1): error TS2454: Variable 'unionOfDifferentReturnType1' is used before being assigned.
+controlFlowFunctionLikeCircular_1.ts(1,29): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+controlFlowFunctionLikeCircular_1.ts(2,7): error TS1155: 'const' declarations must be initialized.
+controlFlowFunctionLikeCircular_1.ts(2,7): error TS2451: Cannot redeclare block-scoped variable 'unionOfDifferentReturnType1'.
+controlFlowFunctionLikeCircular_10.ts(1,10): error TS2393: Duplicate function implementation.
+controlFlowFunctionLikeCircular_10.ts(3,5): error TS2448: Block-scoped variable 'o' used before its declaration.
+controlFlowFunctionLikeCircular_10.ts(3,5): error TS2454: Variable 'o' is used before being assigned.
+controlFlowFunctionLikeCircular_2.ts(1,29): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+controlFlowFunctionLikeCircular_2.ts(2,7): error TS2451: Cannot redeclare block-scoped variable 'unionOfDifferentReturnType1'.
+controlFlowFunctionLikeCircular_3.ts(1,10): error TS2393: Duplicate function implementation.
+controlFlowFunctionLikeCircular_3.ts(2,3): error TS2448: Block-scoped variable 'fn' used before its declaration.
+controlFlowFunctionLikeCircular_3.ts(3,9): error TS2502: 'fn' is referenced directly or indirectly in its own type annotation.
+controlFlowFunctionLikeCircular_3.ts(3,51): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+controlFlowFunctionLikeCircular_3.ts(3,58): error TS2749: 'arg' refers to a value, but is being used as a type here. Did you mean 'typeof arg'?
+controlFlowFunctionLikeCircular_4.ts(1,10): error TS2393: Duplicate function implementation.
+controlFlowFunctionLikeCircular_4.ts(2,3): error TS2448: Block-scoped variable 'fn' used before its declaration.
+controlFlowFunctionLikeCircular_4.ts(2,3): error TS2454: Variable 'fn' is used before being assigned.
+controlFlowFunctionLikeCircular_4.ts(3,40): error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+controlFlowFunctionLikeCircular_4.ts(3,47): error TS2749: 'arg' refers to a value, but is being used as a type here. Did you mean 'typeof arg'?
+controlFlowFunctionLikeCircular_5.ts(1,10): error TS2393: Duplicate function implementation.
+controlFlowFunctionLikeCircular_5.ts(3,5): error TS2448: Block-scoped variable 'fn' used before its declaration.
+controlFlowFunctionLikeCircular_5.ts(3,5): error TS2454: Variable 'fn' is used before being assigned.
+controlFlowFunctionLikeCircular_6.ts(1,10): error TS2393: Duplicate function implementation.
+controlFlowFunctionLikeCircular_6.ts(3,5): error TS2448: Block-scoped variable 'fn' used before its declaration.
+controlFlowFunctionLikeCircular_6.ts(3,5): error TS2454: Variable 'fn' is used before being assigned.
+controlFlowFunctionLikeCircular_7.ts(1,10): error TS2393: Duplicate function implementation.
+controlFlowFunctionLikeCircular_7.ts(3,5): error TS2448: Block-scoped variable 'fn' used before its declaration.
+controlFlowFunctionLikeCircular_7.ts(3,5): error TS2454: Variable 'fn' is used before being assigned.
+controlFlowFunctionLikeCircular_8.ts(1,10): error TS2393: Duplicate function implementation.
+controlFlowFunctionLikeCircular_8.ts(3,5): error TS2448: Block-scoped variable 'b' used before its declaration.
+controlFlowFunctionLikeCircular_8.ts(3,5): error TS2454: Variable 'b' is used before being assigned.
+controlFlowFunctionLikeCircular_8.ts(3,5): error TS2554: Expected 1 arguments, but got 0.
+controlFlowFunctionLikeCircular_8.ts(4,10): error TS2456: Type alias 'First' circularly references itself.
+controlFlowFunctionLikeCircular_9.ts(1,10): error TS2393: Duplicate function implementation.
+controlFlowFunctionLikeCircular_9.ts(3,5): error TS2448: Block-scoped variable 'o' used before its declaration.
+controlFlowFunctionLikeCircular_9.ts(3,5): error TS2454: Variable 'o' is used before being assigned.
+controlFlowFunctionLikeCircular_9.ts(4,47): error TS2411: Property 'x' of type '(() => DateConstructor) | (() => void)' is not assignable to 'string' index type '() => string | number'.
+
+
+==== controlFlowFunctionLikeCircular_1.ts (5 errors) ====
+    unionOfDifferentReturnType1(true);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2448: Block-scoped variable 'unionOfDifferentReturnType1' used before its declaration.
+!!! related TS2728 controlFlowFunctionLikeCircular_1.ts:2:7: 'unionOfDifferentReturnType1' is declared here.
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2454: Variable 'unionOfDifferentReturnType1' is used before being assigned.
+                                ~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    const unionOfDifferentReturnType1: { (a: any): number; } | { (a: number): typeof Date; };
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS1155: 'const' declarations must be initialized.
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'unionOfDifferentReturnType1'.
+!!! related TS6203 controlFlowFunctionLikeCircular_2.ts:2:7: 'unionOfDifferentReturnType1' was also declared here.
+    
+==== controlFlowFunctionLikeCircular_2.ts (2 errors) ====
+    unionOfDifferentReturnType1(true);
+                                ~~~~
+!!! error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'number'.
+    const unionOfDifferentReturnType1 = Math.random() ? (a: any) => 1 : (a: number) => ({}) as typeof Date;
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'unionOfDifferentReturnType1'.
+!!! related TS6203 controlFlowFunctionLikeCircular_1.ts:2:7: 'unionOfDifferentReturnType1' was also declared here.
+    
+==== controlFlowFunctionLikeCircular_3.ts (5 errors) ====
+    function test(arg: () => string) {
+             ~~~~
+!!! error TS2393: Duplicate function implementation.
+      fn();
+      ~~
+!!! error TS2448: Block-scoped variable 'fn' used before its declaration.
+!!! related TS2728 controlFlowFunctionLikeCircular_3.ts:3:9: 'fn' is declared here.
+      const fn: typeof fn = Math.random() ? arg : (): (() => arg) => {};
+            ~~
+!!! error TS2502: 'fn' is referenced directly or indirectly in its own type annotation.
+                                                      ~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+                                                             ~~~
+!!! error TS2749: 'arg' refers to a value, but is being used as a type here. Did you mean 'typeof arg'?
+    }
+    
+==== controlFlowFunctionLikeCircular_4.ts (5 errors) ====
+    function test(arg: () => string) {
+             ~~~~
+!!! error TS2393: Duplicate function implementation.
+      fn();
+      ~~
+!!! error TS2448: Block-scoped variable 'fn' used before its declaration.
+!!! related TS2728 controlFlowFunctionLikeCircular_4.ts:3:9: 'fn' is declared here.
+      ~~
+!!! error TS2454: Variable 'fn' is used before being assigned.
+      const fn = Math.random() ? arg : (): (() => arg) => {};
+                                           ~~~~~~~~~~~
+!!! error TS2355: A function whose declared type is neither 'undefined', 'void', nor 'any' must return a value.
+                                                  ~~~
+!!! error TS2749: 'arg' refers to a value, but is being used as a type here. Did you mean 'typeof arg'?
+    }
+    
+==== controlFlowFunctionLikeCircular_5.ts (3 errors) ====
+    function test(arg: string | number) {
+             ~~~~
+!!! error TS2393: Duplicate function implementation.
+      if (typeof arg === "string") {
+        fn();
+        ~~
+!!! error TS2448: Block-scoped variable 'fn' used before its declaration.
+!!! related TS2728 controlFlowFunctionLikeCircular_5.ts:4:11: 'fn' is declared here.
+        ~~
+!!! error TS2454: Variable 'fn' is used before being assigned.
+        const fn: () => typeof arg = () => arg;
+        return fn;
+      }
+      return undefined;
+    }
+    
+==== controlFlowFunctionLikeCircular_6.ts (3 errors) ====
+    function test(arg: string | number) {
+             ~~~~
+!!! error TS2393: Duplicate function implementation.
+      if (typeof arg === "string") {
+        fn();
+        ~~
+!!! error TS2448: Block-scoped variable 'fn' used before its declaration.
+!!! related TS2728 controlFlowFunctionLikeCircular_6.ts:4:11: 'fn' is declared here.
+        ~~
+!!! error TS2454: Variable 'fn' is used before being assigned.
+        const fn = (): typeof arg => arg;
+        return fn;
+      }
+      return undefined;
+    }
+    
+==== controlFlowFunctionLikeCircular_7.ts (3 errors) ====
+    function test(arg: string | number) {
+             ~~~~
+!!! error TS2393: Duplicate function implementation.
+      if (typeof arg === "string") {
+        fn();
+        ~~
+!!! error TS2448: Block-scoped variable 'fn' used before its declaration.
+!!! related TS2728 controlFlowFunctionLikeCircular_7.ts:4:11: 'fn' is declared here.
+        ~~
+!!! error TS2454: Variable 'fn' is used before being assigned.
+        const fn: { (): typeof arg } = () => arg;
+        return fn;
+      }
+      return undefined;
+    }
+    
+==== controlFlowFunctionLikeCircular_8.ts (5 errors) ====
+    function test(arg: string | number, whatever: any) {
+             ~~~~
+!!! error TS2393: Duplicate function implementation.
+      if (typeof arg === "string") {
+        b();
+        ~
+!!! error TS2448: Block-scoped variable 'b' used before its declaration.
+!!! related TS2728 controlFlowFunctionLikeCircular_8.ts:6:11: 'b' is declared here.
+        ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+        ~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 controlFlowFunctionLikeCircular_8.ts:5:18: An argument for 'arg' was not provided.
+        type First = typeof arg;
+             ~~~~~
+!!! error TS2456: Type alias 'First' circularly references itself.
+        type Test = (arg: unknown) => arg is First;
+        const b: Test = whatever;
+        return b;
+      }
+      return undefined;
+    }
+    
+==== controlFlowFunctionLikeCircular_9.ts (4 errors) ====
+    function test(arg: string | number, whatever: any) {
+             ~~~~
+!!! error TS2393: Duplicate function implementation.
+      if (typeof arg === "string") {
+        o.x();
+        ~
+!!! error TS2448: Block-scoped variable 'o' used before its declaration.
+!!! related TS2728 controlFlowFunctionLikeCircular_9.ts:4:11: 'o' is declared here.
+        ~
+!!! error TS2454: Variable 'o' is used before being assigned.
+        const o: { [k: string]: () => typeof arg; x: (() => typeof Date) | (() => void) } = whatever
+                                                  ~
+!!! error TS2411: Property 'x' of type '(() => DateConstructor) | (() => void)' is not assignable to 'string' index type '() => string | number'.
+        return o.x;
+      }
+      return undefined;
+    }
+    
+==== controlFlowFunctionLikeCircular_10.ts (3 errors) ====
+    function test(arg: string | number, whatever: any) {
+             ~~~~
+!!! error TS2393: Duplicate function implementation.
+      if (typeof arg === "string") {
+        o.foo();
+        ~
+!!! error TS2448: Block-scoped variable 'o' used before its declaration.
+!!! related TS2728 controlFlowFunctionLikeCircular_10.ts:4:11: 'o' is declared here.
+        ~
+!!! error TS2454: Variable 'o' is used before being assigned.
+        const o: { [k: string]: () => typeof arg } = whatever
+        return o.foo;
+      }
+      return undefined;
+    }
+    

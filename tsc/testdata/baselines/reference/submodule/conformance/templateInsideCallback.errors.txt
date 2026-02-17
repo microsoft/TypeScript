@@ -3,13 +3,14 @@ templateInsideCallback.js(15,11): error TS2315: Type 'Call' is not generic.
 templateInsideCallback.js(15,16): error TS2304: Cannot find name 'T'.
 templateInsideCallback.js(17,18): error TS7006: Parameter 'x' implicitly has an 'any' type.
 templateInsideCallback.js(23,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
+templateInsideCallback.js(29,5): error TS2394: This overload signature is not compatible with its implementation signature.
 templateInsideCallback.js(29,5): error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
 templateInsideCallback.js(30,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
 templateInsideCallback.js(37,5): error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
 templateInsideCallback.js(38,5): error TS8039: A JSDoc '@template' tag may not follow a '@typedef', '@callback', or '@overload' tag
 
 
-==== templateInsideCallback.js (9 errors) ====
+==== templateInsideCallback.js (10 errors) ====
     /**
      * @typedef Oops
      * @template T
@@ -49,6 +50,9 @@ templateInsideCallback.js(38,5): error TS8039: A JSDoc '@template' tag may not f
     
     /**
      * @overload
+        ~~~~~~~~
+!!! error TS2394: This overload signature is not compatible with its implementation signature.
+!!! related TS2750 templateInsideCallback.js:47:10: The implementation signature is declared here.
         ~~~~~~~~
 !!! error TS7012: This overload implicitly returns the type 'any' because it lacks a return type annotation.
      * @template T

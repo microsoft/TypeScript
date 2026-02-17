@@ -2736,11 +2736,7 @@ func (c *Checker) checkConstructorDeclaration(node *ast.Node) {
 	}
 	c.checkSourceElement(node.Body())
 	symbol := c.getSymbolOfDeclaration(node)
-	firstDeclaration := ast.GetDeclarationOfKind(symbol, node.Kind)
-	// Only type check the symbol once
-	if node == firstDeclaration {
-		c.checkFunctionOrConstructorSymbol(symbol)
-	}
+	c.checkFunctionOrConstructorSymbol(symbol)
 	// exit early in the case of signature - super checks are not relevant to them
 	if ast.NodeIsMissing(node.Body()) {
 		return
@@ -3328,16 +3324,7 @@ func (c *Checker) checkFunctionOrMethodDeclaration(node *ast.Node) {
 		// - if node.localSymbol === undefined - this node is non-exported so we can just pick the result of getSymbolOfNode
 		symbol := c.getSymbolOfDeclaration(node)
 		localSymbol := core.OrElse(node.LocalSymbol(), symbol)
-		// Since the javascript won't do semantic analysis like typescript,
-		// if the javascript file comes before the typescript file and both contain same name functions,
-		// checkFunctionOrConstructorSymbol wouldn't be called if we didnt ignore javascript function.
-		firstDeclaration := core.Find(localSymbol.Declarations, func(declaration *ast.Node) bool {
-			return declaration.Kind == node.Kind && declaration.Flags&ast.NodeFlagsJavaScriptFile == 0
-		})
-		// Only type check the symbol once
-		if node == firstDeclaration {
-			c.checkFunctionOrConstructorSymbol(localSymbol)
-		}
+		c.checkFunctionOrConstructorSymbol(localSymbol)
 		if symbol.Parent != nil {
 			// run check on export symbol to check that modifiers agree across all exported declarations
 			c.checkFunctionOrConstructorSymbol(symbol)
@@ -3367,6 +3354,14 @@ func (c *Checker) checkFunctionOrMethodDeclaration(node *ast.Node) {
 }
 
 func (c *Checker) checkFunctionOrConstructorSymbol(symbol *ast.Symbol) {
+	// Only check the symbol once
+	if links := c.valueSymbolLinks.Get(symbol); !links.functionOrConstructorChecked {
+		links.functionOrConstructorChecked = true
+		c.checkFunctionOrConstructorSymbolWorker(symbol)
+	}
+}
+
+func (c *Checker) checkFunctionOrConstructorSymbolWorker(symbol *ast.Symbol) {
 	flagsToCheck := ast.ModifierFlagsExport | ast.ModifierFlagsAmbient | ast.ModifierFlagsPrivate | ast.ModifierFlagsProtected | ast.ModifierFlagsAbstract
 	someNodeFlags := ast.ModifierFlagsNone
 	allNodeFlags := flagsToCheck
@@ -4949,8 +4944,8 @@ func (c *Checker) checkEnumDeclaration(node *ast.Node) {
 	//
 	// Only perform this check once per symbol
 	enumSymbol := c.getSymbolOfDeclaration(node)
-	firstDeclaration := ast.GetDeclarationOfKind(enumSymbol, node.Kind)
-	if node == firstDeclaration {
+	if links := c.declaredTypeLinks.Get(enumSymbol); !links.enumChecked {
+		links.enumChecked = true
 		if len(enumSymbol.Declarations) > 1 {
 			enumIsConst := ast.IsEnumConst(node)
 			// check that const is placed\omitted on all enum declarations
