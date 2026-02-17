@@ -2127,7 +2127,7 @@ func (l *LanguageService) createCompletionItem(
 		!data.isRightOfOpenTag &&
 		clientSupportsItemSnippet(ctx) &&
 		preferences.JsxAttributeCompletionStyle != lsutil.JsxAttributeCompletionStyleNone &&
-		!(ast.IsJsxAttribute(data.location.Parent) && data.location.Parent.Initializer() != nil) {
+		!(data.location.Parent != nil && ast.IsJsxAttribute(data.location.Parent) && data.location.Parent.Initializer() != nil) {
 		useBraces := preferences.JsxAttributeCompletionStyle == lsutil.JsxAttributeCompletionStyleBraces
 		t := typeChecker.GetTypeOfSymbolAtLocation(symbol, data.location)
 
