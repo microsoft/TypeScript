@@ -4,8 +4,8 @@ go 1.26
 
 require (
 	github.com/golangci/plugin-module-register v0.1.2
-	golang.org/x/mod v0.32.0
-	golang.org/x/tools v0.41.0
+	golang.org/x/mod v0.33.0
+	golang.org/x/tools v0.42.0
 	gotest.tools/v3 v3.5.2
 )
 

@@ -58,7 +58,7 @@
         "tinybench": "^6.0.0"
     },
     "dependencies": {
-        "@types/node": "^25.2.0",
+        "@types/node": "^25.2.3",
         "@typescript/ast": "1.0.0",
         "@typescript/libsyncrpc": "github:microsoft/libsyncrpc#00f42f7e419186ae06c768cb75fff973d95bcaa6",
         "vscode-jsonrpc": "^9.0.0-next.11"
