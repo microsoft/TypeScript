@@ -294,7 +294,8 @@ func (tx *JSXTransformer) visitJsxElement(element *ast.JsxElement) *ast.Node {
 	if tx.shouldUseCreateElement(element.AsNode()) {
 		tagTransform = (*JSXTransformer).visitJsxOpeningLikeElementCreateElement
 	}
-	return tagTransform(tx, element.OpeningElement, element.Children, element.AsNode())
+	location := core.NewTextRange(scanner.SkipTrivia(tx.currentSourceFile.Text(), element.Pos()), element.End())
+	return tagTransform(tx, element.OpeningElement, element.Children, location)
 }
 
 func (tx *JSXTransformer) visitJsxSelfClosingElement(element *ast.JsxSelfClosingElement) *ast.Node {
@@ -302,7 +303,8 @@ func (tx *JSXTransformer) visitJsxSelfClosingElement(element *ast.JsxSelfClosing
 	if tx.shouldUseCreateElement(element.AsNode()) {
 		tagTransform = (*JSXTransformer).visitJsxOpeningLikeElementCreateElement
 	}
-	return tagTransform(tx, element.AsNode(), nil, element.AsNode())
+	location := core.NewTextRange(scanner.SkipTrivia(tx.currentSourceFile.Text(), element.Pos()), element.End())
+	return tagTransform(tx, element.AsNode(), nil, location)
 }
 
 func (tx *JSXTransformer) visitJsxFragment(fragment *ast.JsxFragment) *ast.Node {
@@ -310,7 +312,8 @@ func (tx *JSXTransformer) visitJsxFragment(fragment *ast.JsxFragment) *ast.Node 
 	if len(tx.importSpecifier) == 0 {
 		tagTransform = (*JSXTransformer).visitJsxOpeningFragmentCreateElement
 	}
-	return tagTransform(tx, fragment.OpeningFragment.AsJsxOpeningFragment(), fragment.Children, fragment.AsNode())
+	location := core.NewTextRange(scanner.SkipTrivia(tx.currentSourceFile.Text(), fragment.Pos()), fragment.End())
+	return tagTransform(tx, fragment.OpeningFragment.AsJsxOpeningFragment(), fragment.Children, location)
 }
 
 func (tx *JSXTransformer) convertJsxChildrenToChildrenPropObject(children []*ast.JsxChild) *ast.Node {
@@ -370,7 +373,7 @@ func (tx *JSXTransformer) getTagName(node *ast.Node) *ast.Node {
 	}
 }
 
-func (tx *JSXTransformer) visitJsxOpeningLikeElementJSX(element *ast.Node, children *ast.NodeList, location *ast.Node) *ast.Node {
+func (tx *JSXTransformer) visitJsxOpeningLikeElementJSX(element *ast.Node, children *ast.NodeList, location core.TextRange) *ast.Node {
 	tagName := tx.getTagName(element)
 	var childrenProp *ast.Node
 	if children != nil && len(children.Nodes) > 0 {
@@ -558,7 +561,7 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementOrFragmentJSX(
 	object *ast.Expression,
 	keyAttr *ast.Node,
 	children *ast.NodeList,
-	location *ast.Node,
+	location core.TextRange,
 ) *ast.Node {
 	var nonWhitespaceChildren []*ast.Node
 	if children != nil {
@@ -599,7 +602,7 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementOrFragmentJSX(
 	}
 
 	element := tx.Factory().NewCallExpression(tx.getJsxFactoryCallee(isStaticChildren), nil, nil, tx.Factory().NewNodeList(args), ast.NodeFlagsNone)
-	element.Loc = location.Loc
+	element.Loc = location
 
 	if tx.inJsxChild {
 		tx.EmitContext().AddEmitFlags(element, printer.EFStartOnNewLine)
@@ -608,7 +611,7 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementOrFragmentJSX(
 	return element
 }
 
-func (tx *JSXTransformer) visitJsxOpeningFragmentJSX(fragment *ast.JsxOpeningFragment, children *ast.NodeList, location *ast.Node) *ast.Node {
+func (tx *JSXTransformer) visitJsxOpeningFragmentJSX(fragment *ast.JsxOpeningFragment, children *ast.NodeList, location core.TextRange) *ast.Node {
 	var childrenProps *ast.Expression
 	if children != nil && len(children.Nodes) > 0 {
 		result := tx.convertJsxChildrenToChildrenPropObject(children.Nodes)
@@ -676,7 +679,7 @@ func (tx *JSXTransformer) createJsxFragmentFactoryExpression(parent *ast.Node) *
 	return tx.createJsxPsuedoFactoryExpression(parent, e, "Fragment")
 }
 
-func (tx *JSXTransformer) visitJsxOpeningLikeElementCreateElement(element *ast.Node, children *ast.NodeList, location *ast.Node) *ast.Node {
+func (tx *JSXTransformer) visitJsxOpeningLikeElementCreateElement(element *ast.Node, children *ast.NodeList, location core.TextRange) *ast.Node {
 	tagName := tx.getTagName(element)
 	attrs := element.Attributes().Properties()
 	var objectProperties *ast.Expression
@@ -722,7 +725,7 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementCreateElement(element *ast.N
 		tx.Factory().NewNodeList(args),
 		ast.NodeFlagsNone,
 	)
-	result.Loc = location.Loc
+	result.Loc = location
 
 	if tx.inJsxChild {
 		tx.EmitContext().AddEmitFlags(result, printer.EFStartOnNewLine)
@@ -730,7 +733,7 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementCreateElement(element *ast.N
 	return result
 }
 
-func (tx *JSXTransformer) visitJsxOpeningFragmentCreateElement(fragment *ast.JsxOpeningFragment, children *ast.NodeList, location *ast.Node) *ast.Node {
+func (tx *JSXTransformer) visitJsxOpeningFragmentCreateElement(fragment *ast.JsxOpeningFragment, children *ast.NodeList, location core.TextRange) *ast.Node {
 	tagName := tx.createJsxFragmentFactoryExpression(fragment.AsNode())
 	callee := tx.createJsxFactoryExpression(fragment.AsNode())
 
@@ -763,7 +766,7 @@ func (tx *JSXTransformer) visitJsxOpeningFragmentCreateElement(fragment *ast.Jsx
 		tx.Factory().NewNodeList(args),
 		ast.NodeFlagsNone,
 	)
-	result.Loc = location.Loc
+	result.Loc = location
 
 	if tx.inJsxChild {
 		tx.EmitContext().AddEmitFlags(result, printer.EFStartOnNewLine)

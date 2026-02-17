@@ -9,7 +9,7 @@
 +        jsx_dev_runtime_1.jsxDEV("p", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 3 }, this),
 +        "text",
 +        jsx_dev_runtime_1.jsxDEV("div", { className: "foo" }, void 0, false, { fileName: _jsxFileName, lineNumber: 6, columnNumber: 3 }, this)
-+    ] }, void 0, true, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 10 }, this);
++    ] }, void 0, true, { fileName: _jsxFileName, lineNumber: 3, columnNumber: 11 }, this);
  //// [react.js]
  "use strict";
  Object.defineProperty(exports, "__esModule", { value: true });
@@ -24,4 +24,4 @@
 +        jsx_dev_runtime_1.jsxDEV("p", {}, void 0, false, { fileName: _jsxFileName, lineNumber: 5, columnNumber: 3 }, this),
 +        "text",
 +        jsx_dev_runtime_1.jsxDEV("div", { className: "foo" }, void 0, false, { fileName: _jsxFileName, lineNumber: 7, columnNumber: 3 }, this)
-+    ] }, void 0, true, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 10 }, this);
++    ] }, void 0, true, { fileName: _jsxFileName, lineNumber: 4, columnNumber: 11 }, this);
