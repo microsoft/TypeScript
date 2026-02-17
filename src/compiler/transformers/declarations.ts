@@ -1626,7 +1626,7 @@ export function transformDeclarations(context: TransformationContext): Transform
                                 elems = elems || [];
                                 elems.push(factory.createPropertyDeclaration(
                                     ensureModifiers(param),
-                                    elem.name as Identifier,
+                                    elem.name,
                                     /*questionOrExclamationToken*/ undefined,
                                     ensureType(elem),
                                     /*initializer*/ undefined,
