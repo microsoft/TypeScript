@@ -79,6 +79,10 @@ func (r *aliasResolver) UseCaseSensitiveFileNames() bool {
 // GetSourceFile implements checker.Program.
 func (r *aliasResolver) GetSourceFile(fileName string) *ast.SourceFile {
 	file := r.host.GetSourceFile(fileName, r.toPath(fileName))
+	// file may be nil due to symlink/realpath mismatch; see TestAutoImportBuilderFS
+	if file == nil {
+		return nil
+	}
 	binder.BindSourceFile(file)
 	return file
 }

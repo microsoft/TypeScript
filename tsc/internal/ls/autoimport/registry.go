@@ -1071,7 +1071,10 @@ func (b *registryBuilder) extractPackages(
 			}
 			wg.Go(func() {
 				file := b.host.GetSourceFile(realpathFileName, realpathPath)
-				binder.BindSourceFile(file)
+				// file may be nil due to symlink/realpath mismatch; see TestAutoImportBuilderFS
+				if file != nil {
+					binder.BindSourceFile(file)
+				}
 				rootFiles[i] = file
 			})
 		}
