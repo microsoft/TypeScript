@@ -85,7 +85,7 @@
     },
     "overrides": {
         "typescript@*": "$typescript",
-        "eslint": "$eslint"
+        "eslint@*": "$eslint"
     },
     "scripts": {
         "test": "hereby runtests-parallel --light=false",
