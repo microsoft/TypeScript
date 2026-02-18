@@ -62,7 +62,7 @@ type; // Error (cannot resolve name)
 as; // Error (used in emitting position)
 export {};
 //// [d.js]
-import "./mod.js"; // Error
+export {};
 //// [e.js]
 import { type as type } from "./mod.js";
 type;
