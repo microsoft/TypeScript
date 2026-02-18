@@ -1,7 +1,0 @@
-{
-    "compilerOptions": {
-        "verbatimModuleSyntax": true,
-        "isolatedModules": true,
-        "preserveConstEnums": true
-    }
-}

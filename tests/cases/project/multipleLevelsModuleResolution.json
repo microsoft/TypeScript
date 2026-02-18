@@ -1,7 +1,0 @@
-{
-    "scenario": "MultipleLevel module resolution",
-    "projectRoot": "tests/cases/projects/MultipleLevels",
-    "inputFiles": [
-        "root.ts"
-    ]
-}

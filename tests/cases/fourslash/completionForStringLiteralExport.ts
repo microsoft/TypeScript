@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-// Should define spans for replacement that appear after the last directory seperator in export statements
+// Should define spans for replacement that appear after the last directory separator in export statements
 
 // @typeRoots: my_typings
 

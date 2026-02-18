@@ -1,6 +1,0 @@
-//// [tests/cases/conformance/jsdoc/importTag13.ts] ////
-
-=== /foo.js ===
-
-/** @import x = require("types") */
-

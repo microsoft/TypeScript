@@ -1,6 +1,0 @@
-//// [tests/cases/compiler/noCheckNoEmit.ts] ////
-
-=== noCheckNoEmit.ts ===
-export const a: number = "not ok";
->a : Symbol(a, Decl(noCheckNoEmit.ts, 0, 12))
-

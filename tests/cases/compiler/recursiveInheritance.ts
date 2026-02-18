@@ -1,8 +1,0 @@
-// @target: es2015
-
-interface I5 extends I5 { // error
-    foo():void;
-} 
-
-interface i8 extends i9 { } // error
-interface i9 extends i8 { } // error

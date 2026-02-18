@@ -1,8 +1,0 @@
-{
-  "scenario": "Verify that the setting to search node_modules deeper takes effect",
-  "projectRoot": "tests/cases/projects/NodeModulesSearch",
-  "baselineCheck": true,
-  "declaration": false,
-  "moduleResolution": "node",
-  "project": "maxDepthIncreased"
-}

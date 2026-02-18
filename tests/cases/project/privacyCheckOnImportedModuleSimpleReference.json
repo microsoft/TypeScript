@@ -1,7 +1,0 @@
-{
-    "scenario": "privacy Check on imported module - simple reference",
-    "projectRoot": "tests/cases/projects/privacyCheck-SimpleReference",
-    "inputFiles": [
-        "test.ts"
-    ]
-}

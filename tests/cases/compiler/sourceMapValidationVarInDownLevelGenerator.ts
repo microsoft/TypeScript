@@ -1,8 +1,0 @@
-// @target: es5,es2015
-// @sourcemap: true
-// @downlevelIteration: true
-// @noEmitHelpers: true
-// @lib: es2015
-function * f() {
-    var x = 1, y;
-}

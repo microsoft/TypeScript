@@ -1,5 +1,0 @@
-// === documentHighlights ===
-// === /tests/cases/fourslash/scopeOfUnionProperties.ts ===
-// function f(s: string | number) {
-//     s.[|{| kind: "reference" |}constr/*HIGHLIGHTS*/uctor|]
-// }

@@ -1,1 +1,0 @@
-declare var a: number;

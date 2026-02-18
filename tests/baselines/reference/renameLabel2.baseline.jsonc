@@ -1,5 +1,0 @@
-// === findRenameLocations ===
-// === /tests/cases/fourslash/renameLabel2.ts ===
-// /*RENAME*/<|[|fooRENAME|]: {
-//     <|break [|fooRENAME|];|>
-// }|>

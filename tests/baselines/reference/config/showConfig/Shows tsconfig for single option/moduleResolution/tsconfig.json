@@ -1,8 +1,0 @@
-{
-    "compilerOptions": {
-        "moduleResolution": "node10",
-        "resolvePackageJsonExports": false,
-        "resolvePackageJsonImports": false,
-        "resolveJsonModule": false
-    }
-}

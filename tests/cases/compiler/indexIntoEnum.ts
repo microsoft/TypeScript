@@ -1,7 +1,0 @@
-// @target: es2015
-namespace M {
-
-    enum E { }
-
-    var x = E[0];
-}

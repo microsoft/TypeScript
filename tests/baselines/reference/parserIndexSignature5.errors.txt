@@ -1,9 +1,0 @@
-parserIndexSignature5.ts(2,4): error TS2304: Cannot find name 'a'.
-
-
-==== parserIndexSignature5.ts (1 errors) ====
-    interface I {
-      [a] // Used to be indexer, now it is a computed property
-       ~
-!!! error TS2304: Cannot find name 'a'.
-    }

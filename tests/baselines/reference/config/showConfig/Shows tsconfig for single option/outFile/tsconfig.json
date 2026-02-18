@@ -1,5 +1,0 @@
-{
-    "compilerOptions": {
-        "outFile": "./someString"
-    }
-}

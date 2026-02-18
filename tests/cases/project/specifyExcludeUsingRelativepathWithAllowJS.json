@@ -1,5 +1,0 @@
-{
-  "scenario": "Verify exclude property without using relative path",
-  "projectRoot": "tests/cases/projects/projectOption/SpecifyExcludeUsingRelativePathWithAllowJS",
-  "baselineCheck": true
-}

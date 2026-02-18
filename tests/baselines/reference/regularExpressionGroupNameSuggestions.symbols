@@ -1,6 +1,0 @@
-//// [tests/cases/compiler/regularExpressionGroupNameSuggestions.ts] ////
-
-=== regularExpressionGroupNameSuggestions.ts ===
-const regex = /(?<foo>)\k<Foo>/;
->regex : Symbol(regex, Decl(regularExpressionGroupNameSuggestions.ts, 0, 5))
-

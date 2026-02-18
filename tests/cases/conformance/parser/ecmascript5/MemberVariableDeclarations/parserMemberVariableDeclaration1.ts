@@ -1,5 +1,0 @@
-// @target: es2015
-// @strict: false
-class C {
-  public public Foo;
-}

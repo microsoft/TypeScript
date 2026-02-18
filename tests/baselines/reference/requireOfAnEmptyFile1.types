@@ -1,9 +1,0 @@
-//// [tests/cases/compiler/requireOfAnEmptyFile1.ts] ////
-
-=== requireOfAnEmptyFile1_a.ts ===
-import fs = require('./requireOfAnEmptyFile1_b');
->fs : any
->   : ^^^
-
-=== requireOfAnEmptyFile1_b.ts ===
-

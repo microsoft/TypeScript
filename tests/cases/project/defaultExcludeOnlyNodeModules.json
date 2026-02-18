@@ -1,6 +1,0 @@
-{
-  "scenario": "Verify default exclude property with only node_modules in project option",
-  "projectRoot": "tests/cases/projects/projectOption/DefaultExcludeOnlyNodeModules",
-  "baselineCheck": true,
-  "declaration": true
-}

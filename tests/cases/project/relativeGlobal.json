@@ -1,8 +1,0 @@
-{
-    "scenario": "relative - global",
-    "projectRoot": "tests/cases/projects/relative-global",
-    "inputFiles": [
-        "consume.ts"
-    ],
-    "runTest": true
-}

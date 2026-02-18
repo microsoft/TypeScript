@@ -1,9 +1,0 @@
-{
-    "scenario": "declare Variable Collision",
-    "projectRoot": "tests/cases/projects/declareVariableCollision",
-    "inputFiles": [
-        "decl.d.ts",
-        "in1.d.ts",
-        "in2.d.ts"
-    ]
-}

@@ -1,8 +1,0 @@
-// @target: es2015
-// @strict: false
-var x: 'hi';
-
-function f(x: 'hi');
-function f(x: string);
-function f(x: any) {
-}

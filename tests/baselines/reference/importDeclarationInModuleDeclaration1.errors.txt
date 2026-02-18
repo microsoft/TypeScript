@@ -1,9 +1,0 @@
-importDeclarationInModuleDeclaration1.ts(2,25): error TS1147: Import declarations in a namespace cannot reference a module.
-
-
-==== importDeclarationInModuleDeclaration1.ts (1 errors) ====
-    namespace m2 {
-        import m3 = require("use_glo_M1_public");
-                            ~~~~~~~~~~~~~~~~~~~
-!!! error TS1147: Import declarations in a namespace cannot reference a module.
-    }

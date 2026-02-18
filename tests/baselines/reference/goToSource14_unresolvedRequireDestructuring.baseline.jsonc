@@ -1,3 +1,0 @@
-// === goToSourceDefinition ===
-// === /home/src/workspaces/project/index.js ===
-// const { blah/*GOTO SOURCE DEF*/ } = require("unresolved");

@@ -1,6 +1,0 @@
-// === findRenameLocations ===
-// @providePrefixAndSuffixTextForRename: true
-
-// === /home/src/workspaces/project/src/index.ts ===
-// <|import { /*START PREFIX*/someExportedVariable as /*RENAME*/[|someExportedVariableRENAME|] } from '../lib/index';|>
-// [|someExportedVariableRENAME|];

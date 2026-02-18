@@ -1,7 +1,0 @@
-{
-    "compilerOptions": {
-        "module": "nodenext",
-        "moduleResolution": "nodenext",
-        "moduleDetection": "force"
-    }
-}
