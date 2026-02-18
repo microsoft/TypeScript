@@ -239,6 +239,7 @@ func (p *Parser) reparseJSDocComment(node *ast.Node, tag *ast.Node) {
 	if comment := tag.CommentList(); comment != nil {
 		propJSDoc := p.factory.NewJSDoc(comment, nil)
 		p.finishReparsedNode(propJSDoc, tag)
+		propJSDoc.Parent = node
 		p.jsdocInfos = append(p.jsdocInfos, JSDocInfo{parent: node, jsDocs: []*ast.Node{propJSDoc}})
 		node.Flags |= ast.NodeFlagsHasJSDoc
 	}
