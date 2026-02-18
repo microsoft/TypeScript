@@ -1430,7 +1430,7 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 				parameterProperties = append(parameterProperties, updated)
 			} else {
 				// Pattern - this is currently an error, but we emit declarations for it somewhat correctly
-				// !!! is this worth reimplementing? We never made it not-an-error
+				parameterProperties = append(parameterProperties, tx.walkBindingPattern(param.Name().AsBindingPattern(), param)...)
 			}
 		}
 		tx.state.getSymbolAccessibilityDiagnostic = oldDiag
@@ -1540,6 +1540,27 @@ func (tx *DeclarationTransformer) transformClassDeclaration(input *ast.ClassDecl
 		tx.Visitor().VisitNodes(input.HeritageClauses),
 		members,
 	)
+}
+
+func (tx *DeclarationTransformer) walkBindingPattern(pattern *ast.BindingPattern, param *ast.Node) []*ast.Node {
+	var elems []*ast.Node
+	for _, elem := range pattern.Elements.Nodes {
+		if ast.IsOmittedExpression(elem) {
+			continue
+		}
+		if ast.IsBindingPattern(elem.Name()) {
+			elems = append(elems, tx.walkBindingPattern(elem.Name().AsBindingPattern(), param)...)
+			continue
+		}
+		elems = append(elems, tx.Factory().NewPropertyDeclaration(
+			tx.ensureModifiers(param),
+			elem.Name(),
+			nil, /*questionOrExclamationToken*/
+			tx.ensureType(elem, false),
+			nil, /*initializer*/
+		))
+	}
+	return elems
 }
 
 func (tx *DeclarationTransformer) transformVariableStatement(input *ast.VariableStatement) *ast.Node {
