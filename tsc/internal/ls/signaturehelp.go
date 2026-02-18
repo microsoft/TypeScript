@@ -1144,7 +1144,7 @@ func tryGetParameterInfo(startingToken *ast.Node, sourceFile *ast.SourceFile, c 
 	}
 
 	signatures := c.GetSignaturesOfType(nonNullableContextualType, checker.SignatureKindCall)
-	if signatures == nil || signatures[len(signatures)-1] == nil {
+	if len(signatures) == 0 {
 		return nil
 	}
 	signature := signatures[len(signatures)-1]
