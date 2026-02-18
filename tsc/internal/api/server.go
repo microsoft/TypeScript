@@ -18,6 +18,9 @@ type StdioServerOptions struct {
 	Err                io.Writer
 	Cwd                string
 	DefaultLibraryPath string
+	// PipePath, if set, listens on a named pipe (Windows) or Unix domain
+	// socket instead of using In/Out for communication.
+	PipePath string
 	// Callbacks specifies which filesystem operations should be delegated
 	// to the client (e.g., "readFile", "fileExists"). Empty means no callbacks.
 	Callbacks []string
@@ -46,8 +49,19 @@ func NewStdioServer(options *StdioServerOptions) *StdioServer {
 
 // Run starts the server and blocks until the connection closes.
 func (s *StdioServer) Run(ctx context.Context) error {
-	transport := NewStdioTransport(s.options.In, s.options.Out)
-	defer transport.Close()
+	var transport Transport
+	if s.options.PipePath != "" {
+		t, err := NewPipeTransport(s.options.PipePath)
+		if err != nil {
+			return fmt.Errorf("failed to create pipe transport: %w", err)
+		}
+		defer t.Close()
+		transport = t
+	} else {
+		t := NewStdioTransport(s.options.In, s.options.Out)
+		defer t.Close()
+		transport = t
+	}
 
 	fs := bundled.WrapFS(osvfs.FS())
 

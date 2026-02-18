@@ -30,6 +30,12 @@ export async function runBenchmarks(singleIteration?: boolean) {
         teardown: async () => {
             await teardown();
         },
+        // Reduce iterations from the default 64 to 10.  Slow tasks
+        // are dominated by the iteration minimum, not the time limit.
+        // 10 iterations still gives stable medians while cutting total
+        // bench time by ~5x.
+        iterations: 10,
+        warmupIterations: 4,
         ...singleIteration ? {
             iterations: 1,
             warmup: false,
