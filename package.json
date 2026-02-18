@@ -111,7 +111,7 @@
     },
     "packageManager": "npm@8.19.4",
     "volta": {
-        "node": "20.1.0",
+        "node": "22.22.0",
         "npm": "8.19.4"
     }
 }
