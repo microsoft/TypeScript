@@ -1531,6 +1531,9 @@ var getFeatureMap = sync.OnceValue(func() map[string][]FeatureMapEntry {
 		"AsyncDisposableStack": {
 			{lib: "esnext", props: []string{}},
 		},
+		"Date": {
+			{lib: "esnext", props: []string{"toTemporalInstant"}},
+		},
 	}
 })
 
