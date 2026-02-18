@@ -673,7 +673,9 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 			dependencies := b.computeDependenciesForNodeModulesDirectory(change, allResolvedPackageNames, dirName, dirPath)
 			bucketState := nodeModulesBucket.Value().state
 			// !!! Optimization: handle different dependency set via granular updates
-			needsFullRebuild := bucketState.multipleFilesDirty || !nodeModulesBucket.Value().DependencyNames.Equals(dependencies)
+			needsFullRebuild := bucketState.multipleFilesDirty ||
+				!nodeModulesBucket.Value().DependencyNames.Equals(dependencies) ||
+				!core.UnorderedEqual(bucketState.fileExcludePatterns, b.userPreferences.AutoImportFileExcludePatterns)
 			dirtyPackages := bucketState.DirtyPackages()
 			canDoGranularUpdate := !needsFullRebuild && dirtyPackages.Len() > 0
 
@@ -701,7 +703,8 @@ func (b *registryBuilder) updateIndexes(ctx context.Context, change RegistryChan
 	if project, hasProject := b.projects.Get(projectPath); hasProject {
 		program := b.host.GetProgramForProject(projectPath)
 		resolvedPackageNames := allResolvedPackageNames[projectPath]
-		shouldRebuild := project.Value().state.hasDirtyFileBesides(change.RequestedFile)
+		shouldRebuild := project.Value().state.hasDirtyFileBesides(change.RequestedFile) ||
+			!core.UnorderedEqual(project.Value().state.fileExcludePatterns, b.userPreferences.AutoImportFileExcludePatterns)
 		if !shouldRebuild && project.Value().state.newProgramStructure > 0 {
 			// Check if resolved package names changed, or if there are new non-node_modules files.
 			// If so, we need to rebuild both the project bucket and potentially node_modules buckets.
