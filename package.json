@@ -62,7 +62,6 @@
         "dprint": "^0.49.1",
         "esbuild": "^0.27.3",
         "eslint": "^10.0.0",
-        "eslint-formatter-autolinkable-stylish": "^1.4.0",
         "eslint-plugin-regexp": "^3.0.0",
         "fast-xml-parser": "^5.3.6",
         "glob": "^10.5.0",
@@ -84,8 +83,7 @@
         "which": "^3.0.1"
     },
     "overrides": {
-        "typescript@*": "$typescript",
-        "eslint@*": "$eslint"
+        "typescript@*": "$typescript"
     },
     "scripts": {
         "test": "hereby runtests-parallel --light=false",
