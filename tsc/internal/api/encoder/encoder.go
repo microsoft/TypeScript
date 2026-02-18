@@ -1,6 +1,7 @@
 package encoder
 
 import (
+	"encoding/base64"
 	"encoding/binary"
 	"fmt"
 	"slices"
@@ -37,6 +38,11 @@ const (
 
 const (
 	HeaderOffsetMetadata = iota * 4
+	HeaderOffsetHashLo0
+	HeaderOffsetHashLo1
+	HeaderOffsetHashHi0
+	HeaderOffsetHashHi1
+	HeaderOffsetParseOptions
 	HeaderOffsetStringOffsets
 	HeaderOffsetStringData
 	HeaderOffsetExtendedData
@@ -45,7 +51,7 @@ const (
 )
 
 const (
-	ProtocolVersion uint8 = 1
+	ProtocolVersion uint8 = 3
 )
 
 // Source File Binary Format
@@ -59,27 +65,29 @@ const (
 //
 // The format comprises six sections:
 //
-// | Section            | Length             | Description                                                                              |
-// | ------------------ | ------------------ | ---------------------------------------------------------------------------------------- |
-// | Header             | 20 bytes           | Contains byte offsets to the start of each section.                                      |
-// | String offsets     | 8 bytes per string | Pairs of starting byte offsets and ending byte offsets into the **string data** section. |
-// | String data        | variable           | UTF-8 encoded string data.                                                               |
-// | Extended node data | variable           | Extra data for some kinds of nodes.                                                      |
-// | Nodes              | 24 bytes per node  | Defines the AST structure of the file, with references to strings and extended data.     |
+// | Section            | Length             | Description                                                                                     |
+// | ------------------ | ------------------ | ----------------------------------------------------------------------------------------------- |
+// | Header             | 40 bytes           | Contains the content hash, parse options, flags, and byte offsets to the start of each section. |
+// | String offsets     | 8 bytes per string | Pairs of starting byte offsets and ending byte offsets into the **string data** section.        |
+// | String data        | variable           | UTF-8 encoded string data.                                                                      |
+// | Extended node data | variable           | Extra data for some kinds of nodes.                                                             |
+// | Nodes              | 24 bytes per node  | Defines the AST structure of the file, with references to strings and extended data.            |
 //
-// Header (20 bytes)
+// Header (40 bytes)
 // -----------------
 //
 // The header contains the following fields:
 //
-// | Byte offset | Type   | Field                                     |
-// | ----------- | ------ | ----------------------------------------- |
-// | 0           | uint8  | Protocol version                          |
-// | 1-4         |        | Reserved                                  |
-// | 4-8         | uint32 | Byte offset to string offsets section     |
-// | 8-12        | uint32 | Byte offset to string data section        |
-// | 12-16       | uint32 | Byte offset to extended node data section |
-// | 16-20       | uint32 | Byte offset to nodes section              |
+// | Byte offset | Type      | Field                                             |
+// | ----------- | --------- | ------------------------------------------------- |
+// | 0           | uint8     | Protocol version                                  |
+// | 1-3         |           | Reserved                                          |
+// | 4-19        | uint128   | Source file content hash (xxh3, LE)               |
+// | 20-23       | uint32    | Parse options (bitmask; bit 0: JSX, bit 1: Force) |
+// | 24-27       | uint32    | Byte offset to string offsets section             |
+// | 28-31       | uint32    | Byte offset to string data section                |
+// | 32-35       | uint32    | Byte offset to extended node data section         |
+// | 36-39       | uint32    | Byte offset to nodes section                      |
 //
 // String offsets (8 bytes per string)
 // -----------------------------------
@@ -116,7 +124,8 @@ const (
 // | ----------- | ------ | ------------------------------------------------- |
 // | 0-4         | uint32 | Index of `text` in the string offsets section     |
 // | 4-8         | uint32 | Index of `fileName` in the string offsets section |
-// | 8-12        | uint32 | Index of `id` in the string offsets section       |
+// | 8-12        | uint32 | Index of `path` in the string offsets section     |
+// | 12-16       | uint32 | Index of `id` in the string offsets section       |
 //
 // Nodes (24 bytes per node)
 // -------------------------
@@ -219,7 +228,26 @@ const (
 // meaning of the data at that offset is defined by the node type. See the **Extended node data** section for details on
 // the format of the extended data for specific node types.
 
-func EncodeSourceFile(sourceFile *ast.SourceFile, id string) ([]byte, error) {
+// SourceFileHash returns the 128-bit content hash for a source file as a hex string.
+func SourceFileHash(sourceFile *ast.SourceFile) string {
+	h := sourceFile.Hash
+	return fmt.Sprintf("%016x%016x", h.Hi, h.Lo)
+}
+
+// encodeParseOptions encodes the per-file ExternalModuleIndicatorOptions as a uint32 bitmask.
+func encodeParseOptions(opts ast.ExternalModuleIndicatorOptions) uint32 {
+	var bits uint32
+	if opts.JSX {
+		bits |= 1
+	}
+	if opts.Force {
+		bits |= 2
+	}
+	return bits
+}
+
+func EncodeSourceFile(sourceFile *ast.SourceFile) ([]byte, error) {
+	hash := sourceFile.Hash
 	var parentIndex, nodeCount, prevIndex uint32
 	var extendedData []byte
 	strs := newStringTable(sourceFile.Text(), sourceFile.TextCount)
@@ -291,11 +319,12 @@ func EncodeSourceFile(sourceFile *ast.SourceFile, id string) ([]byte, error) {
 
 	nodeCount++
 	parentIndex++
-	nodes = appendUint32s(nodes, uint32(sourceFile.Kind), uint32(sourceFile.Pos()), uint32(sourceFile.End()), 0, 0, getSourceFileData(sourceFile, id, strs, &extendedData))
+	nodes = appendUint32s(nodes, uint32(sourceFile.Kind), uint32(sourceFile.Pos()), uint32(sourceFile.End()), 0, 0, getSourceFileData(sourceFile, strs, &extendedData))
 
 	visitor.VisitEachChild(sourceFile.AsNode())
 
 	metadata := uint32(ProtocolVersion) << 24
+	parseOpts := encodeParseOptions(sourceFile.ParseOptions().ExternalModuleIndicatorOptions)
 	offsetStringTableOffsets := HeaderSize
 	offsetStringTableData := HeaderSize + len(strs.offsets)*4
 	offsetExtendedData := offsetStringTableData + strs.stringLength()
@@ -303,6 +332,9 @@ func EncodeSourceFile(sourceFile *ast.SourceFile, id string) ([]byte, error) {
 
 	header := []uint32{
 		metadata,
+		uint32(hash.Lo), uint32(hash.Lo >> 32),
+		uint32(hash.Hi), uint32(hash.Hi >> 32),
+		parseOpts,
 		uint32(offsetStringTableOffsets),
 		uint32(offsetStringTableData),
 		uint32(offsetExtendedData),
@@ -333,13 +365,16 @@ func appendUint32s(buf []byte, values ...uint32) []byte {
 	return buf
 }
 
-func getSourceFileData(sourceFile *ast.SourceFile, id string, strs *stringTable, extendedData *[]byte) uint32 {
+func getSourceFileData(sourceFile *ast.SourceFile, strs *stringTable, extendedData *[]byte) uint32 {
 	t := NodeDataTypeExtendedData
 	extendedDataOffset := len(*extendedData)
 	textIndex := strs.add(sourceFile.Text(), sourceFile.Kind, sourceFile.Pos(), sourceFile.End())
 	fileNameIndex := strs.add(sourceFile.FileName(), 0, 0, 0)
-	idIndex := strs.add(id, 0, 0, 0)
-	*extendedData = appendUint32s(*extendedData, textIndex, fileNameIndex, idIndex)
+	pathIndex := strs.add(string(sourceFile.Path()), 0, 0, 0)
+	var idBuf [8]byte
+	binary.LittleEndian.PutUint64(idBuf[:], uint64(ast.GetNodeId(sourceFile.AsNode())))
+	idIndex := strs.add(base64.StdEncoding.EncodeToString(idBuf[:]), 0, 0, 0)
+	*extendedData = appendUint32s(*extendedData, textIndex, fileNameIndex, pathIndex, idIndex)
 	return t | uint32(extendedDataOffset)
 }
 

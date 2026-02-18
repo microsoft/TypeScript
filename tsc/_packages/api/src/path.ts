@@ -7,9 +7,20 @@ const CharacterCodesa = "a".charCodeAt(0);
 const CharacterCodesz = "z".charCodeAt(0);
 const CharacterCodesA = "A".charCodeAt(0);
 const CharacterCodesZ = "Z".charCodeAt(0);
+const CharacterCodesDot = ".".charCodeAt(0);
 const directorySeparator = "/";
 const altDirectorySeparator = "\\";
 const urlSchemeSeparator = "://";
+const backslashRegExp = /\\/g;
+// check path for these segments: '', '.'. '..'
+const relativePathSegmentRegExp = /\/\/|(?:^|\/)\.\.?(?:$|\/)/;
+
+/**
+ * Determines whether a charCode corresponds to `/` or `\\`.
+ */
+function isAnyDirectorySeparator(charCode: number): boolean {
+    return charCode === CharacterCodesSlash || charCode === CharacterCodesBackslash;
+}
 
 function isVolumeCharacter(charCode: number) {
     return (charCode >= CharacterCodesa && charCode <= CharacterCodesz) ||
@@ -133,6 +144,227 @@ function pathComponents(path: string, rootLength: number) {
 
 function lastOrUndefined<T>(array: T[]): T | undefined {
     return array.length ? array[array.length - 1] : undefined;
+}
+
+/**
+ * Determines whether a path has a trailing separator (`/` or `\\`).
+ */
+export function hasTrailingDirectorySeparator(path: string): boolean {
+    return path.length > 0 && isAnyDirectorySeparator(path.charCodeAt(path.length - 1));
+}
+
+/**
+ * Removes a trailing directory separator from a path, if it does not already have one.
+ */
+export function removeTrailingDirectorySeparator(path: string): string {
+    if (hasTrailingDirectorySeparator(path)) {
+        return path.substr(0, path.length - 1);
+    }
+    return path;
+}
+
+/**
+ * Adds a trailing directory separator to a path, if it does not already have one.
+ */
+export function ensureTrailingDirectorySeparator(path: string): string {
+    if (!hasTrailingDirectorySeparator(path)) {
+        return path + directorySeparator;
+    }
+    return path;
+}
+
+/**
+ * Normalize path separators, converting `\\` into `/`.
+ */
+export function normalizeSlashes(path: string): string {
+    return path.includes("\\")
+        ? path.replace(backslashRegExp, directorySeparator)
+        : path;
+}
+
+/**
+ * Combines paths. If a path is absolute, it replaces any previous path. Relative paths are not simplified.
+ */
+export function combinePaths(path: string, ...paths: (string | undefined)[]): string {
+    if (path) path = normalizeSlashes(path);
+    for (let relativePath of paths) {
+        if (!relativePath) continue;
+        relativePath = normalizeSlashes(relativePath);
+        if (!path || getRootLength(relativePath) !== 0) {
+            path = relativePath;
+        }
+        else {
+            path = ensureTrailingDirectorySeparator(path) + relativePath;
+        }
+    }
+    return path;
+}
+
+function simpleNormalizePath(path: string): string | undefined {
+    // Most paths don't require normalization
+    if (!relativePathSegmentRegExp.test(path)) {
+        return path;
+    }
+    // Some paths only require cleanup of `/./` or leading `./`
+    let simplified = path.replace(/\/\.\//g, "/");
+    if (simplified.startsWith("./")) {
+        simplified = simplified.slice(2);
+    }
+    if (simplified !== path) {
+        path = simplified;
+        if (!relativePathSegmentRegExp.test(path)) {
+            return path;
+        }
+    }
+    return undefined;
+}
+
+/**
+ * Returns the normalized absolute path, resolving `.` and `..` segments.
+ */
+export function getNormalizedAbsolutePath(path: string, currentDirectory: string | undefined): string {
+    let rootLength = getRootLength(path);
+    if (rootLength === 0 && currentDirectory) {
+        path = combinePaths(currentDirectory, path);
+        rootLength = getRootLength(path);
+    }
+    else {
+        // combinePaths normalizes slashes, so not necessary in the other branch
+        path = normalizeSlashes(path);
+    }
+
+    const simpleNormalized = simpleNormalizePath(path);
+    if (simpleNormalized !== undefined) {
+        return simpleNormalized.length > rootLength ? removeTrailingDirectorySeparator(simpleNormalized) : simpleNormalized;
+    }
+
+    const length = path.length;
+    const root = path.substring(0, rootLength);
+    // `normalized` is only initialized once `path` is determined to be non-normalized
+    let normalized: string | undefined;
+    let index = rootLength;
+    let segmentStart = index;
+    let normalizedUpTo = index;
+    let seenNonDotDotSegment = rootLength !== 0;
+    while (index < length) {
+        // At beginning of segment
+        segmentStart = index;
+        let ch = path.charCodeAt(index);
+        while (ch === CharacterCodesSlash && index + 1 < length) {
+            index++;
+            ch = path.charCodeAt(index);
+        }
+        if (index > segmentStart) {
+            // Seen superfluous separator
+            normalized ??= path.substring(0, segmentStart - 1);
+            segmentStart = index;
+        }
+        // Past any superfluous separators
+        let segmentEnd = path.indexOf(directorySeparator, index + 1);
+        if (segmentEnd === -1) {
+            segmentEnd = length;
+        }
+        const segmentLength = segmentEnd - segmentStart;
+        if (segmentLength === 1 && path.charCodeAt(index) === CharacterCodesDot) {
+            // "." segment (skip)
+            normalized ??= path.substring(0, normalizedUpTo);
+        }
+        else if (segmentLength === 2 && path.charCodeAt(index) === CharacterCodesDot && path.charCodeAt(index + 1) === CharacterCodesDot) {
+            // ".." segment
+            if (!seenNonDotDotSegment) {
+                if (normalized !== undefined) {
+                    normalized += normalized.length === rootLength ? ".." : "/..";
+                }
+                else {
+                    normalizedUpTo = index + 2;
+                }
+            }
+            else if (normalized === undefined) {
+                if (normalizedUpTo - 2 >= 0) {
+                    normalized = path.substring(0, Math.max(rootLength, path.lastIndexOf(directorySeparator, normalizedUpTo - 2)));
+                }
+                else {
+                    normalized = path.substring(0, normalizedUpTo);
+                }
+            }
+            else {
+                const lastSlash = normalized.lastIndexOf(directorySeparator);
+                if (lastSlash !== -1) {
+                    normalized = normalized.substring(0, Math.max(rootLength, lastSlash));
+                }
+                else {
+                    normalized = root;
+                }
+                if (normalized.length === rootLength) {
+                    seenNonDotDotSegment = rootLength !== 0;
+                }
+            }
+        }
+        else if (normalized !== undefined) {
+            if (normalized.length !== rootLength) {
+                normalized += directorySeparator;
+            }
+            seenNonDotDotSegment = true;
+            normalized += path.substring(segmentStart, segmentEnd);
+        }
+        else {
+            seenNonDotDotSegment = true;
+            normalizedUpTo = segmentEnd;
+        }
+        index = segmentEnd + 1;
+    }
+    return normalized ?? (length > rootLength ? removeTrailingDirectorySeparator(path) : path);
+}
+
+/**
+ * Normalizes a path, resolving `.` and `..` segments and converting backslashes to forward slashes.
+ */
+export function normalizePath(path: string): string {
+    path = normalizeSlashes(path);
+    let normalized = simpleNormalizePath(path);
+    if (normalized !== undefined) {
+        return normalized;
+    }
+    normalized = getNormalizedAbsolutePath(path, "");
+    return normalized && hasTrailingDirectorySeparator(path) ? ensureTrailingDirectorySeparator(normalized) : normalized;
+}
+
+/**
+ * Determines whether a path is an absolute disk path (e.g. starts with `/`, or a DOS path
+ * like `c:`, `c:\\` or `c:/`).
+ */
+export function isRootedDiskPath(path: string): boolean {
+    return getEncodedRootLength(path) > 0;
+}
+
+/**
+ * Converts a file name to a normalized path.
+ *
+ * @param fileName The file name to convert
+ * @param basePath The base path to use for relative file names
+ * @param getCanonicalFileName A function to get the canonical file name (e.g., toLowerCase for case-insensitive systems)
+ * @returns The normalized path
+ */
+export function toPath(fileName: string, basePath: string | undefined, getCanonicalFileName: (path: string) => string): string {
+    const nonCanonicalizedPath = isRootedDiskPath(fileName)
+        ? normalizePath(fileName)
+        : getNormalizedAbsolutePath(fileName, basePath);
+    return getCanonicalFileName(nonCanonicalizedPath);
+}
+
+/**
+ * Creates a getCanonicalFileName function based on case sensitivity.
+ */
+export function createGetCanonicalFileName(useCaseSensitiveFileNames: boolean): (fileName: string) => string {
+    return useCaseSensitiveFileNames ? identity : toLowerCase;
+}
+
+function identity<T>(x: T): T {
+    return x;
+}
+
+function toLowerCase(s: string): string {
+    return s.toLowerCase();
 }
 
 const bundledScheme = "bundled:///";

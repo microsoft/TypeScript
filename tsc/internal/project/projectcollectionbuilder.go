@@ -146,20 +146,17 @@ func (b *ProjectCollectionBuilder) HandleAPIRequest(apiRequest *APISnapshotReque
 					b.apiOpenedProjects = make(map[tspath.Path]struct{})
 				}
 				b.apiOpenedProjects[configPath] = struct{}{}
-				b.updateProgram(entry, logger)
 			} else {
 				return fmt.Errorf("project not found for open: %s", configFileName)
 			}
 		}
 	}
 
-	if apiRequest.UpdateProjects != nil {
-		for configPath := range apiRequest.UpdateProjects.Keys() {
-			if entry, ok := b.configuredProjects.Load(configPath); ok {
-				b.updateProgram(entry, logger)
-			} else {
-				return fmt.Errorf("project not found for update: %s", configPath)
-			}
+	for configPath := range b.apiOpenedProjects {
+		if entry, ok := b.configuredProjects.Load(configPath); ok {
+			b.updateProgram(entry, logger)
+		} else {
+			return fmt.Errorf("project not found for update: %s", configPath)
 		}
 	}
 

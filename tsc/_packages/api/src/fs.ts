@@ -11,28 +11,34 @@ export interface FileSystem {
     getAccessibleEntries?: (directoryName: string) => FileSystemEntries | undefined;
     readFile?: (fileName: string) => string | null | undefined;
     realpath?: (path: string) => string | undefined;
+    writeFile?: (path: string, content: string) => void;
+    removeFile?: (path: string) => void;
 }
 
+/** The callback names supported by the Go server for virtual FS delegation. */
+export const fsCallbackNames = ["readFile", "fileExists", "directoryExists", "getAccessibleEntries", "realpath"] as const;
+
+interface VDirectory {
+    type: "directory";
+    children: Record<string, VNode>;
+}
+
+interface VFile {
+    type: "file";
+}
+
+type VNode = VDirectory | VFile;
+
 export function createVirtualFileSystem(files: Record<string, string>): FileSystem {
-    interface VDirectory {
-        type: "directory";
-        children: Record<string, VNode>;
-    }
-
-    interface VFile {
-        type: "file";
-        content: string;
-    }
-
-    type VNode = VDirectory | VFile;
-
     const root: VDirectory = {
         type: "directory",
         children: {},
     };
+    const content: Record<string, string> = {};
 
-    for (const [filePath, fileContent] of Object.entries(files)) {
-        createFile(filePath, fileContent);
+    for (const filePath of Object.keys(files)) {
+        content[filePath] = files[filePath];
+        addToTree(filePath);
     }
 
     return {
@@ -41,46 +47,36 @@ export function createVirtualFileSystem(files: Record<string, string>): FileSyst
         getAccessibleEntries,
         readFile,
         realpath: path => path,
+        writeFile,
+        removeFile,
     };
 
-    /**
-     * Traverse the tree from the root according to path segments.
-     * Returns the node if found, or null if any segment doesn't exist.
-     */
     function getNodeFromPath(path: string): VNode | undefined {
         if (!path || path === "/") {
             return root;
         }
         const segments = getPathComponents(path).slice(1);
         let current: VNode = root;
-
         for (const segment of segments) {
             if (current.type !== "directory") {
                 return undefined;
             }
             const child: VNode = current.children[segment];
             if (!child) {
-                return undefined; // segment not found
+                return undefined;
             }
             current = child;
         }
-
         return current;
     }
 
-    /**
-     * Ensure that the directory path (given by `segments`) exists,
-     * creating subdirectories as needed. Returns the final directory node.
-     */
     function ensureDirectory(segments: string[]): VDirectory {
         let current: VDirectory = root;
         for (const segment of segments) {
             if (!current.children[segment]) {
-                // Create a new directory node
                 current.children[segment] = { type: "directory", children: {} };
             }
             else if (current.children[segment].type !== "directory") {
-                // A file with the same name already exists
                 throw new Error(`Cannot create directory: a file already exists at "/${segments.join("/")}"`);
             }
             current = current.children[segment] as VDirectory;
@@ -88,19 +84,30 @@ export function createVirtualFileSystem(files: Record<string, string>): FileSyst
         return current;
     }
 
-    /**
-     * Create (or overwrite) a file at the given path with provided content.
-     * Automatically creates parent directories if needed.
-     */
-    function createFile(path: string, content: string) {
+    function addToTree(path: string): void {
         const segments = getPathComponents(path).slice(1);
         if (segments.length === 0) {
             throw new Error(`Invalid file path: "${path}"`);
         }
         const filename = segments.pop()!;
-        const directorySegments = segments;
-        const dirNode = ensureDirectory(directorySegments);
-        dirNode.children[filename] = { type: "file", content };
+        const dirNode = ensureDirectory(segments);
+        dirNode.children[filename] = { type: "file" };
+    }
+
+    function writeFile(path: string, data: string): void {
+        content[path] = data;
+        addToTree(path);
+    }
+
+    function removeFile(path: string): void {
+        delete content[path];
+        const segments = getPathComponents(path).slice(1);
+        if (segments.length === 0) return;
+        const filename = segments.pop()!;
+        const dirNode = getNodeFromPath("/" + segments.join("/"));
+        if (dirNode && dirNode.type === "directory") {
+            delete dirNode.children[filename];
+        }
     }
 
     function directoryExists(directoryName: string): boolean {
@@ -109,34 +116,31 @@ export function createVirtualFileSystem(files: Record<string, string>): FileSyst
     }
 
     function fileExists(fileName: string): boolean {
-        const node = getNodeFromPath(fileName);
-        return !!node && node.type === "file";
+        return fileName in content;
     }
 
     function getAccessibleEntries(directoryName: string): FileSystemEntries | undefined {
         const node = getNodeFromPath(directoryName);
         if (!node || node.type !== "directory") {
-            // Not found or not a directory
             return undefined;
         }
-        const files: string[] = [];
+        const fileEntries: string[] = [];
         const directories: string[] = [];
         for (const [name, child] of Object.entries(node.children)) {
             if (child.type === "file") {
-                files.push(name);
+                fileEntries.push(name);
             }
             else {
                 directories.push(name);
             }
         }
-        return { files, directories };
+        return { files: fileEntries, directories };
     }
 
     function readFile(fileName: string): string | undefined {
-        const node = getNodeFromPath(fileName);
-        if (!node || node.type !== "file") {
-            return undefined; // doesn't exist or is not a file
+        if (fileName in content) {
+            return content[fileName];
         }
-        return node.content;
+        return undefined;
     }
 }

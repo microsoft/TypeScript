@@ -1,6 +1,7 @@
 import {
     type Node,
     type NodeArray,
+    type Path,
     type SourceFile,
     SyntaxKind,
 } from "@typescript/ast";
@@ -131,12 +132,41 @@ const childProperties: Readonly<Partial<Record<SyntaxKind, readonly string[]>>> 
     [SyntaxKind.JSDocParameterTag]: ["tagName", undefined!, undefined!, "comment"],
 };
 
-const HEADER_OFFSET_RESERVED = 0;
-const HEADER_OFFSET_STRING_TABLE_OFFSETS = 4;
-const HEADER_OFFSET_STRING_TABLE = 8;
-const HEADER_OFFSET_EXTENDED_DATA = 12;
-const HEADER_OFFSET_NODES = 16;
-const HEADER_SIZE = 20;
+const HEADER_OFFSET_METADATA = 0;
+const HEADER_OFFSET_HASH_LO0 = 4;
+const HEADER_OFFSET_HASH_LO1 = 8;
+const HEADER_OFFSET_HASH_HI0 = 12;
+const HEADER_OFFSET_HASH_HI1 = 16;
+const HEADER_OFFSET_PARSE_OPTIONS = 20;
+const HEADER_OFFSET_STRING_TABLE_OFFSETS = 24;
+const HEADER_OFFSET_STRING_TABLE = 28;
+const HEADER_OFFSET_EXTENDED_DATA = 32;
+const HEADER_OFFSET_NODES = 36;
+const HEADER_SIZE = 40;
+
+/**
+ * Read the 128-bit content hash from a source file binary response as a hex string.
+ */
+export function readSourceFileHash(data: DataView): string {
+    const lo0 = data.getUint32(HEADER_OFFSET_HASH_LO0, true);
+    const lo1 = data.getUint32(HEADER_OFFSET_HASH_LO1, true);
+    const hi0 = data.getUint32(HEADER_OFFSET_HASH_HI0, true);
+    const hi1 = data.getUint32(HEADER_OFFSET_HASH_HI1, true);
+    return hex8(hi1) + hex8(hi0) + hex8(lo1) + hex8(lo0);
+}
+
+/**
+ * Read the per-file parse options key from a source file binary response.
+ * This encodes the ExternalModuleIndicatorOptions bitmask as a string,
+ * allowing the client to distinguish files parsed with different options.
+ */
+export function readParseOptionsKey(data: DataView): string {
+    return data.getUint32(HEADER_OFFSET_PARSE_OPTIONS, true).toString();
+}
+
+function hex8(n: number): string {
+    return (n >>> 0).toString(16).padStart(8, "0");
+}
 
 type NodeDataType = typeof NODE_DATA_TYPE_CHILDREN | typeof NODE_DATA_TYPE_STRING | typeof NODE_DATA_TYPE_EXTENDED;
 const NODE_DATA_TYPE_CHILDREN = 0x00000000;
@@ -345,7 +375,8 @@ export class RemoteNode extends RemoteNodeBase implements Node {
             throw new Error("SourceFile not found");
         }
         this.sourceFile = sourceFile as unknown as SourceFile;
-        this.id = `${sourceFile.id}.${this.pos}.${this.kind}`;
+        // Node handle format: pos.end.kind.path
+        this.id = `${this.pos}.${this.end}.${this.kind}.${this.sourceFile.path}`;
     }
 
     forEachChild<T>(visitNode: (node: Node) => T, visitList?: (list: NodeArray<Node>) => T): T | undefined {
@@ -910,6 +941,15 @@ export class RemoteNode extends RemoteNodeBase implements Node {
         }
     }
 
+    get path(): string | undefined {
+        switch (this.kind) {
+            case SyntaxKind.SourceFile:
+                const extendedDataOffset = this.offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
+                const stringIndex = this.view.getUint32(extendedDataOffset + 8, true);
+                return this.getString(stringIndex);
+        }
+    }
+
     // Other properties
     get flags(): number {
         switch (this.kind) {
@@ -957,6 +997,62 @@ export class RemoteSourceFile extends RemoteNode {
     constructor(data: Uint8Array, decoder: TextDecoder) {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
         super(view, decoder, 1, undefined!);
-        this.id = this.getString(this.view.getUint32(this.offsetExtendedData + 8, true));
+        const extendedDataOffset = this.offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
+        const idStringIndex = this.view.getUint32(extendedDataOffset + 12, true);
+        this.id = this.getString(idStringIndex);
     }
+}
+
+/**
+ * Find a descendant node at a specific position with matching kind and end position.
+ */
+export function findDescendant(root: Node, pos: number, end: number, kind: SyntaxKind): Node | undefined {
+    if (root.pos === pos && root.end === end && root.kind === kind) {
+        return root;
+    }
+
+    // Search children
+    let result: Node | undefined;
+    root.forEachChild(child => {
+        if (result) return result; // Already found
+        // Only search in children that could contain our target
+        if (child.pos <= pos && child.end >= end) {
+            result = findDescendant(child, pos, end, kind);
+        }
+        return undefined;
+    });
+
+    return result;
+}
+
+/**
+ * Parsed components of a node handle.
+ */
+export interface ParsedNodeHandle {
+    pos: number;
+    end: number;
+    kind: SyntaxKind;
+    path: Path;
+}
+
+/**
+ * Parse a node handle string into its components.
+ * Handle format: "pos.end.kind.path" where path may contain dots.
+ */
+export function parseNodeHandle(handle: string): ParsedNodeHandle {
+    // Find the positions of the first 3 dots
+    const dot1 = handle.indexOf(".");
+    const dot2 = handle.indexOf(".", dot1 + 1);
+    const dot3 = handle.indexOf(".", dot2 + 1);
+
+    if (dot1 === -1 || dot2 === -1 || dot3 === -1) {
+        throw new Error(`Invalid node handle: ${handle}`);
+    }
+
+    return {
+        pos: parseInt(handle.slice(0, dot1), 10),
+        end: parseInt(handle.slice(dot1 + 1, dot2), 10),
+        kind: parseInt(handle.slice(dot2 + 1, dot3), 10) as SyntaxKind,
+        path: handle.slice(dot3 + 1) as Path,
+    };
 }

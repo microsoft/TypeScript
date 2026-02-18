@@ -1351,8 +1351,24 @@ func (s *Server) handleInitializeAPISession(ctx context.Context, params *lsproto
 			return
 		}
 
+		// Create a cancellable context for the API connection
+		apiCtx, apiCancel := context.WithCancel(s.backgroundCtx)
+		defer apiCancel()
+
+		// Run the connection with panic recovery
+		defer func() {
+			if r := recover(); r != nil {
+				stack := debug.Stack()
+				s.logger.Errorf("API session %s: panic: %v\n%s", apiSession.ID(), r, string(stack))
+				// Cancel the context to shut down the connection
+				apiCancel()
+				// Close the underlying connection
+				rwc.Close()
+			}
+		}()
+
 		conn := api.NewAsyncConn(rwc, apiSession)
-		if apiErr := conn.Run(s.backgroundCtx); apiErr != nil {
+		if apiErr := conn.Run(apiCtx); apiErr != nil {
 			s.logger.Errorf("API session %s: %v", apiSession.ID(), apiErr)
 		}
 	}()

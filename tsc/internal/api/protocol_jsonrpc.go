@@ -68,6 +68,9 @@ func (p *JSONRPCProtocol) WriteNotification(method string, params any) error {
 
 // WriteResponse implements Protocol.
 func (p *JSONRPCProtocol) WriteResponse(id *jsonrpc.ID, result any) error {
+	if result == nil {
+		result = json.Value("null")
+	}
 	msg := jsonrpc.ResponseMessage{
 		ID:     id,
 		Result: result,

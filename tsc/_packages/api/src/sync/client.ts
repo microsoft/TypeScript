@@ -1,5 +1,8 @@
-import type { FileSystem } from "./fs.ts";
-import { SyncRpcChannel } from "./syncChannel.ts";
+import {
+    type FileSystem,
+    fsCallbackNames,
+} from "../fs.ts";
+import { SyncRpcChannel } from "../syncChannel.ts";
 
 export interface ClientOptions {
     tsserverPath: string;
@@ -13,22 +16,32 @@ export class Client {
     private encoder = new TextEncoder();
 
     constructor(options: ClientOptions) {
+        const cwd = options.cwd ?? process.cwd();
         const args = [
             "--api",
             "--cwd",
-            options.cwd ?? process.cwd(),
+            cwd,
         ];
 
         // Enable virtual FS callbacks for each provided FS function
-        if (options.fs && Object.keys(options.fs).length > 0) {
-            args.push(`--callbacks=${Object.keys(options.fs).join(",")}`);
+        const enabledCallbacks: (typeof fsCallbackNames[number])[] = [];
+        if (options.fs) {
+            for (const name of fsCallbackNames) {
+                if (options.fs[name]) {
+                    enabledCallbacks.push(name);
+                }
+            }
+        }
+        if (enabledCallbacks.length > 0) {
+            args.push(`--callbacks=${enabledCallbacks.join(",")}`);
         }
 
         this.channel = new SyncRpcChannel(options.tsserverPath, args);
 
         if (options.fs) {
-            for (const [key, callback] of Object.entries(options.fs)) {
-                this.channel.registerCallback(key, (_, arg) => {
+            for (const name of enabledCallbacks) {
+                const callback = options.fs[name]!;
+                this.channel.registerCallback(name, (_, arg) => {
                     const result = callback(JSON.parse(arg));
                     return JSON.stringify(result) ?? "";
                 });

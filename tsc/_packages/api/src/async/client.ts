@@ -9,6 +9,10 @@ import {
     StreamMessageReader,
     StreamMessageWriter,
 } from "vscode-jsonrpc/node";
+import {
+    type FileSystem,
+    fsCallbackNames,
+} from "../fs.ts";
 
 export interface ClientSocketOptions {
     /** Path to the Unix domain socket or Windows named pipe for API communication */
@@ -20,6 +24,8 @@ export interface ClientSpawnOptions {
     tsserverPath: string;
     /** Current working directory */
     cwd?: string;
+    /** Virtual filesystem callbacks */
+    fs?: FileSystem;
 }
 
 export type ClientOptions = ClientSocketOptions | ClientSpawnOptions;
@@ -65,6 +71,19 @@ export class Client {
                 options.cwd ?? process.cwd(),
             ];
 
+            // Enable virtual FS callbacks for each provided FS function
+            const enabledCallbacks: string[] = [];
+            if (options.fs) {
+                for (const name of fsCallbackNames) {
+                    if (options.fs[name]) {
+                        enabledCallbacks.push(name);
+                    }
+                }
+            }
+            if (enabledCallbacks.length > 0) {
+                args.push(`--callbacks=${enabledCallbacks.join(",")}`);
+            }
+
             this.process = spawn(options.tsserverPath, args, {
                 stdio: ["pipe", "pipe", "inherit"],
             });
@@ -81,6 +100,7 @@ export class Client {
             const reader = new StreamMessageReader(this.process.stdout!);
             const writer = new StreamMessageWriter(this.process.stdin!);
             this.connection = createMessageConnection(reader, writer);
+            this.registerFSCallbacks(this.connection, options.fs);
             this.connection.listen();
         });
     }
@@ -102,6 +122,19 @@ export class Client {
                 reject(new Error(`Socket error: ${error.message}`));
             });
         });
+    }
+
+    private registerFSCallbacks(connection: MessageConnection, fs: FileSystem | undefined): void {
+        if (!fs) return;
+        for (const name of fsCallbackNames) {
+            const callback = fs[name];
+            if (callback) {
+                const requestType = new RequestType<unknown, unknown, void>(name);
+                connection.onRequest(requestType, (arg: unknown) => {
+                    return callback(arg as any) ?? null;
+                });
+            }
+        }
     }
 
     async apiRequest<T>(method: string, params?: unknown): Promise<T> {

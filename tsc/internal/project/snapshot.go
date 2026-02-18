@@ -159,9 +159,8 @@ func (s *Snapshot) ReadDirectory(currentDir string, path string, extensions []st
 }
 
 type APISnapshotRequest struct {
-	OpenProjects   *collections.Set[string]
-	CloseProjects  *collections.Set[tspath.Path]
-	UpdateProjects *collections.Set[tspath.Path]
+	OpenProjects  *collections.Set[string]
+	CloseProjects *collections.Set[tspath.Path]
 }
 
 type ProjectTreeRequest struct {
@@ -277,7 +276,11 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 	fs := newSnapshotFSBuilder(session.fs.fs, s.fs.overlays, overlays, s.fs.diskFiles, s.fs.diskDirectories, session.options.PositionEncoding, s.toPath)
 	if change.fileChanges.HasExcessiveWatchEvents() {
 		invalidateStart := time.Now()
-		if !fs.watchChangesOverlapCache(change.fileChanges) {
+		if change.fileChanges.InvalidateAll {
+			fs.invalidateCache()
+			logger.Logf("InvalidateAll: invalidated file cache in %v", time.Since(invalidateStart))
+		} else if !fs.watchChangesOverlapCache(change.fileChanges) {
+			// All watch changes/deletes are files we haven't seen; should be irrelevant to us (probably an external tool's build or something)
 			change.fileChanges.Changed = collections.Set[lsproto.DocumentUri]{}
 			change.fileChanges.Deleted = collections.Set[lsproto.DocumentUri]{}
 		} else if change.fileChanges.IncludesWatchChangeOutsideNodeModules {
@@ -312,17 +315,17 @@ func (s *Snapshot) Clone(ctx context.Context, change SnapshotChange, overlays ma
 		session.extendedConfigCache,
 	)
 
-	var apiError error
-	if change.apiRequest != nil {
-		apiError = projectCollectionBuilder.HandleAPIRequest(change.apiRequest, logger.Fork("HandleAPIRequest"))
-	}
-
 	if len(change.ataChanges) != 0 {
 		projectCollectionBuilder.DidUpdateATAState(change.ataChanges, logger.Fork("DidUpdateATAState"))
 	}
 
 	if !change.fileChanges.IsEmpty() {
 		projectCollectionBuilder.DidChangeFiles(change.fileChanges, logger.Fork("DidChangeFiles"))
+	}
+
+	var apiError error
+	if change.apiRequest != nil {
+		apiError = projectCollectionBuilder.HandleAPIRequest(change.apiRequest, logger.Fork("HandleAPIRequest"))
 	}
 
 	for _, uri := range change.Documents {

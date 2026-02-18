@@ -1,6 +1,10 @@
 import { SyntaxKind } from "#syntaxKind";
 import { TokenFlags } from "#tokenFlags";
 
+// branded string type used to store absolute, normalized and canonicalized paths
+// arbitrary file name can be converted to Path via toPath function
+export type Path = string & { __pathBrand: any; };
+
 export interface TextRange {
     pos: number;
     end: number;
@@ -17,6 +21,7 @@ export interface SourceFile extends Node {
     readonly endOfFileToken: EndOfFile;
     readonly text: string;
     readonly fileName: string;
+    readonly path: Path;
 }
 
 export type TriviaSyntaxKind =

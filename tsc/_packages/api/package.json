@@ -25,9 +25,9 @@
         }
     },
     "exports": {
-        ".": {
-            "@typescript/source": "./src/api.ts",
-            "default": "./dist/api.js"
+        "./sync": {
+            "@typescript/source": "./src/sync/api.ts",
+            "default": "./dist/sync/api.js"
         },
         "./async": {
             "@typescript/source": "./src/async/api.ts",

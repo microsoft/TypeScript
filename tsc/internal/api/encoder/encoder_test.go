@@ -25,7 +25,7 @@ func TestEncodeSourceFile(t *testing.T) {
 	}, "import { bar } from \"bar\";\nexport function foo<T, U>(a: string, b: string): any {}\nfoo();", core.ScriptKindTS)
 	t.Run("baseline", func(t *testing.T) {
 		t.Parallel()
-		buf, err := encoder.EncodeSourceFile(sourceFile, "")
+		buf, err := encoder.EncodeSourceFile(sourceFile)
 		assert.NilError(t, err)
 
 		str := formatEncodedSourceFile(buf)
@@ -43,7 +43,7 @@ func TestEncodeSourceFileWithUnicodeEscapes(t *testing.T) {
 	}, `let a = "😃"; let b = "\ud83d\ude03"; let c = "\udc00\ud83d\ude03"; let d = "\ud83d\ud83d\ude03"`, core.ScriptKindTS)
 	t.Run("baseline", func(t *testing.T) {
 		t.Parallel()
-		buf, err := encoder.EncodeSourceFile(sourceFile, "")
+		buf, err := encoder.EncodeSourceFile(sourceFile)
 		assert.NilError(t, err)
 
 		str := formatEncodedSourceFile(buf)
@@ -64,7 +64,7 @@ func BenchmarkEncodeSourceFile(b *testing.B) {
 	}, string(fileContent), core.ScriptKindTS)
 
 	for b.Loop() {
-		_, err := encoder.EncodeSourceFile(sourceFile, "")
+		_, err := encoder.EncodeSourceFile(sourceFile)
 		assert.NilError(b, err)
 	}
 }

@@ -47,16 +47,40 @@ type FileChangeSummary struct {
 	// IncludesWatchChangeOutsideNodeModules is true if the summary includes a create, change, or delete watch
 	// event of a file outside a node_modules directory.
 	IncludesWatchChangeOutsideNodeModules bool
+	// InvalidateAll indicates that all cached file state should be discarded.
+	InvalidateAll bool
 }
 
 func (f FileChangeSummary) IsEmpty() bool {
-	return f.Opened == "" && f.Reopened == "" && f.Closed.Len() == 0 && f.Changed.Len() == 0 && f.Created.Len() == 0 && f.Deleted.Len() == 0
+	return !f.InvalidateAll && f.Opened == "" && f.Reopened == "" && f.Closed.Len() == 0 && f.Changed.Len() == 0 && f.Created.Len() == 0 && f.Deleted.Len() == 0
 }
 
 func (f FileChangeSummary) HasExcessiveWatchEvents() bool {
-	return f.Created.Len()+f.Deleted.Len()+f.Changed.Len() > excessiveChangeThreshold
+	return f.InvalidateAll || f.Created.Len()+f.Deleted.Len()+f.Changed.Len() > excessiveChangeThreshold
 }
 
 func (f FileChangeSummary) HasExcessiveNonCreateWatchEvents() bool {
-	return f.Deleted.Len()+f.Changed.Len() > excessiveChangeThreshold
+	return f.InvalidateAll || f.Deleted.Len()+f.Changed.Len() > excessiveChangeThreshold
+}
+
+// mergeFileChangeSummary merges src into dst, combining their change sets.
+func mergeFileChangeSummary(dst *FileChangeSummary, src FileChangeSummary) {
+	if src.IsEmpty() {
+		return
+	}
+	if src.InvalidateAll {
+		dst.InvalidateAll = true
+	}
+	for uri := range src.Changed.Keys() {
+		dst.Changed.Add(uri)
+	}
+	for uri := range src.Created.Keys() {
+		dst.Created.Add(uri)
+	}
+	for uri := range src.Deleted.Keys() {
+		dst.Deleted.Add(uri)
+	}
+	if src.IncludesWatchChangeOutsideNodeModules {
+		dst.IncludesWatchChangeOutsideNodeModules = true
+	}
 }

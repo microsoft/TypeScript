@@ -1582,6 +1582,10 @@ func (p *Program) GetSourceFileForResolvedModule(fileName string) *ast.SourceFil
 	return file
 }
 
+func (p *Program) FilesByPath() map[tspath.Path]*ast.SourceFile {
+	return p.filesByPath
+}
+
 func (p *Program) GetSourceFileByPath(path tspath.Path) *ast.SourceFile {
 	return p.filesByPath[path]
 }
