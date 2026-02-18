@@ -37,7 +37,7 @@ export default tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
     ...tseslint.configs.stylistic,
-    regexpPlugin.configs["flat/recommended"],
+    regexpPlugin.configs.recommended,
     {
         plugins: {
             local: {
