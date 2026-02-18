@@ -1,4 +1,5 @@
 deleteOperatorWithBooleanType.ts(7,12): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+deleteOperatorWithBooleanType.ts(17,31): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 deleteOperatorWithBooleanType.ts(17,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(20,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(21,31): error TS2703: The operand of a 'delete' operator must be a property reference.
@@ -7,8 +8,10 @@ deleteOperatorWithBooleanType.ts(25,31): error TS2790: The operand of a 'delete'
 deleteOperatorWithBooleanType.ts(26,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(27,31): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(30,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithBooleanType.ts(30,38): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 deleteOperatorWithBooleanType.ts(30,38): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(33,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+deleteOperatorWithBooleanType.ts(34,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
 deleteOperatorWithBooleanType.ts(34,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(35,8): error TS2703: The operand of a 'delete' operator must be a property reference.
 deleteOperatorWithBooleanType.ts(36,8): error TS2703: The operand of a 'delete' operator must be a property reference.
@@ -16,7 +19,7 @@ deleteOperatorWithBooleanType.ts(37,8): error TS2790: The operand of a 'delete' 
 deleteOperatorWithBooleanType.ts(38,8): error TS2790: The operand of a 'delete' operator must be optional.
 
 
-==== deleteOperatorWithBooleanType.ts (16 errors) ====
+==== deleteOperatorWithBooleanType.ts (19 errors) ====
     // delete  operator on boolean type
     declare var BOOLEAN: boolean;
     
@@ -36,6 +39,8 @@ deleteOperatorWithBooleanType.ts(38,8): error TS2790: The operand of a 'delete' 
     
     // boolean type var
     var ResultIsBoolean1 = delete BOOLEAN;
+                                  ~~~~~~~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
                                   ~~~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     
@@ -66,6 +71,8 @@ deleteOperatorWithBooleanType.ts(38,8): error TS2790: The operand of a 'delete' 
                                   ~~~~~~~~~~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
                                          ~~~~~~~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+                                         ~~~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     
     // miss assignment operators
@@ -73,6 +80,8 @@ deleteOperatorWithBooleanType.ts(38,8): error TS2790: The operand of a 'delete' 
            ~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete BOOLEAN;
+           ~~~~~~~
+!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
            ~~~~~~~
 !!! error TS2703: The operand of a 'delete' operator must be a property reference.
     delete foo();

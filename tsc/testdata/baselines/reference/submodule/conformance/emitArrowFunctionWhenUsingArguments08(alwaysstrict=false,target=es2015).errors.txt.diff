@@ -1,0 +1,18 @@
+--- old.emitArrowFunctionWhenUsingArguments08(alwaysstrict=false,target=es2015).errors.txt
++++ new.emitArrowFunctionWhenUsingArguments08(alwaysstrict=false,target=es2015).errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
++emitArrowFunctionWhenUsingArguments08.ts(1,12): error TS1100: Invalid use of 'arguments' in strict mode.
++emitArrowFunctionWhenUsingArguments08.ts(2,20): error TS1100: Invalid use of 'arguments' in strict mode.
++
++
++!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
++==== emitArrowFunctionWhenUsingArguments08.ts (2 errors) ====
++    function f(arguments) {
++               ~~~~~~~~~
++!!! error TS1100: Invalid use of 'arguments' in strict mode.
++        var a = () => (arguments) => arguments;
++                       ~~~~~~~~~
++!!! error TS1100: Invalid use of 'arguments' in strict mode.
++    }

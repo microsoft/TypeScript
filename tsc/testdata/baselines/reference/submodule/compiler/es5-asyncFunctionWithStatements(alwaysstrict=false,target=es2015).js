@@ -34,6 +34,7 @@ async function withStatement3() {
 }
 
 //// [es5-asyncFunctionWithStatements.js]
+"use strict";
 async function withStatement0() {
     with (x) {
         y;

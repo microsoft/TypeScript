@@ -1,14 +1,19 @@
+error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
 NonInitializedExportInInternalModule.ts(2,8): error TS1123: Variable declaration list cannot be empty.
+NonInitializedExportInInternalModule.ts(3,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
 NonInitializedExportInInternalModule.ts(3,5): error TS2304: Cannot find name 'let'.
 NonInitializedExportInInternalModule.ts(4,10): error TS1123: Variable declaration list cannot be empty.
 
 
-==== NonInitializedExportInInternalModule.ts (3 errors) ====
+!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+==== NonInitializedExportInInternalModule.ts (4 errors) ====
     namespace Inner {
         var;
            
 !!! error TS1123: Variable declaration list cannot be empty.
         let;
+        ~~~
+!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
         ~~~
 !!! error TS2304: Cannot find name 'let'.
         const;

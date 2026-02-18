@@ -1,0 +1,7 @@
+--- old.ambientWithStatements(alwaysstrict=false).js
++++ new.ambientWithStatements(alwaysstrict=false).js
+@@= skipped -29, +29 lines =@@
+ }
+
+ //// [ambientWithStatements.js]
++"use strict";

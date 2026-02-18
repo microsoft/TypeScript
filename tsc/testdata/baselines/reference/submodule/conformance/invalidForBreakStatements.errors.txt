@@ -3,10 +3,11 @@ invalidForBreakStatements.ts(8,9): error TS1116: A 'break' statement can only ju
 invalidForBreakStatements.ts(14,9): error TS1107: Jump target cannot cross function boundary.
 invalidForBreakStatements.ts(21,9): error TS1107: Jump target cannot cross function boundary.
 invalidForBreakStatements.ts(27,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
+invalidForBreakStatements.ts(32,1): error TS1344: 'A label is not allowed here.
 invalidForBreakStatements.ts(36,5): error TS1116: A 'break' statement can only jump to a label of an enclosing statement.
 
 
-==== invalidForBreakStatements.ts (6 errors) ====
+==== invalidForBreakStatements.ts (7 errors) ====
     // All errors
     
     // naked break not allowed
@@ -49,6 +50,8 @@ invalidForBreakStatements.ts(36,5): error TS1116: A 'break' statement can only j
     }
     // label on non-loop statement
     NINE:
+    ~~~~
+!!! error TS1344: 'A label is not allowed here.
     var y = 12;
     
     for(;;) {

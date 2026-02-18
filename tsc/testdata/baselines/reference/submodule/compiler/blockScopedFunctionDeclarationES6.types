@@ -12,6 +12,6 @@ if (true) {
 >foo : () => void
 }
 foo();
->foo() : void
->foo : () => void
+>foo() : any
+>foo : any
 

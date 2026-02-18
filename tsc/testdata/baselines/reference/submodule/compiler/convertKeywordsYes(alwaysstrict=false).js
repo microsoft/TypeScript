@@ -308,6 +308,7 @@ namespace bigModule {
 }
 
 //// [convertKeywordsYes.js]
+"use strict";
 // reserved ES5 future in strict mode
 var constructor = 0;
 var any = 0;

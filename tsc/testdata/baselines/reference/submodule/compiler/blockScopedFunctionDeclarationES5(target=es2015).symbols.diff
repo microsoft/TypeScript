@@ -1,8 +1,0 @@
---- old.blockScopedFunctionDeclarationES5(target=es2015).symbols
-+++ new.blockScopedFunctionDeclarationES5(target=es2015).symbols
-@@= skipped -8, +8 lines =@@
- >foo : Symbol(foo, Decl(blockScopedFunctionDeclarationES5.ts, 0, 11))
- }
- foo();
-+>foo : Symbol(foo, Decl(blockScopedFunctionDeclarationES5.ts, 0, 11))
-+

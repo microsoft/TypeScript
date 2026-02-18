@@ -1,10 +1,17 @@
+error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+asiPublicPrivateProtected.ts(1,1): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
 asiPublicPrivateProtected.ts(1,1): error TS2304: Cannot find name 'public'.
+asiPublicPrivateProtected.ts(12,1): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
 asiPublicPrivateProtected.ts(12,1): error TS2304: Cannot find name 'private'.
+asiPublicPrivateProtected.ts(23,1): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
 asiPublicPrivateProtected.ts(23,1): error TS2304: Cannot find name 'protected'.
 
 
-==== asiPublicPrivateProtected.ts (3 errors) ====
+!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+==== asiPublicPrivateProtected.ts (6 errors) ====
     public
+    ~~~~~~
+!!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
     ~~~~~~
 !!! error TS2304: Cannot find name 'public'.
     class NonPublicClass {
@@ -19,6 +26,8 @@ asiPublicPrivateProtected.ts(23,1): error TS2304: Cannot find name 'protected'.
     }
     private
     ~~~~~~~
+!!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+    ~~~~~~~
 !!! error TS2304: Cannot find name 'private'.
     class NonPrivateClass {
         private s() {
@@ -31,6 +40,8 @@ asiPublicPrivateProtected.ts(23,1): error TS2304: Cannot find name 'protected'.
         }
     }
     protected
+    ~~~~~~~~~
+!!! error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
     ~~~~~~~~~
 !!! error TS2304: Cannot find name 'protected'.
     class NonProtectedClass {

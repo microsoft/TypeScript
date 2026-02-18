@@ -28,8 +28,16 @@ function someFunc(arguments: boolean, ...rest: any[]) {
 }
 
 tsgo --noEmit
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.
+
+[7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
+[7m [0m [91m                  ~~~~~~~~~[0m
+
+
+Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+
 //// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
 /// <reference no-default-lib="true"/>
 interface Boolean {}
@@ -54,7 +62,7 @@ interface Symbol {
 }
 declare const console: { log(msg: any): void; };
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *new* 
-{"version":"FakeTSVersion","root":[[2,7]],"fileNames":["lib.es2025.full.d.ts","./src/class.ts","./src/indirectClass.ts","./src/directUse.ts","./src/indirectUse.ts","./src/noChangeFile.ts","./src/noChangeFileWithEmitSpecificError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"5106d5119e9d454b0e9d7956b0f66ab8-export class classC {\n    prop = 1;\n}","2d32895543847620d7c9848ddd3a7306-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","12f2d04905c254bde932222194cd2d1b-export function writeLog(s: string) {\n}",{"version":"f54e687ca7ac9fc3c2161967d09e9950-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3],[2]],"options":{"composite":true},"referencedMap":[[4,1],[3,2],[5,1]],"affectedFilesPendingEmit":[[2,17],[4,17],[3,17],[5,17],[6,17],[7,17]],"emitSignatures":[2,3,4,5,6,7]}
+{"version":"FakeTSVersion","root":[[2,7]],"fileNames":["lib.es2025.full.d.ts","./src/class.ts","./src/indirectClass.ts","./src/directUse.ts","./src/indirectUse.ts","./src/noChangeFile.ts","./src/noChangeFileWithEmitSpecificError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},"5106d5119e9d454b0e9d7956b0f66ab8-export class classC {\n    prop = 1;\n}","2d32895543847620d7c9848ddd3a7306-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","12f2d04905c254bde932222194cd2d1b-export function writeLog(s: string) {\n}",{"version":"f54e687ca7ac9fc3c2161967d09e9950-function someFunc(arguments: boolean, ...rest: any[]) {\n}","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3],[2]],"options":{"composite":true},"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"pos":18,"end":27,"code":1100,"category":1,"messageKey":"Invalid_use_of_0_in_strict_mode_1100","messageArgs":["arguments"]}]]],"affectedFilesPendingEmit":[2,4,3,5,6,7],"emitSignatures":[2,3,4,5,6,7]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *new* 
 {
   "version": "FakeTSVersion",
@@ -161,54 +169,53 @@ declare const console: { log(msg: any): void; };
       "./src/indirectClass.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./src/noChangeFileWithEmitSpecificError.ts",
+      [
+        {
+          "pos": 18,
+          "end": 27,
+          "code": 1100,
+          "category": 1,
+          "messageKey": "Invalid_use_of_0_in_strict_mode_1100",
+          "messageArgs": [
+            "arguments"
+          ]
+        }
+      ]
+    ]
+  ],
   "affectedFilesPendingEmit": [
     [
       "./src/class.ts",
-      "Js|DtsEmit",
-      [
-        2,
-        17
-      ]
+      "Js|Dts",
+      2
     ],
     [
       "./src/directUse.ts",
-      "Js|DtsEmit",
-      [
-        4,
-        17
-      ]
+      "Js|Dts",
+      4
     ],
     [
       "./src/indirectClass.ts",
-      "Js|DtsEmit",
-      [
-        3,
-        17
-      ]
+      "Js|Dts",
+      3
     ],
     [
       "./src/indirectUse.ts",
-      "Js|DtsEmit",
-      [
-        5,
-        17
-      ]
+      "Js|Dts",
+      5
     ],
     [
       "./src/noChangeFile.ts",
-      "Js|DtsEmit",
-      [
-        6,
-        17
-      ]
+      "Js|Dts",
+      6
     ],
     [
       "./src/noChangeFileWithEmitSpecificError.ts",
-      "Js|DtsEmit",
-      [
-        7,
-        17
-      ]
+      "Js|Dts",
+      7
     ]
   ],
   "emitSignatures": [
@@ -237,7 +244,7 @@ declare const console: { log(msg: any): void; };
       "original": 7
     }
   ],
-  "size": 1880
+  "size": 2012
 }
 
 tsconfig.json::
@@ -255,8 +262,16 @@ Signatures::
 Edit [0]:: No Change run with emit
 
 tsgo 
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.
+
+[7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
+[7m [0m [91m                  ~~~~~~~~~[0m
+
+
+Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+
 //// [/home/src/workspaces/project/src/class.d.ts] *new* 
 export declare class classC {
     prop: number;
@@ -309,7 +324,7 @@ function someFunc(arguments, ...rest) {
 }
 
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,7]],"fileNames":["lib.es2025.full.d.ts","./src/class.ts","./src/indirectClass.ts","./src/directUse.ts","./src/indirectUse.ts","./src/noChangeFile.ts","./src/noChangeFileWithEmitSpecificError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5106d5119e9d454b0e9d7956b0f66ab8-export class classC {\n    prop = 1;\n}","signature":"8743eb01f3ddad300611aa9bbf6b6c0a-export declare class classC {\n    prop: number;\n}\n","impliedNodeFormat":1},{"version":"2d32895543847620d7c9848ddd3a7306-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"4c7e50f9604f4038b2f1bafae04987bb-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"12f2d04905c254bde932222194cd2d1b-export function writeLog(s: string) {\n}","signature":"b46de008dd76697ce12a1dca20c0bf9e-export declare function writeLog(s: string): void;\n","impliedNodeFormat":1},{"version":"f54e687ca7ac9fc3c2161967d09e9950-function someFunc(arguments: boolean, ...rest: any[]) {\n}","signature":"86b693f65e0d5bed7e4ac554c2edb8ba-declare function someFunc(arguments: boolean, ...rest: any[]): void;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3],[2]],"options":{"composite":true},"referencedMap":[[4,1],[3,2],[5,1]],"latestChangedDtsFile":"./src/noChangeFileWithEmitSpecificError.d.ts"}
+{"version":"FakeTSVersion","root":[[2,7]],"fileNames":["lib.es2025.full.d.ts","./src/class.ts","./src/indirectClass.ts","./src/directUse.ts","./src/indirectUse.ts","./src/noChangeFile.ts","./src/noChangeFileWithEmitSpecificError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5106d5119e9d454b0e9d7956b0f66ab8-export class classC {\n    prop = 1;\n}","signature":"8743eb01f3ddad300611aa9bbf6b6c0a-export declare class classC {\n    prop: number;\n}\n","impliedNodeFormat":1},{"version":"2d32895543847620d7c9848ddd3a7306-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"4c7e50f9604f4038b2f1bafae04987bb-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"12f2d04905c254bde932222194cd2d1b-export function writeLog(s: string) {\n}","signature":"b46de008dd76697ce12a1dca20c0bf9e-export declare function writeLog(s: string): void;\n","impliedNodeFormat":1},{"version":"f54e687ca7ac9fc3c2161967d09e9950-function someFunc(arguments: boolean, ...rest: any[]) {\n}","signature":"86b693f65e0d5bed7e4ac554c2edb8ba-declare function someFunc(arguments: boolean, ...rest: any[]): void;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3],[2]],"options":{"composite":true},"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"pos":18,"end":27,"code":1100,"category":1,"messageKey":"Invalid_use_of_0_in_strict_mode_1100","messageArgs":["arguments"]}]]],"latestChangedDtsFile":"./src/noChangeFileWithEmitSpecificError.d.ts"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -442,8 +457,25 @@ function someFunc(arguments, ...rest) {
       "./src/indirectClass.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./src/noChangeFileWithEmitSpecificError.ts",
+      [
+        {
+          "pos": 18,
+          "end": 27,
+          "code": 1100,
+          "category": 1,
+          "messageKey": "Invalid_use_of_0_in_strict_mode_1100",
+          "messageArgs": [
+            "arguments"
+          ]
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./src/noChangeFileWithEmitSpecificError.d.ts",
-  "size": 2602
+  "size": 2764
 }
 
 tsconfig.json::
@@ -484,12 +516,18 @@ Output::
     [7m2[0m     prop1 = 1;
     [7m [0m [96m    ~~~~~[0m
 
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.
 
-Found 2 errors in 2 files.
+[7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
+[7m [0m [91m                  ~~~~~~~~~[0m
+
+
+Found 3 errors in 3 files.
 
 Errors  Files
      1  src/directUse.ts[90m:2[0m
      1  src/indirectUse.ts[90m:2[0m
+     1  src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
 
 //// [/home/src/workspaces/project/src/class.d.ts] *modified* 
 export declare class classC {
@@ -503,7 +541,7 @@ export class classC {
 
 //// [/home/src/workspaces/project/src/indirectClass.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,7]],"fileNames":["lib.es2025.full.d.ts","./src/class.ts","./src/indirectClass.ts","./src/directUse.ts","./src/indirectUse.ts","./src/noChangeFile.ts","./src/noChangeFileWithEmitSpecificError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"f5da9f4ab128bbaf87adf83ca7ae8e2d-export class classC {\n    prop1 = 1;\n}","signature":"e36cbd492db9c71062d723d518b6277f-export declare class classC {\n    prop1: number;\n}\n","impliedNodeFormat":1},{"version":"2d32895543847620d7c9848ddd3a7306-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"4c7e50f9604f4038b2f1bafae04987bb-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"12f2d04905c254bde932222194cd2d1b-export function writeLog(s: string) {\n}","signature":"b46de008dd76697ce12a1dca20c0bf9e-export declare function writeLog(s: string): void;\n","impliedNodeFormat":1},{"version":"f54e687ca7ac9fc3c2161967d09e9950-function someFunc(arguments: boolean, ...rest: any[]) {\n}","signature":"86b693f65e0d5bed7e4ac554c2edb8ba-declare function someFunc(arguments: boolean, ...rest: any[]): void;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3],[2]],"options":{"composite":true},"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[4,[{"pos":76,"end":80,"code":2551,"category":1,"messageKey":"Property_0_does_not_exist_on_type_1_Did_you_mean_2_2551","messageArgs":["prop","classC","prop1"],"relatedInformation":[{"file":2,"pos":26,"end":31,"code":2728,"category":3,"messageKey":"_0_is_declared_here_2728","messageArgs":["prop1"]}]}]],[5,[{"pos":76,"end":80,"code":2551,"category":1,"messageKey":"Property_0_does_not_exist_on_type_1_Did_you_mean_2_2551","messageArgs":["prop","classC","prop1"],"relatedInformation":[{"file":2,"pos":26,"end":31,"code":2728,"category":3,"messageKey":"_0_is_declared_here_2728","messageArgs":["prop1"]}]}]]],"latestChangedDtsFile":"./src/class.d.ts"}
+{"version":"FakeTSVersion","root":[[2,7]],"fileNames":["lib.es2025.full.d.ts","./src/class.ts","./src/indirectClass.ts","./src/directUse.ts","./src/indirectUse.ts","./src/noChangeFile.ts","./src/noChangeFileWithEmitSpecificError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"f5da9f4ab128bbaf87adf83ca7ae8e2d-export class classC {\n    prop1 = 1;\n}","signature":"e36cbd492db9c71062d723d518b6277f-export declare class classC {\n    prop1: number;\n}\n","impliedNodeFormat":1},{"version":"2d32895543847620d7c9848ddd3a7306-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"4c7e50f9604f4038b2f1bafae04987bb-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"12f2d04905c254bde932222194cd2d1b-export function writeLog(s: string) {\n}","signature":"b46de008dd76697ce12a1dca20c0bf9e-export declare function writeLog(s: string): void;\n","impliedNodeFormat":1},{"version":"f54e687ca7ac9fc3c2161967d09e9950-function someFunc(arguments: boolean, ...rest: any[]) {\n}","signature":"86b693f65e0d5bed7e4ac554c2edb8ba-declare function someFunc(arguments: boolean, ...rest: any[]): void;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3],[2]],"options":{"composite":true},"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[4,[{"pos":76,"end":80,"code":2551,"category":1,"messageKey":"Property_0_does_not_exist_on_type_1_Did_you_mean_2_2551","messageArgs":["prop","classC","prop1"],"relatedInformation":[{"file":2,"pos":26,"end":31,"code":2728,"category":3,"messageKey":"_0_is_declared_here_2728","messageArgs":["prop1"]}]}]],[5,[{"pos":76,"end":80,"code":2551,"category":1,"messageKey":"Property_0_does_not_exist_on_type_1_Did_you_mean_2_2551","messageArgs":["prop","classC","prop1"],"relatedInformation":[{"file":2,"pos":26,"end":31,"code":2728,"category":3,"messageKey":"_0_is_declared_here_2728","messageArgs":["prop1"]}]}]],[7,[{"pos":18,"end":27,"code":1100,"category":1,"messageKey":"Invalid_use_of_0_in_strict_mode_1100","messageArgs":["arguments"]}]]],"latestChangedDtsFile":"./src/class.d.ts"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -696,10 +734,25 @@ export class classC {
           ]
         }
       ]
+    ],
+    [
+      "./src/noChangeFileWithEmitSpecificError.ts",
+      [
+        {
+          "pos": 18,
+          "end": 27,
+          "code": 1100,
+          "category": 1,
+          "messageKey": "Invalid_use_of_0_in_strict_mode_1100",
+          "messageArgs": [
+            "arguments"
+          ]
+        }
+      ]
     ]
   ],
   "latestChangedDtsFile": "./src/class.d.ts",
-  "size": 3213
+  "size": 3344
 }
 
 tsconfig.json::
@@ -722,10 +775,18 @@ export class classC {
 }
 
 tsgo --noEmit
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsSkipped
 Output::
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.
+
+[7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
+[7m [0m [91m                  ~~~~~~~~~[0m
+
+
+Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,7]],"fileNames":["lib.es2025.full.d.ts","./src/class.ts","./src/indirectClass.ts","./src/directUse.ts","./src/indirectUse.ts","./src/noChangeFile.ts","./src/noChangeFileWithEmitSpecificError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5106d5119e9d454b0e9d7956b0f66ab8-export class classC {\n    prop = 1;\n}","signature":"8743eb01f3ddad300611aa9bbf6b6c0a-export declare class classC {\n    prop: number;\n}\n","impliedNodeFormat":1},{"version":"2d32895543847620d7c9848ddd3a7306-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"4c7e50f9604f4038b2f1bafae04987bb-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n","impliedNodeFormat":1},"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",{"version":"12f2d04905c254bde932222194cd2d1b-export function writeLog(s: string) {\n}","signature":"b46de008dd76697ce12a1dca20c0bf9e-export declare function writeLog(s: string): void;\n","impliedNodeFormat":1},{"version":"f54e687ca7ac9fc3c2161967d09e9950-function someFunc(arguments: boolean, ...rest: any[]) {\n}","signature":"86b693f65e0d5bed7e4ac554c2edb8ba-declare function someFunc(arguments: boolean, ...rest: any[]): void;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3],[2]],"options":{"composite":true},"referencedMap":[[4,1],[3,2],[5,1]],"affectedFilesPendingEmit":[[2,17],[4,16],[3,17],[5,16]],"latestChangedDtsFile":"./src/class.d.ts","emitSignatures":[[2,"e36cbd492db9c71062d723d518b6277f-export declare class classC {\n    prop1: number;\n}\n"],[4,"abe7d9981d6018efb6b2b794f40a1607-export {};\n"],[5,"abe7d9981d6018efb6b2b794f40a1607-export {};\n"]]}
+{"version":"FakeTSVersion","root":[[2,7]],"fileNames":["lib.es2025.full.d.ts","./src/class.ts","./src/indirectClass.ts","./src/directUse.ts","./src/indirectUse.ts","./src/noChangeFile.ts","./src/noChangeFileWithEmitSpecificError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5106d5119e9d454b0e9d7956b0f66ab8-export class classC {\n    prop = 1;\n}","signature":"8743eb01f3ddad300611aa9bbf6b6c0a-export declare class classC {\n    prop: number;\n}\n","impliedNodeFormat":1},{"version":"2d32895543847620d7c9848ddd3a7306-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"4c7e50f9604f4038b2f1bafae04987bb-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n","impliedNodeFormat":1},"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;",{"version":"12f2d04905c254bde932222194cd2d1b-export function writeLog(s: string) {\n}","signature":"b46de008dd76697ce12a1dca20c0bf9e-export declare function writeLog(s: string): void;\n","impliedNodeFormat":1},{"version":"f54e687ca7ac9fc3c2161967d09e9950-function someFunc(arguments: boolean, ...rest: any[]) {\n}","signature":"86b693f65e0d5bed7e4ac554c2edb8ba-declare function someFunc(arguments: boolean, ...rest: any[]): void;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3],[2]],"options":{"composite":true},"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"pos":18,"end":27,"code":1100,"category":1,"messageKey":"Invalid_use_of_0_in_strict_mode_1100","messageArgs":["arguments"]}]]],"affectedFilesPendingEmit":[2,[4],3,[5]],"latestChangedDtsFile":"./src/class.d.ts","emitSignatures":[[2,"e36cbd492db9c71062d723d518b6277f-export declare class classC {\n    prop1: number;\n}\n"],[4,"abe7d9981d6018efb6b2b794f40a1607-export {};\n"],[5,"abe7d9981d6018efb6b2b794f40a1607-export {};\n"]]}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -848,37 +909,46 @@ Output::
       "./src/indirectClass.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./src/noChangeFileWithEmitSpecificError.ts",
+      [
+        {
+          "pos": 18,
+          "end": 27,
+          "code": 1100,
+          "category": 1,
+          "messageKey": "Invalid_use_of_0_in_strict_mode_1100",
+          "messageArgs": [
+            "arguments"
+          ]
+        }
+      ]
+    ]
+  ],
   "affectedFilesPendingEmit": [
     [
       "./src/class.ts",
-      "Js|DtsEmit",
-      [
-        2,
-        17
-      ]
+      "Js|Dts",
+      2
     ],
     [
       "./src/directUse.ts",
-      "DtsEmit",
+      "Dts",
       [
-        4,
-        16
+        4
       ]
     ],
     [
       "./src/indirectClass.ts",
-      "Js|DtsEmit",
-      [
-        3,
-        17
-      ]
+      "Js|Dts",
+      3
     ],
     [
       "./src/indirectUse.ts",
-      "DtsEmit",
+      "Dts",
       [
-        5,
-        16
+        5
       ]
     ]
   ],
@@ -909,7 +979,7 @@ Output::
       ]
     }
   ],
-  "size": 2660
+  "size": 2806
 }
 
 tsconfig.json::
@@ -928,8 +998,16 @@ Signatures::
 Edit [3]:: No Change run with emit
 
 tsgo 
-ExitStatus:: Success
+ExitStatus:: DiagnosticsPresent_OutputsGenerated
 Output::
+[96msrc/noChangeFileWithEmitSpecificError.ts[0m:[93m1[0m:[93m19[0m - [91merror[0m[90m TS1100: [0mInvalid use of 'arguments' in strict mode.
+
+[7m1[0m function someFunc(arguments: boolean, ...rest: any[]) {
+[7m [0m [91m                  ~~~~~~~~~[0m
+
+
+Found 1 error in src/noChangeFileWithEmitSpecificError.ts[90m:1[0m
+
 //// [/home/src/workspaces/project/src/class.d.ts] *modified* 
 export declare class classC {
     prop: number;
@@ -942,7 +1020,7 @@ export class classC {
 
 //// [/home/src/workspaces/project/src/indirectClass.js] *rewrite with same content*
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo] *modified* 
-{"version":"FakeTSVersion","root":[[2,7]],"fileNames":["lib.es2025.full.d.ts","./src/class.ts","./src/indirectClass.ts","./src/directUse.ts","./src/indirectUse.ts","./src/noChangeFile.ts","./src/noChangeFileWithEmitSpecificError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5106d5119e9d454b0e9d7956b0f66ab8-export class classC {\n    prop = 1;\n}","signature":"8743eb01f3ddad300611aa9bbf6b6c0a-export declare class classC {\n    prop: number;\n}\n","impliedNodeFormat":1},{"version":"2d32895543847620d7c9848ddd3a7306-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"4c7e50f9604f4038b2f1bafae04987bb-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"12f2d04905c254bde932222194cd2d1b-export function writeLog(s: string) {\n}","signature":"b46de008dd76697ce12a1dca20c0bf9e-export declare function writeLog(s: string): void;\n","impliedNodeFormat":1},{"version":"f54e687ca7ac9fc3c2161967d09e9950-function someFunc(arguments: boolean, ...rest: any[]) {\n}","signature":"86b693f65e0d5bed7e4ac554c2edb8ba-declare function someFunc(arguments: boolean, ...rest: any[]): void;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3],[2]],"options":{"composite":true},"referencedMap":[[4,1],[3,2],[5,1]],"latestChangedDtsFile":"./src/class.d.ts"}
+{"version":"FakeTSVersion","root":[[2,7]],"fileNames":["lib.es2025.full.d.ts","./src/class.ts","./src/indirectClass.ts","./src/directUse.ts","./src/indirectUse.ts","./src/noChangeFile.ts","./src/noChangeFileWithEmitSpecificError.ts"],"fileInfos":[{"version":"8859c12c614ce56ba9a18e58384a198f-/// <reference no-default-lib=\"true\"/>\ninterface Boolean {}\ninterface Function {}\ninterface CallableFunction {}\ninterface NewableFunction {}\ninterface IArguments {}\ninterface Number { toExponential: any; }\ninterface Object {}\ninterface RegExp {}\ninterface String { charAt: any; }\ninterface Array<T> { length: number; [n: number]: T; }\ninterface ReadonlyArray<T> {}\ninterface SymbolConstructor {\n    (desc?: string | number): symbol;\n    for(name: string): symbol;\n    readonly toStringTag: symbol;\n}\ndeclare var Symbol: SymbolConstructor;\ninterface Symbol {\n    readonly [Symbol.toStringTag]: string;\n}\ndeclare const console: { log(msg: any): void; };","affectsGlobalScope":true,"impliedNodeFormat":1},{"version":"5106d5119e9d454b0e9d7956b0f66ab8-export class classC {\n    prop = 1;\n}","signature":"8743eb01f3ddad300611aa9bbf6b6c0a-export declare class classC {\n    prop: number;\n}\n","impliedNodeFormat":1},{"version":"2d32895543847620d7c9848ddd3a7306-import { classC } from './class';\nexport class indirectClass {\n    classC = new classC();\n}","signature":"4c7e50f9604f4038b2f1bafae04987bb-import { classC } from './class';\nexport declare class indirectClass {\n    classC: classC;\n}\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"1e7a664a983b65ba5fbd926c9dad4a26-import { indirectClass } from './indirectClass';\nnew indirectClass().classC.prop;","signature":"abe7d9981d6018efb6b2b794f40a1607-export {};\n","impliedNodeFormat":1},{"version":"12f2d04905c254bde932222194cd2d1b-export function writeLog(s: string) {\n}","signature":"b46de008dd76697ce12a1dca20c0bf9e-export declare function writeLog(s: string): void;\n","impliedNodeFormat":1},{"version":"f54e687ca7ac9fc3c2161967d09e9950-function someFunc(arguments: boolean, ...rest: any[]) {\n}","signature":"86b693f65e0d5bed7e4ac554c2edb8ba-declare function someFunc(arguments: boolean, ...rest: any[]): void;\n","affectsGlobalScope":true,"impliedNodeFormat":1}],"fileIdsList":[[3],[2]],"options":{"composite":true},"referencedMap":[[4,1],[3,2],[5,1]],"semanticDiagnosticsPerFile":[[7,[{"pos":18,"end":27,"code":1100,"category":1,"messageKey":"Invalid_use_of_0_in_strict_mode_1100","messageArgs":["arguments"]}]]],"latestChangedDtsFile":"./src/class.d.ts"}
 //// [/home/src/workspaces/project/tsconfig.tsbuildinfo.readable.baseline.txt] *modified* 
 {
   "version": "FakeTSVersion",
@@ -1075,8 +1153,25 @@ export class classC {
       "./src/indirectClass.ts"
     ]
   },
+  "semanticDiagnosticsPerFile": [
+    [
+      "./src/noChangeFileWithEmitSpecificError.ts",
+      [
+        {
+          "pos": 18,
+          "end": 27,
+          "code": 1100,
+          "category": 1,
+          "messageKey": "Invalid_use_of_0_in_strict_mode_1100",
+          "messageArgs": [
+            "arguments"
+          ]
+        }
+      ]
+    ]
+  ],
   "latestChangedDtsFile": "./src/class.d.ts",
-  "size": 2574
+  "size": 2736
 }
 
 tsconfig.json::

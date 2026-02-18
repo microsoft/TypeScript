@@ -1,0 +1,10 @@
+--- old.collisionArgumentsFunctionExpressions(alwaysstrict=false,target=es2015).js
++++ new.collisionArgumentsFunctionExpressions(alwaysstrict=false,target=es2015).js
+@@= skipped -36, +36 lines =@@
+ }
+
+ //// [collisionArgumentsFunctionExpressions.js]
++"use strict";
+ function foo() {
+     function f1(arguments, ...restParameters) {
+         var arguments = 10; // no error

@@ -1,9 +1,12 @@
+error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
 a.js(3,9): error TS7029: Fallthrough case in switch.
 a.js(16,5): error TS7027: Unreachable code detected.
+a.js(19,1): error TS1344: 'A label is not allowed here.
 a.js(19,1): error TS7028: Unused label.
 
 
-==== a.js (3 errors) ====
+!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+==== a.js (4 errors) ====
     function foo(a, b) {
         switch (a) {
             case 10:
@@ -27,5 +30,7 @@ a.js(19,1): error TS7028: Unused label.
     }
     
     label1:  var x2 = 10;
+    ~~~~~~
+!!! error TS1344: 'A label is not allowed here.
     ~~~~~~
 !!! error TS7028: Unused label.

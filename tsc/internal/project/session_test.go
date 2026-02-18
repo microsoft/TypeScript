@@ -477,9 +477,12 @@ func TestSession(t *testing.T) {
 			files := maps.Clone(defaultFiles)
 			files["/home/projects/TS/p2/tsconfig.json"] = `{
 				"compilerOptions": {
+					"noLib": true,
 					"module": "nodenext",
-					"jsx": "react"
-				}
+					"strict": true,
+					"moduleDetection": "auto"
+				},
+				"include": ["src"]
 			}`
 			files["/home/projects/TS/p2/src/index.ts"] = `import { x } from "../../p1/src/x";`
 			session, _ := projecttestutil.Setup(files)

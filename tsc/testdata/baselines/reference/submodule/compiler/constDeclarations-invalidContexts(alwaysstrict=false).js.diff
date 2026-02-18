@@ -1,0 +1,10 @@
+--- old.constDeclarations-invalidContexts(alwaysstrict=false).js
++++ new.constDeclarations-invalidContexts(alwaysstrict=false).js
+@@= skipped -34, +34 lines =@@
+
+
+ //// [constDeclarations-invalidContexts.js]
++"use strict";
+ // Errors, const must be defined inside a block
+ if (true)
+     const c1 = 0;

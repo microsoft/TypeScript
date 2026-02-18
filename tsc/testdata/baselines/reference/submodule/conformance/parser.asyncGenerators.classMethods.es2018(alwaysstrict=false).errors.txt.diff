@@ -1,0 +1,35 @@
+--- old.parser.asyncGenerators.classMethods.es2018(alwaysstrict=false).errors.txt
++++ new.parser.asyncGenerators.classMethods.es2018(alwaysstrict=false).errors.txt
+@@= skipped -0, +0 lines =@@
++error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+ asyncGeneratorGetAccessorIsError.ts(2,17): error TS1005: '(' expected.
+ asyncGeneratorPropertyIsError.ts(2,15): error TS1005: '(' expected.
+ asyncGeneratorSetAccessorIsError.ts(2,17): error TS1005: '(' expected.
+@@= skipped -7, +8 lines =@@
+ nestedFunctionDeclarationNamedYieldIsError.ts(3,18): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+ nestedFunctionExpressionNamedAwaitIsError.ts(3,28): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+ nestedFunctionExpressionNamedYieldIsError.ts(3,28): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
++yieldAsTypeIsStrictError.ts(1,11): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+ yieldAsTypeIsStrictError.ts(4,16): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+ yieldInClassComputedPropertyIsError.ts(2,14): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+ yieldInClassComputedPropertyIsError.ts(2,14): error TS2693: 'yield' only refers to a type, but is being used as a value here.
+@@= skipped -8, +9 lines =@@
+ yieldStarMissingValueIsError.ts(3,16): error TS1109: Expression expected.
+
+
++!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+ ==== methodIsOk.ts (0 errors) ====
+     class C1 {
+         async * f() {
+@@= skipped -133, +134 lines =@@
+             let x: await;
+         }
+     }
+-==== yieldAsTypeIsStrictError.ts (1 errors) ====
++==== yieldAsTypeIsStrictError.ts (2 errors) ====
+     interface yield {}
++              ~~~~~
++!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+     class C20 {
+         async * f() {
+             let x: yield;

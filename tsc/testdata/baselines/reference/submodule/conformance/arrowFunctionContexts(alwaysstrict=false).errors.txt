@@ -1,14 +1,20 @@
+error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+arrowFunctionContexts.ts(2,1): error TS1101: 'with' statements are not allowed in strict mode.
 arrowFunctionContexts.ts(2,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 arrowFunctionContexts.ts(30,9): error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
 arrowFunctionContexts.ts(31,16): error TS2332: 'this' cannot be referenced in current location.
+arrowFunctionContexts.ts(43,5): error TS1101: 'with' statements are not allowed in strict mode.
 arrowFunctionContexts.ts(43,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 arrowFunctionContexts.ts(71,13): error TS18033: Type '() => number' is not assignable to type 'number' as required for computed enum member values.
 arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in current location.
 
 
-==== arrowFunctionContexts.ts (6 errors) ====
+!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+==== arrowFunctionContexts.ts (8 errors) ====
     // Arrow function used in with statement
     with (window) {
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
     ~~~~~~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
         var p = () => this;
@@ -56,6 +62,8 @@ arrowFunctionContexts.ts(72,20): error TS2332: 'this' cannot be referenced in cu
     namespace M2 {
         // Arrow function used in with statement
         with (window) {
+        ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
         ~~~~~~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
             var p = () => this;

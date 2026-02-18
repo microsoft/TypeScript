@@ -1,0 +1,9 @@
+--- old.FunctionDeclaration2_es6(alwaysstrict=false).js
++++ new.FunctionDeclaration2_es6(alwaysstrict=false).js
+@@= skipped -4, +4 lines =@@
+ }
+
+ //// [FunctionDeclaration2_es6.js]
++"use strict";
+ function f(yield) {
+ }

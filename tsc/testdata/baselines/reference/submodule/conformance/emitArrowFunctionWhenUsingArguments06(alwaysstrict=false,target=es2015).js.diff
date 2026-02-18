@@ -1,0 +1,10 @@
+--- old.emitArrowFunctionWhenUsingArguments06(alwaysstrict=false,target=es2015).js
++++ new.emitArrowFunctionWhenUsingArguments06(alwaysstrict=false,target=es2015).js
+@@= skipped -5, +5 lines =@@
+ }
+
+ //// [emitArrowFunctionWhenUsingArguments06.js]
++"use strict";
+ function f(arguments) {
+     var a = () => () => arguments;
+ }

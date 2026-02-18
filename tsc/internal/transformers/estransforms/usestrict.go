@@ -43,13 +43,8 @@ func (tx *useStrictTransformer) visitSourceFile(node *ast.SourceFile) *ast.Node 
 		return node.AsNode()
 	}
 
-	if isExternalModule ||
-		tx.compilerOptions.AlwaysStrict.IsTrueOrUnknown() {
-		statements := tx.Factory().EnsureUseStrict(node.Statements.Nodes)
-		statementList := tx.Factory().NewNodeList(statements)
-		statementList.Loc = node.Statements.Loc
-		return tx.Factory().UpdateSourceFile(node, statementList, node.EndOfFileToken).AsSourceFile().AsNode()
-	}
-
-	return node.AsNode()
+	statements := tx.Factory().EnsureUseStrict(node.Statements.Nodes)
+	statementList := tx.Factory().NewNodeList(statements)
+	statementList.Loc = node.Statements.Loc
+	return tx.Factory().UpdateSourceFile(node, statementList, node.EndOfFileToken).AsSourceFile().AsNode()
 }

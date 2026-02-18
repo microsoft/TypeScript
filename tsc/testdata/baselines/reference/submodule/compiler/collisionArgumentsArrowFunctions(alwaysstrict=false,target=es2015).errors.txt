@@ -1,0 +1,45 @@
+error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+collisionArgumentsArrowFunctions.ts(1,25): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsArrowFunctions.ts(2,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsArrowFunctions.ts(4,12): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsArrowFunctions.ts(5,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsArrowFunctions.ts(7,18): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsArrowFunctions.ts(8,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsArrowFunctions.ts(12,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsArrowFunctions.ts(15,9): error TS1100: Invalid use of 'arguments' in strict mode.
+
+
+!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+==== collisionArgumentsArrowFunctions.ts (8 errors) ====
+    var f1 = (i: number, ...arguments) => { //arguments is error
+                            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        var arguments: any[]; // no error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    var f12 = (arguments: number, ...rest) => { //arguments is error
+               ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        var arguments = 10; // no error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    var f1NoError = (arguments: number) => { // no error
+                     ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        var arguments = 10; // no error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    
+    var f2 = (...restParameters) => {
+        var arguments = 10; // No Error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    var f2NoError = () => {
+        var arguments = 10; // no error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }

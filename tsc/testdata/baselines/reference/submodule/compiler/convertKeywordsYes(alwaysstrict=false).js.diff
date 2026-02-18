@@ -1,6 +1,14 @@
 --- old.convertKeywordsYes(alwaysstrict=false).js
 +++ new.convertKeywordsYes(alwaysstrict=false).js
-@@= skipped -384, +384 lines =@@
+@@= skipped -307, +307 lines =@@
+ }
+
+ //// [convertKeywordsYes.js]
++"use strict";
+ // reserved ES5 future in strict mode
+ var constructor = 0;
+ var any = 0;
+@@= skipped -77, +78 lines =@@
      with: 0,
  };
  class bigClass {

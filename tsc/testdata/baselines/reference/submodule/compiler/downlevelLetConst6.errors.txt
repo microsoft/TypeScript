@@ -1,7 +1,10 @@
+downlevelLetConst6.ts(1,1): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
 downlevelLetConst6.ts(1,1): error TS2304: Cannot find name 'let'.
 
 
-==== downlevelLetConst6.ts (1 errors) ====
+==== downlevelLetConst6.ts (2 errors) ====
     let
+    ~~~
+!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
     ~~~
 !!! error TS2304: Cannot find name 'let'.

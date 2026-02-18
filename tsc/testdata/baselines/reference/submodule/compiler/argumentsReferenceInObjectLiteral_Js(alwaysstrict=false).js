@@ -29,6 +29,7 @@ const d = () => {
 
 
 //// [a.js]
+"use strict";
 const a = () => {
     return {
         arguments: [],

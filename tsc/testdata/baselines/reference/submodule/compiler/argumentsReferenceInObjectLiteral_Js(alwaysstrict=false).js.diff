@@ -1,0 +1,10 @@
+--- old.argumentsReferenceInObjectLiteral_Js(alwaysstrict=false).js
++++ new.argumentsReferenceInObjectLiteral_Js(alwaysstrict=false).js
+@@= skipped -28, +28 lines =@@
+
+
+ //// [a.js]
++"use strict";
+ const a = () => {
+     return {
+         arguments: [],

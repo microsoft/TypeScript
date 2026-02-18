@@ -1,0 +1,10 @@
+--- old.emitArrowFunctionWhenUsingArguments14_ES6(alwaysstrict=false).js
++++ new.emitArrowFunctionWhenUsingArguments14_ES6(alwaysstrict=false).js
+@@= skipped -8, +8 lines =@@
+ }
+
+ //// [emitArrowFunctionWhenUsingArguments14_ES6.js]
++"use strict";
+ function f() {
+     if (Math.random()) {
+         let arguments = 100;

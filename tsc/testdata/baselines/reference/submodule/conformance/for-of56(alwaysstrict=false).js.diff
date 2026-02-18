@@ -1,0 +1,8 @@
+--- old.for-of56(alwaysstrict=false).js
++++ new.for-of56(alwaysstrict=false).js
+@@= skipped -3, +3 lines =@@
+ for (var let of []) {}
+
+ //// [for-of56.js]
++"use strict";
+ for (var let of []) { }

@@ -1,0 +1,109 @@
+error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+collisionArgumentsFunction.ts(2,13): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(3,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(5,28): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(6,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(8,20): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(9,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(17,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(20,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(23,13): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(24,13): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(25,13): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(26,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(28,28): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(29,28): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(30,25): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(31,9): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(33,20): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(34,20): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(35,20): error TS1100: Invalid use of 'arguments' in strict mode.
+collisionArgumentsFunction.ts(36,9): error TS1100: Invalid use of 'arguments' in strict mode.
+
+
+!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+==== collisionArgumentsFunction.ts (20 errors) ====
+    // Functions
+    function f1(arguments: number, ...restParameters) { //arguments is error
+                ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        var arguments = 10; // no error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    function f12(i: number, ...arguments) { //arguments is error
+                               ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        var arguments: any[]; // no error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    function f1NoError(arguments: number) { // no error
+                       ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        var arguments = 10; // no error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    
+    declare function f2(i: number, ...arguments); // no error - no code gen
+    declare function f21(arguments: number, ...rest); // no error - no code gen
+    declare function f2NoError(arguments: number); // no error
+    
+    function f3(...restParameters) {
+        var arguments = 10; // no error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    function f3NoError() {
+        var arguments = 10; // no error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    
+    function f4(arguments: number, ...rest); // no codegen no error
+                ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    function f4(arguments: string, ...rest); // no codegen no error
+                ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    function f4(arguments: any, ...rest) { // error
+                ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        var arguments: any; // No error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    function f42(i: number, ...arguments); // no codegen no error
+                               ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    function f42(i: string, ...arguments); // no codegen no error
+                               ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    function f42(i: any, ...arguments) { // error
+                            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        var arguments: any[]; // No error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    function f4NoError(arguments: number); // no error
+                       ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    function f4NoError(arguments: string); // no error
+                       ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    function f4NoError(arguments: any) { // no error
+                       ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        var arguments: any; // No error
+            ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }
+    
+    declare function f5(arguments: number, ...rest); // no codegen no error
+    declare function f5(arguments: string, ...rest); // no codegen no error
+    declare function f52(i: number, ...arguments); // no codegen no error
+    declare function f52(i: string, ...arguments); // no codegen no error
+    declare function f6(arguments: number); // no codegen no error
+    declare function f6(arguments: string); // no codegen no error

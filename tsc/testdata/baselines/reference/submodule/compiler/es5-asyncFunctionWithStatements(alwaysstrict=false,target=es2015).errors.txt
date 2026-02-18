@@ -1,18 +1,27 @@
+error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+es5-asyncFunctionWithStatements.ts(4,5): error TS1101: 'with' statements are not allowed in strict mode.
 es5-asyncFunctionWithStatements.ts(4,5): error TS1300: 'with' statements are not allowed in an async function block.
 es5-asyncFunctionWithStatements.ts(4,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+es5-asyncFunctionWithStatements.ts(10,5): error TS1101: 'with' statements are not allowed in strict mode.
 es5-asyncFunctionWithStatements.ts(10,5): error TS1300: 'with' statements are not allowed in an async function block.
 es5-asyncFunctionWithStatements.ts(10,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+es5-asyncFunctionWithStatements.ts(16,5): error TS1101: 'with' statements are not allowed in strict mode.
 es5-asyncFunctionWithStatements.ts(16,5): error TS1300: 'with' statements are not allowed in an async function block.
 es5-asyncFunctionWithStatements.ts(16,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+es5-asyncFunctionWithStatements.ts(24,5): error TS1101: 'with' statements are not allowed in strict mode.
 es5-asyncFunctionWithStatements.ts(24,5): error TS1300: 'with' statements are not allowed in an async function block.
 es5-asyncFunctionWithStatements.ts(24,5): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+es5-asyncFunctionWithStatements.ts(25,9): error TS1101: 'with' statements are not allowed in strict mode.
 
 
-==== es5-asyncFunctionWithStatements.ts (8 errors) ====
+!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+==== es5-asyncFunctionWithStatements.ts (13 errors) ====
     declare var x, y, z, a, b, c;
     
     async function withStatement0() {
         with (x) {
+        ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
         ~~~~
 !!! error TS1300: 'with' statements are not allowed in an async function block.
         ~~~~~~~~
@@ -24,6 +33,8 @@ es5-asyncFunctionWithStatements.ts(24,5): error TS2410: The 'with' statement is 
     async function withStatement1() {
         with (await x) {
         ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
+        ~~~~
 !!! error TS1300: 'with' statements are not allowed in an async function block.
         ~~~~~~~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
@@ -33,6 +44,8 @@ es5-asyncFunctionWithStatements.ts(24,5): error TS2410: The 'with' statement is 
     
     async function withStatement2() {
         with (x) {
+        ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
         ~~~~
 !!! error TS1300: 'with' statements are not allowed in an async function block.
         ~~~~~~~~
@@ -46,10 +59,14 @@ es5-asyncFunctionWithStatements.ts(24,5): error TS2410: The 'with' statement is 
     async function withStatement3() {
         with (x) {
         ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
+        ~~~~
 !!! error TS1300: 'with' statements are not allowed in an async function block.
         ~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
             with (z) {
+            ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
                 a;
                 await y;
                 b;

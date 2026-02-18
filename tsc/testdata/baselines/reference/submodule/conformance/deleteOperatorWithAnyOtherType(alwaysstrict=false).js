@@ -64,6 +64,7 @@ delete objA.a;
 delete M.n;
 
 //// [deleteOperatorWithAnyOtherType.js]
+"use strict";
 // delete  operator on any type
 var ANY2 = ["", ""];
 var obj1 = { x: "", y: () => { } };

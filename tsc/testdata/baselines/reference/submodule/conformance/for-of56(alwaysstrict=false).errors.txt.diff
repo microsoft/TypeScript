@@ -1,0 +1,13 @@
+--- old.for-of56(alwaysstrict=false).errors.txt
++++ new.for-of56(alwaysstrict=false).errors.txt
+@@= skipped -0, +0 lines =@@
+-<no content>
++error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
++for-of56.ts(1,10): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
++
++
++!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
++==== for-of56.ts (1 errors) ====
++    for (var let of []) {}
++             ~~~
++!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.

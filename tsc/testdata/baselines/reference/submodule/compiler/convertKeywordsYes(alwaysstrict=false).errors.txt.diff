@@ -1,0 +1,151 @@
+--- old.convertKeywordsYes(alwaysstrict=false).errors.txt
++++ new.convertKeywordsYes(alwaysstrict=false).errors.txt
+@@= skipped -0, +0 lines =@@
++error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
++convertKeywordsYes.ts(6,5): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
++convertKeywordsYes.ts(7,5): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
++convertKeywordsYes.ts(8,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
++convertKeywordsYes.ts(11,5): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
++convertKeywordsYes.ts(12,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
++convertKeywordsYes.ts(13,5): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
++convertKeywordsYes.ts(14,5): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
++convertKeywordsYes.ts(16,5): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
++convertKeywordsYes.ts(19,5): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
++convertKeywordsYes.ts(24,5): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
++convertKeywordsYes.ts(25,5): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
++convertKeywordsYes.ts(26,5): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
++convertKeywordsYes.ts(28,5): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
++convertKeywordsYes.ts(29,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
++convertKeywordsYes.ts(30,5): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
++convertKeywordsYes.ts(31,5): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
++convertKeywordsYes.ts(33,5): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
++convertKeywordsYes.ts(35,5): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
++convertKeywordsYes.ts(40,8): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
++convertKeywordsYes.ts(41,9): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
++convertKeywordsYes.ts(42,8): error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
++convertKeywordsYes.ts(45,8): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
++convertKeywordsYes.ts(46,9): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
++convertKeywordsYes.ts(47,9): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
++convertKeywordsYes.ts(48,9): error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
++convertKeywordsYes.ts(50,9): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
++convertKeywordsYes.ts(53,8): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+ convertKeywordsYes.ts(175,12): error TS18006: Classes may not have a field named 'constructor'.
+ convertKeywordsYes.ts(292,11): error TS1213: Identifier expected. 'implements' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+ convertKeywordsYes.ts(293,11): error TS1213: Identifier expected. 'interface' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+@@= skipped -9, +37 lines =@@
+ convertKeywordsYes.ts(303,11): error TS1213: Identifier expected. 'yield' is a reserved word in strict mode. Class definitions are automatically in strict mode.
+
+
+-==== convertKeywordsYes.ts (10 errors) ====
++!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
++==== convertKeywordsYes.ts (37 errors) ====
+     // reserved ES5 future in strict mode
+     
+     var constructor = 0;
+     var any = 0;
+     var boolean = 0;
+     var implements = 0;
++        ~~~~~~~~~~
++!!! error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
+     var interface = 0;
++        ~~~~~~~~~
++!!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
+     var let = 0;
++        ~~~
++!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+     var module = 0;
+     var number = 0;
+     var package = 0;
++        ~~~~~~~
++!!! error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+     var private = 0;
++        ~~~~~~~
++!!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+     var protected = 0;
++        ~~~~~~~~~
++!!! error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+     var public = 0;
++        ~~~~~~
++!!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+     var set = 0;
+     var static = 0;
++        ~~~~~~
++!!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+     var string = 0;
+     var get = 0;
+     var yield = 0;
++        ~~~~~
++!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+     var declare = 0;
+     
+     function bigGeneric<
+         constructor,
+         implements ,
++        ~~~~~~~~~~
++!!! error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
+         interface ,
++        ~~~~~~~~~
++!!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
+         let,
++        ~~~
++!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+         module ,
+         package,
++        ~~~~~~~
++!!! error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+         private ,
++        ~~~~~~~
++!!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+         protected,
++        ~~~~~~~~~
++!!! error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+         public ,
++        ~~~~~~
++!!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+         set ,
+         static ,
++        ~~~~~~
++!!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+         get ,
+         yield,
++        ~~~~~
++!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+         declare
+         >(c: constructor,
+         a: any,
+         b2: boolean,
+         i: implements ,
++           ~~~~~~~~~~
++!!! error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
+         i2: interface ,
++            ~~~~~~~~~
++!!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
+         l: let,
++           ~~~
++!!! error TS1212: Identifier expected. 'let' is a reserved word in strict mode.
+         m: module ,
+         n: number,
+         p: package,
++           ~~~~~~~
++!!! error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
+         p2: private ,
++            ~~~~~~~
++!!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
+         p3: protected,
++            ~~~~~~~~~
++!!! error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
+         p4: public ,
++            ~~~~~~
++!!! error TS1212: Identifier expected. 'public' is a reserved word in strict mode.
+         s: set ,
+         s2: static ,
++            ~~~~~~
++!!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
+         s3: string,
+         g: get ,
+         y: yield,
++           ~~~~~
++!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+         d: declare ) { }
+     
+     var bigObject = {

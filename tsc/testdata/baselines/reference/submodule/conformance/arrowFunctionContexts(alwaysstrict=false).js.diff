@@ -1,6 +1,14 @@
 --- old.arrowFunctionContexts(alwaysstrict=false).js
 +++ new.arrowFunctionContexts(alwaysstrict=false).js
-@@= skipped -120, +120 lines =@@
+@@= skipped -97, +97 lines =@@
+
+
+ //// [arrowFunctionContexts.js]
++"use strict";
+ // Arrow function used in with statement
+ with (window) {
+     var p = () => this;
+@@= skipped -23, +24 lines =@@
  // Arrow function as enum value
  var E;
  (function (E) {

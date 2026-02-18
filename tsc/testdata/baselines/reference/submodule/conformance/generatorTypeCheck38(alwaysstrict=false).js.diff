@@ -1,0 +1,10 @@
+--- old.generatorTypeCheck38(alwaysstrict=false).js
++++ new.generatorTypeCheck38(alwaysstrict=false).js
+@@= skipped -7, +7 lines =@@
+ }
+
+ //// [generatorTypeCheck38.js]
++"use strict";
+ var yield;
+ function* g() {
+     yield 0;

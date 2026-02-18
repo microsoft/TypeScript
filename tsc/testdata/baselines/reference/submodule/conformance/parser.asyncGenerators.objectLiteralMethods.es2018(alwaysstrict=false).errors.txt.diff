@@ -1,0 +1,72 @@
+--- old.parser.asyncGenerators.objectLiteralMethods.es2018(alwaysstrict=false).errors.txt
++++ new.parser.asyncGenerators.objectLiteralMethods.es2018(alwaysstrict=false).errors.txt
+@@= skipped -0, +0 lines =@@
++error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+ asyncGeneratorGetAccessorIsError.ts(2,17): error TS1005: '(' expected.
+ asyncGeneratorPropertyIsError.ts(2,14): error TS1005: '(' expected.
+ asyncGeneratorSetAccessorIsError.ts(2,17): error TS1005: '(' expected.
+@@= skipped -4, +5 lines =@@
+ awaitMissingValueIsError.ts(3,14): error TS1109: Expression expected.
+ awaitParameterIsError.ts(2,15): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+ nestedFunctionDeclarationNamedAwaitIsError.ts(3,18): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+-nestedFunctionDeclarationNamedYieldIsError.ts(3,18): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++nestedFunctionDeclarationNamedYieldIsError.ts(3,18): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+ nestedFunctionExpressionNamedAwaitIsError.ts(3,28): error TS1359: Identifier expected. 'await' is a reserved word that cannot be used here.
+-nestedFunctionExpressionNamedYieldIsError.ts(3,28): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++nestedFunctionExpressionNamedYieldIsError.ts(3,28): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
++yieldAsTypeIsOk.ts(1,11): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
++yieldAsTypeIsOk.ts(4,16): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+ yieldInParameterInitializerIsError.ts(2,19): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
+-yieldParameterIsError.ts(2,15): error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++yieldParameterIsError.ts(2,15): error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+ yieldStarMissingValueIsError.ts(3,16): error TS1109: Expression expected.
+
+
++!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+ ==== methodIsOk.ts (0 errors) ====
+     const o1 = {
+         async * f() {
+@@= skipped -34, +37 lines =@@
+     const o5 = {
+         async * f(yield) {
+                   ~~~~~
+-!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+         }
+     };
+ ==== awaitInParameterInitializerIsError.ts (1 errors) ====
+@@= skipped -29, +29 lines =@@
+         async * f() {
+             function yield() {
+                      ~~~~~
+-!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+             }
+         }
+     };
+@@= skipped -9, +9 lines =@@
+         async * f() {
+             const x = function yield() {
+                                ~~~~~
+-!!! error TS1359: Identifier expected. 'yield' is a reserved word that cannot be used here.
++!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+             };
+         }
+     };
+@@= skipped -69, +69 lines =@@
+             let x: await;
+         }
+     };
+-==== yieldAsTypeIsOk.ts (0 errors) ====
++==== yieldAsTypeIsOk.ts (2 errors) ====
+     interface yield {}
++              ~~~~~
++!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+     const o20 = {
+         async * f() {
+             let x: yield;
++                   ~~~~~
++!!! error TS1212: Identifier expected. 'yield' is a reserved word in strict mode.
+         }
+     };
+ ==== yieldInNestedComputedPropertyIsOk.ts (0 errors) ====

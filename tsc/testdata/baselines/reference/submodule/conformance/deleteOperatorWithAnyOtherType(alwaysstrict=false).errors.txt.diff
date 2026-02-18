@@ -1,0 +1,112 @@
+--- old.deleteOperatorWithAnyOtherType(alwaysstrict=false).errors.txt
++++ new.deleteOperatorWithAnyOtherType(alwaysstrict=false).errors.txt
+@@= skipped -0, +0 lines =@@
++error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
++deleteOperatorWithAnyOtherType.ts(25,31): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ deleteOperatorWithAnyOtherType.ts(25,31): error TS2703: The operand of a 'delete' operator must be a property reference.
++deleteOperatorWithAnyOtherType.ts(26,31): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ deleteOperatorWithAnyOtherType.ts(26,31): error TS2703: The operand of a 'delete' operator must be a property reference.
++deleteOperatorWithAnyOtherType.ts(27,31): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ deleteOperatorWithAnyOtherType.ts(27,31): error TS2703: The operand of a 'delete' operator must be a property reference.
++deleteOperatorWithAnyOtherType.ts(28,31): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ deleteOperatorWithAnyOtherType.ts(28,31): error TS2703: The operand of a 'delete' operator must be a property reference.
++deleteOperatorWithAnyOtherType.ts(29,31): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ deleteOperatorWithAnyOtherType.ts(29,31): error TS2703: The operand of a 'delete' operator must be a property reference.
++deleteOperatorWithAnyOtherType.ts(30,31): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ deleteOperatorWithAnyOtherType.ts(30,31): error TS2703: The operand of a 'delete' operator must be a property reference.
++deleteOperatorWithAnyOtherType.ts(33,31): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ deleteOperatorWithAnyOtherType.ts(33,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+ deleteOperatorWithAnyOtherType.ts(34,31): error TS2703: The operand of a 'delete' operator must be a property reference.
+ deleteOperatorWithAnyOtherType.ts(42,32): error TS2703: The operand of a 'delete' operator must be a property reference.
+@@= skipped -15, +23 lines =@@
+ deleteOperatorWithAnyOtherType.ts(47,33): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+ deleteOperatorWithAnyOtherType.ts(47,33): error TS2703: The operand of a 'delete' operator must be a property reference.
+ deleteOperatorWithAnyOtherType.ts(50,32): error TS2703: The operand of a 'delete' operator must be a property reference.
++deleteOperatorWithAnyOtherType.ts(50,39): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ deleteOperatorWithAnyOtherType.ts(50,39): error TS2703: The operand of a 'delete' operator must be a property reference.
+ deleteOperatorWithAnyOtherType.ts(51,32): error TS2703: The operand of a 'delete' operator must be a property reference.
+ deleteOperatorWithAnyOtherType.ts(51,39): error TS2703: The operand of a 'delete' operator must be a property reference.
+ deleteOperatorWithAnyOtherType.ts(51,47): error TS2703: The operand of a 'delete' operator must be a property reference.
++deleteOperatorWithAnyOtherType.ts(54,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ deleteOperatorWithAnyOtherType.ts(54,8): error TS2703: The operand of a 'delete' operator must be a property reference.
++deleteOperatorWithAnyOtherType.ts(55,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ deleteOperatorWithAnyOtherType.ts(55,8): error TS2703: The operand of a 'delete' operator must be a property reference.
++deleteOperatorWithAnyOtherType.ts(57,8): error TS1102: 'delete' cannot be called on an identifier in strict mode.
+ deleteOperatorWithAnyOtherType.ts(57,8): error TS2703: The operand of a 'delete' operator must be a property reference.
+
+
+-==== deleteOperatorWithAnyOtherType.ts (25 errors) ====
++!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
++==== deleteOperatorWithAnyOtherType.ts (36 errors) ====
+     // delete  operator on any type
+     
+     declare var ANY: any;
+@@= skipped -36, +41 lines =@@
+     // any type var
+     var ResultIsBoolean1 = delete ANY1;
+                                   ~~~~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
++                                  ~~~~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+     var ResultIsBoolean2 = delete ANY2;
+                                   ~~~~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
++                                  ~~~~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+     var ResultIsBoolean3 = delete A;
+                                   ~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
++                                  ~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+     var ResultIsBoolean4 = delete M;
+                                   ~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
++                                  ~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+     var ResultIsBoolean5 = delete obj;
+                                   ~~~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
++                                  ~~~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+     var ResultIsBoolean6 = delete obj1;
+                                   ~~~~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
++                                  ~~~~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+     
+     // any type literal
+     var ResultIsBoolean7 = delete undefined;
+                                   ~~~~~~~~~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
++                                  ~~~~~~~~~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+     var ResultIsBoolean8 = delete null;
+                                   ~~~~
+@@= skipped -61, +75 lines =@@
+                                    ~~~~~~~~~~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+                                           ~~~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
++                                          ~~~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+     var ResultIsBoolean21 = delete delete delete (ANY + ANY1);
+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+@@= skipped -12, +14 lines =@@
+     // miss assignment operators
+     delete ANY;
+            ~~~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
++           ~~~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+     delete ANY1;
+            ~~~~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
++           ~~~~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+     delete ANY2[0];
+     delete ANY, ANY1;
++           ~~~
++!!! error TS1102: 'delete' cannot be called on an identifier in strict mode.
+            ~~~
+ !!! error TS2703: The operand of a 'delete' operator must be a property reference.
+     delete obj1.x;

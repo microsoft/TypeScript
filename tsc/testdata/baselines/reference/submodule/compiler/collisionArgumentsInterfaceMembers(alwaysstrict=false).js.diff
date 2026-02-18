@@ -1,0 +1,7 @@
+--- old.collisionArgumentsInterfaceMembers(alwaysstrict=false).js
++++ new.collisionArgumentsInterfaceMembers(alwaysstrict=false).js
+@@= skipped -30, +30 lines =@@
+ }
+
+ //// [collisionArgumentsInterfaceMembers.js]
++"use strict";

@@ -1,0 +1,10 @@
+--- old.parserStatementIsNotAMemberVariableDeclaration1(alwaysstrict=false).js
++++ new.parserStatementIsNotAMemberVariableDeclaration1(alwaysstrict=false).js
+@@= skipped -12, +12 lines =@@
+ };
+
+ //// [parserStatementIsNotAMemberVariableDeclaration1.js]
++"use strict";
+ return {
+     "set": function (key, value) {
+         // 'private' should not be considered a member variable here.

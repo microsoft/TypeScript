@@ -21,13 +21,9 @@ func BenchmarkBind(b *testing.B) {
 			path := tspath.ToPath(fileName, "/", osvfs.FS().UseCaseSensitiveFileNames())
 			sourceText := f.ReadFile(b)
 
-			compilerOptions := &core.CompilerOptions{Target: core.ScriptTargetESNext, Module: core.ModuleKindNodeNext}
-			sourceAffecting := compilerOptions.SourceFileAffecting()
-
 			parseOptions := ast.SourceFileParseOptions{
-				FileName:        fileName,
-				Path:            path,
-				CompilerOptions: sourceAffecting,
+				FileName: fileName,
+				Path:     path,
 			}
 			scriptKind := core.GetScriptKindFromFileName(fileName)
 

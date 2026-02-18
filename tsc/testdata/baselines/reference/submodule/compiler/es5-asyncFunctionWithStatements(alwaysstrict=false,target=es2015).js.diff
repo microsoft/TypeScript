@@ -21,6 +21,7 @@
 -function withStatement2() {
 -    return __awaiter(this, void 0, void 0, function* () {
 -        with (x) {
++"use strict";
 +async function withStatement0() {
 +    with (x) {
 +        y;

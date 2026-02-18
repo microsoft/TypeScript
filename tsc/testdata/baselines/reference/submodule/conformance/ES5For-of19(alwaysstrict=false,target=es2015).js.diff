@@ -1,0 +1,10 @@
+--- old.ES5For-of19(alwaysstrict=false,target=es2015).js
++++ new.ES5For-of19(alwaysstrict=false,target=es2015).js
+@@= skipped -11, +11 lines =@@
+
+
+ //// [ES5For-of19.js]
++"use strict";
+ for (let v of []) {
+     v;
+     function foo() {

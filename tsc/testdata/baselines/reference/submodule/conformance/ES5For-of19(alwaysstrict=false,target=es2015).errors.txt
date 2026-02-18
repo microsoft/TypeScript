@@ -1,0 +1,14 @@
+error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+
+
+!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+==== ES5For-of19.ts (0 errors) ====
+    for (let v of []) {
+        v;
+        function foo() {
+            for (const v of []) {
+                v;
+            }
+        }
+    }
+    

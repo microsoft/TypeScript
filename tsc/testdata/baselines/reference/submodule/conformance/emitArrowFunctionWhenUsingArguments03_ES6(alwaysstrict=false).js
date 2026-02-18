@@ -5,5 +5,6 @@ var arguments;
 var a = () => arguments;
 
 //// [emitArrowFunctionWhenUsingArguments03_ES6.js]
+"use strict";
 var arguments;
 var a = () => arguments;

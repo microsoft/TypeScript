@@ -98,6 +98,7 @@ var asserted2: any;
 
 
 //// [arrowFunctionContexts.js]
+"use strict";
 // Arrow function used in with statement
 with (window) {
     var p = () => this;

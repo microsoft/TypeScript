@@ -1,0 +1,25 @@
+--- old.argumentsReferenceInObjectLiteral_Js(alwaysstrict=false).errors.txt
++++ new.argumentsReferenceInObjectLiteral_Js(alwaysstrict=false).errors.txt
+@@= skipped -0, +0 lines =@@
++error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+ /a.js(16,9): error TS18004: No value exists in scope for the shorthand property 'arguments'. Either declare one or provide an initializer.
+-
+-
+-==== /a.js (1 errors) ====
++/a.js(21,11): error TS1100: Invalid use of 'arguments' in strict mode.
++
++
++!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
++==== /a.js (2 errors) ====
+     const a = () => {
+         return {
+             arguments: [],
+@@= skipped -24, +27 lines =@@
+     
+     const d = () => {
+         const arguments = undefined;
++              ~~~~~~~~~
++!!! error TS1100: Invalid use of 'arguments' in strict mode.
+         return {
+             arguments,
+         };

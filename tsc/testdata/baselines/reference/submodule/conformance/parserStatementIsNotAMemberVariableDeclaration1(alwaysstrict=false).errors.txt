@@ -1,7 +1,10 @@
+error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
 parserStatementIsNotAMemberVariableDeclaration1.ts(1,1): error TS1108: A 'return' statement can only be used within a function body.
+parserStatementIsNotAMemberVariableDeclaration1.ts(6,5): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
 
 
-==== parserStatementIsNotAMemberVariableDeclaration1.ts (1 errors) ====
+!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+==== parserStatementIsNotAMemberVariableDeclaration1.ts (2 errors) ====
     return {
     ~~~~~~
 !!! error TS1108: A 'return' statement can only be used within a function body.
@@ -10,6 +13,8 @@ parserStatementIsNotAMemberVariableDeclaration1.ts(1,1): error TS1108: A 'return
     
         // 'private' should not be considered a member variable here.
         private[key] = value;
+        ~~~~~~~
+!!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
     
       }
     

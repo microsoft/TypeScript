@@ -1,0 +1,10 @@
+--- old.constDeclarations-validContexts(alwaysstrict=false).js
++++ new.constDeclarations-validContexts(alwaysstrict=false).js
+@@= skipped -123, +123 lines =@@
+ }
+
+ //// [constDeclarations-validContexts.js]
++"use strict";
+ // Control flow statements with blocks
+ if (true) {
+     const c1 = 0;

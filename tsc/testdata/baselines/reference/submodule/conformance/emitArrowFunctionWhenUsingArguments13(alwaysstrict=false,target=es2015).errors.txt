@@ -1,0 +1,12 @@
+error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+emitArrowFunctionWhenUsingArguments13.ts(3,14): error TS1100: Invalid use of 'arguments' in strict mode.
+
+
+!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+==== emitArrowFunctionWhenUsingArguments13.ts (1 errors) ====
+    function f() {
+        var _arguments = 10;
+        var a = (arguments) => () => _arguments;
+                 ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+    }

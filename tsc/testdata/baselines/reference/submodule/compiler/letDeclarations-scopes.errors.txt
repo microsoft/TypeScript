@@ -1,7 +1,11 @@
+letDeclarations-scopes.ts(27,1): error TS1101: 'with' statements are not allowed in strict mode.
 letDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
+letDeclarations-scopes.ts(43,5): error TS1344: 'A label is not allowed here.
+letDeclarations-scopes.ts(48,21): error TS1344: 'A label is not allowed here.
+letDeclarations-scopes.ts(119,5): error TS1344: 'A label is not allowed here.
 
 
-==== letDeclarations-scopes.ts (1 errors) ====
+==== letDeclarations-scopes.ts (5 errors) ====
     // global
     let l = "string";
     
@@ -29,6 +33,8 @@ letDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not suppo
     
     var obj;
     with (obj) {
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
     ~~~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
         let l = 0;
@@ -47,11 +53,15 @@ letDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not suppo
     
     if (true) {
         label: let l = 0;
+        ~~~~~
+!!! error TS1344: 'A label is not allowed here.
         n = l;
     }
     
     while (false) {
         label2: label3: label4: let l = 0;
+                        ~~~~~~
+!!! error TS1344: 'A label is not allowed here.
         n = l;
     }
     
@@ -123,6 +133,8 @@ letDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not suppo
         }
     
         lable: let l2 = 0;
+        ~~~~~
+!!! error TS1344: 'A label is not allowed here.
     }
     
     // methods

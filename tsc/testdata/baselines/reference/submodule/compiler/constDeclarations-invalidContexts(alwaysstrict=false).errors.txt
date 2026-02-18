@@ -1,15 +1,20 @@
+error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
 constDeclarations-invalidContexts.ts(3,5): error TS1156: 'const' declarations can only be declared inside a block.
 constDeclarations-invalidContexts.ts(5,5): error TS1156: 'const' declarations can only be declared inside a block.
 constDeclarations-invalidContexts.ts(8,5): error TS1156: 'const' declarations can only be declared inside a block.
 constDeclarations-invalidContexts.ts(11,5): error TS1156: 'const' declarations can only be declared inside a block.
+constDeclarations-invalidContexts.ts(15,1): error TS1101: 'with' statements are not allowed in strict mode.
 constDeclarations-invalidContexts.ts(15,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 constDeclarations-invalidContexts.ts(19,5): error TS1156: 'const' declarations can only be declared inside a block.
 constDeclarations-invalidContexts.ts(22,5): error TS1156: 'const' declarations can only be declared inside a block.
+constDeclarations-invalidContexts.ts(25,5): error TS1344: 'A label is not allowed here.
 constDeclarations-invalidContexts.ts(25,12): error TS1156: 'const' declarations can only be declared inside a block.
+constDeclarations-invalidContexts.ts(28,21): error TS1344: 'A label is not allowed here.
 constDeclarations-invalidContexts.ts(28,29): error TS1156: 'const' declarations can only be declared inside a block.
 
 
-==== constDeclarations-invalidContexts.ts (9 errors) ====
+!!! error TS5108: Option 'alwaysStrict=false' has been removed. Please remove it from your configuration.
+==== constDeclarations-invalidContexts.ts (12 errors) ====
     // Errors, const must be defined inside a block
     if (true) 
         const c1 = 0;
@@ -33,6 +38,8 @@ constDeclarations-invalidContexts.ts(28,29): error TS1156: 'const' declarations 
     
     var obj;
     with (obj) 
+    ~~~~
+!!! error TS1101: 'with' statements are not allowed in strict mode.
     ~~~~~~~~~~
 !!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
         const c5 = 0;  // No  Error will be reported here since we turn off all type checking
@@ -49,11 +56,15 @@ constDeclarations-invalidContexts.ts(28,29): error TS1156: 'const' declarations 
     
     if (true) 
         label: const c8 = 0;
+        ~~~~~
+!!! error TS1344: 'A label is not allowed here.
                ~~~~~~~~~~~~~
 !!! error TS1156: 'const' declarations can only be declared inside a block.
     
     while (false)
         label2: label3: label4: const c9 = 0;
+                        ~~~~~~
+!!! error TS1344: 'A label is not allowed here.
                                 ~~~~~~~~~~~~~
 !!! error TS1156: 'const' declarations can only be declared inside a block.
     

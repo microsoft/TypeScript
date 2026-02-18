@@ -1,0 +1,10 @@
+--- old.NonInitializedExportInInternalModule(alwaysstrict=false).js
++++ new.NonInitializedExportInInternalModule(alwaysstrict=false).js
+@@= skipped -36, +36 lines =@@
+ }
+
+ //// [NonInitializedExportInInternalModule.js]
++"use strict";
+ var Inner;
+ (function (Inner) {
+     var ;

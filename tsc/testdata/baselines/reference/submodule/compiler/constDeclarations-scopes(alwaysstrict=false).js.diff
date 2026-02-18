@@ -1,0 +1,10 @@
+--- old.constDeclarations-scopes(alwaysstrict=false).js
++++ new.constDeclarations-scopes(alwaysstrict=false).js
+@@= skipped -148, +148 lines =@@
+ }
+
+ //// [constDeclarations-scopes.js]
++"use strict";
+ // global
+ const c = "string";
+ var n;

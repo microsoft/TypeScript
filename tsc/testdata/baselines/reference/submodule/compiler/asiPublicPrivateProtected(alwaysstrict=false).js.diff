@@ -1,6 +1,13 @@
 --- old.asiPublicPrivateProtected(alwaysstrict=false).js
 +++ new.asiPublicPrivateProtected(alwaysstrict=false).js
-@@= skipped -48, +48 lines =@@
+@@= skipped -42, +42 lines =@@
+
+
+ //// [asiPublicPrivateProtected.js]
++"use strict";
+ public;
+ class NonPublicClass {
+     s() {
      }
  }
  class NonPublicClass2 {
@@ -8,7 +15,7 @@
      nonPublicFunction() {
      }
  }
-@@= skipped -9, +10 lines =@@
+@@= skipped -15, +17 lines =@@
      }
  }
  class NonPrivateClass2 {
