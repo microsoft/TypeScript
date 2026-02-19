@@ -969,6 +969,11 @@ func (f *FourslashTest) verifyCompletionsWorker(t *testing.T, expected *Completi
 	return list
 }
 
+func (f *FourslashTest) GetCompletions(t *testing.T, userPreferences *lsutil.UserPreferences) *lsproto.CompletionList {
+	t.Helper()
+	return f.getCompletions(t, userPreferences)
+}
+
 func (f *FourslashTest) getCompletions(t *testing.T, userPreferences *lsutil.UserPreferences) *lsproto.CompletionList {
 	t.Helper()
 	params := &lsproto.CompletionParams{
@@ -1285,6 +1290,11 @@ func (f *FourslashTest) verifyCompletionItem(t *testing.T, prefix string, actual
 	}
 
 	return ""
+}
+
+func (f *FourslashTest) ResolveCompletionItem(t *testing.T, item *lsproto.CompletionItem) *lsproto.CompletionItem {
+	t.Helper()
+	return f.resolveCompletionItem(t, item)
 }
 
 func (f *FourslashTest) resolveCompletionItem(t *testing.T, item *lsproto.CompletionItem) *lsproto.CompletionItem {

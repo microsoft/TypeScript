@@ -344,7 +344,7 @@ func (l *LanguageService) getCompletionsAtPosition(
 	}
 
 	preferences := l.UserPreferences()
-	data, err := l.getCompletionData(ctx, checker, file, position, preferences)
+	data, err := l.getCompletionData(ctx, checker, file, position, preferences, false /*forItemResolve*/)
 	if err != nil {
 		return nil, err
 	}
@@ -417,6 +417,7 @@ func (l *LanguageService) getCompletionData(
 	file *ast.SourceFile,
 	position int,
 	preferences *lsutil.UserPreferences,
+	forItemResolve bool,
 ) (completionData, error) {
 	inCheckedFile := isCheckedFile(file, l.GetProgram().Options())
 
@@ -1087,6 +1088,11 @@ func (l *LanguageService) getCompletionData(
 
 	// Mutates `symbols`, `symbolToOriginInfoMap`, and `symbolToSortTextMap`
 	collectAutoImports := func() error {
+		// `completionItem/resolve` for auto-import completions should be resolved via the completion item data,
+		// so we don't need to collect auto-import entries again.
+		if forItemResolve {
+			return nil
+		}
 		if !shouldOfferImportCompletions() {
 			return nil
 		}
@@ -4883,7 +4889,6 @@ func (l *LanguageService) getCompletionItemDetails(
 			symbolDetails.symbol,
 			checker,
 			symbolDetails.location,
-			nil,
 			docFormat,
 		)
 	case symbolCompletion.literal != nil:
@@ -4932,7 +4937,7 @@ func (l *LanguageService) getSymbolCompletionFromItemData(
 		}
 	}
 
-	completionData, err := l.getCompletionData(ctx, ch, file, position, &lsutil.UserPreferences{IncludeCompletionsForModuleExports: core.TSTrue, IncludeCompletionsForImportStatements: core.TSTrue})
+	completionData, err := l.getCompletionData(ctx, ch, file, position, l.UserPreferences(), true /*forItemResolve*/)
 	if err != nil {
 		panic(err)
 	}
@@ -5032,21 +5037,10 @@ func (l *LanguageService) createCompletionDetailsForSymbol(
 	symbol *ast.Symbol,
 	checker *checker.Checker,
 	location *ast.Node,
-	actions []codeAction,
 	docFormat lsproto.MarkupKind,
 ) *lsproto.CompletionItem {
-	details := make([]string, 0, len(actions)+1)
-	edits := make([]*lsproto.TextEdit, 0, len(actions))
-	for _, action := range actions {
-		details = append(details, action.description)
-		edits = append(edits, action.changes...)
-	}
 	quickInfo, documentation := l.getQuickInfoAndDocumentationForSymbol(checker, symbol, location, docFormat)
-	details = append(details, quickInfo)
-	if len(edits) != 0 {
-		item.AdditionalTextEdits = &edits
-	}
-	return createCompletionDetails(item, strings.Join(details, "\n\n"), documentation, docFormat)
+	return createCompletionDetails(item, quickInfo, documentation, docFormat)
 }
 
 func (l *LanguageService) getImportStatementCompletionInfo(contextToken *ast.Node, sourceFile *ast.SourceFile) importStatementCompletionInfo {

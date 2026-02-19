@@ -2058,7 +2058,7 @@ func (l *LanguageService) stringLiteralCompletionDetails(
 		properties := completion.fromProperties
 		for _, symbol := range properties.symbols {
 			if symbol.Name == name {
-				return l.createCompletionDetailsForSymbol(item, symbol, checker, location, nil /*actions*/, docFormat)
+				return l.createCompletionDetailsForSymbol(item, symbol, checker, location, docFormat)
 			}
 		}
 	case completion.fromTypes != nil:
