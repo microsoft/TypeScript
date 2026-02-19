@@ -362,8 +362,10 @@ func (adder *importAdder) getNewImportEntry(moduleSpecifier string, importKind l
 func (adder *importAdder) getAllExportsForSymbol(
 	symbol *ast.Symbol,
 ) []*Export {
-	exportId := SymbolToExport(symbol, adder.checker).ExportID
-	return adder.view.SearchByExportID(exportId)
+	if export := SymbolToExport(symbol, adder.checker); export != nil {
+		return adder.view.SearchByExportID(export.ExportID)
+	}
+	return nil
 }
 
 func TypeToAutoImportableTypeNode(
