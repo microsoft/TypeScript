@@ -2,7 +2,6 @@ package fourslash
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"io"
 	"maps"
@@ -10,7 +9,6 @@ import (
 	"slices"
 	"strconv"
 	"strings"
-	"sync"
 	"testing"
 	"unicode/utf8"
 
@@ -34,20 +32,17 @@ import (
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/testutil/baseline"
 	"github.com/microsoft/typescript-go/internal/testutil/harnessutil"
+	"github.com/microsoft/typescript-go/internal/testutil/lsptestutil"
 	"github.com/microsoft/typescript-go/internal/testutil/tsbaseline"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/microsoft/typescript-go/internal/vfs/iovfs"
 	"github.com/microsoft/typescript-go/internal/vfs/vfstest"
-	"golang.org/x/sync/errgroup"
 	"gotest.tools/v3/assert"
 )
 
 type FourslashTest struct {
-	server *lsp.Server
-	in     *lspWriter
-	out    *lspReader
-	id     int32
+	client *lsptestutil.LSPClient
 	vfs    vfs.FS
 
 	testData      *TestData // !!! consolidate test files from test data and script info
@@ -68,10 +63,6 @@ type FourslashTest struct {
 	selectionEnd            *lsproto.Position
 
 	isStradaServer bool // Whether this is a fourslash server test in Strada. !!! Remove once we don't need to diff baselines.
-
-	// Async message handling
-	pendingRequests   map[jsonrpc.ID]chan *lsproto.ResponseMessage
-	pendingRequestsMu sync.Mutex
 }
 
 type scriptInfo struct {
@@ -125,41 +116,6 @@ func (s *scriptInfo) GetLineContent(line int) string {
 	return content
 }
 
-type lspReader struct {
-	c <-chan *lsproto.Message
-}
-
-func (r *lspReader) Read() (*lsproto.Message, error) {
-	msg, ok := <-r.c
-	if !ok {
-		return nil, io.EOF
-	}
-	return msg, nil
-}
-
-type lspWriter struct {
-	c chan<- *lsproto.Message
-}
-
-func (w *lspWriter) Write(msg *lsproto.Message) error {
-	w.c <- msg
-	return nil
-}
-
-func (w *lspWriter) Close() {
-	close(w.c)
-}
-
-var (
-	_ lsp.Reader = (*lspReader)(nil)
-	_ lsp.Writer = (*lspWriter)(nil)
-)
-
-func newLSPPipe() (*lspReader, *lspWriter) {
-	c := make(chan *lsproto.Message, 100)
-	return &lspReader{c: c}, &lspWriter{c: c}
-}
-
 const rootDir = "/"
 
 var parseCache = project.NewParseCache(project.RefCountCacheOptions{
@@ -208,15 +164,10 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 
 	harnessutil.SkipUnsupportedCompilerOptions(t, compilerOptions)
 
-	inputReader, inputWriter := newLSPPipe()
-	outputReader, outputWriter := newLSPPipe()
-
 	fsFromMap := vfstest.FromMap(testfs, true /*useCaseSensitiveFileNames*/)
 	fs := bundled.WrapFS(fsFromMap)
 
-	server := lsp.NewServer(&lsp.ServerOptions{
-		In:  inputReader,
-		Out: outputWriter,
+	serverOpts := lsp.ServerOptions{
 		Err: io.Discard,
 
 		Cwd:                "/",
@@ -224,7 +175,7 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		DefaultLibraryPath: bundled.LibPath(),
 
 		ParseCache: parseCache,
-	})
+	}
 
 	converters := lsconv.NewConverters(lsproto.PositionEncodingKindUTF8, func(fileName string) *lsconv.LSPLineMap {
 		scriptInfo, ok := scriptInfos[fileName]
@@ -235,9 +186,6 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 	})
 
 	f := &FourslashTest{
-		server:                  server,
-		in:                      inputWriter,
-		out:                     outputReader,
 		testData:                &testData,
 		stateEnableFormatting:   true,
 		reportFormatOnTypeCrash: true,
@@ -247,26 +195,13 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 		converters:              converters,
 		baselines:               make(map[baselineCommand]*strings.Builder),
 		openFiles:               make(map[string]struct{}),
-		pendingRequests:         make(map[jsonrpc.ID]chan *lsproto.ResponseMessage),
 	}
-
-	ctx, cancel := context.WithCancel(t.Context())
-	g, ctx := errgroup.WithContext(ctx)
-
-	// Start server goroutine
-	g.Go(func() error {
-		defer outputWriter.Close()
-		return server.Run(ctx)
-	})
-
-	// Start async message router
-	g.Go(func() error {
-		return f.messageRouter(ctx)
-	})
+	client, closeClient := lsptestutil.NewLSPClient(t, serverOpts, f.handleServerRequest)
+	f.client = client
 
 	// !!! temporary; remove when we have `handleDidChangeConfiguration`/implicit project config support
 	// !!! replace with a proper request *after initialize*
-	f.server.SetCompilerOptionsForInferredProjects(ctx, compilerOptions)
+	client.SetCompilerOptionsForInferredProjects(compilerOptions)
 	f.initialize(t, capabilities)
 
 	if testData.isStateBaseliningEnabled() {
@@ -282,85 +217,20 @@ func NewFourslash(t *testing.T, capabilities *lsproto.ClientCapabilities, conten
 	_, testPath, _, _ := runtime.Caller(1)
 	return f, func() {
 		t.Helper()
-		cancel()
-		inputWriter.Close()
-		if err := g.Wait(); err != nil && !errors.Is(err, context.Canceled) {
+		err := closeClient()
+		if err != nil {
 			t.Errorf("goroutine error: %v", err)
 		}
 		f.verifyBaselines(t, testPath)
 	}
 }
 
-// messageRouter runs in a goroutine and routes incoming messages from the server.
-// It handles responses to client requests and server-initiated requests.
-func (f *FourslashTest) messageRouter(ctx context.Context) error {
-	for {
-		if ctx.Err() != nil {
-			return nil
-		}
-
-		msg, err := f.out.Read()
-		if err != nil {
-			if errors.Is(err, io.EOF) || ctx.Err() != nil {
-				return nil
-			}
-			return fmt.Errorf("failed to read message: %w", err)
-		}
-
-		// Validate message can be marshaled
-		if err := json.MarshalWrite(io.Discard, msg); err != nil {
-			if ctx.Err() != nil {
-				return nil
-			}
-
-			return fmt.Errorf("failed to encode message as JSON: %w", err)
-		}
-
-		switch msg.Kind {
-		case jsonrpc.MessageKindResponse:
-			f.handleResponse(ctx, msg.AsResponse())
-		case jsonrpc.MessageKindRequest:
-			if err := f.handleServerRequest(ctx, msg.AsRequest()); err != nil {
-				return err
-			}
-		case jsonrpc.MessageKindNotification:
-			// Server-initiated notifications (e.g., publishDiagnostics) are currently ignored
-			// in fourslash tests
-		}
-	}
-}
-
-// handleResponse routes a response message to the waiting request goroutine.
-func (f *FourslashTest) handleResponse(ctx context.Context, resp *lsproto.ResponseMessage) {
-	if resp.ID == nil {
-		return
-	}
-
-	f.pendingRequestsMu.Lock()
-	respChan, ok := f.pendingRequests[*resp.ID]
-	if ok {
-		delete(f.pendingRequests, *resp.ID)
-	}
-	f.pendingRequestsMu.Unlock()
-
-	if ok {
-		select {
-		case respChan <- resp:
-			// sent response
-		case <-ctx.Done():
-			// context cancelled
-		}
-	}
-}
-
 // handleServerRequest handles requests initiated by the server (e.g., workspace/configuration).
-func (f *FourslashTest) handleServerRequest(ctx context.Context, req *lsproto.RequestMessage) error {
-	var response *lsproto.ResponseMessage
-
+func (f *FourslashTest) handleServerRequest(_ context.Context, req *lsproto.RequestMessage) *lsproto.ResponseMessage {
 	switch req.Method {
 	case lsproto.MethodWorkspaceConfiguration:
 		// Return current user preferences
-		response = &lsproto.ResponseMessage{
+		return &lsproto.ResponseMessage{
 			ID:      req.ID,
 			JSONRPC: req.JSONRPC,
 			Result:  []any{f.userPreferences},
@@ -368,7 +238,7 @@ func (f *FourslashTest) handleServerRequest(ctx context.Context, req *lsproto.Re
 
 	case lsproto.MethodClientRegisterCapability:
 		// Accept all capability registrations
-		response = &lsproto.ResponseMessage{
+		return &lsproto.ResponseMessage{
 			ID:      req.ID,
 			JSONRPC: req.JSONRPC,
 			Result:  lsproto.Null{},
@@ -376,7 +246,7 @@ func (f *FourslashTest) handleServerRequest(ctx context.Context, req *lsproto.Re
 
 	case lsproto.MethodClientUnregisterCapability:
 		// Accept all capability unregistrations
-		response = &lsproto.ResponseMessage{
+		return &lsproto.ResponseMessage{
 			ID:      req.ID,
 			JSONRPC: req.JSONRPC,
 			Result:  lsproto.Null{},
@@ -384,7 +254,7 @@ func (f *FourslashTest) handleServerRequest(ctx context.Context, req *lsproto.Re
 
 	default:
 		// Unknown server request
-		response = &lsproto.ResponseMessage{
+		return &lsproto.ResponseMessage{
 			ID:      req.ID,
 			JSONRPC: req.JSONRPC,
 			Error: &jsonrpc.ResponseError{
@@ -393,19 +263,6 @@ func (f *FourslashTest) handleServerRequest(ctx context.Context, req *lsproto.Re
 			},
 		}
 	}
-
-	// Send response back to server
-	if ctx.Err() != nil {
-		return nil
-	}
-
-	if err := f.in.Write(response.Message()); err != nil {
-		if ctx.Err() != nil {
-			return nil
-		}
-		return fmt.Errorf("failed to write server request response: %w", err)
-	}
-	return nil
 }
 
 func getBaseFileNameFromTest(t *testing.T) string {
@@ -431,12 +288,6 @@ func getBaseFileNameFromTest(t *testing.T) string {
 	return name
 }
 
-func (f *FourslashTest) nextID() int32 {
-	id := f.id
-	f.id++
-	return id
-}
-
 const showCodeLensLocationsCommandName = "typescript.showCodeLensLocations"
 
 func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCapabilities) {
@@ -447,18 +298,18 @@ func (f *FourslashTest) initialize(t *testing.T, capabilities *lsproto.ClientCap
 		},
 	}
 	params.Capabilities = getCapabilitiesWithDefaults(capabilities)
-	resp, _, ok := sendRequestWorker(t, f, lsproto.InitializeInfo, params)
+	resp, _, ok := lsptestutil.SendRequest(t, f.client, lsproto.InitializeInfo, params)
 	if !ok {
 		t.Fatalf("Initialize request failed")
 	}
 	if resp.AsResponse().Error != nil {
 		t.Fatalf("Initialize request returned error: %s", resp.AsResponse().Error.String())
 	}
-	sendNotificationWorker(t, f, lsproto.InitializedInfo, &lsproto.InitializedParams{})
+	lsptestutil.SendNotification(t, f.client, lsproto.InitializedInfo, &lsproto.InitializedParams{})
 
 	// Wait for the initial configuration exchange to complete
 	// The server will send workspace/configuration as part of handleInitialized
-	<-f.server.InitComplete()
+	<-f.client.Server.InitComplete()
 }
 
 // If modifying the defaults, update GetDefaultCapabilities too.
@@ -668,54 +519,6 @@ func getCapabilitiesWithDefaults(capabilities *lsproto.ClientCapabilities) *lspr
 	return &capabilitiesWithDefaults
 }
 
-func sendRequestWorker[Params, Resp any](t *testing.T, f *FourslashTest, info lsproto.RequestInfo[Params, Resp], params Params) (*lsproto.Message, Resp, bool) {
-	id := f.nextID()
-	reqID := lsproto.NewID(lsproto.IntegerOrString{Integer: &id})
-	req := info.NewRequestMessage(reqID, params)
-
-	// Create response channel and register it
-	responseChan := make(chan *lsproto.ResponseMessage, 1)
-	f.pendingRequestsMu.Lock()
-	f.pendingRequests[*reqID] = responseChan
-	f.pendingRequestsMu.Unlock()
-
-	// Send the request
-	f.writeMsg(t, req.Message())
-
-	// Wait for response with context
-	ctx := t.Context()
-	var resp *lsproto.ResponseMessage
-	select {
-	case <-ctx.Done():
-		f.pendingRequestsMu.Lock()
-		delete(f.pendingRequests, *reqID)
-		f.pendingRequestsMu.Unlock()
-		t.Fatalf("Request cancelled: %v", ctx.Err())
-		return nil, *new(Resp), false
-	case resp = <-responseChan:
-		if resp == nil {
-			return nil, *new(Resp), false
-		}
-	}
-
-	result, ok := resp.Result.(Resp)
-	return resp.Message(), result, ok
-}
-
-func sendNotificationWorker[Params any](t *testing.T, f *FourslashTest, info lsproto.NotificationInfo[Params], params Params) {
-	notification := info.NewNotificationMessage(
-		params,
-	)
-	f.writeMsg(t, notification.Message())
-}
-
-func (f *FourslashTest) writeMsg(t *testing.T, msg *lsproto.Message) {
-	assert.NilError(t, json.MarshalWrite(io.Discard, msg), "failed to encode message as JSON")
-	if err := f.in.Write(msg); err != nil {
-		t.Fatalf("failed to write message: %v", err)
-	}
-}
-
 func sendRequest[Params, Resp any](t *testing.T, f *FourslashTest, info lsproto.RequestInfo[Params, Resp], params Params) Resp {
 	t.Helper()
 	return sendRequestAndBaselineWorker(t, f, info, params, true)
@@ -728,7 +531,7 @@ func sendRequestAndBaselineWorker[Params, Resp any](t *testing.T, f *FourslashTe
 		f.baselineState(t)
 	}
 	f.baselineRequestOrNotification(t, info.Method, params)
-	resMsg, result, resultOk := sendRequestWorker(t, f, info, params)
+	resMsg, result, resultOk := lsptestutil.SendRequest(t, f.client, info, params)
 	if baselineProjects {
 		f.baselineState(t)
 	}
@@ -764,7 +567,7 @@ func sendNotification[Params any](t *testing.T, f *FourslashTest, info lsproto.N
 		f.updateState(info.Method, params)
 	}
 	f.baselineRequestOrNotification(t, info.Method, params)
-	sendNotificationWorker(t, f, info, params)
+	lsptestutil.SendNotification(t, f.client, info, params)
 }
 
 func (f *FourslashTest) updateState(method lsproto.Method, params any) {

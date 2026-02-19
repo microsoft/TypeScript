@@ -9,6 +9,7 @@ import (
 	"time"
 	"unicode"
 
+	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs"
 	"github.com/microsoft/typescript-go/internal/vfs/internal"
@@ -174,4 +175,19 @@ func (vfs *osFS) Remove(path string) error {
 
 func (vfs *osFS) Chtimes(path string, aTime time.Time, mTime time.Time) error {
 	return os.Chtimes(path, aTime, mTime)
+}
+
+func GetGlobalTypingsCacheLocation() string {
+	cacheDir, err := os.UserCacheDir()
+	if err != nil {
+		cacheDir = os.TempDir()
+	}
+
+	var subdir string
+	if runtime.GOOS == "windows" {
+		subdir = "Microsoft/TypeScript"
+	} else {
+		subdir = "typescript"
+	}
+	return tspath.CombinePaths(cacheDir, subdir, core.VersionMajorMinor())
 }

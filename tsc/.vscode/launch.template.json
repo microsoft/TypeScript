@@ -46,6 +46,21 @@
             "request": "launch",
             "mode": "test",
             "program": "${workspaceFolder}/internal/fourslash/gen/${fileBasename}"
+        },
+        {
+            "name": "Launch replay test",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${workspaceFolder}/internal/lsp",
+            "args": [
+                "-test.run",
+                "^TestReplay$",
+                "-replay",
+                "path_to_replay_log.txt",
+                "-testDir",
+                "path_to_project_dir"
+            ]
         }
     ]
 }

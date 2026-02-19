@@ -7,14 +7,12 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
-	"runtime"
 	"syscall"
 
 	"github.com/microsoft/typescript-go/internal/bundled"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/lsp"
 	"github.com/microsoft/typescript-go/internal/pprof"
-	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs/osvfs"
 )
 
@@ -43,7 +41,7 @@ func runLSP(args []string) int {
 
 	fs := bundled.WrapFS(osvfs.FS())
 	defaultLibraryPath := bundled.LibPath()
-	typingsLocation := getGlobalTypingsCacheLocation()
+	typingsLocation := osvfs.GetGlobalTypingsCacheLocation()
 
 	s := lsp.NewServer(&lsp.ServerOptions{
 		In:                 lsp.ToReader(os.Stdin),
@@ -68,19 +66,4 @@ func runLSP(args []string) int {
 		return 1
 	}
 	return 0
-}
-
-func getGlobalTypingsCacheLocation() string {
-	cacheDir, err := os.UserCacheDir()
-	if err != nil {
-		cacheDir = os.TempDir()
-	}
-
-	var subdir string
-	if runtime.GOOS == "windows" {
-		subdir = "Microsoft/TypeScript"
-	} else {
-		subdir = "typescript"
-	}
-	return tspath.CombinePaths(cacheDir, subdir, core.VersionMajorMinor())
 }

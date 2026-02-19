@@ -17,6 +17,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/lsp/lsproto"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/testutil/fsbaselineutil"
+	"github.com/microsoft/typescript-go/internal/testutil/lsptestutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 	"github.com/microsoft/typescript-go/internal/vfs/iovfs"
 	"gotest.tools/v3/assert"
@@ -67,7 +68,7 @@ func (f *FourslashTest) baselineProjectsAfterNotification(t *testing.T, fileName
 		return
 	}
 	// Do hover so we have snapshot to check things on!!
-	_, _, resultOk := sendRequestWorker(t, f, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
+	_, _, resultOk := lsptestutil.SendRequest(t, f.client, lsproto.TextDocumentHoverInfo, &lsproto.HoverParams{
 		TextDocument: lsproto.TextDocumentIdentifier{
 			Uri: lsconv.FileNameToDocumentURI(fileName),
 		},
@@ -241,7 +242,7 @@ func (f *FourslashTest) printStateDiff(t *testing.T, w io.Writer) {
 	if !f.stateBaseline.isInitialized {
 		return
 	}
-	session := f.server.Session()
+	session := f.client.Server.Session()
 	snapshot, release := session.Snapshot()
 	defer release()
 
