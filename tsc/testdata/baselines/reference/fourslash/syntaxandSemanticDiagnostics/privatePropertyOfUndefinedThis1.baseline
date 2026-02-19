@@ -1,0 +1,13 @@
+// === Syntax and Semantic Diagnostics ===
+/privatePropertyOfUndefinedThis1.ts(1,1): error TS2532: Object is possibly 'undefined'.
+/privatePropertyOfUndefinedThis1.ts(1,6): error TS18016: Private identifiers are not allowed outside class bodies.
+
+
+==== /privatePropertyOfUndefinedThis1.ts (2 errors) ====
+    this.#a = {};
+    ~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+         ~~
+!!! error TS18016: Private identifiers are not allowed outside class bodies.
+    export {};
+    

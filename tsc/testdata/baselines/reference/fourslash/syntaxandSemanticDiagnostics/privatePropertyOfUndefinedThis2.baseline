@@ -1,0 +1,16 @@
+// === Syntax and Semantic Diagnostics ===
+/privatePropertyOfUndefinedThis2.ts(3,9): error TS2322: Type '{}' is not assignable to type 'boolean'.
+/privatePropertyOfUndefinedThis2.ts(3,21): error TS2339: Property '#prop' does not exist on type 'any'.
+
+
+==== /privatePropertyOfUndefinedThis2.ts (2 errors) ====
+    export class C {
+        wat(this: any): boolean {
+            return this.#prop = {};
+            ~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'boolean'.
+                        ~~~~~
+!!! error TS2339: Property '#prop' does not exist on type 'any'.
+        }
+    }
+    
