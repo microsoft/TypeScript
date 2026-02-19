@@ -379,3 +379,140 @@ func F20a(value int) int {
 	}
 	return value
 }
+
+// ============================================
+// Additional test cases for coverage
+// ============================================
+
+// Test regular assignment (not :=) - should not trigger shadow check
+func F21() int {
+	value := 1
+	value = 2 // OK - not a new declaration
+	return value
+}
+
+// Test multi-value assignment with blank identifier - should not shadow blank
+func F22() (int, int) {
+	x, _ := 1, 2
+	if true {
+		y, _ := 3, 4 // OK - blank identifier doesn't shadow
+		return x, y
+	}
+	return x, 0
+}
+
+// Test shadowing with different types - should not trigger
+func F23() int {
+	value := 1
+	if true {
+		value := "string" // OK - different type
+		println(value)
+	}
+	return value
+}
+
+// Test var declaration (GenDecl) shadowing
+func F24() int {
+	value := 1
+	if true {
+		value := 2 // Bad - shadows
+		println(value)
+	}
+	return value
+}
+
+// Test shadowing in function literal (triggers FuncLit path in cfgFor)
+func F25() int {
+	value := 1
+	fn := func() int {
+		if true {
+			value := 2 // Bad - shadows outer value
+			return value
+		}
+		return value
+	}
+	return fn()
+}
+
+// Test mixed := where one var is already defined (covers obj == nil case)
+func F26() (int, int) {
+	value := 1
+	err := error(nil)
+	if true {
+		value, err := 2, error(nil) // value is new, err is reassigned
+		_ = err
+		println(value)
+	}
+	_ = err
+	return value, 0
+}
+
+// Test shadowed variable with use
+func F27() int {
+	value := 1
+	if true {
+		value := 2 // Bad - shadows
+		println(value)
+	}
+	return value
+}
+
+// Test shadowing within same function literal (triggers FuncLit case in cfgFor)
+var F28 = func() int {
+	value := 1
+	if true {
+		value := 2 // Bad - shadows within same func lit
+		println(value)
+	}
+	return value
+}
+
+// Test cycle detection in CFG - loop where shadow is used after loop
+func F29() int {
+	value := 1
+	for i := 0; i < 10; i++ {
+		if i == 5 {
+			value := 2 // Bad - shadows and loop creates CFG cycle
+			println(value)
+		}
+	}
+	return value
+}
+
+// Test shadow with use in successor block (triggers reachable in successor)
+func F30() int {
+	value := 1
+	if true {
+		value := 2 // Bad - shadows
+		if true {
+			println(value) // use is in a successor block
+		}
+	}
+	return value
+}
+
+// Test shadow with multiple successor blocks
+func F31(cond bool) int {
+	value := 1
+	if cond {
+		value := 2 // Bad
+		if cond {
+			println(value)
+		} else {
+			println(value)
+		}
+	}
+	return value
+}
+
+// Test := with mixed new/existing variables (triggers obj == nil path)
+func F32() (int, error) {
+	value := 1
+	err := error(nil)
+	// In this :=, 'value' is reassigned (not new) so Defs[value] is nil
+	// 'other' is new, so only 'other' would be checked for shadowing
+	value, other := 2, 3
+	_ = err
+	_ = other
+	return value, nil
+}

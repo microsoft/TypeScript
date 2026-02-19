@@ -2,6 +2,7 @@ package customlint
 
 import (
 	"cmp"
+	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -39,14 +40,14 @@ func (s *shadowPass) run() (any, error) {
 	s.inspect = s.pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 	s.cfgs = s.pass.ResultOf[ctrlflow.Analyzer].(*ctrlflow.CFGs)
 
-	s.objectDefs = make(map[types.Object]*ast.Ident)
+	s.objectDefs = make(map[types.Object]*ast.Ident, len(s.pass.TypesInfo.Defs))
 	for id, obj := range s.pass.TypesInfo.Defs {
 		if obj != nil {
 			s.objectDefs[obj] = id
 		}
 	}
 
-	s.objectUses = make(map[types.Object][]*ast.Ident)
+	s.objectUses = make(map[types.Object][]*ast.Ident, len(s.pass.TypesInfo.Uses))
 	for id, obj := range s.pass.TypesInfo.Uses {
 		if obj != nil {
 			s.objectUses[obj] = append(s.objectUses[obj], id)
@@ -63,13 +64,13 @@ func (s *shadowPass) run() (any, error) {
 
 	s.fnTypeToParent = make(map[*ast.FuncType]ast.Node)
 
-	for n := range s.inspect.PreorderSeq(
+	for c := range s.inspect.Root().Preorder(
 		(*ast.FuncDecl)(nil),
 		(*ast.FuncLit)(nil),
 		(*ast.AssignStmt)(nil),
 		(*ast.GenDecl)(nil),
 	) {
-		switch n := n.(type) {
+		switch n := c.Node().(type) {
 		case *ast.FuncDecl:
 			s.fnTypeToParent[n.Type] = n
 		case *ast.FuncLit:
@@ -93,22 +94,14 @@ func (s *shadowPass) handleAssignment(n ast.Node) {
 			return
 		}
 		for _, expr := range n.Lhs {
-			ident, ok := expr.(*ast.Ident)
-			if !ok {
-				continue
-			}
-			idents = append(idents, ident)
+			idents = append(idents, expr.(*ast.Ident))
 		}
 	case *ast.GenDecl:
 		if n.Tok != token.VAR {
 			return
 		}
 		for _, spec := range n.Specs {
-			valueSpec, ok := spec.(*ast.ValueSpec)
-			if !ok {
-				continue
-			}
-			idents = append(idents, valueSpec.Names...)
+			idents = append(idents, spec.(*ast.ValueSpec).Names...)
 		}
 	}
 
@@ -141,16 +134,6 @@ func (s *shadowPass) handleAssignment(n ast.Node) {
 			continue
 		}
 
-		uses := s.objectUses[obj]
-		var lastUse *ast.Ident
-		if len(uses) > 0 {
-			lastUse = uses[len(uses)-1]
-		}
-		if lastUse == nil {
-			// Unused variable?
-			continue
-		}
-
 		shadowedFunctionScope := s.enclosingFunctionScope(shadowedScope)
 		objFunctionScope := s.enclosingFunctionScope(obj.Parent())
 
@@ -178,11 +161,6 @@ func (s *shadowPass) report(ident *ast.Ident, shadowed types.Object, use token.P
 	}
 }
 
-func (s *shadowPass) reportWithUse(ident *ast.Ident, use token.Pos) {
-	line := s.pass.Fset.Position(use).Line
-	s.pass.ReportRangef(ident, "declaration of %q shadows declaration at line %d", ident.Name, line)
-}
-
 func positionIsReachable(c *cfg.CFG, ident *ast.Ident, shadowDecl token.Pos, shadowUses []*ast.Ident) (reachablePos token.Pos, found bool) {
 	var start *cfg.Block
 	for _, b := range c.Blocks {
@@ -190,9 +168,6 @@ func positionIsReachable(c *cfg.CFG, ident *ast.Ident, shadowDecl token.Pos, sha
 			start = b
 			break
 		}
-	}
-	if start == nil {
-		return 0, true
 	}
 
 	seen := make(map[*cfg.Block]struct{})
@@ -251,7 +226,7 @@ func (s *shadowPass) cfgFor(n ast.Node) *cfg.CFG {
 	case *ast.FuncLit:
 		return s.cfgs.FuncLit(n)
 	default:
-		panic("unexpected node type")
+		panic(fmt.Sprintf("unhandled node type %T", n))
 	}
 }
 
@@ -268,10 +243,6 @@ func posInBlock(b *cfg.Block, pos token.Pos) bool {
 
 func comparePos[T ast.Node](a, b T) int {
 	return cmp.Compare(a.Pos(), b.Pos())
-}
-
-func nodeContainsPos(node ast.Node, pos token.Pos) bool {
-	return node.Pos() <= pos && pos <= node.End()
 }
 
 func isTypeName(obj types.Object) bool {

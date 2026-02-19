@@ -1,5 +1,7 @@
 	package unexportedapi
 	
+	import "testdata/unexportedapi/otherpkg"
+	
 	type Foo struct {
 		Bar *oops
 		     ~
@@ -253,4 +255,339 @@
 !!! unexportedapi: exported API references unexported type unexported
 		unexportedBaseWithField
 	}
+	
+	// ============================================
+	// Additional test cases for coverage
+	// ============================================
+	
+	// Test IndexExpr - generic type with single type parameter
+	type GenericWithUnexported[T any] struct {
+		Value T
+	}
+	
+	// Bad - exported variable with generic type instantiated with unexported type
+	var BadGenericVar GenericWithUnexported[unexported]
+	                                        ~
+!!! unexportedapi: exported API references unexported identifier unexported
+	
+	// Okay - exported variable with generic type instantiated with exported type
+	var OkayGenericVar GenericWithUnexported[Okay2]
+	
+	// Test IndexListExpr - generic type with multiple type parameters
+	type MultiGeneric[K comparable, V any] struct {
+		Key   K
+		Value V
+	}
+	
+	// Bad - exported variable with multi-param generic using unexported type
+	var BadMultiGenericVar MultiGeneric[string, unexported]
+	                                            ~
+!!! unexportedapi: exported API references unexported identifier unexported
+	
+	// Okay - exported variable with multi-param generic using exported types
+	var OkayMultiGenericVar MultiGeneric[string, Okay2]
+	
+	// Test ParenExpr - parenthesized type expressions
+	type ParenType = (Okay2)
+	
+	// Test function type in variable (covers Signature in checkType)
+	type FuncTypeWithUnexported func(unexported) unexported
+	                                 ~
+!!! unexportedapi: exported API references unexported identifier unexported
+	
+	// Okay function type
+	type FuncTypeOkay func(int) string
+	
+	// Test BinaryExpr in array size (compile-time constant expression)
+	type ArrayWithBinaryExpr [1 + 2]int
+	
+	// Test UnaryExpr in array size
+	const (
+		negOne = -1
+		posOne = 1
+	)
+	
+	type ArrayWithUnaryExpr [+posOne]int
+	                          ~
+!!! unexportedapi: exported API references unexported identifier posOne
+	
+	// Test interface embedding
+	type EmbeddedInterface interface {
+		Okay2Method()
+	}
+	
+	type CompositeInterface interface {
+		EmbeddedInterface
+		AnotherMethod()
+	}
+	
+	// Test type with method that has function literal type
+	type TypeWithComplexMethod struct{}
+	
+	func (t TypeWithComplexMethod) MethodWithFuncArg(fn func(int) int) {}
+	
+	// Bad - method with function arg that uses unexported type
+	func (t TypeWithComplexMethod) BadMethodWithFuncArg(fn func(unexported) unexported) {}
+	                                                            ~
+!!! unexportedapi: exported API references unexported identifier unexported
+	
+	// Test exported type with unexported type in generic constraint
+	type unexportedConstraint interface {
+		~int | ~string
+	}
+	
+	// Bad - exported generic type with unexported constraint
+	type BadGenericWithConstraint[T unexportedConstraint] struct {
+	                                ~
+!!! unexportedapi: exported API references unexported identifier unexportedConstraint
+		Value T
+	}
+	
+	// Test CallExpr in variable initialization with type annotation
+	var CallExprVar Okay2 = func() Okay2 { return Okay2{} }()
+	
+	// Test CompositeLit - composite literal types
+	var CompositeVar = struct{ X int }{X: 1}
+	
+	// Test exported variable with struct type containing unexported field type
+	var StructVarWithUnexported = struct{ X unexported }{}
+	    ~
+!!! unexportedapi: exported API references unexported type unexported
+	
+	// Test deeply nested generic types
+	type DeepGeneric[T any] struct {
+		Inner GenericWithUnexported[T]
+	}
+	
+	var DeepGenericVar DeepGeneric[unexported]
+	                               ~
+!!! unexportedapi: exported API references unexported identifier unexported
+	
+	// Test send-only and receive-only channels
+	func SendOnlyChan(c chan<- unexported)    {}
+	                           ~
+!!! unexportedapi: exported API references unexported identifier unexported
+	func ReceiveOnlyChan(c <-chan unexported) {}
+	                              ~
+!!! unexportedapi: exported API references unexported identifier unexported
+	
+	// Test unexported type parameter name in type params
+	type GenericWithNames[unexportedParam any] struct {
+		Value unexportedParam
+		      ~
+!!! unexportedapi: exported API references unexported identifier unexportedParam
+	}
+	
+	// Test pointer to generic type
+	var PointerToGeneric *GenericWithUnexported[unexported]
+	                                            ~
+!!! unexportedapi: exported API references unexported identifier unexported
+	
+	// Test slice of generic type
+	var SliceOfGeneric []GenericWithUnexported[unexported]
+	                                           ~
+!!! unexportedapi: exported API references unexported identifier unexported
+	
+	// Test map with generic types
+	var MapOfGeneric map[string]GenericWithUnexported[unexported]
+	                                                  ~
+!!! unexportedapi: exported API references unexported identifier unexported
+	
+	// ============================================
+	// Tests for checkType via inferred types
+	// ============================================
+	
+	// Helper to create values with inferred types
+	func makeSlice() []unexported                    { return nil }
+	func makeArray() [3]unexported                   { return [3]unexported{} }
+	func makeChan() chan unexported                  { return nil }
+	func makeMap() map[string]unexported             { return nil }
+	func makeFunc() func(unexported)                 { return nil }
+	func makeInterface() interface{ M() unexported } { return nil }
+	
+	// Bad - exported variables with inferred types (triggers checkType paths)
+	var (
+		InferredSlice     = makeSlice()
+		~
+!!! unexportedapi: exported API references unexported type unexported
+		InferredArray     = makeArray()
+		~
+!!! unexportedapi: exported API references unexported type unexported
+		InferredChan      = makeChan()
+		~
+!!! unexportedapi: exported API references unexported type unexported
+		InferredMap       = makeMap()
+		~
+!!! unexportedapi: exported API references unexported type unexported
+		InferredFunc      = makeFunc()
+		~
+!!! unexportedapi: exported API references unexported type unexported
+		InferredInterface = makeInterface()
+		~
+!!! unexportedapi: exported API references unexported type unexported
+	)
+	
+	// Test embedded pointer to unexported type
+	type unexportedForEmbed struct {
+		Value int
+	}
+	
+	type EmbeddingPointer struct {
+		*unexportedForEmbed
+	}
+	
+	// Test function literal in type position
+	type FuncLitType = func()
+	
+	var FuncLitVar = func(x unexported) unexported { return x }
+	    ~
+!!! unexportedapi: exported API references unexported type unexported
+	
+	// ============================================
+	// More coverage tests
+	// ============================================
+	
+	// Test mixed exported/unexported names in var decl (covers line 127-128)
+	var (
+		ExportedInGroup, unexportedInGroup = 1, 2
+	)
+	
+	// Test unexported field names in struct (covers checkExportedField returning false)
+	type StructWithUnexportedField struct {
+		unexportedField int
+		ExportedField   string
+	}
+	
+	// Test SelectorExpr - using type from same package via alias
+	type AliasToOkay2 = Okay2
+	
+	// Test interface with only unexported methods (no exported methods to check)
+	type InterfaceWithUnexportedMethod interface {
+		unexportedMethod()
+	}
+	
+	// Test struct with only unexported fields (no exported fields to check)
+	type StructWithOnlyUnexportedFields struct {
+		a, b, c int
+	}
+	
+	// Test generic type instantiation that triggers TypeArgs path
+	type (
+		GenericContainer[T any] struct{ Value T }
+		ConcreteContainer       = GenericContainer[unexported]
+		                                           ~
+!!! unexportedapi: exported API references unexported identifier unexported
+	)
+	
+	// Test pointer in embedded field (covers pointer dereference in checkEmbeddedField)
+	type exportedForPointerEmbed struct {
+		ExportedValue *unexported
+	}
+	
+	type EmbeddingExportedPointer struct {
+	     ~
+!!! unexportedapi: exported API references unexported type unexported
+		*exportedForPointerEmbed
+	}
+	
+	// ============================================
+	// Tests for SelectorExpr (qualified type from other package)
+	// ============================================
+	
+	// Okay - using exported type from other package (triggers SelectorExpr case)
+	func UsesOtherPkgType(x otherpkg.ExportedType) {}
+	
+	// Okay - field with type from other package
+	type StructWithOtherPkgField struct {
+		Field otherpkg.ExportedType
+	}
+	
+	// Test type alias to type from other package
+	type AliasToOtherPkg = otherpkg.ExportedType
+	
+	// Test using type from other package that itself has unexported field
+	// This should trigger checkType on the type from otherpkg
+	func UsesTypeWithUnexported(x otherpkg.TypeWithUnexported) {}
+	
+	// ============================================
+	// Tests for types.Struct and types.Interface returning false after loop
+	// ============================================
+	
+	// Struct with only exported fields that are all OK types (triggers return false in types.Struct)
+	type AllOkayStruct struct {
+		A int
+		B string
+		C float64
+	}
+	
+	// Use it in inferred type context to trigger checkType(types.Struct)
+	func makeAllOkayStruct() AllOkayStruct { return AllOkayStruct{} }
+	
+	var InferredAllOkayStruct = makeAllOkayStruct()
+	
+	// Interface with only exported methods that have OK types (triggers return false in types.Interface)
+	type AllOkayInterface interface {
+		Method1() int
+		Method2(string) bool
+	}
+	
+	// Use it in inferred type context
+	func makeAllOkayInterface() AllOkayInterface { return nil }
+	
+	var InferredAllOkayInterface = makeAllOkayInterface()
+	
+	// ============================================
+	// Tests for TypeArgs path
+	// ============================================
+	
+	// Generic type from standard library with type args
+	type MyMap = map[string]int
+	
+	// Inferred generic type - this should trigger TypeArgs check
+	func makeGeneric() GenericContainer[int] { return GenericContainer[int]{} }
+	
+	var InferredGeneric = makeGeneric()
+	
+	// Bad - inferred generic with unexported type arg (triggers TypeArgs return true path)
+	func makeGenericUnexported() GenericContainer[unexported] { return GenericContainer[unexported]{} }
+	
+	var InferredGenericUnexported = makeGenericUnexported()
+	    ~
+!!! unexportedapi: exported API references unexported type unexported
+	
+	// Test anonymous struct type with all OK fields (triggers types.Struct return false)
+	func makeAnonStruct() struct {
+		A int
+		B string
+	} {
+		return struct {
+			A int
+			B string
+		}{}
+	}
+	
+	var InferredAnonStruct = makeAnonStruct()
+	
+	// Test anonymous interface type with all OK methods (triggers types.Interface return false)
+	func makeAnonInterface() interface{ Method() int } { return nil }
+	
+	var InferredAnonInterface = makeAnonInterface()
+	
+	// Test types.Alias - type alias to unexported type
+	type (
+		unexportedAliased struct{ v int }
+		AliasedUnexported = unexportedAliased
+		                    ~
+!!! unexportedapi: exported API references unexported identifier unexportedAliased
+	)
+	
+	// Bad - using type alias to unexported type
+	func UsesAliasedUnexported(x AliasedUnexported) {}
+	~
+!!! unexportedapi: exported API references unexported type unexportedAliased
+	
+	// Okay - using type alias to exported type
+	type AliasedExported = Okay2
+	
+	func UsesAliasedExported(x AliasedExported) {}
 	

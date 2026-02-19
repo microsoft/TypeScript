@@ -424,3 +424,158 @@
 		return value
 	}
 	
+	// ============================================
+	// Additional test cases for coverage
+	// ============================================
+	
+	// Test regular assignment (not :=) - should not trigger shadow check
+	func F21() int {
+		value := 1
+		value = 2 // OK - not a new declaration
+		return value
+	}
+	
+	// Test multi-value assignment with blank identifier - should not shadow blank
+	func F22() (int, int) {
+		x, _ := 1, 2
+		if true {
+			y, _ := 3, 4 // OK - blank identifier doesn't shadow
+			return x, y
+		}
+		return x, 0
+	}
+	
+	// Test shadowing with different types - should not trigger
+	func F23() int {
+		value := 1
+		if true {
+			value := "string" // OK - different type
+			println(value)
+		}
+		return value
+	}
+	
+	// Test var declaration (GenDecl) shadowing
+	func F24() int {
+		value := 1
+		if true {
+			value := 2 // Bad - shadows
+			~~~~~
+!!! shadow: declaration of "value" shadows declaration at line 416 and is reachable from use at line 421
+			println(value)
+		}
+		return value
+	}
+	
+	// Test shadowing in function literal (triggers FuncLit path in cfgFor)
+	func F25() int {
+		value := 1
+		fn := func() int {
+			if true {
+				value := 2 // Bad - shadows outer value
+				~~~~~
+!!! shadow: declaration of "value" shadows non-local declaration at line 426
+				return value
+			}
+			return value
+		}
+		return fn()
+	}
+	
+	// Test mixed := where one var is already defined (covers obj == nil case)
+	func F26() (int, int) {
+		value := 1
+		err := error(nil)
+		if true {
+			value, err := 2, error(nil) // value is new, err is reassigned
+			~~~~~
+!!! shadow: declaration of "value" shadows declaration at line 439 and is reachable from use at line 447
+			       ~~~
+!!! shadow: declaration of "err" shadows declaration at line 440 and is reachable from use at line 446
+			_ = err
+			println(value)
+		}
+		_ = err
+		return value, 0
+	}
+	
+	// Test shadowed variable with use
+	func F27() int {
+		value := 1
+		if true {
+			value := 2 // Bad - shadows
+			~~~~~
+!!! shadow: declaration of "value" shadows declaration at line 452 and is reachable from use at line 457
+			println(value)
+		}
+		return value
+	}
+	
+	// Test shadowing within same function literal (triggers FuncLit case in cfgFor)
+	var F28 = func() int {
+		value := 1
+		if true {
+			value := 2 // Bad - shadows within same func lit
+			~~~~~
+!!! shadow: declaration of "value" shadows declaration at line 462 and is reachable from use at line 467
+			println(value)
+		}
+		return value
+	}
+	
+	// Test cycle detection in CFG - loop where shadow is used after loop
+	func F29() int {
+		value := 1
+		for i := 0; i < 10; i++ {
+			if i == 5 {
+				value := 2 // Bad - shadows and loop creates CFG cycle
+				~~~~~
+!!! shadow: declaration of "value" shadows declaration at line 472 and is reachable from use at line 479
+				println(value)
+			}
+		}
+		return value
+	}
+	
+	// Test shadow with use in successor block (triggers reachable in successor)
+	func F30() int {
+		value := 1
+		if true {
+			value := 2 // Bad - shadows
+			~~~~~
+!!! shadow: declaration of "value" shadows declaration at line 484 and is reachable from use at line 491
+			if true {
+				println(value) // use is in a successor block
+			}
+		}
+		return value
+	}
+	
+	// Test shadow with multiple successor blocks
+	func F31(cond bool) int {
+		value := 1
+		if cond {
+			value := 2 // Bad
+			~~~~~
+!!! shadow: declaration of "value" shadows declaration at line 496 and is reachable from use at line 505
+			if cond {
+				println(value)
+			} else {
+				println(value)
+			}
+		}
+		return value
+	}
+	
+	// Test := with mixed new/existing variables (triggers obj == nil path)
+	func F32() (int, error) {
+		value := 1
+		err := error(nil)
+		// In this :=, 'value' is reassigned (not new) so Defs[value] is nil
+		// 'other' is new, so only 'other' would be checked for shadowing
+		value, other := 2, 3
+		_ = err
+		_ = other
+		return value, nil
+	}
+	

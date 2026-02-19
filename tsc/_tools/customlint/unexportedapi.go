@@ -34,18 +34,16 @@ type unexportedAPIPass struct {
 
 func (u *unexportedAPIPass) run() (any, error) {
 	u.checked = make(map[types.Object]bool)
-	inspect := u.pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
+	in := u.pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
 
-	nodeFilter := []ast.Node{
+	for c := range in.Root().Preorder(
 		(*ast.File)(nil),
 		(*ast.FuncDecl)(nil),
 		(*ast.TypeSpec)(nil),
 		(*ast.ValueSpec)(nil),
-	}
-
-	inspect.Preorder(nodeFilter, func(n ast.Node) {
-		u.currDecl = n
-		switch n := n.(type) {
+	) {
+		u.currDecl = c.Node()
+		switch n := c.Node().(type) {
 		case *ast.File:
 			u.file = n
 		case *ast.FuncDecl:
@@ -55,7 +53,7 @@ func (u *unexportedAPIPass) run() (any, error) {
 		case *ast.ValueSpec:
 			u.checkValueSpec(n)
 		}
-	})
+	}
 
 	return nil, nil
 }
@@ -147,7 +145,7 @@ func anyIdentExported(idents []*ast.Ident) bool {
 	return false
 }
 
-func (u *unexportedAPIPass) checkFieldIfNamesExported(field *ast.Field) (stop bool) {
+func (u *unexportedAPIPass) checkExportedField(field *ast.Field) (stop bool) {
 	// For embedded fields (no names), handle specially
 	if len(field.Names) == 0 {
 		return u.checkEmbeddedField(field)
@@ -160,16 +158,8 @@ func (u *unexportedAPIPass) checkFieldIfNamesExported(field *ast.Field) (stop bo
 }
 
 func (u *unexportedAPIPass) checkEmbeddedField(field *ast.Field) (stop bool) {
-	if field.Type == nil {
-		return false
-	}
-
 	// Get the type of the embedded field
 	typ := u.pass.TypesInfo.TypeOf(field.Type)
-	if typ == nil {
-		// Fallback to regular checking if we can't get type info
-		return u.checkField(field)
-	}
 
 	// For embedded fields, walk through all exported members and check them.
 	// Use the checked map to avoid re-checking members we've already seen.
@@ -202,10 +192,6 @@ func (u *unexportedAPIPass) checkEmbeddedField(field *ast.Field) (stop bool) {
 
 // checkObjectType checks a types.Object and memoizes it to avoid duplicate checks
 func (u *unexportedAPIPass) checkObjectType(obj types.Object) (stop bool) {
-	if obj == nil {
-		return false
-	}
-
 	// If we've already checked this object, skip it
 	if u.checked[obj] {
 		return false
@@ -223,9 +209,6 @@ func (u *unexportedAPIPass) checkFieldsIgnoringNames(fields *ast.FieldList) (sto
 }
 
 func (u *unexportedAPIPass) checkField(field *ast.Field) (stop bool) {
-	if field.Type == nil {
-		return false
-	}
 	return u.checkExpr(field.Type)
 }
 
@@ -236,7 +219,7 @@ func (u *unexportedAPIPass) checkExpr(expr ast.Expr) (stop bool) {
 
 	switch expr := expr.(type) {
 	case *ast.StructType:
-		return slices.ContainsFunc(expr.Fields.List, u.checkFieldIfNamesExported)
+		return slices.ContainsFunc(expr.Fields.List, u.checkExportedField)
 	case *ast.StarExpr:
 		return u.checkExpr(expr.X)
 	case *ast.Ident:
@@ -244,9 +227,6 @@ func (u *unexportedAPIPass) checkExpr(expr ast.Expr) (stop bool) {
 		obj := u.pass.TypesInfo.Defs[expr]
 		if obj == nil {
 			obj = u.pass.TypesInfo.Uses[expr]
-		}
-		if obj == nil {
-			return false
 		}
 		if !expr.IsExported() {
 			if obj.Parent() == types.Universe {
@@ -264,13 +244,11 @@ func (u *unexportedAPIPass) checkExpr(expr ast.Expr) (stop bool) {
 	case *ast.ArrayType:
 		return u.checkExpr(expr.Len) || u.checkExpr(expr.Elt)
 	case *ast.SelectorExpr:
-		if !expr.Sel.IsExported() {
-			u.pass.Reportf(u.currDecl.Pos(), "exported API %s references unexported identifier %s", u.file.Name.Name, expr.Sel.Name)
-			return true
-		}
-		return false
+		// Unexported selectors from other packages (pkg.unexported) are compile errors,
+		// so we only need to check the type of exported selectors.
+		return u.checkType(u.pass.TypesInfo.TypeOf(expr))
 	case *ast.InterfaceType:
-		return slices.ContainsFunc(expr.Methods.List, u.checkFieldIfNamesExported)
+		return slices.ContainsFunc(expr.Methods.List, u.checkExportedField)
 	case *ast.ChanType:
 		return u.checkExpr(expr.Value)
 	case *ast.FuncType:
@@ -279,39 +257,29 @@ func (u *unexportedAPIPass) checkExpr(expr ast.Expr) (stop bool) {
 			u.checkFieldsIgnoringNames(expr.Results)
 	case *ast.Ellipsis:
 		return u.checkExpr(expr.Elt)
-	case *ast.CompositeLit:
-		return u.checkExpr(expr.Type)
 	case *ast.IndexListExpr:
 		return u.checkExpr(expr.X) || slices.ContainsFunc(expr.Indices, u.checkExpr)
 	case *ast.IndexExpr:
 		return u.checkExpr(expr.X) || u.checkExpr(expr.Index)
 	case *ast.UnaryExpr:
+		// Unary expressions can appear in array length expressions like [-1]int
 		return u.checkExpr(expr.X)
 	case *ast.BinaryExpr:
+		// Binary expressions can appear in array length expressions like [1+2]int
 		return u.checkExpr(expr.X) || u.checkExpr(expr.Y)
 	case *ast.BasicLit:
+		// Basic literals can appear in array length expressions like [3]int
 		return false
-	case *ast.CallExpr:
-		// For call expressions, check the function being called
-		// We don't check arguments since those are values, not types in the API
-		return u.checkExpr(expr.Fun)
-	case *ast.FuncLit:
-		// Function literals - check the function type
-		return u.checkExpr(expr.Type)
 	case *ast.ParenExpr:
 		return u.checkExpr(expr.X)
 	default:
 		var buf bytes.Buffer
 		_ = format.Node(&buf, u.pass.Fset, expr)
-		panic(fmt.Sprintf("%T, unhandled case %T: %s", u.currDecl, expr, buf.String()))
+		panic(fmt.Sprintf("unhandled expression type %T: %s", expr, buf.String()))
 	}
 }
 
 func (u *unexportedAPIPass) checkType(typ types.Type) (stop bool) {
-	if typ == nil {
-		return false
-	}
-
 	switch typ := typ.(type) {
 	case *types.Named:
 		// Check if the named type itself is unexported
@@ -382,8 +350,10 @@ func (u *unexportedAPIPass) checkType(typ types.Type) (stop bool) {
 	case *types.Basic, *types.TypeParam:
 		// Basic types and type parameters are always OK
 		return false
+	case *types.Alias:
+		// For type aliases, check the underlying aliased type
+		return u.checkType(typ.Rhs())
 	default:
-		// For any unhandled type, be conservative and don't report
-		return false
+		panic(fmt.Sprintf("unhandled types.Type %T", typ))
 	}
 }
