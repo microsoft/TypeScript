@@ -1,5 +1,6 @@
 import {
     API,
+    SignatureKind,
     SymbolFlags,
     TypeFlags,
 } from "@typescript/api/async";
@@ -578,6 +579,242 @@ describe("async Source file cache keying across projects", () => {
 
             // B and C should share the same cached object (both module parse, same content hash)
             assert.strictEqual(sfB, sfC, "projectB and projectC (both module parse) should share the same cached source file");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("async Checker - types and signatures", () => {
+    const checkerFiles = {
+        "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+        "/src/main.ts": `
+export const x = 42;
+export function add(a: number, b: number, ...rest: number[]): number { return a + b; }
+export class MyClass {
+    value: string = "";
+    getValue(): string { return this.value; }
+}
+`,
+    };
+
+    test("getTypeAtPosition", async () => {
+        const api = spawnAPI(checkerFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = checkerFiles["/src/main.ts"];
+            const xPos = src.indexOf("x = 42");
+            const type = await project.checker.getTypeAtPosition("/src/main.ts", xPos);
+            assert.ok(type);
+            assert.ok(type.flags & TypeFlags.NumberLiteral);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getTypeAtPosition batched", async () => {
+        const api = spawnAPI(checkerFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = checkerFiles["/src/main.ts"];
+            const xPos = src.indexOf("x = 42");
+            const addPos = src.indexOf("add(");
+            const types = await project.checker.getTypeAtPosition("/src/main.ts", [xPos, addPos]);
+            assert.equal(types.length, 2);
+            assert.ok(types[0]);
+            assert.ok(types[1]);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getTypeAtLocation", async () => {
+        const api = spawnAPI(checkerFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/main.ts");
+            assert.ok(sourceFile);
+            const firstVarDecl = sourceFile.statements[2]; // "export const x"
+            assert.ok(firstVarDecl);
+            const type = await project.checker.getTypeAtLocation(firstVarDecl);
+            assert.ok(type);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getSignaturesOfType - call signatures", async () => {
+        const api = spawnAPI(checkerFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = checkerFiles["/src/main.ts"];
+            const addPos = src.indexOf("add(");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", addPos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const callSigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+            assert.ok(callSigs.length > 0);
+            const sig = callSigs[0];
+            assert.ok(sig.id);
+            assert.ok(sig.parameters.length >= 2);
+            assert.ok(sig.hasRestParameter);
+            assert.ok(!sig.isConstruct);
+            assert.ok(!sig.isAbstract);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getSignaturesOfType - construct signatures", async () => {
+        const api = spawnAPI(checkerFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = checkerFiles["/src/main.ts"];
+            const classPos = src.indexOf("MyClass");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", classPos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const constructSigs = await project.checker.getSignaturesOfType(type, SignatureKind.Construct);
+            assert.ok(constructSigs.length > 0);
+            const sig = constructSigs[0];
+            assert.ok(sig.isConstruct);
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("Signature declaration can be resolved", async () => {
+        const api = spawnAPI(checkerFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = checkerFiles["/src/main.ts"];
+            const addPos = src.indexOf("add(");
+            const symbol = await project.checker.getSymbolAtPosition("/src/main.ts", addPos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const callSigs = await project.checker.getSignaturesOfType(type, SignatureKind.Call);
+            assert.ok(callSigs.length > 0);
+            const sig = callSigs[0];
+            assert.ok(sig.declaration);
+            const node = await sig.declaration.resolve(project);
+            assert.ok(node);
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("async Symbol - parent, members, exports", () => {
+    const symbolFiles = {
+        "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+        "/src/mod.ts": `
+export class Animal {
+    name: string = "";
+    speak(): void {}
+}
+export const value = 1;
+`,
+    };
+
+    test("getMembers returns class members", async () => {
+        const api = spawnAPI(symbolFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = symbolFiles["/src/mod.ts"];
+            const animalPos = src.indexOf("Animal");
+            const symbol = await project.checker.getSymbolAtPosition("/src/mod.ts", animalPos);
+            assert.ok(symbol);
+            const members = await symbol.getMembers();
+            assert.ok(members.length > 0);
+            const memberNames = members.map(m => m.name);
+            assert.ok(memberNames.includes("name"), "should have 'name' member");
+            assert.ok(memberNames.includes("speak"), "should have 'speak' member");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getExports returns module exports via sourceFile symbol", async () => {
+        const api = spawnAPI(symbolFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const sourceFile = await project.program.getSourceFile("/src/mod.ts");
+            assert.ok(sourceFile);
+            const moduleSymbol = await project.checker.getSymbolAtLocation(sourceFile);
+            assert.ok(moduleSymbol);
+            const exports = await moduleSymbol.getExports();
+            assert.ok(exports.length > 0);
+            const exportNames = exports.map(e => e.name);
+            assert.ok(exportNames.includes("Animal"), "should export Animal");
+            assert.ok(exportNames.includes("value"), "should export value");
+        }
+        finally {
+            await api.close();
+        }
+    });
+
+    test("getParent returns containing symbol", async () => {
+        const api = spawnAPI(symbolFiles);
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = symbolFiles["/src/mod.ts"];
+            const namePos = src.indexOf("name:");
+            const nameSymbol = await project.checker.getSymbolAtPosition("/src/mod.ts", namePos);
+            assert.ok(nameSymbol);
+            assert.equal(nameSymbol.name, "name");
+            const parent = await nameSymbol.getParent();
+            assert.ok(parent);
+            assert.equal(parent.name, "Animal");
+        }
+        finally {
+            await api.close();
+        }
+    });
+});
+
+describe("async Type - getSymbol", () => {
+    test("getSymbol returns the symbol of a type", async () => {
+        const api = spawnAPI({
+            "/tsconfig.json": JSON.stringify({ compilerOptions: { strict: true } }),
+            "/src/types.ts": `
+export class Foo {
+    x: number = 0;
+}
+export const instance: Foo = new Foo();
+`,
+        });
+        try {
+            const snapshot = await api.updateSnapshot({ openProject: "/tsconfig.json" });
+            const project = snapshot.getProject("/tsconfig.json")!;
+            const src = `\nexport class Foo {\n    x: number = 0;\n}\nexport const instance: Foo = new Foo();\n`;
+            const instancePos = src.indexOf("instance");
+            const symbol = await project.checker.getSymbolAtPosition("/src/types.ts", instancePos);
+            assert.ok(symbol);
+            const type = await project.checker.getTypeOfSymbol(symbol);
+            assert.ok(type);
+            const typeSymbol = await type.getSymbol();
+            assert.ok(typeSymbol);
+            assert.equal(typeSymbol.name, "Foo");
         }
         finally {
             await api.close();

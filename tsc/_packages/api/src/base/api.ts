@@ -7,9 +7,14 @@
  * - `Async = true`: Methods return Promise<T> (async)
  */
 
+import { ElementFlags } from "#elementFlags";
+import { ObjectFlags } from "#objectFlags";
+import { SignatureFlags } from "#signatureFlags";
+import { SignatureKind } from "#signatureKind";
 import { SymbolFlags } from "#symbolFlags";
 import { TypeFlags } from "#typeFlags";
 import type {
+    Expression,
     Node,
     Path,
     SourceFile,
@@ -26,7 +31,7 @@ import type {
 } from "../proto.ts";
 import type { MaybeAsync } from "./types.ts";
 
-export { SymbolFlags, TypeFlags };
+export { ElementFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags };
 
 /**
  * A document identifier that can be either a file name (path string) or a document URI object.
@@ -188,21 +193,39 @@ export interface Checker<Async extends boolean> {
      */
     getSymbolAtLocation(node: Node): MaybeAsync<Async, Symbol<Async> | undefined>;
     getSymbolAtLocation(nodes: readonly Node[]): MaybeAsync<Async, (Symbol<Async> | undefined)[]>;
-
     /**
      * Get the symbol at a specific position in a file.
      */
     getSymbolAtPosition(file: DocumentIdentifier, position: number): MaybeAsync<Async, Symbol<Async> | undefined>;
     getSymbolAtPosition(file: DocumentIdentifier, positions: readonly number[]): MaybeAsync<Async, (Symbol<Async> | undefined)[]>;
 
-    /**
-     * Get the type of a symbol.
-     */
     getTypeOfSymbol(symbol: Symbol<Async>): MaybeAsync<Async, Type<Async> | undefined>;
     getTypeOfSymbol(symbols: readonly Symbol<Async>[]): MaybeAsync<Async, (Type<Async> | undefined)[]>;
 
+    getDeclaredTypeOfSymbol(symbol: Symbol<Async>): MaybeAsync<Async, Type<Async> | undefined>;
+
     /**
-     * Resolve a name to a symbol at a given location.
+     * Get the type at a specific node location.
+     */
+    getTypeAtLocation(node: Node): MaybeAsync<Async, Type<Async> | undefined>;
+    getTypeAtLocation(nodes: readonly Node[]): MaybeAsync<Async, (Type<Async> | undefined)[]>;
+    /**
+     * Get the type at a specific position in a file.
+     */
+    getTypeAtPosition(file: DocumentIdentifier, position: number): MaybeAsync<Async, Type<Async> | undefined>;
+    getTypeAtPosition(file: DocumentIdentifier, positions: readonly number[]): MaybeAsync<Async, (Type<Async> | undefined)[]>;
+    /**
+     * Get the narrowed type of a symbol at a specific location.
+     */
+    getTypeOfSymbolAtLocation(symbol: Symbol<Async>, location: Node): MaybeAsync<Async, Type<Async> | undefined>;
+
+    /**
+     * Get the call or construct signatures of a type.
+     */
+    getSignaturesOfType(type: Type<Async>, kind: SignatureKind): MaybeAsync<Async, readonly Signature<Async>[]>;
+
+    /**
+     * Resolve a name to a symbol from a given location.
      * @param name The name to resolve
      * @param meaning Symbol flags indicating what kind of symbol to look for
      * @param location Optional node or document position for location context
@@ -214,6 +237,33 @@ export interface Checker<Async extends boolean> {
         location?: Node | DocumentPosition,
         excludeGlobals?: boolean,
     ): MaybeAsync<Async, Symbol<Async> | undefined>;
+
+    /**
+     * Get the contextual type for an expression node.
+     */
+    getContextualType(node: Expression): MaybeAsync<Async, Type<Async> | undefined>;
+
+    /**
+     * Get the base type of a literal type.
+     */
+    getBaseTypeOfLiteralType(type: Type<Async>): MaybeAsync<Async, Type<Async> | undefined>;
+
+    /**
+     * Get the value symbol of a shorthand property assignment.
+     */
+    getShorthandAssignmentValueSymbol(node: Node): MaybeAsync<Async, Symbol<Async> | undefined>;
+
+    getAnyType(): MaybeAsync<Async, Type<Async>>;
+    getStringType(): MaybeAsync<Async, Type<Async>>;
+    getNumberType(): MaybeAsync<Async, Type<Async>>;
+    getBooleanType(): MaybeAsync<Async, Type<Async>>;
+    getVoidType(): MaybeAsync<Async, Type<Async>>;
+    getUndefinedType(): MaybeAsync<Async, Type<Async>>;
+    getNullType(): MaybeAsync<Async, Type<Async>>;
+    getNeverType(): MaybeAsync<Async, Type<Async>>;
+    getUnknownType(): MaybeAsync<Async, Type<Async>>;
+    getBigIntType(): MaybeAsync<Async, Type<Async>>;
+    getESSymbolType(): MaybeAsync<Async, Type<Async>>;
 }
 
 export interface NodeHandle<Async extends boolean> {
@@ -246,14 +296,149 @@ export interface Symbol<Async extends boolean> {
     readonly declarations: readonly NodeHandle<Async>[];
     /** Node handle for the value declaration of this symbol */
     readonly valueDeclaration: NodeHandle<Async> | undefined;
+
+    /** Get the parent symbol, if any */
+    getParent(): MaybeAsync<Async, Symbol<Async> | undefined>;
+    /** Get the members of this symbol */
+    getMembers(): MaybeAsync<Async, readonly Symbol<Async>[]>;
+    /** Get the exports of this symbol */
+    getExports(): MaybeAsync<Async, readonly Symbol<Async>[]>;
 }
 
 /**
  * Base interface for a TypeScript type.
+ *
+ * Use TypeFlags to determine the specific kind of type and access
+ * kind-specific properties. For example:
+ *
+ * ```ts
+ * if (type.flags & TypeFlags.StringLiteral) {
+ *     console.log((type as LiteralType).value); // string
+ * }
+ * ```
  */
 export interface Type<Async extends boolean> {
     /** Unique identifier for this type */
     readonly id: string;
-    /** Type flags */
+    /** Type flags — use to determine the specific kind of type */
     readonly flags: TypeFlags;
+
+    /** Get the symbol associated with this type, if any */
+    getSymbol(): MaybeAsync<Async, Symbol<Async> | undefined>;
+}
+
+/** Literal types: StringLiteral, NumberLiteral, BigIntLiteral, BooleanLiteral */
+export interface LiteralType<Async extends boolean> extends Type<Async> {
+    /** The literal value */
+    readonly value: string | number | boolean;
+}
+
+/** Object types (TypeFlags.Object) */
+export interface ObjectType<Async extends boolean> extends Type<Async> {
+    /** Object flags — use to determine the specific kind of object type */
+    readonly objectFlags: ObjectFlags;
+}
+
+/** Type references (ObjectFlags.Reference) — e.g. Array<string>, Map<K, V> */
+export interface TypeReference<Async extends boolean> extends ObjectType<Async> {
+    /** Get the generic target type (e.g. Array for Array<string>) */
+    getTarget(): MaybeAsync<Async, Type<Async>>;
+}
+
+/** Interface types — classes and interfaces (ObjectFlags.ClassOrInterface) */
+export interface InterfaceType<Async extends boolean> extends TypeReference<Async> {
+    /** Get all type parameters (outer + local, excluding thisType) */
+    getTypeParameters(): MaybeAsync<Async, readonly Type<Async>[]>;
+    /** Get outer type parameters from enclosing declarations */
+    getOuterTypeParameters(): MaybeAsync<Async, readonly Type<Async>[]>;
+    /** Get local type parameters declared on this interface/class */
+    getLocalTypeParameters(): MaybeAsync<Async, readonly Type<Async>[]>;
+}
+
+/** Tuple types (ObjectFlags.Tuple) */
+export interface TupleType<Async extends boolean> extends InterfaceType<Async> {
+    /** Per-element flags (Required, Optional, Rest, Variadic) */
+    readonly elementFlags: readonly ElementFlags[];
+    /** Number of initial required or optional elements */
+    readonly fixedLength: number;
+    /** Whether the tuple is readonly */
+    readonly readonly: boolean;
+}
+
+/** Union or intersection types (TypeFlags.Union | TypeFlags.Intersection) */
+export interface UnionOrIntersectionType<Async extends boolean> extends Type<Async> {
+    /** Get the constituent types */
+    getTypes(): MaybeAsync<Async, readonly Type<Async>[]>;
+}
+
+/** Union types (TypeFlags.Union) */
+export interface UnionType<Async extends boolean> extends UnionOrIntersectionType<Async> {
+}
+
+/** Intersection types (TypeFlags.Intersection) */
+export interface IntersectionType<Async extends boolean> extends UnionOrIntersectionType<Async> {
+}
+
+/** Type parameters (TypeFlags.TypeParameter) */
+export interface TypeParameter<Async extends boolean> extends Type<Async> {
+}
+
+/** Index types — keyof T (TypeFlags.Index) */
+export interface IndexType<Async extends boolean> extends Type<Async> {
+    /** Get the target type T in `keyof T` */
+    getTarget(): MaybeAsync<Async, Type<Async>>;
+}
+
+/** Indexed access types — T[K] (TypeFlags.IndexedAccess) */
+export interface IndexedAccessType<Async extends boolean> extends Type<Async> {
+    /** Get the object type T in `T[K]` */
+    getObjectType(): MaybeAsync<Async, Type<Async>>;
+    /** Get the index type K in `T[K]` */
+    getIndexType(): MaybeAsync<Async, Type<Async>>;
+}
+
+/** Conditional types — T extends U ? X : Y (TypeFlags.Conditional) */
+export interface ConditionalType<Async extends boolean> extends Type<Async> {
+    /** Get the check type T in `T extends U ? X : Y` */
+    getCheckType(): MaybeAsync<Async, Type<Async>>;
+    /** Get the extends type U in `T extends U ? X : Y` */
+    getExtendsType(): MaybeAsync<Async, Type<Async>>;
+}
+
+/** Substitution types (TypeFlags.Substitution) */
+export interface SubstitutionType<Async extends boolean> extends Type<Async> {
+    getBaseType(): MaybeAsync<Async, Type<Async>>;
+    getConstraint(): MaybeAsync<Async, Type<Async>>;
+}
+
+/** Template literal types (TypeFlags.TemplateLiteral) */
+export interface TemplateLiteralType<Async extends boolean> extends Type<Async> {
+    /** Text segments (always one more than the number of type spans) */
+    readonly texts: readonly string[];
+    /** Get the types interspersed between text segments */
+    getTypes(): MaybeAsync<Async, readonly Type<Async>[]>;
+}
+
+/** String mapping types — Uppercase<T>, Lowercase<T>, etc. (TypeFlags.StringMapping) */
+export interface StringMappingType<Async extends boolean> extends Type<Async> {
+    /** Get the mapped type */
+    getTarget(): MaybeAsync<Async, Type<Async>>;
+}
+
+/**
+ * Base interface for a TypeScript signature.
+ */
+export interface Signature<Async extends boolean> {
+    readonly id: string;
+    readonly declaration?: NodeHandle<Async> | undefined;
+    readonly typeParameters?: readonly Type<Async>[] | undefined;
+    readonly parameters: readonly Symbol<Async>[];
+    readonly thisParameter?: Symbol<Async> | undefined;
+    /** The target signature (for instantiated signatures) */
+    readonly target?: Signature<Async> | undefined;
+    readonly hasRestParameter: boolean;
+    /** Whether this is a construct signature */
+    readonly isConstruct: boolean;
+    /** Whether this is an abstract signature */
+    readonly isAbstract: boolean;
 }

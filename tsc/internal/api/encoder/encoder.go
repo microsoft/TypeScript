@@ -1,7 +1,6 @@
 package encoder
 
 import (
-	"encoding/base64"
 	"encoding/binary"
 	"fmt"
 	"slices"
@@ -371,10 +370,7 @@ func getSourceFileData(sourceFile *ast.SourceFile, strs *stringTable, extendedDa
 	textIndex := strs.add(sourceFile.Text(), sourceFile.Kind, sourceFile.Pos(), sourceFile.End())
 	fileNameIndex := strs.add(sourceFile.FileName(), 0, 0, 0)
 	pathIndex := strs.add(string(sourceFile.Path()), 0, 0, 0)
-	var idBuf [8]byte
-	binary.LittleEndian.PutUint64(idBuf[:], uint64(ast.GetNodeId(sourceFile.AsNode())))
-	idIndex := strs.add(base64.StdEncoding.EncodeToString(idBuf[:]), 0, 0, 0)
-	*extendedData = appendUint32s(*extendedData, textIndex, fileNameIndex, pathIndex, idIndex)
+	*extendedData = appendUint32s(*extendedData, textIndex, fileNameIndex, pathIndex)
 	return t | uint32(extendedDataOffset)
 }
 

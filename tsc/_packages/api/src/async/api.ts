@@ -1,7 +1,12 @@
 /// <reference path="../node.ts" preserve="true" />
+import { ElementFlags } from "#elementFlags";
+import { ObjectFlags } from "#objectFlags";
+import { SignatureFlags } from "#signatureFlags";
+import { SignatureKind } from "#signatureKind";
 import { SymbolFlags } from "#symbolFlags";
 import { TypeFlags } from "#typeFlags";
 import type {
+    Expression,
     Node,
     Path,
     SourceFile,
@@ -10,15 +15,31 @@ import type {
 import {
     type API as BaseAPI,
     type Checker as BaseChecker,
+    type ConditionalType as BaseConditionalType,
     type DocumentIdentifier,
     type DocumentPosition,
+    type IndexedAccessType as BaseIndexedAccessType,
+    type IndexType as BaseIndexType,
+    type InterfaceType as BaseInterfaceType,
+    type IntersectionType as BaseIntersectionType,
+    type LiteralType as BaseLiteralType,
     type NodeHandle as BaseNodeHandle,
+    type ObjectType as BaseObjectType,
     type Program as BaseProgram,
     type Project as BaseProject,
     resolveFileName,
+    type Signature as BaseSignature,
     type Snapshot as BaseSnapshot,
+    type StringMappingType as BaseStringMappingType,
+    type SubstitutionType as BaseSubstitutionType,
     type Symbol as BaseSymbol,
+    type TemplateLiteralType as BaseTemplateLiteralType,
+    type TupleType as BaseTupleType,
     type Type as BaseType,
+    type TypeParameter as BaseTypeParameter,
+    type TypeReference as BaseTypeReference,
+    type UnionOrIntersectionType as BaseUnionOrIntersectionType,
+    type UnionType as BaseUnionType,
 } from "../base/api.ts";
 import { ObjectRegistry } from "../base/objectRegistry.ts";
 import { SourceFileCache } from "../base/sourceFileCache.ts";
@@ -37,6 +58,7 @@ import type {
     ConfigResponse,
     InitializeResponse,
     ProjectResponse,
+    SignatureResponse,
     SourceFileResponse,
     SymbolResponse,
     TypeResponse,
@@ -52,8 +74,24 @@ import {
     type ClientSpawnOptions,
 } from "./client.ts";
 
-export { SymbolFlags, TypeFlags };
+export { ElementFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags };
 export type { DocumentIdentifier, DocumentPosition };
+export type LiteralType = BaseLiteralType<true>;
+export type ObjectType = BaseObjectType<true>;
+export type TypeReference = BaseTypeReference<true>;
+export type InterfaceType = BaseInterfaceType<true>;
+export type TupleType = BaseTupleType<true>;
+export type UnionOrIntersectionType = BaseUnionOrIntersectionType<true>;
+export type UnionType = BaseUnionType<true>;
+export type IntersectionType = BaseIntersectionType<true>;
+export type TypeParameter = BaseTypeParameter<true>;
+export type IndexType = BaseIndexType<true>;
+export type IndexedAccessType = BaseIndexedAccessType<true>;
+export type ConditionalType = BaseConditionalType<true>;
+export type SubstitutionType = BaseSubstitutionType<true>;
+export type TemplateLiteralType = BaseTemplateLiteralType<true>;
+export type StringMappingType = BaseStringMappingType<true>;
+export type Type = BaseType<true>;
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
 
 export interface LSPConnectionOptions extends ClientSocketOptions {
@@ -63,7 +101,7 @@ export interface APIOptions extends ClientSpawnOptions {
 }
 
 /** Type alias for the snapshot-scoped object registry */
-type SnapshotObjectRegistry = ObjectRegistry<Symbol, Type>;
+type SnapshotObjectRegistry = ObjectRegistry<Symbol, TypeObject, Signature>;
 
 export class API<FromLSP extends boolean = false> implements BaseAPI<true, FromLSP> {
     private client: Client;
@@ -175,9 +213,10 @@ export class Snapshot implements BaseSnapshot<true> {
         this.toPath = toPath;
         this.onDispose = onDispose;
 
-        this.objectRegistry = new ObjectRegistry<Symbol, Type>({
-            createSymbol: symbolData => new Symbol(symbolData),
-            createType: typeData => new Type(typeData),
+        this.objectRegistry = new ObjectRegistry<Symbol, TypeObject, Signature>({
+            createSymbol: symbolData => new Symbol(symbolData, this.client, this.id, this.objectRegistry),
+            createType: typeData => new TypeObject(typeData, this.client, this.id, this.objectRegistry),
+            createSignature: sigData => new Signature(sigData, this.objectRegistry),
         });
 
         // Create projects
@@ -349,14 +388,14 @@ export class Checker implements BaseChecker<true> {
                 project: this.projectId,
                 locations: nodeOrNodes.map(node => node.id),
             });
-            return data.map(d => d ? this.objectRegistry.getSymbol(d) : undefined);
+            return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
         }
         const data = await this.client.apiRequest<SymbolResponse | null>("getSymbolAtLocation", {
             snapshot: this.snapshotId,
             project: this.projectId,
             location: (nodeOrNodes as Node).id,
         });
-        return data ? this.objectRegistry.getSymbol(data) : undefined;
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
 
     getSymbolAtPosition(file: DocumentIdentifier, position: number): Promise<Symbol | undefined>;
@@ -369,7 +408,7 @@ export class Checker implements BaseChecker<true> {
                 file,
                 position: positionOrPositions,
             });
-            return data ? this.objectRegistry.getSymbol(data) : undefined;
+            return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
         }
         const data = await this.client.apiRequest<(SymbolResponse | null)[]>("getSymbolsAtPositions", {
             snapshot: this.snapshotId,
@@ -377,7 +416,7 @@ export class Checker implements BaseChecker<true> {
             file,
             positions: positionOrPositions,
         });
-        return data.map(d => d ? this.objectRegistry.getSymbol(d) : undefined);
+        return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
     }
 
     getTypeOfSymbol(symbol: Symbol): Promise<Type | undefined>;
@@ -389,14 +428,73 @@ export class Checker implements BaseChecker<true> {
                 project: this.projectId,
                 symbols: symbolOrSymbols.map(s => s.id),
             });
-            return data.map(d => d ? this.objectRegistry.getType(d) : undefined);
+            return data.map(d => d ? this.objectRegistry.getOrCreateType(d) : undefined);
         }
         const data = await this.client.apiRequest<TypeResponse | null>("getTypeOfSymbol", {
             snapshot: this.snapshotId,
             project: this.projectId,
             symbol: (symbolOrSymbols as Symbol).id,
         });
-        return data ? this.objectRegistry.getType(data) : undefined;
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    async getDeclaredTypeOfSymbol(symbol: Symbol): Promise<Type | undefined> {
+        const data = await this.client.apiRequest<TypeResponse | null>("getDeclaredTypeOfSymbol", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            symbol: symbol.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    getTypeAtLocation(node: Node): Promise<Type | undefined>;
+    getTypeAtLocation(nodes: readonly Node[]): Promise<(Type | undefined)[]>;
+    async getTypeAtLocation(nodeOrNodes: Node | readonly Node[]): Promise<Type | (Type | undefined)[] | undefined> {
+        if (Array.isArray(nodeOrNodes)) {
+            const data = await this.client.apiRequest<(TypeResponse | null)[]>("getTypeAtLocations", {
+                snapshot: this.snapshotId,
+                project: this.projectId,
+                locations: nodeOrNodes.map(node => node.id),
+            });
+            return data.map(d => d ? this.objectRegistry.getOrCreateType(d) : undefined);
+        }
+        const data = await this.client.apiRequest<TypeResponse | null>("getTypeAtLocation", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            location: (nodeOrNodes as Node).id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    async getSignaturesOfType(type: Type, kind: SignatureKind): Promise<readonly Signature[]> {
+        const data = await this.client.apiRequest<SignatureResponse[]>("getSignaturesOfType", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: type.id,
+            kind,
+        });
+        return data.map(d => this.objectRegistry.getOrCreateSignature(d));
+    }
+
+    getTypeAtPosition(file: DocumentIdentifier, position: number): Promise<Type | undefined>;
+    getTypeAtPosition(file: DocumentIdentifier, positions: readonly number[]): Promise<(Type | undefined)[]>;
+    async getTypeAtPosition(file: DocumentIdentifier, positionOrPositions: number | readonly number[]): Promise<Type | (Type | undefined)[] | undefined> {
+        if (typeof positionOrPositions === "number") {
+            const data = await this.client.apiRequest<TypeResponse | null>("getTypeAtPosition", {
+                snapshot: this.snapshotId,
+                project: this.projectId,
+                file,
+                position: positionOrPositions,
+            });
+            return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+        }
+        const data = await this.client.apiRequest<(TypeResponse | null)[]>("getTypesAtPositions", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            file,
+            positions: positionOrPositions,
+        });
+        return data.map(d => d ? this.objectRegistry.getOrCreateType(d) : undefined);
     }
 
     async resolveName(
@@ -417,7 +515,86 @@ export class Checker implements BaseChecker<true> {
             position: !isNode && location ? (location as DocumentPosition).position : undefined,
             excludeGlobals,
         });
-        return data ? this.objectRegistry.getSymbol(data) : undefined;
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    async getContextualType(node: Expression): Promise<Type | undefined> {
+        const data = await this.client.apiRequest<TypeResponse | null>("getContextualType", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            location: node.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    async getBaseTypeOfLiteralType(type: Type): Promise<Type | undefined> {
+        const data = await this.client.apiRequest<TypeResponse | null>("getBaseTypeOfLiteralType", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: type.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    async getShorthandAssignmentValueSymbol(node: Node): Promise<Symbol | undefined> {
+        const data = await this.client.apiRequest<SymbolResponse | null>("getShorthandAssignmentValueSymbol", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            location: node.id,
+        });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    async getTypeOfSymbolAtLocation(symbol: Symbol, location: Node): Promise<Type | undefined> {
+        const data = await this.client.apiRequest<TypeResponse | null>("getTypeOfSymbolAtLocation", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            symbol: symbol.id,
+            location: location.id,
+        });
+        return data ? this.objectRegistry.getOrCreateType(data) : undefined;
+    }
+
+    private async getIntrinsicType(method: string): Promise<Type> {
+        const data = await this.client.apiRequest<TypeResponse>(method, {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+        });
+        return this.objectRegistry.getOrCreateType(data);
+    }
+
+    async getAnyType(): Promise<Type> {
+        return this.getIntrinsicType("getAnyType");
+    }
+    async getStringType(): Promise<Type> {
+        return this.getIntrinsicType("getStringType");
+    }
+    async getNumberType(): Promise<Type> {
+        return this.getIntrinsicType("getNumberType");
+    }
+    async getBooleanType(): Promise<Type> {
+        return this.getIntrinsicType("getBooleanType");
+    }
+    async getVoidType(): Promise<Type> {
+        return this.getIntrinsicType("getVoidType");
+    }
+    async getUndefinedType(): Promise<Type> {
+        return this.getIntrinsicType("getUndefinedType");
+    }
+    async getNullType(): Promise<Type> {
+        return this.getIntrinsicType("getNullType");
+    }
+    async getNeverType(): Promise<Type> {
+        return this.getIntrinsicType("getNeverType");
+    }
+    async getUnknownType(): Promise<Type> {
+        return this.getIntrinsicType("getUnknownType");
+    }
+    async getBigIntType(): Promise<Type> {
+        return this.getIntrinsicType("getBigIntType");
+    }
+    async getESSymbolType(): Promise<Type> {
+        return this.getIntrinsicType("getESSymbolType");
     }
 }
 
@@ -450,6 +627,10 @@ export class NodeHandle implements BaseNodeHandle<true> {
 }
 
 export class Symbol implements BaseSymbol<true> {
+    private client: Client;
+    private snapshotId: string;
+    private objectRegistry: SnapshotObjectRegistry;
+
     readonly id: string;
     readonly name: string;
     readonly flags: SymbolFlags;
@@ -457,7 +638,11 @@ export class Symbol implements BaseSymbol<true> {
     readonly declarations: readonly NodeHandle[];
     readonly valueDeclaration: NodeHandle | undefined;
 
-    constructor(data: SymbolResponse) {
+    constructor(data: SymbolResponse, client: Client, snapshotId: string, objectRegistry: SnapshotObjectRegistry) {
+        this.client = client;
+        this.snapshotId = snapshotId;
+        this.objectRegistry = objectRegistry;
+
         this.id = data.id;
         this.name = data.name;
         this.flags = data.flags;
@@ -465,14 +650,175 @@ export class Symbol implements BaseSymbol<true> {
         this.declarations = (data.declarations ?? []).map(d => new NodeHandle(d));
         this.valueDeclaration = data.valueDeclaration ? new NodeHandle(data.valueDeclaration) : undefined;
     }
+
+    async getParent(): Promise<Symbol | undefined> {
+        const data = await this.client.apiRequest<SymbolResponse | null>("getParentOfSymbol", { snapshot: this.snapshotId, symbol: this.id });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    async getMembers(): Promise<readonly Symbol[]> {
+        const data = await this.client.apiRequest<SymbolResponse[] | null>("getMembersOfSymbol", { snapshot: this.snapshotId, symbol: this.id });
+        return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
+    }
+
+    async getExports(): Promise<readonly Symbol[]> {
+        const data = await this.client.apiRequest<SymbolResponse[] | null>("getExportsOfSymbol", { snapshot: this.snapshotId, symbol: this.id });
+        return data ? data.map(d => this.objectRegistry.getOrCreateSymbol(d)) : [];
+    }
 }
 
-export class Type implements BaseType<true> {
+class TypeObject implements BaseType<true> {
+    private client: Client;
+    private snapshotId: string;
+    private objectRegistry: SnapshotObjectRegistry;
+
     readonly id: string;
     readonly flags: TypeFlags;
+    readonly objectFlags!: ObjectFlags;
+    readonly value!: string | number | boolean;
+    readonly target!: string;
+    readonly typeParameters!: readonly string[];
+    readonly outerTypeParameters!: readonly string[];
+    readonly localTypeParameters!: readonly string[];
+    readonly elementFlags!: readonly ElementFlags[];
+    readonly fixedLength!: number;
+    readonly readonly!: boolean;
+    readonly texts!: readonly string[];
+    readonly objectType!: string;
+    readonly indexType!: string;
+    readonly checkType!: string;
+    readonly extendsType!: string;
+    readonly baseType!: string;
+    readonly substConstraint!: string;
 
-    constructor(data: TypeResponse) {
+    constructor(data: TypeResponse, client: Client, snapshotId: string, objectRegistry: SnapshotObjectRegistry) {
+        this.client = client;
+        this.snapshotId = snapshotId;
+        this.objectRegistry = objectRegistry;
+
         this.id = data.id;
         this.flags = data.flags;
+        if (data.objectFlags !== undefined) this.objectFlags = data.objectFlags;
+        if (data.value !== undefined) this.value = data.value;
+        if (data.target !== undefined) this.target = data.target;
+        if (data.typeParameters !== undefined) this.typeParameters = data.typeParameters;
+        if (data.outerTypeParameters !== undefined) this.outerTypeParameters = data.outerTypeParameters;
+        if (data.localTypeParameters !== undefined) this.localTypeParameters = data.localTypeParameters;
+        if (data.elementFlags !== undefined) this.elementFlags = data.elementFlags;
+        if (data.fixedLength !== undefined) this.fixedLength = data.fixedLength;
+        if (data.readonly !== undefined) this.readonly = data.readonly;
+        if (data.texts !== undefined) this.texts = data.texts;
+        if (data.objectType !== undefined) this.objectType = data.objectType;
+        if (data.indexType !== undefined) this.indexType = data.indexType;
+        if (data.checkType !== undefined) this.checkType = data.checkType;
+        if (data.extendsType !== undefined) this.extendsType = data.extendsType;
+        if (data.baseType !== undefined) this.baseType = data.baseType;
+        if (data.substConstraint !== undefined) this.substConstraint = data.substConstraint;
+    }
+
+    async getSymbol(): Promise<Symbol | undefined> {
+        const data = await this.client.apiRequest<SymbolResponse | null>("getSymbolOfType", { snapshot: this.snapshotId, type: this.id });
+        return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
+    }
+
+    private async fetchType(handle: string | undefined, method: string): Promise<Type> {
+        const cached = handle ? this.objectRegistry.getType(handle) : undefined;
+        if (cached) return cached as Type;
+        const data = await this.client.apiRequest<TypeResponse | null>(method, { snapshot: this.snapshotId, type: this.id });
+        if (!data) throw new Error(`${method} returned null for type ${this.id}`);
+        return this.objectRegistry.getOrCreateType(data) as Type;
+    }
+
+    private async fetchTypes(method: string): Promise<readonly Type[]> {
+        const data = await this.client.apiRequest<TypeResponse[] | null>(method, { snapshot: this.snapshotId, type: this.id });
+        return data ? data.map(d => this.objectRegistry.getOrCreateType(d) as Type) : [];
+    }
+
+    async getTarget(): Promise<Type> {
+        return this.fetchType(this.target, "getTargetOfType");
+    }
+
+    async getTypes(): Promise<readonly Type[]> {
+        return this.fetchTypes("getTypesOfType");
+    }
+
+    async getTypeParameters(): Promise<readonly Type[]> {
+        return this.fetchTypes("getTypeParametersOfType");
+    }
+
+    async getOuterTypeParameters(): Promise<readonly Type[]> {
+        return this.fetchTypes("getOuterTypeParametersOfType");
+    }
+
+    async getLocalTypeParameters(): Promise<readonly Type[]> {
+        return this.fetchTypes("getLocalTypeParametersOfType");
+    }
+
+    async getObjectType(): Promise<Type> {
+        return this.fetchType(this.objectType, "getObjectTypeOfType");
+    }
+
+    async getIndexType(): Promise<Type> {
+        return this.fetchType(this.indexType, "getIndexTypeOfType");
+    }
+
+    async getCheckType(): Promise<Type> {
+        return this.fetchType(this.checkType, "getCheckTypeOfType");
+    }
+
+    async getExtendsType(): Promise<Type> {
+        return this.fetchType(this.extendsType, "getExtendsTypeOfType");
+    }
+
+    async getBaseType(): Promise<Type> {
+        return this.fetchType(this.baseType, "getBaseTypeOfType");
+    }
+
+    async getConstraint(): Promise<Type> {
+        return this.fetchType(this.substConstraint, "getConstraintOfType");
+    }
+}
+
+export class Signature implements BaseSignature<true> {
+    private flags: number;
+    readonly id: string;
+    readonly declaration?: NodeHandle | undefined;
+    readonly typeParameters?: readonly Type[] | undefined;
+    readonly parameters: readonly Symbol[];
+    readonly thisParameter?: Symbol | undefined;
+    readonly target?: Signature | undefined;
+
+    constructor(data: SignatureResponse, objectRegistry: SnapshotObjectRegistry) {
+        this.id = data.id;
+        this.flags = data.flags;
+        this.declaration = data.declaration ? new NodeHandle(data.declaration) : undefined;
+
+        this.typeParameters = (data.typeParameters ?? []).map(id => {
+            return objectRegistry.getOrCreateType({ id, flags: 0 });
+        });
+
+        this.parameters = (data.parameters ?? []).map(id => {
+            return objectRegistry.getOrCreateSymbol({ id, name: "", flags: 0, checkFlags: 0 });
+        });
+
+        this.thisParameter = data.thisParameter
+            ? objectRegistry.getOrCreateSymbol({ id: data.thisParameter, name: "", flags: 0, checkFlags: 0 })
+            : undefined;
+
+        this.target = data.target
+            ? objectRegistry.getOrCreateSignature({ id: data.target, flags: 0 })
+            : undefined;
+    }
+
+    get hasRestParameter(): boolean {
+        return (this.flags & SignatureFlags.HasRestParameter) !== 0;
+    }
+
+    get isConstruct(): boolean {
+        return (this.flags & SignatureFlags.Construct) !== 0;
+    }
+
+    get isAbstract(): boolean {
+        return (this.flags & SignatureFlags.Abstract) !== 0;
     }
 }

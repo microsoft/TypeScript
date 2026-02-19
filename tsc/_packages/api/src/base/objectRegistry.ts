@@ -1,4 +1,5 @@
 import type {
+    SignatureResponse,
     SymbolResponse,
     TypeResponse,
 } from "../proto.ts";
@@ -13,9 +14,10 @@ export interface Identifiable {
 /**
  * Factory functions for creating API objects.
  */
-export interface ObjectFactories<TSymbol extends Identifiable, TType extends Identifiable> {
+export interface ObjectFactories<TSymbol extends Identifiable, TType extends Identifiable, TSignature extends Identifiable = Identifiable> {
     createSymbol(data: SymbolResponse): TSymbol;
     createType(data: TypeResponse): TType;
+    createSignature(data: SignatureResponse): TSignature;
 }
 
 /**
@@ -31,16 +33,18 @@ export interface ObjectFactories<TSymbol extends Identifiable, TType extends Ide
 export class ObjectRegistry<
     TSymbol extends Identifiable,
     TType extends Identifiable,
+    TSignature extends Identifiable = Identifiable,
 > {
     private symbols: Map<string, TSymbol> = new Map();
     private types: Map<string, TType> = new Map();
-    private factories: ObjectFactories<TSymbol, TType>;
+    private signatures: Map<string, TSignature> = new Map();
+    private factories: ObjectFactories<TSymbol, TType, TSignature>;
 
-    constructor(factories: ObjectFactories<TSymbol, TType>) {
+    constructor(factories: ObjectFactories<TSymbol, TType, TSignature>) {
         this.factories = factories;
     }
 
-    getSymbol(data: SymbolResponse): TSymbol {
+    getOrCreateSymbol(data: SymbolResponse): TSymbol {
         let symbol = this.symbols.get(data.id);
         if (symbol) {
             return symbol;
@@ -51,7 +55,7 @@ export class ObjectRegistry<
         return symbol;
     }
 
-    getType(data: TypeResponse): TType {
+    getOrCreateType(data: TypeResponse): TType {
         let type = this.types.get(data.id);
         if (type) {
             return type;
@@ -62,8 +66,24 @@ export class ObjectRegistry<
         return type;
     }
 
+    getType(id: string): TType | undefined {
+        return this.types.get(id);
+    }
+
+    getOrCreateSignature(data: SignatureResponse): TSignature {
+        let signature = this.signatures.get(data.id);
+        if (signature) {
+            return signature;
+        }
+
+        signature = this.factories.createSignature(data);
+        this.signatures.set(data.id, signature);
+        return signature;
+    }
+
     clear(): void {
         this.symbols.clear();
         this.types.clear();
+        this.signatures.clear();
     }
 }

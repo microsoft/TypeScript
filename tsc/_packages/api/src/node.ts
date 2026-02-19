@@ -997,9 +997,6 @@ export class RemoteSourceFile extends RemoteNode {
     constructor(data: Uint8Array, decoder: TextDecoder) {
         const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
         super(view, decoder, 1, undefined!);
-        const extendedDataOffset = this.offsetExtendedData + (this.data & NODE_EXTENDED_DATA_MASK);
-        const idStringIndex = this.view.getUint32(extendedDataOffset + 12, true);
-        this.id = this.getString(idStringIndex);
     }
 }
 
