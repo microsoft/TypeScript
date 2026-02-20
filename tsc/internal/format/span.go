@@ -452,7 +452,7 @@ func (w *formatSpanWorker) processChildNodes(
 		return
 	}
 
-	if listStartToken != -1 {
+	if listStartToken != ast.KindUnknown {
 		// introduce a new indentation scope for lists (including list start and end tokens)
 		for w.formattingScanner.isOnToken() && w.formattingScanner.getTokenFullStart() < w.originalRange.End() {
 			tokenInfo := w.formattingScanner.readTokenInfo(parent)
