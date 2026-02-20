@@ -46,6 +46,29 @@ jobs:
 
       - run: npx hereby build
 
+  release-build:
+    if: ${{ github.repository == 'microsoft/typescript-go' }}
+    runs-on: ['self-hosted', '1ES.Pool=TypeScript-1ES-GitHub-XL', '1ES.ImageOverride=azure-linux-3']
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6.2.0
+        with:
+          node-version: 'lts/*'
+      - uses: dtolnay/rust-toolchain@fcf085fcb4b4b8f63f96906cd713eb52181b5ea4 # stable
+      - uses: ./.github/actions/setup-go
+
+      # Avoid duplicate PR annotations.
+      - name: Disable PR annotations
+        run: |
+          echo "::remove-matcher owner=eslint-compact::"
+          echo "::remove-matcher owner=eslint-stylish::"
+          echo "::remove-matcher owner=tsc::"
+          echo "::remove-matcher owner=go::"
+
+      - run: npm ci
+
+      - run: npx hereby native-preview:release --forRelease --setPrerelease dev.0.0
+
   extension:
     runs-on: ubuntu-latest
     steps:
@@ -77,7 +100,7 @@ jobs:
           - os: ['self-hosted', '1ES.Pool=TypeScript-1ES-GitHub-XL', '1ES.ImageOverride=azure-linux-3']
             name: 'race mode'
             race: true
-            skip: ${{ github.event_name == 'merge_group' }}
+            skip: ${{ github.event_name == 'merge_group' || github.repository != 'microsoft/typescript-go' }}
           - os: ubuntu-latest
             name: 'noembed'
             noembed: true
@@ -334,6 +357,7 @@ jobs:
     if: ${{ always() }}
     needs:
       - build
+      - release-build
       - extension
       - format
       - generate
