@@ -202,6 +202,64 @@ func TestCommentFormatting(t *testing.T) {
 		assert.Check(t, strings.Contains(formatted, "\t// A second call") || strings.Contains(formatted, "   // A second call"), "comment should be indented")
 		assert.Check(t, !strings.Contains(formatted, "\n// A second call"), "comment should not be at column 0")
 	})
+
+	t.Run("multiline comment inside block that opens on first line (issue #2649)", func(t *testing.T) {
+		t.Parallel()
+		ctx := format.WithFormatCodeSettings(t.Context(), &lsutil.FormatCodeSettings{
+			EditorSettings: lsutil.EditorSettings{
+				TabSize:                4,
+				IndentSize:             4,
+				BaseIndentSize:         0,
+				NewLineCharacter:       "\n",
+				ConvertTabsToSpaces:    false,
+				IndentStyle:            lsutil.IndentStyleSmart,
+				TrimTrailingWhitespace: true,
+			},
+		}, "\n")
+
+		originalText := `document.addEventListener('DOMContentLoaded', () => {
+    /** @type {NodeListOf<HTMLSpanElement>} */
+    const elements = document.querySelectorAll('.test')
+});`
+
+		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+			FileName: "/test.js",
+			Path:     "/test.js",
+		}, originalText, core.ScriptKindJS)
+
+		edits := format.FormatDocument(ctx, sourceFile)
+		formatted := applyBulkEdits(originalText, edits)
+		assert.Check(t, len(formatted) > 0, "formatted text should not be empty")
+	})
+
+	t.Run("single-line comment inside block that opens on first line (issue #2649)", func(t *testing.T) {
+		t.Parallel()
+		ctx := format.WithFormatCodeSettings(t.Context(), &lsutil.FormatCodeSettings{
+			EditorSettings: lsutil.EditorSettings{
+				TabSize:                4,
+				IndentSize:             4,
+				BaseIndentSize:         0,
+				NewLineCharacter:       "\n",
+				ConvertTabsToSpaces:    false,
+				IndentStyle:            lsutil.IndentStyleSmart,
+				TrimTrailingWhitespace: true,
+			},
+		}, "\n")
+
+		originalText := `document.addEventListener('DOMContentLoaded', () => {
+    // a comment
+    const x = 1
+});`
+
+		sourceFile := parser.ParseSourceFile(ast.SourceFileParseOptions{
+			FileName: "/test.ts",
+			Path:     "/test.ts",
+		}, originalText, core.ScriptKindTS)
+
+		edits := format.FormatDocument(ctx, sourceFile)
+		formatted := applyBulkEdits(originalText, edits)
+		assert.Check(t, len(formatted) > 0, "formatted text should not be empty")
+	})
 }
 
 func TestSliceBoundsPanic(t *testing.T) {

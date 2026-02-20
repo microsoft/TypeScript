@@ -221,6 +221,7 @@ func getNonDecoratorTokenPosOfNode(node *ast.Node, file *ast.SourceFile) int {
 func (w *formatSpanWorker) execute(s *formattingScanner) []core.TextChange {
 	w.formattingScanner = s
 	w.indentationOnLastIndentedLine = -1
+	w.lastIndentedLine = -1
 	opt := GetFormatCodeSettingsFromContext(w.ctx)
 	w.formattingContext = NewFormattingContext(w.sourceFile, w.requestKind, opt)
 	// formatting context is used by rules provider
@@ -342,7 +343,7 @@ func (w *formatSpanWorker) processChildNode(
 ) int {
 	debug.Assert(!ast.NodeIsSynthesized(child))
 
-	if ast.NodeIsMissing(child) || isGrammarError(parent, child) {
+	if ast.NodeIsMissing(child) || isGrammarError(parent, child) || child.Flags&ast.NodeFlagsReparsed != 0 {
 		return inheritedIndentation
 	}
 
