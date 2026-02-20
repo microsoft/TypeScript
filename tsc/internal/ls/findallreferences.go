@@ -342,7 +342,7 @@ func skipPastExportOrImportSpecifierOrUnion(symbol *ast.Symbol, node *ast.Node, 
 	}
 	parent := node.Parent
 	if parent.Kind == ast.KindExportSpecifier && useLocalSymbolForExportSpecifier {
-		return getLocalSymbolForExportSpecifier(node.AsIdentifier(), symbol, parent.AsExportSpecifier(), checker)
+		return getLocalSymbolForExportSpecifier(node, symbol, parent.AsExportSpecifier(), checker)
 	}
 	// If the symbol is declared as part of a declaration like `{ type: "a" } | { type: "b" }`, use the property on the union type to get more references.
 	return core.FirstNonNil(symbol.Declarations, func(decl *ast.Node) *ast.Symbol {
@@ -2000,7 +2000,7 @@ func (state *refState) getReferencesAtExportSpecifier(
 	exportDeclaration := exportSpecifier.Parent.Parent.AsExportDeclaration()
 	propertyName := exportSpecifier.PropertyName
 	name := exportSpecifier.Name()
-	localSymbol := getLocalSymbolForExportSpecifier(referenceLocation.AsIdentifier(), referenceSymbol, exportSpecifier, state.checker)
+	localSymbol := getLocalSymbolForExportSpecifier(referenceLocation, referenceSymbol, exportSpecifier, state.checker)
 
 	if !alwaysGetReferences && !search.includes(localSymbol) {
 		return

@@ -1,0 +1,4 @@
+// === findAllReferences ===
+// === /findAllRefsExportStringRename.ts ===
+// const foo = 123;
+// export { foo as /*FIND ALL REFS*/"[|bar|]" };

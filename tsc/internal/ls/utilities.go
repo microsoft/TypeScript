@@ -69,7 +69,7 @@ func getNonModuleSymbolOfMergedModuleSymbol(symbol *ast.Symbol) *ast.Symbol {
 	return nil
 }
 
-func getLocalSymbolForExportSpecifier(referenceLocation *ast.Identifier, referenceSymbol *ast.Symbol, exportSpecifier *ast.ExportSpecifier, ch *checker.Checker) *ast.Symbol {
+func getLocalSymbolForExportSpecifier(referenceLocation *ast.Node, referenceSymbol *ast.Symbol, exportSpecifier *ast.ExportSpecifier, ch *checker.Checker) *ast.Symbol {
 	if isExportSpecifierAlias(referenceLocation, exportSpecifier) {
 		if symbol := ch.GetExportSpecifierLocalTargetSymbol(exportSpecifier.AsNode()); symbol != nil {
 			return symbol
@@ -78,12 +78,12 @@ func getLocalSymbolForExportSpecifier(referenceLocation *ast.Identifier, referen
 	return referenceSymbol
 }
 
-func isExportSpecifierAlias(referenceLocation *ast.Identifier, exportSpecifier *ast.ExportSpecifier) bool {
-	debug.Assert(exportSpecifier.PropertyName == referenceLocation.AsNode() || exportSpecifier.Name() == referenceLocation.AsNode(), "referenceLocation is not export specifier name or property name")
+func isExportSpecifierAlias(referenceLocation *ast.Node, exportSpecifier *ast.ExportSpecifier) bool {
+	debug.Assert(exportSpecifier.PropertyName == referenceLocation || exportSpecifier.Name() == referenceLocation, "referenceLocation is not export specifier name or property name")
 	propertyName := exportSpecifier.PropertyName
 	if propertyName != nil {
 		// Given `export { foo as bar } [from "someModule"]`: It's an alias at `foo`, but at `bar` it's a new symbol.
-		return propertyName == referenceLocation.AsNode()
+		return propertyName == referenceLocation
 	} else {
 		// `export { foo } from "foo"` is a re-export.
 		// `export { foo };` is not a re-export, it creates an alias for the local variable `foo`.
