@@ -1,0 +1,30 @@
+//// [tests/cases/compiler/mergedEnumDeclarationMemberReferences.ts] ////
+
+=== mergedEnumDeclarationMemberReferences.ts ===
+// Unqualified enum member references across merged enum declarations
+enum E {
+>E : E
+
+    A = 0,
+>A : E.A
+>0 : 0
+
+    B = 1,
+>B : E.B
+>1 : 1
+}
+
+enum E {
+>E : E
+
+    C = A,
+>C : E.A
+>A : E.A
+
+    D = B + 1,
+>D : E.D
+>B + 1 : number
+>B : E.B
+>1 : 1
+}
+

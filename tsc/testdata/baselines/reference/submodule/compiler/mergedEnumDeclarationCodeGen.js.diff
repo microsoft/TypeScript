@@ -5,6 +5,6 @@
  })(E || (E = {}));
  (function (E) {
 -    E[E["c"] = 0] = "c";
-+    E["c"] = a;
++    E["c"] = E.a;
 +    if (typeof E.c !== "string") E[E.c] = "c";
  })(E || (E = {}));

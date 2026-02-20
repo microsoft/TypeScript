@@ -11,12 +11,3 @@
      }
      M.B = B;
      class C extends B {
-@@= skipped -10, +8 lines =@@
-     M.C = C;
- })(M || (M = {}));
- (function (M) {
--    class C2 extends M.B {
-+    class C2 extends B {
-     }
-     M.C2 = C2;
- })(M || (M = {}));

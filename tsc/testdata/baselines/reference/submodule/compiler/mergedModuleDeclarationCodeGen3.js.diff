@@ -19,8 +19,4 @@
 +        let foo;
          (function (foo_1) {
              function data(my, foo) {
--                data_1.buz();
-+                buz();
-             }
-         })(foo = data_1.foo || (data_1.foo = {}));
-     })(data = my_1.data || (my_1.data = {}));
+                 data_1.buz();

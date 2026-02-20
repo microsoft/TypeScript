@@ -59,7 +59,7 @@ var TypeScript;
                     (this._elementType.isArray() || this._elementType.isNamedTypeSymbol() ?
                         this._elementType.getScopedNameEx(scopeSymbol, false, getPrettyTypeName, getTypeParamMarkerInfo) :
                         this._elementType.getMemberTypeNameEx(false, scopeSymbol, getPrettyTypeName)) : 1;
-                return MemberName.create(elementMemberName, "", "[]");
+                return TypeScript.MemberName.create(elementMemberName, "", "[]");
             }
         }
     }

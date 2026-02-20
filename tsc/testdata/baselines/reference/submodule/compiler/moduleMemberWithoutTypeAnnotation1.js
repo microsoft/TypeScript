@@ -66,7 +66,7 @@ var TypeScript;
     ;
     class PositionedElement {
         childIndex(child) {
-            return Syntax.childIndex();
+            return TypeScript.Syntax.childIndex();
         }
     }
     TypeScript.PositionedElement = PositionedElement;
@@ -95,7 +95,7 @@ var TypeScript;
         Syntax.childIndex = childIndex;
         class VariableWidthTokenWithTrailingTrivia {
             findTokenInternal(parent, position, fullStart) {
-                return new PositionedToken(parent, this, fullStart);
+                return new TypeScript.PositionedToken(parent, this, fullStart);
             }
         }
         Syntax.VariableWidthTokenWithTrailingTrivia = VariableWidthTokenWithTrailingTrivia;

@@ -17,5 +17,5 @@ var M;
     M.v;
 })(M || (M = {}));
 (function (M) {
-    v;
+    M.v;
 })(M || (M = {}));

@@ -60,7 +60,7 @@ var M;
     (function (m2) {
         class M {
         }
-        var p = x;
+        var p = M_2.x;
         var p2 = new M();
     })(m2 || (m2 = {}));
 })(M || (M = {}));
@@ -69,14 +69,14 @@ var M;
     (function (m3) {
         function M() {
         }
-        var p = x;
+        var p = M_3.x;
         var p2 = M();
     })(m3 || (m3 = {}));
 })(M || (M = {}));
 (function (M) {
     let m3;
     (function (m3) {
-        var p = x;
+        var p = M.x;
         var p2;
     })(m3 || (m3 = {}));
 })(M || (M = {}));
@@ -85,7 +85,7 @@ var M;
     (function (m4) {
         let M;
         (function (M) {
-            var p = x;
+            var p = M_4.x;
         })(M || (M = {}));
     })(m4 || (m4 = {}));
 })(M || (M = {}));

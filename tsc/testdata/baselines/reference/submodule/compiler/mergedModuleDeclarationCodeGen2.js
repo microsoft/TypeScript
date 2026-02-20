@@ -27,7 +27,7 @@ var my;
     let data;
     (function (data_1) {
         function data(my) {
-            foo.buz();
+            data_1.foo.buz();
         }
     })(data = my_1.data || (my_1.data = {}));
 })(my || (my = {}));

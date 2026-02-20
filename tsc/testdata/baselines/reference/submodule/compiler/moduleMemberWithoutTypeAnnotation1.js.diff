@@ -9,16 +9,7 @@
      (function (Parser) {
          class SyntaxCursor {
              currentNode() {
-@@= skipped -14, +14 lines =@@
-     ;
-     class PositionedElement {
-         childIndex(child) {
--            return TypeScript.Syntax.childIndex();
-+            return Syntax.childIndex();
-         }
-     }
-     TypeScript.PositionedElement = PositionedElement;
-@@= skipped -23, +23 lines =@@
+@@= skipped -37, +37 lines =@@
      TypeScript.SyntaxNode = SyntaxNode;
  })(TypeScript || (TypeScript = {}));
  (function (TypeScript) {
@@ -27,10 +18,3 @@
      (function (Syntax) {
          function childIndex() { }
          Syntax.childIndex = childIndex;
-         class VariableWidthTokenWithTrailingTrivia {
-             findTokenInternal(parent, position, fullStart) {
--                return new TypeScript.PositionedToken(parent, this, fullStart);
-+                return new PositionedToken(parent, this, fullStart);
-             }
-         }
-         Syntax.VariableWidthTokenWithTrailingTrivia = VariableWidthTokenWithTrailingTrivia;

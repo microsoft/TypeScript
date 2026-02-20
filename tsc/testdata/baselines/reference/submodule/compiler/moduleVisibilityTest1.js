@@ -114,7 +114,7 @@ var M;
     function someModuleFunction() { return 5; }
 })(M || (M = {}));
 (function (M) {
-    M.c = x;
+    M.c = M.x;
     M.meb = M.E.B;
 })(M || (M = {}));
 var cprime = null;

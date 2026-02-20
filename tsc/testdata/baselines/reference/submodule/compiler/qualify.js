@@ -75,8 +75,8 @@ var M;
 (function (M) {
     let N;
     (function (N) {
-        var y = m;
-        var x = n + y;
+        var y = M.m;
+        var x = N.n + y;
     })(N = M.N || (M.N = {}));
 })(M || (M = {}));
 var T;

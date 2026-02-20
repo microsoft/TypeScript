@@ -23,6 +23,6 @@ var M;
 })(M || (exports.M = M = {}));
 const x = 0;
 (function (M) {
-    v;
+    M.v;
     export { x };
 })(M || (exports.M = M = {}));

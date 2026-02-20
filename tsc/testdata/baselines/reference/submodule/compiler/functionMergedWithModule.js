@@ -33,7 +33,7 @@ function foo(title) {
     let Baz;
     (function (Baz) {
         function g() {
-            Bar.f();
+            foo.Bar.f();
         }
         Baz.g = g;
     })(Baz = foo.Baz || (foo.Baz = {}));

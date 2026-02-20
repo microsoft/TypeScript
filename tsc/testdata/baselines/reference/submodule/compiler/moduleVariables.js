@@ -28,7 +28,7 @@ var M;
     console.log(M.x); // 2
 })(M || (M = {}));
 (function (M) {
-    console.log(x); // 2
+    console.log(M.x); // 2
 })(M || (M = {}));
 (function (M) {
     var x = 3;

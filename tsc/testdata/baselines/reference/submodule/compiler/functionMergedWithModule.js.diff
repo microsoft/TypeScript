@@ -17,8 +17,4 @@
 +    let Baz;
      (function (Baz) {
          function g() {
--            foo.Bar.f();
-+            Bar.f();
-         }
-         Baz.g = g;
-     })(Baz = foo.Baz || (foo.Baz = {}));
+             foo.Bar.f();

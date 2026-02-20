@@ -1,7 +1,5 @@
 package tstransforms
 
-// !!! Unqualified enum member references across merged enum declarations are not currently supported (e.g `enum E {A}; enum E {B=A}`)
-// !!! Unqualified namespace member references across merged namespace declarations are not currently supported (e.g `namespace N { export var x = 1; }; namespace N { x; }`).
 // !!! SourceMaps and Comments need to be validated
 
 import (
@@ -1048,7 +1046,7 @@ func (tx *RuntimeSyntaxTransformer) visitExpressionIdentifier(node *ast.Identifi
 			tx.resolver = binder.NewReferenceResolver(tx.compilerOptions, binder.ReferenceResolverHooks{})
 		}
 		container := tx.resolver.GetReferencedExportContainer(location, false /*prefixLocals*/)
-		if container != nil && (ast.IsEnumDeclaration(container) || ast.IsModuleDeclaration(container)) && container.Contains(location) {
+		if container != nil && (ast.IsEnumDeclaration(container) || ast.IsModuleDeclaration(container)) {
 			containerName := tx.getNamespaceContainerName(container)
 
 			memberName := node.Clone(tx.Factory())

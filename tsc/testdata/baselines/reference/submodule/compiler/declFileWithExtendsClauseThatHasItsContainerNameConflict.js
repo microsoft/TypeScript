@@ -36,7 +36,7 @@ var A;
     (function (B) {
         let C;
         (function (C) {
-            class ContextMenu extends EventManager {
+            class ContextMenu extends B.EventManager {
                 name;
             }
             C.ContextMenu = ContextMenu;

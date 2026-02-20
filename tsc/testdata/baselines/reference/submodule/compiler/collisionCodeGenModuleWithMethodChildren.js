@@ -47,7 +47,7 @@ var M;
     class d {
         fn2() {
             var M;
-            var p = x;
+            var p = M_2.x;
         }
     }
 })(M || (M = {}));
@@ -55,7 +55,7 @@ var M;
     class e {
         fn3() {
             function M() {
-                var p = x;
+                var p = M_3.x;
             }
         }
     }

@@ -22,6 +22,6 @@ var Animals;
     Animals[Animals["Dog"] = 2] = "Dog";
 })(Animals || (Animals = {}));
 (function (Animals) {
-    Animals["CatDog"] = Cat | Dog;
+    Animals["CatDog"] = Animals.Cat | Animals.Dog;
     if (typeof Animals.CatDog !== "string") Animals[Animals.CatDog] = "CatDog";
 })(Animals || (Animals = {}));

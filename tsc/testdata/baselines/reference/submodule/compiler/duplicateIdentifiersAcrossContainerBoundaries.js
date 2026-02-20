@@ -91,7 +91,7 @@ var M;
     M.v = 3;
 })(M || (M = {}));
 (function (M) {
-    v = 3; // error for redeclaring var in a different parent
+    M.v = 3; // error for redeclaring var in a different parent
 })(M || (M = {}));
 class Foo {
     static x;

@@ -41,7 +41,7 @@ var superContain;
                 let data;
                 (function (data_1) {
                     function bar(contain, my, buz, data) {
-                        foo();
+                        data_1.foo();
                     }
                     data_1.bar = bar;
                 })(data = buz_1.data || (buz_1.data = {}));

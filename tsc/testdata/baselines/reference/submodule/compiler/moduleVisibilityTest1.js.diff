@@ -20,12 +20,3 @@
              function someInnerFunc() { return 2; }
              var someInnerVar = 3;
          }
-@@= skipped -20, +18 lines =@@
-     function someModuleFunction() { return 5; }
- })(M || (M = {}));
- (function (M) {
--    M.c = M.x;
-+    M.c = x;
-     M.meb = M.E.B;
- })(M || (M = {}));
- var cprime = null;

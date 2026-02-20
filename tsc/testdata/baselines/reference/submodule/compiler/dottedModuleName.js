@@ -36,7 +36,7 @@ var M;
             (function (Y) {
                 let Z;
                 (function (Z) {
-                    Z.v2 = f(v);
+                    Z.v2 = f(Z.v);
                 })(Z = Y.Z || (Y.Z = {}));
             })(Y = X.Y || (X.Y = {}));
         })(X = N.X || (N.X = {}));
@@ -51,7 +51,7 @@ var M;
             (function (Y) {
                 let Z;
                 (function (Z) {
-                    Z.v = f(10);
+                    Z.v = N.f(10);
                 })(Z = Y.Z || (Y.Z = {}));
             })(Y = X.Y || (X.Y = {}));
         })(X = N.X || (N.X = {}));

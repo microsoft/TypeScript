@@ -20,9 +20,9 @@ var m;
 (function (m) {
 })(m || (m = {}));
 (function (m) {
-    var z = x;
+    var z = m.x;
     var y = {
-        a: x,
-        x
+        a: m.x,
+        x: m.x
     };
 })(m || (m = {}));

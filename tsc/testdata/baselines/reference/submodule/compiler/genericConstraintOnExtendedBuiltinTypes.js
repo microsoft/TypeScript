@@ -46,7 +46,7 @@ var EndGate;
 (function (EndGate) {
     let Tweening;
     (function (Tweening) {
-        class NumberTween extends Tween {
+        class NumberTween extends Tweening.Tween {
             constructor(from) {
                 super(from);
             }

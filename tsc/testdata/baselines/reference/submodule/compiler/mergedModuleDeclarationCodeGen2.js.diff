@@ -20,8 +20,4 @@
 +    let data;
      (function (data_1) {
          function data(my) {
--            data_1.foo.buz();
-+            foo.buz();
-         }
-     })(data = my_1.data || (my_1.data = {}));
- })(my || (my = {}));
+             data_1.foo.buz();

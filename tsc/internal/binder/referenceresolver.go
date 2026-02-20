@@ -179,9 +179,6 @@ func (r *referenceResolver) GetReferencedExportContainer(node *ast.IdentifierNod
 			isMatchingContainer := func(n *ast.Node) bool {
 				return (n.Kind == ast.KindModuleDeclaration || n.Kind == ast.KindEnumDeclaration) && r.getSymbolOfDeclaration(n) == parentSymbol
 			}
-			if container := ast.FindAncestor(symbol.ValueDeclaration, isMatchingContainer); container != nil {
-				return container
-			}
 			return ast.FindAncestor(node.Parent, isMatchingContainer)
 		}
 	}

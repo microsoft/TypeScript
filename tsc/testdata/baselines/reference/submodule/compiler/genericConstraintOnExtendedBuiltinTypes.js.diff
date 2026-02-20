@@ -19,8 +19,5 @@
 -    var Tweening;
 +    let Tweening;
      (function (Tweening) {
--        class NumberTween extends Tweening.Tween {
-+        class NumberTween extends Tween {
+         class NumberTween extends Tweening.Tween {
              constructor(from) {
-                 super(from);
-             }

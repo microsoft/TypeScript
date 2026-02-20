@@ -27,7 +27,7 @@ var X;
     (function (Y_1) {
         class A {
             constructor(Y) {
-                new B();
+                new Y_1.B();
             }
         }
     })(Y = X.Y || (X.Y = {}));

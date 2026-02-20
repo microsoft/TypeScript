@@ -9,15 +9,7 @@
          2 * x;
          let X;
          (function (X) {
-@@= skipped -7, +9 lines =@@
-             (function (Y) {
-                 let Z;
-                 (function (Z) {
--                    Z.v2 = f(Z.v);
-+                    Z.v2 = f(v);
-                 })(Z = Y.Z || (Y.Z = {}));
-             })(Y = X.Y || (X.Y = {}));
-         })(X = N.X || (N.X = {}));
+@@= skipped -14, +16 lines =@@
      })(N = M.N || (M.N = {}));
  })(M || (M = {}));
  (function (M) {
@@ -26,12 +18,3 @@
      (function (N) {
          let X;
          (function (X) {
-@@= skipped -15, +15 lines =@@
-             (function (Y) {
-                 let Z;
-                 (function (Z) {
--                    Z.v = N.f(10);
-+                    Z.v = f(10);
-                 })(Z = Y.Z || (Y.Z = {}));
-             })(Y = X.Y || (X.Y = {}));
-         })(X = N.X || (N.X = {}));

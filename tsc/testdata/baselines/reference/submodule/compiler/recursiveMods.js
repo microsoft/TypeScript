@@ -40,7 +40,7 @@ var Foo;
         if (true) {
             return Bar();
         }
-        return new C();
+        return new Foo.C();
     }
     function Baz() {
         var c = Baz();

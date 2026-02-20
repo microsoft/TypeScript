@@ -31,13 +31,13 @@ var M;
 (function (M_2) {
     function fn2() {
         var M;
-        var p = x;
+        var p = M_2.x;
     }
 })(M || (M = {}));
 (function (M_3) {
     function fn3() {
         function M() {
-            var p = x;
+            var p = M_3.x;
         }
     }
 })(M || (M = {}));

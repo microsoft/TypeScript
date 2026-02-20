@@ -10,9 +10,9 @@
 -    Enum[Enum["Z"] = 0] = "Z";
 +    Enum["D"] = d;
 +    if (typeof Enum.D !== "string") Enum[Enum.D] = "D";
-+    Enum["E"] = A;
++    Enum["E"] = Enum.A;
 +    if (typeof Enum.E !== "string") Enum[Enum.E] = "E";
-+    Enum["Y"] = X;
++    Enum["Y"] = Enum.X;
 +    if (typeof Enum.Y !== "string") Enum[Enum.Y] = "Y";
 +    Enum["Z"] = Enum.A;
 +    if (typeof Enum.Z !== "string") Enum[Enum.Z] = "Z";

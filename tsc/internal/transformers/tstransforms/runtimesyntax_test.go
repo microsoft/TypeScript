@@ -207,7 +207,7 @@ var E;
     E[E["A"] = 0] = "A";
 })(E || (E = {}));
 (function (E) {
-    E["B"] = A;
+    E["B"] = E.A;
     if (typeof E.B !== "string") E[E.B] = "B";
 })(E || (E = {}));`},
 
@@ -268,7 +268,7 @@ func TestNamespaceTransformer(t *testing.T) {
     N.x = 1;
 })(N || (N = {}));
 (function (N) {
-    x;
+    N.x;
 })(N || (N = {}));`},
 
 		{title: "exported array binding pattern", input: "namespace N { export var [x] = [1]; }", output: `var N;

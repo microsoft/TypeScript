@@ -1,11 +1,7 @@
 --- old.duplicateIdentifiersAcrossContainerBoundaries.js
 +++ new.duplicateIdentifiersAcrossContainerBoundaries.js
-@@= skipped -90, +90 lines =@@
-     M.v = 3;
- })(M || (M = {}));
- (function (M) {
--    M.v = 3; // error for redeclaring var in a different parent
-+    v = 3; // error for redeclaring var in a different parent
+@@= skipped -93, +93 lines =@@
+     M.v = 3; // error for redeclaring var in a different parent
  })(M || (M = {}));
  class Foo {
 +    static x;

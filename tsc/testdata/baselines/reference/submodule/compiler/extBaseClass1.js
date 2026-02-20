@@ -34,7 +34,7 @@ var M;
     M.C = C;
 })(M || (M = {}));
 (function (M) {
-    class C2 extends B {
+    class C2 extends M.B {
     }
     M.C2 = C2;
 })(M || (M = {}));

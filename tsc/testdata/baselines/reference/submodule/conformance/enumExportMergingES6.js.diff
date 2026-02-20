@@ -15,6 +15,6 @@
  })(Animals || (Animals = {}));
  (function (Animals) {
 -    Animals[Animals["CatDog"] = 3] = "CatDog";
-+    Animals["CatDog"] = Cat | Dog;
++    Animals["CatDog"] = Animals.Cat | Animals.Dog;
 +    if (typeof Animals.CatDog !== "string") Animals[Animals.CatDog] = "CatDog";
  })(Animals || (Animals = {}));

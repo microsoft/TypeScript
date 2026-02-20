@@ -22,6 +22,6 @@ var M;
 (function (M_1) {
     {
         let M = 0;
-        new C();
+        new M_1.C();
     }
 })(M || (M = {}));
