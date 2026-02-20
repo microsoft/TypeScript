@@ -1,0 +1,126 @@
+// === goToDefinition ===
+// === /goToDefinitionObjectBindingPattern.ts ===
+// interface SomeType {
+//     <|[|targetProperty|]: number;|>
+// }
+// 
+// function foo(callback: (p: SomeType) => void) {}
+// 
+// foo(({ /*GOTO DEF*/targetProperty }) => {
+//     targetProperty
+// });
+// 
+// --- (line: 11) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectBindingPattern.ts ===
+// --- (line: 3) skipped ---
+// 
+// function foo(callback: (p: SomeType) => void) {}
+// 
+// foo((<|{ [|targetProperty|] }|>) => {
+//     /*GOTO DEF*/targetProperty
+// });
+// 
+// let { targetProperty }: SomeType = { targetProperty: 42 };
+// --- (line: 12) skipped ---
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectBindingPattern.ts ===
+// interface SomeType {
+//     <|[|targetProperty|]: number;|>
+// }
+// 
+// function foo(callback: (p: SomeType) => void) {}
+// 
+// foo(({ targetProperty }) => {
+//     targetProperty
+// });
+// 
+// let { /*GOTO DEF*/targetProperty }: SomeType = { targetProperty: 42 };
+// 
+// let { targetProperty: alias_1 }: SomeType = { targetProperty: 42 };
+// 
+// let { x: { targetProperty: {} } }: { x: SomeType } = { x: { targetProperty: 42 } };
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectBindingPattern.ts ===
+// interface SomeType {
+//     <|[|targetProperty|]: number;|>
+// }
+// 
+// function foo(callback: (p: SomeType) => void) {}
+// 
+// foo(({ targetProperty }) => {
+//     targetProperty
+// });
+// 
+// let { targetProperty }: SomeType = { /*GOTO DEF*/targetProperty: 42 };
+// 
+// let { targetProperty: alias_1 }: SomeType = { targetProperty: 42 };
+// 
+// let { x: { targetProperty: {} } }: { x: SomeType } = { x: { targetProperty: 42 } };
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectBindingPattern.ts ===
+// interface SomeType {
+//     <|[|targetProperty|]: number;|>
+// }
+// 
+// function foo(callback: (p: SomeType) => void) {}
+// --- (line: 6) skipped ---
+
+// --- (line: 9) skipped ---
+// 
+// let { targetProperty }: SomeType = { targetProperty: 42 };
+// 
+// let { /*GOTO DEF*/targetProperty: alias_1 }: SomeType = { targetProperty: 42 };
+// 
+// let { x: { targetProperty: {} } }: { x: SomeType } = { x: { targetProperty: 42 } };
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectBindingPattern.ts ===
+// --- (line: 9) skipped ---
+// 
+// let { targetProperty }: SomeType = { targetProperty: 42 };
+// 
+// <|let { targetProperty: /*GOTO DEF*/[|alias_1|] }: SomeType = { targetProperty: 42 };|>
+// 
+// let { x: { targetProperty: {} } }: { x: SomeType } = { x: { targetProperty: 42 } };
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectBindingPattern.ts ===
+// interface SomeType {
+//     <|[|targetProperty|]: number;|>
+// }
+// 
+// function foo(callback: (p: SomeType) => void) {}
+// --- (line: 6) skipped ---
+
+// --- (line: 11) skipped ---
+// 
+// let { targetProperty: alias_1 }: SomeType = { targetProperty: 42 };
+// 
+// let { x: { /*GOTO DEF*/targetProperty: {} } }: { x: SomeType } = { x: { targetProperty: 42 } };
+
+
+
+// === goToDefinition ===
+// === /goToDefinitionObjectBindingPattern.ts ===
+// --- (line: 11) skipped ---
+// 
+// let { targetProperty: alias_1 }: SomeType = { targetProperty: 42 };
+// 
+// let { x: { targetProperty: /*GOTO DEF*/{} } }: { x: SomeType } = { x: { targetProperty: 42 } };

@@ -1,7 +1,9 @@
 // === goToDefinition ===
 // === /gotoDefinitionInObjectBindingPattern1.ts ===
-// --- (line: 3) skipped ---
-// interface Test {
-//   prop2: number
+// function bar<T>(onfulfilled: (value: T) => void) {
+//   return undefined;
 // }
-// bar<Test>((<|{[|pr/*GOTO DEF*/op2|]}|>)=>{});
+// interface Test {
+//   <|[|prop2|]: number|>
+// }
+// bar<Test>(({pr/*GOTO DEF*/op2})=>{});
