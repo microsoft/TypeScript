@@ -6,7 +6,7 @@ var x = 1;
 >x : number
 >1 : 1
 
-module A {
+namespace A {
 >A : typeof A
 
     while (true);
@@ -16,24 +16,24 @@ module A {
 >x : any
 }
 
-module A1 {
+namespace A1 {
 >A1 : typeof A1
 
     do {} while(true);
 >true : true
 
-    module A {
+    namespace A {
         interface F {}
     }
 }
 
-module A2 {
+namespace A2 {
 >A2 : typeof A2
 
     while (true);
 >true : true
 
-    module A {
+    namespace A {
 >A : typeof A
 
         var x = 1;
@@ -42,7 +42,7 @@ module A2 {
     }
 }
 
-module A3 {
+namespace A3 {
 >A3 : typeof A3
 
     while (true);
@@ -52,13 +52,13 @@ module A3 {
 >T : string
 }
 
-module A4 {
+namespace A4 {
 >A4 : typeof A4
 
     while (true);
 >true : true
 
-    module A {
+    namespace A {
         const enum E { X }
 >E : E
 >X : E.X
@@ -93,11 +93,11 @@ function f2() {
     }
 }
 
-module B {
+namespace B {
 >B : typeof B
 
     for (; ;);
-    module C {
+    namespace C {
     }
 }
 

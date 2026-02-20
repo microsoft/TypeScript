@@ -1262,14 +1262,6 @@ func minAndMax[T any](slice []T, getValue func(value T) int) (int, int) {
 	return minValue, maxValue
 }
 
-func getNonModifierTokenRangeOfNode(node *ast.Node) core.TextRange {
-	pos := node.Pos()
-	if last := ast.FindLastVisibleNode(node.ModifierNodes()); last != nil {
-		pos = last.Pos()
-	}
-	return scanner.GetRangeOfTokenAtPosition(ast.GetSourceFileOfNode(node), pos)
-}
-
 type FeatureMapEntry struct {
 	lib   string
 	props []string

@@ -1,8 +1,9 @@
+escapedIdentifiers.ts(25,16): error TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
 escapedIdentifiers.ts(37,12): error TS2564: Property 'foo1' has no initializer and is not definitely assigned in the constructor.
 escapedIdentifiers.ts(40,12): error TS2564: Property 'foo2' has no initializer and is not definitely assigned in the constructor.
 
 
-==== escapedIdentifiers.ts (2 errors) ====
+==== escapedIdentifiers.ts (3 errors) ====
     /*
         0 .. \u0030
         9 .. \u0039
@@ -28,6 +29,8 @@ escapedIdentifiers.ts(40,12): error TS2564: Property 'foo2' has no initializer a
         export var baz1: number;
     }
     declare module moduleType\u0032 { 
+                   ~~~~~~~~~~~~~~~~
+!!! error TS1540: A 'namespace' declaration should not be declared using the 'module' keyword. Please use the 'namespace' keyword instead.
         export var baz2: number;
     }
     

@@ -255,8 +255,6 @@ func TestEmit(t *testing.T) {
 		{title: "EnumDeclaration#1", input: `enum a{}`, output: "enum a {\n}"},
 		{title: "EnumDeclaration#2", input: `enum a{b}`, output: "enum a {\n    b\n}"},
 		{title: "EnumDeclaration#3", input: `enum a{b=c}`, output: "enum a {\n    b = c\n}"},
-		{title: "ModuleDeclaration#1", input: `module a{}`, output: "module a { }"},
-		{title: "ModuleDeclaration#2", input: `module a.b{}`, output: "module a.b { }"},
 		{title: "ModuleDeclaration#3", input: `module "a";`, output: "module \"a\";"},
 		{title: "ModuleDeclaration#4", input: `module "a"{}`, output: "module \"a\" { }"},
 		{title: "ModuleDeclaration#5", input: `namespace a{}`, output: "namespace a { }"},

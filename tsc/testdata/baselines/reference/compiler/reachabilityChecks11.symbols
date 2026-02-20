@@ -5,7 +5,7 @@
 var x = 1;
 >x : Symbol(x, Decl(reachabilityChecks11.ts, 1, 3))
 
-module A {
+namespace A {
 >A : Symbol(A, Decl(reachabilityChecks11.ts, 1, 10))
 
     while (true);
@@ -13,23 +13,23 @@ module A {
 >x : Symbol(x, Decl(reachabilityChecks11.ts, 5, 7))
 }
 
-module A1 {
+namespace A1 {
 >A1 : Symbol(A1, Decl(reachabilityChecks11.ts, 6, 1))
 
     do {} while(true);
-    module A {
+    namespace A {
 >A : Symbol(A, Decl(reachabilityChecks11.ts, 9, 22))
 
         interface F {}
->F : Symbol(F, Decl(reachabilityChecks11.ts, 10, 14))
+>F : Symbol(F, Decl(reachabilityChecks11.ts, 10, 17))
     }
 }
 
-module A2 {
+namespace A2 {
 >A2 : Symbol(A2, Decl(reachabilityChecks11.ts, 13, 1))
 
     while (true);
-    module A {
+    namespace A {
 >A : Symbol(A, Decl(reachabilityChecks11.ts, 16, 17))
 
         var x = 1;
@@ -37,7 +37,7 @@ module A2 {
     }
 }
 
-module A3 {
+namespace A3 {
 >A3 : Symbol(A3, Decl(reachabilityChecks11.ts, 20, 1))
 
     while (true);
@@ -45,15 +45,15 @@ module A3 {
 >T : Symbol(T, Decl(reachabilityChecks11.ts, 23, 17))
 }
 
-module A4 {
+namespace A4 {
 >A4 : Symbol(A4, Decl(reachabilityChecks11.ts, 25, 1))
 
     while (true);
-    module A {
+    namespace A {
 >A : Symbol(A, Decl(reachabilityChecks11.ts, 28, 17))
 
         const enum E { X }
->E : Symbol(E, Decl(reachabilityChecks11.ts, 29, 14))
+>E : Symbol(E, Decl(reachabilityChecks11.ts, 29, 17))
 >X : Symbol(E.X, Decl(reachabilityChecks11.ts, 30, 22))
     }
 }
@@ -84,11 +84,11 @@ function f2() {
     }
 }
 
-module B {
+namespace B {
 >B : Symbol(B, Decl(reachabilityChecks11.ts, 48, 1))
 
     for (; ;);
-    module C {
+    namespace C {
 >C : Symbol(C, Decl(reachabilityChecks11.ts, 51, 14))
     }
 }
