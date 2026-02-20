@@ -2,7 +2,7 @@ import type {
     Path,
     SourceFile,
 } from "@typescript/ast";
-import type { SnapshotChanges } from "../proto.ts";
+import type { SnapshotChanges } from "./proto.ts";
 
 /**
  * Builds a composite ref key from a snapshot ID and project ID.

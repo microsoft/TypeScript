@@ -1,10 +1,10 @@
 /// <reference path="../node.ts" preserve="true" />
-import { ElementFlags } from "#elementFlags";
-import { ObjectFlags } from "#objectFlags";
-import { SignatureFlags } from "#signatureFlags";
-import { SignatureKind } from "#signatureKind";
-import { SymbolFlags } from "#symbolFlags";
-import { TypeFlags } from "#typeFlags";
+import { ElementFlags } from "#enums/elementFlags";
+import { ObjectFlags } from "#enums/objectFlags";
+import { SignatureFlags } from "#enums/signatureFlags";
+import { SignatureKind } from "#enums/signatureKind";
+import { SymbolFlags } from "#enums/symbolFlags";
+import { TypeFlags } from "#enums/typeFlags";
 import type {
     Expression,
     Node,
@@ -13,97 +13,69 @@ import type {
     SyntaxKind,
 } from "@typescript/ast";
 import {
-    type API as BaseAPI,
-    type Checker as BaseChecker,
-    type ConditionalType as BaseConditionalType,
-    type DocumentIdentifier,
-    type DocumentPosition,
-    type IndexedAccessType as BaseIndexedAccessType,
-    type IndexType as BaseIndexType,
-    type InterfaceType as BaseInterfaceType,
-    type IntersectionType as BaseIntersectionType,
-    type LiteralType as BaseLiteralType,
-    type NodeHandle as BaseNodeHandle,
-    type ObjectType as BaseObjectType,
-    type Program as BaseProgram,
-    type Project as BaseProject,
-    resolveFileName,
-    type Signature as BaseSignature,
-    type Snapshot as BaseSnapshot,
-    type StringMappingType as BaseStringMappingType,
-    type SubstitutionType as BaseSubstitutionType,
-    type Symbol as BaseSymbol,
-    type TemplateLiteralType as BaseTemplateLiteralType,
-    type TupleType as BaseTupleType,
-    type Type as BaseType,
-    type TypeParameter as BaseTypeParameter,
-    type TypeReference as BaseTypeReference,
-    type UnionOrIntersectionType as BaseUnionOrIntersectionType,
-    type UnionType as BaseUnionType,
-} from "../base/api.ts";
-import { ObjectRegistry } from "../base/objectRegistry.ts";
-import { SourceFileCache } from "../base/sourceFileCache.ts";
-import {
     findDescendant,
     parseNodeHandle,
     readParseOptionsKey,
     readSourceFileHash,
     RemoteSourceFile,
 } from "../node.ts";
+import { ObjectRegistry } from "../objectRegistry.ts";
+import type {
+    APIOptions,
+    LSPConnectionOptions,
+} from "../options.ts";
 import {
     createGetCanonicalFileName,
     toPath,
 } from "../path.ts";
 import type {
     ConfigResponse,
+    DocumentIdentifier,
+    DocumentPosition,
     InitializeResponse,
+    LSPUpdateSnapshotParams,
     ProjectResponse,
     SignatureResponse,
-    SourceFileResponse,
     SymbolResponse,
     TypeResponse,
+    UpdateSnapshotParams,
     UpdateSnapshotResponse,
 } from "../proto.ts";
-import type {
-    LSPUpdateSnapshotParams,
-    UpdateSnapshotParams,
-} from "../proto.ts";
+import { resolveFileName } from "../proto.ts";
+import { SourceFileCache } from "../sourceFileCache.ts";
 import {
     Client,
     type ClientSocketOptions,
     type ClientSpawnOptions,
 } from "./client.ts";
+import type {
+    ConditionalType,
+    IndexedAccessType,
+    IndexType,
+    InterfaceType,
+    IntersectionType,
+    LiteralType,
+    ObjectType,
+    StringMappingType,
+    SubstitutionType,
+    TemplateLiteralType,
+    TupleType,
+    Type,
+    TypeParameter,
+    TypeReference,
+    UnionOrIntersectionType,
+    UnionType,
+} from "./types.ts";
 
 export { ElementFlags, ObjectFlags, SignatureFlags, SignatureKind, SymbolFlags, TypeFlags };
-export type { DocumentIdentifier, DocumentPosition };
-export type LiteralType = BaseLiteralType<true>;
-export type ObjectType = BaseObjectType<true>;
-export type TypeReference = BaseTypeReference<true>;
-export type InterfaceType = BaseInterfaceType<true>;
-export type TupleType = BaseTupleType<true>;
-export type UnionOrIntersectionType = BaseUnionOrIntersectionType<true>;
-export type UnionType = BaseUnionType<true>;
-export type IntersectionType = BaseIntersectionType<true>;
-export type TypeParameter = BaseTypeParameter<true>;
-export type IndexType = BaseIndexType<true>;
-export type IndexedAccessType = BaseIndexedAccessType<true>;
-export type ConditionalType = BaseConditionalType<true>;
-export type SubstitutionType = BaseSubstitutionType<true>;
-export type TemplateLiteralType = BaseTemplateLiteralType<true>;
-export type StringMappingType = BaseStringMappingType<true>;
-export type Type = BaseType<true>;
+export type { APIOptions, ClientSocketOptions, ClientSpawnOptions, DocumentIdentifier, DocumentPosition, LSPConnectionOptions };
+export type { ConditionalType, IndexedAccessType, IndexType, InterfaceType, IntersectionType, LiteralType, ObjectType, StringMappingType, SubstitutionType, TemplateLiteralType, TupleType, TypeParameter, TypeReference, UnionOrIntersectionType, UnionType };
 export { documentURIToFileName, fileNameToDocumentURI } from "../path.ts";
-
-export interface LSPConnectionOptions extends ClientSocketOptions {
-}
-
-export interface APIOptions extends ClientSpawnOptions {
-}
 
 /** Type alias for the snapshot-scoped object registry */
 type SnapshotObjectRegistry = ObjectRegistry<Symbol, TypeObject, Signature>;
 
-export class API<FromLSP extends boolean = false> implements BaseAPI<true, FromLSP> {
+export class API<FromLSP extends boolean = false> {
     private client: Client;
     private sourceFileCache: SourceFileCache;
     private toPath: ((fileName: string) => Path) | undefined;
@@ -192,7 +164,7 @@ export class API<FromLSP extends boolean = false> implements BaseAPI<true, FromL
     }
 }
 
-export class Snapshot implements BaseSnapshot<true> {
+export class Snapshot {
     readonly id: string;
     private projectMap: Map<Path, Project>;
     private toPath: (fileName: string) => Path;
@@ -270,7 +242,7 @@ export class Snapshot implements BaseSnapshot<true> {
     }
 }
 
-export class Project implements BaseProject<true> {
+export class Project {
     readonly id: string;
     readonly configFileName: string;
     readonly compilerOptions: Record<string, unknown>;
@@ -307,7 +279,7 @@ export class Project implements BaseProject<true> {
     }
 }
 
-export class Program implements BaseProgram<true> {
+export class Program {
     private snapshotId: string;
     private projectId: string;
     private client: Client;
@@ -340,17 +312,15 @@ export class Program implements BaseProgram<true> {
         }
 
         // Fetch from server
-        const response = await this.client.apiRequest<SourceFileResponse | undefined>("getSourceFile", {
+        const binaryData = await this.client.apiRequestBinary("getSourceFile", {
             snapshot: this.snapshotId,
             project: this.projectId,
             file,
         });
-        if (!response?.data) {
+        if (!binaryData) {
             return undefined;
         }
 
-        // Decode base64 to Uint8Array
-        const binaryData = Uint8Array.from(atob(response.data), c => c.charCodeAt(0));
         const view = new DataView(binaryData.buffer, binaryData.byteOffset, binaryData.byteLength);
         const contentHash = readSourceFileHash(view);
         const parseOptionsKey = readParseOptionsKey(view);
@@ -361,7 +331,7 @@ export class Program implements BaseProgram<true> {
     }
 }
 
-export class Checker implements BaseChecker<true> {
+export class Checker {
     private snapshotId: string;
     private projectId: string;
     private client: Client;
@@ -598,7 +568,7 @@ export class Checker implements BaseChecker<true> {
     }
 }
 
-export class NodeHandle implements BaseNodeHandle<true> {
+export class NodeHandle {
     readonly kind: SyntaxKind;
     readonly pos: number;
     readonly end: number;
@@ -626,7 +596,7 @@ export class NodeHandle implements BaseNodeHandle<true> {
     }
 }
 
-export class Symbol implements BaseSymbol<true> {
+export class Symbol {
     private client: Client;
     private snapshotId: string;
     private objectRegistry: SnapshotObjectRegistry;
@@ -667,7 +637,7 @@ export class Symbol implements BaseSymbol<true> {
     }
 }
 
-class TypeObject implements BaseType<true> {
+class TypeObject implements Type {
     private client: Client;
     private snapshotId: string;
     private objectRegistry: SnapshotObjectRegistry;
@@ -779,7 +749,7 @@ class TypeObject implements BaseType<true> {
     }
 }
 
-export class Signature implements BaseSignature<true> {
+export class Signature {
     private flags: number;
     readonly id: string;
     readonly declaration?: NodeHandle | undefined;

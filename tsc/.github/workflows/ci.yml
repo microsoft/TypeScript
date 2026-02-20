@@ -258,6 +258,8 @@ jobs:
       - run: npm ci
 
       - run: npx hereby generate
+      - run: npx hereby generate:enums
+      - run: npm run -w @typescript/api generate:sync
 
       - run: node --experimental-strip-types ./internal/lsp/lsproto/_generate/fetchModel.mts
       - run: node --experimental-strip-types ./internal/lsp/lsproto/_generate/generate.mts

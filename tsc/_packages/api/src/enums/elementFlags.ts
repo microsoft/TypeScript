@@ -1,3 +1,11 @@
+//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!! THIS FILE IS AUTO-GENERATED — DO NOT EDIT !!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+// Source: internal/checker/types.go
+// Regenerate: npx hereby generate:enums
+//
 export var ElementFlags: any;
 (function (ElementFlags) {
     ElementFlags[ElementFlags["None"] = 0] = "None";
@@ -8,4 +16,5 @@ export var ElementFlags: any;
     ElementFlags[ElementFlags["Fixed"] = 3] = "Fixed";
     ElementFlags[ElementFlags["Variable"] = 12] = "Variable";
     ElementFlags[ElementFlags["NonRequired"] = 14] = "NonRequired";
+    ElementFlags[ElementFlags["NonRest"] = 11] = "NonRest";
 })(ElementFlags || (ElementFlags = {}));

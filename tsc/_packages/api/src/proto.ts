@@ -1,4 +1,51 @@
-import type { DocumentIdentifier } from "./base/api.ts";
+import {
+    documentURIToFileName,
+    fileNameToDocumentURI,
+} from "./path.ts";
+
+/**
+ * A document identifier that can be either a file name (path string) or a document URI object.
+ *
+ * @example
+ * // Using a file name
+ * project.program.getSourceFile("/path/to/file.ts");
+ *
+ * // Using a URI
+ * project.program.getSourceFile({ uri: "file:///path/to/file.ts" });
+ */
+export type DocumentIdentifier = string | { uri: string; };
+
+/**
+ * A position within a document, combining a document identifier with an offset.
+ */
+export interface DocumentPosition {
+    /** The document containing the position */
+    document: DocumentIdentifier;
+    /** The character offset within the document */
+    position: number;
+}
+
+/**
+ * Resolves a DocumentIdentifier to a file name.
+ * If the identifier contains a URI, it is converted to a file name.
+ */
+export function resolveFileName(identifier: DocumentIdentifier): string {
+    if (typeof identifier === "string") {
+        return identifier;
+    }
+    return documentURIToFileName(identifier.uri);
+}
+
+/**
+ * Resolves a DocumentIdentifier to a document URI.
+ * If the identifier contains a file name, it is converted to a URI.
+ */
+export function resolveDocumentURI(identifier: DocumentIdentifier): string {
+    if (typeof identifier === "string") {
+        return fileNameToDocumentURI(identifier);
+    }
+    return identifier.uri;
+}
 
 /**
  * Response from the initialize method.

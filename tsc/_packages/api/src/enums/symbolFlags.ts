@@ -1,3 +1,11 @@
+//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!! THIS FILE IS AUTO-GENERATED — DO NOT EDIT !!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+// Source: internal/ast/symbolflags.go
+// Regenerate: npx hereby generate:enums
+//
 export var SymbolFlags: any;
 (function (SymbolFlags) {
     SymbolFlags[SymbolFlags["None"] = 0] = "None";
@@ -55,7 +63,7 @@ export var SymbolFlags: any;
     SymbolFlags[SymbolFlags["MethodExcludes"] = 103359] = "MethodExcludes";
     SymbolFlags[SymbolFlags["GetAccessorExcludes"] = 46015] = "GetAccessorExcludes";
     SymbolFlags[SymbolFlags["SetAccessorExcludes"] = 78783] = "SetAccessorExcludes";
-    SymbolFlags[SymbolFlags["AccessorExcludes"] = 13247] = "AccessorExcludes";
+    SymbolFlags[SymbolFlags["AccessorExcludes"] = 111551] = "AccessorExcludes";
     SymbolFlags[SymbolFlags["TypeParameterExcludes"] = 526824] = "TypeParameterExcludes";
     SymbolFlags[SymbolFlags["TypeAliasExcludes"] = 788968] = "TypeAliasExcludes";
     SymbolFlags[SymbolFlags["AliasExcludes"] = 2097152] = "AliasExcludes";

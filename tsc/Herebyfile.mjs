@@ -280,6 +280,219 @@ export const generate = task({
     },
 });
 
+// ── Enum generation from Go source ──────────────────────────────
+
+/**
+ * @typedef {{
+ *   name: string;
+ *   goPrefix: string;
+ *   goFile: string;
+ *   outDir: string;
+ *   constEnum?: boolean;
+ * }} EnumDef
+ */
+
+/** @type {EnumDef[]} */
+const enumDefs = [
+    // @typescript/api enums
+    { name: "SymbolFlags", goPrefix: "SymbolFlags", goFile: "internal/ast/symbolflags.go", outDir: "_packages/api/src/enums" },
+    { name: "TypeFlags", goPrefix: "TypeFlags", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
+    { name: "ObjectFlags", goPrefix: "ObjectFlags", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
+    { name: "SignatureFlags", goPrefix: "SignatureFlags", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
+    { name: "SignatureKind", goPrefix: "SignatureKind", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
+    { name: "ElementFlags", goPrefix: "ElementFlags", goFile: "internal/checker/types.go", outDir: "_packages/api/src/enums" },
+    // @typescript/ast enums
+    { name: "SyntaxKind", goPrefix: "Kind", goFile: "internal/ast/kind.go", outDir: "_packages/ast/src" },
+    { name: "TokenFlags", goPrefix: "TokenFlags", goFile: "internal/ast/tokenflags.go", outDir: "_packages/ast/src", constEnum: true },
+];
+
+/**
+ * @param {string} block
+ * @param {string} prefix
+ * @returns {{ name: string, value: string }[]}
+ */
+function parseGoConstBlock(block, prefix) {
+    const members = [];
+    let iotaCounter = 0;
+    let hasIota = false;
+
+    for (const rawLine of block.split("\n")) {
+        const line = rawLine.replace(/\/\/.*$/, "").trim();
+        if (!line) continue;
+
+        // Match: PrefixName Type = value  or  PrefixName = value
+        const fullMatch = line.match(new RegExp(`^(${prefix}\\w+)\\s+(?:\\S+\\s*)?=\\s*(.+)$`));
+        // Match bare iota continuation: just PrefixName
+        const bareMatch = !fullMatch && hasIota
+            ? line.match(new RegExp(`^(${prefix}\\w+)$`))
+            : null;
+
+        if (!fullMatch && !bareMatch) continue;
+
+        const goName = fullMatch ? fullMatch[1] : /** @type {RegExpMatchArray} */ (bareMatch)[1];
+        const goValue = fullMatch ? fullMatch[2].trim() : "";
+        const memberName = goName.slice(prefix.length);
+
+        let tsValue;
+        if (goValue === "iota") {
+            tsValue = String(iotaCounter);
+            hasIota = true;
+        }
+        else if (hasIota && goValue === "") {
+            tsValue = String(iotaCounter);
+        }
+        else {
+            // Replace Go bitwise NOT (^) with TypeScript (~)
+            tsValue = goValue.replace(/\^/g, "~");
+            // Strip enum prefix from member references
+            tsValue = tsValue.replace(new RegExp(`${prefix}(\\w+)`, "g"), "$1");
+        }
+
+        members.push({ name: memberName, value: tsValue });
+        iotaCounter++;
+    }
+
+    return members;
+}
+
+/**
+ * @param {EnumDef} def
+ * @returns {{ name: string, value: string }[]}
+ */
+function parseGoEnum(def) {
+    const source = fs.readFileSync(def.goFile, "utf-8");
+    const constBlockRegex = /const\s*\(([\s\S]*?)\n\)/g;
+
+    for (const match of source.matchAll(constBlockRegex)) {
+        const members = parseGoConstBlock(match[1], def.goPrefix);
+        if (members.length > 0) return topoSortMembers(members);
+    }
+
+    throw new Error(`No members found for enum ${def.name} in ${def.goFile}`);
+}
+
+/**
+ * Topologically sort enum members so composite members appear after
+ * all members they reference (Go allows forward references, TS does not).
+ * @param {{ name: string, value: string }[]} members
+ * @returns {{ name: string, value: string }[]}
+ */
+function topoSortMembers(members) {
+    const nameSet = new Set(members.map(m => m.name));
+    /** @type {Map<string, Set<string>>} */
+    const deps = new Map();
+    for (const m of members) {
+        /** @type {Set<string>} */
+        const refs = new Set();
+        // Find all identifier references in the value that are other member names
+        for (const [ref] of m.value.matchAll(/\b([A-Za-z_]\w*)\b/g)) {
+            if (ref !== m.name && nameSet.has(ref)) refs.add(ref);
+        }
+        deps.set(m.name, refs);
+    }
+
+    const sorted = /** @type {{ name: string, value: string }[]} */ ([]);
+    const visited = new Set();
+    const visiting = new Set();
+
+    /** @param {string} name */
+    function visit(name) {
+        if (visited.has(name)) return;
+        if (visiting.has(name)) return; // cycle — keep original order
+        visiting.add(name);
+        for (const dep of deps.get(name) ?? []) {
+            visit(dep);
+        }
+        visiting.delete(name);
+        visited.add(name);
+        sorted.push(/** @type {{ name: string, value: string }} */ (members.find(m => m.name === name)));
+    }
+
+    for (const m of members) {
+        visit(m.name);
+    }
+    return sorted;
+}
+
+/**
+ * @param {EnumDef} def
+ * @param {{ name: string, value: string }[]} members
+ * @returns {string}
+ */
+function renderEnumTS(def, members) {
+    const header = [
+        "//",
+        "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+        "// !!! THIS FILE IS AUTO-GENERATED — DO NOT EDIT !!!",
+        "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+        "//",
+        `// Source: ${def.goFile}`,
+        "// Regenerate: npx hereby generate:enums",
+        "//",
+        "",
+    ].join("\n");
+
+    const constKeyword = def.constEnum ? "const " : "";
+    const lines = members.map(m => `    ${m.name} = ${m.value},`);
+    return `${header}export ${constKeyword}enum ${def.name} {\n${lines.join("\n")}\n}\n`;
+}
+
+async function runGenerateEnums() {
+    const ts = /** @type {typeof import("typescript")} */ (await import("typescript"));
+
+    /**
+     * @param {string} enumSource
+     * @param {string} enumName
+     * @returns {string}
+     */
+    function transpile(enumSource, enumName) {
+        const result = ts.transpileModule(enumSource, {
+            compilerOptions: {
+                module: ts.ModuleKind.ESNext,
+                target: ts.ScriptTarget.ESNext,
+            },
+        });
+        return result.outputText.replace(
+            `export var ${enumName};`,
+            `export var ${enumName}: any;`,
+        );
+    }
+
+    console.log("Generating enums from Go source...");
+    /** @type {string[]} */
+    const generatedFiles = [];
+
+    for (const def of enumDefs) {
+        const members = parseGoEnum(def);
+        const camelName = def.name.charAt(0).toLowerCase() + def.name.slice(1);
+
+        fs.mkdirSync(def.outDir, { recursive: true });
+
+        // Generate .enum.ts (TypeScript enum — used for types)
+        const enumTS = renderEnumTS(def, members);
+        const enumPath = path.join(def.outDir, `${camelName}.enum.ts`);
+        fs.writeFileSync(enumPath, enumTS);
+        generatedFiles.push(enumPath);
+
+        // Generate .ts (IIFE — used at runtime)
+        const iifeSource = transpile(enumTS, def.name);
+        const iifePath = path.join(def.outDir, `${camelName}.ts`);
+        fs.writeFileSync(iifePath, iifeSource);
+        generatedFiles.push(iifePath);
+
+        console.log(`  ${def.name}: ${members.length} members → ${camelName}.enum.ts, ${camelName}.ts`);
+    }
+
+    await $`dprint fmt ${generatedFiles}`;
+    console.log("Done.");
+}
+
+export const generateEnums = task({
+    name: "generate:enums",
+    description: "Generates TypeScript enum files from Go source.",
+    run: runGenerateEnums,
+});
+
 const coverageDir = path.join(__dirname, "coverage");
 
 const ensureCoverageDirExists = memoize(() => {

@@ -2,7 +2,7 @@ import type {
     SignatureResponse,
     SymbolResponse,
     TypeResponse,
-} from "../proto.ts";
+} from "./proto.ts";
 
 /**
  * Interface for objects with an ID that can be tracked by the registry.

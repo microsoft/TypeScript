@@ -38,5 +38,10 @@
             "@typescript/source": "./src/utils.ts",
             "default": "./dist/utils.js"
         }
+    },
+    "scripts": {
+        "generate:enums": "npx hereby generate:enums --herebyfile ../../Herebyfile.mjs",
+        "prebuild": "npm run generate:enums",
+        "build": "tsc -b"
     }
 }

@@ -2,13 +2,13 @@ import {
     API,
     type Project,
     type Snapshot,
-} from "@typescript/api/async";
+} from "@typescript/api/async"; // @sync: } from "@typescript/api/sync";
 import {
     type Node,
     type SourceFile,
     SyntaxKind,
 } from "@typescript/ast";
-import { existsSync } from "node:fs";
+import fs, { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Bench } from "tinybench";
@@ -20,17 +20,15 @@ if (isMain) {
 }
 
 export async function runBenchmarks(singleIteration?: boolean) {
-    const repoRoot = fileURLToPath(new URL("../../../", import.meta.url).toString());
+    const repoRoot = fileURLToPath(new URL("../../../../", import.meta.url).toString());
     if (!existsSync(path.join(repoRoot, "_submodules/TypeScript/src/compiler"))) {
-        console.warn("Warning: TypeScript submodule is not cloned; skipping async benchmarks.");
+        console.warn("Warning: TypeScript submodule is not cloned; skipping benchmarks.");
         return;
     }
 
     const bench = new Bench({
-        name: "Async API",
-        teardown: async () => {
-            await teardown();
-        },
+        name: "Async API", // @sync: name: "Sync API",
+        teardown,
         // Reduce iterations from the default 64 to 10.  Slow tasks
         // are dominated by the iteration minimum, not the time limit.
         // 10 iterations still gives stable medians while cutting total
@@ -67,7 +65,7 @@ export async function runBenchmarks(singleIteration?: boolean) {
     })();
 
     bench
-        .add("spawn Async API", async () => {
+        .add("spawn API", async () => {
             await spawnAPI();
         })
         .add("load snapshot", async () => {
@@ -132,7 +130,7 @@ export async function runBenchmarks(singleIteration?: boolean) {
             });
         }, { beforeAll: all(tsCreateProgram, tsCreateChecker, tsGetProgramTS) });
 
-    await bench.run();
+    await bench.run(); // @sync: bench.runSync();
     console.table(bench.table());
 
     function collectIdentifiers(sourceFile: SourceFile): Node[] {
@@ -149,7 +147,7 @@ export async function runBenchmarks(singleIteration?: boolean) {
     async function spawnAPI() {
         api = new API({
             cwd: repoRoot,
-            tsserverPath: fileURLToPath(new URL(`../../../built/local/tsgo${process.platform === "win32" ? ".exe" : ""}`, import.meta.url).toString()),
+            tsserverPath: fileURLToPath(new URL(`../../../../built/local/tsgo${process.platform === "win32" ? ".exe" : ""}`, import.meta.url).toString()),
         });
     }
 
@@ -159,7 +157,7 @@ export async function runBenchmarks(singleIteration?: boolean) {
     }
 
     function tsCreateProgram() {
-        const configFileName = fileURLToPath(new URL("../../../_submodules/TypeScript/src/compiler/tsconfig.json", import.meta.url).toString());
+        const configFileName = fileURLToPath(new URL("../../../../_submodules/TypeScript/src/compiler/tsconfig.json", import.meta.url).toString());
         const configFile = ts.readConfigFile(configFileName, ts.sys.readFile);
         const parsedCommandLine = ts.parseJsonConfigFileContent(configFile.config, ts.sys, path.dirname(configFileName));
         const host = ts.createCompilerHost(parsedCommandLine.options);
@@ -189,7 +187,7 @@ export async function runBenchmarks(singleIteration?: boolean) {
     }
 
     function tsGetProgramTS() {
-        tsFile = tsProgram.getSourceFile(fileURLToPath(new URL("../../../_submodules/TypeScript/src/compiler/program.ts", import.meta.url).toString()))!;
+        tsFile = tsProgram.getSourceFile(fileURLToPath(new URL("../../../../_submodules/TypeScript/src/compiler/program.ts", import.meta.url).toString()))!;
     }
 
     async function getCheckerTS() {

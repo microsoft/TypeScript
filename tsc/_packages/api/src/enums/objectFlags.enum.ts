@@ -1,0 +1,55 @@
+//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!! THIS FILE IS AUTO-GENERATED — DO NOT EDIT !!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+// Source: internal/checker/types.go
+// Regenerate: npx hereby generate:enums
+//
+export enum ObjectFlags {
+    None = 0,
+    Class = 1 << 0,
+    Interface = 1 << 1,
+    Reference = 1 << 2,
+    Tuple = 1 << 3,
+    Anonymous = 1 << 4,
+    Mapped = 1 << 5,
+    Instantiated = 1 << 6,
+    ObjectLiteral = 1 << 7,
+    EvolvingArray = 1 << 8,
+    ObjectLiteralPatternWithComputedProperties = 1 << 9,
+    ReverseMapped = 1 << 10,
+    JsxAttributes = 1 << 11,
+    JSLiteral = 1 << 12,
+    FreshLiteral = 1 << 13,
+    ArrayLiteral = 1 << 14,
+    PrimitiveUnion = 1 << 15,
+    ContainsWideningType = 1 << 16,
+    ContainsObjectOrArrayLiteral = 1 << 17,
+    NonInferrableType = 1 << 18,
+    CouldContainTypeVariablesComputed = 1 << 19,
+    CouldContainTypeVariables = 1 << 20,
+    MembersResolved = 1 << 21,
+    ClassOrInterface = Class | Interface,
+    RequiresWidening = ContainsWideningType | ContainsObjectOrArrayLiteral,
+    PropagatingFlags = ContainsWideningType | ContainsObjectOrArrayLiteral | NonInferrableType,
+    InstantiatedMapped = Mapped | Instantiated,
+    InstantiationExpressionType = 1 << 24,
+    SingleSignatureType = 1 << 25,
+    ObjectTypeKindMask = ClassOrInterface | Reference | Tuple | Anonymous | Mapped | ReverseMapped | EvolvingArray | InstantiationExpressionType | SingleSignatureType,
+    ContainsSpread = 1 << 22,
+    ObjectRestType = 1 << 23,
+    IsClassInstanceClone = 1 << 26,
+    IdenticalBaseTypeCalculated = 1 << 27,
+    IdenticalBaseTypeExists = 1 << 28,
+    IsGenericTypeComputed = 1 << 22,
+    IsGenericObjectType = 1 << 23,
+    IsGenericIndexType = 1 << 24,
+    IsGenericType = IsGenericObjectType | IsGenericIndexType,
+    ContainsIntersections = 1 << 25,
+    IsUnknownLikeUnionComputed = 1 << 26,
+    IsUnknownLikeUnion = 1 << 27,
+    IsNeverIntersectionComputed = 1 << 25,
+    IsNeverIntersection = 1 << 26,
+    IsConstrainedTypeVariable = 1 << 27,
+}

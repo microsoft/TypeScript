@@ -7,53 +7,13 @@
         "node": ">=20.19"
     },
     "imports": {
-        "#symbolFlags": {
+        "#enums/*": {
             "@typescript/source": {
-                "types": "./src/symbolFlags.enum.ts",
-                "default": "./src/symbolFlags.ts"
+                "types": "./src/enums/*.enum.ts",
+                "default": "./src/enums/*.ts"
             },
-            "types": "./dist/symbolFlags.enum.d.ts",
-            "default": "./dist/symbolFlags.js"
-        },
-        "#typeFlags": {
-            "@typescript/source": {
-                "types": "./src/typeFlags.enum.ts",
-                "default": "./src/typeFlags.ts"
-            },
-            "types": "./dist/typeFlags.enum.d.ts",
-            "default": "./dist/typeFlags.js"
-        },
-        "#signatureKind": {
-            "@typescript/source": {
-                "types": "./src/signatureKind.enum.ts",
-                "default": "./src/signatureKind.ts"
-            },
-            "types": "./dist/signatureKind.enum.d.ts",
-            "default": "./dist/signatureKind.js"
-        },
-        "#signatureFlags": {
-            "@typescript/source": {
-                "types": "./src/signatureFlags.enum.ts",
-                "default": "./src/signatureFlags.ts"
-            },
-            "types": "./dist/signatureFlags.enum.d.ts",
-            "default": "./dist/signatureFlags.js"
-        },
-        "#objectFlags": {
-            "@typescript/source": {
-                "types": "./src/objectFlags.enum.ts",
-                "default": "./src/objectFlags.ts"
-            },
-            "types": "./dist/objectFlags.enum.d.ts",
-            "default": "./dist/objectFlags.js"
-        },
-        "#elementFlags": {
-            "@typescript/source": {
-                "types": "./src/elementFlags.enum.ts",
-                "default": "./src/elementFlags.ts"
-            },
-            "types": "./dist/elementFlags.enum.d.ts",
-            "default": "./dist/elementFlags.js"
+            "types": "./dist/enums/*.enum.d.ts",
+            "default": "./dist/enums/*.js"
         }
     },
     "exports": {
@@ -64,10 +24,6 @@
         "./async": {
             "@typescript/source": "./src/async/api.ts",
             "default": "./dist/async/api.js"
-        },
-        "./base/*": {
-            "@typescript/source": "./src/base/*.ts",
-            "default": "./dist/base/*.js"
         },
         "./fs": {
             "@typescript/source": "./src/fs.ts",
@@ -80,10 +36,15 @@
     },
     "scripts": {
         "node": "node --experimental-strip-types --no-warnings --conditions @typescript/source",
+        "generate:sync": "node --experimental-strip-types --no-warnings scripts/generate-sync.ts",
+        "generate:enums": "npx hereby generate:enums --herebyfile ../../Herebyfile.mjs",
+        "prebuild": "npm run generate:enums && npm run generate:sync",
         "build": "tsc -b",
-        "watch": "tsc -b --watch",
+        "prebuild:test": "npm run generate:enums && npm run generate:sync",
         "build:test": "tsc -b test",
+        "prebench": "npm run generate:enums && npm run generate:sync",
         "bench": "npm run node -- test/api.bench.ts",
+        "pretest": "npm run generate:enums && npm run generate:sync",
         "test": "npm run node -- --test ./test/**/*.test.ts"
     },
     "devDependencies": {

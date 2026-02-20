@@ -1,3 +1,11 @@
+//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!! THIS FILE IS AUTO-GENERATED — DO NOT EDIT !!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+// Source: internal/ast/symbolflags.go
+// Regenerate: npx hereby generate:enums
+//
 export enum SymbolFlags {
     None = 0,
     FunctionScopedVariable = 1 << 0,
@@ -32,7 +40,6 @@ export enum SymbolFlags {
     ReplaceableByMethod = 1 << 29,
     GlobalLookup = 1 << 30,
     All = 1 << 30 - 1,
-
     Enum = RegularEnum | ConstEnum,
     Variable = FunctionScopedVariable | BlockScopedVariable,
     Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor,
@@ -40,11 +47,8 @@ export enum SymbolFlags {
     Namespace = ValueModule | NamespaceModule | Enum,
     Module = ValueModule | NamespaceModule,
     Accessor = GetAccessor | SetAccessor,
-
     FunctionScopedVariableExcludes = Value & ~FunctionScopedVariable,
-
     BlockScopedVariableExcludes = Value,
-
     ParameterExcludes = Value,
     PropertyExcludes = Value & ~Property,
     EnumMemberExcludes = Value | Type,
@@ -58,7 +62,7 @@ export enum SymbolFlags {
     MethodExcludes = Value & ~Method,
     GetAccessorExcludes = Value & ~SetAccessor,
     SetAccessorExcludes = Value & ~GetAccessor,
-    AccessorExcludes = Value & ~Accessor,
+    AccessorExcludes = Value,
     TypeParameterExcludes = Type & ~TypeParameter,
     TypeAliasExcludes = Type,
     AliasExcludes = Alias,
@@ -69,7 +73,6 @@ export enum SymbolFlags {
     ClassMember = Method | Accessor | Property,
     ExportSupportsDefaultModifier = Class | Function | Interface,
     ExportDoesNotSupportDefaultModifier = ~ExportSupportsDefaultModifier,
-
     Classifiable = Class | Enum | TypeAlias | Interface | TypeParameter | Module | Alias,
     LateBindingContainer = Class | Interface | TypeLiteral | ObjectLiteral | Function,
 }

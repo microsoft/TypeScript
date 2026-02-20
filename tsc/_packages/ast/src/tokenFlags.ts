@@ -1,4 +1,11 @@
-// dprint-ignore
+//
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// !!! THIS FILE IS AUTO-GENERATED — DO NOT EDIT !!!
+// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//
+// Source: internal/ast/tokenflags.go
+// Regenerate: npx hereby generate:enums
+//
 export var TokenFlags: any;
 (function (TokenFlags) {
     TokenFlags[TokenFlags["None"] = 0] = "None";
@@ -18,10 +25,14 @@ export var TokenFlags: any;
     TokenFlags[TokenFlags["ContainsLeadingZero"] = 8192] = "ContainsLeadingZero";
     TokenFlags[TokenFlags["ContainsInvalidSeparator"] = 16384] = "ContainsInvalidSeparator";
     TokenFlags[TokenFlags["PrecedingJSDocLeadingAsterisks"] = 32768] = "PrecedingJSDocLeadingAsterisks";
+    TokenFlags[TokenFlags["SingleQuote"] = 65536] = "SingleQuote";
+    TokenFlags[TokenFlags["PrecedingJSDocWithDeprecated"] = 131072] = "PrecedingJSDocWithDeprecated";
+    TokenFlags[TokenFlags["PrecedingJSDocWithSeeOrLink"] = 262144] = "PrecedingJSDocWithSeeOrLink";
     TokenFlags[TokenFlags["BinaryOrOctalSpecifier"] = 384] = "BinaryOrOctalSpecifier";
     TokenFlags[TokenFlags["WithSpecifier"] = 448] = "WithSpecifier";
-    TokenFlags[TokenFlags["StringLiteralFlags"] = 7176] = "StringLiteralFlags";
+    TokenFlags[TokenFlags["StringLiteralFlags"] = 72716] = "StringLiteralFlags";
     TokenFlags[TokenFlags["NumericLiteralFlags"] = 25584] = "NumericLiteralFlags";
-    TokenFlags[TokenFlags["TemplateLiteralLikeFlags"] = 7176] = "TemplateLiteralLikeFlags";
+    TokenFlags[TokenFlags["TemplateLiteralLikeFlags"] = 7180] = "TemplateLiteralLikeFlags";
+    TokenFlags[TokenFlags["RegularExpressionLiteralFlags"] = 4] = "RegularExpressionLiteralFlags";
     TokenFlags[TokenFlags["IsInvalid"] = 26656] = "IsInvalid";
 })(TokenFlags || (TokenFlags = {}));

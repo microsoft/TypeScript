@@ -1,21 +1,23 @@
+import { fsCallbackNames } from "../fs.ts";
 import {
-    type FileSystem,
-    fsCallbackNames,
-} from "../fs.ts";
+    type ClientOptions,
+    type ClientSocketOptions,
+    type ClientSpawnOptions,
+    isSpawnOptions,
+} from "../options.ts";
 import { SyncRpcChannel } from "../syncChannel.ts";
 
-export interface ClientOptions {
-    tsserverPath: string;
-    cwd?: string;
-    logFile?: string;
-    fs?: FileSystem;
-}
+export type { ClientOptions, ClientSocketOptions, ClientSpawnOptions };
 
 export class Client {
     private channel: SyncRpcChannel;
     private encoder = new TextEncoder();
 
     constructor(options: ClientOptions) {
+        if (!isSpawnOptions(options)) {
+            throw new Error("Socket connections are not yet supported in the sync client");
+        }
+
         const cwd = options.cwd ?? process.cwd();
         const args = [
             "--api",
@@ -36,30 +38,39 @@ export class Client {
             args.push(`--callbacks=${enabledCallbacks.join(",")}`);
         }
 
-        this.channel = new SyncRpcChannel(options.tsserverPath, args);
+        const channel = new SyncRpcChannel(options.tsserverPath, args);
+        this.channel = channel;
 
         if (options.fs) {
             for (const name of enabledCallbacks) {
                 const callback = options.fs[name]!;
-                this.channel.registerCallback(name, (_, arg) => {
+                channel.registerCallback(name, (_, arg) => {
                     const result = callback(JSON.parse(arg));
+                    if (name === "readFile") {
+                        // readFile has 3 returns: string (content), null (not found), undefined (fall back).
+                        // Wrap in object to preserve null vs undefined distinction.
+                        if (result === undefined) return "";
+                        return JSON.stringify({ content: result });
+                    }
                     return JSON.stringify(result) ?? "";
                 });
             }
         }
     }
 
-    request(method: string, payload: any): any {
-        const encodedPayload = JSON.stringify(payload);
+    apiRequest<T>(method: string, params?: unknown): T {
+        const encodedPayload = JSON.stringify(params);
         const result = this.channel.requestSync(method, encodedPayload);
         if (result.length) {
-            const decodedResult = JSON.parse(result);
-            return decodedResult;
+            return JSON.parse(result) as T;
         }
+        return undefined as unknown as T;
     }
 
-    requestBinary(method: string, payload: any): Uint8Array {
-        return this.channel.requestBinarySync(method, this.encoder.encode(JSON.stringify(payload)));
+    apiRequestBinary(method: string, params?: unknown): Uint8Array | undefined {
+        const result = this.channel.requestBinarySync(method, this.encoder.encode(JSON.stringify(params)));
+        if (result.length === 0) return undefined;
+        return result;
     }
 
     echo(payload: string): string {
