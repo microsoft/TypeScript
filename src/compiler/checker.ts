@@ -37952,6 +37952,14 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (importCallOptionsType !== emptyObjectType) {
                 checkTypeAssignableTo(optionsType, getNullableType(importCallOptionsType, TypeFlags.Undefined), node.arguments[1]);
             }
+            if (compilerOptions.ignoreDeprecations !== "6.0" && isObjectLiteralExpression(node.arguments[1])) {
+                for (const prop of node.arguments[1].properties) {
+                    if (isPropertyAssignment(prop) && isIdentifier(prop.name) && prop.name.escapedText === "assert") {
+                        grammarErrorOnNode(prop.name, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
+                        break;
+                    }
+                }
+            }
         }
 
         // resolveExternalModuleName will return undefined if the moduleReferenceExpression is not a string literal

@@ -11,3 +11,6 @@ export interface MyType { x: string }
 // With ignoreDeprecations: "6.0", import type assertions should not produce a deprecation error.
 type A = import("./types", { assert: { "resolution-mode": "import" } }).MyType;
 type B = import("./types", { assert: { "resolution-mode": "require" } }).MyType;
+
+const a = import("./types", { assert: { "resolution-mode": "import" } });
+const b = import("./types", { assert: { "resolution-mode": "require" } });
