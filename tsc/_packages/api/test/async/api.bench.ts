@@ -8,11 +8,12 @@ import {
     type SourceFile,
     SyntaxKind,
 } from "@typescript/ast";
-import fs, { existsSync } from "node:fs";
+import { existsSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Bench } from "tinybench";
 import ts from "typescript";
+import { RemoteSourceFile } from "../../src/node.ts";
 
 const isMain = process.argv[1] === fileURLToPath(import.meta.url);
 if (isMain) {
@@ -84,12 +85,14 @@ export async function runBenchmarks(singleIteration?: boolean) {
             await getCheckerTS();
         }, { beforeAll: all(spawnAPI, loadSnapshot) })
         .add("materialize program.ts", async () => {
-            file.forEachChild(function visit(node) {
+            const { view, decoder } = file as unknown as RemoteSourceFile;
+            new RemoteSourceFile(new Uint8Array(view.buffer, view.byteOffset, view.byteLength), decoder).forEachChild(function visit(node) {
                 node.forEachChild(visit);
             });
         }, { beforeAll: all(spawnAPI, loadSnapshot, getProgramTS) })
         .add("materialize checker.ts", async () => {
-            file.forEachChild(function visit(node) {
+            const { view, decoder } = file as unknown as RemoteSourceFile;
+            new RemoteSourceFile(new Uint8Array(view.buffer, view.byteOffset, view.byteLength), decoder).forEachChild(function visit(node) {
                 node.forEachChild(visit);
             });
         }, { beforeAll: all(spawnAPI, loadSnapshot, getCheckerTS) })

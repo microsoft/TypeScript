@@ -1,6 +1,7 @@
 {
     "extends": "./tsconfig.base.json",
     "compilerOptions": {
+        "rewriteRelativeImportExtensions": false,
         "module": "nodenext",
         "strict": true,
         "noEmit": true,
