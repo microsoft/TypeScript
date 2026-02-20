@@ -121,4 +121,58 @@ func TestSnapshot(t *testing.T) {
 		_, ok := snapshot.ReadFile("/home/projects/TS/p1/nonexistent.ts")
 		assert.Check(t, !ok, "ReadFile should return false for non-existent file")
 	})
+
+	t.Run("program change loads node_modules dependency and auto-imports includes it", func(t *testing.T) {
+		t.Parallel()
+		files := map[string]any{
+			"/home/projects/otherproject/tsconfig.json": `{
+				"compilerOptions": {
+					"module": "commonjs"
+				}
+			}`,
+			"/home/projects/otherproject/index.ts": ``,
+			"/home/projects/node_modules/foo/package.json": `{
+				"types": "index.d.ts",
+				"typesVersions": {
+					"*": {
+						"bar/*": ["dist/*"],
+						"exact-match": ["dist/index.d.ts"],
+						"foo/*": ["dist/*"],
+						"*": ["dist/*"]
+					}
+				}
+			}`,
+			"/home/projects/node_modules/foo/nope.d.ts":                     `export const nope = 0;`,
+			"/home/projects/node_modules/foo/dist/index.d.ts":               `export const index = 0;`,
+			"/home/projects/node_modules/foo/dist/blah.d.ts":                `export const blah = 0;`,
+			"/home/projects/node_modules/foo/dist/foo/onlyInFooFolder.d.ts": `export const foo = 0;`,
+			"/home/projects/node_modules/foo/dist/subfolder/one.d.ts":       `export const one = 0;`,
+		}
+		session := setup(files)
+		t.Cleanup(session.Close)
+		ctx := context.Background()
+		otherIndexURI := lsproto.DocumentUri("file:///home/projects/otherproject/index.ts")
+
+		// Open the file
+		session.DidOpenFile(ctx, otherIndexURI, 1, files["/home/projects/otherproject/index.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		// Insert import statement:
+		// This will trigger both a program rebuild which will include the node_modules files,
+		// and an auto-import collection which should find the exports from those files.
+		session.DidChangeFile(ctx, otherIndexURI, 2, []lsproto.TextDocumentContentChangePartialOrWholeDocument{
+			{
+				Partial: &lsproto.TextDocumentContentChangePartial{
+					Text: `import {} from "foo/foo/subfolder/one";`,
+					Range: lsproto.Range{
+						Start: lsproto.Position{Line: 0, Character: 0},
+						End:   lsproto.Position{Line: 0, Character: 0},
+					},
+				},
+			},
+		})
+
+		// Now trigger snapshot clone with both program update and auto-imports registry building.
+		_, err := session.GetLanguageServiceWithAutoImports(ctx, otherIndexURI)
+		assert.NilError(t, err)
+	})
 }

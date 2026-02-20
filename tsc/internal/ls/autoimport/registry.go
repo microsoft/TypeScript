@@ -278,7 +278,6 @@ func (r *Registry) Clone(ctx context.Context, change RegistryChange, host Regist
 		logger.Logf("Built autoimport registry in %v", time.Since(start))
 	}
 	registry := builder.Build()
-	builder.host.Dispose()
 	return registry, nil
 }
 
