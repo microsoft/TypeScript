@@ -950,7 +950,7 @@ func isKnownGenericTypeName(name string) bool {
 }
 
 func (c *Checker) GetFirstTypeArgumentFromKnownType(t *Type) *Type {
-	if t.objectFlags&ObjectFlagsReference != 0 && isKnownGenericTypeName(t.symbol.Name) {
+	if t.objectFlags&ObjectFlagsReference != 0 && t.symbol != nil && isKnownGenericTypeName(t.symbol.Name) {
 		symbol := c.getGlobalSymbol(t.symbol.Name, ast.SymbolFlagsType, nil)
 		if symbol != nil && symbol == t.Target().symbol {
 			return core.FirstOrNil(c.getTypeArguments(t))
