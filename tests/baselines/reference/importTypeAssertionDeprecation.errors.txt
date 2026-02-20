@@ -1,0 +1,15 @@
+/main.ts(1,38): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+/main.ts(2,38): error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+
+
+==== /types.d.ts (0 errors) ====
+    export interface MyType { x: string }
+    
+==== /main.ts (2 errors) ====
+    type A = import("./types", { assert: { "resolution-mode": "import" } }).MyType;
+                                         ~
+!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+    type B = import("./types", { assert: { "resolution-mode": "require" } }).MyType;
+                                         ~
+!!! error TS2880: Import assertions have been replaced by import attributes. Use 'with' instead of 'assert'.
+    

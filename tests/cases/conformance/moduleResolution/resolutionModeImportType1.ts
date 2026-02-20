@@ -23,11 +23,11 @@ export declare const x: "script";
 
 // @Filename: /app.ts
 type Default = typeof import("foo").x;
-type Import = typeof import("foo", { assert: { "resolution-mode": "import" } }).x;
-type Require = typeof import("foo", { assert: { "resolution-mode": "require" } }).x;
+type Import = typeof import("foo", { with: { "resolution-mode": "import" } }).x;
+type Require = typeof import("foo", { with: { "resolution-mode": "require" } }).x;
 // resolution-mode does not enforce file extension in `bundler`, just sets conditions
-type ImportRelative = typeof import("./other", { assert: { "resolution-mode": "import" } }).x;
-type RequireRelative = typeof import("./other", { assert: { "resolution-mode": "require" } }).x;
+type ImportRelative = typeof import("./other", { with: { "resolution-mode": "import" } }).x;
+type RequireRelative = typeof import("./other", { with: { "resolution-mode": "require" } }).x;
 
 // @Filename: /other.ts
 export const x = "other";

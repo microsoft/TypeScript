@@ -15,11 +15,11 @@ export interface ImportInterface {}
 export interface RequireInterface {}
 //// [index.ts]
 export type LocalInterface =
-    & import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface
-    & import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface;
+    & import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface
+    & import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface;
 
-export const a = (null as any as import("pkg", { assert: {"resolution-mode": "foobar"} }).RequireInterface);
-export const b = (null as any as import("pkg", { assert: {"resolution-mode": "import"} }).ImportInterface);
+export const a = (null as any as import("pkg", { with: {"resolution-mode": "foobar"} }).RequireInterface);
+export const b = (null as any as import("pkg", { with: {"resolution-mode": "import"} }).ImportInterface);
 //// [other.ts]
 // missing assert:
 export type LocalInterface =
@@ -120,8 +120,8 @@ exports.b = null;
 
 
 //// [index.d.ts]
-export type LocalInterface = import("pkg", { assert: { "resolution-mode": "foobar" } }).RequireInterface & import("pkg", { assert: { "resolution-mode": "import" } }).ImportInterface;
-export declare const a: import("pkg").RequireInterface;
+export type LocalInterface = import("pkg", { with: { "resolution-mode": "foobar" } }).RequireInterface & import("pkg", { with: { "resolution-mode": "import" } }).ImportInterface;
+export declare const a: import("pkg", { with: { "resolution-mode": "foobar" } }).RequireInterface;
 export declare const b: import("pkg", { with: { "resolution-mode": "import" } }).ImportInterface;
 //// [other.d.ts]
 export type LocalInterface = import("pkg", { with: {} });

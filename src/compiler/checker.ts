@@ -43020,6 +43020,9 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         checkSourceElement(node.argument);
 
         if (node.attributes) {
+            if (node.attributes.token !== SyntaxKind.WithKeyword && compilerOptions.ignoreDeprecations !== "6.0") {
+                grammarErrorOnFirstToken(node.attributes, Diagnostics.Import_assertions_have_been_replaced_by_import_attributes_Use_with_instead_of_assert);
+            }
             getResolutionModeOverride(node.attributes, grammarErrorOnNode);
         }
         checkTypeReferenceOrImport(node);
