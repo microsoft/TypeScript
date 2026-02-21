@@ -1,0 +1,31 @@
+//// [tests/cases/compiler/computedPropertyWithEnumKey.ts] ////
+
+=== computedPropertyWithEnumKey.ts ===
+enum Type { Foo = 'foo', '3x14' = '3.14' } type TypeMap = { [Type.Foo]: any; [Type['3x14']]: any; };
+>Type : Type
+>     : ^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+>'foo' : "foo"
+>      : ^^^^^
+>'3x14' : (typeof Type)["3x14"]
+>       : ^^^^^^^^^^^^^^^^^^^^^
+>'3.14' : "3.14"
+>       : ^^^^^^
+>TypeMap : TypeMap
+>        : ^^^^^^^
+>[Type.Foo] : any
+>Type.Foo : Type.Foo
+>         : ^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>Foo : Type.Foo
+>    : ^^^^^^^^
+>[Type['3x14']] : any
+>Type['3x14'] : (typeof Type)["3x14"]
+>             : ^^^^^^^^^^^^^^^^^^^^^
+>Type : typeof Type
+>     : ^^^^^^^^^^^
+>'3x14' : "3x14"
+>       : ^^^^^^
+

@@ -13785,12 +13785,22 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             && isTypeUsableAsIndexSignature(isComputedPropertyName(node) ? checkComputedPropertyName(node) : checkExpressionCached((node as ElementAccessExpression).argumentExpression));
     }
 
+    function isEntityNameExpressionOrElementAccess(node: Node): boolean {
+        if (isEntityNameExpression(node)) {
+            return true;
+        }
+        if (isElementAccessExpression(node) && isStringOrNumericLiteralLike(skipParentheses(node.argumentExpression))) {
+            return isEntityNameExpressionOrElementAccess(node.expression);
+        }
+        return false;
+    }
+
     function isLateBindableAST(node: DeclarationName) {
         if (!isComputedPropertyName(node) && !isElementAccessExpression(node)) {
             return false;
         }
         const expr = isComputedPropertyName(node) ? node.expression : node.argumentExpression;
-        return isEntityNameExpression(expr);
+        return isEntityNameExpressionOrElementAccess(expr);
     }
 
     function isTypeUsableAsIndexSignature(type: Type): boolean {
@@ -52956,7 +52966,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
 
     function checkGrammarForInvalidDynamicName(node: DeclarationName, message: DiagnosticMessage) {
         // Even non-bindable names are allowed as late-bound implied index signatures so long as the name is a simple `a.b.c` type name expression
-        if (isNonBindableDynamicName(node) && !isEntityNameExpression(isElementAccessExpression(node) ? skipParentheses(node.argumentExpression) : (node as ComputedPropertyName).expression)) {
+        if (isNonBindableDynamicName(node) && !isEntityNameExpressionOrElementAccess(isElementAccessExpression(node) ? skipParentheses(node.argumentExpression) : (node as ComputedPropertyName).expression)) {
             return grammarErrorOnNode(node, message);
         }
     }

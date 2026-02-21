@@ -1,0 +1,16 @@
+//// [tests/cases/compiler/computedPropertyWithEnumKey.ts] ////
+
+=== computedPropertyWithEnumKey.ts ===
+enum Type { Foo = 'foo', '3x14' = '3.14' } type TypeMap = { [Type.Foo]: any; [Type['3x14']]: any; };
+>Type : Symbol(Type, Decl(computedPropertyWithEnumKey.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(computedPropertyWithEnumKey.ts, 0, 11))
+>'3x14' : Symbol(Type['3x14'], Decl(computedPropertyWithEnumKey.ts, 0, 24))
+>TypeMap : Symbol(TypeMap, Decl(computedPropertyWithEnumKey.ts, 0, 42))
+>[Type.Foo] : Symbol([Type.Foo], Decl(computedPropertyWithEnumKey.ts, 0, 59))
+>Type.Foo : Symbol(Type.Foo, Decl(computedPropertyWithEnumKey.ts, 0, 11))
+>Type : Symbol(Type, Decl(computedPropertyWithEnumKey.ts, 0, 0))
+>Foo : Symbol(Type.Foo, Decl(computedPropertyWithEnumKey.ts, 0, 11))
+>[Type['3x14']] : Symbol([Type['3x14']], Decl(computedPropertyWithEnumKey.ts, 0, 76))
+>Type : Symbol(Type, Decl(computedPropertyWithEnumKey.ts, 0, 0))
+>'3x14' : Symbol(Type['3x14'], Decl(computedPropertyWithEnumKey.ts, 0, 24))
+
