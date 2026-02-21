@@ -1,9 +1,12 @@
 mod1.js(6,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+validator.ts(1,8): error TS2882: Cannot find module or type declarations for side-effect import of './'.
 validator.ts(5,12): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 
-==== validator.ts (1 errors) ====
+==== validator.ts (2 errors) ====
     import "./";
+           ~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of './'.
     
     import Person = require("./mod1");
     

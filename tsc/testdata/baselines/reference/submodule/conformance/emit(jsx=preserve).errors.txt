@@ -3,6 +3,7 @@ main.ts(3,16): error TS2307: Cannot find module '../foo.mts' or its correspondin
 main.ts(4,16): error TS2307: Cannot find module '../../foo.cts' or its corresponding type declarations.
 main.ts(5,16): error TS2307: Cannot find module './foo.tsx' or its corresponding type declarations.
 main.ts(6,22): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
+main.ts(7,8): error TS2882: Cannot find module or type declarations for side-effect import of './foo.ts'.
 main.ts(8,15): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
 main.ts(10,8): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
 main.ts(11,8): error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
@@ -23,7 +24,7 @@ no.ts(11,8): error TS2307: Cannot find module 'node:path' or its corresponding t
 ==== globals.d.ts (0 errors) ====
     declare function require(module: string): any;
     
-==== main.ts (10 errors) ====
+==== main.ts (11 errors) ====
     // Rewrite
     import {} from "./foo.ts";
                    ~~~~~~~~~~
@@ -41,6 +42,8 @@ no.ts(11,8): error TS2307: Cannot find module 'node:path' or its corresponding t
                          ~~~~~~~~~~
 !!! error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.
     import "./foo.ts";
+           ~~~~~~~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of './foo.ts'.
     export * from "./foo.ts";
                   ~~~~~~~~~~
 !!! error TS2307: Cannot find module './foo.ts' or its corresponding type declarations.

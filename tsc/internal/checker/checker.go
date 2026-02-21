@@ -5161,8 +5161,13 @@ func (c *Checker) checkImportDeclaration(node *ast.Node) {
 				!hasTypeJsonImportAttribute(node) {
 				c.error(moduleSpecifier, diagnostics.Importing_a_JSON_file_into_an_ECMAScript_module_requires_a_type_Colon_json_import_attribute_when_module_is_set_to_0, c.moduleKind.String())
 			}
-		} else if c.compilerOptions.NoUncheckedSideEffectImports.IsTrue() && importClause == nil {
-			c.resolveExternalModuleName(node, moduleSpecifier, false)
+		} else if c.compilerOptions.NoUncheckedSideEffectImports.IsTrueOrUnknown() && importClause == nil {
+			ignoreErrors := c.compilerOptions.NoCheck.IsTrue()
+			var errorMessage *diagnostics.Message
+			if !ignoreErrors {
+				errorMessage = diagnostics.Cannot_find_module_or_type_declarations_for_side_effect_import_of_0
+			}
+			c.resolveExternalModuleNameWorker(node, moduleSpecifier, errorMessage, ignoreErrors, false /*isForAugmentation*/)
 		}
 	}
 	c.checkImportAttributes(node)

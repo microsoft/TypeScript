@@ -23,6 +23,7 @@ autoAccessorDisallowedModifiers.ts(31,1): error TS1275: 'accessor' modifier can 
 autoAccessorDisallowedModifiers.ts(32,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(33,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(34,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
+autoAccessorDisallowedModifiers.ts(34,17): error TS2882: Cannot find module or type declarations for side-effect import of 'x'.
 autoAccessorDisallowedModifiers.ts(35,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 autoAccessorDisallowedModifiers.ts(35,25): error TS2307: Cannot find module 'x' or its corresponding type declarations.
 autoAccessorDisallowedModifiers.ts(36,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
@@ -30,7 +31,7 @@ autoAccessorDisallowedModifiers.ts(37,1): error TS1275: 'accessor' modifier can 
 autoAccessorDisallowedModifiers.ts(38,1): error TS1275: 'accessor' modifier can only appear on a property declaration.
 
 
-==== autoAccessorDisallowedModifiers.ts (30 errors) ====
+==== autoAccessorDisallowedModifiers.ts (31 errors) ====
     abstract class C1 {
         accessor accessor a: any;
                  ~~~~~~~~
@@ -115,6 +116,8 @@ autoAccessorDisallowedModifiers.ts(38,1): error TS1275: 'accessor' modifier can 
     accessor import "x";
     ~~~~~~~~
 !!! error TS1275: 'accessor' modifier can only appear on a property declaration.
+                    ~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'x'.
     accessor import {} from "x";
     ~~~~~~~~
 !!! error TS1275: 'accessor' modifier can only appear on a property declaration.

@@ -1,22 +1,14 @@
 --- old.nodeModulesAllowJsExportAssignment(module=node20).errors.txt
 +++ new.nodeModulesAllowJsExportAssignment(module=node20).errors.txt
 @@= skipped -0, +0 lines =@@
--file.js(2,8): error TS2882: Cannot find module or type declarations for side-effect import of 'fs'.
+ file.js(2,8): error TS2882: Cannot find module or type declarations for side-effect import of 'fs'.
 -file.js(4,1): error TS2591: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i --save-dev @types/node` and then add 'node' to the types field in your tsconfig.
 +file.js(4,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
  index.js(3,1): error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
  index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
  subfolder/index.js(3,1): error TS8003: 'export =' can only be used in TypeScript files.
-@@= skipped -22, +21 lines =@@
- !!! error TS1203: Export assignment cannot be used when targeting ECMAScript modules. Consider using 'export default' or another module format instead.
-     ~~~~~~~~~~~
- !!! error TS8003: 'export =' can only be used in TypeScript files.
--==== file.js (2 errors) ====
-+==== file.js (1 errors) ====
-     // esm format file
-     import "fs";
--           ~~~~
--!!! error TS2882: Cannot find module or type declarations for side-effect import of 'fs'.
+@@= skipped -29, +29 lines =@@
+ !!! error TS2882: Cannot find module or type declarations for side-effect import of 'fs'.
      const a = {};
      module.exports = a;
 -    ~~~~~~

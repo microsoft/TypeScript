@@ -878,7 +878,7 @@ var optionsForCompiler = []*CommandLineOption{
 		AffectsBuildInfo:           true,
 		Category:                   diagnostics.Modules,
 		Description:                diagnostics.Check_side_effect_imports,
-		DefaultValueDescription:    false,
+		DefaultValueDescription:    true,
 	},
 
 	// Source Maps

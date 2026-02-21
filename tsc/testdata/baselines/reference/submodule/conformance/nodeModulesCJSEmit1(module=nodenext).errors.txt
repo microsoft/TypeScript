@@ -1,3 +1,4 @@
+/3.cjs(1,8): error TS2882: Cannot find module or type declarations for side-effect import of 'foo'.
 /5.cjs(2,8): error TS1192: Module '"/3"' has no default export.
 
 
@@ -7,8 +8,10 @@
 ==== /2.cjs (0 errors) ====
     exports.foo = 0;
     
-==== /3.cjs (0 errors) ====
+==== /3.cjs (1 errors) ====
     import "foo";
+           ~~~~~
+!!! error TS2882: Cannot find module or type declarations for side-effect import of 'foo'.
     exports.foo = {};
     
 ==== /4.cjs (0 errors) ====

@@ -1,7 +1,8 @@
 --- old.checkExportsObjectAssignPrototypeProperty.errors.txt
 +++ new.checkExportsObjectAssignPrototypeProperty.errors.txt
 @@= skipped -0, +0 lines =@@
--validator.ts(1,8): error TS2882: Cannot find module or type declarations for side-effect import of './'.
++mod1.js(6,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+ validator.ts(1,8): error TS2882: Cannot find module or type declarations for side-effect import of './'.
 -validator.ts(19,4): error TS2540: Cannot assign to 'readonlyProp' because it is a read-only property.
 -validator.ts(20,4): error TS2540: Cannot assign to 'readonlyAccessor' because it is a read-only property.
 -validator.ts(21,1): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -10,15 +11,14 @@
 -
 -
 -==== validator.ts (6 errors) ====
-+mod1.js(6,5): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 +validator.ts(5,12): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 +
 +
-+==== validator.ts (1 errors) ====
++==== validator.ts (2 errors) ====
      import "./";
--           ~~~~
--!!! error TS2882: Cannot find module or type declarations for side-effect import of './'.
-     
+            ~~~~
+ !!! error TS2882: Cannot find module or type declarations for side-effect import of './'.
+@@= skipped -13, +10 lines =@@
      import Person = require("./mod1");
      
      const m1 = new Person("Name")
@@ -27,7 +27,7 @@
      
      m1.thing;
      m1.readonlyProp;
-@@= skipped -27, +23 lines =@@
+@@= skipped -14, +16 lines =@@
      
      // disallowed assignments
      m1.readonlyProp = "name";
