@@ -222,7 +222,12 @@ function getNormalizedSymbolModifiers(symbol: Symbol) {
             : ModifierFlags.None;
         const modifiers = getNodeModifiers(declaration, excludeFlags);
         if (modifiers) {
-            return modifiers.split(",");
+            const result = modifiers.split(",");
+            // For getter/setter pairs, include deprecated if any accessor has @deprecated
+            if (symbol.flags & SymbolFlags.Accessor && !result.includes("deprecated") && some(symbol.declarations, isDeprecatedDeclaration)) {
+                result.push("deprecated");
+            }
+            return result;
         }
     }
     return [];

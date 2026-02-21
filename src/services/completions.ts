@@ -6085,7 +6085,11 @@ function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecke
 }
 
 function isDeprecated(symbol: Symbol, checker: TypeChecker) {
-    const declarations = skipAlias(symbol, checker).declarations;
+    const resolvedSymbol = skipAlias(symbol, checker);
+    const declarations = resolvedSymbol.declarations;
+    if (resolvedSymbol.flags & SymbolFlags.Accessor) {
+        return !!length(declarations) && some(declarations, isDeprecatedDeclaration);
+    }
     return !!length(declarations) && every(declarations, isDeprecatedDeclaration);
 }
 
