@@ -712,7 +712,7 @@ func registerLanguageServiceDocumentRequestHandler[Req lsproto.HasTextDocumentUR
 			return nil, err
 		}
 		return func() error {
-			defer s.recover(ctx, req)
+			defer s.recover(req)
 			resp, lsErr := fn(s, ctx, ls, params)
 			if lsErr != nil {
 				return lsErr
@@ -737,7 +737,7 @@ func registerLanguageServiceWithAutoImportsRequestHandler[Req lsproto.HasTextDoc
 			return nil, err
 		}
 		return func() error {
-			defer s.recover(ctx, req)
+			defer s.recover(req)
 			resp, lsErr := fn(s, ctx, languageService, params)
 			if errors.Is(lsErr, ls.ErrNeedsAutoImports) {
 				languageService, lsErr = s.session.GetLanguageServiceWithAutoImports(ctx, params.TextDocumentURI())
@@ -780,7 +780,7 @@ func registerMultiProjectReferenceRequestHandler[Req lsproto.HasTextDocumentPosi
 			return nil, err
 		}
 		return func() error {
-			defer s.recover(ctx, req)
+			defer s.recover(req)
 			resp, lsErr := fn(defaultLs, ctx, params, orchestrator)
 			if lsErr != nil {
 				return lsErr
@@ -834,17 +834,17 @@ func (s *Server) getLanguageServiceAndCrossProjectOrchestrator(ctx context.Conte
 	return defaultLs, orchestrator, err
 }
 
-func (s *Server) recover(ctx context.Context, req *lsproto.RequestMessage) {
+func (s *Server) recover(req *lsproto.RequestMessage) {
 	if r := recover(); r != nil {
 		stack := debug.Stack()
 		s.logger.Errorf("panic handling request %s: %v\n%s", req.Method, r, string(stack))
 		if req.ID != nil {
 			err := s.sendError(req.ID, fmt.Errorf("%w: panic handling request %s: %v", lsproto.ErrorCodeInternalError, req.Method, r))
 			if err != nil {
-				panic(err)
+				return
 			}
 
-			err = sendNotification(s, lsproto.TelemetryEventInfo, lsproto.TelemetryEvent{
+			_ = sendNotification(s, lsproto.TelemetryEventInfo, lsproto.TelemetryEvent{
 				RequestFailureTelemetryEvent: &lsproto.RequestFailureTelemetryEvent{
 					Properties: &lsproto.RequestFailureTelemetryProperties{
 						ErrorCode:     lsproto.ErrorCodeInternalError.String(),
@@ -853,9 +853,6 @@ func (s *Server) recover(ctx context.Context, req *lsproto.RequestMessage) {
 					},
 				},
 			})
-			if err != nil {
-				panic(err)
-			}
 		} else {
 			s.logger.Error("unhandled panic in notification", req.Method, r)
 		}
@@ -1181,7 +1178,7 @@ func (s *Server) handleCompletionItemResolve(ctx context.Context, params *lsprot
 	if err != nil {
 		return nil, err
 	}
-	defer s.recover(ctx, reqMsg)
+	defer s.recover(reqMsg)
 	return languageService.ResolveCompletionItem(
 		ctx,
 		params,
@@ -1218,7 +1215,7 @@ func (s *Server) handleDocumentOnTypeFormat(ctx context.Context, ls *ls.Language
 
 func (s *Server) handleWorkspaceSymbol(ctx context.Context, params *lsproto.WorkspaceSymbolParams, reqMsg *lsproto.RequestMessage) (lsproto.WorkspaceSymbolResponse, error) {
 	snapshot := s.session.GetSnapshotLoadingProjectTree(ctx, nil)
-	defer s.recover(ctx, reqMsg)
+	defer s.recover(reqMsg)
 
 	programs := core.Map(snapshot.ProjectCollection.Projects(), (*project.Project).GetProgram)
 	return ls.ProvideWorkspaceSymbols(
@@ -1272,7 +1269,7 @@ func (s *Server) handleCodeLensResolve(ctx context.Context, codeLens *lsproto.Co
 		// based on non-existent files and line maps from shortened files.
 		return codeLens, lsproto.ErrorCodeContentModified
 	}
-	defer s.recover(ctx, reqMsg)
+	defer s.recover(reqMsg)
 	return defaultLs.ResolveCodeLens(
 		ctx,
 		codeLens,
