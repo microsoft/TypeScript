@@ -61,8 +61,6 @@ const { values: rawOptions } = parseArgs({
         dirty: { type: "boolean" },
         release: { type: "boolean" },
 
-        insiders: { type: "boolean" },
-
         setPrerelease: { type: "string" },
         forRelease: { type: "boolean" },
 
@@ -1763,27 +1761,4 @@ export const nativePreview = task({
     run: options.forRelease ? async () => {
         throw new Error("This task should not be run in release builds.");
     } : undefined,
-});
-
-export const installExtension = task({
-    name: "install-extension",
-    hiddenFromTaskList: true,
-    dependencies: options.forRelease ? undefined : [packNativePreviewExtensions],
-    run: async () => {
-        if (options.forRelease) {
-            throw new Error("This task should not be run in release builds.");
-        }
-
-        const platforms = nativePreviewPlatforms();
-        const myPlatform = platforms.find(p => p.nodeOs === process.platform && p.nodeArch === process.arch);
-        if (!myPlatform) {
-            throw new Error(`No platform found for ${process.platform}-${process.arch}`);
-        }
-
-        await $`${options.insiders ? "code-insiders" : "code"} --install-extension ${myPlatform.extensions[0].vsixPath}`;
-        console.log(pc.yellowBright("\nExtension installed. ") + "To enable this extension, set:\n");
-        console.log(pc.whiteBright(`    "typescript.experimental.useTsgo": true\n`));
-        console.log("To configure the extension to use built/local instead of its bundled tsgo, set:\n");
-        console.log(pc.whiteBright(`    "typescript.native-preview.tsdk": "${path.join(__dirname, "built", "local")}"\n`));
-    },
 });
