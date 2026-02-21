@@ -1018,12 +1018,12 @@ func (b *ProjectCollectionBuilder) markFilesChanged(entry dirty.Value[*Project],
 
 			dirtyFilePath = p.dirtyFilePath
 			for _, path := range paths {
+				if _, ok := p.affectingLocationsWatch.input[path]; ok {
+					dirty = true
+					dirtyFilePath = ""
+					break
+				}
 				if changeType == lsproto.FileChangeTypeCreated {
-					if _, ok := p.affectingLocationsWatch.input[path]; ok {
-						dirty = true
-						dirtyFilePath = ""
-						break
-					}
 					if _, ok := p.failedLookupsWatch.input[path]; ok {
 						dirty = true
 						dirtyFilePath = ""

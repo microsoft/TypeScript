@@ -560,6 +560,63 @@ func TestProjectCollectionBuilder(t *testing.T) {
 		assert.Assert(t, defaultProject != nil, "dependency should have a default project")
 		assert.Equal(t, defaultProject.Kind, project.KindInferred, "dependency should be in an inferred project after import is deleted")
 	})
+
+	t.Run("should update project on package.json change", func(t *testing.T) {
+		t.Parallel()
+		// Set up a project with package.json "imports" that affect module resolution.
+		// The package.json is not a program file, but it IS an affecting location.
+		// When it changes, the project should be marked dirty and the program should be rebuilt.
+		packageJsonFiles := map[string]any{
+			"/home/projects/myproject/tsconfig.json": `{
+				"compilerOptions": {
+					"module": "nodenext",
+					"moduleResolution": "nodenext",
+					"noLib": true,
+					"noEmit": true
+				}
+			}`,
+			"/home/projects/myproject/package.json": `{
+				"name": "myproject",
+				"type": "module",
+				"imports": {
+					"#utils": "./src/utils.ts"
+				}
+			}`,
+			"/home/projects/myproject/src/index.ts": `import { add } from "#utils";`,
+			"/home/projects/myproject/src/utils.ts": `export function add(a: number, b: number) { return a + b; }`,
+		}
+
+		session, utils := projecttestutil.Setup(packageJsonFiles)
+		indexUri := lsproto.DocumentUri("file:///home/projects/myproject/src/index.ts")
+		session.DidOpenFile(context.Background(), indexUri, 1, packageJsonFiles["/home/projects/myproject/src/index.ts"].(string), lsproto.LanguageKindTypeScript)
+
+		// Verify initial state: #utils resolves to utils.ts, so utils.ts is in the program
+		ls, err := session.GetLanguageService(context.Background(), indexUri)
+		assert.NilError(t, err)
+		program := ls.GetProgram()
+		assert.Equal(t, len(program.GetSemanticDiagnostics(context.Background(), nil)), 0, "should have no diagnostics with correct package.json")
+
+		// Now change the package.json to point #utils at a non-existent file
+		err = utils.FS().WriteFile("/home/projects/myproject/package.json", `{
+			"name": "myproject",
+			"type": "module",
+			"imports": {
+				"#utils": "./src/nonexistent.ts"
+			}
+		}`, false)
+		assert.NilError(t, err)
+		session.DidChangeWatchedFiles(context.Background(), []*lsproto.FileEvent{
+			{
+				Uri:  lsproto.DocumentUri("file:///home/projects/myproject/package.json"),
+				Type: lsproto.FileChangeTypeChanged,
+			},
+		})
+
+		ls, err = session.GetLanguageService(context.Background(), indexUri)
+		assert.NilError(t, err)
+		updatedProgram := ls.GetProgram()
+		assert.Equal(t, len(updatedProgram.GetSemanticDiagnostics(context.Background(), nil)), 1, "should have diagnostics after package.json change")
+	})
 }
 
 func filesForSolutionConfigFile(solutionRefs []string, compilerOptions string, ownFiles []string) map[string]any {
