@@ -1,0 +1,21 @@
+//// [tests/cases/compiler/noDoubleErrorForLiteralUnionFromAmbient.ts] ////
+
+=== noDoubleErrorForLiteralUnionFromAmbient.ts ===
+// Repro from #63050
+// When assigning a union of string literals from an ambient declaration to
+// an incompatible type, the error should not show the same message twice.
+
+declare const x: "a" | "b"
+>x : Symbol(x, Decl(noDoubleErrorForLiteralUnionFromAmbient.ts, 4, 13))
+
+const y: number = x
+>y : Symbol(y, Decl(noDoubleErrorForLiteralUnionFromAmbient.ts, 6, 5))
+>x : Symbol(x, Decl(noDoubleErrorForLiteralUnionFromAmbient.ts, 4, 13))
+
+declare const single: "hello"
+>single : Symbol(single, Decl(noDoubleErrorForLiteralUnionFromAmbient.ts, 8, 13))
+
+const z: number = single
+>z : Symbol(z, Decl(noDoubleErrorForLiteralUnionFromAmbient.ts, 10, 5))
+>single : Symbol(single, Decl(noDoubleErrorForLiteralUnionFromAmbient.ts, 8, 13))
+

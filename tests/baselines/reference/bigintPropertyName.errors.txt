@@ -23,7 +23,7 @@ g.ts(32,3): error TS2538: Type 'bigint' cannot be used as an index type.
 g.ts(33,4): error TS2538: Type 'bigint' cannot be used as an index type.
 g.ts(35,1): error TS1434: Unexpected keyword or identifier.
 g.ts(35,2): error TS1353: A bigint literal must be an integer.
-q.ts(2,19): error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
+q.ts(2,19): error TS2322: Type 'Q' is not assignable to type 'string | number | symbol'.
   Type 'bigint' is not assignable to type 'string | number | symbol'.
 
 
@@ -138,6 +138,6 @@ q.ts(2,19): error TS2322: Type 'bigint' is not assignable to type 'string | numb
     type Q = 6n | 7n | 8n;
     type T = { [t in  Q]: string };
                       ~
-!!! error TS2322: Type 'bigint' is not assignable to type 'string | number | symbol'.
+!!! error TS2322: Type 'Q' is not assignable to type 'string | number | symbol'.
 !!! error TS2322:   Type 'bigint' is not assignable to type 'string | number | symbol'.
     

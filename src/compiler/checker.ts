@@ -22636,7 +22636,16 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             if (!(target.flags & TypeFlags.Never) && isLiteralType(source) && !typeCouldHaveTopLevelSingletonTypes(target)) {
                 generalizedSource = getBaseTypeOfLiteralType(source);
                 Debug.assert(!isTypeAssignableTo(generalizedSource, target), "generalized source shouldn't be assignable");
-                generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
+                // When a non-enum union of literals generalizes to a single non-union
+                // base type (e.g. "a" | "b" -> string), skip the generalization for
+                // display purposes. The per-member elaboration already shows the base
+                // type, so using it here would produce a duplicate message (see #63050).
+                if (source.flags & TypeFlags.Union && !(source.flags & TypeFlags.EnumLiteral) && !(generalizedSource.flags & TypeFlags.Union)) {
+                    generalizedSource = source;
+                }
+                else {
+                    generalizedSourceType = getTypeNameForErrorDisplay(generalizedSource);
+                }
             }
 
             // If `target` is of indexed access type (And `source` it is not), we use the object type of `target` for better error reporting

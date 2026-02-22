@@ -1,0 +1,23 @@
+noDoubleErrorForLiteralUnionFromAmbient.ts(7,7): error TS2322: Type '"a" | "b"' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
+noDoubleErrorForLiteralUnionFromAmbient.ts(11,7): error TS2322: Type 'string' is not assignable to type 'number'.
+
+
+==== noDoubleErrorForLiteralUnionFromAmbient.ts (2 errors) ====
+    // Repro from #63050
+    // When assigning a union of string literals from an ambient declaration to
+    // an incompatible type, the error should not show the same message twice.
+    
+    declare const x: "a" | "b"
+    
+    const y: number = x
+          ~
+!!! error TS2322: Type '"a" | "b"' is not assignable to type 'number'.
+!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+    
+    declare const single: "hello"
+    
+    const z: number = single
+          ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+    
