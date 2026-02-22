@@ -282,13 +282,11 @@ func VisitEachChildAndJSDoc(
 	visitNodes func(*ast.NodeList, *ast.NodeVisitor) *ast.NodeList,
 ) {
 	visitor := getNodeVisitor(visitNode, visitNodes)
-	if node.Flags&ast.NodeFlagsHasJSDoc != 0 {
-		for _, jsdoc := range node.JSDoc(sourceFile) {
-			if visitor.Hooks.VisitNode != nil {
-				visitor.Hooks.VisitNode(jsdoc, visitor)
-			} else {
-				visitor.VisitNode(jsdoc)
-			}
+	for _, jsdoc := range node.JSDoc(sourceFile) {
+		if visitor.Hooks.VisitNode != nil {
+			visitor.Hooks.VisitNode(jsdoc, visitor)
+		} else {
+			visitor.VisitNode(jsdoc)
 		}
 	}
 	node.VisitEachChild(visitor)

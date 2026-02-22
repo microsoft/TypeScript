@@ -196,10 +196,8 @@ func getSmartSelectionRange(l *LanguageService, sourceFile *ast.SourceFile, pos 
 		}
 
 		// Visit JSDoc nodes first if they exist
-		if current.Flags&ast.NodeFlagsHasJSDoc != 0 {
-			for _, jsdoc := range current.JSDoc(sourceFile) {
-				visit(jsdoc)
-			}
+		for _, jsdoc := range current.JSDoc(sourceFile) {
+			visit(jsdoc)
 		}
 
 		tempVisitor := ast.NewNodeVisitor(visit, nil, ast.NodeVisitorHooks{
