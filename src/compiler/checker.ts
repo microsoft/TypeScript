@@ -17746,7 +17746,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
         const readonly = isReadonlyTypeOperator(node.parent);
         const elementType = getArrayElementTypeNode(node);
         if (elementType) {
-            return readonly ? globalReadonlyArrayType : globalArrayType;
+            return (readonly ? globalReadonlyArrayType : globalArrayType) || emptyGenericType;
         }
         const elementFlags = map((node as TupleTypeNode).elements, getTupleElementFlags);
         return getTupleTargetType(elementFlags, readonly, map((node as TupleTypeNode).elements, memberIfLabeledElementDeclaration));

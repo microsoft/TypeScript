@@ -1,0 +1,7 @@
+//// [tests/cases/compiler/bug57009.ts] ////
+
+=== bug57009.ts ===
+type Array<T> = T[];
+>Array : {}
+>      : ^^
+
