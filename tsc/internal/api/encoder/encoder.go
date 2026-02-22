@@ -354,12 +354,7 @@ func EncodeSourceFile(sourceFile *ast.SourceFile) ([]byte, error) {
 
 func appendUint32s(buf []byte, values ...uint32) []byte {
 	for _, value := range values {
-		var err error
-		if buf, err = binary.Append(buf, binary.LittleEndian, value); err != nil {
-			// The only error binary.Append can return is for values that are not fixed-size.
-			// This can never happen here, since we are always appending uint32.
-			panic(fmt.Sprintf("failed to append uint32: %v", err))
-		}
+		buf = binary.LittleEndian.AppendUint32(buf, value)
 	}
 	return buf
 }
