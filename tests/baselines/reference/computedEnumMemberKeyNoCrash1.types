@@ -1,0 +1,41 @@
+//// [tests/cases/compiler/computedEnumMemberKeyNoCrash1.ts] ////
+
+=== computedEnumMemberKeyNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/63173
+
+declare const enum E {
+>E : E
+>  : ^
+
+    [foo] = 1,
+>[foo] : E
+>      : ^
+>foo : E.foo
+>    : ^^^^^
+>1 : 1
+>  : ^
+
+    A,
+>A : E.A
+>  : ^^^
+
+    foo = 10,
+>foo : E.foo
+>    : ^^^^^
+>10 : 10
+>   : ^^
+}
+E.A.toString();
+>E.A.toString() : string
+>               : ^^^^^^
+>E.A.toString : (radix?: number) => string
+>             : ^     ^^^      ^^^^^      
+>E.A : E.A
+>    : ^^^
+>E : typeof E
+>  : ^^^^^^^^
+>A : E.A
+>  : ^^^
+>toString : (radix?: number) => string
+>         : ^     ^^^      ^^^^^      
+

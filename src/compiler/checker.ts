@@ -13549,7 +13549,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                 for (const declaration of symbol.declarations) {
                     if (declaration.kind === SyntaxKind.EnumDeclaration) {
                         for (const member of (declaration as EnumDeclaration).members) {
-                            if (hasBindableName(member)) {
+                            if (!hasDynamicName(member)) {
                                 const memberSymbol = getSymbolOfDeclaration(member);
                                 const value = getEnumMemberValue(member).value;
                                 const memberType = getFreshTypeOfLiteralType(

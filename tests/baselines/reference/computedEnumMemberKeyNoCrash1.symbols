@@ -1,0 +1,25 @@
+//// [tests/cases/compiler/computedEnumMemberKeyNoCrash1.ts] ////
+
+=== computedEnumMemberKeyNoCrash1.ts ===
+// https://github.com/microsoft/TypeScript/issues/63173
+
+declare const enum E {
+>E : Symbol(E, Decl(computedEnumMemberKeyNoCrash1.ts, 0, 0))
+
+    [foo] = 1,
+>[foo] : Symbol(E[foo], Decl(computedEnumMemberKeyNoCrash1.ts, 2, 22))
+>foo : Symbol(E.foo, Decl(computedEnumMemberKeyNoCrash1.ts, 4, 6))
+
+    A,
+>A : Symbol(E.A, Decl(computedEnumMemberKeyNoCrash1.ts, 3, 14))
+
+    foo = 10,
+>foo : Symbol(E.foo, Decl(computedEnumMemberKeyNoCrash1.ts, 4, 6))
+}
+E.A.toString();
+>E.A.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>E.A : Symbol(E.A, Decl(computedEnumMemberKeyNoCrash1.ts, 3, 14))
+>E : Symbol(E, Decl(computedEnumMemberKeyNoCrash1.ts, 0, 0))
+>A : Symbol(E.A, Decl(computedEnumMemberKeyNoCrash1.ts, 3, 14))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+

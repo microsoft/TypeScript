@@ -1,0 +1,15 @@
+computedEnumMemberKeyNoCrash1.ts(4,5): error TS1164: Computed property names are not allowed in enums.
+
+
+==== computedEnumMemberKeyNoCrash1.ts (1 errors) ====
+    // https://github.com/microsoft/TypeScript/issues/63173
+    
+    declare const enum E {
+        [foo] = 1,
+        ~~~~~
+!!! error TS1164: Computed property names are not allowed in enums.
+        A,
+        foo = 10,
+    }
+    E.A.toString();
+    
