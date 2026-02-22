@@ -36344,7 +36344,7 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
             case SyntaxKind.GetAccessor:
             case SyntaxKind.SetAccessor:
                 // For decorators with only two parameters we supply only two arguments
-                return signature.parameters.length <= 2 ? 2 : 3;
+                return getParameterCount(signature) <= 2 ? 2 : 3;
             case SyntaxKind.Parameter:
                 return 3;
             default:
