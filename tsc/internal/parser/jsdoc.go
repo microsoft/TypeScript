@@ -255,7 +255,7 @@ loop:
 				indent += len(asterisk)
 			}
 		case ast.KindWhitespaceTrivia:
-			if state == jsdocStateSavingComments {
+			if state == jsdocStateSavingComments || state == jsdocStateSavingBackticks {
 				panic("whitespace shouldn't come from the scanner while saving top-level comment text")
 			}
 			// only collect whitespace if we're already saving comments or have just crossed the comment indent margin
@@ -274,8 +274,17 @@ loop:
 		case ast.KindEndOfFile:
 			break loop
 		case ast.KindJSDocCommentTextToken:
-			state = jsdocStateSavingComments
+			if state != jsdocStateSavingBackticks {
+				state = jsdocStateSavingComments
+			}
 			pushComment(p.scanner.TokenValue())
+		case ast.KindBacktickToken:
+			if state == jsdocStateSavingBackticks {
+				state = jsdocStateSavingComments
+			} else {
+				state = jsdocStateSavingBackticks
+			}
+			pushComment(p.scanner.TokenText())
 		case ast.KindOpenBraceToken:
 			state = jsdocStateSavingComments
 			commentEnd := p.scanner.TokenFullStart()
@@ -296,11 +305,13 @@ loop:
 			// Anything else is doc comment text. We just save it. Because it
 			// wasn't a tag, we can no longer parse a tag on this line until we hit the next
 			// line break.
-			state = jsdocStateSavingComments
+			if state != jsdocStateSavingBackticks {
+				state = jsdocStateSavingComments
+			}
 			pushComment(p.scanner.TokenText())
 		}
-		if state == jsdocStateSavingComments {
-			p.nextJSDocCommentTextToken(false)
+		if state == jsdocStateSavingComments || state == jsdocStateSavingBackticks {
+			p.nextJSDocCommentTextToken(state == jsdocStateSavingBackticks)
 		} else {
 			p.nextTokenJSDoc()
 		}
