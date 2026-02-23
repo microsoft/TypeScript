@@ -9276,7 +9276,7 @@ interface ReadableStreamDefaultController<R = any> {
      *
      * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ReadableStreamDefaultController/enqueue)
      */
-    enqueue(chunk?: R): void;
+    enqueue(chunk: R): void;
     /**
      * The **`error()`** method of the ReadableStreamDefaultController interface causes any future interactions with the associated stream to error.
      *
