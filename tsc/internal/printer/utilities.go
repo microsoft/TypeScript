@@ -10,6 +10,7 @@ import (
 	"github.com/microsoft/typescript-go/internal/ast"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/scanner"
+	"github.com/microsoft/typescript-go/internal/sourcemap"
 	"github.com/microsoft/typescript-go/internal/stringutil"
 	"github.com/microsoft/typescript-go/internal/tspath"
 )
@@ -886,4 +887,43 @@ func calculateIndent(text string, pos int, end int) int {
 	}
 
 	return currentLineIndent
+}
+
+// lineCharacterCache provides cached line/character lookups for a source file,
+// optimized for monotonically increasing positions (e.g., during source map emit).
+//
+// When positions increase within the same line, only the delta between the last
+// position and the new position needs to be scanned for rune counts, turning
+// what would be O(n²) into O(n) for long lines.
+type lineCharacterCache struct {
+	lineMap    []core.TextPos
+	text       string
+	cachedLine int
+	cachedPos  int
+	cachedChar int
+	hasCached  bool
+}
+
+func newLineCharacterCache(source sourcemap.Source) *lineCharacterCache {
+	return &lineCharacterCache{
+		lineMap: source.ECMALineMap(),
+		text:    source.Text(),
+	}
+}
+
+func (c *lineCharacterCache) getLineAndCharacter(pos int) (line int, character int) {
+	line = scanner.ComputeLineOfPosition(c.lineMap, pos)
+	if c.hasCached && line == c.cachedLine && pos >= c.cachedPos {
+		// Incremental: only count runes from the last cached position.
+		character = c.cachedChar + utf8.RuneCountInString(c.text[c.cachedPos:pos])
+	} else {
+		// Full computation from line start.
+		// !!! TODO: this is suspect; these are rune counts, not UTF-8 _or_ UTF-16 offsets.
+		character = utf8.RuneCountInString(c.text[c.lineMap[line]:pos])
+	}
+	c.cachedLine = line
+	c.cachedPos = pos
+	c.cachedChar = character
+	c.hasCached = true
+	return line, character
 }

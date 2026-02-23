@@ -125,6 +125,7 @@ type Printer struct {
 	sourceMapSource                   sourcemap.Source
 	sourceMapSourceIndex              sourcemap.SourceIndex
 	sourceMapSourceIsJson             bool
+	sourceMapLineCharCache            *lineCharacterCache
 	mostRecentSourceMapSource         sourcemap.Source
 	mostRecentSourceMapSourceIndex    sourcemap.SourceIndex
 	containerPos                      int
@@ -4922,11 +4923,13 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 	savedSourceMapGenerator := p.sourceMapGenerator
 	savedSourceMapSource := p.sourceMapSource
 	savedSourceMapSourceIndex := p.sourceMapSourceIndex
+	savedSourceMapLineCharCache := p.sourceMapLineCharCache
 
 	p.sourceMapsDisabled = sourceMapGenerator == nil
 	p.sourceMapGenerator = sourceMapGenerator
 	p.sourceMapSource = nil
 	p.sourceMapSourceIndex = -1
+	p.sourceMapLineCharCache = nil
 
 	p.setSourceFile(sourceFile)
 	p.writer = writer
@@ -5112,6 +5115,7 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 	p.sourceMapGenerator = savedSourceMapGenerator
 	p.sourceMapSource = savedSourceMapSource
 	p.sourceMapSourceIndex = savedSourceMapSourceIndex
+	p.sourceMapLineCharCache = savedSourceMapLineCharCache
 }
 
 //
@@ -5578,6 +5582,7 @@ func (p *Printer) setSourceMapSource(source sourcemap.Source) {
 	}
 
 	p.sourceMapSource = source
+	p.sourceMapLineCharCache = newLineCharacterCache(source)
 	if p.mostRecentSourceMapSource == source {
 		p.sourceMapSourceIndex = p.mostRecentSourceMapSourceIndex
 		return
@@ -5604,7 +5609,7 @@ func (p *Printer) emitPos(pos int) {
 		return
 	}
 
-	sourceLine, sourceCharacter := scanner.GetECMALineAndCharacterOfPosition(p.sourceMapSource, pos)
+	sourceLine, sourceCharacter := p.sourceMapLineCharCache.getLineAndCharacter(pos)
 	if err := p.sourceMapGenerator.AddSourceMapping(
 		p.writer.GetLine(),
 		p.writer.GetColumn(),
@@ -5640,10 +5645,12 @@ func (p *Printer) emitSourcePos(source sourcemap.Source, pos int) {
 	if source != p.sourceMapSource {
 		savedSourceMapSource := p.sourceMapSource
 		savedSourceMapSourceIndex := p.sourceMapSourceIndex
+		savedSourceMapLineCharCache := p.sourceMapLineCharCache
 		p.setSourceMapSource(source)
 		p.emitPos(pos)
 		p.sourceMapSource = savedSourceMapSource
 		p.sourceMapSourceIndex = savedSourceMapSourceIndex
+		p.sourceMapLineCharCache = savedSourceMapLineCharCache
 	} else {
 		p.emitPos(pos)
 	}
