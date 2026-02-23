@@ -1,42 +1,37 @@
 // === QuickInfo ===
-=== /quickInfoForObjectBindingElementName04.ts ===
-// interface Options {
-//    /**
-//     * A description of 'a'
-//     */
-//     a: {
-//        /**
-//         * A description of 'b'
-//         */
-//        b: string;
-//    }
+=== /destructuredInterfaceJSDocWithRename.ts ===
+// interface FooBar {
+//     /** foo comment */
+//     foo: number;
+//     /** bar comment */
+//     bar: string;
 // }
 // 
-// function f({ a, a: { b } }: Options) {
-//     a;
-//     ^
+// declare const fubar: FooBar;
+// 
+// const {foo: myFoo, bar: myBar} = fubar;
+//             ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var a: { b: string; }
+// | const myFoo: number
 // | ```
-// | A description of 'a'
+// | foo comment
 // | ----------------------------------------------------------------------
-//     b;
-//     ^
+//                         ^^^^^
 // | ----------------------------------------------------------------------
 // | ```tsx
-// | var b: string
+// | const myBar: string
 // | ```
-// | A description of 'b'
+// | bar comment
 // | ----------------------------------------------------------------------
-// }
+// 
 [
   {
     "marker": {
-      "Position": 193,
+      "Position": 144,
       "LSPosition": {
-        "line": 13,
-        "character": 5
+        "line": 9,
+        "character": 12
       },
       "Name": "1",
       "Data": {}
@@ -44,26 +39,26 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar a: { b: string; }\n```\nA description of 'a'"
+        "value": "```tsx\nconst myFoo: number\n```\nfoo comment"
       },
       "range": {
         "start": {
-          "line": 13,
-          "character": 4
+          "line": 9,
+          "character": 12
         },
         "end": {
-          "line": 13,
-          "character": 5
+          "line": 9,
+          "character": 17
         }
       }
     }
   },
   {
     "marker": {
-      "Position": 200,
+      "Position": 156,
       "LSPosition": {
-        "line": 14,
-        "character": 5
+        "line": 9,
+        "character": 24
       },
       "Name": "2",
       "Data": {}
@@ -71,16 +66,16 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar b: string\n```\nA description of 'b'"
+        "value": "```tsx\nconst myBar: string\n```\nbar comment"
       },
       "range": {
         "start": {
-          "line": 14,
-          "character": 4
+          "line": 9,
+          "character": 24
         },
         "end": {
-          "line": 14,
-          "character": 5
+          "line": 9,
+          "character": 29
         }
       }
     }

@@ -65,16 +65,44 @@ func (l *LanguageService) getQuickInfoAndDocumentationForSymbol(c *checker.Check
 	if quickInfo == "" {
 		return "", ""
 	}
-	return quickInfo, l.getDocumentationFromDeclaration(c, declaration, contentFormat, false /*commentOnly*/)
+	return quickInfo, l.getDocumentationFromDeclaration(c, symbol, declaration, node, contentFormat, false /*commentOnly*/)
 }
 
-func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, declaration *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
+func (l *LanguageService) getDocumentationFromDeclaration(c *checker.Checker, symbol *ast.Symbol, declaration *ast.Node, location *ast.Node, contentFormat lsproto.MarkupKind, commentOnly bool) string {
 	if declaration == nil {
 		return ""
 	}
+
 	isMarkdown := contentFormat == lsproto.MarkupKindMarkdown
 	var b strings.Builder
-	if jsdoc := getJSDocOrTag(c, declaration); jsdoc != nil && !(declaration.Flags&ast.NodeFlagsReparsed == 0 && containsTypedefTag(jsdoc)) {
+	jsdoc := getJSDocOrTag(c, declaration)
+
+	// Handle binding elements specially (variables created from destructuring) - we need to get the documentation from the property type
+	// If the binding element doesn't have its own JSDoc, fall back to the property's JSDoc
+	if jsdoc == nil && symbol != nil && symbol.ValueDeclaration != nil && ast.IsBindingElement(symbol.ValueDeclaration) && ast.IsIdentifier(location) {
+		bindingElement := symbol.ValueDeclaration
+		parent := bindingElement.Parent
+		name := bindingElement.PropertyName()
+		if name == nil {
+			name = bindingElement.Name()
+		}
+		if ast.IsIdentifier(name) && ast.IsObjectBindingPattern(parent) {
+			propertyName := name.Text()
+			objectType := c.GetTypeAtLocation(parent)
+			if objectType != nil {
+				propertySymbol := findPropertyInType(c, objectType, propertyName)
+				if propertySymbol != nil && propertySymbol.ValueDeclaration != nil {
+					jsdoc = getJSDocOrTag(c, propertySymbol.ValueDeclaration)
+					if jsdoc != nil {
+						// Use property declaration for typedef check
+						declaration = propertySymbol.ValueDeclaration
+					}
+				}
+			}
+		}
+	}
+
+	if jsdoc != nil && !(declaration.Flags&ast.NodeFlagsReparsed == 0 && containsTypedefTag(jsdoc)) {
 		l.writeComments(&b, c, jsdoc.Comments(), isMarkdown)
 		if jsdoc.Kind == ast.KindJSDoc && !commentOnly {
 			if tags := jsdoc.AsJSDoc().Tags; tags != nil {
@@ -710,6 +738,20 @@ func writeQuotedString(b *strings.Builder, str string, quote bool) {
 	} else {
 		b.WriteString(str)
 	}
+}
+
+// findPropertyInType finds a property in a type, handling union types by searching constituent types
+func findPropertyInType(c *checker.Checker, objectType *checker.Type, propertyName string) *ast.Symbol {
+	// For union types, try to find the property in any of the constituent types
+	if objectType.IsUnion() {
+		for _, t := range objectType.Types() {
+			if prop := c.GetPropertyOfType(t, propertyName); prop != nil {
+				return prop
+			}
+		}
+		return nil
+	}
+	return c.GetPropertyOfType(objectType, propertyName)
 }
 
 func getEntityNameString(name *ast.Node) string {

@@ -1,0 +1,153 @@
+// === QuickInfo ===
+=== /destructuredInterfaceJSDoc.ts ===
+// interface FooBar {
+//     /** foo comment */
+//     foo: number;
+//     /** bar comment */
+//     bar: string;
+//     /** baz comment */
+//     baz: string;
+// }
+// 
+// declare const fubar: FooBar;
+// 
+// const {foo, bar, baz: biz} = fubar;
+//        ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const foo: number
+// | ```
+// | foo comment
+// | ----------------------------------------------------------------------
+//             ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const bar: string
+// | ```
+// | bar comment
+// | ----------------------------------------------------------------------
+//                  ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | (property) FooBar.baz: string
+// | ```
+// | baz comment
+// | ----------------------------------------------------------------------
+//                       ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const biz: string
+// | ```
+// | baz comment
+// | ----------------------------------------------------------------------
+// 
+[
+  {
+    "marker": {
+      "Position": 179,
+      "LSPosition": {
+        "line": 11,
+        "character": 7
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconst foo: number\n```\nfoo comment"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 7
+        },
+        "end": {
+          "line": 11,
+          "character": 10
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 184,
+      "LSPosition": {
+        "line": 11,
+        "character": 12
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconst bar: string\n```\nbar comment"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 12
+        },
+        "end": {
+          "line": 11,
+          "character": 15
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 189,
+      "LSPosition": {
+        "line": 11,
+        "character": 17
+      },
+      "Name": "3",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\n(property) FooBar.baz: string\n```\nbaz comment"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 17
+        },
+        "end": {
+          "line": 11,
+          "character": 20
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 194,
+      "LSPosition": {
+        "line": 11,
+        "character": 22
+      },
+      "Name": "4",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconst biz: string\n```\nbaz comment"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 22
+        },
+        "end": {
+          "line": 11,
+          "character": 25
+        }
+      }
+    }
+  }
+]

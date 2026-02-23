@@ -17,7 +17,7 @@
 // | ```tsx
 // | var a: string | number
 // | ```
-// | 
+// | A description of a
 // | ----------------------------------------------------------------------
 // }
 [
@@ -34,7 +34,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nvar a: string | number\n```\n"
+        "value": "```tsx\nvar a: string | number\n```\nA description of a"
       },
       "range": {
         "start": {

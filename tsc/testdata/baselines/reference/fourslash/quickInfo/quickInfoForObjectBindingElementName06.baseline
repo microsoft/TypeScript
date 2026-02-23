@@ -23,7 +23,7 @@
 // | ```tsx
 // | const isBar: boolean
 // | ```
-// | 
+// | Thing is a baz
 // | ----------------------------------------------------------------------
 [
   {
@@ -39,7 +39,7 @@
     "item": {
       "contents": {
         "kind": "markdown",
-        "value": "```tsx\nconst isBar: boolean\n```\n"
+        "value": "```tsx\nconst isBar: boolean\n```\nThing is a baz"
       },
       "range": {
         "start": {

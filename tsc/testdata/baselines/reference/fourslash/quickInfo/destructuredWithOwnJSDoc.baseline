@@ -1,0 +1,87 @@
+// === QuickInfo ===
+=== /destructuredWithOwnJSDoc.ts ===
+// interface Foo {
+//     /** This is bar from the interface */
+//     bar: string;
+//     /** This is baz from the interface */
+//     baz: number;
+// }
+// 
+// declare var foo: Foo;
+// 
+// /** Comment on the variable statement. */
+// const {
+//     /** Comment on bar destructuring. */ bar,
+//                                          ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const bar: string
+// | ```
+// | This is bar from the interface
+// | ----------------------------------------------------------------------
+//     /** Comment on baz destructuring. */ baz
+//                                          ^^^
+// | ----------------------------------------------------------------------
+// | ```tsx
+// | const baz: number
+// | ```
+// | This is baz from the interface
+// | ----------------------------------------------------------------------
+// } = foo;
+// 
+[
+  {
+    "marker": {
+      "Position": 251,
+      "LSPosition": {
+        "line": 11,
+        "character": 41
+      },
+      "Name": "1",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconst bar: string\n```\nThis is bar from the interface"
+      },
+      "range": {
+        "start": {
+          "line": 11,
+          "character": 41
+        },
+        "end": {
+          "line": 11,
+          "character": 44
+        }
+      }
+    }
+  },
+  {
+    "marker": {
+      "Position": 297,
+      "LSPosition": {
+        "line": 12,
+        "character": 41
+      },
+      "Name": "2",
+      "Data": {}
+    },
+    "item": {
+      "contents": {
+        "kind": "markdown",
+        "value": "```tsx\nconst baz: number\n```\nThis is baz from the interface"
+      },
+      "range": {
+        "start": {
+          "line": 12,
+          "character": 41
+        },
+        "end": {
+          "line": 12,
+          "character": 44
+        }
+      }
+    }
+  }
+]
