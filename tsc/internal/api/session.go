@@ -15,6 +15,8 @@ import (
 	"github.com/microsoft/typescript-go/internal/compiler"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/json"
+	"github.com/microsoft/typescript-go/internal/nodebuilder"
+	"github.com/microsoft/typescript-go/internal/printer"
 	"github.com/microsoft/typescript-go/internal/project"
 	"github.com/microsoft/typescript-go/internal/tsoptions"
 	"github.com/microsoft/typescript-go/internal/tspath"
@@ -375,6 +377,12 @@ func (s *Session) HandleRequest(ctx context.Context, method string, params json.
 		return s.handleGetShorthandAssignmentValueSymbol(ctx, parsed.(*GetTypeAtLocationParams))
 	case string(MethodGetTypeOfSymbolAtLocation):
 		return s.handleGetTypeOfSymbolAtLocation(ctx, parsed.(*GetTypeOfSymbolAtLocationParams))
+	case string(MethodTypeToTypeNode):
+		return s.handleTypeToTypeNode(ctx, parsed.(*TypeToTypeNodeParams))
+	case string(MethodTypeToString):
+		return s.handleTypeToString(ctx, parsed.(*TypeToTypeNodeParams))
+	case string(MethodPrintNode):
+		return s.handlePrintNode(ctx, parsed.(*PrintNodeParams))
 	case string(MethodGetAnyType):
 		return s.handleGetIntrinsicType(ctx, parsed.(*GetIntrinsicTypeParams), (*checker.Checker).GetAnyType)
 	case string(MethodGetStringType):
@@ -1237,6 +1245,88 @@ func (s *Session) handleGetTypeOfSymbolAtLocation(ctx context.Context, params *G
 	}
 
 	return setup.sd.registerType(t), nil
+}
+
+// handleTypeToTypeNode converts a Type to a TypeNode AST and returns it as binary-encoded data.
+func (s *Session) handleTypeToTypeNode(ctx context.Context, params *TypeToTypeNodeParams) (any, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.sd.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	var enclosingDeclaration *ast.Node
+	if params.Location != "" {
+		enclosingDeclaration, err = s.resolveNodeHandle(setup.program, params.Location)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	typeNode := setup.checker.TypeToTypeNode(t, enclosingDeclaration, nodebuilder.Flags(params.Flags), nil)
+	if typeNode == nil {
+		return nil, nil
+	}
+
+	data, err := encoder.EncodeNode(typeNode.AsNode(), nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to encode type node: %w", err)
+	}
+
+	if s.useBinaryResponses {
+		return RawBinary(data), nil
+	}
+	return &SourceFileResponse{
+		Data: base64.StdEncoding.EncodeToString(data),
+	}, nil
+}
+
+// handleTypeToString converts a Type to its string representation.
+func (s *Session) handleTypeToString(ctx context.Context, params *TypeToTypeNodeParams) (any, error) {
+	setup, err := s.setupChecker(ctx, params.Snapshot, params.Project)
+	if err != nil {
+		return nil, err
+	}
+	defer setup.done()
+
+	t, err := setup.sd.resolveTypeHandle(params.Type)
+	if err != nil {
+		return nil, err
+	}
+
+	var enclosingDeclaration *ast.Node
+	if params.Location != "" {
+		enclosingDeclaration, err = s.resolveNodeHandle(setup.program, params.Location)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if params.Flags != 0 {
+		return setup.checker.TypeToStringEx(t, enclosingDeclaration, checker.TypeFormatFlags(params.Flags)), nil
+	}
+	return setup.checker.TypeToStringEx(t, enclosingDeclaration, checker.TypeFormatFlagsAllowUniqueESSymbolType|checker.TypeFormatFlagsUseAliasDefinedOutsideCurrentScope), nil
+}
+
+// handlePrintNode decodes a binary-encoded AST node and prints it to text.
+func (s *Session) handlePrintNode(_ context.Context, params *PrintNodeParams) (string, error) {
+	data, err := base64.StdEncoding.DecodeString(params.Data)
+	if err != nil {
+		return "", fmt.Errorf("%w: invalid base64 data: %w", ErrClientError, err)
+	}
+
+	node, err := encoder.DecodeNodes(data)
+	if err != nil {
+		return "", fmt.Errorf("%w: failed to decode AST: %w", ErrClientError, err)
+	}
+
+	p := printer.NewPrinter(printer.PrinterOptions{}, printer.PrintHandlers{}, nil)
+	return p.Emit(node, nil), nil
 }
 
 // handleGetIntrinsicType returns an intrinsic type (any, string, number, etc.).

@@ -8,19 +8,32 @@ import {
     type SourceFile,
     SyntaxKind,
 } from "@typescript/ast";
-import { existsSync } from "node:fs";
+import {
+    existsSync,
+    writeFileSync,
+} from "node:fs";
+import inspector from "node:inspector";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { parseArgs } from "node:util";
 import { Bench } from "tinybench";
 import ts from "typescript";
-import { RemoteSourceFile } from "../../src/node.ts";
+import { RemoteSourceFile } from "../../src/node/node.ts";
 
 const isMain = process.argv[1] === fileURLToPath(import.meta.url);
 if (isMain) {
-    await runBenchmarks();
+    const { values } = parseArgs({
+        options: {
+            filter: { type: "string" },
+            singleIteration: { type: "boolean", default: false },
+            cpuprofile: { type: "boolean", default: false },
+        },
+    });
+    await runBenchmarks(values);
 }
 
-export async function runBenchmarks(singleIteration?: boolean) {
+export async function runBenchmarks(options?: { filter?: string; singleIteration?: boolean; cpuprofile?: boolean; }) {
+    const { filter, singleIteration, cpuprofile } = options ?? {};
     const repoRoot = fileURLToPath(new URL("../../../../", import.meta.url).toString());
     if (!existsSync(path.join(repoRoot, "_submodules/TypeScript/src/compiler"))) {
         console.warn("Warning: TypeScript submodule is not cloned; skipping benchmarks.");
@@ -85,14 +98,14 @@ export async function runBenchmarks(singleIteration?: boolean) {
             await getCheckerTS();
         }, { beforeAll: all(spawnAPI, loadSnapshot) })
         .add("materialize program.ts", async () => {
-            const { view, decoder } = file as unknown as RemoteSourceFile;
-            new RemoteSourceFile(new Uint8Array(view.buffer, view.byteOffset, view.byteLength), decoder).forEachChild(function visit(node) {
+            const { view, _decoder } = file as unknown as RemoteSourceFile;
+            new RemoteSourceFile(new Uint8Array(view.buffer, view.byteOffset, view.byteLength), _decoder).forEachChild(function visit(node) {
                 node.forEachChild(visit);
             });
         }, { beforeAll: all(spawnAPI, loadSnapshot, getProgramTS) })
         .add("materialize checker.ts", async () => {
-            const { view, decoder } = file as unknown as RemoteSourceFile;
-            new RemoteSourceFile(new Uint8Array(view.buffer, view.byteOffset, view.byteLength), decoder).forEachChild(function visit(node) {
+            const { view, _decoder } = file as unknown as RemoteSourceFile;
+            new RemoteSourceFile(new Uint8Array(view.buffer, view.byteOffset, view.byteLength), _decoder).forEachChild(function visit(node) {
                 node.forEachChild(visit);
             });
         }, { beforeAll: all(spawnAPI, loadSnapshot, getCheckerTS) })
@@ -133,7 +146,34 @@ export async function runBenchmarks(singleIteration?: boolean) {
             });
         }, { beforeAll: all(tsCreateProgram, tsCreateChecker, tsGetProgramTS) });
 
+    if (filter) {
+        const pattern = filter.toLowerCase();
+        for (const task of [...bench.tasks]) {
+            if (!task.name.toLowerCase().includes(pattern)) {
+                bench.remove(task.name);
+            }
+        }
+    }
+
+    let session: inspector.Session | undefined;
+    if (cpuprofile) {
+        session = new inspector.Session();
+        session.connect();
+        session.post("Profiler.enable");
+        session.post("Profiler.start");
+    }
+
     await bench.run(); // @sync: bench.runSync();
+
+    if (session) {
+        session.post("Profiler.stop", (err, { profile }) => {
+            if (err) throw err;
+            const outPath = `bench-${Date.now()}.cpuprofile`;
+            writeFileSync(outPath, JSON.stringify(profile));
+            console.log(`CPU profile written to ${outPath}`);
+        });
+        session.disconnect();
+    }
     console.table(bench.table());
 
     function collectIdentifiers(sourceFile: SourceFile): Node[] {

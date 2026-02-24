@@ -1,4 +1,4 @@
-import { SyntaxKind } from "#syntaxKind";
+import { SyntaxKind } from "#enums/syntaxKind";
 import type {
     AbstractKeyword,
     AccessorKeyword,

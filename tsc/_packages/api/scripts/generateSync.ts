@@ -36,7 +36,7 @@ function generatedHeader(asyncSourceRelPath: string): string {
     return [
         "//",
         "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
-        "// !!! THIS FILE IS AUTO-GENERATED — DO NOT EDIT !!!",
+        "// !!! THIS FILE IS AUTO-GENERATED - DO NOT EDIT !!!",
         "// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
         "//",
         `// Source: ${asyncSourceRelPath}`,

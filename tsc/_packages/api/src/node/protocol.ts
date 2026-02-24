@@ -1,0 +1,140 @@
+import { SyntaxKind } from "@typescript/ast";
+
+export const PROTOCOL_VERSION = 3;
+
+export const HEADER_OFFSET_METADATA = 0;
+export const HEADER_OFFSET_HASH_LO0 = 4;
+export const HEADER_OFFSET_HASH_LO1 = 8;
+export const HEADER_OFFSET_HASH_HI0 = 12;
+export const HEADER_OFFSET_HASH_HI1 = 16;
+export const HEADER_OFFSET_PARSE_OPTIONS = 20;
+export const HEADER_OFFSET_STRING_TABLE_OFFSETS = 24;
+export const HEADER_OFFSET_STRING_TABLE = 28;
+export const HEADER_OFFSET_EXTENDED_DATA = 32;
+export const HEADER_OFFSET_NODES = 36;
+export const HEADER_SIZE = 40;
+
+export const NODE_LEN = 24;
+export const KIND_NODE_LIST = 0xFFFFFFFF;
+
+export const NODE_DATA_TYPE_CHILDREN = 0x00000000;
+export const NODE_DATA_TYPE_STRING = 0x40000000;
+export const NODE_DATA_TYPE_EXTENDED = 0x80000000;
+
+export const childProperties: Readonly<Partial<Record<SyntaxKind, readonly string[]>>> = {
+    [SyntaxKind.SourceFile]: ["statements", "endOfFileToken"],
+    [SyntaxKind.QualifiedName]: ["left", "right"],
+    [SyntaxKind.TypeParameter]: ["modifiers", "name", "constraint", "default"],
+    [SyntaxKind.IfStatement]: ["expression", "thenStatement", "elseStatement"],
+    [SyntaxKind.DoStatement]: ["statement", "expression"],
+    [SyntaxKind.WhileStatement]: ["expression", "statement"],
+    [SyntaxKind.ForStatement]: ["initializer", "condition", "incrementor", "statement"],
+    [SyntaxKind.ForInStatement]: ["awaitModifier", "initializer", "expression", "statement"],
+    [SyntaxKind.ForOfStatement]: ["awaitModifier", "initializer", "expression", "statement"],
+    [SyntaxKind.WithStatement]: ["expression", "statement"],
+    [SyntaxKind.SwitchStatement]: ["expression", "caseBlock"],
+    [SyntaxKind.CaseClause]: ["expression", "statements"],
+    [SyntaxKind.DefaultClause]: ["expression", "statements"],
+    [SyntaxKind.TryStatement]: ["tryBlock", "catchClause", "finallyBlock"],
+    [SyntaxKind.CatchClause]: ["variableDeclaration", "block"],
+    [SyntaxKind.LabeledStatement]: ["label", "statement"],
+    [SyntaxKind.VariableStatement]: ["modifiers", "declarationList"],
+    [SyntaxKind.VariableDeclaration]: ["name", "exclamationToken", "type", "initializer"],
+    [SyntaxKind.Parameter]: ["modifiers", "dotDotDotToken", "name", "questionToken", "type", "initializer"],
+    [SyntaxKind.BindingElement]: ["dotDotDotToken", "propertyName", "name", "initializer"],
+    [SyntaxKind.FunctionDeclaration]: ["modifiers", "asteriskToken", "name", "typeParameters", "parameters", "type", "body"],
+    [SyntaxKind.InterfaceDeclaration]: ["modifiers", "name", "typeParameters", "heritageClauses", "members"],
+    [SyntaxKind.TypeAliasDeclaration]: ["modifiers", "name", "typeParameters", "type"],
+    [SyntaxKind.EnumMember]: ["name", "initializer"],
+    [SyntaxKind.EnumDeclaration]: ["modifiers", "name", "members"],
+    [SyntaxKind.ModuleDeclaration]: ["modifiers", "name", "body"],
+    [SyntaxKind.ImportEqualsDeclaration]: ["modifiers", "name", "moduleReference"],
+    [SyntaxKind.ImportDeclaration]: ["modifiers", "importClause", "moduleSpecifier", "attributes"],
+    [SyntaxKind.ImportSpecifier]: ["propertyName", "name"],
+    [SyntaxKind.ImportClause]: ["name", "namedBindings"],
+    [SyntaxKind.ExportAssignment]: ["modifiers", "expression"],
+    [SyntaxKind.NamespaceExportDeclaration]: ["modifiers", "name"],
+    [SyntaxKind.ExportDeclaration]: ["modifiers", "exportClause", "moduleSpecifier", "attributes"],
+    [SyntaxKind.ExportSpecifier]: ["propertyName", "name"],
+    [SyntaxKind.CallSignature]: ["typeParameters", "parameters", "type"],
+    [SyntaxKind.ConstructSignature]: ["typeParameters", "parameters", "type"],
+    [SyntaxKind.Constructor]: ["modifiers", "typeParameters", "parameters", "type", "body"],
+    [SyntaxKind.GetAccessor]: ["modifiers", "name", "typeParameters", "parameters", "type", "body"],
+    [SyntaxKind.SetAccessor]: ["modifiers", "name", "typeParameters", "parameters", "type", "body"],
+    [SyntaxKind.IndexSignature]: ["modifiers", "parameters", "type"],
+    [SyntaxKind.MethodSignature]: ["modifiers", "name", "postfixToken", "typeParameters", "parameters", "type"],
+    [SyntaxKind.MethodDeclaration]: ["modifiers", "asteriskToken", "name", "postfixToken", "typeParameters", "parameters", "type", "body"],
+    [SyntaxKind.PropertySignature]: ["modifiers", "name", "postfixToken", "type", "initializer"],
+    [SyntaxKind.PropertyDeclaration]: ["modifiers", "name", "postfixToken", "type", "initializer"],
+    [SyntaxKind.BinaryExpression]: ["left", "operatorToken", "right"],
+    [SyntaxKind.YieldExpression]: ["asteriskToken", "expression"],
+    [SyntaxKind.ArrowFunction]: ["modifiers", "typeParameters", "parameters", "type", "equalsGreaterThanToken", "body"],
+    [SyntaxKind.FunctionExpression]: ["modifiers", "asteriskToken", "name", "typeParameters", "parameters", "type", "body"],
+    [SyntaxKind.AsExpression]: ["expression", "type"],
+    [SyntaxKind.SatisfiesExpression]: ["expression", "type"],
+    [SyntaxKind.ConditionalExpression]: ["condition", "questionToken", "whenTrue", "colonToken", "whenFalse"],
+    [SyntaxKind.PropertyAccessExpression]: ["expression", "questionDotToken", "name"],
+    [SyntaxKind.ElementAccessExpression]: ["expression", "questionDotToken", "argumentExpression"],
+    [SyntaxKind.CallExpression]: ["expression", "questionDotToken", "typeArguments", "arguments"],
+    [SyntaxKind.NewExpression]: ["expression", "typeArguments", "arguments"],
+    [SyntaxKind.TemplateExpression]: ["head", "templateSpans"],
+    [SyntaxKind.TemplateSpan]: ["expression", "literal"],
+    [SyntaxKind.TaggedTemplateExpression]: ["tag", "questionDotToken", "typeArguments", "template"],
+    [SyntaxKind.PropertyAssignment]: ["modifiers", "name", "postfixToken", "initializer"],
+    [SyntaxKind.ShorthandPropertyAssignment]: ["modifiers", "name", "postfixToken", "equalsToken", "objectAssignmentInitializer"],
+    [SyntaxKind.SpreadAssignment]: ["expression"],
+    [SyntaxKind.TypeAssertionExpression]: ["type", "expression"],
+    [SyntaxKind.ConditionalType]: ["checkType", "extendsType", "trueType", "falseType"],
+    [SyntaxKind.IndexedAccessType]: ["objectType", "indexType"],
+    [SyntaxKind.TypeReference]: ["typeName", "typeArguments"],
+    [SyntaxKind.ExpressionWithTypeArguments]: ["expression", "typeArguments"],
+    [SyntaxKind.TypePredicate]: ["assertsModifier", "parameterName", "type"],
+    [SyntaxKind.ImportType]: ["argument", "attributes", "qualifier", "typeArguments"],
+    [SyntaxKind.ImportAttribute]: ["name", "value"],
+    [SyntaxKind.TypeQuery]: ["exprName", "typeArguments"],
+    [SyntaxKind.MappedType]: ["readonlyToken", "typeParameter", "nameType", "questionToken", "type", "members"],
+    [SyntaxKind.NamedTupleMember]: ["dotDotDotToken", "name", "questionToken", "type"],
+    [SyntaxKind.FunctionType]: ["typeParameters", "parameters", "type"],
+    [SyntaxKind.ConstructorType]: ["modifiers", "typeParameters", "parameters", "type"],
+    [SyntaxKind.TemplateLiteralType]: ["head", "templateSpans"],
+    [SyntaxKind.TemplateLiteralTypeSpan]: ["type", "literal"],
+    [SyntaxKind.JsxElement]: ["openingElement", "children", "closingElement"],
+    [SyntaxKind.JsxNamespacedName]: ["name", "namespace"],
+    [SyntaxKind.JsxOpeningElement]: ["tagName", "typeArguments", "attributes"],
+    [SyntaxKind.JsxSelfClosingElement]: ["tagName", "typeArguments", "attributes"],
+    [SyntaxKind.JsxFragment]: ["openingFragment", "children", "closingFragment"],
+    [SyntaxKind.JsxAttribute]: ["name", "initializer"],
+    [SyntaxKind.JsxSpreadAttribute]: ["expression"],
+    [SyntaxKind.JsxExpression]: ["dotDotDotToken", "expression"],
+    [SyntaxKind.JSDoc]: ["comment", "tags"],
+    [SyntaxKind.JSDocMemberName]: ["left", "right"],
+    [SyntaxKind.JSDocTypeTag]: ["tagName", "typeExpression", "comment"],
+    [SyntaxKind.JSDocTag]: ["tagName", "comment"],
+    [SyntaxKind.JSDocTemplateTag]: ["tagName", "constraint", "typeParameters", "comment"],
+    [SyntaxKind.JSDocReturnTag]: ["tagName", "typeExpression", "comment"],
+    [SyntaxKind.JSDocPublicTag]: ["tagName", "comment"],
+    [SyntaxKind.JSDocPrivateTag]: ["tagName", "comment"],
+    [SyntaxKind.JSDocProtectedTag]: ["tagName", "comment"],
+    [SyntaxKind.JSDocReadonlyTag]: ["tagName", "comment"],
+    [SyntaxKind.JSDocOverrideTag]: ["tagName", "comment"],
+    [SyntaxKind.JSDocDeprecatedTag]: ["tagName", "comment"],
+    [SyntaxKind.JSDocSeeTag]: ["tagName", "name", "comment"],
+    [SyntaxKind.JSDocImplementsTag]: ["tagName", "class", "comment"],
+    [SyntaxKind.JSDocAugmentsTag]: ["tagName", "class", "comment"],
+    [SyntaxKind.JSDocSatisfiesTag]: ["tagName", "typeExpression", "comment"],
+    [SyntaxKind.JSDocThisTag]: ["tagName", "typeExpression", "comment"],
+    [SyntaxKind.JSDocImportTag]: ["tagName", "importClause", "moduleSpecifier", "attributes", "comment"],
+    [SyntaxKind.JSDocCallbackTag]: ["tagName", "typeExpression", "fullName", "comment"],
+    [SyntaxKind.JSDocOverloadTag]: ["tagName", "typeExpression", "comment"],
+    [SyntaxKind.JSDocTypedefTag]: ["tagName", "typeExpression", "fullName", "comment"],
+    [SyntaxKind.JSDocSignature]: ["typeParameters", "parameters", "type"],
+    [SyntaxKind.ClassStaticBlockDeclaration]: ["modifiers", "body"],
+    [SyntaxKind.ClassDeclaration]: ["modifiers", "name", "typeParameters", "heritageClauses", "members"],
+    [SyntaxKind.ClassExpression]: ["modifiers", "name", "typeParameters", "heritageClauses", "members"],
+    [SyntaxKind.JSImportDeclaration]: ["modifiers", "importClause", "moduleSpecifier", "attributes"],
+    [SyntaxKind.JSExportAssignment]: ["modifiers", "expression"],
+
+    // JSDocPropertyTag and JSDocParameterTag have variable child order based on isNameFirst
+    [SyntaxKind.JSDocPropertyTag]: [undefined!, undefined!],
+    [SyntaxKind.JSDocParameterTag]: ["tagName", undefined!, undefined!, "comment"],
+};

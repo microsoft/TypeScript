@@ -132,6 +132,11 @@ const (
 	MethodGetBaseTypeOfLiteralType          Method = "getBaseTypeOfLiteralType"
 	MethodGetShorthandAssignmentValueSymbol Method = "getShorthandAssignmentValueSymbol"
 	MethodGetTypeOfSymbolAtLocation         Method = "getTypeOfSymbolAtLocation"
+	MethodTypeToTypeNode                    Method = "typeToTypeNode"
+	MethodTypeToString                      Method = "typeToString"
+
+	// Emitter methods
+	MethodPrintNode Method = "printNode"
 
 	// Intrinsic type getters
 	MethodGetAnyType       Method = "getAnyType"
@@ -324,6 +329,9 @@ var unmarshalers = map[Method]func([]byte) (any, error){
 	MethodGetBaseTypeOfLiteralType:          unmarshallerFor[GetBaseTypeOfLiteralTypeParams],
 	MethodGetShorthandAssignmentValueSymbol: unmarshallerFor[GetTypeAtLocationParams],
 	MethodGetTypeOfSymbolAtLocation:         unmarshallerFor[GetTypeOfSymbolAtLocationParams],
+	MethodTypeToTypeNode:                    unmarshallerFor[TypeToTypeNodeParams],
+	MethodTypeToString:                      unmarshallerFor[TypeToTypeNodeParams],
+	MethodPrintNode:                         unmarshallerFor[PrintNodeParams],
 	MethodGetAnyType:                        unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetStringType:                     unmarshallerFor[GetIntrinsicTypeParams],
 	MethodGetNumberType:                     unmarshallerFor[GetIntrinsicTypeParams],
@@ -687,6 +695,20 @@ type GetTypesAtPositionsParams struct {
 	Project   Handle[project.Project]  `json:"project"`
 	File      DocumentIdentifier       `json:"file"`
 	Positions []uint32                 `json:"positions"`
+}
+
+// TypeToTypeNodeParams are the parameters for the typeToTypeNode method.
+type TypeToTypeNodeParams struct {
+	Snapshot Handle[project.Snapshot] `json:"snapshot"`
+	Project  Handle[project.Project]  `json:"project"`
+	Type     Handle[checker.Type]     `json:"type"`
+	Location Handle[ast.Node]         `json:"location,omitempty"`
+	Flags    int32                    `json:"flags,omitempty"`
+}
+
+// PrintNodeParams are the parameters for the printNode method.
+type PrintNodeParams struct {
+	Data string `json:"data"` // base64-encoded binary AST data
 }
 
 // SourceFileResponse contains the binary-encoded AST data for a source file.

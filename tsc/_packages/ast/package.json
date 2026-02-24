@@ -8,21 +8,13 @@
         "node": ">=20.19"
     },
     "imports": {
-        "#syntaxKind": {
+        "#enums/*": {
             "@typescript/source": {
-                "types": "./src/syntaxKind.enum.ts",
-                "default": "./src/syntaxKind.ts"
+                "types": "./src/enums/*.enum.ts",
+                "default": "./src/enums/*.ts"
             },
-            "types": "./dist/syntaxKind.enum.d.ts",
-            "default": "./dist/syntaxKind.js"
-        },
-        "#tokenFlags": {
-            "@typescript/source": {
-                "types": "./src/tokenFlags.enum.ts",
-                "default": "./src/tokenFlags.ts"
-            },
-            "types": "./dist/tokenFlags.enum.d.ts",
-            "default": "./dist/tokenFlags.js"
+            "types": "./dist/enums/*.enum.d.ts",
+            "default": "./dist/enums/*.js"
         }
     },
     "exports": {
@@ -34,6 +26,10 @@
             "@typescript/source": "./src/is.ts",
             "default": "./dist/is.js"
         },
+        "./factory": {
+            "@typescript/source": "./src/factory.ts",
+            "default": "./dist/factory.js"
+        },
         "./utils": {
             "@typescript/source": "./src/utils.ts",
             "default": "./dist/utils.js"
@@ -41,7 +37,8 @@
     },
     "scripts": {
         "generate:enums": "npx hereby generate:enums --herebyfile ../../Herebyfile.mjs",
-        "prebuild": "npm run generate:enums",
+        "generate:factory": "node --conditions=@typescript/source --experimental-strip-types --no-warnings scripts/generateFactory.ts",
+        "prebuild": "npm run generate:enums && npm run generate:factory",
         "build": "tsc -b"
     }
 }

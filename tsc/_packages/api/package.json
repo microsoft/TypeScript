@@ -36,7 +36,7 @@
     },
     "scripts": {
         "node": "node --experimental-strip-types --no-warnings --conditions @typescript/source",
-        "generate:sync": "node --experimental-strip-types --no-warnings scripts/generate-sync.ts",
+        "generate:sync": "node --experimental-strip-types --no-warnings scripts/generateSync.ts",
         "generate:enums": "npx hereby generate:enums --herebyfile ../../Herebyfile.mjs",
         "prebuild": "npm run generate:enums && npm run generate:sync",
         "build": "tsc -b",

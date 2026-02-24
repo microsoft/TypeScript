@@ -29,7 +29,7 @@ func (t *stringTable) add(text string, kind ast.Kind, pos int, end int) uint32 {
 		return index
 	}
 	length := len(text)
-	if end-pos > 0 {
+	if end-pos > 0 && end <= len(t.fileText) {
 		// pos includes leading trivia, but we can usually infer the actual start of the
 		// string from the kind and end
 		endOffset := 0

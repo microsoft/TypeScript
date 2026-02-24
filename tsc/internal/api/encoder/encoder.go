@@ -6,6 +6,7 @@ import (
 	"slices"
 
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/zeebo/xxh3"
 )
 
 const (
@@ -226,6 +227,20 @@ const (
 // `uint32(0x00_ff_ff_ff & node.data)`) _N_ that is a byte offset into the **extended node data** section. The length and
 // meaning of the data at that offset is defined by the node type. See the **Extended node data** section for details on
 // the format of the extended data for specific node types.
+//
+// Encoding Arbitrary Nodes
+// ------------------------
+//
+// The same binary format can be used to encode an arbitrary subtree of a SourceFile, not just a whole SourceFile. When
+// encoding a non-SourceFile node, the format is identical with the following differences:
+//
+// - The content hash fields in the header (bytes 4-19) are zero.
+// - The parse options field in the header (bytes 20-23) is zero.
+// - The root node in the nodes section uses its actual node kind and data encoding (via getNodeData) rather than the
+//   SourceFile-specific extended data format.
+//
+// The string data section contains only the strings referenced by nodes in the subtree, rather than the full source
+// file text. The EncodeNode function provides this entrypoint.
 
 // SourceFileHash returns the 128-bit content hash for a source file as a hex string.
 func SourceFileHash(sourceFile *ast.SourceFile) string {
@@ -245,12 +260,32 @@ func encodeParseOptions(opts ast.ExternalModuleIndicatorOptions) uint32 {
 	return bits
 }
 
+// EncodeSourceFile encodes an entire source file AST into the binary format.
 func EncodeSourceFile(sourceFile *ast.SourceFile) ([]byte, error) {
-	hash := sourceFile.Hash
+	return encodeTree(sourceFile.AsNode(), sourceFile)
+}
+
+// EncodeNode encodes an arbitrary AST node and its descendants into the binary format.
+// The sourceFile is needed to provide the source text for efficient string encoding.
+// When encoding a non-SourceFile node, the header hash and parse options fields will be zero.
+func EncodeNode(node *ast.Node, sourceFile *ast.SourceFile) ([]byte, error) {
+	return encodeTree(node, sourceFile)
+}
+
+func encodeTree(rootNode *ast.Node, sourceFile *ast.SourceFile) ([]byte, error) {
 	var parentIndex, nodeCount, prevIndex uint32
 	var extendedData []byte
-	strs := newStringTable(sourceFile.Text(), sourceFile.TextCount)
-	nodes := make([]byte, 0, (sourceFile.NodeCount+1)*NodeSize)
+	var strs *stringTable
+	if rootNode.Kind == ast.KindSourceFile {
+		strs = newStringTable(sourceFile.Text(), sourceFile.TextCount)
+	} else {
+		strs = newStringTable("", 0)
+	}
+	var initialNodeCount int
+	if sourceFile != nil {
+		initialNodeCount = sourceFile.NodeCount
+	}
+	nodes := make([]byte, 0, (initialNodeCount+1)*NodeSize)
 
 	visitor := &ast.NodeVisitor{
 		Hooks: ast.NodeVisitorHooks{
@@ -318,12 +353,19 @@ func EncodeSourceFile(sourceFile *ast.SourceFile) ([]byte, error) {
 
 	nodeCount++
 	parentIndex++
-	nodes = appendUint32s(nodes, uint32(sourceFile.Kind), uint32(sourceFile.Pos()), uint32(sourceFile.End()), 0, 0, getSourceFileData(sourceFile, strs, &extendedData))
 
-	visitor.VisitEachChild(sourceFile.AsNode())
+	nodes = appendUint32s(nodes, uint32(rootNode.Kind), uint32(rootNode.Pos()), uint32(rootNode.End()), 0, 0, getNodeData(rootNode, strs, &extendedData))
+
+	visitor.VisitEachChild(rootNode)
+
+	var hash xxh3.Uint128
+	var parseOpts uint32
+	if rootNode.Kind == ast.KindSourceFile {
+		hash = sourceFile.Hash
+		parseOpts = encodeParseOptions(sourceFile.ParseOptions().ExternalModuleIndicatorOptions)
+	}
 
 	metadata := uint32(ProtocolVersion) << 24
-	parseOpts := encodeParseOptions(sourceFile.ParseOptions().ExternalModuleIndicatorOptions)
 	offsetStringTableOffsets := HeaderSize
 	offsetStringTableData := HeaderSize + len(strs.offsets)*4
 	offsetExtendedData := offsetStringTableData + strs.stringLength()
@@ -357,16 +399,6 @@ func appendUint32s(buf []byte, values ...uint32) []byte {
 		buf = binary.LittleEndian.AppendUint32(buf, value)
 	}
 	return buf
-}
-
-func getSourceFileData(sourceFile *ast.SourceFile, strs *stringTable, extendedData *[]byte) uint32 {
-	t := NodeDataTypeExtendedData
-	extendedDataOffset := len(*extendedData)
-	textIndex := strs.add(sourceFile.Text(), sourceFile.Kind, sourceFile.Pos(), sourceFile.End())
-	fileNameIndex := strs.add(sourceFile.FileName(), 0, 0, 0)
-	pathIndex := strs.add(string(sourceFile.Path()), 0, 0, 0)
-	*extendedData = appendUint32s(*extendedData, textIndex, fileNameIndex, pathIndex)
-	return t | uint32(extendedDataOffset)
 }
 
 func getNodeData(node *ast.Node, strs *stringTable, extendedData *[]byte) uint32 {
@@ -808,28 +840,37 @@ func recordNodeStrings(node *ast.Node, strs *stringTable) uint32 {
 
 func recordExtendedData(node *ast.Node, strs *stringTable, extendedData *[]byte) uint32 {
 	offset := uint32(len(*extendedData))
-	var text, rawText string
-	var templateFlags uint32
 	switch node.Kind {
-	case ast.KindTemplateTail:
-		n := node.AsTemplateTail()
-		text = n.Text
-		rawText = n.RawText
-		templateFlags = uint32(n.TemplateFlags)
-	case ast.KindTemplateMiddle:
-		n := node.AsTemplateMiddle()
-		text = n.Text
-		rawText = n.RawText
-		templateFlags = uint32(n.TemplateFlags)
-	case ast.KindTemplateHead:
-		n := node.AsTemplateHead()
-		text = n.Text
-		rawText = n.RawText
-		templateFlags = uint32(n.TemplateFlags)
+	case ast.KindSourceFile:
+		sf := node.AsSourceFile()
+		textIndex := strs.add(sf.Text(), sf.Kind, sf.Pos(), sf.End())
+		fileNameIndex := strs.add(sf.FileName(), 0, 0, 0)
+		pathIndex := strs.add(string(sf.Path()), 0, 0, 0)
+		*extendedData = appendUint32s(*extendedData, textIndex, fileNameIndex, pathIndex)
+	default:
+		var text, rawText string
+		var templateFlags uint32
+		switch node.Kind {
+		case ast.KindTemplateTail:
+			n := node.AsTemplateTail()
+			text = n.Text
+			rawText = n.RawText
+			templateFlags = uint32(n.TemplateFlags)
+		case ast.KindTemplateMiddle:
+			n := node.AsTemplateMiddle()
+			text = n.Text
+			rawText = n.RawText
+			templateFlags = uint32(n.TemplateFlags)
+		case ast.KindTemplateHead:
+			n := node.AsTemplateHead()
+			text = n.Text
+			rawText = n.RawText
+			templateFlags = uint32(n.TemplateFlags)
+		}
+		textIndex := strs.add(text, node.Kind, node.Pos(), node.End())
+		rawTextIndex := strs.add(rawText, node.Kind, node.Pos(), node.End())
+		*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, templateFlags)
 	}
-	textIndex := strs.add(text, node.Kind, node.Pos(), node.End())
-	rawTextIndex := strs.add(rawText, node.Kind, node.Pos(), node.End())
-	*extendedData = appendUint32s(*extendedData, textIndex, rawTextIndex, templateFlags)
 	return offset
 }
 

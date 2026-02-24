@@ -1,4 +1,4 @@
-/// <reference path="../node.ts" preserve="true" />
+/// <reference path="../node/node.ts" preserve="true" />
 import { ElementFlags } from "#enums/elementFlags";
 import { ObjectFlags } from "#enums/objectFlags";
 import { SignatureFlags } from "#enums/signatureFlags";
@@ -11,14 +11,21 @@ import type {
     Path,
     SourceFile,
     SyntaxKind,
+    TypeNode,
 } from "@typescript/ast";
 import {
+    encodeNode,
+    uint8ArrayToBase64,
+} from "../node/encoder.ts";
+import {
+    decodeNode,
     findDescendant,
+    getNodeId,
     parseNodeHandle,
     readParseOptionsKey,
     readSourceFileHash,
     RemoteSourceFile,
-} from "../node.ts";
+} from "../node/node.ts";
 import { ObjectRegistry } from "../objectRegistry.ts";
 import type {
     APIOptions,
@@ -250,6 +257,7 @@ export class Project {
 
     readonly program: Program;
     readonly checker: Checker;
+    readonly emitter: Emitter;
 
     constructor(
         data: ProjectResponse,
@@ -276,6 +284,7 @@ export class Project {
             client,
             objectRegistry,
         );
+        this.emitter = new Emitter(client);
     }
 }
 
@@ -356,14 +365,14 @@ export class Checker {
             const data = await this.client.apiRequest<(SymbolResponse | null)[]>("getSymbolsAtLocations", {
                 snapshot: this.snapshotId,
                 project: this.projectId,
-                locations: nodeOrNodes.map(node => node.id),
+                locations: nodeOrNodes.map(node => getNodeId(node)),
             });
             return data.map(d => d ? this.objectRegistry.getOrCreateSymbol(d) : undefined);
         }
         const data = await this.client.apiRequest<SymbolResponse | null>("getSymbolAtLocation", {
             snapshot: this.snapshotId,
             project: this.projectId,
-            location: (nodeOrNodes as Node).id,
+            location: getNodeId(nodeOrNodes as Node),
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
@@ -424,14 +433,14 @@ export class Checker {
             const data = await this.client.apiRequest<(TypeResponse | null)[]>("getTypeAtLocations", {
                 snapshot: this.snapshotId,
                 project: this.projectId,
-                locations: nodeOrNodes.map(node => node.id),
+                locations: nodeOrNodes.map(node => getNodeId(node)),
             });
             return data.map(d => d ? this.objectRegistry.getOrCreateType(d) : undefined);
         }
         const data = await this.client.apiRequest<TypeResponse | null>("getTypeAtLocation", {
             snapshot: this.snapshotId,
             project: this.projectId,
-            location: (nodeOrNodes as Node).id,
+            location: getNodeId(nodeOrNodes as Node),
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
@@ -473,14 +482,14 @@ export class Checker {
         location?: Node | DocumentPosition,
         excludeGlobals?: boolean,
     ): Promise<Symbol | undefined> {
-        // Distinguish Node (has `id`) from DocumentPosition (has `document` and `position`)
-        const isNode = location && "id" in location;
+        // Distinguish Node (has `kind`) from DocumentPosition (has `document` and `position`)
+        const isNode = location && "kind" in location;
         const data = await this.client.apiRequest<SymbolResponse | null>("resolveName", {
             snapshot: this.snapshotId,
             project: this.projectId,
             name,
             meaning,
-            location: isNode ? (location as Node).id : undefined,
+            location: isNode ? getNodeId(location as Node) : undefined,
             file: !isNode && location ? (location as DocumentPosition).document : undefined,
             position: !isNode && location ? (location as DocumentPosition).position : undefined,
             excludeGlobals,
@@ -492,7 +501,7 @@ export class Checker {
         const data = await this.client.apiRequest<TypeResponse | null>("getContextualType", {
             snapshot: this.snapshotId,
             project: this.projectId,
-            location: node.id,
+            location: getNodeId(node),
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
@@ -510,7 +519,7 @@ export class Checker {
         const data = await this.client.apiRequest<SymbolResponse | null>("getShorthandAssignmentValueSymbol", {
             snapshot: this.snapshotId,
             project: this.projectId,
-            location: node.id,
+            location: getNodeId(node),
         });
         return data ? this.objectRegistry.getOrCreateSymbol(data) : undefined;
     }
@@ -520,7 +529,7 @@ export class Checker {
             snapshot: this.snapshotId,
             project: this.projectId,
             symbol: symbol.id,
-            location: location.id,
+            location: getNodeId(location),
         });
         return data ? this.objectRegistry.getOrCreateType(data) : undefined;
     }
@@ -565,6 +574,42 @@ export class Checker {
     }
     async getESSymbolType(): Promise<Type> {
         return this.getIntrinsicType("getESSymbolType");
+    }
+
+    async typeToTypeNode(type: Type, enclosingDeclaration?: Node, flags?: number): Promise<TypeNode | undefined> {
+        const binaryData = await this.client.apiRequestBinary("typeToTypeNode", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: type.id,
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
+        });
+        if (!binaryData) return undefined;
+        return decodeNode(binaryData) as TypeNode;
+    }
+
+    async typeToString(type: Type, enclosingDeclaration?: Node, flags?: number): Promise<string> {
+        return this.client.apiRequest<string>("typeToString", {
+            snapshot: this.snapshotId,
+            project: this.projectId,
+            type: type.id,
+            location: enclosingDeclaration ? getNodeId(enclosingDeclaration) : undefined,
+            flags,
+        });
+    }
+}
+
+export class Emitter {
+    private client: Client;
+
+    constructor(client: Client) {
+        this.client = client;
+    }
+
+    async printNode(node: Node): Promise<string> {
+        const encoded = encodeNode(node);
+        const base64 = uint8ArrayToBase64(encoded);
+        return this.client.apiRequest<string>("printNode", { data: base64 });
     }
 }
 

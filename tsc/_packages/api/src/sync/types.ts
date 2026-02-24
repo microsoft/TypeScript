@@ -1,6 +1,6 @@
 //
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// !!! THIS FILE IS AUTO-GENERATED — DO NOT EDIT !!!
+// !!! THIS FILE IS AUTO-GENERATED - DO NOT EDIT !!!
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //
 // Source: src/async/types.ts
