@@ -27,6 +27,10 @@ func (w *textWriter) Clear() {
 	*w = textWriter{newLine: w.newLine, indentSize: w.indentSize, lineStart: true}
 }
 
+func (w *textWriter) Grow(n int) {
+	w.builder.Grow(n)
+}
+
 func (w *textWriter) DecreaseIndent() {
 	w.indent--
 }

@@ -4934,6 +4934,11 @@ func (p *Printer) Write(node *ast.Node, sourceFile *ast.SourceFile, writer EmitT
 	p.setSourceFile(sourceFile)
 	p.writer = writer
 	p.writer.Clear()
+	if sourceFile != nil {
+		if grower, ok := p.writer.(interface{ Grow(n int) }); ok {
+			grower.Grow(len(sourceFile.Text()))
+		}
+	}
 
 	switch node.Kind {
 	// Pseudo-literals
