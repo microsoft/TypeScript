@@ -893,14 +893,16 @@ func calculateIndent(text string, pos int, end int) int {
 // optimized for monotonically increasing positions (e.g., during source map emit).
 //
 // When positions increase within the same line, only the delta between the last
-// position and the new position needs to be scanned for rune counts, turning
-// what would be O(n²) into O(n) for long lines.
+// position and the new position needs to be scanned for UTF-16 code unit counts,
+// turning what would be O(n²) into O(n) for long lines.
+//
+// Character offsets are measured in UTF-16 code units per the source map specification.
 type lineCharacterCache struct {
 	lineMap    []core.TextPos
 	text       string
 	cachedLine int
 	cachedPos  int
-	cachedChar int
+	cachedChar core.UTF16Offset
 	hasCached  bool
 }
 
@@ -911,15 +913,16 @@ func newLineCharacterCache(source sourcemap.Source) *lineCharacterCache {
 	}
 }
 
-func (c *lineCharacterCache) getLineAndCharacter(pos int) (line int, character int) {
+// getLineAndCharacter returns the 0-based line number and UTF-16 code unit
+// offset from the start of that line for the given byte position.
+func (c *lineCharacterCache) getLineAndCharacter(pos int) (line int, character core.UTF16Offset) {
 	line = scanner.ComputeLineOfPosition(c.lineMap, pos)
 	if c.hasCached && line == c.cachedLine && pos >= c.cachedPos {
-		// Incremental: only count runes from the last cached position.
-		character = c.cachedChar + utf8.RuneCountInString(c.text[c.cachedPos:pos])
+		// Incremental: only count UTF-16 code units from the last cached position.
+		character = c.cachedChar + core.UTF16Len(c.text[c.cachedPos:pos])
 	} else {
 		// Full computation from line start.
-		// !!! TODO: this is suspect; these are rune counts, not UTF-8 _or_ UTF-16 offsets.
-		character = utf8.RuneCountInString(c.text[c.lineMap[line]:pos])
+		character = core.UTF16Len(c.text[c.lineMap[line]:pos])
 	}
 	c.cachedLine = line
 	c.cachedPos = pos

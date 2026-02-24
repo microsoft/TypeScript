@@ -167,8 +167,8 @@ func FormatDiagnosticWithColorAndContext(output io.Writer, diagnostic Diagnostic
 }
 
 func writeCodeSnippet(writer io.Writer, sourceFile FileLike, start int, length int, squiggleColor string, indent string, formatOpts *FormattingOptions) {
-	firstLine, firstLineChar := scanner.GetECMALineAndCharacterOfPosition(sourceFile, start)
-	lastLine, lastLineChar := scanner.GetECMALineAndCharacterOfPosition(sourceFile, start+length)
+	firstLine, firstLineChar := scanner.GetECMALineAndUTF16CharacterOfPosition(sourceFile, start)
+	lastLine, lastLineChar := scanner.GetECMALineAndUTF16CharacterOfPosition(sourceFile, start+length)
 	if length == 0 {
 		lastLineChar++ // When length is zero, squiggle the character right after the start position.
 	}
@@ -196,10 +196,10 @@ func writeCodeSnippet(writer io.Writer, sourceFile FileLike, start int, length i
 			i = lastLine - 1
 		}
 
-		lineStart := scanner.GetECMAPositionOfLineAndCharacter(sourceFile, i, 0)
+		lineStart := scanner.GetECMAPositionOfLineAndByteOffset(sourceFile, i, 0)
 		var lineEnd int
 		if i < lastLineOfFile {
-			lineEnd = scanner.GetECMAPositionOfLineAndCharacter(sourceFile, i+1, 0)
+			lineEnd = scanner.GetECMAPositionOfLineAndByteOffset(sourceFile, i+1, 0)
 		} else {
 			lineEnd = len(sourceFile.Text())
 		}
@@ -229,21 +229,21 @@ func writeCodeSnippet(writer io.Writer, sourceFile FileLike, start int, length i
 			// Otherwise, we'll just squiggle the rest of the line, giving 'slice' no end position.
 			var lastCharForLine int
 			if i == lastLine {
-				lastCharForLine = lastLineChar
+				lastCharForLine = int(lastLineChar)
 			} else {
-				lastCharForLine = len(lineContent)
+				lastCharForLine = int(core.UTF16Len(lineContent))
 			}
 
 			// Fill with spaces until the first character,
 			// then squiggle the remainder of the line.
-			fmt.Fprint(writer, strings.Repeat(" ", firstLineChar))
-			fmt.Fprint(writer, strings.Repeat("~", lastCharForLine-firstLineChar))
+			fmt.Fprint(writer, strings.Repeat(" ", int(firstLineChar)))
+			fmt.Fprint(writer, strings.Repeat("~", lastCharForLine-int(firstLineChar)))
 		case lastLine:
 			// Squiggle until the final character.
-			fmt.Fprint(writer, strings.Repeat("~", lastLineChar))
+			fmt.Fprint(writer, strings.Repeat("~", int(lastLineChar)))
 		default:
 			// Squiggle the entire line.
-			fmt.Fprint(writer, strings.Repeat("~", len(lineContent)))
+			fmt.Fprint(writer, strings.Repeat("~", int(core.UTF16Len(lineContent))))
 		}
 
 		fmt.Fprint(writer, resetEscapeSequence)
@@ -303,7 +303,7 @@ func writeWithStyleAndReset(output io.Writer, text string, formatStyle string) {
 }
 
 func WriteLocation(output io.Writer, file FileLike, pos int, formatOpts *FormattingOptions, writeWithStyleAndReset FormattedWriter) {
-	firstLine, firstChar := scanner.GetECMALineAndCharacterOfPosition(file, pos)
+	firstLine, firstChar := scanner.GetECMALineAndUTF16CharacterOfPosition(file, pos)
 	var relativeFileName string
 	if formatOpts != nil {
 		relativeFileName = tspath.ConvertToRelativePath(file.FileName(), formatOpts.ComparePathsOptions)
@@ -315,7 +315,7 @@ func WriteLocation(output io.Writer, file FileLike, pos int, formatOpts *Formatt
 	fmt.Fprint(output, ":")
 	writeWithStyleAndReset(output, strconv.Itoa(firstLine+1), foregroundColorEscapeYellow)
 	fmt.Fprint(output, ":")
-	writeWithStyleAndReset(output, strconv.Itoa(firstChar+1), foregroundColorEscapeYellow)
+	writeWithStyleAndReset(output, strconv.Itoa(int(firstChar)+1), foregroundColorEscapeYellow)
 }
 
 // Some of these lived in watch.ts, but they're not specific to the watch API.
@@ -465,10 +465,10 @@ func WriteFormatDiagnostics(output io.Writer, diagnostics []Diagnostic, formatOp
 
 func WriteFormatDiagnostic(output io.Writer, diagnostic Diagnostic, formatOpts *FormattingOptions) {
 	if diagnostic.File() != nil {
-		line, character := scanner.GetECMALineAndCharacterOfPosition(diagnostic.File(), diagnostic.Pos())
+		line, character := scanner.GetECMALineAndUTF16CharacterOfPosition(diagnostic.File(), diagnostic.Pos())
 		fileName := diagnostic.File().FileName()
 		relativeFileName := tspath.ConvertToRelativePath(fileName, formatOpts.ComparePathsOptions)
-		fmt.Fprintf(output, "%s(%d,%d): ", relativeFileName, line+1, character+1)
+		fmt.Fprintf(output, "%s(%d,%d): ", relativeFileName, line+1, int(character)+1)
 	}
 
 	fmt.Fprintf(output, "%s TS%d: ", diagnostic.Category().Name(), diagnostic.Code())

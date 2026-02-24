@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 	"unicode"
+	"unicode/utf16"
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/debug"
@@ -440,11 +441,35 @@ func ComputeECMALineStartsSeq(text string) iter.Seq[TextPos] {
 	}
 }
 
-func PositionToLineAndCharacter(position int, lineStarts []TextPos) (line int, character int) {
+// PositionToLineAndByteOffset returns the 0-based line and byte offset from the
+// start of that line for the given byte position, using the provided line starts.
+// The byte offset is a raw UTF-8 byte offset from the line start, not a UTF-16 code unit count.
+func PositionToLineAndByteOffset(position int, lineStarts []TextPos) (line int, byteOffset int) {
 	line = max(sort.Search(len(lineStarts), func(i int) bool {
 		return int(lineStarts[i]) > position
 	})-1, 0)
 	return line, position - int(lineStarts[line])
+}
+
+// UTF16Offset represents a character offset measured in UTF-16 code units.
+type UTF16Offset int
+
+// UTF16Len returns the number of UTF-16 code units needed to
+// represent the given UTF-8 encoded string.
+func UTF16Len(s string) UTF16Offset {
+	// Fast path: scan for non-ASCII bytes. For ASCII-only strings,
+	// each byte is one UTF-16 code unit, so we can return len(s) directly.
+	for i := range len(s) {
+		if s[i] >= utf8.RuneSelf {
+			// Found non-ASCII; count the ASCII prefix, then decode the rest.
+			n := UTF16Offset(i)
+			for _, r := range s[i:] {
+				n += UTF16Offset(utf16.RuneLen(r))
+			}
+			return n
+		}
+	}
+	return UTF16Offset(len(s))
 }
 
 func Flatten[T any](array [][]T) []T {

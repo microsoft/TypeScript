@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+	"unicode/utf16"
 	"unicode/utf8"
 
 	"github.com/microsoft/typescript-go/internal/ast"
@@ -2459,12 +2460,25 @@ func GetECMALineOfPosition(sourceFile ast.SourceFileLike, pos int) int {
 	return ComputeLineOfPosition(lineMap, pos)
 }
 
-func GetECMALineAndCharacterOfPosition(sourceFile ast.SourceFileLike, pos int) (line int, character int) {
+// GetECMALineAndUTF16CharacterOfPosition returns the 0-based line number and the
+// UTF-16 code unit offset from the start of that line for the given byte position.
+// Uses ECMAScript line separators (LF, CR, CRLF, LS, PS).
+func GetECMALineAndUTF16CharacterOfPosition(sourceFile ast.SourceFileLike, pos int) (line int, character core.UTF16Offset) {
 	lineMap := GetECMALineStarts(sourceFile)
 	line = ComputeLineOfPosition(lineMap, pos)
-	// !!! TODO: this is suspect; these are rune counts, not UTF-8 _or_ UTF-16 offsets.
-	character = utf8.RuneCountInString(sourceFile.Text()[lineMap[line]:pos])
+	character = core.UTF16Len(sourceFile.Text()[lineMap[line]:pos])
 	return line, character
+}
+
+// GetECMALineAndByteOffsetOfPosition returns the 0-based line number and the
+// raw UTF-8 byte offset from the start of that line for the given byte position.
+// Uses ECMAScript line separators (LF, CR, CRLF, LS, PS).
+// Unlike GetECMALineAndUTF16CharacterOfPosition, the offset is in bytes, not UTF-16 code units.
+func GetECMALineAndByteOffsetOfPosition(sourceFile ast.SourceFileLike, pos int) (line int, byteOffset int) {
+	lineMap := GetECMALineStarts(sourceFile)
+	line = ComputeLineOfPosition(lineMap, pos)
+	byteOffset = pos - int(lineMap[line])
+	return line, byteOffset
 }
 
 func GetECMAEndLinePosition(sourceFile *ast.SourceFile, line int) int {
@@ -2478,15 +2492,35 @@ func GetECMAEndLinePosition(sourceFile *ast.SourceFile, line int) int {
 	}
 }
 
-func GetECMAPositionOfLineAndCharacter(sourceFile ast.SourceFileLike, line int, character int) int {
-	return ComputePositionOfLineAndCharacter(GetECMALineStarts(sourceFile), line, character)
+// GetECMAPositionOfLineAndUTF16Character converts a 0-based line number and UTF-16
+// code unit character offset back to an absolute byte position in the source text.
+// Uses ECMAScript line separators.
+func GetECMAPositionOfLineAndUTF16Character(sourceFile ast.SourceFileLike, line int, character core.UTF16Offset) int {
+	lineStarts := GetECMALineStarts(sourceFile)
+	return ComputePositionOfLineAndUTF16Character(lineStarts, line, character, sourceFile.Text(), false)
 }
 
-func ComputePositionOfLineAndCharacter(lineStarts []core.TextPos, line int, character int) int {
-	return ComputePositionOfLineAndCharacterEx(lineStarts, line, character, nil, false)
+// GetECMAPositionOfLineAndByteOffset converts a 0-based line number and byte offset
+// from line start back to an absolute byte position in the source text.
+// Uses ECMAScript line separators.
+func GetECMAPositionOfLineAndByteOffset(sourceFile ast.SourceFileLike, line int, byteOffset int) int {
+	return ComputePositionOfLineAndByteOffset(GetECMALineStarts(sourceFile), line, byteOffset)
 }
 
-func ComputePositionOfLineAndCharacterEx(lineStarts []core.TextPos, line int, character int, text *string, allowEdits bool) int {
+// ComputePositionOfLineAndByteOffset computes a byte position from a line and
+// raw byte offset from the line start. This is a simple addition with validation.
+func ComputePositionOfLineAndByteOffset(lineStarts []core.TextPos, line int, byteOffset int) int {
+	if line < 0 || line >= len(lineStarts) {
+		panic(fmt.Sprintf("Bad line number. Line: %d, lineStarts.length: %d.", line, len(lineStarts)))
+	}
+	return int(lineStarts[line]) + byteOffset
+}
+
+// ComputePositionOfLineAndUTF16Character converts a line and UTF-16 character offset
+// back to a byte position. The character parameter is measured in UTF-16 code units.
+// It scans from the line start to correctly handle multi-byte characters.
+// When allowEdits is true, out-of-range values are clamped instead of panicking.
+func ComputePositionOfLineAndUTF16Character(lineStarts []core.TextPos, line int, character core.UTF16Offset, text string, allowEdits bool) int {
 	if line < 0 || line >= len(lineStarts) {
 		if allowEdits {
 			// Clamp line to nearest allowable value
@@ -2500,25 +2534,47 @@ func ComputePositionOfLineAndCharacterEx(lineStarts []core.TextPos, line int, ch
 		}
 	}
 
-	res := int(lineStarts[line]) + character
+	lineStart := int(lineStarts[line])
+
+	if character > 0 {
+		// UTF-16 character offset: scan from line start counting UTF-16 code units.
+		lineEnd := len(text)
+		if line+1 < len(lineStarts) {
+			lineEnd = int(lineStarts[line+1])
+		}
+		utf16Count := core.UTF16Offset(0)
+		pos := lineStart
+		for pos < lineEnd {
+			if utf16Count >= character {
+				break
+			}
+			r, size := utf8.DecodeRuneInString(text[pos:])
+			utf16Count += core.UTF16Offset(utf16.RuneLen(r))
+			pos += size
+		}
+		if !allowEdits {
+			if pos == lineEnd && utf16Count < character {
+				panic(fmt.Sprintf("Bad UTF-16 character offset. Line: %d, character: %d.", line, character))
+			}
+			debug.Assert(pos <= len(text))
+			return pos
+		}
+		if pos > len(text) {
+			return len(text)
+		}
+		return pos
+	}
+
+	// Character is 0: line start position.
+	res := lineStart
 
 	if allowEdits {
-		// Clamp to nearest allowable values to allow the underlying to be edited without crashing (accuracy is lost, instead)
-		// TODO: Somehow track edits between file as it was during the creation of sourcemap we have and the current file and
-		// apply them to the computed position to improve accuracy
-		if line+1 < len(lineStarts) && res > int(lineStarts[line+1]) {
-			return int(lineStarts[line+1])
-		}
-		if text != nil && res > len(*text) {
-			return len(*text)
+		if res > len(text) {
+			return len(text)
 		}
 		return res
 	}
-	if line < len(lineStarts)-1 && res >= int(lineStarts[line+1]) {
-		panic("Computed position is beyond that of the following line.")
-	} else if text != nil {
-		debug.Assert(res <= len(*text)) // Allow single character overflow for trailing newline
-	}
+	debug.Assert(res <= len(text)) // Allow single character overflow for trailing newline
 	return res
 }
 

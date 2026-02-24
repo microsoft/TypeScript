@@ -300,10 +300,10 @@ func writeRangeDiff(output *strings.Builder, file *ast.SourceFile, diff tokenDif
 		goTokenPos = diff.goToken.Pos
 		goTokenEnd = diff.goToken.End
 	}
-	tsStartLine, _ := core.PositionToLineAndCharacter(tsTokenPos, lines)
-	tsEndLine, _ := core.PositionToLineAndCharacter(tsTokenEnd, lines)
-	goStartLine, _ := core.PositionToLineAndCharacter(goTokenPos, lines)
-	goEndLine, _ := core.PositionToLineAndCharacter(goTokenEnd, lines)
+	tsStartLine, _ := core.PositionToLineAndByteOffset(tsTokenPos, lines)
+	tsEndLine, _ := core.PositionToLineAndByteOffset(tsTokenEnd, lines)
+	goStartLine, _ := core.PositionToLineAndByteOffset(goTokenPos, lines)
+	goEndLine, _ := core.PositionToLineAndByteOffset(goTokenEnd, lines)
 
 	contextLines := 2
 	startLine := min(tsStartLine, goStartLine)

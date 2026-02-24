@@ -264,7 +264,7 @@ func (w *formatSpanWorker) execute(s *formattingScanner) []core.TextChange {
 		}
 
 		w.indentTriviaItems(remainingTrivia, indentation, true, func(item TextRangeWithKind) {
-			startLine, startChar := scanner.GetECMALineAndCharacterOfPosition(w.sourceFile, item.Loc.Pos())
+			startLine, startChar := scanner.GetECMALineAndByteOffsetOfPosition(w.sourceFile, item.Loc.Pos())
 			w.processRange(item, startLine, startChar, w.enclosingNode, w.enclosingNode, nil)
 			w.insertIndentation(item.Loc.Pos(), indentation, false)
 		})
@@ -770,7 +770,7 @@ func (w *formatSpanWorker) processRange(r TextRangeWithKind, rangeStartLine int,
 func (w *formatSpanWorker) processTrivia(trivia []TextRangeWithKind, parent *ast.Node, contextNode *ast.Node, dynamicIndentation *dynamicIndenter) {
 	for _, triviaItem := range trivia {
 		if isComment(triviaItem.Kind) && triviaItem.Loc.ContainedBy(w.originalRange) {
-			triviaItemStartLine, triviaItemStartCharacter := scanner.GetECMALineAndCharacterOfPosition(w.sourceFile, triviaItem.Loc.Pos())
+			triviaItemStartLine, triviaItemStartCharacter := scanner.GetECMALineAndByteOffsetOfPosition(w.sourceFile, triviaItem.Loc.Pos())
 			w.processRange(triviaItem, triviaItemStartLine, triviaItemStartCharacter, parent, contextNode, dynamicIndentation)
 		}
 	}
@@ -867,7 +867,7 @@ func (w *formatSpanWorker) insertIndentation(pos int, indentation int, lineAdded
 		// insert indentation string at the very beginning of the token
 		w.recordReplace(pos, 0, indentationString)
 	} else {
-		tokenStartLine, tokenStartCharacter := scanner.GetECMALineAndCharacterOfPosition(w.sourceFile, pos)
+		tokenStartLine, tokenStartCharacter := scanner.GetECMALineAndByteOffsetOfPosition(w.sourceFile, pos)
 		startLinePosition := int(scanner.GetECMALineStarts(w.sourceFile)[tokenStartLine])
 		if indentation != w.characterToColumn(startLinePosition, tokenStartCharacter) || w.indentationIsDifferent(indentationString, startLinePosition) {
 			w.recordReplace(startLinePosition, tokenStartCharacter, indentationString)
@@ -1031,7 +1031,7 @@ func (w *formatSpanWorker) consumeTokenAndAdvanceScanner(currentTokenInfo tokenI
 	lineAction := LineActionNone
 	isTokenInRange := currentTokenInfo.token.Loc.ContainedBy(w.originalRange)
 
-	tokenStartLine, tokenStartChar := scanner.GetECMALineAndCharacterOfPosition(w.sourceFile, currentTokenInfo.token.Loc.Pos())
+	tokenStartLine, tokenStartChar := scanner.GetECMALineAndByteOffsetOfPosition(w.sourceFile, currentTokenInfo.token.Loc.Pos())
 
 	if isTokenInRange {
 		rangeHasError := w.rangeContainsError(currentTokenInfo.token.Loc)

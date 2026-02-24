@@ -1,17 +1,5 @@
 --- old.unicodeEscapesInNames02(target=es2015).errors.txt
 +++ new.unicodeEscapesInNames02(target=es2015).errors.txt
-@@= skipped -0, +0 lines =@@
--astralAsSurrogatePair.ts(1,17): error TS1127: Invalid character.
--astralAsSurrogatePair.ts(1,18): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
--astralAsSurrogatePair.ts(1,23): error TS1127: Invalid character.
--astralAsSurrogatePair.ts(1,24): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
-+astralAsSurrogatePair.ts(1,16): error TS1127: Invalid character.
-+astralAsSurrogatePair.ts(1,17): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uD800'.
-+astralAsSurrogatePair.ts(1,22): error TS1127: Invalid character.
-+astralAsSurrogatePair.ts(1,23): error TS2305: Module '"./extendedEscapesForAstralsInVarsAndClasses.js"' has no exported member 'uDEA7'.
-
-
- ==== extendedEscapesForAstralsInVarsAndClasses.ts (0 errors) ====
 @@= skipped -31, +31 lines =@@
      
  ==== astralAsSurrogatePair.ts (4 errors) ====

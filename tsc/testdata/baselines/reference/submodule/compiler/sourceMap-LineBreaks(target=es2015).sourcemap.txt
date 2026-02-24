@@ -79,12 +79,12 @@ sourceFile:sourceMap-LineBreaks.ts
 5 >                       ^
 6 >                        ^
 7 >                         ^^^^^^^^^^^^^^^->
-1->�
-2 >�var
-3 >     endsWithLineFee
-4 >                    d =
-5 >                        
-6 >                        1
+1->
+2 >var 
+3 >    endsWithLineFeed
+4 >                     = 
+5 >                       1
+6 >                        ;
 1->Emitted(5, 1) Source(3, 27) + SourceIndex(0)
 2 >Emitted(5, 5) Source(3, 31) + SourceIndex(0)
 3 >Emitted(5, 21) Source(3, 47) + SourceIndex(0)
@@ -99,7 +99,7 @@ sourceFile:sourceMap-LineBreaks.ts
 4 >                                  ^^^
 5 >                                     ^
 6 >                                      ^
-1->;
+1->
   >
 2 >var 
 3 >    endsWithCarriageReturnLineFeed
@@ -306,19 +306,19 @@ sourceFile:sourceMap-LineBreaks.ts
 2 >^^^^
 3 >    ^^^^^^^^^^^^^^^^^^^^^^^^^
 4 >                             ^^^
-5 >                                ^^^^^^^^^^^^^^^^^
-6 >                                                 ^
+5 >                                ^^^^^^^^^^^^^^^^
+6 >                                                ^
 1->   >
 2 >var 
 3 >    stringLiteralWithNextLine
 4 >                              = 
-5 >                                "line 1\line 2
-6 >                                                 "
+5 >                                "line 1\line 2"
+6 >                                                ;
 1->Emitted(20, 1) Source(21, 1) + SourceIndex(0)
 2 >Emitted(20, 5) Source(21, 5) + SourceIndex(0)
 3 >Emitted(20, 30) Source(21, 30) + SourceIndex(0)
 4 >Emitted(20, 33) Source(21, 33) + SourceIndex(0)
-5 >Emitted(20, 50) Source(21, 49) + SourceIndex(0)
-6 >Emitted(20, 51) Source(21, 50) + SourceIndex(0)
+5 >Emitted(20, 49) Source(21, 49) + SourceIndex(0)
+6 >Emitted(20, 50) Source(21, 50) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMap-LineBreaks.js.map

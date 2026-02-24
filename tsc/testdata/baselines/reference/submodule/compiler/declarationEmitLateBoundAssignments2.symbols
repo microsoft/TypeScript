@@ -19,10 +19,10 @@ const emoji = "🤷‍♂️"
 >emoji : Symbol(emoji, Decl(declarationEmitLateBoundAssignments2.ts, 6, 5))
 
 export function decl() {}
->decl : Symbol(decl, Decl(declarationEmitLateBoundAssignments2.ts, 6, 20))
+>decl : Symbol(decl, Decl(declarationEmitLateBoundAssignments2.ts, 6, 21))
 
 decl["B"] = 'foo'
->decl : Symbol(decl, Decl(declarationEmitLateBoundAssignments2.ts, 6, 20))
+>decl : Symbol(decl, Decl(declarationEmitLateBoundAssignments2.ts, 6, 21))
 >"B" : Symbol(decl["B"], Decl(declarationEmitLateBoundAssignments2.ts, 8, 25))
 
 export function decl2() {}
@@ -82,10 +82,10 @@ decl9["🤪"] = 0
 >"🤪" : Symbol(decl9["\uD83E\uDD2A"], Decl(declarationEmitLateBoundAssignments2.ts, 32, 26))
 
 export function decl10() {}
->decl10 : Symbol(decl10, Decl(declarationEmitLateBoundAssignments2.ts, 33, 14))
+>decl10 : Symbol(decl10, Decl(declarationEmitLateBoundAssignments2.ts, 33, 15))
 
 decl10[emoji] = 0
->decl10 : Symbol(decl10, Decl(declarationEmitLateBoundAssignments2.ts, 33, 14))
+>decl10 : Symbol(decl10, Decl(declarationEmitLateBoundAssignments2.ts, 33, 15))
 >emoji : Symbol(emoji, Decl(declarationEmitLateBoundAssignments2.ts, 6, 5))
 
 export const arrow = () => {}

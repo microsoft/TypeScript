@@ -16,7 +16,7 @@ import (
 // generateLongLineTS generates TypeScript source code that produces a single very long line.
 // This simulates generated code (e.g., from code generators) that has no line breaks,
 // which triggers O(n²) behavior in source map generation due to
-// GetECMALineAndCharacterOfPosition scanning from line start for each position.
+// GetECMALineAndUTF16CharacterOfPosition scanning from line start for each position.
 func generateLongLineTS(numProperties int) string {
 	// Build a large object literal all on one line, with no line breaks.
 	var b strings.Builder

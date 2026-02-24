@@ -590,11 +590,11 @@ func (tx *JSXTransformer) visitJsxOpeningLikeElementOrFragmentJSX(
 				args = append(args, tx.Factory().NewFalseExpression())
 			}
 			// __source development flag
-			line, col := scanner.GetECMALineAndCharacterOfPosition(originalFile.AsSourceFile(), location.Pos())
+			line, col := scanner.GetECMALineAndUTF16CharacterOfPosition(originalFile.AsSourceFile(), location.Pos())
 			args = append(args, tx.Factory().NewObjectLiteralExpression(tx.Factory().NewNodeList([]*ast.Node{
 				tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("fileName"), nil, nil, tx.getCurrentFileNameExpression()),
 				tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("lineNumber"), nil, nil, tx.Factory().NewNumericLiteral(strconv.FormatInt(int64(line+1), 10), ast.TokenFlagsNone)),
-				tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("columnNumber"), nil, nil, tx.Factory().NewNumericLiteral(strconv.FormatInt(int64(col+1), 10), ast.TokenFlagsNone)),
+				tx.Factory().NewPropertyAssignment(nil, tx.Factory().NewIdentifier("columnNumber"), nil, nil, tx.Factory().NewNumericLiteral(strconv.FormatInt(int64(col)+1, 10), ast.TokenFlagsNone)),
 			}), false))
 			// __self development flag
 			args = append(args, tx.Factory().NewThisExpression())

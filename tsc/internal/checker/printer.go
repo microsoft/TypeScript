@@ -49,7 +49,7 @@ func (s *semicolonRemoverWriter) DecreaseIndent() {
 	s.inner.DecreaseIndent()
 }
 
-func (s *semicolonRemoverWriter) GetColumn() int {
+func (s *semicolonRemoverWriter) GetColumn() core.UTF16Offset {
 	return s.inner.GetColumn()
 }
 

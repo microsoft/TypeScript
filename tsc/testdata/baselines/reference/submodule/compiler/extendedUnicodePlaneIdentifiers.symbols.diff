@@ -1,11 +1,7 @@
 --- old.extendedUnicodePlaneIdentifiers.symbols
 +++ new.extendedUnicodePlaneIdentifiers.symbols
-@@= skipped -14, +14 lines =@@
- >𝑚 : Symbol(𝑚, Decl(extendedUnicodePlaneIdentifiers.ts, 0, 5))
-
- class K {
-->K : Symbol(K, Decl(extendedUnicodePlaneIdentifiers.ts, 2, 21))
-+>K : Symbol(K, Decl(extendedUnicodePlaneIdentifiers.ts, 2, 19))
+@@= skipped -17, +17 lines =@@
+ >K : Symbol(K, Decl(extendedUnicodePlaneIdentifiers.ts, 2, 21))
 
      #𝑚 = 4;
 ->#𝑚 : Symbol(K[#𝑚], Decl(extendedUnicodePlaneIdentifiers.ts, 4, 9))
@@ -13,7 +9,7 @@
 
      #𝑀 = 5;
 ->#𝑀 : Symbol(K[#𝑀], Decl(extendedUnicodePlaneIdentifiers.ts, 5, 12))
-+>#𝑀 : Symbol(K.#𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 5, 11))
++>#𝑀 : Symbol(K.#𝑀, Decl(extendedUnicodePlaneIdentifiers.ts, 5, 12))
  }
 
  // lower 8 bits look like 'a'

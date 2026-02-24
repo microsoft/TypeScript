@@ -9,10 +9,10 @@ import (
 
 type Mapping struct {
 	GeneratedLine      int
-	GeneratedCharacter int
+	GeneratedCharacter core.UTF16Offset
 	SourceIndex        SourceIndex
 	SourceLine         int
-	SourceCharacter    int
+	SourceCharacter    core.UTF16Offset
 	NameIndex          NameIndex
 }
 
@@ -28,13 +28,14 @@ func (m *Mapping) Equals(other *Mapping) bool {
 func (m *Mapping) IsSourceMapping() bool {
 	return m.SourceIndex != MissingSource &&
 		m.SourceLine != MissingLineOrColumn &&
-		m.SourceCharacter != MissingLineOrColumn
+		m.SourceCharacter != MissingUTF16Column
 }
 
 const (
-	MissingSource       SourceIndex = -1
-	MissingName         NameIndex   = -1
-	MissingLineOrColumn int         = -1
+	MissingSource       SourceIndex      = -1
+	MissingName         NameIndex        = -1
+	MissingLineOrColumn int              = -1
+	MissingUTF16Column  core.UTF16Offset = -1
 )
 
 type MappingsDecoder struct {
@@ -42,10 +43,10 @@ type MappingsDecoder struct {
 	done               bool
 	pos                int
 	generatedLine      int
-	generatedCharacter int
+	generatedCharacter core.UTF16Offset
 	sourceIndex        SourceIndex
 	sourceLine         int
-	sourceCharacter    int
+	sourceCharacter    core.UTF16Offset
 	nameIndex          NameIndex
 	error              error
 	mappingPool        core.Pool[Mapping]
@@ -100,7 +101,7 @@ func (d *MappingsDecoder) Next() (value *Mapping, done bool) {
 
 		hasSource := false
 		hasName := false
-		d.generatedCharacter += d.base64VLQFormatDecode()
+		d.generatedCharacter += core.UTF16Offset(d.base64VLQFormatDecode())
 		if d.hasReportedError() {
 			return d.stopIterating()
 		}
@@ -133,7 +134,7 @@ func (d *MappingsDecoder) Next() (value *Mapping, done bool) {
 				return d.setErrorAndStopIterating("Unsupported Format: No entries after sourceLine")
 			}
 
-			d.sourceCharacter += d.base64VLQFormatDecode()
+			d.sourceCharacter += core.UTF16Offset(d.base64VLQFormatDecode())
 			if d.hasReportedError() {
 				return d.stopIterating()
 			}
@@ -169,7 +170,7 @@ func (d *MappingsDecoder) captureMapping(hasSource bool, hasName bool) *Mapping 
 	mapping.GeneratedCharacter = d.generatedCharacter
 	mapping.SourceIndex = core.IfElse(hasSource, d.sourceIndex, MissingSource)
 	mapping.SourceLine = core.IfElse(hasSource, d.sourceLine, MissingLineOrColumn)
-	mapping.SourceCharacter = core.IfElse(hasSource, d.sourceCharacter, MissingLineOrColumn)
+	mapping.SourceCharacter = core.IfElse(hasSource, d.sourceCharacter, MissingUTF16Column)
 	mapping.NameIndex = core.IfElse(hasName, d.nameIndex, MissingName)
 	return mapping
 }
