@@ -48,6 +48,12 @@ const customStructures: Structure[] = [
                 optional: true,
                 documentation: "The client-side command name that resolved references/implementations `CodeLens` should trigger. Arguments passed will be `(DocumentUri, Position, Location[])`.",
             },
+            {
+                name: "userPreferences",
+                type: { kind: "reference", name: "any" },
+                optional: true,
+                documentation: "userPreferences and/or formatting options if provided at initialization.",
+            },
         ],
         documentation: "InitializationOptions contains user-provided initialization options.",
     },

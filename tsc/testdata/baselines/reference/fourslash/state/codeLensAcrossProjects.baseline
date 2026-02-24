@@ -161,7 +161,7 @@ Config File Names::
   "method": "workspace/didChangeConfiguration",
   "params": {
     "settings": {
-      "typescript": {
+      "js/ts": {
         "FormatCodeSettings": null,
         "QuotePreference": "",
         "LazyConfiguredProjectsFromExternalProject": false,
@@ -609,7 +609,7 @@ Config::
   "method": "workspace/didChangeConfiguration",
   "params": {
     "settings": {
-      "typescript": {
+      "js/ts": {
         "FormatCodeSettings": {
           "BaseIndentSize": 0,
           "IndentSize": 4,

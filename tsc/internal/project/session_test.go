@@ -925,7 +925,7 @@ func TestSession(t *testing.T) {
 			"OrganizeImportsIgnoreCase": true,
 		}
 		// set "typescript" options only
-		session.Configure(lsutil.ParseNewUserConfig([]any{nil, configMap1, nil}))
+		session.Configure(lsutil.ParseNewUserConfig(map[string]any{"typescript": configMap1}))
 		actualConfig1 := session.Config()
 		expectedPrefs1 := lsutil.NewDefaultUserPreferences()
 		expectedPrefs1.UseAliasesForRename = core.TSTrue
@@ -942,7 +942,7 @@ func TestSession(t *testing.T) {
 			"OrganizeImportsIgnoreCase": false,
 		}
 		// set "javascript" options only
-		session.Configure(lsutil.ParseNewUserConfig([]any{nil, nil, configMap2}))
+		session.Configure(lsutil.ParseNewUserConfig(map[string]any{"javascript": configMap2}))
 		actualConfig2 := session.Config()
 		expectedPrefs2 := lsutil.NewDefaultUserPreferences()
 		expectedPrefs2.UseAliasesForRename = core.TSFalse

@@ -284,7 +284,18 @@ func (s *Server) RefreshCodeLens(ctx context.Context) error {
 func (s *Server) RequestConfiguration(ctx context.Context) (*lsutil.UserConfig, error) {
 	caps := lsproto.GetClientCapabilities(ctx)
 	if !caps.Workspace.Configuration {
-		// if no configuration request capapbility, return default config
+		if s.initializeParams != nil && s.initializeParams.InitializationOptions != nil && s.initializeParams.InitializationOptions.UserPreferences != nil {
+			s.logger.Logf(
+				"received formatting options from initialization: %T\n%+v",
+				*s.initializeParams.InitializationOptions.UserPreferences,
+				*s.initializeParams.InitializationOptions.UserPreferences,
+			)
+			// Any options received via initializationOptions will be used for both `js` and `ts` options
+			if config, ok := (*s.initializeParams.InitializationOptions.UserPreferences).(map[string]any); ok {
+				return lsutil.NewUserConfig(lsutil.NewDefaultUserPreferences().ParseWorker(config)), nil
+			}
+		}
+		// if no configuration request capability, return default config
 		return lsutil.NewUserConfig(nil), nil
 	}
 	configs, err := sendClientRequest(ctx, s, lsproto.WorkspaceConfigurationInfo, &lsproto.ConfigurationParams{
@@ -298,12 +309,35 @@ func (s *Server) RequestConfiguration(ctx context.Context) (*lsutil.UserConfig, 
 			{
 				Section: new("javascript"),
 			},
+			{
+				Section: new("editor"),
+			},
 		},
 	})
 	if err != nil {
 		return &lsutil.UserConfig{}, fmt.Errorf("configure request failed: %w", err)
 	}
-	return lsutil.ParseNewUserConfig(configs), nil
+	configMap := map[string]any{}
+	for i, config := range configs {
+		switch i {
+		case 0:
+			configMap["js/ts"] = config
+		case 1:
+			configMap["typescript"] = config
+		case 2:
+			configMap["javascript"] = config
+		case 3:
+			configMap["editor"] = config
+		}
+	}
+	s.logger.Logf(
+		"received options from workspace/configuration request:\njs/ts: %+v\n\ntypescript: %+v\n\njavascript: %+v\n\neditor: %+v\n",
+		configMap["js/ts"],
+		configMap["typescript"],
+		configMap["javascript"],
+		configMap["editor"],
+	)
+	return lsutil.ParseNewUserConfig(configMap), nil
 }
 
 func (s *Server) Run(ctx context.Context) error {
@@ -1046,7 +1080,7 @@ func (s *Server) handleInitialized(ctx context.Context, params *lsproto.Initiali
 				RegisterOptions: &lsproto.RegisterOptions{
 					DidChangeConfiguration: &lsproto.DidChangeConfigurationRegistrationOptions{
 						Section: &lsproto.StringOrStrings{
-							Strings: &[]string{"js/ts", "typescript", "javascript"},
+							Strings: &[]string{"js/ts", "typescript", "javascript", "editor"},
 						},
 					},
 				},
@@ -1078,14 +1112,10 @@ func (s *Server) handleExit(ctx context.Context, params any) error {
 }
 
 func (s *Server) handleDidChangeWorkspaceConfiguration(ctx context.Context, params *lsproto.DidChangeConfigurationParams) error {
-	// !!! only implemented because needed for fourslash
 	if params.Settings == nil {
 		return nil
-	} else if settings, ok := params.Settings.([]any); ok {
-		s.session.Configure(lsutil.ParseNewUserConfig(settings))
 	} else if settings, ok := params.Settings.(map[string]any); ok {
-		// fourslash case
-		s.session.Configure(lsutil.ParseNewUserConfig([]any{settings["js/ts"], settings["typescript"], settings["javascript"]}))
+		s.session.Configure(lsutil.ParseNewUserConfig(settings))
 	}
 	return nil
 }

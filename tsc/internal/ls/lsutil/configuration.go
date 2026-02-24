@@ -78,31 +78,43 @@ func (c *UserConfig) GetPreferences(activeFile string) *UserPreferences {
 	return NewDefaultUserPreferences()
 }
 
-func ParseNewUserConfig(items []any) *UserConfig {
-	defaultPref := NewUserConfig(NewDefaultUserPreferences())
-	c := &UserConfig{}
-	for i, item := range items {
-		if item == nil {
-			// continue
-		} else if config, ok := item.(map[string]any); ok {
-			switch i {
-			case 0:
-				// if provided, parse and set "js/ts" as base config
-				defaultPref = NewUserConfig(defaultPref.ts.ParseWorker(config))
-				c = defaultPref.Copy()
-				continue
-			case 1:
-				// typescript
-				c.ts = defaultPref.ts.ParseWorker(config)
-			case 2:
-				// javascript
-				c.js = defaultPref.js.ParseWorker(config)
-			}
-		} else if item, ok := item.(*UserPreferences); ok {
-			// case for fourslash -- fourslash sends the entire userPreferences over
-			// !!! support format and js/ts distinction?
-			return NewUserConfig(item)
+func ParseNewUserConfig(items map[string]any) *UserConfig {
+	defaultPref := NewDefaultUserPreferences()
+	if editorItem, ok := items["editor"]; ok && editorItem != nil {
+		if editorSettings, ok := editorItem.(map[string]any); ok {
+			defaultPref.FormatCodeSettings = defaultPref.FormatCodeSettings.ParseEditorSettings(editorSettings)
 		}
 	}
+	if jsTsItem, ok := items["js/ts"]; ok && jsTsItem != nil {
+		// if "js/ts" is provided, we assume they are already resolved and merged
+		switch jsTsSettings := jsTsItem.(type) {
+		case map[string]any:
+			return NewUserConfig(defaultPref.ParseWorker(jsTsSettings))
+		case *UserPreferences:
+			// case for fourslash -- fourslash sends the entire userPreferences over in "js/ts"
+			return NewUserConfig(jsTsSettings)
+		}
+	}
+
+	// set typescript and javascript preferences separately
+	c := &UserConfig{}
+	if tsItem, ok := items["typescript"]; ok && tsItem != nil {
+		switch tsSettings := tsItem.(type) {
+		case map[string]any:
+			c.ts = defaultPref.Copy().ParseWorker(tsSettings)
+		case *UserPreferences:
+			c.ts = tsSettings
+		}
+	}
+
+	if jsItem, ok := items["javascript"]; ok && jsItem != nil {
+		switch jsSettings := jsItem.(type) {
+		case map[string]any:
+			c.js = defaultPref.Copy().ParseWorker(jsSettings)
+		case *UserPreferences:
+			c.js = jsSettings
+		}
+	}
+
 	return c
 }

@@ -585,14 +585,13 @@ func (f *FourslashTest) GetOptions() *lsutil.UserPreferences {
 
 func (f *FourslashTest) Configure(t *testing.T, config *lsutil.UserPreferences) {
 	// !!!
-	// Callers to this function may need to consider
-	// sending a more specific configuration for 'javascript'
-	// or 'js/ts' as well. For now, we only send 'typescript',
-	// and most tests probably just want this.
+	// We send 'js/ts' by default because that is what we expect the primary config to be in vscode and VS (one
+	// set of preferences for both languages). This should be fine in fourslash since tests that need
+	// multiple options usually send reconfiguration commands for each `verify` anyways
 	f.userPreferences = config
 	sendNotification(t, f, lsproto.WorkspaceDidChangeConfigurationInfo, &lsproto.DidChangeConfigurationParams{
 		Settings: map[string]any{
-			"typescript": config,
+			"js/ts": config,
 		},
 	})
 }

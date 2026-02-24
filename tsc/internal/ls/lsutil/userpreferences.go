@@ -618,8 +618,11 @@ func parseBoolWithDefault(val any, defaultV bool) bool {
 }
 
 func parseIntWithDefault(val any, defaultV int) int {
-	if v, ok := val.(int); ok {
+	switch v := val.(type) {
+	case int:
 		return v
+	case float64:
+		return int(v)
 	}
 	return defaultV
 }

@@ -107,6 +107,19 @@ func (settings *FormatCodeSettings) ToLSFormatOptions() *lsproto.FormattingOptio
 	}
 }
 
+func (settings *FormatCodeSettings) ParseEditorSettings(editorSettings map[string]any) *FormatCodeSettings {
+	if editorSettings == nil {
+		return settings
+	}
+	for name, value := range editorSettings {
+		switch strings.ToLower(name) {
+		case "baseindentsize", "indentsize", "tabsize", "newlinecharacter", "converttabstospaces", "indentstyle", "trimtrailingwhitespace":
+			settings.Set(name, value)
+		}
+	}
+	return settings
+}
+
 func (settings *FormatCodeSettings) Parse(prefs any) bool {
 	formatSettingsMap, ok := prefs.(map[string]any)
 	formatSettingsParsed := false
