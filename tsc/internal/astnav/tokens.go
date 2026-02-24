@@ -713,17 +713,17 @@ func FindChildOfKind(containingNode *ast.Node, kind ast.Kind, sourceFile *ast.So
 		startPos := lastNodePos
 		for startPos < node.Pos() {
 			tokenKind := scan.Token()
-			tokenFullStart := scan.TokenFullStart()
 			tokenEnd := scan.TokenEnd()
-			flags := scan.TokenFlags()
-			token := sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, containingNode, flags)
 			if tokenKind == kind {
-				foundChild = token
+				tokenFullStart := scan.TokenFullStart()
+				flags := scan.TokenFlags()
+				foundChild = sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, containingNode, flags)
 				return true
 			}
 			startPos = tokenEnd
 			scan.Scan()
 		}
+
 		if node.Kind == kind {
 			foundChild = node
 			return true
@@ -744,11 +744,11 @@ func FindChildOfKind(containingNode *ast.Node, kind ast.Kind, sourceFile *ast.So
 	startPos := lastNodePos
 	for startPos < containingNode.End() {
 		tokenKind := scan.Token()
-		tokenFullStart := scan.TokenFullStart()
 		tokenEnd := scan.TokenEnd()
-		flags := scan.TokenFlags()
-		token := sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, containingNode, flags)
 		if tokenKind == kind {
+			tokenFullStart := scan.TokenFullStart()
+			flags := scan.TokenFlags()
+			token := sourceFile.GetOrCreateToken(tokenKind, tokenFullStart, tokenEnd, containingNode, flags)
 			return token
 		}
 		startPos = tokenEnd
