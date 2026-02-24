@@ -2,6 +2,7 @@ package format
 
 import (
 	"github.com/microsoft/typescript-go/internal/ast"
+	"github.com/microsoft/typescript-go/internal/astnav"
 	"github.com/microsoft/typescript-go/internal/core"
 	"github.com/microsoft/typescript-go/internal/ls/lsutil"
 	"github.com/microsoft/typescript-go/internal/scanner"
@@ -23,8 +24,6 @@ type FormattingContext struct {
 	SourceFile            *ast.SourceFile
 	FormattingRequestKind FormatRequestKind
 	Options               *lsutil.FormatCodeSettings
-
-	scanner *scanner.Scanner
 }
 
 func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options *lsutil.FormatCodeSettings) *FormattingContext {
@@ -32,10 +31,7 @@ func NewFormattingContext(file *ast.SourceFile, kind FormatRequestKind, options 
 		SourceFile:            file,
 		FormattingRequestKind: kind,
 		Options:               options,
-		scanner:               scanner.NewScanner(),
 	}
-	res.scanner.SetText(file.Text())
-	res.scanner.SetSkipTrivia(true)
 	return res
 }
 
@@ -80,23 +76,11 @@ func withTokenStart(loc *ast.Node, file *ast.SourceFile) core.TextRange {
 }
 
 func (this *FormattingContext) blockIsOnOneLine(node *ast.Node) core.Tristate {
-	// In strada, this relies on token child manifesting - we just use the scanner here,
-	// so this will have a differing performance profile. Is this OK? Needs profiling to know.
-	this.scanner.ResetPos(node.Pos())
-	end := node.End()
-	firstOpenBrace := -1
-	lastCloseBrace := -1
-	for this.scanner.TokenEnd() < end {
-		// tokenStart instead of tokenfullstart to skip trivia
-		if firstOpenBrace == -1 && this.scanner.Token() == ast.KindOpenBraceToken {
-			firstOpenBrace = this.scanner.TokenStart()
-		} else if this.scanner.Token() == ast.KindCloseBraceToken {
-			lastCloseBrace = this.scanner.TokenStart()
-		}
-		this.scanner.Scan()
-	}
-	if firstOpenBrace != -1 && lastCloseBrace != -1 {
-		return this.rangeIsOnOneLine(core.NewTextRange(firstOpenBrace, lastCloseBrace))
+	openBrace := astnav.FindChildOfKind(node, ast.KindOpenBraceToken, this.SourceFile)
+	closeBrace := astnav.FindChildOfKind(node, ast.KindCloseBraceToken, this.SourceFile)
+	if openBrace != nil && closeBrace != nil {
+		closeBraceStart := scanner.GetTokenPosOfNode(closeBrace, this.SourceFile, false)
+		return this.rangeIsOnOneLine(core.NewTextRange(openBrace.End(), closeBraceStart))
 	}
 	return core.TSFalse
 }
