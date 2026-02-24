@@ -3,7 +3,7 @@
 {
     "name": "TypeScript Compiler Development",
     // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-    "image": "mcr.microsoft.com/devcontainers/go:2-1.25-bookworm",
+    "image": "mcr.microsoft.com/devcontainers/go:2-1.26-bookworm",
     // Features to add to the dev container. More info: https://containers.dev/features.
     "features": {
         "ghcr.io/devcontainers/features/node:1": {
@@ -25,10 +25,6 @@
         "Initialize Submodules": "git submodule update --init --recursive; cd _submodules/TypeScript; npm ci",
         "Install pprof": "go install github.com/google/pprof@latest",
         "Install Graphviz": "sudo apt update -y; sudo apt install -y graphviz"
-    },
-
-    "containerEnv": {
-        "GOTOOLCHAIN": "auto"
     },
 
     // Configure tool-specific properties.
