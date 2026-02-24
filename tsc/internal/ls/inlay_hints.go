@@ -245,6 +245,7 @@ func (s *inlayHintState) visitVariableLikeDeclaration(decl *ast.VariableOrProper
 		hintText = b.String()
 	}
 	if !s.preferences.IncludeInlayVariableTypeHintsWhenTypeMatchesName &&
+		!ast.IsComputedPropertyName(decl.Name()) &&
 		stringutil.EquateStringCaseInsensitive(decl.Name().Text(), hintText) {
 		return
 	}

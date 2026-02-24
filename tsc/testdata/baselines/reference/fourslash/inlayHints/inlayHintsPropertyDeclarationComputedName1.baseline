@@ -1,0 +1,19 @@
+// === Inlay Hints ===
+    [sym] = 123;
+         ^
+{
+  "position": {
+    "line": 3,
+    "character": 9
+  },
+  "label": [
+    {
+      "value": ": "
+    },
+    {
+      "value": "number"
+    }
+  ],
+  "kind": 1,
+  "paddingLeft": true
+}
