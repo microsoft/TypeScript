@@ -879,7 +879,9 @@ func (w *formatSpanWorker) characterToColumn(startLinePosition int, characterInL
 	column := 0
 	for i := range characterInLine {
 		if w.sourceFile.Text()[startLinePosition+i] == '\t' {
-			column += w.formattingContext.Options.TabSize - (column % w.formattingContext.Options.TabSize)
+			if w.formattingContext.Options.TabSize > 0 {
+				column += w.formattingContext.Options.TabSize - (column % w.formattingContext.Options.TabSize)
+			}
 		} else {
 			column++
 		}
@@ -976,6 +978,9 @@ func (w *formatSpanWorker) indentMultilineComment(commentRange core.TextRange, i
 func getIndentationString(indentation int, options *lsutil.FormatCodeSettings) string {
 	// go's `strings.Repeat` already has static, global caching for repeated tabs and spaces, so there's no need to cache here like in strada
 	if !options.ConvertTabsToSpaces {
+		if options.TabSize == 0 {
+			return ""
+		}
 		tabs := int(math.Floor(float64(indentation) / float64(options.TabSize)))
 		spaces := indentation - (tabs * options.TabSize)
 		res := strings.Repeat("\t", tabs)

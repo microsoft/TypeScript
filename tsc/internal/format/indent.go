@@ -230,7 +230,9 @@ func findFirstNonWhitespaceCharacterAndColumn(startPos int, endPos int, sourceFi
 		}
 
 		if ch == '\t' {
-			column += options.TabSize + (column % options.TabSize)
+			if options.TabSize > 0 {
+				column += options.TabSize + (column % options.TabSize)
+			}
 		} else {
 			column++
 		}
