@@ -65,32 +65,45 @@ var __importStar = (this && this.__importStar) || (function () {
         return result;
     };
 })();
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.l = exports.cl2 = exports.obj = exports.cl1 = void 0;
 exports.fn = fn;
-async function fn() {
-    const req = await Promise.resolve().then(() => __importStar(require('./test'))); // ONE
+function fn() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // ONE
+    });
 }
 class cl1 {
-    async m() {
-        const req = await Promise.resolve().then(() => __importStar(require('./test'))); // TWO
+    m() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // TWO
+        });
     }
 }
 exports.cl1 = cl1;
 exports.obj = {
-    m: async () => {
-        const req = await Promise.resolve().then(() => __importStar(require('./test'))); // THREE
-    }
+    m: () => __awaiter(void 0, void 0, void 0, function* () {
+        const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // THREE
+    })
 };
 class cl2 {
     p = {
-        m: async () => {
-            const req = await Promise.resolve().then(() => __importStar(require('./test'))); // FOUR
-        }
+        m: () => __awaiter(this, void 0, void 0, function* () {
+            const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // FOUR
+        })
     };
 }
 exports.cl2 = cl2;
-const l = async () => {
-    const req = await Promise.resolve().then(() => __importStar(require('./test'))); // FIVE
-};
+const l = () => __awaiter(void 0, void 0, void 0, function* () {
+    const req = yield Promise.resolve().then(() => __importStar(require('./test'))); // FIVE
+});
 exports.l = l;

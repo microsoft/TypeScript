@@ -17,12 +17,18 @@ async function conditional2() {
 
 //// [es5-asyncFunctionConditionals.js]
 "use strict";
-async function conditional0() {
-    a = (await x) ? y : z;
+function conditional0() {
+    return __awaiter(this, void 0, void 0, function* () {
+        a = (yield x) ? y : z;
+    });
 }
-async function conditional1() {
-    a = x ? await y : z;
+function conditional1() {
+    return __awaiter(this, void 0, void 0, function* () {
+        a = x ? yield y : z;
+    });
 }
-async function conditional2() {
-    a = x ? y : await z;
+function conditional2() {
+    return __awaiter(this, void 0, void 0, function* () {
+        a = x ? y : yield z;
+    });
 }

@@ -81,110 +81,148 @@ async function whileStatement18() {
 
 //// [es5-asyncFunctionWhileStatements.js]
 "use strict";
-async function whileStatement0() {
-    while (x) {
-        y;
-    }
+function whileStatement0() {
+    return __awaiter(this, void 0, void 0, function* () {
+        while (x) {
+            y;
+        }
+    });
 }
-async function whileStatement1() {
-    while (await x) {
-        y;
-    }
+function whileStatement1() {
+    return __awaiter(this, void 0, void 0, function* () {
+        while (yield x) {
+            y;
+        }
+    });
 }
-async function whileStatement2() {
-    while (x) {
-        await y;
-    }
+function whileStatement2() {
+    return __awaiter(this, void 0, void 0, function* () {
+        while (x) {
+            yield y;
+        }
+    });
 }
-async function whileStatement3() {
-    while (x) {
-        continue;
-    }
-}
-async function whileStatement4() {
-    while (await x) {
-        continue;
-    }
-}
-async function whileStatement5() {
-    while (x) {
-        await y;
-        continue;
-    }
-}
-async function whileStatement6() {
-    while (x) {
-        if (1)
+function whileStatement3() {
+    return __awaiter(this, void 0, void 0, function* () {
+        while (x) {
             continue;
-        await y;
-    }
+        }
+    });
 }
-async function whileStatement7() {
-    A: while (x) {
-        continue A;
-    }
+function whileStatement4() {
+    return __awaiter(this, void 0, void 0, function* () {
+        while (yield x) {
+            continue;
+        }
+    });
 }
-async function whileStatement8() {
-    B: while (await x) {
-        continue B;
-    }
+function whileStatement5() {
+    return __awaiter(this, void 0, void 0, function* () {
+        while (x) {
+            yield y;
+            continue;
+        }
+    });
 }
-async function whileStatement9() {
-    C: while (x) {
-        await y;
-        continue C;
-    }
+function whileStatement6() {
+    return __awaiter(this, void 0, void 0, function* () {
+        while (x) {
+            if (1)
+                continue;
+            yield y;
+        }
+    });
 }
-async function whileStatement10() {
-    D: while (x) {
-        if (1)
-            continue D;
-        await y;
-    }
+function whileStatement7() {
+    return __awaiter(this, void 0, void 0, function* () {
+        A: while (x) {
+            continue A;
+        }
+    });
 }
-async function whileStatement11() {
-    while (x) {
-        break;
-    }
+function whileStatement8() {
+    return __awaiter(this, void 0, void 0, function* () {
+        B: while (yield x) {
+            continue B;
+        }
+    });
 }
-async function whileStatement12() {
-    while (await x) {
-        break;
-    }
+function whileStatement9() {
+    return __awaiter(this, void 0, void 0, function* () {
+        C: while (x) {
+            yield y;
+            continue C;
+        }
+    });
 }
-async function whileStatement13() {
-    while (x) {
-        await y;
-        break;
-    }
+function whileStatement10() {
+    return __awaiter(this, void 0, void 0, function* () {
+        D: while (x) {
+            if (1)
+                continue D;
+            yield y;
+        }
+    });
 }
-async function whileStatement14() {
-    while (x) {
-        if (1)
+function whileStatement11() {
+    return __awaiter(this, void 0, void 0, function* () {
+        while (x) {
             break;
-        await y;
-    }
+        }
+    });
 }
-async function whileStatement15() {
-    E: while (x) {
-        break E;
-    }
+function whileStatement12() {
+    return __awaiter(this, void 0, void 0, function* () {
+        while (yield x) {
+            break;
+        }
+    });
 }
-async function whileStatement16() {
-    F: while (await x) {
-        break F;
-    }
+function whileStatement13() {
+    return __awaiter(this, void 0, void 0, function* () {
+        while (x) {
+            yield y;
+            break;
+        }
+    });
 }
-async function whileStatement17() {
-    G: while (x) {
-        await y;
-        break G;
-    }
+function whileStatement14() {
+    return __awaiter(this, void 0, void 0, function* () {
+        while (x) {
+            if (1)
+                break;
+            yield y;
+        }
+    });
 }
-async function whileStatement18() {
-    H: while (x) {
-        if (1)
-            break H;
-        await y;
-    }
+function whileStatement15() {
+    return __awaiter(this, void 0, void 0, function* () {
+        E: while (x) {
+            break E;
+        }
+    });
+}
+function whileStatement16() {
+    return __awaiter(this, void 0, void 0, function* () {
+        F: while (yield x) {
+            break F;
+        }
+    });
+}
+function whileStatement17() {
+    return __awaiter(this, void 0, void 0, function* () {
+        G: while (x) {
+            yield y;
+            break G;
+        }
+    });
+}
+function whileStatement18() {
+    return __awaiter(this, void 0, void 0, function* () {
+        H: while (x) {
+            if (1)
+                break H;
+            yield y;
+        }
+    });
 }

@@ -48,28 +48,28 @@ const looserAsyncFactory: SequenceFactory = async function* (){
 const syncFactory = function* () {
     let name = "";
     while (!name) {
-        name = (yield "What is your name?");
+        name = yield "What is your name?";
     }
     return `That's the end of the game, ${name}`;
 };
 const asyncFactory = async function* () {
     let name = "";
     while (!name) {
-        name = (yield "What is your name?");
+        name = yield "What is your name?";
     }
     return `That's the end of the game, ${name}`;
 };
 const looserSyncFactory = function* () {
     let name = "";
     while (!name) {
-        name = (yield "What is your name?");
+        name = yield "What is your name?";
     }
     return `That's the end of the game, ${name}`;
 };
 const looserAsyncFactory = async function* () {
     let name = "";
     while (!name) {
-        name = (yield "What is your name?");
+        name = yield "What is your name?";
     }
     return `That's the end of the game, ${name}`;
 };

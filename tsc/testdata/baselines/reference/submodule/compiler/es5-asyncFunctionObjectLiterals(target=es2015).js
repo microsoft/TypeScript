@@ -54,45 +54,59 @@ async function objectLiteral6() {
 
 //// [es5-asyncFunctionObjectLiterals.js]
 "use strict";
-async function objectLiteral0() {
-    x = {
-        a: await y,
-        b: z
-    };
+function objectLiteral0() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = {
+            a: yield y,
+            b: z
+        };
+    });
 }
-async function objectLiteral1() {
-    x = {
-        a: y,
-        b: await z
-    };
+function objectLiteral1() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = {
+            a: y,
+            b: yield z
+        };
+    });
 }
-async function objectLiteral2() {
-    x = {
-        [await a]: y,
-        b: z
-    };
+function objectLiteral2() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = {
+            [yield a]: y,
+            b: z
+        };
+    });
 }
-async function objectLiteral3() {
-    x = {
-        [a]: await y,
-        b: z
-    };
+function objectLiteral3() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = {
+            [a]: yield y,
+            b: z
+        };
+    });
 }
-async function objectLiteral4() {
-    x = {
-        a: await y,
-        [b]: z
-    };
+function objectLiteral4() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = {
+            a: yield y,
+            [b]: z
+        };
+    });
 }
-async function objectLiteral5() {
-    x = {
-        a: y,
-        [await b]: z
-    };
+function objectLiteral5() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = {
+            a: y,
+            [yield b]: z
+        };
+    });
 }
-async function objectLiteral6() {
-    x = {
-        a: y,
-        [b]: await z
-    };
+function objectLiteral6() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = {
+            a: y,
+            [b]: yield z
+        };
+    });
 }

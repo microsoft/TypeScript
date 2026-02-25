@@ -26,8 +26,10 @@ class A {
             return new Promise((resolve) => { resolve(null); });
         }
         static C = class C {
-            static async func() {
-                await B.func2();
+            static func() {
+                return __awaiter(this, void 0, void 0, function* () {
+                    yield B.func2();
+                });
             }
         };
     };

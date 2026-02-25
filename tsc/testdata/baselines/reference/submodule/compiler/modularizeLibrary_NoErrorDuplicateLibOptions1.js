@@ -84,6 +84,15 @@ const o1 = {
 
 //// [modularizeLibrary_NoErrorDuplicateLibOptions1.js]
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 // Using Es6 array
 function f(x, y, z) {
     return Array.from(arguments);
@@ -123,8 +132,10 @@ var o = {
 };
 o.hasOwnProperty(Symbol.hasInstance);
 // Using ES6 promise
-async function out() {
-    return new Promise(function (resolve, reject) { });
+function out() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return new Promise(function (resolve, reject) { });
+    });
 }
 out().then(() => {
     console.log("Yea!");

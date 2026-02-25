@@ -6,5 +6,7 @@ async function foo(a = await => await): Promise<void> {
 
 //// [asyncFunctionDeclaration10_es5.js]
 "use strict";
-async function foo(a = await , await) {
+function foo() {
+    return __awaiter(this, arguments, void 0, function* (a = yield , await) {
+    });
 }

@@ -280,6 +280,24 @@ func (f *NodeFactory) InlineExpressions(expressions []*ast.Expression) *ast.Expr
 // Utilities
 //
 
+func (f *NodeFactory) CreateExpressionFromEntityName(node *ast.Node) *ast.Expression {
+	if ast.IsQualifiedName(node) {
+		left := f.CreateExpressionFromEntityName(node.AsQualifiedName().Left)
+		right := node.AsQualifiedName().Right.Clone(f.AsNodeFactory())
+		right.Loc = node.AsQualifiedName().Right.Loc
+		// TODO(rbuckton): Does this need to be parented?
+		right.Parent = node.AsQualifiedName().Right.Parent
+		propAccess := f.NewPropertyAccessExpression(left, nil, right, ast.NodeFlagsNone)
+		propAccess.Loc = node.Loc
+		return propAccess
+	}
+	res := node.Clone(f.AsNodeFactory())
+	res.Loc = node.Loc
+	// TODO(rbuckton): Does this need to be parented?
+	res.Parent = node.Parent
+	return res
+}
+
 func (f *NodeFactory) NewTypeCheck(value *ast.Node, tag string) *ast.Node {
 	if tag == "null" {
 		return f.NewStrictEqualityExpression(value, f.NewKeywordExpression(ast.KindNullKeyword))
@@ -649,6 +667,64 @@ func (f *NodeFactory) NewRestHelper(value *ast.Expression, elements []*ast.Node,
 }
 
 // !!! ES2017 Helpers
+
+// Allocates a new Call expression to the `__awaiter` helper.
+func (f *NodeFactory) NewAwaiterHelper(
+	hasLexicalThis bool,
+	argumentsExpression *ast.Expression,
+	parameters *ast.NodeList,
+	body *ast.BlockNode,
+) *ast.Expression {
+	f.emitContext.RequestEmitHelper(awaiterHelper)
+
+	var params *ast.NodeList
+	if parameters != nil {
+		params = parameters
+	} else {
+		params = f.NewNodeList([]*ast.Node{})
+	}
+
+	generatorFunc := f.NewFunctionExpression(
+		nil, /*modifiers*/
+		f.NewToken(ast.KindAsteriskToken),
+		nil, /*name*/
+		nil, /*typeParameters*/
+		params,
+		nil, /*returnType*/
+		nil, /*fullSignature*/
+		body,
+	)
+
+	// Mark this node as originally an async function body
+	f.emitContext.AddEmitFlags(generatorFunc, EFAsyncFunctionBody|EFReuseTempVariableScope)
+
+	var thisArg *ast.Expression
+	if hasLexicalThis {
+		thisArg = f.NewKeywordExpression(ast.KindThisKeyword)
+	} else {
+		thisArg = f.NewVoidZeroExpression()
+	}
+
+	var argsArg *ast.Expression
+	if argumentsExpression != nil {
+		argsArg = argumentsExpression
+	} else {
+		argsArg = f.NewVoidZeroExpression()
+	}
+
+	return f.NewCallExpression(
+		f.NewUnscopedHelperName("__awaiter"),
+		nil, /*questionDotToken*/
+		nil, /*typeArguments*/
+		f.NewNodeList([]*ast.Expression{
+			thisArg,
+			argsArg,
+			f.NewVoidZeroExpression(),
+			generatorFunc,
+		}),
+		ast.NodeFlagsNone,
+	)
+}
 
 // ES2015 Helpers
 

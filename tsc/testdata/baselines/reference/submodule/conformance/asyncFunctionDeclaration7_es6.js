@@ -9,8 +9,12 @@ async function bar(): Promise<void> {
 
 //// [asyncFunctionDeclaration7_es6.js]
 "use strict";
-async function bar() {
-    // 'await' here is an identifier, and not a yield expression.
-    async function foo(a = await ) {
-    }
+function bar() {
+    return __awaiter(this, void 0, void 0, function* () {
+        // 'await' here is an identifier, and not a yield expression.
+        function foo() {
+            return __awaiter(this, arguments, void 0, function* (a = yield ) {
+            });
+        }
+    });
 }

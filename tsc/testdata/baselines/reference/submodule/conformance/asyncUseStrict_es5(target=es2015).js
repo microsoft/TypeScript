@@ -10,7 +10,9 @@ async function func(): Promise<void> {
 
 //// [asyncUseStrict_es5.js]
 "use strict";
-async function func() {
-    "use strict";
-    var b = await p || a;
+function func() {
+    return __awaiter(this, void 0, void 0, function* () {
+        "use strict";
+        var b = (yield p) || a;
+    });
 }

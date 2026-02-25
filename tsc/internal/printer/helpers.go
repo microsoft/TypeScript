@@ -154,6 +154,41 @@ var restHelper = &EmitHelper{
 
 // !!! ES2017 Helpers
 
+var awaiterHelper = &EmitHelper{
+	Name:       "typescript:awaiter",
+	ImportName: "__awaiter",
+	Scoped:     false,
+	Priority:   &Priority{5},
+	Text: `var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};`,
+}
+
+var AsyncSuperHelper = &EmitHelper{
+	Name:   "typescript:async-super",
+	Scoped: true,
+	TextCallback: func(makeUniqueName func(string) string) string {
+		return "\nconst " + makeUniqueName("_superIndex") + " = name => super[name];"
+	},
+}
+
+var AdvancedAsyncSuperHelper = &EmitHelper{
+	Name:   "typescript:advanced-async-super",
+	Scoped: true,
+	TextCallback: func(makeUniqueName func(string) string) string {
+		return "\nconst " + makeUniqueName("_superIndex") + " = (function (geti, seti) {\n" +
+			"    const cache = Object.create(null);\n" +
+			"    return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });\n" +
+			"})(name => super[name], (name, value) => super[name] = value);"
+	},
+}
+
 // ES2015 Helpers
 
 var propKeyHelper = &EmitHelper{

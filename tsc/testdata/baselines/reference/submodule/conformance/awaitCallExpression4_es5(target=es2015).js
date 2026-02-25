@@ -17,8 +17,10 @@ async function func(): Promise<void> {
 
 //// [awaitCallExpression4_es5.js]
 "use strict";
-async function func() {
-    before();
-    var b = (await pfn)(a, a, a);
-    after();
+function func() {
+    return __awaiter(this, void 0, void 0, function* () {
+        before();
+        var b = (yield pfn)(a, a, a);
+        after();
+    });
 }

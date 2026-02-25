@@ -6,5 +6,5 @@ var foo = async (await): Promise<void> => {
 
 //// [asyncArrowFunction5_es6.js]
 "use strict";
-var foo = async (await) => {
-};
+var foo = (await) => __awaiter(void 0, void 0, void 0, function* () {
+});

@@ -9,8 +9,8 @@ var bar = async (): Promise<void> => {
 
 //// [asyncArrowFunction7_es5.js]
 "use strict";
-var bar = async () => {
+var bar = () => __awaiter(void 0, void 0, void 0, function* () {
     // 'await' here is an identifier, and not an await expression.
-    var foo = async (a = await ) => {
-    };
-};
+    var foo = (...args_1) => __awaiter(void 0, [...args_1], void 0, function* (a = yield ) {
+    });
+});

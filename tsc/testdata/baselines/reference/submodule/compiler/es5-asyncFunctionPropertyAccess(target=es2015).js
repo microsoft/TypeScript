@@ -17,12 +17,18 @@ async function callExpression0() {
 
 //// [es5-asyncFunctionPropertyAccess.js]
 "use strict";
-async function propertyAccess0() {
-    y = await x.a;
+function propertyAccess0() {
+    return __awaiter(this, void 0, void 0, function* () {
+        y = yield x.a;
+    });
 }
-async function propertyAccess1() {
-    y = (await x).a;
+function propertyAccess1() {
+    return __awaiter(this, void 0, void 0, function* () {
+        y = (yield x).a;
+    });
 }
-async function callExpression0() {
-    await x(y, z);
+function callExpression0() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield x(y, z);
+    });
 }

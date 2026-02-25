@@ -9,6 +9,15 @@ async function main() {
 
 //// [usingDeclarationsInForAwaitOf.js]
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __addDisposableResource = (this && this.__addDisposableResource) || function (env, value, async) {
     if (value !== null && value !== void 0) {
         if (typeof value !== "object" && typeof value !== "function") throw new TypeError("Object expected.");
@@ -61,18 +70,20 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
     var e = new Error(message);
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
-async function main() {
-    for await (const d1_1 of [{ [Symbol.dispose]() { } }, null, undefined]) {
-        const env_1 = { stack: [], error: void 0, hasError: false };
-        try {
-            const d1 = __addDisposableResource(env_1, d1_1, false);
+function main() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for await (const d1_1 of [{ [Symbol.dispose]() { } }, null, undefined]) {
+            const env_1 = { stack: [], error: void 0, hasError: false };
+            try {
+                const d1 = __addDisposableResource(env_1, d1_1, false);
+            }
+            catch (e_1) {
+                env_1.error = e_1;
+                env_1.hasError = true;
+            }
+            finally {
+                __disposeResources(env_1);
+            }
         }
-        catch (e_1) {
-            env_1.error = e_1;
-            env_1.hasError = true;
-        }
-        finally {
-            __disposeResources(env_1);
-        }
-    }
+    });
 }

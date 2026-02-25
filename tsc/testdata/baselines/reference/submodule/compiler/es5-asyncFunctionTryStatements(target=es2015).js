@@ -126,114 +126,136 @@ async function tryCatchFinally3() {
 
 //// [es5-asyncFunctionTryStatements.js]
 "use strict";
-async function tryCatch0() {
-    var x, y;
-    try {
-        x;
-    }
-    catch (e) {
-        y;
-    }
+function tryCatch0() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y;
+        try {
+            x;
+        }
+        catch (e) {
+            y;
+        }
+    });
 }
-async function tryCatch1() {
-    var x, y;
-    try {
-        await x;
-    }
-    catch (e) {
-        y;
-    }
+function tryCatch1() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y;
+        try {
+            yield x;
+        }
+        catch (e) {
+            y;
+        }
+    });
 }
-async function tryCatch2() {
-    var x, y;
-    try {
-        x;
-    }
-    catch (e) {
-        await y;
-    }
+function tryCatch2() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y;
+        try {
+            x;
+        }
+        catch (e) {
+            yield y;
+        }
+    });
 }
-async function tryCatch3() {
-    var x, y;
-    try {
-        await x;
-    }
-    catch (e) {
-        return () => e;
-    }
+function tryCatch3() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y;
+        try {
+            yield x;
+        }
+        catch (e) {
+            return () => e;
+        }
+    });
 }
-async function tryFinally0() {
-    var x, y;
-    try {
-        x;
-    }
-    finally {
-        y;
-    }
+function tryFinally0() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y;
+        try {
+            x;
+        }
+        finally {
+            y;
+        }
+    });
 }
-async function tryFinally1() {
-    var x, y;
-    try {
-        await x;
-    }
-    finally {
-        y;
-    }
+function tryFinally1() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y;
+        try {
+            yield x;
+        }
+        finally {
+            y;
+        }
+    });
 }
-async function tryFinally2() {
-    var x, y;
-    try {
-        x;
-    }
-    finally {
-        await y;
-    }
+function tryFinally2() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y;
+        try {
+            x;
+        }
+        finally {
+            yield y;
+        }
+    });
 }
-async function tryCatchFinally0() {
-    var x, y, z;
-    try {
-        x;
-    }
-    catch (e) {
-        y;
-    }
-    finally {
-        z;
-    }
+function tryCatchFinally0() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y, z;
+        try {
+            x;
+        }
+        catch (e) {
+            y;
+        }
+        finally {
+            z;
+        }
+    });
 }
-async function tryCatchFinally1() {
-    var x, y, z;
-    try {
-        await x;
-    }
-    catch (e) {
-        y;
-    }
-    finally {
-        z;
-    }
+function tryCatchFinally1() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y, z;
+        try {
+            yield x;
+        }
+        catch (e) {
+            y;
+        }
+        finally {
+            z;
+        }
+    });
 }
-async function tryCatchFinally2() {
-    var x, y, z;
-    try {
-        x;
-    }
-    catch (e) {
-        await y;
-    }
-    finally {
-        z;
-    }
+function tryCatchFinally2() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y, z;
+        try {
+            x;
+        }
+        catch (e) {
+            yield y;
+        }
+        finally {
+            z;
+        }
+    });
 }
-async function tryCatchFinally3() {
-    var x, y, z;
-    try {
-        x;
-    }
-    catch (e) {
-        y;
-    }
-    finally {
-        await z;
-    }
+function tryCatchFinally3() {
+    return __awaiter(this, void 0, void 0, function* () {
+        var x, y, z;
+        try {
+            x;
+        }
+        catch (e) {
+            y;
+        }
+        finally {
+            yield z;
+        }
+    });
 }

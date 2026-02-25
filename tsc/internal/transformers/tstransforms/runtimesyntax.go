@@ -676,8 +676,8 @@ func (tx *RuntimeSyntaxTransformer) visitImportEqualsDeclaration(node *ast.Impor
 		return tx.Visitor().VisitEachChild(node.AsNode())
 	}
 
-	moduleReference := convertEntityNameToExpression(tx.EmitContext(), node.ModuleReference)
-	tx.EmitContext().SetEmitFlags(moduleReference, printer.EFNoComments|printer.EFNoNestedSourceMaps)
+	moduleReference := tx.Factory().CreateExpressionFromEntityName(node.ModuleReference)
+	tx.EmitContext().SetEmitFlags(moduleReference, printer.EFNoComments|printer.EFNoNestedComments)
 	if !tx.isExportOfNamespace(node.AsNode()) {
 		//  export var ${name} = ${moduleReference};
 		//  var ${name} = ${moduleReference};

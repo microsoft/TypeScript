@@ -340,6 +340,10 @@ func (g *NameGenerator) makeUniqueName(baseName string, checkFn func(name string
 	}
 }
 
+func (g *NameGenerator) MakeFileLevelOptimisticUniqueName(name string) string {
+	return g.makeUniqueName(name, g.IsFileLevelUniqueNameInCurrentFile, true /*optimistic*/, false /*scoped*/, false /*privateName*/, "" /*prefix*/, "" /*suffix*/)
+}
+
 func (g *NameGenerator) checkUniqueName(name string, privateName bool, checkFn func(name string, privateName bool) bool) bool {
 	if checkFn != nil {
 		return checkFn(name, privateName)

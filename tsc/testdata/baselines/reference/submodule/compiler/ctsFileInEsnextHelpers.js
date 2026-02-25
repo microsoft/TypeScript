@@ -8,7 +8,10 @@ export async function foo() {
 //// [notmodule.cjs]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const tslib_1 = require("tslib");
 exports.foo = foo;
-async function foo() {
-    await 0;
+function foo() {
+    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        yield 0;
+    });
 }

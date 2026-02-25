@@ -9,6 +9,6 @@ class C {
 //// [asyncConstructor_es5.js]
 "use strict";
 class C {
-    async constructor() {
+    constructor() {
     }
 }

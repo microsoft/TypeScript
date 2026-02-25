@@ -17,27 +17,33 @@ async function ifStatement3() {
 
 //// [es5-asyncFunctionIfStatements.js]
 "use strict";
-async function ifStatement1() {
-    if (await x) {
-        y;
-    }
-    else {
-        z;
-    }
+function ifStatement1() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (yield x) {
+            y;
+        }
+        else {
+            z;
+        }
+    });
 }
-async function ifStatement2() {
-    if (x) {
-        await y;
-    }
-    else {
-        z;
-    }
+function ifStatement2() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (x) {
+            yield y;
+        }
+        else {
+            z;
+        }
+    });
 }
-async function ifStatement3() {
-    if (x) {
-        y;
-    }
-    else {
-        await z;
-    }
+function ifStatement3() {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (x) {
+            y;
+        }
+        else {
+            yield z;
+        }
+    });
 }

@@ -25,9 +25,17 @@ async function foo(): Promise<void> {}
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-async function foo() { }
-async function bar() { }
+const tslib_1 = require("tslib");
+function foo() {
+    return tslib_1.__awaiter(this, void 0, void 0, function* () { });
+}
+function bar() {
+    return tslib_1.__awaiter(this, void 0, void 0, function* () { });
+}
 //// [index.js]
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-async function foo() { }
+const tslib_1 = require("tslib");
+function foo() {
+    return tslib_1.__awaiter(this, void 0, void 0, function* () { });
+}

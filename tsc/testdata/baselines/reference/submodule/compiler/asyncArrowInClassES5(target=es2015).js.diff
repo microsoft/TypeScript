@@ -6,7 +6,7 @@
  // Should capture `this`
 -var _a;
  class Test {
-+    static member = async (x) => { };
++    static member = (x) => __awaiter(this, void 0, void 0, function* () { });
  }
 -_a = Test;
 -Test.member = (x) => __awaiter(void 0, void 0, void 0, function* () { });

@@ -13,10 +13,12 @@ async function* f(a: { b?: number }) {
 //// [nullishCoalescingOperatorInAsyncGenerator.js]
 "use strict";
 // https://github.com/microsoft/TypeScript/issues/37686
-async function* f(a) {
-    var _a;
-    let c = (_a = a.b) !== null && _a !== void 0 ? _a : 10;
-    while (c) {
-        yield c--;
-    }
+function* f(a) {
+    return __awaiter(this, void 0, void 0, function* () {
+        var _a;
+        let c = (_a = a.b) !== null && _a !== void 0 ? _a : 10;
+        while (c) {
+            yield c--;
+        }
+    });
 }

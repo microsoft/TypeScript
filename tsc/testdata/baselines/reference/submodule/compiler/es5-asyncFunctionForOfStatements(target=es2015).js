@@ -81,98 +81,136 @@ async function forOfStatement18() {
 
 //// [es5-asyncFunctionForOfStatements.js]
 "use strict";
-async function forOfStatement0() {
-    for (x of y) {
-        z;
-    }
+function forOfStatement0() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (x of y) {
+            z;
+        }
+    });
 }
-async function forOfStatement1() {
-    for (x of await y) {
-        z;
-    }
+function forOfStatement1() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (x of yield y) {
+            z;
+        }
+    });
 }
-async function forOfStatement2() {
-    for (x of y) {
-        await z;
-    }
+function forOfStatement2() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (x of y) {
+            yield z;
+        }
+    });
 }
-async function forOfStatement3() {
-    for ((await x).a of y) {
-        z;
-    }
+function forOfStatement3() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for ((yield x).a of y) {
+            z;
+        }
+    });
 }
-async function forOfStatement4() {
-    for (x.a of await y) {
-        z;
-    }
+function forOfStatement4() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (x.a of yield y) {
+            z;
+        }
+    });
 }
-async function forOfStatement5() {
-    for (x.a of y) {
-        await z;
-    }
+function forOfStatement5() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (x.a of y) {
+            yield z;
+        }
+    });
 }
-async function forOfStatement6() {
-    for (var b of y) {
-        z;
-    }
+function forOfStatement6() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (var b of y) {
+            z;
+        }
+    });
 }
-async function forOfStatement7() {
-    for (var c of await y) {
-        z;
-    }
+function forOfStatement7() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (var c of yield y) {
+            z;
+        }
+    });
 }
-async function forOfStatement8() {
-    for (var d of y) {
-        await z;
-    }
+function forOfStatement8() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for (var d of y) {
+            yield z;
+        }
+    });
 }
-async function forOfStatement9() {
-    for ([x] of await y) {
-        z;
-    }
+function forOfStatement9() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for ([x] of yield y) {
+            z;
+        }
+    });
 }
-async function forOfStatement10() {
-    for ([x] of y) {
-        await z;
-    }
+function forOfStatement10() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for ([x] of y) {
+            yield z;
+        }
+    });
 }
-async function forOfStatement11() {
-    for ([x = await a] of y) {
-        z;
-    }
+function forOfStatement11() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for ([x = yield a] of y) {
+            z;
+        }
+    });
 }
-async function forOfStatement12() {
-    for ([x = a] of await y) {
-        z;
-    }
+function forOfStatement12() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for ([x = a] of yield y) {
+            z;
+        }
+    });
 }
-async function forOfStatement13() {
-    for ([x = a] of y) {
-        await z;
-    }
+function forOfStatement13() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for ([x = a] of y) {
+            yield z;
+        }
+    });
 }
-async function forOfStatement14() {
-    for ({ x } of await y) {
-        z;
-    }
+function forOfStatement14() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for ({ x } of yield y) {
+            z;
+        }
+    });
 }
-async function forOfStatement15() {
-    for ({ x } of y) {
-        await z;
-    }
+function forOfStatement15() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for ({ x } of y) {
+            yield z;
+        }
+    });
 }
-async function forOfStatement16() {
-    for ({ x = await a } of y) {
-        z;
-    }
+function forOfStatement16() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for ({ x = yield a } of y) {
+            z;
+        }
+    });
 }
-async function forOfStatement17() {
-    for ({ x = a } of await y) {
-        z;
-    }
+function forOfStatement17() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for ({ x = a } of yield y) {
+            z;
+        }
+    });
 }
-async function forOfStatement18() {
-    for ({ x = a } of y) {
-        await z;
-    }
+function forOfStatement18() {
+    return __awaiter(this, void 0, void 0, function* () {
+        for ({ x = a } of y) {
+            yield z;
+        }
+    });
 }

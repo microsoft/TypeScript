@@ -9,7 +9,7 @@ var foo = async (): Promise<void> => {
 
 //// [asyncArrowFunction10_es6.js]
 "use strict";
-var foo = async () => {
+var foo = () => __awaiter(void 0, void 0, void 0, function* () {
     // Legal to use 'await' in a type context.
     var v;
-};
+});

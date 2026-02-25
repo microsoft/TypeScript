@@ -17,14 +17,16 @@ async function nestedLoops() {
 
 //// [es5-asyncFunctionNestedLoops.js]
 "use strict";
-async function nestedLoops() {
-    A: while (x) {
-        await y;
-        while (z) {
-            continue A;
+function nestedLoops() {
+    return __awaiter(this, void 0, void 0, function* () {
+        A: while (x) {
+            yield y;
+            while (z) {
+                continue A;
+            }
+            while (a) {
+                continue;
+            }
         }
-        while (a) {
-            continue;
-        }
-    }
+    });
 }

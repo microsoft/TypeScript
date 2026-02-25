@@ -6,18 +6,6 @@ import (
 	"github.com/microsoft/typescript-go/internal/printer"
 )
 
-func convertEntityNameToExpression(emitContext *printer.EmitContext, name *ast.EntityName) *ast.Expression {
-	if ast.IsQualifiedName(name) {
-		left := convertEntityNameToExpression(emitContext, name.AsQualifiedName().Left)
-		right := name.AsQualifiedName().Right
-		prop := emitContext.Factory.NewPropertyAccessExpression(left, nil /*questionDotToken*/, right, ast.NodeFlagsNone)
-		emitContext.SetOriginal(prop, name)
-		emitContext.AssignCommentAndSourceMapRanges(prop, name)
-		return prop
-	}
-	return name.Clone(emitContext.Factory)
-}
-
 func constantExpression(value any, factory *printer.NodeFactory) *ast.Expression {
 	switch value := value.(type) {
 	case string:

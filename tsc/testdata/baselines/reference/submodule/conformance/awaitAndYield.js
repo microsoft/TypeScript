@@ -15,7 +15,7 @@ async function* test(x) {
     (function (E) {
         E["foo"] = await x;
         if (typeof E.foo !== "string") E[E.foo] = "foo";
-        E["baz"] = (yield 1);
+        E["baz"] = yield 1;
         if (typeof E.baz !== "string") E[E.baz] = "baz";
     })(E || (E = {}));
 }

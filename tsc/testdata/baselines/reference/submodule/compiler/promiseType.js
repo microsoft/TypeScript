@@ -228,75 +228,102 @@ Promise.resolve(undefined as Promise<string | Promise<Promise<number>>>);
 
 //// [promiseType.js]
 "use strict";
-async function A() {
-    const a = await p;
-    return a;
-}
-async function B() {
-    const a = await p;
-    return 1;
-}
-async function C() {
-    try {
-        const a = await p;
-        return 1;
-    }
-    catch (e) {
-        return 'error';
-    }
-}
-async function D() {
-    try {
-        const a = await p;
-        return 1;
-    }
-    catch (e) {
-    }
-}
-async function E() {
-    try {
-        const a = await p;
-        return 1;
-    }
-    catch (e) {
-        throw Error();
-    }
-}
-async function F() {
-    try {
-        const a = await p;
-        return 1;
-    }
-    catch (e) {
-        return Promise.reject(Error());
-    }
-}
-async function G() {
-    try {
-        const a = await p;
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+function A() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const a = yield p;
         return a;
-    }
-    catch (e) {
-        return;
-    }
+    });
 }
-async function H() {
-    try {
-        const a = await p;
-        return a;
-    }
-    catch (e) {
-        throw Error();
-    }
+function B() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const a = yield p;
+        return 1;
+    });
 }
-async function I() {
-    try {
-        const a = await p;
-        return a;
-    }
-    catch (e) {
-        return Promise.reject(Error());
-    }
+function C() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const a = yield p;
+            return 1;
+        }
+        catch (e) {
+            return 'error';
+        }
+    });
+}
+function D() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const a = yield p;
+            return 1;
+        }
+        catch (e) {
+        }
+    });
+}
+function E() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const a = yield p;
+            return 1;
+        }
+        catch (e) {
+            throw Error();
+        }
+    });
+}
+function F() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const a = yield p;
+            return 1;
+        }
+        catch (e) {
+            return Promise.reject(Error());
+        }
+    });
+}
+function G() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const a = yield p;
+            return a;
+        }
+        catch (e) {
+            return;
+        }
+    });
+}
+function H() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const a = yield p;
+            return a;
+        }
+        catch (e) {
+            throw Error();
+        }
+    });
+}
+function I() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const a = yield p;
+            return a;
+        }
+        catch (e) {
+            return Promise.reject(Error());
+        }
+    });
 }
 // addresses github issue #4903:
 const p00 = p.catch();

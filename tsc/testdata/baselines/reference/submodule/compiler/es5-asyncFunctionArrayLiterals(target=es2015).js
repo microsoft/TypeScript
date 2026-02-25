@@ -37,27 +37,43 @@ async function arrayLiteral7() {
 
 //// [es5-asyncFunctionArrayLiterals.js]
 "use strict";
-async function arrayLiteral0() {
-    x = [await y, z];
+function arrayLiteral0() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = [yield y, z];
+    });
 }
-async function arrayLiteral1() {
-    x = [y, await z];
+function arrayLiteral1() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = [y, yield z];
+    });
 }
-async function arrayLiteral2() {
-    x = [...(await y), z];
+function arrayLiteral2() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = [...(yield y), z];
+    });
 }
-async function arrayLiteral3() {
-    x = [...y, await z];
+function arrayLiteral3() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = [...y, yield z];
+    });
 }
-async function arrayLiteral4() {
-    x = [await y, ...z];
+function arrayLiteral4() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = [yield y, ...z];
+    });
 }
-async function arrayLiteral5() {
-    x = [y, ...(await z)];
+function arrayLiteral5() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = [y, ...(yield z)];
+    });
 }
-async function arrayLiteral6() {
-    x = [y, await z, a];
+function arrayLiteral6() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = [y, yield z, a];
+    });
 }
-async function arrayLiteral7() {
-    x = [await y, z, await a];
+function arrayLiteral7() {
+    return __awaiter(this, void 0, void 0, function* () {
+        x = [yield y, z, yield a];
+    });
 }

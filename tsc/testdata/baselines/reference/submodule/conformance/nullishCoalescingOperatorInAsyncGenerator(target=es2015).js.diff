@@ -6,16 +6,13 @@
  // https://github.com/microsoft/TypeScript/issues/37686
 -function f(a) {
 -    return __asyncGenerator(this, arguments, function* f_1() {
--        var _a;
--        let c = (_a = a.b) !== null && _a !== void 0 ? _a : 10;
--        while (c) {
++function* f(a) {
++    return __awaiter(this, void 0, void 0, function* () {
+         var _a;
+         let c = (_a = a.b) !== null && _a !== void 0 ? _a : 10;
+         while (c) {
 -            yield yield __await(c--);
--        }
--    });
-+async function* f(a) {
-+    var _a;
-+    let c = (_a = a.b) !== null && _a !== void 0 ? _a : 10;
-+    while (c) {
-+        yield c--;
-+    }
++            yield c--;
+         }
+     });
  }

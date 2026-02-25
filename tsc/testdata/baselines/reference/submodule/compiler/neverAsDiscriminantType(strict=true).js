@@ -68,6 +68,15 @@ export async function adaptSession(input: GatewayPayload) {
 
 
 //// [neverAsDiscriminantType.js]
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 function f1(foo) {
     if (foo.kind === 'a') {
         foo.a;
@@ -94,8 +103,10 @@ var GatewayOpcode;
     GatewayOpcode[GatewayOpcode["HEARTBEAT_ACK"] = 11] = "HEARTBEAT_ACK";
 })(GatewayOpcode || (GatewayOpcode = {}));
 function assertMessage(event) { }
-export async function adaptSession(input) {
-    if (input.t === 'MESSAGE_CREATE') {
-        assertMessage(input.d);
-    }
+export function adaptSession(input) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (input.t === 'MESSAGE_CREATE') {
+            assertMessage(input.d);
+        }
+    });
 }

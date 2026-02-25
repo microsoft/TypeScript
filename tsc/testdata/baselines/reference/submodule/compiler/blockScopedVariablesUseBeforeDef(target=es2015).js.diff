@@ -1,18 +1,9 @@
 --- old.blockScopedVariablesUseBeforeDef(target=es2015).js
 +++ new.blockScopedVariablesUseBeforeDef(target=es2015).js
-@@= skipped -162, +162 lines =@@
-
- //// [blockScopedVariablesUseBeforeDef.js]
- "use strict";
--var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
--    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
--    return new (P || (P = Promise))(function (resolve, reject) {
--        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
--        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
--        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
--        step((generator = generator.apply(thisArg, _arguments || [])).next());
--    });
--};
+@@= skipped -171, +171 lines =@@
+         step((generator = generator.apply(thisArg, _arguments || [])).next());
+     });
+ };
 -var __setFunctionName = (this && this.__setFunctionName) || function (f, name, prefix) {
 -    if (typeof name === "symbol") name = name.description ? "[".concat(name.description, "]") : "";
 -    return Object.defineProperty(f, "name", { configurable: true, value: prefix ? "".concat(prefix, " ", name) : name });
@@ -33,7 +24,7 @@
  function foo0() {
      let a = x;
      let x;
-@@= skipped -62, +36 lines =@@
+@@= skipped -53, +36 lines =@@
  }
  function foo7() {
      class A {
@@ -93,39 +84,17 @@
              constructor() {
                  this.a = x;
              }
-@@= skipped -78, +69 lines =@@
-     let [a] = (() => a)();
- }
- function foo17() {
--    const promise = (() => __awaiter(this, void 0, void 0, function* () {
--        promise;
--        foo;
--        yield null;
--        promise;
--        foo;
--    }))();
-+    const promise = (async () => {
-+        promise;
-+        foo;
-+        await null;
-+        promise;
-+        foo;
-+    })();
-     const foo = 1;
- }
- // #30907
-@@= skipped -17, +17 lines =@@
+@@= skipped -95, +86 lines =@@
      })();
  }
  function wrapI2() {
 -    const iter = (function foo() {
 -        return __asyncGenerator(this, arguments, function* foo_1() {
--            iter;
++    const iter = (function* foo() {
++        return __awaiter(this, void 0, void 0, function* () {
+             iter;
 -            yield yield __await(1);
--        });
-+    const iter = (async function* foo() {
-+        iter;
-+        yield 1;
++            yield 1;
+         });
      })();
  }
- function foo18() {

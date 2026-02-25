@@ -16,12 +16,21 @@
 -    function fulfill(value) { resume("next", value); }
 -    function reject(value) { resume("throw", value); }
 -    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
--};
++var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
++    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
++    return new (P || (P = Promise))(function (resolve, reject) {
++        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
++        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
++        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
++        step((generator = generator.apply(thisArg, _arguments || [])).next());
++    });
+ };
  const o1 = {
 -    f() {
 -        return __asyncGenerator(this, arguments, function* f_1() {
--        });
-+    async *f() {
++    *f() {
++        return __awaiter(this, void 0, void 0, function* () {
+         });
      }
  };
  //// [O2.js]
@@ -38,14 +47,23 @@
 -    function fulfill(value) { resume("next", value); }
 -    function reject(value) { resume("throw", value); }
 -    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
--};
++var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
++    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
++    return new (P || (P = Promise))(function (resolve, reject) {
++        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
++        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
++        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
++        step((generator = generator.apply(thisArg, _arguments || [])).next());
++    });
+ };
  const o2 = {
 -    f() {
 -        return __asyncGenerator(this, arguments, function* f_1() {
 -            const x = yield yield __await(void 0);
--        });
-+    async *f() {
-+        const x = yield;
++    *f() {
++        return __awaiter(this, void 0, void 0, function* () {
++            const x = yield;
+         });
      }
  };
  //// [O3.js]
@@ -62,14 +80,23 @@
 -    function fulfill(value) { resume("next", value); }
 -    function reject(value) { resume("throw", value); }
 -    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
--};
++var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
++    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
++    return new (P || (P = Promise))(function (resolve, reject) {
++        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
++        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
++        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
++        step((generator = generator.apply(thisArg, _arguments || [])).next());
++    });
+ };
  const o3 = {
 -    f() {
 -        return __asyncGenerator(this, arguments, function* f_1() {
 -            const x = yield yield __await(1);
--        });
-+    async *f() {
-+        const x = yield 1;
++    *f() {
++        return __awaiter(this, void 0, void 0, function* () {
++            const x = yield 1;
+         });
      }
  };
  //// [O4.js]
@@ -98,14 +125,23 @@
 -    function fulfill(value) { resume("next", value); }
 -    function reject(value) { resume("throw", value); }
 -    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
--};
++var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
++    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
++    return new (P || (P = Promise))(function (resolve, reject) {
++        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
++        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
++        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
++        step((generator = generator.apply(thisArg, _arguments || [])).next());
++    });
+ };
  const o4 = {
 -    f() {
 -        return __asyncGenerator(this, arguments, function* f_1() {
 -            const x = yield __await(yield* __asyncDelegator(__asyncValues([1])));
--        });
-+    async *f() {
-+        const x = yield* [1];
++    *f() {
++        return __awaiter(this, void 0, void 0, function* () {
++            const x = yield* [1];
+         });
      }
  };
  //// [O5.js]
@@ -134,14 +170,25 @@
 -    var i, p;
 -    return i = {}, verb("next"), verb("throw", function (e) { throw e; }), verb("return"), i[Symbol.iterator] = function () { return this; }, i;
 -    function verb(n, f) { i[n] = o[n] ? function (v) { return (p = !p) ? { value: __await(o[n](v)), done: false } : f ? f(v) : v; } : f; }
--};
++var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
++    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
++    return new (P || (P = Promise))(function (resolve, reject) {
++        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
++        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
++        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
++        step((generator = generator.apply(thisArg, _arguments || [])).next());
++    });
+ };
  const o5 = {
 -    f() {
 -        return __asyncGenerator(this, arguments, function* f_1() {
 -            const x = yield __await(yield* __asyncDelegator(__asyncValues((function () { return __asyncGenerator(this, arguments, function* () { yield yield __await(1); }); })())));
--        });
-+    async *f() {
-+        const x = yield* (async function* () { yield 1; })();
++    *f() {
++        return __awaiter(this, void 0, void 0, function* () {
++            const x = yield* (function* () {
++                return __awaiter(this, void 0, void 0, function* () { yield 1; });
++            })();
+         });
      }
  };
  //// [O6.js]
@@ -158,14 +205,23 @@
 -    function fulfill(value) { resume("next", value); }
 -    function reject(value) { resume("throw", value); }
 -    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
--};
++var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
++    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
++    return new (P || (P = Promise))(function (resolve, reject) {
++        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
++        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
++        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
++        step((generator = generator.apply(thisArg, _arguments || [])).next());
++    });
+ };
  const o6 = {
 -    f() {
 -        return __asyncGenerator(this, arguments, function* f_1() {
 -            const x = yield __await(1);
--        });
-+    async *f() {
-+        const x = await 1;
++    *f() {
++        return __awaiter(this, void 0, void 0, function* () {
++            const x = yield 1;
+         });
      }
  };
  //// [O7.js]
@@ -182,13 +238,22 @@
 -    function fulfill(value) { resume("next", value); }
 -    function reject(value) { resume("throw", value); }
 -    function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
--};
++var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
++    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
++    return new (P || (P = Promise))(function (resolve, reject) {
++        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
++        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
++        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
++        step((generator = generator.apply(thisArg, _arguments || [])).next());
++    });
+ };
  const o7 = {
 -    f() {
 -        return __asyncGenerator(this, arguments, function* f_1() {
 -            return yield __await(1);
--        });
-+    async *f() {
-+        return 1;
++    *f() {
++        return __awaiter(this, void 0, void 0, function* () {
++            return 1;
+         });
      }
  };

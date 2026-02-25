@@ -177,6 +177,9 @@ func NewPrinter(options PrinterOptions, handlers PrintHandlers, emitContext *Emi
 	printer.nameGenerator.Context = printer.emitContext
 	printer.nameGenerator.GetTextOfNode = func(node *ast.Node) string { return printer.getTextOfNode(node, false) }
 	printer.nameGenerator.IsFileLevelUniqueNameInCurrentFile = printer.isFileLevelUniqueNameInCurrentFile
+	printer.makeFileLevelOptimisticUniqueName = func(name string) string {
+		return printer.nameGenerator.MakeFileLevelOptimisticUniqueName(name)
+	}
 	printer.containerPos = -1
 	printer.containerEnd = -1
 	printer.declarationListContainerEnd = -1
@@ -1503,7 +1506,14 @@ func canEmitSimpleArrowHead(parentNode *ast.Node, parameters *ast.ParameterList)
 	parent := parentNode.AsArrowFunction()
 	parameter := parameters.Nodes[0].AsParameterDeclaration()
 
-	return parameter.Pos() == greatestEnd(parent.Pos(), parent.Modifiers()) && // may not have parsed tokens between modifiers/start of parent and parameter
+	// Only use modifiers for position check if they actually contain nodes.
+	// After transformation (e.g., async removal), modifiers may be an empty list with stale source positions.
+	modifiers := parent.Modifiers()
+	if modifiers != nil && len(modifiers.Nodes) == 0 {
+		modifiers = nil
+	}
+
+	return parameter.Pos() == greatestEnd(parent.Pos(), modifiers) && // may not have parsed tokens between modifiers/start of parent and parameter
 		parent.TypeParameters == nil && // parent may not have type parameters
 		parent.Type == nil && // parent may not have return type annotation
 		!parameters.HasTrailingComma() && // parameters may not have a trailing comma
@@ -2716,6 +2726,7 @@ func (p *Printer) getBinaryExpressionPrecedence(node *ast.BinaryExpression) (lef
 	case ast.OperatorPrecedenceAssignment:
 		// assignment is right-associative
 		leftPrec = ast.OperatorPrecedenceLeftHandSide
+		rightPrec = ast.OperatorPrecedenceYield
 	case ast.OperatorPrecedenceLogicalOR:
 		rightPrec = ast.OperatorPrecedenceLogicalAND
 	case ast.OperatorPrecedenceLogicalAND:

@@ -44,6 +44,15 @@ function foo9(y = {[z]() { return z; }}, z = 1) {
 
 //// [capturedParametersInInitializers1.js]
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 // ok - usage is deferred
 function foo1(y = class {
     c = x;
@@ -70,7 +79,7 @@ function foo6(y = () => (() => z)(), z = 1) {
 function foo7(y = (function* () { yield z; })(), z = 1) {
 }
 // ok - used inside immediately invoked async function
-function foo8(y = (async () => z)(), z = 1) {
+function foo8(y = (() => __awaiter(this, void 0, void 0, function* () { return z; }))(), z = 1) {
 }
 // error - used as computed name of method
 function foo9(y = { [z]() { return z; } }, z = 1) {

@@ -27,6 +27,7 @@ const (
 	EFNeverApplyImportHelper                          // Do not apply an import helper to this node
 	EFStartOnNewLine                                  // Start this node on a new line
 	EFIndirectCall                                    // Emit CallExpression as an indirect call: `(0, f)()`
+	EFAsyncFunctionBody                               // The node was originally an async function body.
 )
 
 const (

@@ -17,5 +17,7 @@ var X;
     }
     X.MyPromise = MyPromise;
 })(X || (X = {}));
-async function f() {
+function f() {
+    return __awaiter(this, void 0, void 0, function* () {
+    });
 }

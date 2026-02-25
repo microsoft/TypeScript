@@ -12,11 +12,13 @@ async function test(skip: boolean) {
 
 //// [generatorTransformFinalLabel.js]
 "use strict";
-async function test(skip) {
-    if (!skip) {
-        await 1;
-    }
-    else {
-        throw Error('test');
-    }
+function test(skip) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (!skip) {
+            yield 1;
+        }
+        else {
+            throw Error('test');
+        }
+    });
 }

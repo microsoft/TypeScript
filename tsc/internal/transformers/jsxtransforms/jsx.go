@@ -366,7 +366,7 @@ func (tx *JSXTransformer) getTagName(node *ast.Node) *ast.Node {
 				tagName.AsJsxNamespacedName().Namespace.Text()+":"+tagName.AsJsxNamespacedName().Name().Text(), ast.TokenFlagsNone,
 			)
 		} else {
-			return createExpressionFromEntityName(tx.Factory(), tagName)
+			return tx.Factory().CreateExpressionFromEntityName(tagName)
 		}
 	} else {
 		panic("unhandled node kind passed to getTagName: " + node.Kind.String())

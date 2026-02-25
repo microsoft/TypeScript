@@ -163,6 +163,15 @@ function foo18() {
 
 //// [blockScopedVariablesUseBeforeDef.js]
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 function foo0() {
     let a = x;
     let x;
@@ -268,13 +277,13 @@ function foo16() {
     let [a] = (() => a)();
 }
 function foo17() {
-    const promise = (async () => {
+    const promise = (() => __awaiter(this, void 0, void 0, function* () {
         promise;
         foo;
-        await null;
+        yield null;
         promise;
         foo;
-    })();
+    }))();
     const foo = 1;
 }
 // #30907
@@ -285,9 +294,11 @@ function wrapI1() {
     })();
 }
 function wrapI2() {
-    const iter = (async function* foo() {
-        iter;
-        yield 1;
+    const iter = (function* foo() {
+        return __awaiter(this, void 0, void 0, function* () {
+            iter;
+            yield 1;
+        });
     })();
 }
 function foo18() {

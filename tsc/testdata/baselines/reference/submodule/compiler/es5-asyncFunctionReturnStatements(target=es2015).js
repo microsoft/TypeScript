@@ -30,28 +30,40 @@ async function returnStatement5(): Promise<any>{
 
 //// [es5-asyncFunctionReturnStatements.js]
 "use strict";
-async function returnStatement0() {
-    return;
-}
-async function returnStatement1() {
-    return x;
-}
-async function returnStatement2() {
-    return await x;
-}
-async function returnStatement3() {
-    {
+function returnStatement0() {
+    return __awaiter(this, void 0, void 0, function* () {
         return;
-    }
+    });
 }
-async function returnStatement4() {
-    await x;
-    {
-        return;
-    }
+function returnStatement1() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return x;
+    });
 }
-async function returnStatement5() {
-    {
-        return await x;
-    }
+function returnStatement2() {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield x;
+    });
+}
+function returnStatement3() {
+    return __awaiter(this, void 0, void 0, function* () {
+        {
+            return;
+        }
+    });
+}
+function returnStatement4() {
+    return __awaiter(this, void 0, void 0, function* () {
+        yield x;
+        {
+            return;
+        }
+    });
+}
+function returnStatement5() {
+    return __awaiter(this, void 0, void 0, function* () {
+        {
+            return yield x;
+        }
+    });
 }
