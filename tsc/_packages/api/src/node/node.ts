@@ -111,7 +111,7 @@ export class RemoteNodeBase {
     }
 
     protected getFileText(start: number, end: number): string {
-        return this.sourceFile._decoder.decode(new Uint8Array(this.view.buffer, this.sourceFile._offsetStringTable + start, end - start));
+        return this.sourceFile._decoder.decode(new Uint8Array(this.view.buffer, this.view.byteOffset + this.sourceFile._offsetStringTable + start, end - start));
     }
 
     protected get sourceFile(): RemoteSourceFile {
@@ -324,7 +324,7 @@ export class RemoteNode extends RemoteNodeBase implements Node {
         const start = this.view.getUint32(offsetStringTableOffsets + index * 4, true);
         const end = this.view.getUint32(offsetStringTableOffsets + (index + 1) * 4, true);
         const offsetStringTable = this.sourceFile._offsetStringTable;
-        const text = new Uint8Array(this.view.buffer, offsetStringTable + start, end - start);
+        const text = new Uint8Array(this.view.buffer, this.view.byteOffset + offsetStringTable + start, end - start);
         return this.sourceFile._decoder.decode(text);
     }
 
