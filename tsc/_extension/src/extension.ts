@@ -3,6 +3,8 @@ import * as vscode from "vscode";
 import { registerEnablementCommands } from "./commands";
 import {
     aiConnectionString,
+    getUseTsgo,
+    getUseTsgoFalseSetting,
     needsExtHostRestartOnChange,
 } from "./util";
 
@@ -33,31 +35,33 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
     const sessionManager = new SessionManager(context, output, traceOutput, languageServerInitializedEventEmitter, telemetryReporter);
     context.subscriptions.push(sessionManager);
 
-    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(async event => {
-        if (event.affectsConfiguration("typescript.experimental.useTsgo")) {
-            if (needsExtHostRestartOnChange()) {
-                // Delay because the command to change the config setting will restart
-                // the extension host, so no need to show a message
-                setTimeout(async () => {
+    let configChangeTimeout: ReturnType<typeof setTimeout> | undefined;
+    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(event => {
+        if (event.affectsConfiguration("typescript.experimental.useTsgo") || event.affectsConfiguration("js/ts.experimental.useTsgo")) {
+            // Debounce to coalesce rapid events when both settings are updated together.
+            clearTimeout(configChangeTimeout);
+            configChangeTimeout = setTimeout(async () => {
+                if (needsExtHostRestartOnChange()) {
                     const selected = await vscode.window.showInformationMessage("TypeScript Native Preview setting has changed. Restart extensions to apply changes.", "Restart Extensions");
                     if (selected) {
                         vscode.commands.executeCommand("workbench.action.restartExtensionHost");
                     }
-                }, 100);
-            }
-            else {
-                const useTsgo = vscode.workspace.getConfiguration("typescript").get<boolean>("experimental.useTsgo");
-                if (useTsgo) {
-                    await sessionManager.restart(context);
                 }
                 else {
-                    await sessionManager.stop();
+                    const useTsgo = getUseTsgo();
+                    if (useTsgo) {
+                        await sessionManager.restart(context);
+                    }
+                    else {
+                        await sessionManager.stop();
+                    }
                 }
-            }
+            }, 100);
         }
     }));
+    context.subscriptions.push({ dispose: () => clearTimeout(configChangeTimeout) });
 
-    const useTsgo = vscode.workspace.getConfiguration("typescript").get<boolean>("experimental.useTsgo");
+    const useTsgo = getUseTsgo();
 
     if (context.extensionMode === vscode.ExtensionMode.Development) {
         const tsExtension = vscode.extensions.getExtension("vscode.typescript-language-features");
@@ -70,8 +74,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<Extens
             }
         }
         else if (useTsgo === false) {
+            const settingName = getUseTsgoFalseSetting() ?? "typescript.experimental.useTsgo";
             vscode.window.showWarningMessage(
-                'TypeScript Native Preview is running in development mode with "typescript.experimental.useTsgo" set to false.',
+                `TypeScript Native Preview is running in development mode with "${settingName}" set to false.`,
                 "Enable Setting",
                 "Ignore",
             ).then(selected => {

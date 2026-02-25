@@ -26,19 +26,37 @@ export function registerEnablementCommands(context: vscode.ExtensionContext, tel
 
 /**
  * Updates the TypeScript Native Preview setting and reloads extension host.
+ * Handles both `js/ts.experimental.useTsgo` and `typescript.experimental.useTsgo`.
  */
 async function updateUseTsgoSetting(enable: boolean): Promise<void> {
     const tsConfig = vscode.workspace.getConfiguration("typescript");
-    let target: vscode.ConfigurationTarget | undefined;
-    const useTsgo = tsConfig.inspect("experimental.useTsgo");
-    if (useTsgo) {
-        target = useTsgo.workspaceFolderValue !== undefined ? vscode.ConfigurationTarget.WorkspaceFolder :
-            useTsgo.workspaceValue !== undefined ? vscode.ConfigurationTarget.Workspace :
-            useTsgo.globalValue !== undefined ? vscode.ConfigurationTarget.Global : undefined;
+    const jsTsConfig = vscode.workspace.getConfiguration("js/ts");
+
+    const tsTarget = getExplicitConfigTarget(tsConfig, "experimental.useTsgo");
+    const jsTsTarget = getExplicitConfigTarget(jsTsConfig, "experimental.useTsgo");
+
+    const updates: Thenable<void>[] = [];
+    if (jsTsTarget !== undefined) {
+        updates.push(jsTsConfig.update("experimental.useTsgo", enable, jsTsTarget));
     }
-    // Update the setting and restart the extension host (needed to change the state of the built-in TS extension)
-    await tsConfig.update("experimental.useTsgo", enable, target ?? vscode.ConfigurationTarget.Global);
+    if (tsTarget !== undefined || jsTsTarget === undefined) {
+        updates.push(tsConfig.update("experimental.useTsgo", enable, tsTarget ?? vscode.ConfigurationTarget.Global));
+    }
+    await Promise.all(updates);
+
     await restartExtHostOnChangeIfNeeded();
+}
+
+function getExplicitConfigTarget(
+    config: vscode.WorkspaceConfiguration,
+    key: string,
+): vscode.ConfigurationTarget | undefined {
+    const inspection = config.inspect(key);
+    if (!inspection) return undefined;
+    if (inspection.workspaceFolderValue !== undefined) return vscode.ConfigurationTarget.WorkspaceFolder;
+    if (inspection.workspaceValue !== undefined) return vscode.ConfigurationTarget.Workspace;
+    if (inspection.globalValue !== undefined) return vscode.ConfigurationTarget.Global;
+    return undefined;
 }
 
 export const codeLensShowLocationsCommandName = "typescript.native-preview.codeLens.showLocations";
