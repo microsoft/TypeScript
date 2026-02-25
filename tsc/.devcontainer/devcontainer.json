@@ -3,7 +3,7 @@
 {
     "name": "TypeScript Compiler Development",
     // Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-    "image": "mcr.microsoft.com/devcontainers/go:2-1.26-bookworm",
+    "image": "mcr.microsoft.com/devcontainers/go:dev-1.26-bookworm",
     // Features to add to the dev container. More info: https://containers.dev/features.
     "features": {
         "ghcr.io/devcontainers/features/node:1": {
