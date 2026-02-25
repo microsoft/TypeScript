@@ -78,8 +78,8 @@ const resizeObserver = new ResizeObserver(([entry]) => {
 >                                             : ^^^^^^^^^^^^^^
 >ResizeObserver : { new (callback: globalThis.ResizeObserverCallback): ResizeObserver; prototype: ResizeObserver; }
 >               : ^^^^^^^        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^              ^^^^^^^^^^^^^              ^^^
->([entry]) => {    entry} : ([entry]: ResizeObserverEntry[]) => void
->                         : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>([entry]) => {    entry} : ([entry]: Iterable<ResizeObserverEntry>) => void
+>                         : ^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >entry : ResizeObserverEntry
 >      : ^^^^^^^^^^^^^^^^^^^
 

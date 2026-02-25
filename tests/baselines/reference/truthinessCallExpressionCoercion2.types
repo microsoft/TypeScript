@@ -520,10 +520,10 @@ function checksConsole() {
 >        : ^^^^^^^
 >firebug : any
 >        : ^^^
->(window.console.error && window.console.table) : (tabularData?: any, properties?: string[]) => void
->                                               : ^           ^^^   ^^          ^^^        ^^^^^    
->window.console.error && window.console.table : (tabularData?: any, properties?: string[]) => void
->                                             : ^           ^^^   ^^          ^^^        ^^^^^    
+>(window.console.error && window.console.table) : (tabularData?: any, properties?: Iterable<string>) => void
+>                                               : ^           ^^^   ^^          ^^^                ^^^^^    
+>window.console.error && window.console.table : (tabularData?: any, properties?: Iterable<string>) => void
+>                                             : ^           ^^^   ^^          ^^^                ^^^^^    
 >window.console.error : (...data: any[]) => void
 >                     : ^^^^    ^^     ^^^^^    
 >window.console : Console
@@ -534,16 +534,16 @@ function checksConsole() {
 >        : ^^^^^^^
 >error : (...data: any[]) => void
 >      : ^^^^    ^^     ^^^^^    
->window.console.table : (tabularData?: any, properties?: string[]) => void
->                     : ^           ^^^   ^^          ^^^        ^^^^^    
+>window.console.table : (tabularData?: any, properties?: Iterable<string>) => void
+>                     : ^           ^^^   ^^          ^^^                ^^^^^    
 >window.console : Console
 >               : ^^^^^^^
 >window : Window & typeof globalThis
 >       : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >console : Console
 >        : ^^^^^^^
->table : (tabularData?: any, properties?: string[]) => void
->      : ^           ^^^   ^^          ^^^        ^^^^^    
+>table : (tabularData?: any, properties?: Iterable<string>) => void
+>      : ^           ^^^   ^^          ^^^                ^^^^^    
 }
 
 function checksPropertyAccess() {
