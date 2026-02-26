@@ -118,7 +118,9 @@ jobs:
       - name: Tests
         id: test
         # run tests, but lint separately
-        run: npm run test -- --no-lint --bundle=${{ matrix.config.bundle }}
+        env:
+          BUNDLE: ${{ matrix.config.bundle }}
+        run: npm run test -- --no-lint --bundle="$BUNDLE"
 
       - name: Print baseline diff on failure
         if: ${{ failure() && steps.test.conclusion == 'failure' }}
@@ -264,10 +266,12 @@ jobs:
         id: pack
 
       - name: Smoke test
+        env:
+          PACKAGE: ${{ steps.pack.outputs.package }}
         run: |
           cd "$(mktemp -d)"
           npm init --yes
-          npm install ${{ steps.pack.outputs.package }}
+          npm install "$PACKAGE"
 
           echo "Testing tsc..."
           npx tsc --version
