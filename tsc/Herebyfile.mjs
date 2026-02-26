@@ -877,6 +877,21 @@ export const baselineAccept = task({
     run: baselineAcceptTask(localBaseline, refBaseline),
 });
 
+function getDiffTool() {
+    const program = process.env.DIFF;
+    if (!program) {
+        console.warn("Add the 'DIFF' environment variable to the path of the program you want to use.");
+        process.exit(1);
+    }
+    return program;
+}
+
+export const diff = task({
+    name: "diff",
+    description: "Diffs baselines using the diff tool specified by the 'DIFF' environment variable",
+    run: () => $`${getDiffTool()} ${refBaseline} ${localBaseline}`,
+});
+
 /**
  * @param {fs.PathLike} p
  */
