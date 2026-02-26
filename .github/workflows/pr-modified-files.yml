@@ -33,13 +33,16 @@ jobs:
 
     env:
       GH_TOKEN: ${{ secrets.TS_BOT_GITHUB_TOKEN }}
+      PR_NUMBER: ${{ github.event.pull_request.number }}
+      PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+      REPO: ${{ github.repository }}
 
     steps:
       - name: Check if PR author is in pr_owners.txt
         id: pr_owner
         run: |
           curl -s https://raw.githubusercontent.com/microsoft/TypeScript/main/.github/pr_owners.txt > pr_owners.txt
-          if grep -Fxq -m1 "${{ github.event.pull_request.user.login }}" pr_owners.txt; then
+          if grep -Fxq -m1 "$PR_AUTHOR" pr_owners.txt; then
             echo "pr_owner=true" >> "$GITHUB_OUTPUT"
           else
             echo "pr_owner=false" >> "$GITHUB_OUTPUT"
@@ -57,7 +60,7 @@ jobs:
               gh api graphql -f query='
                 query($endCursor: String) {
                   repository(owner: "microsoft", name: "TypeScript") {
-                    pullRequest(number: ${{ github.event.pull_request.number }}) {
+                    pullRequest(number: '"$PR_NUMBER"') {
                       files(first: 100, after: $endCursor) {
                         pageInfo{ hasNextPage, endCursor }
                         nodes {
@@ -79,7 +82,7 @@ jobs:
             #!/bin/bash
             FILENAME=bot_comments.txt
             if [ ! -f $FILENAME ]; then
-              gh pr view ${{ github.event.pull_request.number }} --repo ${{ github.repository }} \
+              gh pr view $PR_NUMBER --repo $REPO \
                 --json 'comments' --jq '.comments[] | select(.author.login == "typescript-bot") | .body' > $FILENAME
             fi
             exec grep -Fq -m1 "$1" $FILENAME
@@ -99,7 +102,7 @@ jobs:
             MESSAGE+=" You can [read more here](https://github.com/microsoft/TypeScript/blob/main/CONTRIBUTING.md#contributing-libdts-fixes)."
             MESSAGE+=" For house-keeping purposes, this pull request will be closed."
 
-            gh pr close ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --comment "$MESSAGE"
+            gh pr close "$PR_NUMBER" --repo "$REPO" --comment "$MESSAGE"
             exit 1 # Stop the pipeline; we just closed the PR.
           fi
 
@@ -114,7 +117,7 @@ jobs:
             if ./already_commented.sh "It looks like you've changed the TSServer protocol in some way."; then
               echo "Already commented."
             else
-              gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body "$MESSAGE"
+              gh pr comment "$PR_NUMBER" --repo "$REPO" --body "$MESSAGE"
             fi
           fi
 
@@ -130,6 +133,6 @@ jobs:
             if ./already_commented.sh "Looks like you're introducing a change to the public API surface area."; then
               echo "Already commented."
             else
-              gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body "$MESSAGE"
+              gh pr comment "$PR_NUMBER" --repo "$REPO" --body "$MESSAGE"
             fi
           fi
