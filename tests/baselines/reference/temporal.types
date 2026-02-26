@@ -1197,12 +1197,12 @@ Type Count: 2,500
     instant.round({ smallestUnit: "second" }); // => 2019-03-30T02:46:00Z
 >instant.round({ smallestUnit: "second" }) : Temporal.Instant
 >                                          : ^^^^^^^^^^^^^^^^
->instant.round : { (roundTo: Temporal.TimeUnit): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
->              : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>instant.round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
+>              : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >instant : Temporal.Instant
 >        : ^^^^^^^^^^^^^^^^
->round : { (roundTo: Temporal.TimeUnit): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
->      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >{ smallestUnit: "second" } : { smallestUnit: "second"; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >smallestUnit : "second"
@@ -1214,12 +1214,12 @@ Type Count: 2,500
     instant.round({ roundingIncrement: 60, smallestUnit: "minute" });
 >instant.round({ roundingIncrement: 60, smallestUnit: "minute" }) : Temporal.Instant
 >                                                                 : ^^^^^^^^^^^^^^^^
->instant.round : { (roundTo: Temporal.TimeUnit): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
->              : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>instant.round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
+>              : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >instant : Temporal.Instant
 >        : ^^^^^^^^^^^^^^^^
->round : { (roundTo: Temporal.TimeUnit): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
->      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >{ roundingIncrement: 60, smallestUnit: "minute" } : { roundingIncrement: number; smallestUnit: "minute"; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >roundingIncrement : number
@@ -1236,12 +1236,12 @@ Type Count: 2,500
     instant.round({ roundingIncrement: 60, smallestUnit: "minute", roundingMode: "floor" });
 >instant.round({ roundingIncrement: 60, smallestUnit: "minute", roundingMode: "floor" }) : Temporal.Instant
 >                                                                                        : ^^^^^^^^^^^^^^^^
->instant.round : { (roundTo: Temporal.TimeUnit): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
->              : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>instant.round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
+>              : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >instant : Temporal.Instant
 >        : ^^^^^^^^^^^^^^^^
->round : { (roundTo: Temporal.TimeUnit): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
->      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.Instant; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.Instant; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^
 >{ roundingIncrement: 60, smallestUnit: "minute", roundingMode: "floor" } : { roundingIncrement: number; smallestUnit: "minute"; roundingMode: "floor"; }
 >                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >roundingIncrement : number
@@ -3864,12 +3864,12 @@ Type Count: 2,500
     zdt.round({ smallestUnit: "hour" });
 >zdt.round({ smallestUnit: "hour" }) : Temporal.ZonedDateTime
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^
->zdt.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
->          : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>zdt.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
+>          : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >zdt : Temporal.ZonedDateTime
 >    : ^^^^^^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ smallestUnit: "hour" } : { smallestUnit: "hour"; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >smallestUnit : "hour"
@@ -3882,12 +3882,12 @@ Type Count: 2,500
     zdt.round({ roundingIncrement: 30, smallestUnit: "minute" });
 >zdt.round({ roundingIncrement: 30, smallestUnit: "minute" }) : Temporal.ZonedDateTime
 >                                                             : ^^^^^^^^^^^^^^^^^^^^^^
->zdt.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
->          : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>zdt.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
+>          : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >zdt : Temporal.ZonedDateTime
 >    : ^^^^^^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ roundingIncrement: 30, smallestUnit: "minute" } : { roundingIncrement: number; smallestUnit: "minute"; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >roundingIncrement : number
@@ -3904,12 +3904,12 @@ Type Count: 2,500
     zdt.round({ roundingIncrement: 30, smallestUnit: "minute", roundingMode: "floor" });
 >zdt.round({ roundingIncrement: 30, smallestUnit: "minute", roundingMode: "floor" }) : Temporal.ZonedDateTime
 >                                                                                    : ^^^^^^^^^^^^^^^^^^^^^^
->zdt.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
->          : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>zdt.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
+>          : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >zdt : Temporal.ZonedDateTime
 >    : ^^^^^^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.ZonedDateTime; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ roundingIncrement: 30, smallestUnit: "minute", roundingMode: "floor" } : { roundingIncrement: number; smallestUnit: "minute"; roundingMode: "floor"; }
 >                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >roundingIncrement : number
@@ -7802,12 +7802,12 @@ Type Count: 2,500
     time.round({ smallestUnit: "hour" }); // => 20:00:00
 >time.round({ smallestUnit: "hour" }) : Temporal.PlainTime
 >                                     : ^^^^^^^^^^^^^^^^^^
->time.round : { (roundTo: Temporal.TimeUnit): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
->           : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>time.round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
+>           : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >time : Temporal.PlainTime
 >     : ^^^^^^^^^^^^^^^^^^
->round : { (roundTo: Temporal.TimeUnit): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
->      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >{ smallestUnit: "hour" } : { smallestUnit: "hour"; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >smallestUnit : "hour"
@@ -7819,12 +7819,12 @@ Type Count: 2,500
     time.round({ roundingIncrement: 30, smallestUnit: "minute" });
 >time.round({ roundingIncrement: 30, smallestUnit: "minute" }) : Temporal.PlainTime
 >                                                              : ^^^^^^^^^^^^^^^^^^
->time.round : { (roundTo: Temporal.TimeUnit): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
->           : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>time.round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
+>           : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >time : Temporal.PlainTime
 >     : ^^^^^^^^^^^^^^^^^^
->round : { (roundTo: Temporal.TimeUnit): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
->      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >{ roundingIncrement: 30, smallestUnit: "minute" } : { roundingIncrement: number; smallestUnit: "minute"; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >roundingIncrement : number
@@ -7841,12 +7841,12 @@ Type Count: 2,500
     time.round({ roundingIncrement: 30, smallestUnit: "minute", roundingMode: "ceil" });
 >time.round({ roundingIncrement: 30, smallestUnit: "minute", roundingMode: "ceil" }) : Temporal.PlainTime
 >                                                                                    : ^^^^^^^^^^^^^^^^^^
->time.round : { (roundTo: Temporal.TimeUnit): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
->           : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>time.round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
+>           : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >time : Temporal.PlainTime
 >     : ^^^^^^^^^^^^^^^^^^
->round : { (roundTo: Temporal.TimeUnit): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
->      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<Temporal.TimeUnit>): Temporal.PlainTime; (roundTo: Temporal.RoundingOptions<Temporal.TimeUnit>): Temporal.PlainTime; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^
 >{ roundingIncrement: 30, smallestUnit: "minute", roundingMode: "ceil" } : { roundingIncrement: number; smallestUnit: "minute"; roundingMode: "ceil"; }
 >                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >roundingIncrement : number
@@ -10311,12 +10311,12 @@ Type Count: 2,500
     dt.round({ smallestUnit: "hour" }); // => 1995-12-07T03:00:00
 >dt.round({ smallestUnit: "hour" }) : Temporal.PlainDateTime
 >                                   : ^^^^^^^^^^^^^^^^^^^^^^
->dt.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
->         : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dt.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
+>         : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dt : Temporal.PlainDateTime
 >   : ^^^^^^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ smallestUnit: "hour" } : { smallestUnit: "hour"; }
 >                         : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >smallestUnit : "hour"
@@ -10328,12 +10328,12 @@ Type Count: 2,500
     dt.round({ roundingIncrement: 30, smallestUnit: "minute" });
 >dt.round({ roundingIncrement: 30, smallestUnit: "minute" }) : Temporal.PlainDateTime
 >                                                            : ^^^^^^^^^^^^^^^^^^^^^^
->dt.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
->         : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dt.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
+>         : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dt : Temporal.PlainDateTime
 >   : ^^^^^^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ roundingIncrement: 30, smallestUnit: "minute" } : { roundingIncrement: number; smallestUnit: "minute"; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >roundingIncrement : number
@@ -10350,12 +10350,12 @@ Type Count: 2,500
     dt.round({ roundingIncrement: 30, smallestUnit: "minute", roundingMode: "floor" });
 >dt.round({ roundingIncrement: 30, smallestUnit: "minute", roundingMode: "floor" }) : Temporal.PlainDateTime
 >                                                                                   : ^^^^^^^^^^^^^^^^^^^^^^
->dt.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
->         : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>dt.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
+>         : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >dt : Temporal.PlainDateTime
 >   : ^^^^^^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | "days" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; (roundTo: Temporal.RoundingOptions<"day" | Temporal.TimeUnit>): Temporal.PlainDateTime; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ roundingIncrement: 30, smallestUnit: "minute", roundingMode: "floor" } : { roundingIncrement: number; smallestUnit: "minute"; roundingMode: "floor"; }
 >                                                                         : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >roundingIncrement : number
@@ -11772,24 +11772,24 @@ Type Count: 2,500
     ym.until(other); // => P12Y10M
 >ym.until(other) : Temporal.Duration
 >                : ^^^^^^^^^^^^^^^^^
->ym.until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">) => Temporal.Duration
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^^^^^^^^^
+>ym.until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month">) => Temporal.Duration
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^
 >ym : Temporal.PlainYearMonth
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
->until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">) => Temporal.Duration
->      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^^^^^^^^^
+>until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month">) => Temporal.Duration
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^
 >other : Temporal.PlainYearMonth
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 
     ym.until(other, { largestUnit: "month" }); // => P154M
 >ym.until(other, { largestUnit: "month" }) : Temporal.Duration
 >                                          : ^^^^^^^^^^^^^^^^^
->ym.until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">) => Temporal.Duration
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^^^^^^^^^
+>ym.until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month">) => Temporal.Duration
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^
 >ym : Temporal.PlainYearMonth
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
->until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">) => Temporal.Duration
->      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^^^^^^^^^
+>until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month">) => Temporal.Duration
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^
 >other : Temporal.PlainYearMonth
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ largestUnit: "month" } : { largestUnit: "month"; }
@@ -11802,12 +11802,12 @@ Type Count: 2,500
     other.until(ym, { largestUnit: "month" }); // => -P154M
 >other.until(ym, { largestUnit: "month" }) : Temporal.Duration
 >                                          : ^^^^^^^^^^^^^^^^^
->other.until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">) => Temporal.Duration
->            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^^^^^^^^^
+>other.until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month">) => Temporal.Duration
+>            : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^
 >other : Temporal.PlainYearMonth
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
->until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">) => Temporal.Duration
->      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^^^^^^^^^
+>until : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month">) => Temporal.Duration
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^
 >ym : Temporal.PlainYearMonth
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
 >{ largestUnit: "month" } : { largestUnit: "month"; }
@@ -11905,12 +11905,12 @@ Type Count: 2,500
     ym.since(other); // => P12Y10M
 >ym.since(other) : Temporal.Duration
 >                : ^^^^^^^^^^^^^^^^^
->ym.since : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">) => Temporal.Duration
->         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^^^^^^^^^
+>ym.since : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month">) => Temporal.Duration
+>         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^
 >ym : Temporal.PlainYearMonth
 >   : ^^^^^^^^^^^^^^^^^^^^^^^
->since : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">) => Temporal.Duration
->      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                                       ^^^^^^^^^^^^^^^^^^^^^^
+>since : (other: Temporal.PlainYearMonthLike, options?: Temporal.RoundingOptionsWithLargestUnit<"year" | "month">) => Temporal.Duration
+>      : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^^^^^^^
 >other : Temporal.PlainYearMonth
 >      : ^^^^^^^^^^^^^^^^^^^^^^^
 }
@@ -14355,8 +14355,8 @@ Type Count: 2,500
     one.subtract(two).round({ largestUnit: "hour" }); // => PT2H59M30S
 >one.subtract(two).round({ largestUnit: "hour" }) : Temporal.Duration
 >                                                 : ^^^^^^^^^^^^^^^^^
->one.subtract(two).round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->                        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>one.subtract(two).round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>                        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >one.subtract(two) : Temporal.Duration
 >                  : ^^^^^^^^^^^^^^^^^
 >one.subtract : (other: Temporal.DurationLike) => Temporal.Duration
@@ -14367,8 +14367,8 @@ Type Count: 2,500
 >         : ^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >two : Temporal.Duration
 >    : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ largestUnit: "hour" } : { largestUnit: "hour"; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >largestUnit : "hour"
@@ -14653,12 +14653,12 @@ Type Count: 2,500
     d.round({ largestUnit: "day" }); // => PT2H10M
 >d.round({ largestUnit: "day" }) : Temporal.Duration
 >                                : ^^^^^^^^^^^^^^^^^
->d.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ largestUnit: "day" } : { largestUnit: "day"; }
 >                       : ^^^^^^^^^^^^^^^^^^^^^^^
 >largestUnit : "day"
@@ -14698,12 +14698,12 @@ Type Count: 2,500
     d.round({ smallestUnit: "minute" }); // => PT11M
 >d.round({ smallestUnit: "minute" }) : Temporal.Duration
 >                                    : ^^^^^^^^^^^^^^^^^
->d.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ smallestUnit: "minute" } : { smallestUnit: "minute"; }
 >                           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >smallestUnit : "minute"
@@ -14714,12 +14714,12 @@ Type Count: 2,500
     d.round({ smallestUnit: "minute", roundingMode: "trunc" }); // => PT10M
 >d.round({ smallestUnit: "minute", roundingMode: "trunc" }) : Temporal.Duration
 >                                                           : ^^^^^^^^^^^^^^^^^
->d.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ smallestUnit: "minute", roundingMode: "trunc" } : { smallestUnit: "minute"; roundingMode: "trunc"; }
 >                                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >smallestUnit : "minute"
@@ -14757,12 +14757,12 @@ Type Count: 2,500
 >                                           : ^^^^^^
 >d.round({ largestUnit: "second" }) : Temporal.Duration
 >                                   : ^^^^^^^^^^^^^^^^^
->d.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ largestUnit: "second" } : { largestUnit: "second"; }
 >                          : ^^^^^^^^^^^^^^^^^^^^^^^^^^
 >largestUnit : "second"
@@ -14800,12 +14800,12 @@ Type Count: 2,500
     d.round({
 >d.round({        relativeTo: "2020-01-01T00:00+01:00[Europe/Rome]",        largestUnit: "year",    }) : Temporal.Duration
 >                                                                                                      : ^^^^^^^^^^^^^^^^^
->d.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        relativeTo: "2020-01-01T00:00+01:00[Europe/Rome]",        largestUnit: "year",    } : { relativeTo: string; largestUnit: "year"; }
 >                                                                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -14826,12 +14826,12 @@ Type Count: 2,500
     d.round({
 >d.round({        relativeTo: "2020-01-01",        largestUnit: "year",    }) : Temporal.Duration
 >                                                                             : ^^^^^^^^^^^^^^^^^
->d.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        relativeTo: "2020-01-01",        largestUnit: "year",    } : { relativeTo: string; largestUnit: "year"; }
 >                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -14896,12 +14896,12 @@ Type Count: 2,500
     d.round({ relativeTo: refDate, largestUnit: "year" }); // => P6M8D
 >d.round({ relativeTo: refDate, largestUnit: "year" }) : Temporal.Duration
 >                                                      : ^^^^^^^^^^^^^^^^^
->d.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ relativeTo: refDate, largestUnit: "year" } : { relativeTo: Temporal.PlainDate; largestUnit: "year"; }
 >                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >relativeTo : Temporal.PlainDate
@@ -14917,12 +14917,12 @@ Type Count: 2,500
     d.round({
 >d.round({        relativeTo: refDate.withCalendar("hebrew"),        largestUnit: "year",    }) : Temporal.Duration
 >                                                                                               : ^^^^^^^^^^^^^^^^^
->d.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        relativeTo: refDate.withCalendar("hebrew"),        largestUnit: "year",    } : { relativeTo: Temporal.PlainDate; largestUnit: "year"; }
 >                                                                                      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -14976,12 +14976,12 @@ Type Count: 2,500
     d.round({
 >d.round({        smallestUnit: "minute",        roundingIncrement: 5,        roundingMode: "ceil",    }) : Temporal.Duration
 >                                                                                                         : ^^^^^^^^^^^^^^^^^
->d.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        smallestUnit: "minute",        roundingIncrement: 5,        roundingMode: "ceil",    } : { smallestUnit: "minute"; roundingIncrement: number; roundingMode: "ceil"; }
 >                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -15041,12 +15041,12 @@ Type Count: 2,500
 >  : ^^^^^^^^^^^^^^^^^
 >d.round({        smallestUnit: "month",        roundingIncrement: 3,        roundingMode: "trunc",        relativeTo: Temporal.Now.plainDateISO(),    }) : Temporal.Duration
 >                                                                                                                                                         : ^^^^^^^^^^^^^^^^^
->d.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>d.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{        smallestUnit: "month",        roundingIncrement: 3,        roundingMode: "trunc",        relativeTo: Temporal.Now.plainDateISO(),    } : { smallestUnit: "month"; roundingIncrement: number; roundingMode: "trunc"; relativeTo: Temporal.PlainDate; }
 >                                                                                                                                                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -15143,12 +15143,12 @@ Type Count: 2,500
     d.total({ unit: "second" }); // => 469200
 >d.total({ unit: "second" }) : number
 >                            : ^^^^^^
->d.total : { (totalOf: "day" | "days" | Temporal.TimeUnit): number; (totalOf: Temporal.DurationTotalOptions): number; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>d.total : { (totalOf: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): number; (totalOf: Temporal.DurationTotalOptions): number; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->total : { (totalOf: "day" | "days" | Temporal.TimeUnit): number; (totalOf: Temporal.DurationTotalOptions): number; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>total : { (totalOf: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): number; (totalOf: Temporal.DurationTotalOptions): number; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >{ unit: "second" } : { unit: "second"; }
 >                   : ^^^^^^^^^^^^^^^^^^^
 >unit : "second"
@@ -15180,12 +15180,12 @@ Type Count: 2,500
     d.total({ unit: "day" }); // 1428.8980208333332
 >d.total({ unit: "day" }) : number
 >                         : ^^^^^^
->d.total : { (totalOf: "day" | "days" | Temporal.TimeUnit): number; (totalOf: Temporal.DurationTotalOptions): number; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>d.total : { (totalOf: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): number; (totalOf: Temporal.DurationTotalOptions): number; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->total : { (totalOf: "day" | "days" | Temporal.TimeUnit): number; (totalOf: Temporal.DurationTotalOptions): number; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>total : { (totalOf: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): number; (totalOf: Temporal.DurationTotalOptions): number; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >{ unit: "day" } : { unit: "day"; }
 >                : ^^^^^^^^^^^^^^^^
 >unit : "day"
@@ -15221,12 +15221,12 @@ Type Count: 2,500
     d.total({
 >d.total({        relativeTo: "2020-01-01T00:00+01:00[Europe/Rome]",        unit: "month",    }) : number
 >                                                                                                : ^^^^^^
->d.total : { (totalOf: "day" | "days" | Temporal.TimeUnit): number; (totalOf: Temporal.DurationTotalOptions): number; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>d.total : { (totalOf: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): number; (totalOf: Temporal.DurationTotalOptions): number; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->total : { (totalOf: "day" | "days" | Temporal.TimeUnit): number; (totalOf: Temporal.DurationTotalOptions): number; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>total : { (totalOf: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): number; (totalOf: Temporal.DurationTotalOptions): number; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >{        relativeTo: "2020-01-01T00:00+01:00[Europe/Rome]",        unit: "month",    } : { relativeTo: string; unit: "month"; }
 >                                                                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -15246,12 +15246,12 @@ Type Count: 2,500
     d.total({
 >d.total({        unit: "month",        relativeTo: "2020-01-01",    }) : number
 >                                                                       : ^^^^^^
->d.total : { (totalOf: "day" | "days" | Temporal.TimeUnit): number; (totalOf: Temporal.DurationTotalOptions): number; }
->        : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>d.total : { (totalOf: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): number; (totalOf: Temporal.DurationTotalOptions): number; }
+>        : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >d : Temporal.Duration
 >  : ^^^^^^^^^^^^^^^^^
->total : { (totalOf: "day" | "days" | Temporal.TimeUnit): number; (totalOf: Temporal.DurationTotalOptions): number; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
+>total : { (totalOf: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): number; (totalOf: Temporal.DurationTotalOptions): number; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^      ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^
 >{        unit: "month",        relativeTo: "2020-01-01",    } : { unit: "month"; relativeTo: string; }
 >                                                              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -15446,12 +15446,12 @@ Type Count: 2,500
 >    : ^^^^^^^^^^^^^^^^^
 >nobal.round({ largestUnit: "year" }) : Temporal.Duration
 >                                     : ^^^^^^^^^^^^^^^^^
->nobal.round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->            : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nobal.round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>            : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >nobal : Temporal.Duration
 >      : ^^^^^^^^^^^^^^^^^
->round : { (roundTo: "day" | "days" | Temporal.TimeUnit): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
->      : ^^^       ^^                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>round : { (roundTo: Temporal.PluralizeUnit<"day" | Temporal.TimeUnit>): Temporal.Duration; (roundTo: Temporal.DurationRoundingOptions): Temporal.Duration; }
+>      : ^^^       ^^^^^^^^^^^^^^^^^^^^^^^^         ^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ largestUnit: "year" } : { largestUnit: "year"; }
 >                        : ^^^^^^^^^^^^^^^^^^^^^^^^
 >largestUnit : "year"
