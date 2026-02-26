@@ -44,7 +44,6 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var _a, _b;
 (obj === null || obj === void 0 ? void 0 : obj["a"])++;
 (obj === null || obj === void 0 ? void 0 : obj.a["b"])++;
 (obj === null || obj === void 0 ? void 0 : obj["a"])--;
@@ -53,10 +52,10 @@ var _a, _b;
 ++(obj === null || obj === void 0 ? void 0 : obj.a["b"]);
 --(obj === null || obj === void 0 ? void 0 : obj["a"]);
 --(obj === null || obj === void 0 ? void 0 : obj.a["b"]);
-(obj === null || obj === void 0 ? void 0 : obj["a"]) = 1;
-(obj === null || obj === void 0 ? void 0 : obj.a["b"]) = 1;
-(obj === null || obj === void 0 ? void 0 : obj["a"]) += 1;
-(obj === null || obj === void 0 ? void 0 : obj.a["b"]) += 1;
+obj === null || obj === void 0 ? void 0 : obj["a"] = 1;
+obj === null || obj === void 0 ? void 0 : obj.a["b"] = 1;
+obj === null || obj === void 0 ? void 0 : obj["a"] += 1;
+obj === null || obj === void 0 ? void 0 : obj.a["b"] += 1;
 for (obj === null || obj === void 0 ? void 0 : obj["a"] in {})
     ;
 for (obj === null || obj === void 0 ? void 0 : obj.a["b"] in {})
@@ -67,7 +66,7 @@ for (obj === null || obj === void 0 ? void 0 : obj.a["b"] of [])
     ;
 ({ a: obj === null || obj === void 0 ? void 0 : obj["a"] } = { a: 1 });
 ({ a: obj === null || obj === void 0 ? void 0 : obj.a["b"] } = { a: 1 });
-(_a = { a: 1 }, (obj === null || obj === void 0 ? void 0 : obj["a"]) = __rest(_a, []));
-(_b = { a: 1 }, (obj === null || obj === void 0 ? void 0 : obj.a["b"]) = __rest(_b, []));
+(obj === null || obj === void 0 ? void 0 : obj["a"] = __rest({ a: 1 }, []));
+(obj === null || obj === void 0 ? void 0 : obj.a["b"] = __rest({ a: 1 }, []));
 [...obj === null || obj === void 0 ? void 0 : obj["a"]] = [];
 [...obj === null || obj === void 0 ? void 0 : obj.a["b"]] = [];

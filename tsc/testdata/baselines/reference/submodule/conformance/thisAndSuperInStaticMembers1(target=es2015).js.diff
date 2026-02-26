@@ -47,7 +47,7 @@
 +    static z10 = [...super.a] = [0];
 +    static z11 = { x: super.a } = { x: 0 };
 +    static z12 = { x: super.a = 0 } = { x: 0 };
-+    static z13 = (_a = { x: 0 }, super.a = __rest(_a, []));
++    static z13 = (_a = { x: 0 }, super.a = __rest(_a, []), _a);
 +    static z14 = ++super.a;
 +    static z15 = --super.a;
 +    static z16 = ++super[("a")];

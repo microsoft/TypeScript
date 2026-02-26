@@ -342,11 +342,11 @@ class B extends A {
             (() => __awaiter(this, void 0, void 0, function* () { return _superIndex("x").value = f; }));
         });
     }
-    *property_access_only_read_only_in_generator() {
+    property_access_only_read_only_in_generator() {
         const _super = Object.create(null, {
             x: { get: () => super.x }
         });
-        return __awaiter(this, void 0, void 0, function* () {
+        return __asyncGenerator(this, arguments, function* property_access_only_read_only_in_generator_1() {
             // call with property access
             _super.x.call(this);
             // property access (read)
@@ -357,11 +357,11 @@ class B extends A {
             (() => __awaiter(this, void 0, void 0, function* () { return _super.x.call(this); }));
         });
     }
-    *property_access_only_write_only_in_generator() {
+    property_access_only_write_only_in_generator() {
         const _super = Object.create(null, {
             x: { get: () => super.x, set: v => super.x = v }
         });
-        return __awaiter(this, void 0, void 0, function* () {
+        return __asyncGenerator(this, arguments, function* property_access_only_write_only_in_generator_1() {
             const f = () => { };
             // property access (assign)
             _super.x = f;
@@ -373,9 +373,9 @@ class B extends A {
             (() => __awaiter(this, void 0, void 0, function* () { return _super.x = f; }));
         });
     }
-    *element_access_only_read_only_in_generator() {
+    element_access_only_read_only_in_generator() {
         const _superIndex = name => super[name];
-        return __awaiter(this, void 0, void 0, function* () {
+        return __asyncGenerator(this, arguments, function* element_access_only_read_only_in_generator_1() {
             // call with element access
             _superIndex("x").call(this);
             // element access (read)
@@ -386,12 +386,12 @@ class B extends A {
             (() => __awaiter(this, void 0, void 0, function* () { return _superIndex("x").call(this); }));
         });
     }
-    *element_access_only_write_only_in_generator() {
+    element_access_only_write_only_in_generator() {
         const _superIndex = (function (geti, seti) {
             const cache = Object.create(null);
             return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
         })(name => super[name], (name, value) => super[name] = value);
-        return __awaiter(this, void 0, void 0, function* () {
+        return __asyncGenerator(this, arguments, function* element_access_only_write_only_in_generator_1() {
             const f = () => { };
             // element access (assign)
             _superIndex("x").value = f;

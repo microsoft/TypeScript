@@ -23,31 +23,26 @@ type lexicalArgumentsInfo struct {
 
 type asyncTransformer struct {
 	transformers.Transformer
+	superAccessState
 
 	contextFlags asyncContextFlags
 
 	enclosingFunctionParameterNames *collections.Set[string]
-	capturedSuperProperties         *collections.OrderedSet[string]
-	hasSuperElementAccess           bool
-	hasSuperPropertyAssignment      bool
-	superBinding                    *ast.IdentifierNode
-	superIndexBinding               *ast.IdentifierNode
 	lexicalArguments                lexicalArgumentsInfo
 
 	parentNode  *ast.Node
 	currentNode *ast.Node
 
-	asyncBodyVisitor             *ast.NodeVisitor
-	argumentsAndSuperNodeVisitor *ast.NodeVisitor
-	superAccessVisitor           *ast.NodeVisitor
+	asyncBodyVisitor    *ast.NodeVisitor
+	fallbackNodeVisitor *ast.NodeVisitor
 }
 
 func newAsyncTransformer(opts *transformers.TransformOptions) *transformers.Transformer {
 	tx := &asyncTransformer{}
 	result := tx.NewTransformer(tx.visit, opts.Context)
+	tx.initSuperAccessVisitor(tx.EmitContext(), tx.Factory())
 	tx.asyncBodyVisitor = tx.EmitContext().NewNodeVisitor(tx.visitAsyncBodyNode)
-	tx.argumentsAndSuperNodeVisitor = tx.EmitContext().NewNodeVisitor(tx.visitArgumentsAndSuper)
-	tx.superAccessVisitor = tx.EmitContext().NewNodeVisitor(tx.visitSuperAccess)
+	tx.fallbackNodeVisitor = tx.EmitContext().NewNodeVisitor(tx.visitFallback)
 	return result
 }
 
@@ -98,42 +93,7 @@ func (tx *asyncTransformer) visitDefault(node *ast.Node) *ast.Node {
 	return tx.Visitor().VisitEachChild(node)
 }
 
-// trackSuperAccess records super property/element accesses and super property assignments
-// for the enclosing async method body. Called from both the main visitor and the arguments
-// visitor to ensure super accesses are tracked regardless of whether the node has transform flags.
-func (tx *asyncTransformer) trackSuperAccess(node *ast.Node) {
-	if tx.capturedSuperProperties == nil {
-		return
-	}
-	switch node.Kind {
-	case ast.KindPropertyAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
-			tx.capturedSuperProperties.Add(node.Name().Text())
-		}
-	case ast.KindElementAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
-			tx.hasSuperElementAccess = true
-		}
-	case ast.KindBinaryExpression:
-		if ast.IsAssignmentOperator(node.AsBinaryExpression().OperatorToken.Kind) && assignmentTargetContainsSuperProperty(node.AsBinaryExpression().Left) {
-			tx.hasSuperPropertyAssignment = true
-		}
-	case ast.KindPrefixUnaryExpression:
-		if isUpdateExpression(node) && assignmentTargetContainsSuperProperty(node.AsPrefixUnaryExpression().Operand) {
-			tx.hasSuperPropertyAssignment = true
-		}
-	case ast.KindPostfixUnaryExpression:
-		if isUpdateExpression(node) && assignmentTargetContainsSuperProperty(node.AsPostfixUnaryExpression().Operand) {
-			tx.hasSuperPropertyAssignment = true
-		}
-	}
-}
-
-// argumentsAndSuperVisitor recurses into subtrees that lack await transform flags.
-// It ensures we still (1) substitute `arguments` references with a lexical binding and
-// (2) track super accesses (which don't set await flags). It stops at function boundaries
-// since both `arguments` and `super` rebind in nested functions.
-func (tx *asyncTransformer) argumentsAndSuperVisitor(node *ast.Node) *ast.Node {
+func (tx *asyncTransformer) fallbackVisitor(node *ast.Node) *ast.Node {
 	if tx.capturedSuperProperties == nil && tx.lexicalArguments.binding == nil {
 		return node
 	}
@@ -156,7 +116,7 @@ func (tx *asyncTransformer) argumentsAndSuperVisitor(node *ast.Node) *ast.Node {
 			return tx.lexicalArguments.binding
 		}
 	}
-	return tx.argumentsAndSuperNodeVisitor.VisitEachChild(node)
+	return tx.fallbackNodeVisitor.VisitEachChild(node)
 }
 
 func (tx *asyncTransformer) descendInto(node *ast.Node) func() {
@@ -166,12 +126,10 @@ func (tx *asyncTransformer) descendInto(node *ast.Node) func() {
 	return func() { tx.currentNode = tx.parentNode; tx.parentNode = savedParent }
 }
 
-// visitArgumentsAndSuper is the NodeVisitor callback for argumentsAndSuperNodeVisitor.
-// It wraps argumentsAndSuperVisitor with parent tracking for recursive calls.
-func (tx *asyncTransformer) visitArgumentsAndSuper(node *ast.Node) *ast.Node {
+func (tx *asyncTransformer) visitFallback(node *ast.Node) *ast.Node {
 	cleanup := tx.descendInto(node)
 	defer cleanup()
-	return tx.argumentsAndSuperVisitor(node)
+	return tx.fallbackVisitor(node)
 }
 
 func (tx *asyncTransformer) visit(node *ast.Node) *ast.Node {
@@ -179,7 +137,7 @@ func (tx *asyncTransformer) visit(node *ast.Node) *ast.Node {
 	defer cleanup()
 
 	if node.SubtreeFacts()&(ast.SubtreeContainsAnyAwait|ast.SubtreeContainsAwait) == 0 {
-		return tx.argumentsAndSuperVisitor(node)
+		return tx.fallbackVisitor(node)
 	}
 	tx.trackSuperAccess(node)
 	switch node.Kind {
@@ -922,180 +880,6 @@ func (tx *asyncTransformer) transformAsyncFunctionBodyWorker(body *ast.Node) *as
 	block := tx.Factory().NewBlock(list, false /*multiLine*/)
 	block.Loc = body.Loc
 	return block
-}
-
-// substituteSuperAccessesInBody walks the async body and replaces super property/element
-// accesses with _super/_superIndex references. This is necessary because the async body
-// ends up inside a generator function where `super` is not valid.
-// visitSuperAccess is the NodeVisitor callback for superAccessVisitor.
-func (tx *asyncTransformer) visitSuperAccess(node *ast.Node) *ast.Node {
-	switch node.Kind {
-	case ast.KindCallExpression:
-		call := node.AsCallExpression()
-		if ast.IsSuperProperty(call.Expression) {
-			return tx.substituteCallExpressionWithSuperAccess(call, tx.superAccessVisitor)
-		}
-		return tx.superAccessVisitor.VisitEachChild(node)
-	case ast.KindPropertyAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
-			// super.x → _super.x
-			return tx.Factory().NewPropertyAccessExpression(
-				tx.superBinding, nil, node.Name(), ast.NodeFlagsNone,
-			)
-		}
-		return tx.superAccessVisitor.VisitEachChild(node)
-	case ast.KindElementAccessExpression:
-		if node.Expression().Kind == ast.KindSuperKeyword {
-			// super[x] → _superIndex(x) or _superIndex(x).value
-			return tx.createSuperElementAccessInAsyncMethod(
-				node.AsElementAccessExpression().ArgumentExpression,
-			)
-		}
-		return tx.superAccessVisitor.VisitEachChild(node)
-	// Don't recurse into non-arrow function scopes or classes
-	case ast.KindFunctionExpression, ast.KindFunctionDeclaration,
-		ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor,
-		ast.KindConstructor, ast.KindClassDeclaration, ast.KindClassExpression:
-		return node
-	default:
-		return tx.superAccessVisitor.VisitEachChild(node)
-	}
-}
-
-func (tx *asyncTransformer) substituteSuperAccessesInBody(body *ast.Node) *ast.Node {
-	return tx.superAccessVisitor.VisitNode(body)
-}
-
-// substituteCallExpressionWithSuperAccess handles super.x(args) and super[x](args).
-func (tx *asyncTransformer) substituteCallExpressionWithSuperAccess(call *ast.CallExpression, visitor *ast.NodeVisitor) *ast.Node {
-	expression := call.Expression
-	var target *ast.Node
-
-	if ast.IsPropertyAccessExpression(expression) {
-		// super.x(args) → _super.x.call(this, args)
-		target = tx.Factory().NewPropertyAccessExpression(
-			tx.superBinding, nil,
-			expression.AsPropertyAccessExpression().Name(), ast.NodeFlagsNone,
-		)
-	} else if ast.IsElementAccessExpression(expression) {
-		// super[x](args) → _superIndex(x).call(this, args) or _superIndex(x).value.call(this, args)
-		target = tx.createSuperElementAccessInAsyncMethod(
-			expression.AsElementAccessExpression().ArgumentExpression,
-		)
-	} else {
-		return visitor.VisitEachChild(call.AsNode())
-	}
-
-	callTarget := tx.Factory().NewPropertyAccessExpression(
-		target, nil,
-		tx.Factory().NewIdentifier("call"), ast.NodeFlagsNone,
-	)
-
-	var allArgs []*ast.Node
-	allArgs = append(allArgs, tx.Factory().NewThisExpression())
-	if call.Arguments != nil {
-		visitedArgs := visitor.VisitNodes(call.Arguments)
-		if visitedArgs != nil {
-			allArgs = append(allArgs, visitedArgs.Nodes...)
-		}
-	}
-
-	result := tx.Factory().NewCallExpression(
-		callTarget, nil, nil,
-		tx.Factory().NewNodeList(allArgs), ast.NodeFlagsNone,
-	)
-	result.Loc = call.Loc
-	return result
-}
-
-// createSuperElementAccessInAsyncMethod creates _superIndex(x) or _superIndex(x).value.
-func (tx *asyncTransformer) createSuperElementAccessInAsyncMethod(argumentExpression *ast.Node) *ast.Node {
-	superIndexCall := tx.Factory().NewCallExpression(
-		tx.superIndexBinding, nil, nil,
-		tx.Factory().NewNodeList([]*ast.Node{argumentExpression}),
-		ast.NodeFlagsNone,
-	)
-	if tx.hasSuperPropertyAssignment {
-		return tx.Factory().NewPropertyAccessExpression(
-			superIndexCall, nil,
-			tx.Factory().NewIdentifier("value"), ast.NodeFlagsNone,
-		)
-	}
-	return superIndexCall
-}
-
-// createSuperAccessVariableStatement creates a variable named `_super` with accessor
-// properties for the given property names.
-//
-// Create a variable declaration with a getter/setter (if binding) definition for each name:
-//
-//	const _super = Object.create(null, {
-//	    x: { get: () => super.x },                           // read-only
-//	    x: { get: () => super.x, set: (v) => super.x = v }, // read-write
-//	});
-func (tx *asyncTransformer) createSuperAccessVariableStatement() *ast.Node {
-	f := tx.Factory()
-	var accessors []*ast.Node
-
-	for name := range tx.capturedSuperProperties.Values() {
-		var descriptorProperties []*ast.Node
-
-		// getter: get: () => super.name
-		getterBody := f.NewPropertyAccessExpression(
-			f.NewKeywordExpression(ast.KindSuperKeyword), nil,
-			f.NewIdentifier(name), ast.NodeFlagsNone,
-		)
-		getterArrow := f.NewArrowFunction(
-			nil, nil,
-			f.NewNodeList([]*ast.Node{}),
-			nil, nil,
-			f.NewToken(ast.KindEqualsGreaterThanToken),
-			getterBody,
-		)
-		getter := f.NewPropertyAssignment(nil, f.NewIdentifier("get"), nil, nil, getterArrow)
-		descriptorProperties = append(descriptorProperties, getter)
-
-		if tx.hasSuperPropertyAssignment {
-			// setter: set: v => super.name = v
-			vParam := f.NewParameterDeclaration(nil, nil, f.NewIdentifier("v"), nil, nil, nil)
-			superProp := f.NewPropertyAccessExpression(
-				f.NewKeywordExpression(ast.KindSuperKeyword), nil,
-				f.NewIdentifier(name), ast.NodeFlagsNone,
-			)
-			assignExpr := f.NewAssignmentExpression(superProp, f.NewIdentifier("v"))
-			setterArrow := f.NewArrowFunction(
-				nil, nil,
-				f.NewNodeList([]*ast.Node{vParam}),
-				nil, nil,
-				f.NewToken(ast.KindEqualsGreaterThanToken),
-				assignExpr,
-			)
-			setter := f.NewPropertyAssignment(nil, f.NewIdentifier("set"), nil, nil, setterArrow)
-			descriptorProperties = append(descriptorProperties, setter)
-		}
-
-		descriptor := f.NewObjectLiteralExpression(f.NewNodeList(descriptorProperties), false)
-		accessor := f.NewPropertyAssignment(nil, f.NewIdentifier(name), nil, nil, descriptor)
-		accessors = append(accessors, accessor)
-	}
-
-	descriptorsObject := f.NewObjectLiteralExpression(f.NewNodeList(accessors), true)
-
-	objectCreateCall := f.NewCallExpression(
-		f.NewPropertyAccessExpression(
-			f.NewIdentifier("Object"), nil,
-			f.NewIdentifier("create"), ast.NodeFlagsNone,
-		), nil, nil,
-		f.NewNodeList([]*ast.Node{
-			f.NewKeywordExpression(ast.KindNullKeyword),
-			descriptorsObject,
-		}),
-		ast.NodeFlagsNone,
-	)
-
-	decl := f.NewVariableDeclaration(tx.superBinding, nil, nil, objectCreateCall)
-	declList := f.NewVariableDeclarationList(ast.NodeFlagsConst, f.NewNodeList([]*ast.Node{decl}))
-	return f.NewVariableStatement(nil, declList)
 }
 
 func (tx *asyncTransformer) convertToFunctionBlock(node *ast.Node) *ast.Node {

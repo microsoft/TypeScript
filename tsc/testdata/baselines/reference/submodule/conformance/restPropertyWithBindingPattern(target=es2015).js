@@ -19,8 +19,8 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var _a, _b, _c, _d, _e, _f;
-(_a = {}, _b = __rest(_a, []));
-(_c = {}, ({}) = __rest(_c, []));
-(_d = {}, _e = __rest(_d, []));
-(_f = {}, ([]) = __rest(_f, []));
+var _a, _b;
+(_a = __rest({}, []));
+(({}) = __rest({}, []));
+(_b = __rest({}, []));
+(([]) = __rest({}, []));

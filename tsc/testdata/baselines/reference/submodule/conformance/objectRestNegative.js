@@ -46,4 +46,4 @@ function generic(t) {
     return rest;
 }
 let rest = { b: "" };
-({ a } = o, (rest.b + rest.b) = __rest(o, ["a"]));
+({ a } = o, rest.b + rest.b = __rest(o, ["a"]));

@@ -69,24 +69,44 @@ var __disposeResources = (this && this.__disposeResources) || (function (Suppres
     var e = new Error(message);
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 });
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
-        for await (const d1_1 of [{ [Symbol.asyncDispose]() {
-                    return __awaiter(this, void 0, void 0, function* () { });
-                } }, { [Symbol.dispose]() { } }, null, undefined]) {
-            const env_1 = { stack: [], error: void 0, hasError: false };
+        var _a, e_1, _b, _c;
+        try {
+            for (var _d = true, _e = __asyncValues([{ [Symbol.asyncDispose]() {
+                        return __awaiter(this, void 0, void 0, function* () { });
+                    } }, { [Symbol.dispose]() { } }, null, undefined]), _f; _f = yield _e.next(), _a = _f.done, !_a; _d = true) {
+                _c = _f.value;
+                _d = false;
+                const d1_1 = _c;
+                const env_1 = { stack: [], error: void 0, hasError: false };
+                try {
+                    const d1 = __addDisposableResource(env_1, d1_1, true);
+                }
+                catch (e_2) {
+                    env_1.error = e_2;
+                    env_1.hasError = true;
+                }
+                finally {
+                    const result_1 = __disposeResources(env_1);
+                    if (result_1)
+                        yield result_1;
+                }
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
             try {
-                const d1 = __addDisposableResource(env_1, d1_1, true);
+                if (!_d && !_a && (_b = _e.return)) yield _b.call(_e);
             }
-            catch (e_1) {
-                env_1.error = e_1;
-                env_1.hasError = true;
-            }
-            finally {
-                const result_1 = __disposeResources(env_1);
-                if (result_1)
-                    yield result_1;
-            }
+            finally { if (e_1) throw e_1.error; }
         }
     });
 }

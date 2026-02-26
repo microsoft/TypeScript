@@ -3300,7 +3300,8 @@ func (node *ReturnStatement) Clone(f NodeFactoryCoercible) *Node {
 }
 
 func (node *ReturnStatement) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression)
+	// return in an ES2018 async generator must be awaited
+	return propagateSubtreeFacts(node.Expression) | SubtreeContainsForAwaitOrAsyncGenerator
 }
 
 func IsReturnStatement(node *Node) bool {
@@ -6380,12 +6381,18 @@ func (node *BinaryExpression) Clone(f NodeFactoryCoercible) *Node {
 }
 
 func (node *BinaryExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateModifierListSubtreeFacts(node.modifiers) |
+	facts := propagateModifierListSubtreeFacts(node.modifiers) |
 		propagateSubtreeFacts(node.Left) |
 		propagateSubtreeFacts(node.Type) |
 		propagateSubtreeFacts(node.OperatorToken) |
 		propagateSubtreeFacts(node.Right) |
 		core.IfElse(node.OperatorToken.Kind == KindInKeyword && IsPrivateIdentifier(node.Left), SubtreeContainsClassFields|SubtreeContainsPrivateIdentifierInExpression, SubtreeFactsNone)
+	if node.OperatorToken.Kind == KindEqualsToken {
+		if (IsObjectLiteralExpression(node.Left) || IsArrayLiteralExpression(node.Left)) && ContainsObjectRestOrSpread(node.Left) {
+			facts |= SubtreeContainsObjectRestOrSpread
+		}
+	}
+	return facts
 }
 
 func (node *BinaryExpression) setModifiers(modifiers *ModifierList) { node.modifiers = modifiers }
@@ -7730,7 +7737,8 @@ func (node *AwaitExpression) Clone(f NodeFactoryCoercible) *Node {
 }
 
 func (node *AwaitExpression) computeSubtreeFacts() SubtreeFacts {
-	return propagateSubtreeFacts(node.Expression) | SubtreeContainsAwait
+	// await in an ES2018 async generator must use `yield __await(expr)`
+	return propagateSubtreeFacts(node.Expression) | SubtreeContainsAwait | SubtreeContainsForAwaitOrAsyncGenerator
 }
 
 func IsAwaitExpression(node *Node) bool {

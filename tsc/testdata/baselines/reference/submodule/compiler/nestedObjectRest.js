@@ -20,11 +20,11 @@ var __rest = (this && this.__rest) || function (s, e) {
         }
     return t;
 };
-var _a, _b, _c;
+var _a, _b;
 // https://github.com/microsoft/TypeScript/issues/43400
 var x, y;
-_a = [{ abc: 1 }], [_b] = _a, x = __rest(_b, []);
-for (let _d of [[{ abc: 1 }]]) {
-    [_c] = _d, y = __rest(_c, []);
+[_a] = [{ abc: 1 }], x = __rest(_a, []);
+for (let _c of [[{ abc: 1 }]]) {
+    [_b] = _c, y = __rest(_b, []);
     ;
 }
