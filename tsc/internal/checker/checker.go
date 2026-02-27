@@ -2042,9 +2042,9 @@ func isPropertyImmediatelyReferencedWithinDeclaration(declaration *ast.Node, usa
 			return false
 		case ast.KindPropertyDeclaration:
 			// even when stopping at any property declaration, they need to come from the same class
-			if stopAtAnyPropertyDeclaration && (ast.IsPropertyDeclaration(declaration) && node.Parent == declaration.Parent || ast.IsParameterPropertyDeclaration(declaration, declaration.Parent) && node.Parent == declaration.Parent.Parent) {
-				return true
-			}
+			return stopAtAnyPropertyDeclaration &&
+				((ast.IsPropertyDeclaration(declaration) && node.Parent == declaration.Parent) ||
+					(ast.IsParameterPropertyDeclaration(declaration, declaration.Parent) && node.Parent == declaration.Parent.Parent))
 		case ast.KindBlock:
 			switch node.Parent.Kind {
 			case ast.KindMethodDeclaration, ast.KindGetAccessor, ast.KindSetAccessor:
