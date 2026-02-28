@@ -1,3 +1,4 @@
+// @target: es2015
 var x1: typeof {};
 var x2: typeof (): void;
 var x3: typeof 1;

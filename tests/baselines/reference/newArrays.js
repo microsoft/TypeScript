@@ -15,21 +15,18 @@ namespace M {
 }
 
 //// [newArrays.js]
+"use strict";
 var M;
 (function (M) {
-    var Foo = /** @class */ (function () {
-        function Foo() {
-        }
-        return Foo;
-    }());
-    var Gar = /** @class */ (function () {
-        function Gar() {
+    class Foo {
+    }
+    class Gar {
+        constructor() {
             this.x = 10;
             this.y = 10;
         }
-        Gar.prototype.m = function () {
+        m() {
             this.fa = new Array(this.x * this.y);
-        };
-        return Gar;
-    }());
+        }
+    }
 })(M || (M = {}));

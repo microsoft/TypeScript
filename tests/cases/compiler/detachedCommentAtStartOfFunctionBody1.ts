@@ -1,3 +1,4 @@
+// @target: es2015
 class TestFile {
     foo(message: string): () => string {
         /// <summary>Test summary</summary>

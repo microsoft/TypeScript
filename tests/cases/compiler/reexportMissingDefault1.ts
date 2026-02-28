@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @strict: false
 // @esModuleInterop: true
 // @filename: b.ts

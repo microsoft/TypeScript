@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @stableTypeOrdering: true
 //// declare function test<T>(a: {
 ////   [K in keyof T]: {
 ////     b?: (keyof T)[];
@@ -20,5 +21,5 @@
 ////   },
 //// });
 
-verify.completions({ marker: ["ts"], exact: ["foo", "bar"] });
-verify.completions({ marker: ["ts2"], includes: ['"foo"', '"bar"'], isNewIdentifierLocation: true });
+verify.completions({ marker: ["ts"], exact: ["bar", "foo"] });
+verify.completions({ marker: ["ts2"], includes: ['"bar"', '"foo"'], isNewIdentifierLocation: true });

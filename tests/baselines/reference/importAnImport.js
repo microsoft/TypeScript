@@ -10,3 +10,4 @@ namespace m0 {
 }
 
 //// [importAnImport.js]
+"use strict";

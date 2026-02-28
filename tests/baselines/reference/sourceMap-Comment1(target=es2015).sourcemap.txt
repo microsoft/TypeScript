@@ -1,0 +1,21 @@
+===================================================================
+JsFile: sourceMap-Comment1.js
+mapUrl: sourceMap-Comment1.js.map
+sourceRoot: 
+sources: sourceMap-Comment1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:sourceMap-Comment1.js
+sourceFile:sourceMap-Comment1.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>// Comment
+1 >
+2 >^^^^^^^^^^
+3 >          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+2 >// Comment
+1 >Emitted(2, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(2, 11) Source(1, 11) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=sourceMap-Comment1.js.map

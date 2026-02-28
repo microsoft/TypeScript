@@ -6,5 +6,6 @@ function f1() {
 >   : ^^^^^^^^^^
 
     try {} catch(ex){}
->ex : any
+>ex : unknown
+>   : ^^^^^^^
 }

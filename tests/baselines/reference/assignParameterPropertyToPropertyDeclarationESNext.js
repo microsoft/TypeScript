@@ -54,6 +54,7 @@ class H {
 
 
 //// [assignParameterPropertyToPropertyDeclarationESNext.js]
+"use strict";
 class C {
     foo;
     qux = this.bar; // should error

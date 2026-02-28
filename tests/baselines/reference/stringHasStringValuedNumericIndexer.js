@@ -4,4 +4,5 @@
 var str: string = ""[0];
 
 //// [stringHasStringValuedNumericIndexer.js]
+"use strict";
 var str = ""[0];

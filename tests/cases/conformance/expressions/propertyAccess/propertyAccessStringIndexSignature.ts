@@ -1,3 +1,4 @@
+// @target: es2015
 // @noImplicitAny: true, false
 interface Flags { [name: string]: boolean };
 declare let flags: Flags;

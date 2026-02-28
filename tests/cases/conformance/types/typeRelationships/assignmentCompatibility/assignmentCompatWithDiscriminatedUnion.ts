@@ -1,3 +1,4 @@
+// @target: es2015
 // see 'typeRelatedToDiscriminatedType' in checker.ts:
 
 // IteratorResult

@@ -10,7 +10,8 @@ const array = [
 
 
 //// [commentOnArrayElement16.js]
-var array = [
+"use strict";
+const array = [
     // comment start
     1,
     2,

@@ -5,7 +5,7 @@
 //// const [|weirdName: number = 1|];
 
 // @Filename: /home/src/workspaces/project/tsconfig.json
-//// {}
+//// { "compilerOptions": { "lib": ["es5"] } }
 
 // @Filename: /home/src/workspaces/project/node_modules/bar/index.d.ts
 //// export const [|weirdName: number|];

@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowSyntheticDefaultImports: true
 // @module: commonjs
 // @Filename: a.ts

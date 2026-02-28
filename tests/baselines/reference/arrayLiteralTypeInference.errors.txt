@@ -1,20 +1,29 @@
+arrayLiteralTypeInference.ts(2,5): error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
+arrayLiteralTypeInference.ts(6,5): error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
+arrayLiteralTypeInference.ts(10,5): error TS2564: Property 'trueNess' has no initializer and is not definitely assigned in the constructor.
 arrayLiteralTypeInference.ts(14,14): error TS2353: Object literal may only specify known properties, and 'trueness' does not exist in type 'Action'.
 arrayLiteralTypeInference.ts(15,14): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type 'Action'.
 arrayLiteralTypeInference.ts(31,18): error TS2353: Object literal may only specify known properties, and 'trueness' does not exist in type '{ id: number; }'.
 arrayLiteralTypeInference.ts(32,18): error TS2353: Object literal may only specify known properties, and 'name' does not exist in type '{ id: number; }'.
 
 
-==== arrayLiteralTypeInference.ts (4 errors) ====
+==== arrayLiteralTypeInference.ts (7 errors) ====
     class Action {
         id: number;
+        ~~
+!!! error TS2564: Property 'id' has no initializer and is not definitely assigned in the constructor.
     }
     
     class ActionA extends Action {
         value: string;
+        ~~~~~
+!!! error TS2564: Property 'value' has no initializer and is not definitely assigned in the constructor.
     }
     
     class ActionB extends Action {
         trueNess: boolean;
+        ~~~~~~~~
+!!! error TS2564: Property 'trueNess' has no initializer and is not definitely assigned in the constructor.
     }
     
     var x1: Action[] = [

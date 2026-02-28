@@ -1,4 +1,6 @@
 ///<reference path="fourslash.ts"/>
+
+// @stableTypeOrdering: true
 // @strict: true
 ////
 //// type ActionFunction<
@@ -50,5 +52,5 @@
 
 goTo.marker("1");
 edit.insert(`x`)
-verify.completions({ exact: ["FOO", "BAR"] });
+verify.completions({ exact: ["BAR", "FOO"] });
 verify.baselineSyntacticAndSemanticDiagnostics()

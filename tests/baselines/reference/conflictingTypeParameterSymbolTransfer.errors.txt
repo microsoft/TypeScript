@@ -1,7 +1,8 @@
 conflictingTypeParameterSymbolTransfer.ts(13,16): error TS2304: Cannot find name 'U'.
+conflictingTypeParameterSymbolTransfer.ts(29,5): error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
 
 
-==== conflictingTypeParameterSymbolTransfer.ts (1 errors) ====
+==== conflictingTypeParameterSymbolTransfer.ts (2 errors) ====
     // @strict
     
     // Via #56620
@@ -33,6 +34,8 @@ conflictingTypeParameterSymbolTransfer.ts(13,16): error TS2304: Cannot find name
     class BaseClass { }
     class Item<data> extends BaseClass {
         data: data;
+        ~~~~
+!!! error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
         getData() {
             // should OK
             return this.data;

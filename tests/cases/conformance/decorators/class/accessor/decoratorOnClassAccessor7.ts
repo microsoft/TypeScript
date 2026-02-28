@@ -1,4 +1,4 @@
-// @target:es5
+// @target:es5, es2015
 // @experimentaldecorators: true
 declare function dec1<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 declare function dec2<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;

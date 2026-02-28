@@ -12,8 +12,8 @@ const x: ((rowData: Row2<string>) => unknown) = (rowData: Row2<any>) => (null)
 >  : ^       ^^            ^^^^^       
 >rowData : Row2<string>
 >        : ^^^^^^^^^^^^
->(rowData: Row2<any>) => (null) : (rowData: Row2<any>) => any
->                               : ^       ^^         ^^^^^^^^
+>(rowData: Row2<any>) => (null) : (rowData: Row2<any>) => null
+>                               : ^       ^^         ^^^^^^^^^
 >rowData : Row2<any>
 >        : ^^^^^^^^^
 >(null) : null
@@ -32,8 +32,8 @@ const y : C = { s: '' }
 === ./a.d.ts ===
 import '.'
 declare module '.' {
->'.' : typeof import("index")
->    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'.' : typeof import(".")
+>    : ^^^^^^^^^^^^^^^^^^
 
   type Row2<T> = {}
 >Row2 : Row2<T>
@@ -48,8 +48,8 @@ declare module '.' {
 
 === ./index.d.ts ===
 export type {Row2} from './common';
->Row2 : import("common").Row2
->     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Row2 : import("./common").Row2
+>     : ^^^^^^^^^^^^^^^^^^^^^^^
 
 === ./common.d.ts ===
 

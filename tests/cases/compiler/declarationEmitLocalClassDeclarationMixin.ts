@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @declaration: true
 interface Constructor<C> { new (...args: any[]): C; }
 

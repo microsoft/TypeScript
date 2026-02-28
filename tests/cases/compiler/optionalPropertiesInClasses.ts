@@ -1,3 +1,4 @@
+// @target: es2015
 interface ifoo {
 	x?:number;
 	y:number;

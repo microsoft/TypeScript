@@ -3,6 +3,7 @@
 === castTest.ts ===
 var x : any = 0;
 >x : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -12,17 +13,23 @@ var z = <number> x;
 ><number> x : number
 >           : ^^^^^^
 >x : any
+>  : ^^^
 
 var y = x + z;
 >y : any
+>  : ^^^
 >x + z : any
+>      : ^^^
 >x : any
+>  : ^^^
 >z : number
 >  : ^^^^^^
 
 var a = <any>0;
 >a : any
+>  : ^^^
 ><any>0 : any
+>       : ^^^
 >0 : 0
 >  : ^
 
@@ -126,20 +133,24 @@ var p_cast = <Point> ({
 >                                    : ^^^^^
 >Point : typeof Point
 >      : ^^^^^^^^^^^^
->this.x + dx : any
->this.x : any
->this : any
->     : ^^^
->x : any
->  : ^^^
+>this.x + dx : number
+>            : ^^^^^^
+>this.x : number
+>       : ^^^^^^
+>this : Point
+>     : ^^^^^
+>x : number
+>  : ^^^^^^
 >dx : number
 >   : ^^^^^^
->this.y + dy : any
->this.y : any
->this : any
->     : ^^^
->y : any
->  : ^^^
+>this.y + dy : number
+>            : ^^^^^^
+>this.y : number
+>       : ^^^^^^
+>this : Point
+>     : ^^^^^
+>y : number
+>  : ^^^^^^
 >dy : number
 >   : ^^^^^^
 

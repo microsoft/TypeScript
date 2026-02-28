@@ -1,3 +1,4 @@
+// @target: es2015
 type M = { p: string };
 type O = { m: () => M };
 type X<T extends M> = T;

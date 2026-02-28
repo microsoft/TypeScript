@@ -1,3 +1,4 @@
+// @target: es2015
 class Sammy {
    foo() { return "hi"; }
   static bar() {

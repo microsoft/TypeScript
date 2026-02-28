@@ -1,3 +1,4 @@
+// @target: es2015
 class Base {
     foo(x: { a: number }): { a: number } {
         return null;

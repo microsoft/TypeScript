@@ -11,6 +11,7 @@ namespace Bar {
 
 
 //// [moduleUnassignedVariable.js]
+"use strict";
 var Bar;
 (function (Bar) {
     Bar.a = 1;

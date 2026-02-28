@@ -1,3 +1,4 @@
+// @target: es2015
 interface IEnumerable<T> {
 
     zip<TResult>(second: IEnumerable<T>, resultSelector: (first: T, second: T, index: number) => TResult): IEnumerable<TResult>;

@@ -3,6 +3,7 @@
 === commaOperatorWithSecondOperandObjectType.ts ===
 var ANY: any;
 >ANY : any
+>    : ^^^
 
 var BOOLEAN: boolean;
 >BOOLEAN : boolean
@@ -34,6 +35,7 @@ ANY, OBJECT;
 >ANY, OBJECT : Object
 >            : ^^^^^^
 >ANY : any
+>    : ^^^
 >OBJECT : Object
 >       : ^^^^^^
 
@@ -78,6 +80,7 @@ var resultIsObject1 = (ANY, OBJECT);
 >ANY, OBJECT : Object
 >            : ^^^^^^
 >ANY : any
+>    : ^^^
 >OBJECT : Object
 >       : ^^^^^^
 
@@ -142,6 +145,7 @@ ANY = null, OBJECT
 >ANY = null : null
 >           : ^^^^
 >ANY : any
+>    : ^^^
 >OBJECT : Object
 >       : ^^^^^^
 
@@ -154,14 +158,14 @@ true, {}
 >   : ^^
 
 !BOOLEAN, []
->!BOOLEAN, [] : undefined[]
->             : ^^^^^^^^^^^
+>!BOOLEAN, [] : never[]
+>             : ^^^^^^^
 >!BOOLEAN : boolean
 >         : ^^^^^^^
 >BOOLEAN : boolean
 >        : ^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 "string", new Date()
 >"string", new Date() : Date
@@ -209,6 +213,7 @@ var resultIsObject7 = (ANY = null, OBJECT);
 >ANY = null : null
 >           : ^^^^
 >ANY : any
+>    : ^^^
 >OBJECT : Object
 >       : ^^^^^^
 

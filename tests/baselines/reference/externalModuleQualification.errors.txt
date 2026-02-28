@@ -1,0 +1,17 @@
+externalModuleQualification.ts(3,13): error TS2564: Property 'previousDiffAction' has no initializer and is not definitely assigned in the constructor.
+
+
+==== externalModuleQualification.ts (1 errors) ====
+    export var ID = "test";
+    export class DiffEditor<A, B, C> {
+        private previousDiffAction: NavigateAction;
+                ~~~~~~~~~~~~~~~~~~
+!!! error TS2564: Property 'previousDiffAction' has no initializer and is not definitely assigned in the constructor.
+        constructor(id: string = ID) {
+        }
+    }
+    class NavigateAction {
+        f(editor: DiffEditor<any, any, any>) {
+        }
+    }
+    

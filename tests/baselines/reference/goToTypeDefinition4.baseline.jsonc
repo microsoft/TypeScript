@@ -20,7 +20,7 @@
     "defId": 0,
     "kind": "const",
     "name": "T",
-    "containerName": "\"/tests/cases/fourslash/foo\"",
+    "containerName": "\"./foo\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false
@@ -29,7 +29,7 @@
     "defId": 1,
     "kind": "const",
     "name": "T",
-    "containerName": "\"/tests/cases/fourslash/foo\"",
+    "containerName": "\"./foo\"",
     "isLocal": false,
     "isAmbient": false,
     "unverified": false

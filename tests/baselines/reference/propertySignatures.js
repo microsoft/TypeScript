@@ -23,6 +23,7 @@ test.bar = 2;
 
 
 //// [propertySignatures.js]
+"use strict";
 foo2.a = 2;
 foo2.a = "0";
 var test = foo();

@@ -20,7 +20,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/a\"",
+    "name": "module \"./a\"",
     "displayParts": [
      {
       "text": "module",
@@ -31,7 +31,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/a\"",
+      "text": "\"./a\"",
       "kind": "stringLiteral"
      }
     ]

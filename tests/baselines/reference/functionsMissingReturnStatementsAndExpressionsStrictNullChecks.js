@@ -77,6 +77,7 @@ const fn4: FN = async () => {};
 
 
 //// [functionsMissingReturnStatementsAndExpressionsStrictNullChecks.js]
+"use strict";
 function f10() {
     // Ok, return type allows implicit return of undefined
 }

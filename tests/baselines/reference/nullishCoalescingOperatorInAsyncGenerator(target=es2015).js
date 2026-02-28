@@ -11,6 +11,7 @@ async function* f(a: { b?: number }) {
 
 
 //// [nullishCoalescingOperatorInAsyncGenerator.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/37686
 function f(a) {
     return __asyncGenerator(this, arguments, function* f_1() {

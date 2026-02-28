@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     static fn() { return this; }
     static get x() { return 1; }

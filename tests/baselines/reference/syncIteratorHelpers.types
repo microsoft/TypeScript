@@ -1,0 +1,69 @@
+//// [tests/cases/conformance/es2025/syncIteratorHelpers.ts] ////
+
+=== syncIteratorHelpers.ts ===
+[1, 2, 3, 4].values()
+>[1, 2, 3, 4].values()    .filter((x) => x % 2 === 0)    .map((x) => x * 10)    .toArray() : number[]
+>                                                                                          : ^^^^^^^^
+>[1, 2, 3, 4].values()    .filter((x) => x % 2 === 0)    .map((x) => x * 10)    .toArray : () => number[]
+>                                                                                        : ^^^^^^^^^^^^^^
+>[1, 2, 3, 4].values()    .filter((x) => x % 2 === 0)    .map((x) => x * 10) : IteratorObject<number, undefined, unknown>
+>                                                                            : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4].values()    .filter((x) => x % 2 === 0)    .map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
+>                                                             : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4].values()    .filter((x) => x % 2 === 0) : IteratorObject<number, undefined, unknown>
+>                                                     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4].values()    .filter : { <S extends number>(predicate: (value: number, index: number) => value is S): IteratorObject<S, undefined, unknown>; (predicate: (value: number, index: number) => unknown): IteratorObject<number, undefined, unknown>; }
+>                                 : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4].values() : ArrayIterator<number>
+>                      : ^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4].values : () => ArrayIterator<number>
+>                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>[1, 2, 3, 4] : number[]
+>             : ^^^^^^^^
+>1 : 1
+>  : ^
+>2 : 2
+>  : ^
+>3 : 3
+>  : ^
+>4 : 4
+>  : ^
+>values : () => ArrayIterator<number>
+>       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    .filter((x) => x % 2 === 0)
+>filter : { <S extends number>(predicate: (value: number, index: number) => value is S): IteratorObject<S, undefined, unknown>; (predicate: (value: number, index: number) => unknown): IteratorObject<number, undefined, unknown>; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^     ^^      ^^^^^       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x) => x % 2 === 0 : (x: number) => boolean
+>                   : ^ ^^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x % 2 === 0 : boolean
+>            : ^^^^^^^
+>x % 2 : number
+>      : ^^^^^^
+>x : number
+>  : ^^^^^^
+>2 : 2
+>  : ^
+>0 : 0
+>  : ^
+
+    .map((x) => x * 10)
+>map : <U>(callbackfn: (value: number, index: number) => U) => IteratorObject<U, undefined, unknown>
+>    : ^ ^^          ^^^     ^^^^^^^^^^     ^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(x) => x * 10 : (x: number) => number
+>              : ^ ^^^^^^^^^^^^^^^^^^^
+>x : number
+>  : ^^^^^^
+>x * 10 : number
+>       : ^^^^^^
+>x : number
+>  : ^^^^^^
+>10 : 10
+>   : ^^
+
+    .toArray();
+>toArray : () => number[]
+>        : ^^^^^^^^^^^^^^
+

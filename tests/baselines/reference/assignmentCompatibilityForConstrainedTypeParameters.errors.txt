@@ -1,0 +1,13 @@
+assignmentCompatibilityForConstrainedTypeParameters.ts(5,12): error TS2454: Variable 'x' is used before being assigned.
+
+
+==== assignmentCompatibilityForConstrainedTypeParameters.ts (1 errors) ====
+    function foo<T extends { bar: string }>() {
+      function bar<S extends T>() {
+        var x: S;
+        var y: T;
+           y = x;
+               ~
+!!! error TS2454: Variable 'x' is used before being assigned.
+        }
+    }

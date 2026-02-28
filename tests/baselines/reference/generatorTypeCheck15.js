@@ -6,6 +6,7 @@ function* g() {
 }
 
 //// [generatorTypeCheck15.js]
+"use strict";
 function* g() {
     return "";
 }

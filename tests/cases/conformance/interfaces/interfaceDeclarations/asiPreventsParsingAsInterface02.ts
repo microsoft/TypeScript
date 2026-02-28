@@ -1,3 +1,4 @@
+// @target: es2015
 
 function f(interface: number, I: string) {
     interface   // This should be the identifier 'interface'

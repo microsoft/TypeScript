@@ -4,8 +4,8 @@
 const { apply } = require('./moduleExportAliasDuplicateAlias')
 >apply : number
 >      : ^^^^^^
->require('./moduleExportAliasDuplicateAlias') : typeof import("moduleExportAliasDuplicateAlias")
->                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require('./moduleExportAliasDuplicateAlias') : typeof import("./moduleExportAliasDuplicateAlias")
+>                                             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./moduleExportAliasDuplicateAlias' : "./moduleExportAliasDuplicateAlias"
 >                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -28,8 +28,8 @@ exports.apply = undefined;
 >                          : ^^^^^^^^^
 >exports.apply : (() => void) | "ok" | 1 | undefined
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->exports : typeof import("moduleExportAliasDuplicateAlias")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >apply : (() => void) | "ok" | 1 | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
@@ -40,8 +40,8 @@ exports.apply = undefined;
 >                          : ^^^^^^^^^
 >exports.apply : (() => void) | "ok" | 1 | undefined
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->exports : typeof import("moduleExportAliasDuplicateAlias")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >apply : (() => void) | "ok" | 1 | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >undefined : undefined
@@ -56,8 +56,8 @@ exports.apply = a;
 >                  : ^^^^^^^^^^
 >exports.apply : (() => void) | "ok" | 1 | undefined
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->exports : typeof import("moduleExportAliasDuplicateAlias")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >apply : (() => void) | "ok" | 1 | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >a : () => void
@@ -68,8 +68,8 @@ exports.apply()
 >                : ^^^^
 >exports.apply : () => void
 >              : ^^^^^^^^^^
->exports : typeof import("moduleExportAliasDuplicateAlias")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >apply : () => void
 >      : ^^^^^^^^^^
 
@@ -78,8 +78,8 @@ exports.apply = 'ok'
 >                     : ^^^^
 >exports.apply : (() => void) | "ok" | 1 | undefined
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->exports : typeof import("moduleExportAliasDuplicateAlias")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >apply : (() => void) | "ok" | 1 | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'ok' : "ok"
@@ -94,8 +94,8 @@ var OK = exports.apply.toUpperCase()
 >                          : ^^^^^^      
 >exports.apply : "ok"
 >              : ^^^^
->exports : typeof import("moduleExportAliasDuplicateAlias")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >apply : "ok"
 >      : ^^^^
 >toUpperCase : () => string
@@ -106,8 +106,8 @@ exports.apply = 1
 >                  : ^
 >exports.apply : (() => void) | "ok" | 1 | undefined
 >              : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->exports : typeof import("moduleExportAliasDuplicateAlias")
->        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./moduleExportAliasDuplicateAlias")
+>        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >apply : (() => void) | "ok" | 1 | undefined
 >      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >1 : 1

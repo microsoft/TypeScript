@@ -29,8 +29,8 @@ declare namespace Bacon {
 >              : ^   ^^      ^^   ^^^      ^^^^^             
 >max : number
 >    : ^^^^^^
->min : number
->    : ^^^^^^
+>min : number | undefined
+>    : ^^^^^^^^^^^^^^^^^^
 
         log(): Observable<T>;
 >log : () => Observable<T>
@@ -75,8 +75,8 @@ declare namespace Bacon {
         endOnError(f?: (value: T) => boolean): Observable<T>;
 >endOnError : (f?: (value: T) => boolean) => Observable<T>
 >           : ^ ^^^                     ^^^^^             
->f : (value: T) => boolean
->  : ^     ^^ ^^^^^       
+>f : ((value: T) => boolean) | undefined
+>  : ^^     ^^ ^^^^^       ^^^^^^^^^^^^^
 >value : T
 >      : ^
 

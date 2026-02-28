@@ -1,3 +1,4 @@
+// @target: es2015
 // Check that errors are reported for non-generic types with type arguments
 
 class C { }

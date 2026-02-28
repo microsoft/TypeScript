@@ -15,5 +15,6 @@
     var x = sort(sc);
 
 //// [icomparable.js]
+"use strict";
 var sc;
 var x = sort(sc);

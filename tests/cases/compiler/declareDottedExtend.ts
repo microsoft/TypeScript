@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace A.B
 {
     export class C{ }

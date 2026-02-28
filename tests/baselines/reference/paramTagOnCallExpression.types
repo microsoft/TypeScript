@@ -15,8 +15,8 @@ exports.inherits = factory('inherits')
 >                                       : ^^
 >exports.inherits : {}
 >                 : ^^
->exports : typeof import("a")
->        : ^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./a")
+>        : ^^^^^^^^^^^^^^^^^^^^
 >inherits : {}
 >         : ^^
 >factory('inherits') : {}

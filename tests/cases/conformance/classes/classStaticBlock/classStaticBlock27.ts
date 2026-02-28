@@ -1,3 +1,4 @@
+// @target: es2015
 // https://github.com/microsoft/TypeScript/issues/44872
 
 void class Foo {

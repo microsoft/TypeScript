@@ -55,8 +55,8 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyComp = void 0;
-var ns = __importStar(require("mod"));
-var Ctor = ns.default;
+const ns = __importStar(require("mod"));
+const Ctor = ns.default;
 exports.MyComp = Ctor.extends({ foo: "bar" });
 
 

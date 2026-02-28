@@ -55,14 +55,14 @@ var b2: { new (x: string): number };
 var a3: { new <T>(x?: T): T };
 >a3 : new <T>(x?: T) => T
 >   : ^^^^^ ^^ ^^^ ^^^^^ 
->x : T
->  : ^
+>x : T | undefined
+>  : ^^^^^^^^^^^^^
 
 var b3: { new (x?: string): number };
 >b3 : new (x?: string) => number
 >   : ^^^^^ ^^^      ^^^^^      
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 var a4: { new <T>(...x: T[]): T };
 >a4 : new <T>(...x: T[]) => T

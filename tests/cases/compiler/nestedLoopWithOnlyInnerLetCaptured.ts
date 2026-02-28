@@ -1,5 +1,5 @@
 // @strict: false
-// @target: es5
+// @target: es5, es2015
 declare let doSomething;
 
 for (let a1 of [])

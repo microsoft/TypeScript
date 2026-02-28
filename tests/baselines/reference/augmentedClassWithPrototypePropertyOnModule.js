@@ -9,3 +9,4 @@ declare class m {
 }
 
 //// [augmentedClassWithPrototypePropertyOnModule.js]
+"use strict";

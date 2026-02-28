@@ -5,6 +5,7 @@ type BrandedNum = number & { __numberBrand: any };
 >BrandedNum : BrandedNum
 >           : ^^^^^^^^^^
 >__numberBrand : any
+>              : ^^^
 
 var x : BrandedNum;
 >x : BrandedNum

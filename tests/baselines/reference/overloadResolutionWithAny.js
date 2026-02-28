@@ -24,6 +24,7 @@ func2(x, ""); // boolean
 func2("", x); // RegExp
 
 //// [overloadResolutionWithAny.js]
+"use strict";
 var func;
 func(""); // number
 func(3); // string

@@ -4,6 +4,7 @@
 function foo(param:number[]){}; foo([1]);
 
 //// [contextualTyping31.js]
+"use strict";
 function foo(param) { }
 ;
 foo([1]);

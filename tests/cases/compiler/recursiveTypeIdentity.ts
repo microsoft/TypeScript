@@ -1,3 +1,4 @@
+// @target: es2015
 interface A {
     <T extends A>(x: T): void;
 }

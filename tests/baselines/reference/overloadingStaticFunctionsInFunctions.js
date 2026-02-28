@@ -8,6 +8,7 @@ function boo {
 }
 
 //// [overloadingStaticFunctionsInFunctions.js]
+"use strict";
 function boo() {
     test();
     test(name, string);

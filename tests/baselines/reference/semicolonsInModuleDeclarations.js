@@ -11,5 +11,6 @@ var n2: ambiModule.i2;
 
 
 //// [semicolonsInModuleDeclarations.js]
+"use strict";
 var n1;
 var n2;

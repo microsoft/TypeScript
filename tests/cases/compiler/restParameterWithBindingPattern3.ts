@@ -1,3 +1,4 @@
+// @target: es2015
 function a(...[a = 1, b = true]: string[]) { }
 
 function b(...[...foo = []]: string[]) { }

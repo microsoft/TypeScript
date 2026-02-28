@@ -4,6 +4,7 @@
 var a₁ = "hello"; alert(a₁)
 
 //// [unicodeIdentifierName2.js]
+"use strict";
 var a;
 "hello";
 alert(a);

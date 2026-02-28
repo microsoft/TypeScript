@@ -240,13 +240,6 @@ File '/home/src/workspace/package.json' does not exist according to earlier cach
 File '/home/src/package.json' does not exist according to earlier cached lookups.
 File '/home/package.json' does not exist according to earlier cached lookups.
 File '/package.json' does not exist according to earlier cached lookups.
-======== Resolving type reference directive 'sometype', containing file '/home/src/workspace/projects/project1/__inferred type names__.ts', root directory '/home/src/workspace/projects/project1/typeroot1'. ========
-Resolving with primary search path '/home/src/workspace/projects/project1/typeroot1'.
-File '/home/src/workspace/projects/project1/typeroot1/sometype.d.ts' does not exist.
-File '/home/src/workspace/projects/project1/typeroot1/sometype/package.json' does not exist.
-File '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts' exists - use it as a name resolution result.
-Resolving real path for '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', result '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts'.
-======== Type reference directive 'sometype' was successfully resolved to '/home/src/workspace/projects/project1/typeroot1/sometype/index.d.ts', primary: true. ========
 ======== Resolving module '@typescript/lib-dom' from '/home/src/workspace/projects/project1/__lib_node_modules_lookup_lib.dom.d.ts__.ts'. ========
 Explicitly specified module resolution kind: 'Node10'.
 Loading module '@typescript/lib-dom' from 'node_modules' folder, target file types: TypeScript, Declaration.
@@ -291,7 +284,6 @@ project1/utils.d.ts
   Matched by default include pattern '**/*'
 project1/typeroot1/sometype/index.d.ts
   Matched by default include pattern '**/*'
-  Entry point for implicit type library 'sometype'
 [[90mHH:MM:SS AM[0m] Project 'project2/tsconfig.json' is out of date because output file 'project2/tsconfig.tsbuildinfo' does not exist
 
 [[90mHH:MM:SS AM[0m] Building project '/home/src/workspace/projects/project2/tsconfig.json'...
@@ -452,10 +444,7 @@ project4/utils.d.ts
 
 
 //// [/home/src/workspace/projects/project1/file.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.file = void 0;
-exports.file = 10;
+export const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/file.d.ts]
@@ -463,6 +452,7 @@ export declare const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/file2.js]
+"use strict";
 /// <reference lib="webworker"/>
 /// <reference lib="scripthost"/>
 /// <reference lib="es5"/>
@@ -472,10 +462,7 @@ export declare const file = 10;
 
 
 //// [/home/src/workspace/projects/project1/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.x = void 0;
-exports.x = "type1";
+export const x = "type1";
 
 
 //// [/home/src/workspace/projects/project1/index.d.ts]
@@ -606,10 +593,7 @@ export declare const x = "type1";
 }
 
 //// [/home/src/workspace/projects/project2/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.y = void 0;
-exports.y = 10;
+export const y = 10;
 
 
 //// [/home/src/workspace/projects/project2/index.d.ts]
@@ -682,10 +666,7 @@ export declare const y = 10;
 }
 
 //// [/home/src/workspace/projects/project3/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.z = void 0;
-exports.z = 10;
+export const z = 10;
 
 
 //// [/home/src/workspace/projects/project3/index.d.ts]
@@ -758,10 +739,7 @@ export declare const z = 10;
 }
 
 //// [/home/src/workspace/projects/project4/index.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.z = void 0;
-exports.z = 10;
+export const z = 10;
 
 
 //// [/home/src/workspace/projects/project4/index.d.ts]

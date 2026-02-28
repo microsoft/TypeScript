@@ -84,11 +84,9 @@ else {
 
 
 //// [typeGuardOfFormTypeOfOther.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+"use strict";
+class C {
+}
 ;
 var str;
 var bool;
@@ -128,10 +126,10 @@ else {
     var r5 = strOrC; // error: no narrowing to string
 }
 if (typeof strOrNumOrBool === "Object") {
-    var q1 = strOrNumOrBool; // {}
+    let q1 = strOrNumOrBool; // {}
 }
 else {
-    var q2 = strOrNumOrBool; // string | number | boolean
+    let q2 = strOrNumOrBool; // string | number | boolean
 }
 // A type guard of the form typeof x !== s, where s is a string literal,
 //  - when true, narrows the type of x by typeof x === s when false, or
@@ -155,8 +153,8 @@ else {
     c = boolOrC; // C
 }
 if (typeof strOrNumOrBool !== "Object") {
-    var q1 = strOrNumOrBool; // string | number | boolean
+    let q1 = strOrNumOrBool; // string | number | boolean
 }
 else {
-    var q2 = strOrNumOrBool; // {}
+    let q2 = strOrNumOrBool; // {}
 }

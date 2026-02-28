@@ -12,6 +12,7 @@ namespace M {
 
 
 //// [assign1.js]
+"use strict";
 var M;
 (function (M) {
     var x = { salt: 2, pepper: 0 };

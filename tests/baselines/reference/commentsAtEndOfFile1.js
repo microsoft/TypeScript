@@ -7,5 +7,6 @@ Input:
 
 
 //// [commentsAtEndOfFile1.js]
+"use strict";
 Input: ;
 //Testing two

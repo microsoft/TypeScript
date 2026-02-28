@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 (arg1?, arg2) => 101;
 (...arg?) => 102;

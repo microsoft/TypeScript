@@ -1,13 +1,22 @@
+unusedPrivateVariableInClass4.ts(2,13): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+unusedPrivateVariableInClass4.ts(3,13): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 unusedPrivateVariableInClass4.ts(3,13): error TS6133: 'y' is declared but its value is never read.
+unusedPrivateVariableInClass4.ts(4,13): error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
 
 
-==== unusedPrivateVariableInClass4.ts (1 errors) ====
+==== unusedPrivateVariableInClass4.ts (4 errors) ====
     class greeter {
         private x: string;
+                ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         private y: string;
+                ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
                 ~
 !!! error TS6133: 'y' is declared but its value is never read.
         public  z: string;
+                ~
+!!! error TS2564: Property 'z' has no initializer and is not definitely assigned in the constructor.
     
         public method1() {
             this.x;

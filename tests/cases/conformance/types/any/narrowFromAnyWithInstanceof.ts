@@ -1,3 +1,4 @@
+// @target: es2015
 declare var x: any;
 
 if (x instanceof Function) { // 'any' is not narrowed when target type is 'Function'

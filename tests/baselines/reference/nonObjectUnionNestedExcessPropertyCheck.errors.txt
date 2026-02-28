@@ -1,5 +1,5 @@
 nonObjectUnionNestedExcessPropertyCheck.ts(13,35): error TS2353: Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
-nonObjectUnionNestedExcessPropertyCheck.ts(16,49): error TS2353: Object literal may only specify known properties, and 'asdfasdf' does not exist in type '{ testBool?: boolean; }'.
+nonObjectUnionNestedExcessPropertyCheck.ts(16,49): error TS2353: Object literal may only specify known properties, and 'asdfasdf' does not exist in type '{ testBool?: boolean | undefined; }'.
 nonObjectUnionNestedExcessPropertyCheck.ts(19,56): error TS2353: Object literal may only specify known properties, and 'INVALID_PROP_NAME' does not exist in type 'IProps'.
 
 
@@ -23,7 +23,7 @@ nonObjectUnionNestedExcessPropertyCheck.ts(19,56): error TS2353: Object literal 
     // Nested typing works here and we also get an expected error:
     const propB2: IProps | number = { nestedProp: { asdfasdf: 'test' }, iconProp: 'test' };
                                                     ~~~~~~~~
-!!! error TS2353: Object literal may only specify known properties, and 'asdfasdf' does not exist in type '{ testBool?: boolean; }'.
+!!! error TS2353: Object literal may only specify known properties, and 'asdfasdf' does not exist in type '{ testBool?: boolean | undefined; }'.
     
     // Want an error generated here but there isn't one.
     const propA1: INestedProps | number = { nestedProps: { INVALID_PROP_NAME: 'share', iconProp: 'test' } };

@@ -1,12 +1,15 @@
+incompatibleAssignmentOfIdenticallyNamedTypes.ts(4,5): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
 incompatibleAssignmentOfIdenticallyNamedTypes.ts(6,9): error TS2719: Type 'T' is not assignable to type 'T'. Two different types with this name exist, but they are unrelated.
   'T' could be instantiated with an arbitrary type which could be unrelated to 'T'.
 
 
-==== incompatibleAssignmentOfIdenticallyNamedTypes.ts (1 errors) ====
+==== incompatibleAssignmentOfIdenticallyNamedTypes.ts (2 errors) ====
     interface T { }
     declare const a: T;
     class Foo<T> {
         x: T;
+        ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
         fn() {
             this.x = a;
             ~~~~~~

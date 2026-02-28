@@ -1,3 +1,4 @@
+// @target: es2015
 const a = { a: 1 }
 const b = [1]
 

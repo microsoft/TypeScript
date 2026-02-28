@@ -57,6 +57,7 @@ x.methodOnlyInI1("hello"); // error
 x.methodOnlyInI2(10); // error
 
 //// [unionTypeMembers.js]
+"use strict";
 // If each type in U has a property P, U has a property P of a union type of the types of P from each type in U.
 str = x.commonPropertyType; // string
 str = x.commonMethodType(str); // (a: string) => string so result should be string

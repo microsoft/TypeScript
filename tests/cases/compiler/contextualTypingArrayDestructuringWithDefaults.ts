@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 type I = { a: "a" };
 let [ c0 = {a: "a"} ]: [I?] = [];

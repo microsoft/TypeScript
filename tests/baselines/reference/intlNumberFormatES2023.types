@@ -376,3 +376,108 @@ new Intl.NumberFormat('en-GB').format('+Infinity');
 >'+Infinity' : "+Infinity"
 >            : ^^^^^^^^^^^
 
+// Test approximatelySign part type
+const nf = new Intl.NumberFormat("en-US", {
+>nf : Intl.NumberFormat
+>   : ^^^^^^^^^^^^^^^^^
+>new Intl.NumberFormat("en-US", {  style: "currency",  currency: "EUR",  maximumFractionDigits: 0,}) : Intl.NumberFormat
+>                                                                                                    : ^^^^^^^^^^^^^^^^^
+>Intl.NumberFormat : Intl.NumberFormatConstructor
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>Intl : typeof Intl
+>     : ^^^^^^^^^^^
+>NumberFormat : Intl.NumberFormatConstructor
+>             : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"en-US" : "en-US"
+>        : ^^^^^^^
+>{  style: "currency",  currency: "EUR",  maximumFractionDigits: 0,} : { style: "currency"; currency: string; maximumFractionDigits: number; }
+>                                                                    : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  style: "currency",
+>style : "currency"
+>      : ^^^^^^^^^^
+>"currency" : "currency"
+>           : ^^^^^^^^^^
+
+  currency: "EUR",
+>currency : string
+>         : ^^^^^^
+>"EUR" : "EUR"
+>      : ^^^^^
+
+  maximumFractionDigits: 0,
+>maximumFractionDigits : number
+>                      : ^^^^^^
+>0 : 0
+>  : ^
+
+});
+
+const filtered = nf
+>filtered : string
+>         : ^^^^^^
+>nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join("") : string
+>                                                                                                                               : ^^^^^^
+>nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value)  .join : (separator?: string) => string
+>                                                                                                                           : ^         ^^^      ^^^^^      
+>nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map((part) => part.value) : string[]
+>                                                                                                                    : ^^^^^^^^
+>nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign")  .map : <U>(callbackfn: (value: Intl.NumberRangeFormatPart, index: number, array: Intl.NumberRangeFormatPart[]) => U, thisArg?: any) => U[]
+>                                                                                              : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>nf  .formatRangeToParts(100, 100)  .filter((part) => part.type !== "approximatelySign") : Intl.NumberRangeFormatPart[]
+>                                                                                        : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nf  .formatRangeToParts(100, 100)  .filter : { <S extends Intl.NumberRangeFormatPart>(predicate: (value: Intl.NumberRangeFormatPart, index: number, array: Intl.NumberRangeFormatPart[]) => value is S, thisArg?: any): S[]; (predicate: (value: Intl.NumberRangeFormatPart, index: number, array: Intl.NumberRangeFormatPart[]) => unknown, thisArg?: any): Intl.NumberRangeFormatPart[]; }
+>                                           : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nf  .formatRangeToParts(100, 100) : Intl.NumberRangeFormatPart[]
+>                                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>nf  .formatRangeToParts : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                        : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>nf : Intl.NumberFormat
+>   : ^^^^^^^^^^^^^^^^^
+
+  .formatRangeToParts(100, 100)
+>formatRangeToParts : (start: number | bigint | Intl.StringNumericLiteral, end: number | bigint | Intl.StringNumericLiteral) => Intl.NumberRangeFormatPart[]
+>                   : ^     ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^   ^^                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  
+>100 : 100
+>    : ^^^
+>100 : 100
+>    : ^^^
+
+  .filter((part) => part.type !== "approximatelySign")
+>filter : { <S extends Intl.NumberRangeFormatPart>(predicate: (value: Intl.NumberRangeFormatPart, index: number, array: Intl.NumberRangeFormatPart[]) => value is S, thisArg?: any): S[]; (predicate: (value: Intl.NumberRangeFormatPart, index: number, array: Intl.NumberRangeFormatPart[]) => unknown, thisArg?: any): Intl.NumberRangeFormatPart[]; }
+>       : ^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^^         ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^       ^^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>(part) => part.type !== "approximatelySign" : (part: Intl.NumberRangeFormatPart) => boolean
+>                                            : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>part : Intl.NumberRangeFormatPart
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>part.type !== "approximatelySign" : boolean
+>                                  : ^^^^^^^
+>part.type : keyof Intl.NumberFormatRangePartTypeRegistry
+>          : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>part : Intl.NumberRangeFormatPart
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>type : keyof Intl.NumberFormatRangePartTypeRegistry
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>"approximatelySign" : "approximatelySign"
+>                    : ^^^^^^^^^^^^^^^^^^^
+
+  .map((part) => part.value)
+>map : <U>(callbackfn: (value: Intl.NumberRangeFormatPart, index: number, array: Intl.NumberRangeFormatPart[]) => U, thisArg?: any) => U[]
+>    : ^ ^^          ^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^      ^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^       ^^^   ^^^^^^^^
+>(part) => part.value : (part: Intl.NumberRangeFormatPart) => string
+>                     : ^    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>part : Intl.NumberRangeFormatPart
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>part.value : string
+>           : ^^^^^^
+>part : Intl.NumberRangeFormatPart
+>     : ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>value : string
+>      : ^^^^^^
+
+  .join("");
+>join : (separator?: string) => string
+>     : ^         ^^^      ^^^^^      
+>"" : ""
+>   : ^^
+

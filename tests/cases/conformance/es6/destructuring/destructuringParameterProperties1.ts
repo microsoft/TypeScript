@@ -1,4 +1,6 @@
-﻿class C1 {
+﻿// @module: commonjs
+// @target: es2015
+class C1 {
     constructor(public [x, y, z]: string[]) {
     }
 }

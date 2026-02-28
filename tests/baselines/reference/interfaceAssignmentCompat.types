@@ -91,8 +91,8 @@ namespace M {
         var x:IEye[]= [];
 >x : IEye[]
 >  : ^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
         var result="";
 >result : string
@@ -167,12 +167,12 @@ namespace M {
 >  : ^^^^^^
 >x.sort(CompareYeux) : IEye[]
 >                    : ^^^^^^
->x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->       : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
+>x.sort : (compareFn?: ((a: IEye, b: IEye) => number) | undefined) => IEye[]
+>       : ^         ^^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : IEye[]
 >  : ^^^^^^
->sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->     : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
+>sort : (compareFn?: ((a: IEye, b: IEye) => number) | undefined) => IEye[]
+>     : ^         ^^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >CompareYeux : (a: IFrenchEye, b: IFrenchEye) => number
 >            : ^ ^^          ^^ ^^          ^^^^^      
 
@@ -182,12 +182,12 @@ namespace M {
 >  : ^^^^^^
 >x.sort(CompareEyes) : IEye[]
 >                    : ^^^^^^
->x.sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->       : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
+>x.sort : (compareFn?: ((a: IEye, b: IEye) => number) | undefined) => IEye[]
+>       : ^         ^^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >x : IEye[]
 >  : ^^^^^^
->sort : (compareFn?: (a: IEye, b: IEye) => number) => IEye[]
->     : ^         ^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^
+>sort : (compareFn?: ((a: IEye, b: IEye) => number) | undefined) => IEye[]
+>     : ^         ^^^^^ ^^^^^^^^ ^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^
 >CompareEyes : (a: IEye, b: IEye) => number
 >            : ^ ^^    ^^ ^^    ^^^^^      
 
@@ -251,8 +251,8 @@ namespace M {
         var eeks:IFrenchEye[] = [];
 >eeks : IFrenchEye[]
 >     : ^^^^^^^^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
         for (var j=z.length=1;j>=0;j--) {
 >j : number

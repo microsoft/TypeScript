@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 // @useDefineForClassFields: true
 abstract class A {
     abstract p = 'yep'

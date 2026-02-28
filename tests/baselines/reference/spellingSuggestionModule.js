@@ -12,6 +12,7 @@ faroo;
 
 
 //// [spellingSuggestionModule.js]
+"use strict";
 foobar;
 barfoo;
 faroo;

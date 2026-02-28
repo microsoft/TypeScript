@@ -20,6 +20,7 @@ class C {
 });
 
 //// [esDecorators-classDeclaration-parameterDecorators.js]
+"use strict";
 class C {
     constructor(
     @dec

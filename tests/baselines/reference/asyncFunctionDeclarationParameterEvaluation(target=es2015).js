@@ -28,6 +28,7 @@ function f() {
 }
 
 //// [asyncFunctionDeclarationParameterEvaluation.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/40410
 function f1(x_1) {
     return __awaiter(this, arguments, void 0, function* (x, y = z) { });

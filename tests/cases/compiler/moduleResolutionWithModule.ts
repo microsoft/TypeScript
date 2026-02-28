@@ -1,3 +1,4 @@
+// @target: es2022
 // @moduleResolution: node16,nodenext
 // @module: commonjs,node16,node18,node20,nodenext
 // @filename: node_modules/pkg/package.json

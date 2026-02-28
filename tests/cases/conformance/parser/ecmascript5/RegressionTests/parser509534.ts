@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 "use strict";
 var config = require("../config");

@@ -1,0 +1,24 @@
+fluentClasses.ts(17,9): error TS2454: Variable 'c' is used before being assigned.
+
+
+==== fluentClasses.ts (1 errors) ====
+    class A {
+        foo() {
+            return this;
+        }
+    }
+    class B extends A {
+        bar() {
+            return this;
+        }
+    }
+    class C extends B {
+        baz() {
+            return this;
+        }
+    }
+    var c: C;
+    var z = c.foo().bar().baz();  // Fluent pattern
+            ~
+!!! error TS2454: Variable 'c' is used before being assigned.
+    

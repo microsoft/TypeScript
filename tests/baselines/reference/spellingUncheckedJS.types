@@ -135,7 +135,7 @@ object.fresh = 12 // OK
 >   : ^^
 
 other.puuuce // OK, from another file
->other.puuuce : any
+>other.puuuce : error
 >other : { puuce: number; }
 >      : ^^^^^^^^^^^^^^^^^^
 >puuuce : any

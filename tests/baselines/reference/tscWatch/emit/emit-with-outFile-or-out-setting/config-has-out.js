@@ -42,20 +42,18 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/home/src/projects/a/a.js]
-var x = 1;
+"use strict";
+let x = 1;
 
 
 //// [/home/src/projects/a/b.js]
-var y = 1;
+"use strict";
+let y = 1;
 
 
-
-PolledWatches::
-/home/src/projects/a/node_modules/@types: *new*
-  {"pollingInterval":500}
-/home/src/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/projects/a/a.ts: *new*
@@ -64,7 +62,7 @@ FsWatches::
   {}
 /home/src/projects/a/tsconfig.json: *new*
   {}
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 
 FsWatchesRecursive::
@@ -83,14 +81,14 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/a.ts
 /home/src/projects/a/b.ts
 
 No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/a.ts (used version)
 /home/src/projects/a/b.ts (used version)
 
@@ -125,7 +123,8 @@ Output::
 
 
 //// [/home/src/projects/a/a.js]
-var x = 11;
+"use strict";
+let x = 11;
 
 
 //// [/home/src/projects/a/b.js] file written with same contents
@@ -143,7 +142,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/a.ts
 /home/src/projects/a/b.ts
 
@@ -151,7 +150,7 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/a.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined
@@ -185,7 +184,8 @@ Output::
 
 
 //// [/home/src/projects/a/a.js]
-var xy = 11;
+"use strict";
+let xy = 11;
 
 
 //// [/home/src/projects/a/b.js] file written with same contents
@@ -203,7 +203,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /home/src/projects/a/a.ts
 /home/src/projects/a/b.ts
 
@@ -211,7 +211,7 @@ No cached semantic diagnostics in the builder::
 
 Shape signatures in builder refreshed for::
 /home/src/projects/a/a.ts (computed .d.ts)
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /home/src/projects/a/b.ts (computed .d.ts)
 
 exitCode:: ExitStatus.undefined

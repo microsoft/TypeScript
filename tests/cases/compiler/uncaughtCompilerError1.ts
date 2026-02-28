@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 declare var index, lineTokens, token, tokens;
 

@@ -8,7 +8,6 @@ export class B {
 
 
 //// [decoratorMetadataNoLibIsolatedModulesTypes.js]
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,16 +17,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.B = void 0;
-var B = /** @class */ (function () {
-    function B() {
-    }
-    var _a;
-    __decorate([
-        Decorate,
-        __metadata("design:type", typeof (_a = typeof Map !== "undefined" && Map) === "function" ? _a : Object)
-    ], B.prototype, "member", void 0);
-    return B;
-}());
-exports.B = B;
+var _a;
+export class B {
+}
+__decorate([
+    Decorate,
+    __metadata("design:type", typeof (_a = typeof Map !== "undefined" && Map) === "function" ? _a : Object)
+], B.prototype, "member", void 0);

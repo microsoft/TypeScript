@@ -53,8 +53,8 @@ type T4 = [number, T4]
 var x: T5[] = []
 >x : any
 >  : ^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 type T5 = typeof x
 >T5 : any

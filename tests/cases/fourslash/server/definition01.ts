@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 // @Filename: b.ts
 ////import n = require([|'./a/*1*/'|]);
 ////var x = new n.Foo();

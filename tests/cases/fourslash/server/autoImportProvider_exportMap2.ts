@@ -5,8 +5,9 @@
 // @Filename: /home/src/workspaces/project/tsconfig.json
 //// {
 ////   "compilerOptions": {
-////     "module": "commonjs"
-////     "moduleResolution": "node10",
+////     "lib": ["es5"],
+////     "module": "commonjs",
+////     "moduleResolution": "node10"
 ////   }
 //// }
 

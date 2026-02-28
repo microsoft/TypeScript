@@ -1,4 +1,4 @@
-// @target: es5
+// @target: es5, es2015
 var p1: number | string;
 var p2: number | number[];
 var p3: string | boolean;

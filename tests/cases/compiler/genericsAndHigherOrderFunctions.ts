@@ -1,3 +1,4 @@
+// @target: es2015
 // no errors expected
 
 var combine: <T, S>(f: (_: T) => S) =>

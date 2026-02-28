@@ -1,3 +1,4 @@
+// @target: es2015
 interface StatelessComponent<P = {}> {
   (props: P & { children?: number }, context?: any): null;
 }

@@ -12,6 +12,7 @@ class A {
 
 
 //// [privateNameNestedClassNameConflict.js]
+"use strict";
 var _A_foo;
 class A {
     constructor() {

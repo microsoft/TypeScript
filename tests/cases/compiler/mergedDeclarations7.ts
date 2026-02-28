@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: passport.d.ts
 declare module 'passport' {
     namespace passport {

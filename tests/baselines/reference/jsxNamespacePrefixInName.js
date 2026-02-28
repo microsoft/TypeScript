@@ -32,6 +32,7 @@ var upcaseComponent2 = <Upcase:element />;  // Parsed as instrinsic
 
 
 //// [jsxNamespacePrefixInName.jsx]
+"use strict";
 var justElement1 = <a:element />;
 var justElement2 = <a:element></a:element>;
 var justElement3 = <a:element attr={"value"}></a:element>;

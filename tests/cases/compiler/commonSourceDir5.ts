@@ -1,3 +1,4 @@
+// @target: es2015
 // @outFile: concat.js
 // @module: esnext
 // @moduleResolution: bundler

@@ -1,0 +1,28 @@
+tsxInArrowFunction.tsx(15,7): error TS7006: Parameter 'x' implicitly has an 'any' type.
+
+
+==== tsxInArrowFunction.tsx (1 errors) ====
+    declare namespace JSX {
+        interface Element { }
+        interface IntrinsicElements {
+            div: {
+                text?: string;
+            }
+        }
+    }
+    
+    
+    // didn't work
+    <div>{() => <div text="wat" />}</div>;
+    
+    // didn't work
+    <div>{x => <div text="wat" />}</div>;
+          ~
+!!! error TS7006: Parameter 'x' implicitly has an 'any' type.
+    
+    // worked
+    <div>{() => (<div text="wat" />)}</div>;
+    
+    // worked (!)
+    <div>{() => <div text="wat"></div>}</div>;
+    

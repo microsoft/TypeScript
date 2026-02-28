@@ -1,16 +1,22 @@
 error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
+exportAssignmentOfGenericType1_0.ts(2,14): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+exportAssignmentOfGenericType1_1.ts(6,17): error TS2454: Variable 'm' is used before being assigned.
 
 
 !!! error TS5107: Option 'module=AMD' is deprecated and will stop functioning in TypeScript 7.0. Specify compilerOption '"ignoreDeprecations": "6.0"' to silence this error.
-==== exportAssignmentOfGenericType1_1.ts (0 errors) ====
+==== exportAssignmentOfGenericType1_1.ts (1 errors) ====
     ///<reference path='exportAssignmentOfGenericType1_0.ts'/>
     import q = require("exportAssignmentOfGenericType1_0");
     
     class M extends q<string> { }
     var m: M;
     var r: string = m.foo;
+                    ~
+!!! error TS2454: Variable 'm' is used before being assigned.
     
-==== exportAssignmentOfGenericType1_0.ts (0 errors) ====
+==== exportAssignmentOfGenericType1_0.ts (1 errors) ====
     export = T;
     class T<X> { foo: X; }
+                 ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     

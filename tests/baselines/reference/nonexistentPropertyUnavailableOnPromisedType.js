@@ -7,6 +7,7 @@ function f(x: Promise<number>) {
 
 
 //// [nonexistentPropertyUnavailableOnPromisedType.js]
+"use strict";
 function f(x) {
     x.toLowerCase();
 }

@@ -50,6 +50,7 @@ var mResult3 = m[hi];
 
 
 //// [noImplicitAnyIndexingSuppressed.js]
+"use strict";
 var MyEmusEnum;
 (function (MyEmusEnum) {
     MyEmusEnum[MyEmusEnum["emu"] = 0] = "emu";

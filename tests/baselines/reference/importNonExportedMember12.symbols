@@ -10,7 +10,7 @@ module.exports = 1;
 export const A = require("foo");
 >A : Symbol(A, Decl(a.js, 0, 12))
 >require : Symbol(require)
->"foo" : Symbol("/node_modules/foo/src/index", Decl(index.js, 0, 0))
+>"foo" : Symbol("foo", Decl(index.js, 0, 0))
 
 === /b.ts ===
 import { A } from "./a";

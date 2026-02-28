@@ -1,3 +1,4 @@
+// @target: es2015
 class C {
     "a b": number;
     static "c d": number;

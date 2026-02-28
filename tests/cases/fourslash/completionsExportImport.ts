@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @lib: es5
+
 ////declare global {
 ////    namespace N {
 ////        const foo: number;

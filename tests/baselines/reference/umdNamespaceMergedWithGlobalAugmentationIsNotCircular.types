@@ -6,8 +6,8 @@ declare global {
 >       : ^^^^^^^^^^^^^
 
     const React: typeof import("./module");
->React : typeof import("module")
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>React : typeof import("./module")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 }
 
 export { };
@@ -35,8 +35,8 @@ export { };
 React.createRef;
 >React.createRef : () => any
 >                : ^^^^^^   
->React : typeof import("module")
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>React : typeof import("./module")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >createRef : () => any
 >          : ^^^^^^   
 
@@ -56,8 +56,8 @@ console.log("hello");
 React.createRef;
 >React.createRef : () => any
 >                : ^^^^^^   
->React : typeof import("module")
->      : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>React : typeof import("./module")
+>      : ^^^^^^^^^^^^^^^^^^^^^^^^^
 >createRef : () => any
 >          : ^^^^^^   
 

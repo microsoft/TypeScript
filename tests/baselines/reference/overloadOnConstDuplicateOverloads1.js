@@ -13,6 +13,7 @@ function foo2(a: any, x: any) {
 }
 
 //// [overloadOnConstDuplicateOverloads1.js]
+"use strict";
 function foo(a, x) {
 }
 function foo2(a, x) {

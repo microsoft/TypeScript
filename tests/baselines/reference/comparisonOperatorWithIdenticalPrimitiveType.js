@@ -82,6 +82,7 @@ var rh6 = null !== null;
 var rh7 = undefined !== undefined;
 
 //// [comparisonOperatorWithIdenticalPrimitiveType.js]
+"use strict";
 var E;
 (function (E) {
     E[E["a"] = 0] = "a";

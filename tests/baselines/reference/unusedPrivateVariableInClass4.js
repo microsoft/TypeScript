@@ -12,11 +12,9 @@ class greeter {
 }
 
 //// [unusedPrivateVariableInClass4.js]
-var greeter = /** @class */ (function () {
-    function greeter() {
-    }
-    greeter.prototype.method1 = function () {
+"use strict";
+class greeter {
+    method1() {
         this.x;
-    };
-    return greeter;
-}());
+    }
+}

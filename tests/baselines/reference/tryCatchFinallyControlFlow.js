@@ -335,7 +335,7 @@ function f21() {
 "use strict";
 // Repro from #34797
 function f1() {
-    var a = null;
+    let a = null;
     try {
         a = 123;
         return a;
@@ -349,7 +349,7 @@ function f1() {
     }
 }
 function f2() {
-    var x = 0;
+    let x = 0;
     try {
         x = 1;
     }
@@ -363,7 +363,7 @@ function f2() {
     x; // 1
 }
 function f3() {
-    var x = 0;
+    let x = 0;
     try {
         x = 1;
     }
@@ -377,7 +377,7 @@ function f3() {
     x; // 1
 }
 function f4() {
-    var x = 0;
+    let x = 0;
     try {
         x = 1;
     }
@@ -390,7 +390,7 @@ function f4() {
     x; // 1 | 2
 }
 function f5() {
-    var x = 0;
+    let x = 0;
     try {
         x = 1;
         return;
@@ -404,7 +404,7 @@ function f5() {
     x; // 2
 }
 function f6() {
-    var x = 0;
+    let x = 0;
     try {
         x = 1;
     }
@@ -418,7 +418,7 @@ function f6() {
     x; // 1
 }
 function f7() {
-    var x = 0;
+    let x = 0;
     try {
         x = 1;
         return;
@@ -433,8 +433,8 @@ function f7() {
     x; // Unreachable
 }
 function f8() {
-    var x = 0;
-    (function () {
+    let x = 0;
+    (() => {
         try {
             x = 1;
             return;
@@ -447,8 +447,8 @@ function f8() {
     x; // 1
 }
 function f9() {
-    var x = 0;
-    (function () {
+    let x = 0;
+    (() => {
         try {
             if (!!true) {
                 x = 1;
@@ -464,8 +464,8 @@ function f9() {
     x; // 1 | 2
 }
 function f10() {
-    var x = 0;
-    (function () {
+    let x = 0;
+    (() => {
         try {
             x = 1;
             return;
@@ -482,8 +482,8 @@ function f10() {
     x; // 1 | 3
 }
 function f11() {
-    var x = 0;
-    (function () {
+    let x = 0;
+    (() => {
         try {
             if (!!true) {
                 x = 1;
@@ -510,8 +510,8 @@ function f11() {
     x; // 1 | 4 | 5
 }
 function f12() {
-    var x = 0;
-    (function () {
+    let x = 0;
+    (() => {
         try {
             if (!!true) {
                 x = 1;
@@ -546,8 +546,8 @@ function f12() {
     x; // 4 | 5 | 6
 }
 // Repro from #35644
-var main = function () {
-    var hoge = undefined;
+const main = () => {
+    let hoge = undefined;
     try {
         hoge = 'hoge!';
         return;
@@ -564,7 +564,7 @@ var main = function () {
 };
 // Repro from #36828
 function t1() {
-    var x = (function () {
+    const x = (() => {
         try {
             return 'x';
         }
@@ -576,7 +576,7 @@ function t1() {
     x; // Reachable
 }
 function notallowed(arg) {
-    var state = { tag: "one" };
+    let state = { tag: "one" };
     try {
         state = { tag: "two" };
         try {
@@ -592,7 +592,7 @@ function notallowed(arg) {
     }
 }
 function f20() {
-    var x = 0;
+    let x = 0;
     try {
         x = 1;
         try {
@@ -619,7 +619,7 @@ function f20() {
     x; // 3 | 4 | 5 | 6
 }
 function f21() {
-    var x = 0;
+    let x = 0;
     try {
         x = 1;
         try {

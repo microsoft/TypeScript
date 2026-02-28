@@ -37,7 +37,9 @@ var r2 = f('');
 
 var r3 = new f();
 >r3 : any
+>   : ^^^
 >new f() : any
+>        : ^^^
 >f : Foo
 >  : ^^^
 

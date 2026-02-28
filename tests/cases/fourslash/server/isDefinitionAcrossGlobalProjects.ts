@@ -71,6 +71,7 @@
 ////{
 ////    "compilerOptions": {
 ////        "composite": true,
+////        "lib": ["es5"],
 ////    },
 ////    "references": [
 ////        { "path": "a" },
@@ -86,6 +87,7 @@
 ////        "declarationMap": true,
 ////        "module": "none",
 ////        "emitDeclarationOnly": true,
+////        "lib": ["es5"],
 ////    }
 ////}
 

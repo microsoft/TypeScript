@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @jsx: react
 // @strict: true
 /// <reference path="/.lib/react16.d.ts" />

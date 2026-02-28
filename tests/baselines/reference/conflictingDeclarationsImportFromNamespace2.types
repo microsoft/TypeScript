@@ -38,16 +38,16 @@ export = pick;
 === node_modules/@types/lodash/index.d.ts ===
 /// <reference path="./object.d.ts" />
 export = _;
->_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_ : import("lodash").LoDashStatic
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 export as namespace _;
->_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_ : import("lodash").LoDashStatic
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 declare const _: _.LoDashStatic;
->_ : import("node_modules/@types/lodash/index.d.ts").LoDashStatic
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>_ : import("lodash").LoDashStatic
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >_ : any
 >  : ^^^
 

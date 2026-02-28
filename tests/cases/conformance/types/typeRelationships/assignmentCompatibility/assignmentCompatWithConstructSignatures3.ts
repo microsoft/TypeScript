@@ -1,3 +1,4 @@
+// @target: es2015
 // checking assignment compatibility relations for function types. All of these are valid.
 
 class Base { foo: string; }

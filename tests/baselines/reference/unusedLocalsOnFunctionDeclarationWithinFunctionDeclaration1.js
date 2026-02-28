@@ -10,6 +10,7 @@ function greeter(person: string, person2: string) {
 }
 
 //// [unusedLocalsOnFunctionDeclarationWithinFunctionDeclaration1.js]
+"use strict";
 function greeter(person, person2) {
     var unused = 20;
     function maker(child) {

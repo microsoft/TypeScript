@@ -11,3 +11,4 @@
     }
 
 //// [ambientEnum1.js]
+"use strict";

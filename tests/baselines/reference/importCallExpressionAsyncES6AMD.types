@@ -6,12 +6,12 @@ export async function fn() {
 >   : ^^^^^^^^^^^^^^^^^^^
 
     const req = await import('./test') // ONE
->req : typeof import("test")
->    : ^^^^^^^^^^^^^^^^^^^^^
->await import('./test') : typeof import("test")
->                       : ^^^^^^^^^^^^^^^^^^^^^
->import('./test') : Promise<typeof import("test")>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>req : typeof import("./test")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>await import('./test') : typeof import("./test")
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>import('./test') : Promise<typeof import("./test")>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./test' : "./test"
 >         : ^^^^^^^^
 }
@@ -25,12 +25,12 @@ export class cl1 {
 >  : ^^^^^^^^^^^^^^^^^^^
 
         const req = await import('./test') // TWO
->req : typeof import("test")
->    : ^^^^^^^^^^^^^^^^^^^^^
->await import('./test') : typeof import("test")
->                       : ^^^^^^^^^^^^^^^^^^^^^
->import('./test') : Promise<typeof import("test")>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>req : typeof import("./test")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>await import('./test') : typeof import("./test")
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>import('./test') : Promise<typeof import("./test")>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./test' : "./test"
 >         : ^^^^^^^^
     }
@@ -49,12 +49,12 @@ export const obj = {
 >                                                                      : ^^^^^^^^^^^^^^^^^^^
 
         const req = await import('./test') // THREE
->req : typeof import("test")
->    : ^^^^^^^^^^^^^^^^^^^^^
->await import('./test') : typeof import("test")
->                       : ^^^^^^^^^^^^^^^^^^^^^
->import('./test') : Promise<typeof import("test")>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>req : typeof import("./test")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>await import('./test') : typeof import("./test")
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>import('./test') : Promise<typeof import("./test")>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./test' : "./test"
 >         : ^^^^^^^^
     }
@@ -77,12 +77,12 @@ export class cl2 {
 >                                                                             : ^^^^^^^^^^^^^^^^^^^
 
             const req = await import('./test') // FOUR
->req : typeof import("test")
->    : ^^^^^^^^^^^^^^^^^^^^^
->await import('./test') : typeof import("test")
->                       : ^^^^^^^^^^^^^^^^^^^^^
->import('./test') : Promise<typeof import("test")>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>req : typeof import("./test")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>await import('./test') : typeof import("./test")
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>import('./test') : Promise<typeof import("./test")>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./test' : "./test"
 >         : ^^^^^^^^
         }
@@ -96,12 +96,12 @@ export const l = async () => {
 >                                                             : ^^^^^^^^^^^^^^^^^^^
 
     const req = await import('./test') // FIVE
->req : typeof import("test")
->    : ^^^^^^^^^^^^^^^^^^^^^
->await import('./test') : typeof import("test")
->                       : ^^^^^^^^^^^^^^^^^^^^^
->import('./test') : Promise<typeof import("test")>
->                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>req : typeof import("./test")
+>    : ^^^^^^^^^^^^^^^^^^^^^^^
+>await import('./test') : typeof import("./test")
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^
+>import('./test') : Promise<typeof import("./test")>
+>                 : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >'./test' : "./test"
 >         : ^^^^^^^^
 }

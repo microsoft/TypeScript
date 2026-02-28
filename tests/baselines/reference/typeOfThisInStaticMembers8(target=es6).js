@@ -21,6 +21,7 @@ class C {
 
 
 //// [typeOfThisInStaticMembers8.js]
+"use strict";
 var _a;
 class C {
 }

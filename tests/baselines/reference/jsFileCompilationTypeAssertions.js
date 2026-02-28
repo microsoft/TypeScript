@@ -6,6 +6,7 @@ var v = <string>undefined;
 
 
 //// [a.js]
+"use strict";
 0;
 var v = <string>undefined;
 </>;

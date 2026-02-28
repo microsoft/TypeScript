@@ -8,6 +8,7 @@ enum E {
 
 
 //// [underscoreEscapedNameInEnum.js]
+"use strict";
 var E;
 (function (E) {
     E[E["__foo"] = 1] = "__foo";

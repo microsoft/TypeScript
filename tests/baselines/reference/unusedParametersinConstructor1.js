@@ -7,8 +7,8 @@ class greeter {
 }
 
 //// [unusedParametersinConstructor1.js]
-var greeter = /** @class */ (function () {
-    function greeter(param1) {
+"use strict";
+class greeter {
+    constructor(param1) {
     }
-    return greeter;
-}());
+}

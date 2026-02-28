@@ -51,6 +51,7 @@
 })();
 
 //// [emptyVariableDeclarationBindingPatterns01_ES6.js]
+"use strict";
 (function () {
     var a;
     var {} = a;

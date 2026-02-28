@@ -1,3 +1,4 @@
+// @target: es2015
 var x1: this;
 var x2: { a: this };
 var x3: this[];

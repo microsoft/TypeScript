@@ -7,6 +7,7 @@ var x = foo('foo');
 
 
 //// [functionOverloads9.js]
+"use strict";
 function foo(foo) { return ''; }
 ;
 var x = foo('foo');

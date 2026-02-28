@@ -1,3 +1,4 @@
+// @target: es2015
 class Red extends Color {
     public shade() { 
     	var getHue = () => { return this.hue(); };

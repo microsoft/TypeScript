@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 // @Filename: file.ts
 ////export var x = 10;
 ////export var y = 10;

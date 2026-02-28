@@ -1,0 +1,14 @@
+test.ts(4,12): error TS2564: Property 'event' has no initializer and is not definitely assigned in the constructor.
+
+
+==== event.ts (0 errors) ====
+    export interface Event { title: string };
+    
+==== test.ts (1 errors) ====
+    import { Event } from './event';
+    function Input(target: any, key: string): void { }
+    export class SomeClass {
+        @Input event: Event;
+               ~~~~~
+!!! error TS2564: Property 'event' has no initializer and is not definitely assigned in the constructor.
+    }

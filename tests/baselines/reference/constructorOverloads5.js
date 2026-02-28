@@ -21,3 +21,4 @@
 
 
 //// [constructorOverloads5.js]
+"use strict";

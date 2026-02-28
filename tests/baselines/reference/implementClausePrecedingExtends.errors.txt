@@ -1,8 +1,11 @@
+implementClausePrecedingExtends.ts(1,11): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
 implementClausePrecedingExtends.ts(2,22): error TS1173: 'extends' clause must precede 'implements' clause.
 
 
-==== implementClausePrecedingExtends.ts (1 errors) ====
+==== implementClausePrecedingExtends.ts (2 errors) ====
     class C { foo: number }
+              ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     class D implements C extends C { }
                          ~~~~~~~
 !!! error TS1173: 'extends' clause must precede 'implements' clause.

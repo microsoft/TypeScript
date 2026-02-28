@@ -1,3 +1,4 @@
+// @target: es2015
 interface Square {
     kind: "square";
     size: number;

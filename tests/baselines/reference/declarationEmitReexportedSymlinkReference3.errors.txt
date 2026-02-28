@@ -1,4 +1,4 @@
-monorepo/pkg3/src/keys.ts(3,14): error TS2742: The inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
+monorepo/pkg3/src/keys.ts(3,14): error TS2883: The inferred type of 'ADMIN' cannot be named without a reference to 'IdType' from '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
 
 
 ==== monorepo/pkg3/tsconfig.json (0 errors) ====
@@ -21,7 +21,7 @@ monorepo/pkg3/src/keys.ts(3,14): error TS2742: The inferred type of 'ADMIN' cann
     
     export const ADMIN = MetadataAccessor.create<boolean>('1');
                  ~~~~~
-!!! error TS2742: The inferred type of 'ADMIN' cannot be named without a reference to '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
+!!! error TS2883: The inferred type of 'ADMIN' cannot be named without a reference to 'IdType' from '../../pkg2/node_modules/@raymondfeng/pkg1/dist'. This is likely not portable. A type annotation is necessary.
 ==== monorepo/pkg1/dist/index.d.ts (0 errors) ====
     export * from './types';
 ==== monorepo/pkg1/dist/types.d.ts (0 errors) ====

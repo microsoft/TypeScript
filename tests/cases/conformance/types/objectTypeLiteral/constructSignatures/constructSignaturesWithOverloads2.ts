@@ -1,3 +1,4 @@
+// @target: es2015
 // No errors expected for basic overloads of construct signatures with merged declarations
 
 // clodules

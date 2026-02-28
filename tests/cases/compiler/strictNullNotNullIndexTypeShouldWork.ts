@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 // @strictPropertyInitialization: false
 interface A {

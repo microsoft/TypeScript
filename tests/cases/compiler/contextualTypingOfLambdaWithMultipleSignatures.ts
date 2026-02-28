@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 interface Foo {
     getFoo(n: number): void;

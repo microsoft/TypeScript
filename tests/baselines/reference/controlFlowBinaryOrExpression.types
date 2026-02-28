@@ -75,11 +75,13 @@ declare function isNodeList(sourceObj: any): sourceObj is NodeList;
 >isNodeList : (sourceObj: any) => sourceObj is NodeList
 >           : ^         ^^   ^^^^^                     
 >sourceObj : any
+>          : ^^^
 
 declare function isHTMLCollection(sourceObj: any): sourceObj is HTMLCollection;
 >isHTMLCollection : (sourceObj: any) => sourceObj is HTMLCollection
 >                 : ^         ^^   ^^^^^                           
 >sourceObj : any
+>          : ^^^
 
 type EventTargetLike = {a: string} | HTMLCollection | NodeList;
 >EventTargetLike : EventTargetLike
@@ -91,6 +93,7 @@ var sourceObj: EventTargetLike = <any>undefined;
 >sourceObj : EventTargetLike
 >          : ^^^^^^^^^^^^^^^
 ><any>undefined : any
+>               : ^^^
 >undefined : undefined
 >          : ^^^^^^^^^
 

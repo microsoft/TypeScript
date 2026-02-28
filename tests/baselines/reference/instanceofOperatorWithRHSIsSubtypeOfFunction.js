@@ -17,6 +17,7 @@ var r5 = x instanceof null;
 var r6 = x instanceof undefined;
 
 //// [instanceofOperatorWithRHSIsSubtypeOfFunction.js]
+"use strict";
 var x;
 var f1;
 var f2;

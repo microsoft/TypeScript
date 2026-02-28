@@ -15,3 +15,4 @@ interface C {
 }
 
 //// [recursiveTypeIdentity.js]
+"use strict";

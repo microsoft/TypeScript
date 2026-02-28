@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 type ExtendedService<T> = {
     [K in keyof T]: T[K] & {

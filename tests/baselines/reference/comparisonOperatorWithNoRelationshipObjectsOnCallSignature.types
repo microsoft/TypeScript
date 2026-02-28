@@ -95,16 +95,16 @@ declare var a5: { fn(a?: Base): void };
 >   : ^^^^^ ^^^    ^^^    ^^^
 >fn : (a?: Base) => void
 >   : ^ ^^^    ^^^^^    
->a : Base
->  : ^^^^
+>a : Base | undefined
+>  : ^^^^^^^^^^^^^^^^
 
 declare var b5: { fn(a?: C): void };
 >b5 : { fn(a?: C): void; }
 >   : ^^^^^ ^^^ ^^^    ^^^
 >fn : (a?: C) => void
 >   : ^ ^^^ ^^^^^    
->a : C
->  : ^
+>a : C | undefined
+>  : ^^^^^^^^^^^^^
 
 declare var a6: { fn(...a: Base[]): void };
 >a6 : { fn(...a: Base[]): void; }

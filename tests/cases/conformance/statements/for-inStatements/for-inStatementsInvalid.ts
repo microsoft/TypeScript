@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 var aNumber: number;
 for (aNumber in {}) { }

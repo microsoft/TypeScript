@@ -7,6 +7,7 @@
 `
 
 //// [templateStringMultiline2_ES6.js]
+"use strict";
 // newlines are <LF>
 `
 \

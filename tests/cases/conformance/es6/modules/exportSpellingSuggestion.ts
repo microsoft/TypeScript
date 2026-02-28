@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 // @filename: a.ts
 export function assertNever(x: never, msg: string) {
     throw new Error("Unexpected " + msg);

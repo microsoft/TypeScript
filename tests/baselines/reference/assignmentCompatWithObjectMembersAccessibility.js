@@ -112,26 +112,18 @@ namespace TargetIsPublic {
 }
 
 //// [assignmentCompatWithObjectMembersAccessibility.js]
+"use strict";
 // members N and M of types S and T have the same name, same accessibility, same optionality, and N is assignable M
 var TargetIsPublic;
 (function (TargetIsPublic) {
     // targets
-    var Base = /** @class */ (function () {
-        function Base() {
-        }
-        return Base;
-    }());
+    class Base {
+    }
     // sources
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
-    var E = /** @class */ (function () {
-        function E() {
-        }
-        return E;
-    }());
+    class D {
+    }
+    class E {
+    }
     a = b;
     a = i;
     a = d;
@@ -156,22 +148,13 @@ var TargetIsPublic;
 })(TargetIsPublic || (TargetIsPublic = {}));
 (function (TargetIsPublic) {
     // targets
-    var Base = /** @class */ (function () {
-        function Base() {
-        }
-        return Base;
-    }());
+    class Base {
+    }
     // sources
-    var D = /** @class */ (function () {
-        function D() {
-        }
-        return D;
-    }());
-    var E = /** @class */ (function () {
-        function E() {
-        }
-        return E;
-    }());
+    class D {
+    }
+    class E {
+    }
     a = b; // error
     a = i; // error
     a = d;

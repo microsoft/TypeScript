@@ -11,12 +11,8 @@ foo('foo', 'bar', 3);
 
 
 //// [functionCall16.js]
-function foo(a, b) {
-    var c = [];
-    for (var _i = 2; _i < arguments.length; _i++) {
-        c[_i - 2] = arguments[_i];
-    }
-}
+"use strict";
+function foo(a, b, ...c) { }
 foo('foo', 1);
 foo('foo');
 foo('foo', 'bar');

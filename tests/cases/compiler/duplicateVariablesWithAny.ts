@@ -1,3 +1,4 @@
+// @target: es2015
 // They should have to be the same even when one of the types is 'any'
 var x: any;
 var x = 2; //error

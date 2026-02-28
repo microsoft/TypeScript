@@ -93,38 +93,32 @@ foo2('foo', ['bar']); // error
 foo3('foo', ['bar']); // error
 foo4('foo', { x: 'bar' }); // error
 foo5('foo', { x: 'bar' }); // error
-doSomething(new Animal(), function () { return new Animal(); }); // ok
-doSomething(new Animal(), function () { return new Dog(); }); // ok
-doSomething(new Dog(), function () { return new Animal(); }); // error
+doSomething(new Animal(), () => new Animal()); // ok
+doSomething(new Animal(), () => new Dog()); // ok
+doSomething(new Dog(), () => new Animal()); // error
 assertEqual({ x: 1 }, { x: 3 }); // ok
-var g = { x: 3, y: 2 };
+const g = { x: 3, y: 2 };
 assertEqual(g, { x: 3 }); // error
 invoke(test, { x: 1, y: 2 }); // error
 test({ x: 1, y: 2 }); // error
 doWork(comp, { foo: 42 }); // ok
 doWork(comp, {}); // error
-var mutate1 = mutate(function (a, b) { return b; });
-var OkClass = /** @class */ (function () {
-    function OkClass(clazz, _value) {
+const mutate1 = mutate((a, b) => b);
+class OkClass {
+    constructor(clazz, _value) {
         this.clazz = clazz;
         this._value = _value;
     }
-    Object.defineProperty(OkClass.prototype, "value", {
-        get: function () {
-            return this._value; // ok
-        },
-        enumerable: false,
-        configurable: true
-    });
-    return OkClass;
-}());
-var OkClass2 = /** @class */ (function () {
-    function OkClass2(clazz, _value) {
+    get value() {
+        return this._value; // ok
+    }
+}
+class OkClass2 {
+    constructor(clazz, _value) {
         this.clazz = clazz;
         this._value = _value;
     }
-    return OkClass2;
-}());
+}
 
 
 //// [noInfer.d.ts]

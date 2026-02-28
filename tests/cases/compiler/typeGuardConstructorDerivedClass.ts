@@ -1,3 +1,4 @@
+// @target: es2015
 // Derived class with different structures
 class C1 {
     property1!: number;

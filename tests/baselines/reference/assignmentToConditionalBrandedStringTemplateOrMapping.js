@@ -13,9 +13,10 @@ c = d;
 
 
 //// [assignmentToConditionalBrandedStringTemplateOrMapping.js]
-var a = null;
-var b = null;
+"use strict";
+let a = null;
+let b = null;
 a = b;
-var c = null;
-var d = null;
+let c = null;
+let d = null;
 c = d;

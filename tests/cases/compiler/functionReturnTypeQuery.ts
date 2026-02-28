@@ -1,3 +1,4 @@
+// @target: es2015
 declare let foo: number;
 
 declare function test1(foo: string, bar: typeof foo): typeof foo;

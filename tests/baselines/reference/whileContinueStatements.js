@@ -56,6 +56,7 @@ while (true) {
 
 
 //// [whileContinueStatements.js]
+"use strict";
 while (true) {
     continue;
 }

@@ -15,7 +15,7 @@ c.chunk;
 const D = require("./mod1");
 >D : Symbol(D, Decl(use.js, 6, 5))
 >require : Symbol(require, Decl(types.d.ts, 0, 0))
->"./mod1" : Symbol("mod1", Decl(mod1.js, 0, 0))
+>"./mod1" : Symbol("./mod1", Decl(mod1.js, 0, 0))
 
 /** @type {D} */
 var d;

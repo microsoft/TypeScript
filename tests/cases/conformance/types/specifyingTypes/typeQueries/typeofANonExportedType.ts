@@ -1,3 +1,5 @@
+// @module: commonjs
+// @target: es2015
 var x = 1;
 export var r1: typeof x;
 var y = { foo: '' };

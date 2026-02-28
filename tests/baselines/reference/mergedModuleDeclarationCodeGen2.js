@@ -11,6 +11,7 @@ namespace my.data {
 }
 
 //// [mergedModuleDeclarationCodeGen2.js]
+"use strict";
 var my;
 (function (my) {
     var data;

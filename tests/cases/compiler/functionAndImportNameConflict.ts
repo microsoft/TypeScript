@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @filename: f1.ts
 export function f() {

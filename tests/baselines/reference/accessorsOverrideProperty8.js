@@ -35,6 +35,7 @@ const value = mine.x;
 
 
 //// [accessorsOverrideProperty8.js]
+"use strict";
 const Base = classWithProperties({
     get x() { return 'boolean'; },
     y: 'string',

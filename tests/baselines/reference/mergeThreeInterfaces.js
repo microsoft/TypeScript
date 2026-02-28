@@ -81,6 +81,7 @@ namespace M {
 }
 
 //// [mergeThreeInterfaces.js]
+"use strict";
 // interfaces with the same root module should merge
 var a;
 var r1 = a.foo;

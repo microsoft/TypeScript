@@ -3,8 +3,8 @@
 === tile1.ts ===
 interface Lifecycle<Attrs, State> {
 	oninit?(vnode: Vnode<Attrs, State>): number;
->oninit : (vnode: Vnode<Attrs, State>) => number
->       : ^     ^^                   ^^^^^      
+>oninit : ((vnode: Vnode<Attrs, State>) => number) | undefined
+>       : ^^     ^^                   ^^^^^      ^^^^^^^^^^^^^
 >vnode : Vnode<Attrs, State>
 >      : ^^^^^^^^^^^^^^^^^^^
 
@@ -31,8 +31,8 @@ interface Component<Attrs, State> {
 
 interface ClassComponent<A> extends Lifecycle<A, ClassComponent<A>> {
 	oninit?(vnode: Vnode<A, this>): number;
->oninit : (vnode: Vnode<A, this>) => number
->       : ^     ^^              ^^^^^      
+>oninit : ((vnode: Vnode<A, this>) => number) | undefined
+>       : ^^     ^^              ^^^^^      ^^^^^^^^^^^^^
 >vnode : Vnode<A, this>
 >      : ^^^^^^^^^^^^^^
 

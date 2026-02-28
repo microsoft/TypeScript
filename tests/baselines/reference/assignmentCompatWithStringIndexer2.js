@@ -56,6 +56,7 @@ namespace Generics {
 }
 
 //// [assignmentCompatWithStringIndexer2.js]
+"use strict";
 // index signatures must be compatible in assignments
 a = b; // ok
 b = a; // error

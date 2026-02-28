@@ -1,5 +1,8 @@
 //// [tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts] ////
 
+=== Performance Stats ===
+Type Count: 100 -> 1,000
+
 === excessPropertyCheckWithEmptyObject.ts ===
 // Repro from #14910
 
@@ -29,8 +32,8 @@ Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false });
 >      : ^^^^^
 
 interface A { x?: string }
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 // Excess property error expected here
 let a: A & ThisType<any> = { y: 10 };

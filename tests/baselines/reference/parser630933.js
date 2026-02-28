@@ -6,5 +6,6 @@ var b = a.match(/\/ver=([^/]+)/);
 
 
 //// [parser630933.js]
+"use strict";
 var a = "Hello";
 var b = a.match(/\/ver=([^/]+)/);

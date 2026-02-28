@@ -18,6 +18,7 @@ declare namespace JSX {
 
 
 //// [file.jsx]
+"use strict";
 // Error
 <test1 data-foo={32}/>;
 // OK

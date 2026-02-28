@@ -6,8 +6,8 @@ exports.n = {};
 >               : ^^^^^^^^
 >exports.n : typeof n
 >          : ^^^^^^^^
->exports : typeof import("mod")
->        : ^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./mod")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >n : typeof n
 >  : ^^^^^^^^
 >{} : {}
@@ -20,8 +20,8 @@ exports.n.K = function () {
 >            : ^^^^^^^^
 >exports.n : typeof n
 >          : ^^^^^^^^
->exports : typeof import("mod")
->        : ^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./mod")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >n : typeof n
 >  : ^^^^^^^^
 >K : typeof K
@@ -45,8 +45,8 @@ exports.Classic = class {
 >                                                                     : ^^^^^^^^^^^^^^
 >exports.Classic : typeof Classic
 >                : ^^^^^^^^^^^^^^
->exports : typeof import("mod")
->        : ^^^^^^^^^^^^^^^^^^^^
+>exports : typeof import("./mod")
+>        : ^^^^^^^^^^^^^^^^^^^^^^
 >Classic : typeof Classic
 >        : ^^^^^^^^^^^^^^
 >class {    constructor() {        this.p = 1    }} : typeof Classic

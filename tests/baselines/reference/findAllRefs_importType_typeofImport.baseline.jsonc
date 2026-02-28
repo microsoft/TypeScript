@@ -14,7 +14,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "const",
-    "name": "const x: typeof import(\"/a\")",
+    "name": "const x: typeof import(\"./a\")",
     "displayParts": [
      {
       "text": "const",
@@ -53,7 +53,7 @@
       "kind": "punctuation"
      },
      {
-      "text": "\"/a\"",
+      "text": "\"./a\"",
       "kind": "stringLiteral"
      },
      {
@@ -81,7 +81,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/a\"",
+    "name": "module \"./a\"",
     "displayParts": [
      {
       "text": "module",
@@ -92,7 +92,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/a\"",
+      "text": "\"./a\"",
       "kind": "stringLiteral"
      }
     ]
@@ -117,7 +117,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "const",
-    "name": "const y: typeof import(\"/a\")",
+    "name": "const y: typeof import(\"./a\")",
     "displayParts": [
      {
       "text": "const",
@@ -156,7 +156,7 @@
       "kind": "punctuation"
      },
      {
-      "text": "\"/a\"",
+      "text": "\"./a\"",
       "kind": "stringLiteral"
      },
      {
@@ -184,7 +184,7 @@
     "containerKind": "",
     "containerName": "",
     "kind": "module",
-    "name": "module \"/a\"",
+    "name": "module \"./a\"",
     "displayParts": [
      {
       "text": "module",
@@ -195,7 +195,7 @@
       "kind": "space"
      },
      {
-      "text": "\"/a\"",
+      "text": "\"./a\"",
       "kind": "stringLiteral"
      }
     ]

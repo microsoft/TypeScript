@@ -5,5 +5,6 @@ var tt = { aa; }
 var x = tt;
 
 //// [incompleteObjectLiteral1.js]
-var tt = { aa: aa };
+"use strict";
+var tt = { aa };
 var x = tt;

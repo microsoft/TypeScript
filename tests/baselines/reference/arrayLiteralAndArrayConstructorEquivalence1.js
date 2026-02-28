@@ -16,6 +16,7 @@ myCars3 = myCars5;
 
 
 //// [arrayLiteralAndArrayConstructorEquivalence1.js]
+"use strict";
 var myCars = new Array();
 var myCars3 = new Array({});
 myCars = myCars3;

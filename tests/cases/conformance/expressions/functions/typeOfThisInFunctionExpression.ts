@@ -1,3 +1,4 @@
+// @target: es2015
 // type of 'this' in FunctionExpression is Any
 
 function fn() {

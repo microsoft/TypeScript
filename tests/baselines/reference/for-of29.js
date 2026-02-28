@@ -9,4 +9,5 @@ for (var v of iterableWithOptionalIterator) { }
 
 
 //// [for-of29.js]
+"use strict";
 for (var v of iterableWithOptionalIterator) { }

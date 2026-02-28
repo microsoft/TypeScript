@@ -12,6 +12,7 @@ namespace __test2__ {
 __test2__.__val__x4 = __test1__.__val__obj4
 
 //// [assignmentCompatability10.js]
+"use strict";
 var __test1__;
 (function (__test1__) {
     ;
@@ -21,13 +22,12 @@ var __test1__;
 })(__test1__ || (__test1__ = {}));
 var __test2__;
 (function (__test2__) {
-    var classWithPublicAndOptional = /** @class */ (function () {
-        function classWithPublicAndOptional(one, two) {
+    class classWithPublicAndOptional {
+        constructor(one, two) {
             this.one = one;
             this.two = two;
         }
-        return classWithPublicAndOptional;
-    }());
+    }
     __test2__.classWithPublicAndOptional = classWithPublicAndOptional;
     var x4 = new classWithPublicAndOptional(1);
     ;

@@ -1,3 +1,4 @@
+// @target: es2015
 // @noEmit: true
 
 // GH #38175 -- should not crash while checking

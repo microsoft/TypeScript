@@ -9,6 +9,7 @@ foo('foo', 1, 'bar');
 foo();
 
 //// [functionCall9.js]
+"use strict";
 function foo(a, b) { }
 ;
 foo('foo', 1);

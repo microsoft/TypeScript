@@ -9,8 +9,8 @@ const {
 >     : ^^
 
 } = require('./mod1');
->require('./mod1') : typeof import("mod1")
->                  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require('./mod1') : typeof import("./mod1")
+>                  : ^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >        : ^^^
 >'./mod1' : "./mod1"

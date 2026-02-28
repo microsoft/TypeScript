@@ -26,7 +26,8 @@ foo.push({
 });
 
 //// [partialDiscriminatedUnionMemberHasGoodError.js]
-var foo = [];
+"use strict";
+const foo = [];
 foo.push({
     types: [{
             type: "A"

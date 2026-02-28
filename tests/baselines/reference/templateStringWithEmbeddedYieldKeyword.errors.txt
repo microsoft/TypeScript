@@ -1,11 +1,14 @@
 templateStringWithEmbeddedYieldKeyword.ts(1,15): error TS1005: '(' expected.
+templateStringWithEmbeddedYieldKeyword.ts(3,20): error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
 
 
-==== templateStringWithEmbeddedYieldKeyword.ts (1 errors) ====
+==== templateStringWithEmbeddedYieldKeyword.ts (2 errors) ====
     function* gen {
                   ~
 !!! error TS1005: '(' expected.
         // Once this is supported, yield *must* be parenthesized.
         var x = `abc${ yield 10 }def`;
+                       ~~~~~
+!!! error TS7057: 'yield' expression implicitly results in an 'any' type because its containing generator lacks a return-type annotation.
     }
     

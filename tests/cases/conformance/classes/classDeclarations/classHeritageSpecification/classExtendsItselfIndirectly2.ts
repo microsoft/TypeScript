@@ -1,3 +1,4 @@
+// @target: es2015
 class C extends N.E { foo: string; } // error
 
 namespace M {

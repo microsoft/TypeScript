@@ -1,3 +1,5 @@
+// @target: es2015
+// @module: commonjs
 // @filename: input.ts
 export = exports;
 declare class exports {

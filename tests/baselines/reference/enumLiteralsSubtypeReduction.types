@@ -4105,8 +4105,8 @@ enum E {
 >      : ^^^^^^^
 }
 function run(a: number) {
->run : (a: number) => E[]
->    : ^ ^^      ^^^^^^^^
+>run : (a: number) => E[] | undefined
+>    : ^ ^^      ^^^^^^^^^^^^^^^^^^^^
 >a : number
 >  : ^^^^^^
 

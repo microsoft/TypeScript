@@ -10,12 +10,10 @@ let x = (new C).foo();
 
 
 //// [classExpression4.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.foo = function () {
+"use strict";
+let C = class {
+    foo() {
         return new C();
-    };
-    return C;
-}());
-var x = (new C).foo();
+    }
+};
+let x = (new C).foo();

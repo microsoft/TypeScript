@@ -10,3 +10,4 @@ declare class Enumerator {
 
 
 //// [parserClassDeclaration17.js]
+"use strict";

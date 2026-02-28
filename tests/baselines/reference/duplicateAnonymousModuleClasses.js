@@ -59,54 +59,37 @@ namespace Gar {
 
 
 //// [duplicateAnonymousModuleClasses.js]
+"use strict";
 var F;
 (function (F) {
-    var Helper = /** @class */ (function () {
-        function Helper() {
-        }
-        return Helper;
-    }());
+    class Helper {
+    }
 })(F || (F = {}));
 (function (F) {
     // Should not be an error
-    var Helper = /** @class */ (function () {
-        function Helper() {
-        }
-        return Helper;
-    }());
+    class Helper {
+    }
 })(F || (F = {}));
 var Foo;
 (function (Foo) {
-    var Helper = /** @class */ (function () {
-        function Helper() {
-        }
-        return Helper;
-    }());
+    class Helper {
+    }
 })(Foo || (Foo = {}));
 (function (Foo) {
     // Should not be an error
-    var Helper = /** @class */ (function () {
-        function Helper() {
-        }
-        return Helper;
-    }());
+    class Helper {
+    }
 })(Foo || (Foo = {}));
 var Gar;
 (function (Gar) {
-    var Foo;
+    let Foo;
     (function (Foo) {
-        var Helper = /** @class */ (function () {
-            function Helper() {
-            }
-            return Helper;
-        }());
+        class Helper {
+        }
     })(Foo || (Foo = {}));
     (function (Foo) {
         // Should not be an error
-        var Helper = /** @class */ (function () {
-            function Helper() {
-            }
-            return Helper;
-        }());
+        class Helper {
+        }
     })(Foo || (Foo = {}));
 })(Gar || (Gar = {}));

@@ -25,6 +25,6 @@ define(["require", "exports", "./other.js"], function (require, exports, other_j
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.x = void 0;
     other_js_1 = __importDefault(other_js_1);
-    var x = 10 + other_js_1.default;
+    const x = 10 + other_js_1.default;
     exports.x = x;
 });

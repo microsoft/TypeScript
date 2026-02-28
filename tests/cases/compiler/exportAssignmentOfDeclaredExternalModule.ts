@@ -1,3 +1,4 @@
+// @target: es2015
 // @module: commonjs
 // @Filename: exportAssignmentOfDeclaredExternalModule_0.ts
 interface Sammy {

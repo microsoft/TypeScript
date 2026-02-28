@@ -1,0 +1,27 @@
+mutuallyRecursiveInference.ts(2,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+mutuallyRecursiveInference.ts(9,5): error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+mutuallyRecursiveInference.ts(10,5): error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+
+
+==== mutuallyRecursiveInference.ts (3 errors) ====
+    class T<A> {
+        a: A;
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        b: any
+    }
+    class L<RT extends { a: 'a' | 'b', b: any }> extends T<RT[RT['a']]> {
+        m() { this.a }
+    }
+    class X extends L<X> {
+        a: 'a' | 'b'
+        ~
+!!! error TS2564: Property 'a' has no initializer and is not definitely assigned in the constructor.
+        b: number
+        ~
+!!! error TS2564: Property 'b' has no initializer and is not definitely assigned in the constructor.
+        m2() {
+            this.a
+        }
+    }
+    

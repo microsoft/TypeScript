@@ -17,6 +17,7 @@ var a = Object.create(<object>{}, {});
 
 
 //// [objectCreate2.js]
+"use strict";
 var n = Object.create(null); // any
 var t = Object.create({ a: 1, b: "" }); // {a: number, b: string }
 var u = Object.create(union); // {a: number, b: string }

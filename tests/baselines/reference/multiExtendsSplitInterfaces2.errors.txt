@@ -1,0 +1,37 @@
+multiExtendsSplitInterfaces2.ts(19,9): error TS2454: Variable 'i' is used before being assigned.
+multiExtendsSplitInterfaces2.ts(20,10): error TS2454: Variable 'i' is used before being assigned.
+multiExtendsSplitInterfaces2.ts(21,9): error TS2454: Variable 'i' is used before being assigned.
+multiExtendsSplitInterfaces2.ts(22,10): error TS2454: Variable 'i' is used before being assigned.
+
+
+==== multiExtendsSplitInterfaces2.ts (4 errors) ====
+    interface A {
+    	a: number;
+    }
+    
+    interface I extends A {
+    	i1: number;
+    }
+    
+    interface B {
+    	b: number;
+    }
+    
+    interface I extends B {
+    	i2: number;
+    }
+    
+    var i: I;
+    
+    var a = i.a;
+            ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var i1 = i.i1;
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var b = i.b;
+            ~
+!!! error TS2454: Variable 'i' is used before being assigned.
+    var i2 = i.i2;
+             ~
+!!! error TS2454: Variable 'i' is used before being assigned.

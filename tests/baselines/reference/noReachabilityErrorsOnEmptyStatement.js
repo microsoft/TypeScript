@@ -6,6 +6,7 @@ function foo() {
 }
 
 //// [noReachabilityErrorsOnEmptyStatement.js]
+"use strict";
 function foo() {
     return 1;
     ;

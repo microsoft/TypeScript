@@ -40,7 +40,11 @@ ts.JsTyping.discoverTypings::
       },
       "unresolvedImports": [],
       "typesRegistry": {},
-      "compilerOptions": {}
+      "compilerOptions": {
+        "types": [
+          "*"
+        ]
+      }
     }
 TI:: [hh:mm:ss:mss] Searching for typing names in /home/src/projects/project/node_modules; all files: ["/home/src/projects/project/node_modules/a/package.json"]
 TI:: [hh:mm:ss:mss]     Found package names: ["a"]

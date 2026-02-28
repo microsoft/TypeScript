@@ -12,8 +12,8 @@ a() ? (b: number, c?: string): void => d() : e; // Not legal JS; "Unexpected tok
 >                                     : ^ ^^      ^^ ^^^      ^^^^^    
 >b : number
 >  : ^^^^^^
->c : string
->  : ^^^^^^
+>c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >d() : any
 >    : ^^^
 >d : any
@@ -33,8 +33,8 @@ a() ? (b: number, c?: string): void => d() : e;
 >                                     : ^ ^^      ^^ ^^^      ^^^^^    
 >b : number
 >  : ^^^^^^
->c : string
->  : ^^^^^^
+>c : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 >d() : any
 >    : ^^^
 >d : any

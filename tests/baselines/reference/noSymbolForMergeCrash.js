@@ -9,4 +9,6 @@ type A = {}
 
 
 //// [initial.js]
+"use strict";
 //// [final.js]
+"use strict";

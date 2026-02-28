@@ -1,6 +1,7 @@
+// @module: commonjs
+// @target: es5, es2015
 // @allowJs: true
 // @checkJs: true
-// @target: es5
 // @lib: es6
 // @outDir: ./out
 // @declaration: true

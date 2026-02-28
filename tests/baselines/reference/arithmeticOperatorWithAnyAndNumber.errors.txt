@@ -1,0 +1,255 @@
+arithmeticOperatorWithAnyAndNumber.ts(6,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(10,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(11,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(12,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(12,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(16,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(20,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(21,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(22,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(22,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(26,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(30,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(31,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(32,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(32,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(36,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(40,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(41,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(42,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(42,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(46,16): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(50,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(51,16): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(52,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(52,16): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(56,16): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(60,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(61,16): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(62,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(62,16): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(66,17): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(70,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(71,17): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(72,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(72,17): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(76,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(80,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(81,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(82,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(82,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(86,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(90,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(91,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(92,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(92,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(96,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(100,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(101,15): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(102,11): error TS2454: Variable 'b' is used before being assigned.
+arithmeticOperatorWithAnyAndNumber.ts(102,15): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== arithmeticOperatorWithAnyAndNumber.ts (50 errors) ====
+    var a: any;
+    var b: number;
+    
+    // operator *
+    var ra1 = a * a;
+    var ra2 = a * b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var ra3 = a * 0;
+    var ra4 = 0 * a;
+    var ra5 = 0 * 0;
+    var ra6 = b * 0;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var ra7 = 0 * b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var ra8 = b * b;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    // operator /
+    var rb1 = a / a;
+    var rb2 = a / b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rb3 = a / 0;
+    var rb4 = 0 / a;
+    var rb5 = 0 / 0;
+    var rb6 = b / 0;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rb7 = 0 / b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rb8 = b / b;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    // operator %
+    var rc1 = a % a;
+    var rc2 = a % b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rc3 = a % 0;
+    var rc4 = 0 % a;
+    var rc5 = 0 % 0;
+    var rc6 = b % 0;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rc7 = 0 % b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rc8 = b % b;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    // operator -
+    var rd1 = a - a;
+    var rd2 = a - b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rd3 = a - 0;
+    var rd4 = 0 - a;
+    var rd5 = 0 - 0;
+    var rd6 = b - 0;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rd7 = 0 - b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rd8 = b - b;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    // operator <<
+    var re1 = a << a;
+    var re2 = a << b;
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var re3 = a << 0;
+    var re4 = 0 << a;
+    var re5 = 0 << 0;
+    var re6 = b << 0;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var re7 = 0 << b;
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var re8 = b << b;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    // operator >>
+    var rf1 = a >> a;
+    var rf2 = a >> b;
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rf3 = a >> 0;
+    var rf4 = 0 >> a;
+    var rf5 = 0 >> 0;
+    var rf6 = b >> 0;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rf7 = 0 >> b;
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rf8 = b >> b;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                   ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    // operator >>>
+    var rg1 = a >>> a;
+    var rg2 = a >>> b;
+                    ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rg3 = a >>> 0;
+    var rg4 = 0 >>> a;
+    var rg5 = 0 >>> 0;
+    var rg6 = b >>> 0;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rg7 = 0 >>> b;
+                    ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rg8 = b >>> b;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                    ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    // operator &
+    var rh1 = a & a;
+    var rh2 = a & b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rh3 = a & 0;
+    var rh4 = 0 & a;
+    var rh5 = 0 & 0;
+    var rh6 = b & 0;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rh7 = 0 & b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rh8 = b & b;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    // operator ^
+    var ri1 = a ^ a;
+    var ri2 = a ^ b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var ri3 = a ^ 0;
+    var ri4 = 0 ^ a;
+    var ri5 = 0 ^ 0;
+    var ri6 = b ^ 0;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var ri7 = 0 ^ b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var ri8 = b ^ b;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    
+    // operator |
+    var rj1 = a | a;
+    var rj2 = a | b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rj3 = a | 0;
+    var rj4 = 0 | a;
+    var rj5 = 0 | 0;
+    var rj6 = b | 0;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rj7 = 0 | b;
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    var rj8 = b | b;
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+                  ~
+!!! error TS2454: Variable 'b' is used before being assigned.

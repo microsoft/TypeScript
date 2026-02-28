@@ -1,3 +1,4 @@
+// @target: es2015
 // Checking basic subtype relations with construct signatures
 
 namespace ConstructSignature {

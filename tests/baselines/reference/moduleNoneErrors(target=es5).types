@@ -1,0 +1,12 @@
+//// [tests/cases/compiler/moduleNoneErrors.ts] ////
+
+=== a.ts ===
+export class Foo {
+>Foo : Foo
+>    : ^^^
+
+    foo: string;
+>foo : string
+>    : ^^^^^^
+}
+

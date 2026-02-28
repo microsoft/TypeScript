@@ -1,3 +1,4 @@
+// @target: es2015
 class Food {
     private amount: number;
     constructor(public name: string) {

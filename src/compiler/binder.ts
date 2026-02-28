@@ -82,6 +82,7 @@ import {
     FunctionExpression,
     FunctionLikeDeclaration,
     GetAccessorDeclaration,
+    getAlwaysStrict,
     getAssignedExpandoInitializer,
     getAssignmentDeclarationKind,
     getAssignmentDeclarationPropertyAccessKind,
@@ -108,7 +109,6 @@ import {
     getSourceFileOfNode,
     getSourceTextOfNodeFromSourceFile,
     getSpanOfTokenAtPosition,
-    getStrictOptionValue,
     getSymbolNameForPrivateIdentifier,
     getTextOfIdentifierOrLiteral,
     getThisContainer,
@@ -488,6 +488,7 @@ export const enum ContainerFlags {
     HasLocals = 1 << 5,
     IsInterface = 1 << 6,
     IsObjectLiteralOrClassExpressionMethodOrAccessor = 1 << 7,
+    PropagatesThisKeyword = 1 << 8,
 }
 
 /** @internal */
@@ -617,7 +618,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
     }
 
     function bindInStrictMode(file: SourceFile, opts: CompilerOptions): boolean {
-        if (getStrictOptionValue(opts, "alwaysStrict") && !file.isDeclarationFile) {
+        if (getAlwaysStrict(opts) && !file.isDeclarationFile) {
             // bind in strict mode source files with alwaysStrict option
             return true;
         }
@@ -1055,7 +1056,7 @@ function createBinder(): (file: SourceFile, options: CompilerOptions) => void {
             currentExceptionTarget = saveExceptionTarget;
             activeLabelList = saveActiveLabelList;
             hasExplicitReturn = saveHasExplicitReturn;
-            seenThisKeyword = node.kind === SyntaxKind.ArrowFunction ? saveSeenThisKeyword || seenThisKeyword : saveSeenThisKeyword;
+            seenThisKeyword = containerFlags & ContainerFlags.PropagatesThisKeyword ? saveSeenThisKeyword || seenThisKeyword : saveSeenThisKeyword;
         }
         else if (containerFlags & ContainerFlags.IsInterface) {
             const saveSeenThisKeyword = seenThisKeyword;
@@ -3845,6 +3846,7 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.FunctionDeclaration:
         case SyntaxKind.ClassStaticBlockDeclaration:
             return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+
         case SyntaxKind.MethodSignature:
         case SyntaxKind.CallSignature:
         case SyntaxKind.JSDocSignature:
@@ -3852,15 +3854,17 @@ export function getContainerFlags(node: Node): ContainerFlags {
         case SyntaxKind.FunctionType:
         case SyntaxKind.ConstructSignature:
         case SyntaxKind.ConstructorType:
-            return ContainerFlags.IsContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike;
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.PropagatesThisKeyword;
 
         case SyntaxKind.JSDocImportTag:
             // treat as a container to prevent using an enclosing effective host, ensuring import bindings are scoped correctly
-            return ContainerFlags.IsContainer | ContainerFlags.HasLocals;
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.PropagatesThisKeyword;
 
         case SyntaxKind.FunctionExpression:
-        case SyntaxKind.ArrowFunction:
             return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsFunctionExpression;
+
+        case SyntaxKind.ArrowFunction:
+            return ContainerFlags.IsContainer | ContainerFlags.IsControlFlowContainer | ContainerFlags.HasLocals | ContainerFlags.IsFunctionLike | ContainerFlags.IsFunctionExpression | ContainerFlags.PropagatesThisKeyword;
 
         case SyntaxKind.ModuleBlock:
             return ContainerFlags.IsControlFlowContainer;

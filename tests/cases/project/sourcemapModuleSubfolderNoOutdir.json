@@ -6,5 +6,6 @@
     ],
     "sourceMap": true,
     "declaration": true,
-    "baselineCheck": true
+    "baselineCheck": true,
+    "strict": false
 }

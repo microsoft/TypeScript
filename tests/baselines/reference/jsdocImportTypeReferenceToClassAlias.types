@@ -31,14 +31,14 @@ module.exports.C = C
 function demo(c) {
 >demo : (c: X) => void
 >     : ^ ^^ ^^^^^^^^^
->c : import("mod1").C
->  : ^^^^^^^^^^^^^^^^
+>c : import("./mod1").C
+>  : ^^^^^^^^^^^^^^^^^^
 
     c.s
 >c.s : () => void
 >    : ^^^^^^^^^^
->c : import("mod1").C
->  : ^^^^^^^^^^^^^^^^
+>c : import("./mod1").C
+>  : ^^^^^^^^^^^^^^^^^^
 >s : () => void
 >  : ^^^^^^^^^^
 }

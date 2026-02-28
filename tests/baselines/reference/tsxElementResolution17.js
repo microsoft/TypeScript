@@ -27,6 +27,7 @@ import s2 = require('elements2');
 
 
 //// [file.jsx]
+"use strict";
 //// [consumer.jsx]
 define(["require", "exports", "elements1"], function (require, exports, s1) {
     "use strict";

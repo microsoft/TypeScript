@@ -31,5 +31,6 @@ var a2: {
 }
 
 //// [callSignaturesThatDifferOnlyByReturnType.js]
+"use strict";
 var a;
 var a2;

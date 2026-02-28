@@ -1,3 +1,4 @@
+// @target: es2015
     export namespace CompilerDiagnostics {
         export var debug = false;
         export interface IDiagnosticWriter {

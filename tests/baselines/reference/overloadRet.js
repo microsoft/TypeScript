@@ -13,3 +13,4 @@ interface I {
 }
 
 //// [overloadRet.js]
+"use strict";

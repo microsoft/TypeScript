@@ -1,3 +1,4 @@
+// @target: es2015
 type T1 = "string" | "number" | "boolean";
 type T2 = T1 & ("number" | "boolean"); // "number" | "boolean"
 type T3 = T1 & ("string" | "boolean"); // "string" | "boolean"

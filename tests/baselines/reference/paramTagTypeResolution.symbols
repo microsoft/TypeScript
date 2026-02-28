@@ -4,7 +4,7 @@
 var f = require('./first');
 >f : Symbol(f, Decl(main.js, 0, 3))
 >require : Symbol(require)
->'./first' : Symbol("first", Decl(first.js, 0, 0))
+>'./first' : Symbol("./first", Decl(first.js, 0, 0))
 
 f(1, n => { })
 >f : Symbol(f, Decl(main.js, 0, 3))

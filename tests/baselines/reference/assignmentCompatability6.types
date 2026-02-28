@@ -8,8 +8,8 @@ namespace __test1__ {
     export interface interfaceWithPublicAndOptional<T,U> { one: T; two?: U; };  var obj4: interfaceWithPublicAndOptional<number,string> = { one: 1 };;
 >one : T
 >    : ^
->two : U
->    : ^
+>two : U | undefined
+>    : ^^^^^^^^^^^^^
 >obj4 : interfaceWithPublicAndOptional<number, string>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ one: 1 } : { one: number; }
@@ -30,8 +30,8 @@ namespace __test2__ {
 >          : ^^^^^^^^^^^^^^^^
 
     export          interface interfaceWithOptional<T> { one?: T; };               var obj3: interfaceWithOptional<number> = { };;
->one : T
->    : ^
+>one : T | undefined
+>    : ^^^^^^^^^^^^^
 >obj3 : interfaceWithOptional<number>
 >     : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >{ } : {}

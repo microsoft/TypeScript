@@ -1,3 +1,4 @@
+// @target: es2015
 namespace Keyboard {
   export enum Key { UP, DOWN, LEFT, RIGHT }
 }

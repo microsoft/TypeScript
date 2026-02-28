@@ -6,6 +6,7 @@ var v = {
 }
 
 //// [parserComputedPropertyName41.js]
+"use strict";
 var v = {
     [0 in []]: true
 };

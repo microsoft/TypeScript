@@ -1,3 +1,4 @@
+// @target: es2015
 class X<T> { }
 interface Foo<T> {
     z: Foo<X<T>>; // error

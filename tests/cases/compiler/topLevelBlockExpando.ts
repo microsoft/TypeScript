@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // https://github.com/microsoft/TypeScript/issues/31972
 

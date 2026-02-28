@@ -1,3 +1,4 @@
+// @target: es2015
 // @removeComments: false
 class DebugClass {
     public static debugFunc() {

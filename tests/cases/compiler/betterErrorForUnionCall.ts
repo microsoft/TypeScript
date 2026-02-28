@@ -1,3 +1,4 @@
+// @target: es2015
 declare const union: { a: string } | { b: string }
 union("");
 

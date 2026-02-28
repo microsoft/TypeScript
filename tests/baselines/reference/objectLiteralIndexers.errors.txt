@@ -1,0 +1,30 @@
+objectLiteralIndexers.ts(13,51): error TS2454: Variable 'a' is used before being assigned.
+objectLiteralIndexers.ts(13,57): error TS2454: Variable 'b' is used before being assigned.
+objectLiteralIndexers.ts(14,11): error TS2454: Variable 'b' is used before being assigned.
+objectLiteralIndexers.ts(15,17): error TS2454: Variable 'b' is used before being assigned.
+
+
+==== objectLiteralIndexers.ts (4 errors) ====
+    interface A {
+        x: number;
+    }
+    
+    interface B extends A {
+        y: string;
+    }
+    
+    var a: A;
+    var b: B;
+    var c: any;
+    
+    var o1: { [s: string]: A;[n: number]: B; } = { x: a, 0: b }; // string indexer is A, number indexer is B
+                                                      ~
+!!! error TS2454: Variable 'a' is used before being assigned.
+                                                            ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    o1 = { x: b, 0: c }; // both indexers are any
+              ~
+!!! error TS2454: Variable 'b' is used before being assigned.
+    o1 = { x: c, 0: b }; // string indexer is any, number indexer is B
+                    ~
+!!! error TS2454: Variable 'b' is used before being assigned.

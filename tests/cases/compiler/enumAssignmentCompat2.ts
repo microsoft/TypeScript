@@ -1,3 +1,4 @@
+// @target: es2015
 enum W {
 
     a, b, c,

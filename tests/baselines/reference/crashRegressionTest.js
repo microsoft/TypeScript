@@ -28,6 +28,7 @@ namespace MsPortal.Util.TemplateEngine {
 
 
 //// [crashRegressionTest.js]
+"use strict";
 var MsPortal;
 (function (MsPortal) {
     var Util;
@@ -35,22 +36,20 @@ var MsPortal;
         var TemplateEngine;
         (function (TemplateEngine) {
             "use strict";
-            var StringTemplate = /** @class */ (function () {
-                function StringTemplate(templateStorage) {
+            class StringTemplate {
+                constructor(templateStorage) {
                     this._templateStorage = templateStorage;
                 }
-                StringTemplate.prototype.text = function (value) {
+                text(value) {
                     this._templateStorage.templateSources[this._name] = value;
-                };
-                return StringTemplate;
-            }());
-            var TemplateStorage = /** @class */ (function () {
-                function TemplateStorage() {
+                }
+            }
+            class TemplateStorage {
+                constructor() {
                     this.templateSources = {};
                     this.templateData = {};
                 }
-                return TemplateStorage;
-            }());
+            }
             TemplateEngine.TemplateStorage = TemplateStorage;
         })(TemplateEngine = Util.TemplateEngine || (Util.TemplateEngine = {}));
     })(Util = MsPortal.Util || (MsPortal.Util = {}));

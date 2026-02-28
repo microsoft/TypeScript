@@ -1,3 +1,4 @@
+// @target: es2015
 type Selector<S, R> = (state: S) => R;
 
 declare function createStructuredSelector<S, T>(

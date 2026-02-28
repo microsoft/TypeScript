@@ -1,3 +1,4 @@
+// @target: es2022
 // @module: node16
 // @declaration: true
 // @traceResolution: true

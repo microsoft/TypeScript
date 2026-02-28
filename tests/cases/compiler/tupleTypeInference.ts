@@ -1,4 +1,5 @@
-﻿declare var $q: IQService;
+﻿// @target: es2015
+declare var $q: IQService;
 
 interface IQService {
     all<T1, T2, T3>(x: [IPromise<T1>, IPromise<T2>, IPromise<T3>]): IPromise<[T1, T2, T3]>;

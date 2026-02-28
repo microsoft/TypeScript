@@ -58,6 +58,7 @@ baz
 
 
 //// [jsxEsprimaFbTestSuite.jsx]
+"use strict";
 <a />;
 <n:a n:v/>;
 <a n:foo="bar"> {value} <b><c /></b></a>;

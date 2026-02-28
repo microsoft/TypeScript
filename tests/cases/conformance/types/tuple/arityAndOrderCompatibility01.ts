@@ -1,3 +1,4 @@
+// @target: es2015
 interface StrNum extends Array<string|number> {
     0: string;
     1: number;

@@ -24,18 +24,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.C = void 0;
 // Unused, but could collide with the named type argument below.
-var TypeVariable = /** @class */ (function () {
-    function TypeVariable() {
-    }
-    return TypeVariable;
-}());
-var C = /** @class */ (function () {
-    function C() {
-    }
-    __decorate([
-        Decorate,
-        __metadata("design:type", Object)
-    ], C.prototype, "member", void 0);
-    return C;
-}());
+class TypeVariable {
+}
+class C {
+}
 exports.C = C;
+__decorate([
+    Decorate,
+    __metadata("design:type", Object)
+], C.prototype, "member", void 0);

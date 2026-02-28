@@ -33,31 +33,24 @@ Output::
 
 
 
+//// [/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts] *Lib*
+
 //// [/user/someone/projects/myproject/file1.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/user/someone/projects/myproject/file2.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
+export {};
 
 
 //// [/user/someone/projects/myproject/file3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var v = 1 /* E2.V */;
+const v = 1 /* E2.V */;
+export {};
 
 
-
-PolledWatches::
-/user/someone/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
-/user/someone/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
-/home/src/tslibs/TS/Lib/lib.d.ts: *new*
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts: *new*
   {}
 /user/someone/projects/myproject/file1.ts: *new*
   {}
@@ -74,19 +67,19 @@ Program options: {
 }
 Program structureReused: Not
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/someone/projects/myproject/file1.ts
 /user/someone/projects/myproject/file2.ts
 /user/someone/projects/myproject/file3.ts
 
 Semantic diagnostics in builder refreshed for::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/someone/projects/myproject/file1.ts
 /user/someone/projects/myproject/file2.ts
 /user/someone/projects/myproject/file3.ts
 
 Shape signatures in builder refreshed for::
-/home/src/tslibs/ts/lib/lib.d.ts (used version)
+/home/src/tslibs/ts/lib/lib.es2025.full.d.ts (used version)
 /user/someone/projects/myproject/file1.ts (used version)
 /user/someone/projects/myproject/file2.ts (used version)
 /user/someone/projects/myproject/file3.ts (used version)
@@ -117,10 +110,9 @@ Output::
 
 
 //// [/user/someone/projects/myproject/file3.js]
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var v = 1 /* E2.V */;
+const v = 1 /* E2.V */;
 function foo2() { return 2; }
+export {};
 
 
 
@@ -133,7 +125,7 @@ Program options: {
 }
 Program structureReused: Completely
 Program files::
-/home/src/tslibs/TS/Lib/lib.d.ts
+/home/src/tslibs/TS/Lib/lib.es2025.full.d.ts
 /user/someone/projects/myproject/file1.ts
 /user/someone/projects/myproject/file2.ts
 /user/someone/projects/myproject/file3.ts

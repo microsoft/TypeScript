@@ -1,3 +1,4 @@
+// @target: es2015
 declare namespace M {
     interface iBar { t: any; }
     interface iFoo extends iBar {

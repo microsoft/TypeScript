@@ -19,3 +19,4 @@ namespace A {
 }
 
 //// [mixedExports.js]
+"use strict";

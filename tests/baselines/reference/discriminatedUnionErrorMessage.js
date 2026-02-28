@@ -16,7 +16,8 @@ let shape: Shape = {
 
 
 //// [discriminatedUnionErrorMessage.js]
-var shape = {
+"use strict";
+let shape = {
     kind: "sq",
     x: 12,
     y: 13,

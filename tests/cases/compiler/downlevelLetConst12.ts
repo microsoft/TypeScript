@@ -1,4 +1,4 @@
-// @target:es5
+// @target:es5, es2015
 
 'use strict'
 // top level let\const should not be renamed

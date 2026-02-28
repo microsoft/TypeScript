@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // Shouldn't be able to index a class instance by a number (unless it has declared a number index signature)
 

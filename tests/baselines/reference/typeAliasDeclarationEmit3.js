@@ -21,8 +21,9 @@ function f3(): void {
 
 
 //// [typeAliasDeclarationEmit3.js]
+"use strict";
 function f1() {
-    for (var i = 0; i < 1; i++)
+    for (let i = 0; i < 1; i++)
         ;
     console.log('f1');
 }

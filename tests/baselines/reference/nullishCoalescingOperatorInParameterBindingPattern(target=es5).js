@@ -6,6 +6,7 @@ const a = (): string | undefined => undefined;
 (({ [a() ?? "d"]: c = "" }) => {})();
 
 //// [nullishCoalescingOperatorInParameterBindingPattern.js]
+"use strict";
 // https://github.com/microsoft/TypeScript/issues/36295
 var a = function () { return undefined; };
 (function (_a) {

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 function f<T>(array: T[], ...args) { }
 function g(array: number[], ...args) { }

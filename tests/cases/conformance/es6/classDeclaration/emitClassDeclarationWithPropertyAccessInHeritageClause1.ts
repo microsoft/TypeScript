@@ -1,3 +1,4 @@
+// @target: es2015
 class B {}
 function foo() {
     return {B: B};

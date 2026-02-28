@@ -15,6 +15,7 @@ class C3 extends C1 {
 
 
 //// [autoAccessor6.js]
+"use strict";
 class C1 {
     #a_accessor_storage;
     get a() { return this.#a_accessor_storage; }

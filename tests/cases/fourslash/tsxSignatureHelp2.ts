@@ -1,10 +1,8 @@
 /// <reference path='fourslash.ts' />
 
-//@Filename: file.tsx
 // @jsx: preserve
-// @noLib: true
-// @libFiles: react.d.ts,lib.d.ts
 
+//@Filename: file.tsx
 //// import React = require('react');
 //// export interface ClickableProps {
 ////     children?: string;

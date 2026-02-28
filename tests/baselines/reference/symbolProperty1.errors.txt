@@ -1,0 +1,14 @@
+symbolProperty1.ts(3,6): error TS2454: Variable 's' is used before being assigned.
+
+
+==== symbolProperty1.ts (1 errors) ====
+    var s: symbol;
+    var x = {
+        [s]: 0,
+         ~
+!!! error TS2454: Variable 's' is used before being assigned.
+        [s]() { },
+        get [s]() {
+            return 0;
+        }
+    }

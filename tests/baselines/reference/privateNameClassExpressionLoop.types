@@ -4,8 +4,8 @@
 const array = [];
 >array : any[]
 >      : ^^^^^
->[] : undefined[]
->   : ^^^^^^^^^^^
+>[] : never[]
+>   : ^^^^^^^
 
 for (let i = 0; i < 10; ++i) {
 >i : number

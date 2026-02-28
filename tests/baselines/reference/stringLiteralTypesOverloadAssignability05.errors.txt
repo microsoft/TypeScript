@@ -1,0 +1,26 @@
+stringLiteralTypesOverloadAssignability05.ts(15,1): error TS2322: Type '(x: "foo") => number' is not assignable to type '{ (x: "foo"): number; (x: string): number; }'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'string' is not assignable to type '"foo"'.
+
+
+==== stringLiteralTypesOverloadAssignability05.ts (1 errors) ====
+    function f(x: "foo"): number;
+    function f(x: string): number;
+    function f(x: string): number {
+        return 0;
+    }
+    
+    function g(x: "foo"): number;
+    function g(x: string): number {
+        return 0;
+    }
+    
+    let a = f;
+    let b = g;
+    
+    a = b;
+    ~
+!!! error TS2322: Type '(x: "foo") => number' is not assignable to type '{ (x: "foo"): number; (x: string): number; }'.
+!!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type '"foo"'.
+    b = a;

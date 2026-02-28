@@ -1,3 +1,4 @@
+// @target: es2015
 // @strictNullChecks: true
 
 declare function foo(): string | undefined;

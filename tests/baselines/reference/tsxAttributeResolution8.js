@@ -13,6 +13,7 @@ var x: any;
 <test1 {...x} />
 
 //// [file.jsx]
+"use strict";
 var x;
 // Should be OK
 <test1 {...x}/>;

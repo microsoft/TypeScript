@@ -2,16 +2,15 @@
 EmitSkipped: false
 
 FileName : declSingleFile.js
+"use strict";
 var x = 5;
-var Bar = /** @class */ (function () {
-    function Bar() {
-    }
-    return Bar;
-}());
+class Bar {
+    x;
+    y;
+}
 var x = "world";
-var Bar2 = /** @class */ (function () {
-    function Bar2() {
-    }
-    return Bar2;
-}());
+class Bar2 {
+    x;
+    y;
+}
 

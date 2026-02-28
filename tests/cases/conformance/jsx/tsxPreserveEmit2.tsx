@@ -1,6 +1,6 @@
 //@module: amd
 //@jsx: preserve
-//@target: ES5
+//@target: ES5, ES2015
 
 //@Filename: test.tsx
 

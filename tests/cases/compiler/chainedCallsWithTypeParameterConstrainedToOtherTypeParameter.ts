@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 class Chain<T extends A> {
     constructor(public value: T) { }

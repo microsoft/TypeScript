@@ -2,9 +2,11 @@ typeOfThisInStaticMembers10.ts(6,16): error TS2816: Cannot use 'this' in a stati
 typeOfThisInStaticMembers10.ts(12,16): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
 typeOfThisInStaticMembers10.ts(13,26): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
 typeOfThisInStaticMembers10.ts(14,22): error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
+typeOfThisInStaticMembers10.ts(15,31): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+typeOfThisInStaticMembers10.ts(37,31): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 
 
-==== typeOfThisInStaticMembers10.ts (4 errors) ====
+==== typeOfThisInStaticMembers10.ts (6 errors) ====
     declare const foo: any;
     
     @foo
@@ -28,6 +30,9 @@ typeOfThisInStaticMembers10.ts(14,22): error TS2816: Cannot use 'this' in a stat
                          ~~~~
 !!! error TS2816: Cannot use 'this' in a static property initializer of a decorated class.
         static ff = function () { this.c + 1 }
+                                  ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 typeOfThisInStaticMembers10.ts:15:17: An outer value of 'this' is shadowed by this container.
         static foo () {
             return this.c + 1;
         }
@@ -50,6 +55,9 @@ typeOfThisInStaticMembers10.ts(14,22): error TS2816: Cannot use 'this' in a stat
         static e = super.a + this.c + 1;
         static f = () => this.c + 1;
         static ff = function () { this.c + 1 }
+                                  ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 typeOfThisInStaticMembers10.ts:37:17: An outer value of 'this' is shadowed by this container.
         static foo () {
             return this.c + 1;
         }

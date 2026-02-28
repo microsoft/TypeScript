@@ -25,6 +25,7 @@ namespace A {
 
 
 //// [ExportInterfaceWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.js]
+"use strict";
 var A;
 (function (A) {
     A.Origin = { x: 0, y: 0 };

@@ -1,4 +1,6 @@
-﻿export default function Foo (){
+﻿// @module: commonjs
+// @target: es2015
+export default function Foo (){
     
 }
 

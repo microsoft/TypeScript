@@ -12,6 +12,7 @@ declare module "test" {
 }
 
 //// [declFileAliasUseBeforeDeclaration2.js]
+"use strict";
 
 
 //// [declFileAliasUseBeforeDeclaration2.d.ts]

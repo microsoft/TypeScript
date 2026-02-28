@@ -1,3 +1,4 @@
+// @target: es2015
 // @removeComments: false
 const enum Foo {
     X = 100,

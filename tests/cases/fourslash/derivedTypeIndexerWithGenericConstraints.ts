@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
+// @strict: false
 ////class CollectionItem {
 ////    x: number;
 ////}

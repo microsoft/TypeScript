@@ -106,7 +106,9 @@ namespace Generic {
 
     var ra = r.foo; // any
 >ra : any
+>   : ^^^
 >r.foo : any
+>      : ^^^
 >r : C<any, any>
 >  : ^^^^^^^^^^^
 >foo : any
@@ -124,7 +126,9 @@ namespace Generic {
 
     var rb = r2.baz; // any
 >rb : any
+>   : ^^^
 >r2.baz : any
+>       : ^^^
 >r2 : D<any, any>
 >   : ^^^^^^^^^^^
 >baz : any

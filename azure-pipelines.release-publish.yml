@@ -73,6 +73,10 @@ extends:
                   targetPath: '$(Pipeline.Workspace)/tgz'
             steps:
               - checkout: none
+              - task: NodeTool@0
+                inputs:
+                  versionSpec: 20.x
+                displayName: 'Install Node'
               - task: CmdLine@2
                 displayName: Copy versioned drop to typescript.tgz
                 inputs:

@@ -9,3 +9,4 @@ interface Entry {
 declare var x: Entry;
 
 //// [noImplicitAnyReferencingDeclaredInterface.js]
+"use strict";

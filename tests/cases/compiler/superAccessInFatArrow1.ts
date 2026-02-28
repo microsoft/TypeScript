@@ -1,3 +1,4 @@
+// @target: es2015
 namespace test {
     export class A {
         foo() {

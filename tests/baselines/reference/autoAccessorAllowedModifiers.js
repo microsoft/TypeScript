@@ -30,6 +30,7 @@ declare class C3 {
 
 
 //// [autoAccessorAllowedModifiers.js]
+"use strict";
 class C1 {
     accessor a;
     accessor b;

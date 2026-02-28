@@ -1,5 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
+// @lib: es5
+
 //// type Node/*N*/<T> = {
 ////     value: T;
 ////     left: Node<T> | undefined;

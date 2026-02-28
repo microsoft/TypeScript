@@ -1,3 +1,4 @@
+// @target: es2015
 // @allowUnusedLabels: true
 // @allowUnreachableCode: true
 

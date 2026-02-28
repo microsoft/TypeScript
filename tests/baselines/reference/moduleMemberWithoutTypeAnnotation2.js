@@ -20,9 +20,10 @@ namespace TypeScript {
 
 
 //// [moduleMemberWithoutTypeAnnotation2.js]
+"use strict";
 var TypeScript;
 (function (TypeScript) {
-    var CompilerDiagnostics;
+    let CompilerDiagnostics;
     (function (CompilerDiagnostics) {
         CompilerDiagnostics.diagnosticWriter = null;
         function Alert(output) {

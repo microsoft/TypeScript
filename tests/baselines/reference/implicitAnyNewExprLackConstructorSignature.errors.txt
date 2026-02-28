@@ -1,8 +1,11 @@
+implicitAnyNewExprLackConstructorSignature.ts(1,20): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
 implicitAnyNewExprLackConstructorSignature.ts(2,14): error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.
 
 
-==== implicitAnyNewExprLackConstructorSignature.ts (1 errors) ====
+==== implicitAnyNewExprLackConstructorSignature.ts (2 errors) ====
     function Point() { this.x = 3; }
+                       ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
     var x: any = new Point();  // error at "new"
                  ~~~~~~~~~~~
 !!! error TS7009: 'new' expression, whose target lacks a construct signature, implicitly has an 'any' type.

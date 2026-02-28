@@ -1,3 +1,4 @@
+// @target: es2015
 class T5<T>{
 
     public foo: T;

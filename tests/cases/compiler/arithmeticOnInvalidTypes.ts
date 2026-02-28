@@ -1,3 +1,4 @@
+// @target: es2015
 var x: Number;
 var y: Number;
 var z = x + y;

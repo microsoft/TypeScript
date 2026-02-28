@@ -1,3 +1,4 @@
+// @target: es2015
 // @jsx: preserve
 // @strict: true
 declare namespace JSX {

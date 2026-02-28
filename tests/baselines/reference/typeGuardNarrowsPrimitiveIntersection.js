@@ -25,7 +25,8 @@ if (isNonBlank2(value)) {
 
 
 //// [typeGuardNarrowsPrimitiveIntersection.js]
-var value;
+"use strict";
+let value;
 if (isNonBlank(value)) {
     doThis(value);
 }

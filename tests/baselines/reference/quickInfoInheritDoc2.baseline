@@ -15,7 +15,7 @@
 //     prop: T | undefined;
 //     ^^^^
 // | ----------------------------------------------------------------------
-// | (property) SubClass<T>.prop: T
+// | (property) SubClass<T>.prop: T | undefined
 // | Base.prop
 // | SubClass.prop
 // | @inheritdoc SubClass.prop
@@ -88,6 +88,22 @@
         {
           "text": "T",
           "kind": "typeParameterName"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "|",
+          "kind": "punctuation"
+        },
+        {
+          "text": " ",
+          "kind": "space"
+        },
+        {
+          "text": "undefined",
+          "kind": "keyword"
         }
       ],
       "documentation": [

@@ -10,6 +10,7 @@ class C {
 
 
 //// [esDecorators-classDeclaration-multipleDecorators.js]
+"use strict";
 @dec1
 @dec2
 class C {

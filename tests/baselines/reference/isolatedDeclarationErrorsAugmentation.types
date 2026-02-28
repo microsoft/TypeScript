@@ -6,8 +6,8 @@ import { ParentThing } from './parent';
 >            : ^^^^^^^^^^^^^^^^^^
 
 declare module './parent' {
->'./parent' : typeof import("parent")
->           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>'./parent' : typeof import("./parent")
+>           : ^^^^^^^^^^^^^^^^^^^^^^^^^
 
     interface ParentThing {
         add: (a: number, b: number) => number;

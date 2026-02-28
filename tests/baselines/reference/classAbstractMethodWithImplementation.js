@@ -6,9 +6,7 @@ abstract class A {
 }
 
 //// [classAbstractMethodWithImplementation.js]
-var A = /** @class */ (function () {
-    function A() {
-    }
-    A.prototype.foo = function () { };
-    return A;
-}());
+"use strict";
+class A {
+    foo() { }
+}

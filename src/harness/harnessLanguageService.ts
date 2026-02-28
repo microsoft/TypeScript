@@ -1,7 +1,7 @@
 import * as collections from "./_namespaces/collections.js";
 import * as fakes from "./_namespaces/fakes.js";
 import {
-    Compiler,
+    IO,
     mockHash,
     virtualFileSystemRoot,
 } from "./_namespaces/Harness.js";
@@ -128,13 +128,122 @@ export interface LanguageServiceAdapter {
     getLogger(): LoggerWithInMemoryLogs | undefined;
 }
 
+/** Create VFS with libs only at fourslashLibFolder */
+function createLanguageServiceVfs(): vfs.FileSystem {
+    return vfs.createFourslashVfs(IO, /*ignoreCase*/ true, { cwd: virtualFileSystemRoot });
+}
+
+// Cache lib file SourceFiles directly to avoid reparsing across tests.
+// Lib .d.ts files parse identically regardless of compiler settings, so we cache
+// just one copy per path. This persists for the entire test run.
+const libSourceFileCache = new Map<string, ts.SourceFile>();
+
+function createLibCachingDocumentRegistry(): ts.DocumentRegistry {
+    const localRegistry = ts.createDocumentRegistry(/*useCaseSensitiveFileNames*/ false, virtualFileSystemRoot);
+
+    function isLibFile(fileName: string): boolean {
+        return vpath.beneath(vfs.fourslashLibFolder, fileName);
+    }
+
+    return {
+        acquireDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions) {
+            if (isLibFile(fileName)) {
+                const cached = libSourceFileCache.get(fileName);
+                if (cached) {
+                    return cached;
+                }
+                // Not cached - acquire from local registry to parse it, then cache
+                const sourceFile = localRegistry.acquireDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
+                libSourceFileCache.set(fileName, sourceFile);
+                // Release from local registry immediately - we don't need ref counting for cached libs
+                const settings = typeof (compilationSettingsOrHost as ts.MinimalResolutionCacheHost).getCompilationSettings === "function"
+                    ? (compilationSettingsOrHost as ts.MinimalResolutionCacheHost).getCompilationSettings()
+                    : compilationSettingsOrHost as ts.CompilerOptions;
+                localRegistry.releaseDocument(fileName, settings, scriptKind!, typeof sourceFileOptions === "object" ? sourceFileOptions.impliedNodeFormat : undefined);
+                return sourceFile;
+            }
+            return localRegistry.acquireDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
+        },
+        acquireDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions) {
+            if (isLibFile(fileName)) {
+                const cached = libSourceFileCache.get(fileName);
+                if (cached) {
+                    return cached;
+                }
+                // Not cached - acquire from local registry to parse it, then cache
+                const sourceFile = localRegistry.acquireDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
+                libSourceFileCache.set(fileName, sourceFile);
+                // Release from local registry immediately
+                const impliedNodeFormat = typeof sourceFileOptions === "object" ? sourceFileOptions.impliedNodeFormat : undefined;
+                localRegistry.releaseDocumentWithKey(path, key, scriptKind!, impliedNodeFormat);
+                return sourceFile;
+            }
+            return localRegistry.acquireDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
+        },
+        updateDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions) {
+            if (isLibFile(fileName)) {
+                // Lib files should never be updated - just return the cached version
+                const cached = libSourceFileCache.get(fileName);
+                if (cached) {
+                    return cached;
+                }
+                // Fall through to acquire if somehow not cached
+                return this.acquireDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
+            }
+            return localRegistry.updateDocument(fileName, compilationSettingsOrHost, scriptSnapshot, version, scriptKind, sourceFileOptions);
+        },
+        updateDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions) {
+            if (isLibFile(fileName)) {
+                // Lib files should never be updated - just return the cached version
+                const cached = libSourceFileCache.get(fileName);
+                if (cached) {
+                    return cached;
+                }
+                // Fall through to acquire if somehow not cached
+                return this.acquireDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
+            }
+            return localRegistry.updateDocumentWithKey(fileName, path, compilationSettingsOrHost, key, scriptSnapshot, version, scriptKind, sourceFileOptions);
+        },
+        getKeyForCompilationSettings(settings) {
+            return localRegistry.getKeyForCompilationSettings(settings);
+        },
+        getDocumentRegistryBucketKeyWithMode(key, mode) {
+            return localRegistry.getDocumentRegistryBucketKeyWithMode(key, mode);
+        },
+        releaseDocument(fileName: string, compilationSettings: ts.CompilerOptions, scriptKind?: ts.ScriptKind, impliedNodeFormat?: ts.ResolutionMode) {
+            if (isLibFile(fileName)) {
+                // Lib files are cached separately - no ref counting needed, so no-op
+                return;
+            }
+            return localRegistry.releaseDocument(fileName, compilationSettings, scriptKind!, impliedNodeFormat);
+        },
+        releaseDocumentWithKey(path: ts.Path, key: ts.DocumentRegistryBucketKey, scriptKind?: ts.ScriptKind, impliedNodeFormat?: ts.ResolutionMode) {
+            // We can't easily tell if this is a lib file from just the path without the fileName,
+            // so try to release from local registry and ignore errors
+            try {
+                localRegistry.releaseDocumentWithKey(path, key, scriptKind!, impliedNodeFormat);
+            }
+            catch {
+                // Ignore - might be a lib file that was never in the local registry
+            }
+        },
+        reportStats() {
+            return `Lib cache: ${libSourceFileCache.size} files\nLocal registry: ${localRegistry.reportStats()}`;
+        },
+        getBuckets() {
+            return localRegistry.getBuckets();
+        },
+    };
+}
+
 export abstract class LanguageServiceAdapterHost {
-    public readonly sys: fakes.System = new fakes.System(new vfs.FileSystem(/*ignoreCase*/ true, { cwd: virtualFileSystemRoot }));
+    public readonly sys: fakes.System;
     public typesRegistry: Map<string, void> | undefined;
     private scriptInfos: collections.SortedMap<string, ScriptInfo>;
     public jsDocParsingMode: ts.JSDocParsingMode | undefined;
 
     constructor(protected cancellationToken: DefaultHostCancellationToken = DefaultHostCancellationToken.instance, protected settings: ts.CompilerOptions = ts.getDefaultCompilerOptions()) {
+        this.sys = new fakes.System(createLanguageServiceVfs());
         this.scriptInfos = new collections.SortedMap({ comparer: this.vfs.stringComparer, sort: "insertion" });
     }
 
@@ -280,7 +389,7 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
     }
 
     getDefaultLibFileName(): string {
-        return Compiler.defaultLibFileName;
+        return vpath.combine(vfs.fourslashLibFolder, ts.getDefaultLibFileName(this.settings));
     }
 
     getScriptFileNames(): string[] {
@@ -289,7 +398,10 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
 
     getScriptSnapshot(fileName: string): ts.IScriptSnapshot | undefined {
         const script = this.getScriptInfo(fileName);
-        return script ? new ScriptSnapshot(script) : undefined;
+        if (script) return new ScriptSnapshot(script);
+        // Fall back to reading from VFS for files not in scriptInfos (e.g., lib files)
+        const content = this.readFile(fileName);
+        return content !== undefined ? ts.ScriptSnapshot.fromString(content) : undefined;
     }
 
     getScriptKind(): ts.ScriptKind {
@@ -332,15 +444,17 @@ class NativeLanguageServiceHost extends LanguageServiceAdapterHost implements ts
 
 export class NativeLanguageServiceAdapter implements LanguageServiceAdapter {
     private host: NativeLanguageServiceHost;
+    private documentRegistry: ts.DocumentRegistry;
     getLogger: typeof ts.returnUndefined = ts.returnUndefined;
     constructor(cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
         this.host = new NativeLanguageServiceHost(cancellationToken, options);
+        this.documentRegistry = createLibCachingDocumentRegistry();
     }
     getHost(): LanguageServiceAdapterHost {
         return this.host;
     }
     getLanguageService(): ts.LanguageService {
-        return ts.createLanguageService(this.host);
+        return ts.createLanguageService(this.host, this.documentRegistry);
     }
     getClassifier(): ts.Classifier {
         return ts.createClassifier();
@@ -394,8 +508,6 @@ interface ServerHostDirectoryWatcher {
     cb: ts.DirectoryWatcherCallback;
 }
 
-/** Default typescript and lib installs location for tests */
-export const harnessSessionLibLocation = "/home/src/tslibs/TS/Lib";
 class SessionServerHost implements ts.server.ServerHost {
     args: string[] = [];
     newLine: string;
@@ -420,7 +532,9 @@ class SessionServerHost implements ts.server.ServerHost {
     readFile(fileName: string): string | undefined {
         // System FS would follow symlinks, even though snapshots are stored by original file name
         const snapshot = this.host.getScriptSnapshot(fileName) || this.host.getScriptSnapshot(this.realpath(fileName));
-        return snapshot && ts.getSnapshotText(snapshot);
+        if (snapshot) return ts.getSnapshotText(snapshot);
+        // Fall back to reading from VFS for files not in scriptInfos (e.g., lib files)
+        return this.host.readFile(fileName);
     }
 
     realpath(path: string) {
@@ -443,7 +557,7 @@ class SessionServerHost implements ts.server.ServerHost {
     }
 
     getExecutingFilePath(): string {
-        return harnessSessionLibLocation + "/tsc.js";
+        return vfs.fourslashLibFolder + "/tsc.js";
     }
 
     exit = ts.noop;
@@ -670,6 +784,11 @@ export class ServerLanguageServiceAdapter implements LanguageServiceAdapter {
         // Wire the client to the host to get notifications when a file is open
         // or edited.
         clientHost.setClient(client);
+
+        // Apply test options (e.g. @lib) to inferred projects
+        if (options) {
+            client.setCompilerOptionsForInferredProjects(ts.optionMapToObject(ts.serializeCompilerOptions(options)) as ts.server.protocol.CompilerOptions);
+        }
 
         // Set the properties
         this.client = client;

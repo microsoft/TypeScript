@@ -22,8 +22,8 @@ export declare function __classPrivateFieldGet<T extends object, V>(
 >  : ^
 
   kind?: "f"
->kind : "f"
->     : ^^^
+>kind : "f" | undefined
+>     : ^^^^^^^^^^^^^^^
 
 ): V;
 export declare function __classPrivateFieldGet<T extends new (...args: any[]) => unknown, V>(

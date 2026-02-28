@@ -17,6 +17,7 @@ var foo: M.F;
 let x: ns.A;
 
 //// [namespacesDeclaration2.js]
+"use strict";
 var N;
 (function (N) {
     function S() { }
@@ -27,7 +28,7 @@ var M;
 })(M || (M = {}));
 var foge;
 var foo;
-var x;
+let x;
 
 
 //// [namespacesDeclaration2.d.ts]

@@ -4,7 +4,7 @@
 const eslintReact = require('./eslint-plugin-react.js');
 >eslintReact : Symbol(eslintReact, Decl(eslint.config.js, 0, 5))
 >require : Symbol(require)
->'./eslint-plugin-react.js' : Symbol("eslint-plugin-react", Decl(eslint-plugin-react.js, 0, 0))
+>'./eslint-plugin-react.js' : Symbol("./eslint-plugin-react.js", Decl(eslint-plugin-react.js, 0, 0))
 
 const tseslint = require('./typescript-eslint.js');
 >tseslint : Symbol(tseslint, Decl(eslint.config.js, 1, 5))

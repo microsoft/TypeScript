@@ -53,11 +53,8 @@ export namespace M.Q {
 "use strict";
 var f;
 (function (f) {
-    var c = /** @class */ (function () {
-        function c() {
-        }
-        return c;
-    }());
+    class c {
+    }
     f.c = c;
 })(f || (f = {}));
 module.exports = f;
@@ -65,18 +62,15 @@ module.exports = f;
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.M = void 0;
-var im = require("./declarationEmit_nameConflicts_1");
+const im = require("./declarationEmit_nameConflicts_1");
 var M;
 (function (M) {
     function f() { }
     M.f = f;
-    var C = /** @class */ (function () {
-        function C() {
-        }
-        return C;
-    }());
+    class C {
+    }
     M.C = C;
-    var N;
+    let N;
     (function (N) {
         function g() { }
         N.g = g;
@@ -92,13 +86,10 @@ var M;
     (function (P) {
         function f() { }
         P.f = f;
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         P.C = C;
-        var N;
+        let N;
         (function (N) {
             function g() { }
             N.g = g;
@@ -117,13 +108,10 @@ var M;
     (function (Q) {
         function f() { }
         Q.f = f;
-        var C = /** @class */ (function () {
-            function C() {
-            }
-            return C;
-        }());
+        class C {
+        }
         Q.C = C;
-        var N;
+        let N;
         (function (N) {
             function g() { }
             N.g = g;

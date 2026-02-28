@@ -1,3 +1,4 @@
+// @target: es2015
 var v = 3;
 var v2: typeof v = v;
 var v3: string = v2; // Not assignment compatible

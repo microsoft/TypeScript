@@ -15,6 +15,7 @@ namespace m {
 
 
 //// [objectLiteralShorthandPropertiesWithModuleES6.js]
+"use strict";
 var m;
 (function (m) {
 })(m || (m = {}));

@@ -8,6 +8,7 @@ namespace Foo {
 }
 
 //// [reboundBaseClassSymbol.js]
+"use strict";
 var Foo;
 (function (Foo) {
     var A = 1;

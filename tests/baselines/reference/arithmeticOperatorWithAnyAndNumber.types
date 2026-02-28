@@ -3,6 +3,7 @@
 === arithmeticOperatorWithAnyAndNumber.ts ===
 var a: any;
 >a : any
+>  : ^^^
 
 var b: number;
 >b : number
@@ -15,7 +16,9 @@ var ra1 = a * a;
 >a * a : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 var ra2 = a * b;
 >ra2 : number
@@ -23,6 +26,7 @@ var ra2 = a * b;
 >a * b : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -32,6 +36,7 @@ var ra3 = a * 0;
 >a * 0 : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -43,6 +48,7 @@ var ra4 = 0 * a;
 >0 : 0
 >  : ^
 >a : any
+>  : ^^^
 
 var ra5 = 0 * 0;
 >ra5 : number
@@ -91,7 +97,9 @@ var rb1 = a / a;
 >a / a : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 var rb2 = a / b;
 >rb2 : number
@@ -99,6 +107,7 @@ var rb2 = a / b;
 >a / b : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -108,6 +117,7 @@ var rb3 = a / 0;
 >a / 0 : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -119,6 +129,7 @@ var rb4 = 0 / a;
 >0 : 0
 >  : ^
 >a : any
+>  : ^^^
 
 var rb5 = 0 / 0;
 >rb5 : number
@@ -167,7 +178,9 @@ var rc1 = a % a;
 >a % a : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 var rc2 = a % b;
 >rc2 : number
@@ -175,6 +188,7 @@ var rc2 = a % b;
 >a % b : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -184,6 +198,7 @@ var rc3 = a % 0;
 >a % 0 : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -195,6 +210,7 @@ var rc4 = 0 % a;
 >0 : 0
 >  : ^
 >a : any
+>  : ^^^
 
 var rc5 = 0 % 0;
 >rc5 : number
@@ -243,7 +259,9 @@ var rd1 = a - a;
 >a - a : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 var rd2 = a - b;
 >rd2 : number
@@ -251,6 +269,7 @@ var rd2 = a - b;
 >a - b : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -260,6 +279,7 @@ var rd3 = a - 0;
 >a - 0 : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -271,6 +291,7 @@ var rd4 = 0 - a;
 >0 : 0
 >  : ^
 >a : any
+>  : ^^^
 
 var rd5 = 0 - 0;
 >rd5 : number
@@ -319,7 +340,9 @@ var re1 = a << a;
 >a << a : number
 >       : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 var re2 = a << b;
 >re2 : number
@@ -327,6 +350,7 @@ var re2 = a << b;
 >a << b : number
 >       : ^^^^^^
 >a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -336,6 +360,7 @@ var re3 = a << 0;
 >a << 0 : number
 >       : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -347,6 +372,7 @@ var re4 = 0 << a;
 >0 : 0
 >  : ^
 >a : any
+>  : ^^^
 
 var re5 = 0 << 0;
 >re5 : number
@@ -395,7 +421,9 @@ var rf1 = a >> a;
 >a >> a : number
 >       : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 var rf2 = a >> b;
 >rf2 : number
@@ -403,6 +431,7 @@ var rf2 = a >> b;
 >a >> b : number
 >       : ^^^^^^
 >a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -412,6 +441,7 @@ var rf3 = a >> 0;
 >a >> 0 : number
 >       : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -423,6 +453,7 @@ var rf4 = 0 >> a;
 >0 : 0
 >  : ^
 >a : any
+>  : ^^^
 
 var rf5 = 0 >> 0;
 >rf5 : number
@@ -471,7 +502,9 @@ var rg1 = a >>> a;
 >a >>> a : number
 >        : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 var rg2 = a >>> b;
 >rg2 : number
@@ -479,6 +512,7 @@ var rg2 = a >>> b;
 >a >>> b : number
 >        : ^^^^^^
 >a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -488,6 +522,7 @@ var rg3 = a >>> 0;
 >a >>> 0 : number
 >        : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -499,6 +534,7 @@ var rg4 = 0 >>> a;
 >0 : 0
 >  : ^
 >a : any
+>  : ^^^
 
 var rg5 = 0 >>> 0;
 >rg5 : number
@@ -547,7 +583,9 @@ var rh1 = a & a;
 >a & a : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 var rh2 = a & b;
 >rh2 : number
@@ -555,6 +593,7 @@ var rh2 = a & b;
 >a & b : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -564,6 +603,7 @@ var rh3 = a & 0;
 >a & 0 : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -575,6 +615,7 @@ var rh4 = 0 & a;
 >0 : 0
 >  : ^
 >a : any
+>  : ^^^
 
 var rh5 = 0 & 0;
 >rh5 : number
@@ -623,7 +664,9 @@ var ri1 = a ^ a;
 >a ^ a : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 var ri2 = a ^ b;
 >ri2 : number
@@ -631,6 +674,7 @@ var ri2 = a ^ b;
 >a ^ b : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -640,6 +684,7 @@ var ri3 = a ^ 0;
 >a ^ 0 : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -651,6 +696,7 @@ var ri4 = 0 ^ a;
 >0 : 0
 >  : ^
 >a : any
+>  : ^^^
 
 var ri5 = 0 ^ 0;
 >ri5 : number
@@ -699,7 +745,9 @@ var rj1 = a | a;
 >a | a : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >a : any
+>  : ^^^
 
 var rj2 = a | b;
 >rj2 : number
@@ -707,6 +755,7 @@ var rj2 = a | b;
 >a | b : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >b : number
 >  : ^^^^^^
 
@@ -716,6 +765,7 @@ var rj3 = a | 0;
 >a | 0 : number
 >      : ^^^^^^
 >a : any
+>  : ^^^
 >0 : 0
 >  : ^
 
@@ -727,6 +777,7 @@ var rj4 = 0 | a;
 >0 : 0
 >  : ^
 >a : any
+>  : ^^^
 
 var rj5 = 0 | 0;
 >rj5 : number

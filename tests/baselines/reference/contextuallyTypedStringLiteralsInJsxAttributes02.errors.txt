@@ -1,39 +1,47 @@
-file.tsx(27,64): error TS2769: No overload matches this call.
+file.tsx(25,16): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+file.tsx(28,12): error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+file.tsx(31,56): error TS2769: No overload matches this call.
   Overload 1 of 2, '(buttonProps: ButtonProps): Element', gave the following error.
     Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
       Property 'extra' does not exist on type 'IntrinsicAttributes & ButtonProps'.
   Overload 2 of 2, '(linkProps: LinkProps): Element', gave the following error.
     Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
       Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
-file.tsx(28,13): error TS2769: No overload matches this call.
+file.tsx(32,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(buttonProps: ButtonProps): Element', gave the following error.
     Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
       Property 'extra' does not exist on type 'IntrinsicAttributes & ButtonProps'.
   Overload 2 of 2, '(linkProps: LinkProps): Element', gave the following error.
     Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
       Property 'onClick' does not exist on type 'IntrinsicAttributes & LinkProps'.
-file.tsx(29,43): error TS2769: No overload matches this call.
+file.tsx(33,43): error TS2769: No overload matches this call.
   Overload 1 of 2, '(buttonProps: ButtonProps): Element', gave the following error.
     Type '{ extra: true; goTo: string; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
       Property 'extra' does not exist on type 'IntrinsicAttributes & ButtonProps'.
   Overload 2 of 2, '(linkProps: LinkProps): Element', gave the following error.
     Type '{ extra: true; goTo: "home"; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
       Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
-file.tsx(30,13): error TS2769: No overload matches this call.
+file.tsx(34,13): error TS2769: No overload matches this call.
   Overload 1 of 2, '(buttonProps: ButtonProps): Element', gave the following error.
     Type '{ goTo: string; extra: true; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
       Property 'goTo' does not exist on type 'IntrinsicAttributes & ButtonProps'.
   Overload 2 of 2, '(linkProps: LinkProps): Element', gave the following error.
     Type '{ goTo: "home"; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
       Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
-file.tsx(33,65): error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
+file.tsx(36,69): error TS2322: Type 'undefined' is not assignable to type 'Element'.
+file.tsx(37,57): error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
   Property 'extra' does not exist on type 'IntrinsicAttributes & ButtonProps'.
-file.tsx(36,44): error TS2322: Type '{ extra: true; goTo: "home"; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+file.tsx(39,66): error TS2322: Type 'undefined' is not assignable to type 'Element'.
+file.tsx(40,44): error TS2322: Type '{ extra: true; goTo: "home"; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
 
 
-==== file.tsx (6 errors) ====
+==== file.tsx (10 errors) ====
+    /// <reference path="/.lib/react.d.ts" />
+    
     import React = require('react')
+    
+    declare function log(...args: any[]): void;
     
     export interface ClickableProps {
         children?: string;
@@ -54,13 +62,19 @@ file.tsx(36,44): error TS2322: Type '{ extra: true; goTo: "home"; }' is not assi
         const linkProps = props as LinkProps;
         if(linkProps.goTo) {
             return this._buildMainLink(props);
+                   ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 file.tsx:22:17: An outer value of 'this' is shadowed by this container.
         }
     
         return this._buildMainButton(props);
+               ~~~~
+!!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
+!!! related TS2738 file.tsx:22:17: An outer value of 'this' is shadowed by this container.
     }
     
-    const b0 = <MainButton {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type "left" | "right"
-                                                                   ~~~~~
+    const b0 = <MainButton {...{onClick: (k) => {log(k)}}} extra />;  // k has type "left" | "right"
+                                                           ~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(buttonProps: ButtonProps): Element', gave the following error.
 !!! error TS2769:     Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
@@ -68,7 +82,7 @@ file.tsx(36,44): error TS2322: Type '{ extra: true; goTo: "home"; }' is not assi
 !!! error TS2769:   Overload 2 of 2, '(linkProps: LinkProps): Element', gave the following error.
 !!! error TS2769:     Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
 !!! error TS2769:       Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
-    const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
+    const b2 = <MainButton onClick={(k)=>{log(k)}} extra />;  // k has type "left" | "right"
                 ~~~~~~~~~~
 !!! error TS2769: No overload matches this call.
 !!! error TS2769:   Overload 1 of 2, '(buttonProps: ButtonProps): Element', gave the following error.
@@ -97,12 +111,16 @@ file.tsx(36,44): error TS2322: Type '{ extra: true; goTo: "home"; }' is not assi
 !!! error TS2769:       Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
     
     export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undefined }
-    const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
-                                                                    ~~~~~
+                                                                        ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Element'.
+    const c1 = <NoOverload  {...{onClick: (k) => {log(k)}}} extra />;  // k has type any
+                                                            ~~~~~
 !!! error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & ButtonProps'.
 !!! error TS2322:   Property 'extra' does not exist on type 'IntrinsicAttributes & ButtonProps'.
     
     export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefined }
+                                                                     ~~~~~~
+!!! error TS2322: Type 'undefined' is not assignable to type 'Element'.
     const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" | "contact"
                                                ~~~~~
 !!! error TS2322: Type '{ extra: true; goTo: "home"; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.

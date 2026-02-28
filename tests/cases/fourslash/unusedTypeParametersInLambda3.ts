@@ -1,5 +1,6 @@
 /// <reference path='fourslash.ts' />
 
+// @strict: false
 // @noUnusedLocals: true
 // @noUnusedParameters: true
 //// class A<Dummy> { public x: Dummy }

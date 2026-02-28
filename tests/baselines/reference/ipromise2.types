@@ -6,16 +6,18 @@ declare namespace Windows.Foundation {
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
 >then : { <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; }
 >     : ^^^ ^^       ^^^                         ^^     ^^^                           ^^        ^^^                       ^^^                              ^^^^^^^^       ^^^                           ^^     ^^^                   ^^        ^^^                       ^^^                                ^^^^^^^^       ^^^                 ^^     ^^^                             ^^        ^^^                       ^^^                                ^^^^^^^^       ^^^                 ^^     ^^^                   ^^        ^^^                       ^^^                                ^^^
->success : (value: T) => IPromise<U>
->        : ^     ^^ ^^^^^           
+>success : ((value: T) => IPromise<U>) | undefined
+>        : ^^     ^^ ^^^^^           ^^^^^^^^^^^^^
 >value : T
 >      : ^
->error : (error: any) => IPromise<U>
->      : ^     ^^   ^^^^^           
+>error : ((error: any) => IPromise<U>) | undefined
+>      : ^^     ^^   ^^^^^           ^^^^^^^^^^^^^
 >error : any
->progress : (progress: any) => void
->         : ^        ^^   ^^^^^    
+>      : ^^^
+>progress : ((progress: any) => void) | undefined
+>         : ^^        ^^   ^^^^^    ^^^^^^^^^^^^^
 >progress : any
+>         : ^^^
 >Windows : any
 >        : ^^^
 >Foundation : any
@@ -24,16 +26,18 @@ declare namespace Windows.Foundation {
         then<U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
 >then : { <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U>(success?: (value: T) => IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; }
 >     : ^^^^^^^^       ^^^                           ^^     ^^^                             ^^        ^^^                       ^^^                                ^^^ ^^       ^^^                         ^^     ^^^                 ^^        ^^^                       ^^^                              ^^^^^^^^       ^^^                 ^^     ^^^                             ^^        ^^^                       ^^^                                ^^^^^^^^       ^^^                 ^^     ^^^                   ^^        ^^^                       ^^^                                ^^^
->success : (value: T) => IPromise<U>
->        : ^     ^^ ^^^^^           
+>success : ((value: T) => IPromise<U>) | undefined
+>        : ^^     ^^ ^^^^^           ^^^^^^^^^^^^^
 >value : T
 >      : ^
->error : (error: any) => U
->      : ^     ^^   ^^^^^ 
+>error : ((error: any) => U) | undefined
+>      : ^^     ^^   ^^^^^ ^^^^^^^^^^^^^
 >error : any
->progress : (progress: any) => void
->         : ^        ^^   ^^^^^    
+>      : ^^^
+>progress : ((progress: any) => void) | undefined
+>         : ^^        ^^   ^^^^^    ^^^^^^^^^^^^^
 >progress : any
+>         : ^^^
 >Windows : any
 >        : ^^^
 >Foundation : any
@@ -42,16 +46,18 @@ declare namespace Windows.Foundation {
         then<U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
 >then : { <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U>(success?: (value: T) => U, error?: (error: any) => IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; }
 >     : ^^^^^^^^       ^^^                           ^^     ^^^                             ^^        ^^^                       ^^^                                ^^^^^^^^       ^^^                           ^^     ^^^                   ^^        ^^^                       ^^^                                ^^^ ^^       ^^^               ^^     ^^^                           ^^        ^^^                       ^^^                              ^^^^^^^^       ^^^                 ^^     ^^^                   ^^        ^^^                       ^^^                                ^^^
->success : (value: T) => U
->        : ^     ^^ ^^^^^ 
+>success : ((value: T) => U) | undefined
+>        : ^^     ^^ ^^^^^ ^^^^^^^^^^^^^
 >value : T
 >      : ^
->error : (error: any) => IPromise<U>
->      : ^     ^^   ^^^^^           
+>error : ((error: any) => IPromise<U>) | undefined
+>      : ^^     ^^   ^^^^^           ^^^^^^^^^^^^^
 >error : any
->progress : (progress: any) => void
->         : ^        ^^   ^^^^^    
+>      : ^^^
+>progress : ((progress: any) => void) | undefined
+>         : ^^        ^^   ^^^^^    ^^^^^^^^^^^^^
 >progress : any
+>         : ^^^
 >Windows : any
 >        : ^^^
 >Foundation : any
@@ -60,16 +66,18 @@ declare namespace Windows.Foundation {
         then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void ): Windows.Foundation.IPromise<U>;
 >then : { <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => IPromise<U_1>, error?: (error: any) => U_1, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U_1>(success?: (value: T) => U_1, error?: (error: any) => IPromise<U_1>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U_1>; <U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
 >     : ^^^^^^^^       ^^^                           ^^     ^^^                             ^^        ^^^                       ^^^                                ^^^^^^^^       ^^^                           ^^     ^^^                   ^^        ^^^                       ^^^                                ^^^^^^^^       ^^^                 ^^     ^^^                             ^^        ^^^                       ^^^                                ^^^ ^^       ^^^               ^^     ^^^                 ^^        ^^^                       ^^^                              ^^^
->success : (value: T) => U
->        : ^     ^^ ^^^^^ 
+>success : ((value: T) => U) | undefined
+>        : ^^     ^^ ^^^^^ ^^^^^^^^^^^^^
 >value : T
 >      : ^
->error : (error: any) => U
->      : ^     ^^   ^^^^^ 
+>error : ((error: any) => U) | undefined
+>      : ^^     ^^   ^^^^^ ^^^^^^^^^^^^^
 >error : any
->progress : (progress: any) => void
->         : ^        ^^   ^^^^^    
+>      : ^^^
+>progress : ((progress: any) => void) | undefined
+>         : ^^        ^^   ^^^^^    ^^^^^^^^^^^^^
 >progress : any
+>         : ^^^
 >Windows : any
 >        : ^^^
 >Foundation : any
@@ -78,16 +86,18 @@ declare namespace Windows.Foundation {
         done<U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void ): void;
 >done : <U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void) => void
 >     : ^ ^^       ^^^                 ^^     ^^^                   ^^        ^^^                       ^^^^^    
->success : (value: T) => any
->        : ^     ^^ ^^^^^   
+>success : ((value: T) => any) | undefined
+>        : ^^     ^^ ^^^^^   ^^^^^^^^^^^^^
 >value : T
 >      : ^
->error : (error: any) => any
->      : ^     ^^   ^^^^^   
+>error : ((error: any) => any) | undefined
+>      : ^^     ^^   ^^^^^   ^^^^^^^^^^^^^
 >error : any
->progress : (progress: any) => void
->         : ^        ^^   ^^^^^    
+>      : ^^^
+>progress : ((progress: any) => void) | undefined
+>         : ^^        ^^   ^^^^^    ^^^^^^^^^^^^^
 >progress : any
+>         : ^^^
 
         value: T;
 >value : T
@@ -108,12 +118,12 @@ var p2 = p.then(function (s) {
 >   : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p.then(function (s) {    return 34;} ) : Windows.Foundation.IPromise<number>
 >                                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->p.then : { <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
->       : ^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>p.then : { <U>(success?: ((value: string) => Windows.Foundation.IPromise<U>) | undefined, error?: ((error: any) => Windows.Foundation.IPromise<U>) | undefined, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: ((value: string) => Windows.Foundation.IPromise<U>) | undefined, error?: ((error: any) => U) | undefined, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => Windows.Foundation.IPromise<U>) | undefined, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => U) | undefined, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
+>       : ^^^ ^^       ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >p : Windows.Foundation.IPromise<string>
 >  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->then : { <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => Windows.Foundation.IPromise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => Windows.Foundation.IPromise<U>, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: (value: string) => U, error?: (error: any) => U, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
->     : ^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^     ^^^^^^^^^^^^^^^^     ^^^^     ^^   ^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>then : { <U>(success?: ((value: string) => Windows.Foundation.IPromise<U>) | undefined, error?: ((error: any) => Windows.Foundation.IPromise<U>) | undefined, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: ((value: string) => Windows.Foundation.IPromise<U>) | undefined, error?: ((error: any) => U) | undefined, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => Windows.Foundation.IPromise<U>) | undefined, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; <U>(success?: ((value: string) => U) | undefined, error?: ((error: any) => U) | undefined, progress?: (progress: any) => void): Windows.Foundation.IPromise<U>; }
+>     : ^^^ ^^       ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ^^       ^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^     ^^^^^     ^^   ^^^^^^^^^^^^^^^^^^^^^        ^^^                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >function (s) {    return 34;} : (s: string) => number
 >                              : ^ ^^^^^^^^^^^^^^^^^^^
 >s : string

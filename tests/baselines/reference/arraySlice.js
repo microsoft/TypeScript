@@ -6,5 +6,6 @@ arr.splice(1, 1);
 
 
 //// [arraySlice.js]
+"use strict";
 var arr;
 arr.splice(1, 1);

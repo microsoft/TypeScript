@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 interface MyArrayWrapper<T> {
     constructor(initialItems?: T[]);

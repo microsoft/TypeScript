@@ -1,3 +1,4 @@
+// @target: es2015
 
 var x : any = 0;
 var z = <number> x;

@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: true
 
 type MyMappedType<Primitive extends any> = {

@@ -10,6 +10,7 @@ namespace Bar {
 }
 
 //// [parserExportAssignment9.js]
+"use strict";
 var Foo;
 (function (Foo) {
     export default foo;

@@ -10,16 +10,16 @@ test<{t?: string}, object>();
 >                             : ^^^^
 >test : <A, B extends A>() => void
 >     : ^ ^^ ^^^^^^^^^ ^^^^^^^    
->t : string
->  : ^^^^^^
+>t : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 test<{t?: string}, bigint>();
 >test<{t?: string}, bigint>() : void
 >                             : ^^^^
 >test : <A, B extends A>() => void
 >     : ^ ^^ ^^^^^^^^^ ^^^^^^^    
->t : string
->  : ^^^^^^
+>t : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
 // no error when bigint is used even when ES2020 lib is not present
 

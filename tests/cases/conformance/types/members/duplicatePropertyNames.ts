@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 // duplicate property names are an error in all types
 

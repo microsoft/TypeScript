@@ -4,10 +4,10 @@
 const {taskGroups, taskNameToGroup} = require('./module.js');
 >taskGroups : { parseHTML: { id: "parseHTML"; label: string; }; styleLayout: { id: "styleLayout"; label: string; }; }
 >           : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^      ^^^^^^
->taskNameToGroup : { [x: string]: import("module").TaskGroup; }
->                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
->require('./module.js') : typeof import("module")
->                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>taskNameToGroup : { [x: string]: import("./module.js").TaskGroup; }
+>                : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>require('./module.js') : typeof import("./module.js")
+>                       : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >require : any
 >'./module.js' : "./module.js"
 >              : ^^^^^^^^^^^^^
@@ -31,8 +31,8 @@ class MainThreadTasks {
      * @param {TaskNode} y
      */
     constructor(x, y){}
->x : import("module").TaskGroup
->  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>x : import("./module.js").TaskGroup
+>  : ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 >y : TaskNode
 >  : ^^^^^^^^
 }

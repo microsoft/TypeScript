@@ -1,3 +1,4 @@
+// @target: es2015
 namespace M {
  export class C {
    public n = 42;

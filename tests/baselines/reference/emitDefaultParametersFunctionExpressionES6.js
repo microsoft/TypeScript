@@ -11,6 +11,7 @@ var y = (function (num = 10, boo = false, ...rest) { })()
 var z = (function (num: number, boo = false, ...rest) { })(10)
 
 //// [emitDefaultParametersFunctionExpressionES6.js]
+"use strict";
 var lambda1 = (y = "hello") => { };
 var lambda2 = (x, y = "hello") => { };
 var lambda3 = (x, y = "hello", ...rest) => { };

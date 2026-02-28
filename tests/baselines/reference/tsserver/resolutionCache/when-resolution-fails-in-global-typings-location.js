@@ -101,12 +101,12 @@ Info seq  [hh:mm:ss:mss] 	Files (2)
 
 Info seq  [hh:mm:ss:mss] -----------------------------------------------
 TI:: Creating typing installer
-//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 15
+//// [/home/src/tslibs/TS/Lib/lib.es2020.full.d.ts] *Lib* Inode:: 16
 
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2020.full.d.ts: *new*
-  {"inode":15}
+  {"inode":16}
 
 Projects::
 /dev/null/inferredProject1* (Inferred) *new*
@@ -133,10 +133,10 @@ TI:: [hh:mm:ss:mss] Updating types-registry npm package...
 TI:: [hh:mm:ss:mss] npm install --ignore-scripts types-registry@latest
 TI:: [hh:mm:ss:mss] Updated types-registry npm package
 TI:: typing installer creation complete
-//// [/home/src/Library/Caches/typescript/package.json] Inode:: 113
+//// [/home/src/Library/Caches/typescript/package.json] Inode:: 120
 { "private": true }
 
-//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 116
+//// [/home/src/Library/Caches/typescript/node_modules/types-registry/index.json] Inode:: 123
 {
   "entries": {}
 }

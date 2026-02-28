@@ -9,14 +9,9 @@ class D implements C implements C {
 }
 
 //// [implementsClauseAlreadySeen.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
-var D = /** @class */ (function () {
-    function D() {
-    }
-    D.prototype.baz = function () { };
-    return D;
-}());
+"use strict";
+class C {
+}
+class D {
+    baz() { }
+}

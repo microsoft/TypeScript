@@ -1,15 +1,24 @@
 invalidNestedModules.ts(1,15): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
+invalidNestedModules.ts(3,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+invalidNestedModules.ts(4,9): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
+invalidNestedModules.ts(11,13): error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
 invalidNestedModules.ts(17,18): error TS2300: Duplicate identifier 'Point'.
+invalidNestedModules.ts(18,9): error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+invalidNestedModules.ts(18,20): error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
 invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
 
 
-==== invalidNestedModules.ts (3 errors) ====
+==== invalidNestedModules.ts (8 errors) ====
     namespace A.B.C {
                   ~
 !!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
         export class Point {
             x: number;
+            ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
             y: number;
+            ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
         }
     }
     
@@ -17,6 +26,8 @@ invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
         export namespace B {
             export class C { // Error
                 name: string;
+                ~~~~
+!!! error TS2564: Property 'name' has no initializer and is not definitely assigned in the constructor.
             }
         }
     }
@@ -26,6 +37,10 @@ invalidNestedModules.ts(24,20): error TS2300: Duplicate identifier 'Point'.
                      ~~~~~
 !!! error TS2300: Duplicate identifier 'Point'.
             x: number; y: number;
+            ~
+!!! error TS2564: Property 'x' has no initializer and is not definitely assigned in the constructor.
+                       ~
+!!! error TS2564: Property 'y' has no initializer and is not definitely assigned in the constructor.
         }
     }
     

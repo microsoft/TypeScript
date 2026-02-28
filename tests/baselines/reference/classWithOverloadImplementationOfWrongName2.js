@@ -8,9 +8,7 @@ class C {
 }
 
 //// [classWithOverloadImplementationOfWrongName2.js]
-var C = /** @class */ (function () {
-    function C() {
-    }
-    C.prototype.bar = function (x) { };
-    return C;
-}());
+"use strict";
+class C {
+    bar(x) { }
+}

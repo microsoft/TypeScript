@@ -34,15 +34,13 @@ var r4: string = o2[''];
 
 
 //// [objectTypeWithStringIndexerHidingObjectIndexer.js]
+"use strict";
 // object types can define string indexers that are more specific than the default 'any' that would be returned
 // no errors expected below 
 var o = {};
 var r = o['']; // should be Object
-var C = /** @class */ (function () {
-    function C() {
-    }
-    return C;
-}());
+class C {
+}
 var r2 = c[''];
 var r3 = i[''];
 var r4 = o2[''];

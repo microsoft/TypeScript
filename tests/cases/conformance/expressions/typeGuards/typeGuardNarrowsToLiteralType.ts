@@ -1,3 +1,4 @@
+// @target: es2015
 declare function isFoo(value: string) : value is "foo";
 declare function doThis(value: "foo"): void;
 declare function doThat(value: string) : void;

@@ -4,3 +4,4 @@
 namespace string {}
 
 //// [primitiveTypeAsmoduleName.js]
+"use strict";

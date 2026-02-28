@@ -84,12 +84,6 @@ FileWatcher:: Added:: WatchInfo: /home/src/tslibs/TS/package.json 2000 undefined
 FileWatcher:: Added:: WatchInfo: /home/src/tslibs/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/package.json 2000 undefined File location affecting resolution
 FileWatcher:: Added:: WatchInfo: /user/username/projects/myproject/package.json 2000 undefined File location affecting resolution
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/src/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/myproject/node_modules/@types 1 undefined Type roots
-DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
-Elapsed:: *ms DirectoryWatcher:: Added:: WatchInfo: /user/username/projects/node_modules/@types 1 undefined Type roots
 [96msrc/fileA.ts[0m:[93m1[0m:[93m21[0m - [91merror[0m[90m TS2307: [0mCannot find module './fileB.mjs' or its corresponding type declarations.
 
 [7m1[0m import { foo } from "./fileB.mjs";
@@ -123,16 +117,10 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types: *new*
-  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileB.mjs: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types: *new*
   {"pollingInterval":500}
 /user/username/projects/myproject/src/package.json: *new*
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types: *new*
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts: *new*
@@ -279,14 +267,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/src/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/src/fileB.mjs:
@@ -442,16 +424,10 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileB.mjs: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 FsWatches::
 /home/src/tslibs/TS/Lib/lib.es2016.full.d.ts:
@@ -584,16 +560,10 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileB.mjs:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 
@@ -740,14 +710,8 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/src/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 
 PolledWatches *deleted*::
 /user/username/projects/myproject/src/fileB.mjs:
@@ -909,16 +873,10 @@ PolledWatches::
   {"pollingInterval":2000}
 /home/src/tslibs/package.json:
   {"pollingInterval":2000}
-/user/username/projects/myproject/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/myproject/src/fileB.mjs: *new*
-  {"pollingInterval":500}
-/user/username/projects/myproject/src/node_modules/@types:
   {"pollingInterval":500}
 /user/username/projects/myproject/src/package.json:
   {"pollingInterval":2000}
-/user/username/projects/node_modules/@types:
-  {"pollingInterval":500}
 /user/username/projects/package.json: *new*
   {"pollingInterval":2000}
 

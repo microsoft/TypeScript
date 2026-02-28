@@ -46,4 +46,5 @@ namespace Generics {
 }
 
 //// [subtypingWithStringIndexer2.js]
+"use strict";
 // Derived type indexer must be subtype of base type indexer

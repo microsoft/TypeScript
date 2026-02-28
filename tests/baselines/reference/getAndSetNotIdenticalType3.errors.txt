@@ -1,14 +1,20 @@
+getAndSetNotIdenticalType3.ts(1,14): error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
+getAndSetNotIdenticalType3.ts(4,5): error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
 getAndSetNotIdenticalType3.ts(9,9): error TS2322: Type 'A<string>' is not assignable to type 'A<number>'.
   Type 'string' is not assignable to type 'number'.
 getAndSetNotIdenticalType3.ts(15,1): error TS2322: Type 'A<number>' is not assignable to type 'A<string>'.
   Type 'number' is not assignable to type 'string'.
 
 
-==== getAndSetNotIdenticalType3.ts (2 errors) ====
+==== getAndSetNotIdenticalType3.ts (4 errors) ====
     class A<T> { foo: T; }
+                 ~~~
+!!! error TS2564: Property 'foo' has no initializer and is not definitely assigned in the constructor.
     
     class C<T> {
         data: A<number>;
+        ~~~~
+!!! error TS2564: Property 'data' has no initializer and is not definitely assigned in the constructor.
         get x(): A<number> {
             return this.data;
         }

@@ -1,5 +1,7 @@
 /// <reference path="../fourslash.ts"/>
 
+// @lib: es5
+
 // Global class reference.
 
 // @Filename: /home/src/workspaces/project/referencesForGlobals_1.ts

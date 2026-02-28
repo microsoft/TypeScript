@@ -32,3 +32,16 @@ new Intl.NumberFormat('en-GB').formatRangeToParts('123E-4', '567E8');
 new Intl.NumberFormat('en-GB').format('Infinity');
 new Intl.NumberFormat('en-GB').format('-Infinity');
 new Intl.NumberFormat('en-GB').format('+Infinity');
+
+// Test approximatelySign part type
+const nf = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+});
+
+const filtered = nf
+  .formatRangeToParts(100, 100)
+  .filter((part) => part.type !== "approximatelySign")
+  .map((part) => part.value)
+  .join("");

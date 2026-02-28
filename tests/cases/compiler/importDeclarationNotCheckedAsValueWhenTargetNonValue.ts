@@ -1,3 +1,4 @@
+// @target: es2015
 // @filename: file.d.ts
 declare namespace dojox {
     namespace charting {

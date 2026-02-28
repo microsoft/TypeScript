@@ -6,8 +6,8 @@ class B {
 >  : ^
 
     constructor(x?: string) {}
->x : string
->  : ^^^^^^
+>x : string | undefined
+>  : ^^^^^^^^^^^^^^^^^^
 
     x(): string { return ""; }
 >x : () => string

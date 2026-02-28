@@ -1,3 +1,4 @@
+// @target: es2015
 // @noUncheckedIndexedAccess: true, false
 
 type Facts = { [key: string]: boolean };

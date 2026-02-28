@@ -1,3 +1,4 @@
+// @target: es2015
 // @strict: false
 //@module: amd
 // @Filename: exportImportMultipleFiles_math.ts

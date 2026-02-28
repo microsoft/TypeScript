@@ -1,3 +1,4 @@
+// @target: es2015
 // RegExpExecArray.slice can have zero, one, or two arguments
 var regExpExecArrayValue: RegExpExecArray;
 regExpExecArrayValue.slice();

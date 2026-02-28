@@ -1,4 +1,6 @@
-﻿var numOrDate: number | Date;
+﻿// @strict: false
+// @target: es2015
+var numOrDate: number | Date;
 var anyVar: number;
 
 // If each type in U has a string index signature, 
