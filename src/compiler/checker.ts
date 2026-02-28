@@ -27419,7 +27419,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                         const impliedArity = constraint.target.fixedLength;
                                         if (startLength + impliedArity <= source.target.fixedLength) {
                                             inferFromTypes(sliceTupleType(source, startLength, sourceArity - (startLength + impliedArity)), elementTypes[startLength]);
-                                            inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength + impliedArity, endLength)!, elementTypes[startLength + 1]);
+                                            const restType = getElementTypeOfSliceOfTupleType(source, startLength + impliedArity, endLength);
+                                            if (restType) {
+                                                inferFromTypes(restType, elementTypes[startLength + 1]);
+                                            }
                                         }
                                     }
                                 }
@@ -27435,7 +27438,10 @@ export function createTypeChecker(host: TypeCheckerHost): TypeChecker {
                                             const startIndex = endIndex - impliedArity;
                                             const trailingSlice = createTupleType(getTypeArguments(source).slice(startIndex, endIndex), source.target.elementFlags.slice(startIndex, endIndex), /*readonly*/ false, source.target.labeledElementDeclarations && source.target.labeledElementDeclarations.slice(startIndex, endIndex));
 
-                                            inferFromTypes(getElementTypeOfSliceOfTupleType(source, startLength, endLength + impliedArity)!, elementTypes[startLength]);
+                                            const restType = getElementTypeOfSliceOfTupleType(source, startLength, endLength + impliedArity);
+                                            if (restType) {
+                                                inferFromTypes(restType, elementTypes[startLength]);
+                                            }
                                             inferFromTypes(trailingSlice, elementTypes[startLength + 1]);
                                         }
                                     }
