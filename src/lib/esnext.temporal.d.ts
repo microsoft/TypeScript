@@ -59,22 +59,8 @@ declare namespace Temporal {
         offset?: string | undefined;
     }
 
-    type DateUnit = "year" | "month" | "week" | "day";
-    type TimeUnit = "hour" | "minute" | "second" | "millisecond" | "microsecond" | "nanosecond";
-    type PluralizeUnit<T extends DateUnit | TimeUnit> =
-        | T
-        | {
-            year: "years";
-            month: "months";
-            week: "weeks";
-            day: "days";
-            hour: "hours";
-            minute: "minutes";
-            second: "seconds";
-            millisecond: "milliseconds";
-            microsecond: "microseconds";
-            nanosecond: "nanoseconds";
-        }[T];
+    type DateUnit = "year" | "month" | "week" | "day" | "years" | "months" | "weeks" | "days";
+    type TimeUnit = "hour" | "minute" | "second" | "millisecond" | "microsecond" | "nanosecond" | "hours" | "minutes" | "seconds" | "milliseconds" | "microseconds" | "nanoseconds";
 
     interface DisambiguationOptions {
         disambiguation?: "compatible" | "earlier" | "later" | "reject" | undefined;
@@ -89,13 +75,13 @@ declare namespace Temporal {
     }
 
     interface RoundingOptions<Units extends DateUnit | TimeUnit> {
-        smallestUnit?: PluralizeUnit<Units> | undefined;
+        smallestUnit?: Units | undefined;
         roundingIncrement?: number | undefined;
         roundingMode?: "ceil" | "floor" | "expand" | "trunc" | "halfCeil" | "halfFloor" | "halfExpand" | "halfTrunc" | "halfEven" | undefined;
     }
 
     interface RoundingOptionsWithLargestUnit<Units extends DateUnit | TimeUnit> extends RoundingOptions<Units> {
-        largestUnit?: "auto" | PluralizeUnit<Units> | undefined;
+        largestUnit?: "auto" | Units | undefined;
     }
 
     interface ToStringRoundingOptions<Units extends DateUnit | TimeUnit> extends Pick<RoundingOptions<Units>, "smallestUnit" | "roundingMode"> {}
@@ -166,7 +152,7 @@ declare namespace Temporal {
     }
     var PlainDate: PlainDateConstructor;
 
-    interface PlainTimeToStringOptions extends ToStringRoundingOptionsWithFractionalSeconds<Exclude<TimeUnit, "hour">> {}
+    interface PlainTimeToStringOptions extends ToStringRoundingOptionsWithFractionalSeconds<Exclude<TimeUnit, "hour" | "hours">> {}
 
     interface PlainTime {
         readonly hour: number;
@@ -181,7 +167,7 @@ declare namespace Temporal {
         until(other: PlainTimeLike, options?: RoundingOptionsWithLargestUnit<TimeUnit>): Duration;
         since(other: PlainTimeLike, options?: RoundingOptionsWithLargestUnit<TimeUnit>): Duration;
         equals(other: PlainTimeLike): boolean;
-        round(roundTo: PluralizeUnit<TimeUnit>): PlainTime;
+        round(roundTo: TimeUnit): PlainTime;
         round(roundTo: RoundingOptions<TimeUnit>): PlainTime;
         toString(options?: PlainTimeToStringOptions): string;
         toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string;
@@ -230,8 +216,8 @@ declare namespace Temporal {
         subtract(duration: DurationLike, options?: OverflowOptions): PlainDateTime;
         until(other: PlainDateTimeLike, options?: RoundingOptionsWithLargestUnit<DateUnit | TimeUnit>): Duration;
         since(other: PlainDateTimeLike, options?: RoundingOptionsWithLargestUnit<DateUnit | TimeUnit>): Duration;
-        round(roundTo: PluralizeUnit<"day" | TimeUnit>): PlainDateTime;
-        round(roundTo: RoundingOptions<"day" | TimeUnit>): PlainDateTime;
+        round(roundTo: "day" | "days" | TimeUnit): PlainDateTime;
+        round(roundTo: RoundingOptions<"day" | "days" | TimeUnit>): PlainDateTime;
         equals(other: PlainDateTimeLike): boolean;
         toString(options?: PlainDateTimeToStringOptions): string;
         toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string;
@@ -297,8 +283,8 @@ declare namespace Temporal {
         subtract(duration: DurationLike, options?: OverflowOptions): ZonedDateTime;
         until(other: ZonedDateTimeLike, options?: RoundingOptionsWithLargestUnit<DateUnit | TimeUnit>): Duration;
         since(other: ZonedDateTimeLike, options?: RoundingOptionsWithLargestUnit<DateUnit | TimeUnit>): Duration;
-        round(roundTo: PluralizeUnit<"day" | TimeUnit>): ZonedDateTime;
-        round(roundTo: RoundingOptions<"day" | TimeUnit>): ZonedDateTime;
+        round(roundTo: "day" | "days" | TimeUnit): ZonedDateTime;
+        round(roundTo: RoundingOptions<"day" | "days" | TimeUnit>): ZonedDateTime;
         equals(other: ZonedDateTimeLike): boolean;
         toString(options?: ZonedDateTimeToStringOptions): string;
         toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string;
@@ -328,10 +314,10 @@ declare namespace Temporal {
 
     interface DurationRoundingOptions extends DurationRelativeToOptions, RoundingOptionsWithLargestUnit<DateUnit | TimeUnit> {}
 
-    interface DurationToStringOptions extends ToStringRoundingOptionsWithFractionalSeconds<Exclude<TimeUnit, "hour" | "minute">> {}
+    interface DurationToStringOptions extends ToStringRoundingOptionsWithFractionalSeconds<Exclude<TimeUnit, "hour" | "minute" | "hours" | "minutes">> {}
 
     interface DurationTotalOptions extends DurationRelativeToOptions {
-        unit: PluralizeUnit<DateUnit | TimeUnit>;
+        unit: DateUnit | TimeUnit;
     }
 
     interface Duration {
@@ -352,9 +338,9 @@ declare namespace Temporal {
         abs(): Duration;
         add(other: DurationLike): Duration;
         subtract(other: DurationLike): Duration;
-        round(roundTo: PluralizeUnit<"day" | TimeUnit>): Duration;
+        round(roundTo: "day" | "days" | TimeUnit): Duration;
         round(roundTo: DurationRoundingOptions): Duration;
-        total(totalOf: PluralizeUnit<"day" | TimeUnit>): number;
+        total(totalOf: "day" | "days" | TimeUnit): number;
         total(totalOf: DurationTotalOptions): number;
         toString(options?: DurationToStringOptions): string;
         toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DurationFormatOptions): string;
@@ -382,7 +368,7 @@ declare namespace Temporal {
         subtract(duration: DurationLike): Instant;
         until(other: InstantLike, options?: RoundingOptionsWithLargestUnit<TimeUnit>): Duration;
         since(other: InstantLike, options?: RoundingOptionsWithLargestUnit<TimeUnit>): Duration;
-        round(roundTo: PluralizeUnit<TimeUnit>): Instant;
+        round(roundTo: TimeUnit): Instant;
         round(roundTo: RoundingOptions<TimeUnit>): Instant;
         equals(other: InstantLike): boolean;
         toString(options?: InstantToStringOptions): string;
@@ -421,8 +407,8 @@ declare namespace Temporal {
         with(yearMonthLike: PartialTemporalLike<YearMonthLikeObject>, options?: OverflowOptions): PlainYearMonth;
         add(duration: DurationLike, options?: OverflowOptions): PlainYearMonth;
         subtract(duration: DurationLike, options?: OverflowOptions): PlainYearMonth;
-        until(other: PlainYearMonthLike, options?: RoundingOptionsWithLargestUnit<"year" | "month">): Duration;
-        since(other: PlainYearMonthLike, options?: RoundingOptionsWithLargestUnit<"year" | "month">): Duration;
+        until(other: PlainYearMonthLike, options?: RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">): Duration;
+        since(other: PlainYearMonthLike, options?: RoundingOptionsWithLargestUnit<"year" | "month" | "years" | "months">): Duration;
         equals(other: PlainYearMonthLike): boolean;
         toString(options?: PlainDateToStringOptions): string;
         toLocaleString(locales?: Intl.LocalesArgument, options?: Intl.DateTimeFormatOptions): string;
