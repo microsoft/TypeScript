@@ -6085,8 +6085,15 @@ function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, checker: TypeChecke
 }
 
 function isDeprecated(symbol: Symbol, checker: TypeChecker) {
-    const declarations = skipAlias(symbol, checker).declarations;
-    return !!length(declarations) && every(declarations, isDeprecatedDeclaration);
+    const targetSymbol = skipAlias(symbol, checker);
+    const declarations = targetSymbol.declarations;
+    if (!length(declarations)) {
+        return false;
+    }
+    if (targetSymbol.flags & SymbolFlags.Accessor) {
+        return some(declarations, isDeprecatedDeclaration);
+    }
+    return every(declarations, isDeprecatedDeclaration);
 }
 
 /**

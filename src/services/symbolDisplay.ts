@@ -216,13 +216,19 @@ function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeCheck
 function getNormalizedSymbolModifiers(symbol: Symbol) {
     if (symbol.declarations && symbol.declarations.length) {
         const [declaration, ...declarations] = symbol.declarations;
+        const isAccessor = !!(symbol.flags & SymbolFlags.Accessor);
+        const hasDeprecatedDeclaration = some(symbol.declarations, isDeprecatedDeclaration);
         // omit deprecated flag if some declarations are not deprecated
-        const excludeFlags = length(declarations) && isDeprecatedDeclaration(declaration) && some(declarations, d => !isDeprecatedDeclaration(d))
+        const excludeFlags = length(declarations) && isDeprecatedDeclaration(declaration) && some(declarations, d => !isDeprecatedDeclaration(d)) && !isAccessor
             ? ModifierFlags.Deprecated
             : ModifierFlags.None;
         const modifiers = getNodeModifiers(declaration, excludeFlags);
         if (modifiers) {
-            return modifiers.split(",");
+            const modifierList = modifiers.split(",");
+            if (isAccessor && hasDeprecatedDeclaration && !modifierList.includes(ScriptElementKindModifier.deprecatedModifier)) {
+                modifierList.push(ScriptElementKindModifier.deprecatedModifier);
+            }
+            return modifierList;
         }
     }
     return [];
